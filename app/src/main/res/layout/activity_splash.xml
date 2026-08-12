@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/pink_primary">
 
-    <!-- TODO: replace src with your own logo drawable, e.g. @drawable/logo -->
     <ImageView
         android:id="@+id/logoImage"
         android:layout_width="140dp"

@@ -11,7 +11,6 @@
         android:layout_height="wrap_content"
         android:padding="28dp">
 
-        <!-- TODO: replace with your logo -->
         <ImageView
             android:id="@+id/loginLogo"
             android:layout_width="80dp"
@@ -118,12 +117,118 @@
             android:id="@+id/goToSignUp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="8dp"
             android:padding="8dp"
             android:text="Tiada akaun? Daftar sekarang"
             android:textColor="@color/pink_dark"
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@id/loginButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Divider: "Atau" -->
+        <View
+            android:id="@+id/dividerLineLeft"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/field_border"
+            app:layout_constraintTop_toBottomOf="@id/goToSignUp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/orText" />
+
+        <TextView
+            android:id="@+id/orText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:paddingHorizontal="10dp"
+            android:text="Atau"
+            android:textColor="@color/text_gray"
+            android:textSize="13sp"
+            app:layout_constraintTop_toBottomOf="@id/goToSignUp"
+            app:layout_constraintStart_toEndOf="@id/dividerLineLeft"
+            app:layout_constraintEnd_toStartOf="@id/dividerLineRight" />
+
+        <View
+            android:id="@+id/dividerLineRight"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/field_border"
+            app:layout_constraintTop_toBottomOf="@id/goToSignUp"
+            app:layout_constraintStart_toEndOf="@id/orText"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Social login row -->
+        <!-- TODO: these are placeholders. Real Google/Facebook login needs Firebase
+             Authentication set up (google-services.json + Facebook SDK). Replace the
+             text "G" / "f" with proper brand icons once you add those dependencies. -->
+        <LinearLayout
+            android:id="@+id/socialLoginRow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@id/orText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <TextView
+                android:id="@+id/googleLoginButton"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/circle_bg_light"
+                android:gravity="center"
+                android:text="G"
+                android:textColor="@color/pink_dark"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <TextView
+                android:id="@+id/facebookLoginButton"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/circle_bg_light"
+                android:gravity="center"
+                android:text="f"
+                android:textColor="@color/pink_dark"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <TextView
+                android:id="@+id/phoneLoginButton"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:background="@drawable/circle_bg_light"
+                android:gravity="center"
+                android:text="&#128241;"
+                android:textSize="20sp"
+                android:clickable="true"
+                android:focusable="true" />
+
+        </LinearLayout>
+
+        <!-- Guest access -->
+        <TextView
+            android:id="@+id/guestText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:padding="8dp"
+            android:text="Login as Guest"
+            android:textColor="@color/text_gray"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/socialLoginRow"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

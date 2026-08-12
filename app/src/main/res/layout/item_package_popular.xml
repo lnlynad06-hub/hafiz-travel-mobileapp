@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="150dp"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="12dp"
+    android:orientation="vertical">
+
+    <!-- TODO: replace this FrameLayout's background with a real ImageView
+         (destination photo) using Glide once you have actual package images -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:background="@drawable/bg_image_placeholder">
+
+        <TextView
+            android:id="@+id/likeIcon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="top|end"
+            android:layout_margin="8dp"
+            android:background="@drawable/circle_bg_accent"
+            android:gravity="center"
+            android:text="&#9825;"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/packageTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/text_dark"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:maxLines="1"
+        android:ellipsize="end"
+        tools:text="Pakej Umrah Ekonomi" />
+
+    <TextView
+        android:id="@+id/packageSubtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text_gray"
+        android:textSize="12sp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        tools:text="12 Hari · RM8,500" />
+
+</LinearLayout>

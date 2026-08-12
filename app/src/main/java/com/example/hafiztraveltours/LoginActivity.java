@@ -34,6 +34,20 @@ public class LoginActivity extends AppCompatActivity {
         findViewById(R.id.goToSignUp).setOnClickListener(v ->
                 startActivity(new Intent(LoginActivity.this, SignUpActivity.class))
         );
+
+        // TODO: wire these up to real Firebase Authentication / Facebook SDK later
+        findViewById(R.id.googleLoginButton).setOnClickListener(v ->
+                Toast.makeText(this, "Log masuk Google - akan datang", Toast.LENGTH_SHORT).show());
+        findViewById(R.id.facebookLoginButton).setOnClickListener(v ->
+                Toast.makeText(this, "Log masuk Facebook - akan datang", Toast.LENGTH_SHORT).show());
+        findViewById(R.id.phoneLoginButton).setOnClickListener(v ->
+                Toast.makeText(this, "Log masuk nombor telefon - akan datang", Toast.LENGTH_SHORT).show());
+
+        // Guest: skip login entirely. Replace MainActivity.class with your real
+        // Homepage activity once it's built.
+        findViewById(R.id.guestText).setOnClickListener(v ->
+                startActivity(new Intent(LoginActivity.this, MainActivity.class))
+        );
     }
 
     private void attemptLogin() {

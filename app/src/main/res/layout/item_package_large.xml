@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="220dp"
+    android:layout_height="140dp"
+    android:layout_marginEnd="12dp"
+    android:background="@drawable/bg_image_placeholder">
+
+    <!-- TODO: replace this whole FrameLayout background with a real ImageView
+         (destination photo) using Glide once you have actual package images -->
+
+    <TextView
+        android:id="@+id/playIcon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="top|end"
+        android:layout_margin="10dp"
+        android:background="@drawable/circle_bg_accent"
+        android:gravity="center"
+        android:text="&#9654;"
+        android:textColor="@color/white"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@drawable/bg_image_scrim"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <TextView
+            android:id="@+id/packageTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:text="Korea Tour" />
+
+        <TextView
+            android:id="@+id/packageSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            tools:text="6 Hari 4 Malam" />
+
+    </LinearLayout>
+
+</FrameLayout>

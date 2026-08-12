@@ -27,7 +27,7 @@ public class WelcomeActivity extends AppCompatActivity {
         startFloatingLoop(imageRight, 300);
 
         findViewById(R.id.getStartedButton).setOnClickListener(v ->
-                startActivity(new Intent(WelcomeActivity.this, SignUpActivity.class))
+                startActivity(new Intent(WelcomeActivity.this, MainActivity.class))
         );
 
         findViewById(R.id.loginLinkText).setOnClickListener(v ->

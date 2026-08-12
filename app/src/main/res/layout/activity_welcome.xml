@@ -8,10 +8,6 @@
     android:padding="28dp">
 
     <!-- Overlapping image stack area -->
-    <!-- TODO: replace src on all 3 ImageViews below with real photos:
-         e.g. Umrah (Kaabah), Haji, and Tour (landmark) images.
-         Keep them circular by using android:clipToOutline + a circular background,
-         or use a rounded ImageView library like Glide's CircleCrop transform. -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/imageStack"
         android:layout_width="match_parent"

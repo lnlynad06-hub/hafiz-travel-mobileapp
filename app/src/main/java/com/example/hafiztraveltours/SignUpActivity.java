@@ -38,7 +38,24 @@ public class SignUpActivity extends AppCompatActivity {
         signUpButton = findViewById(R.id.signUpButton);
         signUpButton.setOnClickListener(v -> attemptSignUp());
 
-        findViewById(R.id.goToLogin).setOnClickListener(v -> finish());
+        findViewById(R.id.goToLogin).setOnClickListener(v -> {
+            startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
+            finish();
+        });
+
+        // TODO: wire these up to real Firebase Authentication / Facebook SDK later
+        findViewById(R.id.googleSignUpButton).setOnClickListener(v ->
+                Toast.makeText(this, "Daftar guna Google - akan datang", Toast.LENGTH_SHORT).show());
+        findViewById(R.id.facebookSignUpButton).setOnClickListener(v ->
+                Toast.makeText(this, "Daftar guna Facebook - akan datang", Toast.LENGTH_SHORT).show());
+        findViewById(R.id.phoneSignUpButton).setOnClickListener(v ->
+                Toast.makeText(this, "Daftar guna nombor telefon - akan datang", Toast.LENGTH_SHORT).show());
+
+        // Guest: skip sign up entirely. Replace MainActivity.class with your real
+        // Homepage activity once it's built.
+        findViewById(R.id.guestText).setOnClickListener(v ->
+                startActivity(new Intent(SignUpActivity.this, MainActivity.class))
+        );
     }
 
     private void attemptSignUp() {
