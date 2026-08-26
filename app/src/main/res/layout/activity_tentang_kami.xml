@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginStart="8dp"
-            android:text="Tentang Kami"
+            android:text="@string/about_us_title"
             android:textColor="@color/text_dark"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -65,7 +65,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Hafiz Travel &amp; Tours Sdn Bhd"
+                    android:text="@string/company_full_name"
                     android:textColor="@color/white"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -75,7 +75,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
                     android:alpha="0.9"
-                    android:text="Menyediakan bimbingan Umrah yang telus serta pakej pelancongan berkualiti, dengan sokongan rangkaian cawangan di seluruh Malaysia."
+                    android:text="@string/about_hero_blurb"
                     android:textColor="@color/white"
                     android:textSize="13sp"
                     android:lineSpacingExtra="2dp" />
@@ -87,7 +87,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="22dp"
-                android:text="Siapa Kami"
+                android:text="@string/about_who_we_are_title"
                 android:textColor="@color/text_dark"
                 android:textSize="17sp"
                 android:textStyle="bold" />
@@ -98,7 +98,7 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/bg_search_white"
                 android:padding="16dp"
-                android:text="Hafiz Travel &amp; Tours Sdn. Bhd. (No. KPK/LN: 10751) ialah agensi pelancongan dan pengendali umrah berdaftar di bawah Kementerian Pelancongan, Seni dan Budaya (MOTAC), yang ditubuhkan secara rasmi pada tahun 2022. Dengan kepakaran dan pengalaman dalam industri pelancongan serta pengurusan umrah, kami komited menyediakan perkhidmatan perjalanan ibadah dan pelancongan yang telus, teratur dan profesional.\n\nBerpusat di Larkin, Johor Bahru, kami kini berkembang dengan sokongan lebih 10 cawangan aktif merentasi Johor, Melaka, Selangor, Kuala Lumpur, Perak, Pulau Pinang, Kedah, Kelantan, Terengganu dan Pahang, bagi memudahkan urusan jemaah dan pelanggan di seluruh negara."
+                android:text="@string/about_who_we_are_body"
                 android:textColor="@color/text_gray"
                 android:textSize="14sp"
                 android:lineSpacingExtra="4dp" />
@@ -108,7 +108,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="22dp"
-                android:text="Layanan dan Perkhidmatan Utama"
+                android:text="@string/about_services_title"
                 android:textColor="@color/text_dark"
                 android:textSize="17sp"
                 android:textStyle="bold" />
@@ -139,7 +139,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_marginStart="8dp"
-                        android:text="Pakej Umrah dan Ziarah — perjalanan ibadah ke Tanah Suci dengan bimbingan mutawif berpengalaman, kebajikan jemaah dan penginapan yang selesa. Termasuk Pakej Bajet, Khas Wanita, Honeymoon serta ziarah seperti Istanbul dan Dubai."
+                        android:text="@string/about_service_umrah"
                         android:textColor="@color/text_gray"
                         android:textSize="14sp"
                         android:lineSpacingExtra="4dp" />
@@ -165,7 +165,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_marginStart="8dp"
-                        android:text="Pelancongan Antarabangsa — pakej percutian ke pelbagai destinasi popular di rantau Asia dan Eropah."
+                        android:text="@string/about_service_tour"
                         android:textColor="@color/text_gray"
                         android:textSize="14sp"
                         android:lineSpacingExtra="4dp" />
@@ -179,7 +179,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="22dp"
-                android:text="Sebab Memilih Kami"
+                android:text="@string/about_why_choose_title"
                 android:textColor="@color/text_dark"
                 android:textSize="17sp"
                 android:textStyle="bold" />
@@ -210,7 +210,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_marginStart="8dp"
-                        android:text="Agensi berdaftar dan sah (KPK/LN: 10751) — pengendali umrah dan agensi pelancongan rasmi yang mematuhi garis panduan undang-undang pelancongan Malaysia."
+                        android:text="@string/about_reason_registered"
                         android:textColor="@color/text_gray"
                         android:textSize="14sp"
                         android:lineSpacingExtra="4dp" />
@@ -236,7 +236,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_marginStart="8dp"
-                        android:text="Cawangan luas — rangkaian cawangan tempatan di 10 buah negeri untuk khidmat nasihat secara bersemuka."
+                        android:text="@string/about_reason_branches"
                         android:textColor="@color/text_gray"
                         android:textSize="14sp"
                         android:lineSpacingExtra="4dp" />
@@ -262,7 +262,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_marginStart="8dp"
-                        android:text="Bimbingan mesra dan profesional — mengutamakan pengalaman ibadah yang lancar dan membahagiakan buat setiap jemaah."
+                        android:text="@string/about_reason_guidance"
                         android:textColor="@color/text_gray"
                         android:textSize="14sp"
                         android:lineSpacingExtra="4dp" />
@@ -290,7 +290,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Visi"
+                        android:text="@string/label_vision"
                         android:textColor="@color/pink_dark"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -299,7 +299,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
-                        android:text="Menjadi syarikat pelancongan yang sentiasa telus, berpatutan dan menjadi pilihan utama masyarakat."
+                        android:text="@string/about_vision_body"
                         android:textColor="@color/text_gray"
                         android:textSize="12sp"
                         android:lineSpacingExtra="3dp" />
@@ -318,7 +318,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Misi"
+                        android:text="@string/label_mission"
                         android:textColor="@color/pink_dark"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -327,7 +327,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
-                        android:text="Menyediakan pakej terjamin dengan harga relevan dan khidmat yang memberi kepuasan maksimum kepada pelanggan."
+                        android:text="@string/about_mission_body"
                         android:textColor="@color/text_gray"
                         android:textSize="12sp"
                         android:lineSpacingExtra="3dp" />
@@ -348,7 +348,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Pendaftaran Rasmi"
+                    android:text="@string/about_registration_title"
                     android:textColor="@color/text_dark"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -357,7 +357,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="Berdaftar dengan MOTAC: KPK/LN 10751"
+                    android:text="@string/registration_motac"
                     android:textColor="@color/text_gray"
                     android:textSize="12sp" />
 
@@ -365,7 +365,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="No. Pendaftaran SSM: 202201043065 (1488762-A)"
+                    android:text="@string/registration_ssm"
                     android:textColor="@color/text_gray"
                     android:textSize="12sp" />
 
@@ -373,7 +373,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Ditubuhkan pada tahun 2022"
+                    android:text="@string/about_established_year"
                     android:textColor="@color/text_gray"
                     android:textSize="12sp" />
 

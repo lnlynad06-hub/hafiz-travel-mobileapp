@@ -1,5 +1,6 @@
 package com.example.hafiztraveltours;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +19,11 @@ import androidx.appcompat.app.AppCompatActivity;
  * once one exists instead of hardcoding it here).
  */
 public class TentangKamiActivity extends AppCompatActivity {
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.applySavedLocale(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

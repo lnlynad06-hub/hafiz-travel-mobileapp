@@ -88,4 +88,56 @@
 
     <string name="package_duration_price">%1$d Hari %2$d Malam - RM%3$s</string>
 
+    <string name="prayer_subuh">Subuh</string>
+    <string name="prayer_zohor">Zohor</string>
+    <string name="prayer_asar">Asar</string>
+    <string name="prayer_maghrib">Maghrib</string>
+    <string name="prayer_isyak">Isyak</string>
+    <string name="prayer_default_location">Waktu Solat - %1$s</string>
+    <string name="menu_profile">Profil Saya</string>
+    <string name="menu_language">Bahasa / Language</string>
+    <string name="menu_about_us">Tentang Kami</string>
+    <string name="menu_contact_us">Hubungi Kami</string>
+
+    <string name="about_us_title">Tentang Kami</string>
+    <string name="company_full_name">Hafiz Travel &amp; Tours Sdn Bhd</string>
+    <string name="company_short_name">Hafiz Travel &amp; Tours</string>
+    <string name="about_hero_blurb">Menyediakan bimbingan Umrah yang telus serta pakej pelancongan berkualiti, dengan sokongan rangkaian cawangan di seluruh Malaysia.</string>
+    <string name="about_who_we_are_title">Siapa Kami</string>
+    <string name="about_who_we_are_body">Hafiz Travel &amp; Tours Sdn. Bhd. (No. KPK/LN: 10751) ialah agensi pelancongan dan pengendali umrah berdaftar di bawah Kementerian Pelancongan, Seni dan Budaya (MOTAC), yang ditubuhkan secara rasmi pada tahun 2022. Dengan kepakaran dan pengalaman dalam industri pelancongan serta pengurusan umrah, kami komited menyediakan perkhidmatan perjalanan ibadah dan pelancongan yang telus, teratur dan profesional.\n\nBerpusat di Larkin, Johor Bahru, kami kini berkembang dengan sokongan lebih 10 cawangan aktif merentasi Johor, Melaka, Selangor, Kuala Lumpur, Perak, Pulau Pinang, Kedah, Kelantan, Terengganu dan Pahang, bagi memudahkan urusan jemaah dan pelanggan di seluruh negara.</string>
+    <string name="about_services_title">Layanan dan Perkhidmatan Utama</string>
+    <string name="about_service_umrah">Pakej Umrah dan Ziarah — perjalanan ibadah ke Tanah Suci dengan bimbingan mutawif berpengalaman, kebajikan jemaah dan penginapan yang selesa. Termasuk Pakej Bajet, Khas Wanita, Honeymoon serta ziarah seperti Istanbul dan Dubai.</string>
+    <string name="about_service_tour">Pelancongan Antarabangsa — pakej percutian ke pelbagai destinasi popular di rantau Asia dan Eropah.</string>
+    <string name="about_why_choose_title">Sebab Memilih Kami</string>
+    <string name="about_reason_registered">Agensi berdaftar dan sah (KPK/LN: 10751) — pengendali umrah dan agensi pelancongan rasmi yang mematuhi garis panduan undang-undang pelancongan Malaysia.</string>
+    <string name="about_reason_branches">Cawangan luas — rangkaian cawangan tempatan di 10 buah negeri untuk khidmat nasihat secara bersemuka.</string>
+    <string name="about_reason_guidance">Bimbingan mesra dan profesional — mengutamakan pengalaman ibadah yang lancar dan membahagiakan buat setiap jemaah.</string>
+    <string name="label_vision">Visi</string>
+    <string name="about_vision_body">Menjadi syarikat pelancongan yang sentiasa telus, berpatutan dan menjadi pilihan utama masyarakat.</string>
+    <string name="label_mission">Misi</string>
+    <string name="about_mission_body">Menyediakan pakej terjamin dengan harga relevan dan khidmat yang memberi kepuasan maksimum kepada pelanggan.</string>
+    <string name="about_registration_title">Pendaftaran Rasmi</string>
+    <string name="registration_motac">Berdaftar dengan MOTAC: KPK/LN 10751</string>
+    <string name="registration_ssm">No. Pendaftaran SSM: 202201043065 (1488762-A)</string>
+    <string name="about_established_year">Ditubuhkan pada tahun 2022</string>
+
+    <string name="contact_us_title">Hubungi Kami</string>
+    <string name="contact_hero_blurb">Ada soalan tentang pakej Umrah atau Tour? Hubungi kami menggunakan mana-mana saluran di bawah, kami sedia membantu.</string>
+    <string name="label_address">Alamat</string>
+    <string name="label_phone">Telefon</string>
+    <string name="label_email">E-mel</string>
+    <string name="contact_whatsapp_cta">WhatsApp Kami Sekarang</string>
+    <string name="contact_social_title">Media Sosial Kami</string>
+
+    <string name="default_user_name">Pengguna</string>
+    <string name="profile_member_since">Ahli sejak 2026</string>
+    <string name="profile_account_section">Akaun Saya</string>
+    <string name="profile_edit">Kemaskini Profil</string>
+    <string name="profile_my_bookings">Tempahan Saya</string>
+    <string name="profile_notifications">Notifikasi</string>
+    <string name="profile_theme_section">Tema Aplikasi</string>
+    <string name="profile_theme_light">Tema Terang</string>
+    <string name="profile_theme_dark">Tema Gelap</string>
+    <string name="profile_logout">Log Keluar</string>
+
 </resources>

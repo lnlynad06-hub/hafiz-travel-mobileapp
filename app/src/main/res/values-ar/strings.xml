@@ -90,4 +90,56 @@
 
     <string name="package_duration_price">%1$d أيام %2$d ليالٍ - RM%3$s</string>
 
+    <string name="prayer_subuh">الفجر</string>
+    <string name="prayer_zohor">الظهر</string>
+    <string name="prayer_asar">العصر</string>
+    <string name="prayer_maghrib">المغرب</string>
+    <string name="prayer_isyak">العشاء</string>
+    <string name="prayer_default_location">مواقيت الصلاة - %1$s</string>
+    <string name="menu_profile">ملفي الشخصي</string>
+    <string name="menu_language">اللغة</string>
+    <string name="menu_about_us">من نحن</string>
+    <string name="menu_contact_us">اتصل بنا</string>
+
+    <string name="about_us_title">من نحن</string>
+    <string name="company_full_name">Hafiz Travel &amp; Tours Sdn Bhd</string>
+    <string name="company_short_name">Hafiz Travel &amp; Tours</string>
+    <string name="about_hero_blurb">نقدّم إرشادات عمرة شفافة وباقات سياحية عالية الجودة، مدعومة بشبكة فروع في جميع أنحاء ماليزيا.</string>
+    <string name="about_who_we_are_title">من نحن</string>
+    <string name="about_who_we_are_body">شركة Hafiz Travel &amp; Tours Sdn. Bhd. (رقم الترخيص KPK/LN: 10751) هي وكالة سفر ومشغّل عمرة مرخّص لدى وزارة السياحة والفنون والثقافة (MOTAC)، تأسست رسميًا في عام 2022. بفضل خبرتنا في مجال السياحة وتنظيم العمرة، نلتزم بتقديم خدمات حج وسياحة شفافة ومنظمة واحترافية.\n\nمقرّنا الرئيسي في لاركين، جوهور بهرو، وقد توسّعنا لنضمّ أكثر من 10 فروع نشطة في جوهور وملقا وسيلانجور وكوالالمبور وبيراك وبينانج وقدح وكلنتن وترينجانو وباهانج، لتسهيل خدمة المعتمرين والعملاء في جميع أنحاء البلاد.</string>
+    <string name="about_services_title">خدماتنا الرئيسية</string>
+    <string name="about_service_umrah">باقات العمرة والزيارة — رحلات دينية إلى الأراضي المقدسة بمرافقة مطوّفين ذوي خبرة، ورعاية للمعتمرين وإقامة مريحة. وتشمل باقات اقتصادية، وباقات خاصة للسيدات، وباقات شهر العسل، بالإضافة إلى زيارات مثل إسطنبول ودبي.</string>
+    <string name="about_service_tour">جولات دولية — باقات سياحية إلى وجهات شهيرة في آسيا وأوروبا.</string>
+    <string name="about_why_choose_title">لماذا تختارنا</string>
+    <string name="about_reason_registered">وكالة مرخّصة ومسجّلة رسميًا (KPK/LN: 10751) — مشغّل عمرة رسمي ووكالة سفر ملتزمة بلوائح السياحة الماليزية.</string>
+    <string name="about_reason_branches">شبكة فروع واسعة — فروع محلية في 10 ولايات لتقديم استشارات وجهًا لوجه.</string>
+    <string name="about_reason_guidance">إرشاد ودود واحترافي — نضع تجربة عمرة سلسة ومُرضية لكل معتمر في المقام الأول.</string>
+    <string name="label_vision">الرؤية</string>
+    <string name="about_vision_body">أن نصبح شركة سياحية تتّسم دائمًا بالشفافية والأسعار المناسبة، وتكون الخيار الأول للمجتمع.</string>
+    <string name="label_mission">الرسالة</string>
+    <string name="about_mission_body">تقديم باقات مضمونة بأسعار مناسبة وخدمة تحقق أقصى درجات رضا العملاء.</string>
+    <string name="about_registration_title">التسجيل الرسمي</string>
+    <string name="registration_motac">مسجّلة لدى MOTAC: KPK/LN 10751</string>
+    <string name="registration_ssm">رقم تسجيل SSM: 202201043065 (1488762-A)</string>
+    <string name="about_established_year">تأسست في عام 2022</string>
+
+    <string name="contact_us_title">اتصل بنا</string>
+    <string name="contact_hero_blurb">هل لديك سؤال حول باقات العمرة أو الجولات لدينا؟ تواصل معنا عبر أي من القنوات أدناه، ويسعدنا مساعدتك.</string>
+    <string name="label_address">العنوان</string>
+    <string name="label_phone">الهاتف</string>
+    <string name="label_email">البريد الإلكتروني</string>
+    <string name="contact_whatsapp_cta">راسلنا عبر واتساب الآن</string>
+    <string name="contact_social_title">وسائل التواصل الاجتماعي</string>
+
+    <string name="default_user_name">مستخدم</string>
+    <string name="profile_member_since">عضو منذ 2026</string>
+    <string name="profile_account_section">حسابي</string>
+    <string name="profile_edit">تحديث الملف الشخصي</string>
+    <string name="profile_my_bookings">حجوزاتي</string>
+    <string name="profile_notifications">الإشعارات</string>
+    <string name="profile_theme_section">مظهر التطبيق</string>
+    <string name="profile_theme_light">المظهر الفاتح</string>
+    <string name="profile_theme_dark">المظهر الداكن</string>
+    <string name="profile_logout">تسجيل الخروج</string>
+
 </resources>

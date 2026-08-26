@@ -90,4 +90,56 @@
 
     <string name="package_duration_price">%1$d일 %2$d박 - RM%3$s</string>
 
+    <string name="prayer_subuh">파즈르 (새벽)</string>
+    <string name="prayer_zohor">두흐르 (정오)</string>
+    <string name="prayer_asar">아스르 (오후)</string>
+    <string name="prayer_maghrib">마그립 (일몰)</string>
+    <string name="prayer_isyak">이샤 (밤)</string>
+    <string name="prayer_default_location">기도 시간 - %1$s</string>
+    <string name="menu_profile">내 프로필</string>
+    <string name="menu_language">언어</string>
+    <string name="menu_about_us">회사 소개</string>
+    <string name="menu_contact_us">문의하기</string>
+
+    <string name="about_us_title">회사 소개</string>
+    <string name="company_full_name">Hafiz Travel &amp; Tours Sdn Bhd</string>
+    <string name="company_short_name">Hafiz Travel &amp; Tours</string>
+    <string name="about_hero_blurb">말레이시아 전역의 지점 네트워크를 기반으로 투명한 움라 안내와 양질의 투어 패키지를 제공합니다.</string>
+    <string name="about_who_we_are_title">회사 소개</string>
+    <string name="about_who_we_are_body">Hafiz Travel &amp; Tours Sdn. Bhd.(등록번호 KPK/LN: 10751)는 관광예술문화부(MOTAC)에 등록된 여행사이자 움라 운영업체로, 2022년에 공식 설립되었습니다. 여행 및 움라 관리 업계에서의 전문성과 경험을 바탕으로 투명하고 체계적이며 전문적인 순례 및 여행 서비스를 제공하고자 노력하고 있습니다.\n\n조호바루 라르킨을 본거지로 하여, 현재 조호, 말라카, 슬랑오르, 쿠알라룸푸르, 페락, 페낭, 케다, 클란탄, 트렝가누, 파항 등 10개 이상의 활성 지점을 운영하며 전국의 순례자와 고객에게 편리함을 제공하고 있습니다.</string>
+    <string name="about_services_title">주요 서비스</string>
+    <string name="about_service_umrah">움라 및 지야라 패키지 — 경험 많은 무타윕의 안내와 순례자 복지, 편안한 숙박이 포함된 성지 순례 여행. 예산형 패키지, 여성 전용 패키지, 허니문 패키지 및 이스탄불, 두바이 등 지야라 여행도 포함됩니다.</string>
+    <string name="about_service_tour">해외 투어 — 아시아 및 유럽의 인기 여행지로 떠나는 여행 패키지.</string>
+    <string name="about_why_choose_title">선택 이유</string>
+    <string name="about_reason_registered">정식 등록 대행사(KPK/LN: 10751) — 말레이시아 관광 법규를 준수하는 공식 움라 운영업체이자 여행사입니다.</string>
+    <string name="about_reason_branches">광범위한 지점망 — 10개 주에 걸친 지역 지점에서 대면 상담이 가능합니다.</string>
+    <string name="about_reason_guidance">친절하고 전문적인 안내 — 모든 순례자에게 원활하고 만족스러운 순례 경험을 최우선으로 합니다.</string>
+    <string name="label_vision">비전</string>
+    <string name="about_vision_body">항상 투명하고 합리적인 가격을 제공하며, 지역사회가 가장 신뢰하는 여행사가 되는 것을 목표로 합니다.</string>
+    <string name="label_mission">미션</string>
+    <string name="about_mission_body">합리적인 가격으로 보장된 패키지를 제공하고, 고객에게 최고의 만족을 주는 서비스를 제공합니다.</string>
+    <string name="about_registration_title">공식 등록 정보</string>
+    <string name="registration_motac">MOTAC 등록번호: KPK/LN 10751</string>
+    <string name="registration_ssm">SSM 등록번호: 202201043065 (1488762-A)</string>
+    <string name="about_established_year">2022년 설립</string>
+
+    <string name="contact_us_title">문의하기</string>
+    <string name="contact_hero_blurb">움라 또는 투어 패키지에 대해 궁금한 점이 있으신가요? 아래 채널 중 하나로 언제든 문의해 주세요.</string>
+    <string name="label_address">주소</string>
+    <string name="label_phone">전화번호</string>
+    <string name="label_email">이메일</string>
+    <string name="contact_whatsapp_cta">지금 WhatsApp으로 문의하기</string>
+    <string name="contact_social_title">공식 소셜 미디어</string>
+
+    <string name="default_user_name">사용자</string>
+    <string name="profile_member_since">2026년부터 회원</string>
+    <string name="profile_account_section">내 계정</string>
+    <string name="profile_edit">프로필 수정</string>
+    <string name="profile_my_bookings">내 예약</string>
+    <string name="profile_notifications">알림</string>
+    <string name="profile_theme_section">앱 테마</string>
+    <string name="profile_theme_light">라이트 테마</string>
+    <string name="profile_theme_dark">다크 테마</string>
+    <string name="profile_logout">로그아웃</string>
+
 </resources>

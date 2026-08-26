@@ -1,5 +1,6 @@
 package com.example.hafiztraveltours;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,23 +8,12 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-/**
- * Standalone "Hubungi Kami" page (not a dialog) - a proper full-screen
- * Activity so it behaves consistently with WebViewActivity and the rest
- * of the app, and supports normal back navigation.
- *
- * Contact details below are taken directly from the footer on
- * hafiztraveltours.com (checked 2026-08-24):
- * - Alamat: No. 31, Jalan Dataran Larkin, 80350 Johor Bahru, Johor.
- * - Tel: +6019-785 9867
- * - Email: sales.httsb@gmail.com.my
- * - MOTAC: KPK/LN 10751, SSM: 202201043065 (1488762-A)
- *
- * TODO: if the company updates their address/number/email/socials, update
- * the constants below (or better, once a backend exists, pull this from
- * the API instead of hardcoding it).
- */
 public class HubungiKamiActivity extends AppCompatActivity {
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.applySavedLocale(newBase));
+    }
 
     private static final String PHONE_NUMBER = "+6019-785 9867";
     private static final String PHONE_DIAL_URI = "tel:+60197859867";

@@ -46,4 +46,5 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.android.flexbox:flexbox:3.0.0")
+    implementation("com.batoulapps.adhan:adhan:1.2.1")
 }

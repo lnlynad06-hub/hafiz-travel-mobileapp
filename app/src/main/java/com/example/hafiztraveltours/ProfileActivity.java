@@ -26,6 +26,11 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class ProfileActivity extends AppCompatActivity {
 
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.applySavedLocale(newBase));
+    }
+
     private SharedPreferences profilePrefs;
     private FirebaseAuth mAuth;
 

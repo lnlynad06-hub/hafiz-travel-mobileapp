@@ -90,4 +90,56 @@
 
     <string name="package_duration_price">%1$d Days %2$d Nights - RM%3$s</string>
 
+    <string name="prayer_subuh">Fajr</string>
+    <string name="prayer_zohor">Dhuhr</string>
+    <string name="prayer_asar">Asr</string>
+    <string name="prayer_maghrib">Maghrib</string>
+    <string name="prayer_isyak">Isha</string>
+    <string name="prayer_default_location">Prayer Times - %1$s</string>
+    <string name="menu_profile">My Profile</string>
+    <string name="menu_language">Language</string>
+    <string name="menu_about_us">About Us</string>
+    <string name="menu_contact_us">Contact Us</string>
+
+    <string name="about_us_title">About Us</string>
+    <string name="company_full_name">Hafiz Travel &amp; Tours Sdn Bhd</string>
+    <string name="company_short_name">Hafiz Travel &amp; Tours</string>
+    <string name="about_hero_blurb">Providing transparent Umrah guidance and quality tour packages, backed by a nationwide branch network across Malaysia.</string>
+    <string name="about_who_we_are_title">Who We Are</string>
+    <string name="about_who_we_are_body">Hafiz Travel &amp; Tours Sdn. Bhd. (No. KPK/LN: 10751) is a licensed travel agency and Umrah operator registered under the Ministry of Tourism, Arts and Culture (MOTAC), officially established in 2022. With expertise and experience in the travel and Umrah management industry, we are committed to providing transparent, organised and professional pilgrimage and tour services.\n\nBased in Larkin, Johor Bahru, we have grown with the support of over 10 active branches across Johor, Melaka, Selangor, Kuala Lumpur, Perak, Penang, Kedah, Kelantan, Terengganu and Pahang, making it easier for pilgrims and customers nationwide.</string>
+    <string name="about_services_title">Our Services</string>
+    <string name="about_service_umrah">Umrah and Ziarah Packages — pilgrimage trips to the Holy Land with experienced mutawif guidance, pilgrim welfare and comfortable accommodation. Includes Budget, Ladies-Only, and Honeymoon Packages, plus ziarah trips such as Istanbul and Dubai.</string>
+    <string name="about_service_tour">International Tours — holiday packages to popular destinations across Asia and Europe.</string>
+    <string name="about_why_choose_title">Why Choose Us</string>
+    <string name="about_reason_registered">Licensed and registered agency (KPK/LN: 10751) — an official Umrah operator and travel agency compliant with Malaysian tourism regulations.</string>
+    <string name="about_reason_branches">Wide branch network — local branches in 10 states for face-to-face consultation.</string>
+    <string name="about_reason_guidance">Friendly and professional guidance — prioritising a smooth and fulfilling pilgrimage experience for every pilgrim.</string>
+    <string name="label_vision">Vision</string>
+    <string name="about_vision_body">To become a travel company that is always transparent, affordable, and the community\'s top choice.</string>
+    <string name="label_mission">Mission</string>
+    <string name="about_mission_body">To provide guaranteed packages at reasonable prices with service that delivers maximum customer satisfaction.</string>
+    <string name="about_registration_title">Official Registration</string>
+    <string name="registration_motac">Registered with MOTAC: KPK/LN 10751</string>
+    <string name="registration_ssm">SSM Registration No.: 202201043065 (1488762-A)</string>
+    <string name="about_established_year">Established in 2022</string>
+
+    <string name="contact_us_title">Contact Us</string>
+    <string name="contact_hero_blurb">Have a question about our Umrah or Tour packages? Reach us through any of the channels below — we\'re happy to help.</string>
+    <string name="label_address">Address</string>
+    <string name="label_phone">Phone</string>
+    <string name="label_email">Email</string>
+    <string name="contact_whatsapp_cta">WhatsApp Us Now</string>
+    <string name="contact_social_title">Our Social Media</string>
+
+    <string name="default_user_name">User</string>
+    <string name="profile_member_since">Member since 2026</string>
+    <string name="profile_account_section">My Account</string>
+    <string name="profile_edit">Edit Profile</string>
+    <string name="profile_my_bookings">My Bookings</string>
+    <string name="profile_notifications">Notifications</string>
+    <string name="profile_theme_section">App Theme</string>
+    <string name="profile_theme_light">Light Theme</string>
+    <string name="profile_theme_dark">Dark Theme</string>
+    <string name="profile_logout">Log Out</string>
+
 </resources>

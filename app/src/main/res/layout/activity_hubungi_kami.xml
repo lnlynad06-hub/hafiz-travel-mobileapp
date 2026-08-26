@@ -2,6 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -22,18 +23,19 @@
             android:id="@+id/hubungiBackButton"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:clickable="true"
+            android:focusable="true"
             android:padding="10dp"
             android:src="@drawable/ic_back"
             app:tint="@color/text_dark"
-            android:clickable="true"
-            android:focusable="true" />
+            tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginStart="8dp"
-            android:text="Hubungi Kami"
+            android:text="@string/contact_us_title"
             android:textColor="@color/text_dark"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -63,7 +65,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Hafiz Travel &amp; Tours"
+                    android:text="@string/company_short_name"
                     android:textColor="@color/white"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -73,7 +75,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
                     android:alpha="0.9"
-                    android:text="Ada soalan tentang pakej Umrah atau Tour? Hubungi kami menggunakan mana-mana saluran di bawah, kami sedia membantu."
+                    android:text="@string/contact_hero_blurb"
                     android:textColor="@color/white"
                     android:textSize="13sp"
                     android:lineSpacingExtra="2dp" />
@@ -118,7 +120,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Alamat"
+                            android:text="@string/label_address"
                             android:textColor="@color/text_gray"
                             android:textSize="12sp" />
 
@@ -170,7 +172,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Telefon"
+                            android:text="@string/label_phone"
                             android:textColor="@color/text_gray"
                             android:textSize="12sp" />
 
@@ -181,7 +183,8 @@
                             android:text="+6019-785 9867"
                             android:textColor="@color/text_dark"
                             android:textSize="14sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:textDirection="ltr" />
 
                     </LinearLayout>
 
@@ -222,7 +225,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="E-mel"
+                            android:text="@string/label_email"
                             android:textColor="@color/text_gray"
                             android:textSize="12sp" />
 
@@ -264,7 +267,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:text="WhatsApp Kami Sekarang"
+                    android:text="@string/contact_whatsapp_cta"
                     android:textColor="@color/white"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -276,7 +279,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="26dp"
-                android:text="Media Sosial Kami"
+                android:text="@string/contact_social_title"
                 android:textColor="@color/text_dark"
                 android:textSize="17sp"
                 android:textStyle="bold" />
@@ -291,8 +294,8 @@
                     android:id="@+id/socialFacebook"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_marginEnd="6dp"
+                    android:layout_weight="1"
                     android:background="@drawable/circle_bg_light"
                     android:clickable="true"
                     android:focusable="true"
@@ -301,14 +304,15 @@
                     android:text="Facebook"
                     android:textColor="@color/pink_dark"
                     android:textSize="12sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:ignore="TouchTargetSizeCheck" />
 
                 <TextView
                     android:id="@+id/socialInstagram"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_marginHorizontal="6dp"
+                    android:layout_weight="1"
                     android:background="@drawable/circle_bg_light"
                     android:clickable="true"
                     android:focusable="true"
@@ -317,14 +321,15 @@
                     android:text="Instagram"
                     android:textColor="@color/pink_dark"
                     android:textSize="12sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:ignore="TouchTargetSizeCheck" />
 
                 <TextView
                     android:id="@+id/socialTiktok"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_marginHorizontal="6dp"
+                    android:layout_weight="1"
                     android:background="@drawable/circle_bg_light"
                     android:clickable="true"
                     android:focusable="true"
@@ -333,14 +338,15 @@
                     android:text="TikTok"
                     android:textColor="@color/pink_dark"
                     android:textSize="12sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:ignore="TouchTargetSizeCheck" />
 
                 <TextView
                     android:id="@+id/socialYoutube"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_marginStart="6dp"
+                    android:layout_weight="1"
                     android:background="@drawable/circle_bg_light"
                     android:clickable="true"
                     android:focusable="true"
@@ -349,7 +355,8 @@
                     android:text="YouTube"
                     android:textColor="@color/pink_dark"
                     android:textSize="12sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:ignore="TouchTargetSizeCheck" />
 
             </LinearLayout>
 
@@ -365,7 +372,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Hafiz Travel &amp; Tours Sdn Bhd"
+                    android:text="@string/company_full_name"
                     android:textColor="@color/text_dark"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -374,7 +381,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="Berdaftar dengan MOTAC: KPK/LN 10751"
+                    android:text="@string/registration_motac"
                     android:textColor="@color/text_gray"
                     android:textSize="12sp" />
 
@@ -382,7 +389,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="No. Pendaftaran SSM: 202201043065 (1488762-A)"
+                    android:text="@string/registration_ssm"
                     android:textColor="@color/text_gray"
                     android:textSize="12sp" />
 

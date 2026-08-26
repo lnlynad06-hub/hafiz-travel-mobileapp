@@ -90,4 +90,56 @@
 
     <string name="package_duration_price">%1$d日%2$d泊 - RM%3$s</string>
 
+    <string name="prayer_subuh">ファジュル</string>
+    <string name="prayer_zohor">ズフル</string>
+    <string name="prayer_asar">アスル</string>
+    <string name="prayer_maghrib">マグリブ</string>
+    <string name="prayer_isyak">イシャー</string>
+    <string name="prayer_default_location">礼拝時間 - %1$s</string>
+    <string name="menu_profile">マイプロフィール</string>
+    <string name="menu_language">言語</string>
+    <string name="menu_about_us">私たちについて</string>
+    <string name="menu_contact_us">お問い合わせ</string>
+
+    <string name="about_us_title">会社概要</string>
+    <string name="company_full_name">Hafiz Travel &amp; Tours Sdn Bhd</string>
+    <string name="company_short_name">Hafiz Travel &amp; Tours</string>
+    <string name="about_hero_blurb">マレーシア全土の支店網に支えられ、透明性のあるウムラガイダンスと質の高いツアーパッケージを提供しています。</string>
+    <string name="about_who_we_are_title">私たちについて</string>
+    <string name="about_who_we_are_body">Hafiz Travel &amp; Tours Sdn. Bhd.（登録番号 KPK/LN: 10751）は、観光芸術文化省（MOTAC）の認可を受けた旅行代理店およびウムラ運営会社で、2022年に正式に設立されました。旅行業界およびウムラ運営における専門知識と経験を活かし、透明で組織的、かつ専門的な巡礼・旅行サービスの提供に努めています。\n\nジョホールバルのラルキンを拠点とし、ジョホール、マラッカ、セランゴール、クアラルンプール、ペラ、ペナン、ケダ、クランタン、トレンガヌ、パハンにわたる10以上の支店の支援を受けて成長を続けており、全国の巡礼者やお客様の利便性を高めています。</string>
+    <string name="about_services_title">主なサービス</string>
+    <string name="about_service_umrah">ウムラ・巡礼パッケージ — 経験豊富なムタウィフの案内、巡礼者の福利、快適な宿泊を伴う聖地への巡礼旅行。予算重視プラン、女性専用プラン、ハネムーンプランに加え、イスタンブールやドバイなどの巡礼旅行も含みます。</string>
+    <string name="about_service_tour">海外ツアー — アジアおよびヨーロッパの人気観光地への旅行パッケージ。</string>
+    <string name="about_why_choose_title">選ばれる理由</string>
+    <string name="about_reason_registered">正式登録代理店（KPK/LN: 10751）— マレーシアの観光関連法規を遵守する公式ウムラ運営会社・旅行代理店です。</string>
+    <string name="about_reason_branches">広範な支店網 — 対面相談が可能な10州にわたる地元支店。</string>
+    <string name="about_reason_guidance">親切かつ専門的なガイダンス — すべての巡礼者にとって円滑で充実した巡礼体験を最優先します。</string>
+    <string name="label_vision">ビジョン</string>
+    <string name="about_vision_body">常に透明性があり、手頃な価格で、地域社会に選ばれる旅行会社になることを目指します。</string>
+    <string name="label_mission">ミッション</string>
+    <string name="about_mission_body">妥当な価格で保証されたパッケージを提供し、お客様に最大限の満足をもたらすサービスを提供します。</string>
+    <string name="about_registration_title">正式登録情報</string>
+    <string name="registration_motac">MOTAC登録番号: KPK/LN 10751</string>
+    <string name="registration_ssm">SSM登録番号: 202201043065 (1488762-A)</string>
+    <string name="about_established_year">2022年設立</string>
+
+    <string name="contact_us_title">お問い合わせ</string>
+    <string name="contact_hero_blurb">ウムラやツアーパッケージについてご質問がありますか？以下のいずれかの方法でお気軽にお問い合わせください。</string>
+    <string name="label_address">住所</string>
+    <string name="label_phone">電話番号</string>
+    <string name="label_email">メール</string>
+    <string name="contact_whatsapp_cta">今すぐWhatsAppでお問い合わせ</string>
+    <string name="contact_social_title">公式SNS</string>
+
+    <string name="default_user_name">ユーザー</string>
+    <string name="profile_member_since">2026年からのメンバー</string>
+    <string name="profile_account_section">マイアカウント</string>
+    <string name="profile_edit">プロフィールを編集</string>
+    <string name="profile_my_bookings">予約履歴</string>
+    <string name="profile_notifications">通知</string>
+    <string name="profile_theme_section">アプリのテーマ</string>
+    <string name="profile_theme_light">ライトテーマ</string>
+    <string name="profile_theme_dark">ダークテーマ</string>
+    <string name="profile_logout">ログアウト</string>
+
 </resources>

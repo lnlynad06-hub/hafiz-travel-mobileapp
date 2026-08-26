@@ -90,4 +90,56 @@
 
     <string name="package_duration_price">%1$d天%2$d晚 - RM%3$s</string>
 
+    <string name="prayer_subuh">晨礼</string>
+    <string name="prayer_zohor">晌礼</string>
+    <string name="prayer_asar">晡礼</string>
+    <string name="prayer_maghrib">昏礼</string>
+    <string name="prayer_isyak">宵礼</string>
+    <string name="prayer_default_location">祈祷时间 - %1$s</string>
+    <string name="menu_profile">我的资料</string>
+    <string name="menu_language">语言</string>
+    <string name="menu_about_us">关于我们</string>
+    <string name="menu_contact_us">联络我们</string>
+
+    <string name="about_us_title">关于我们</string>
+    <string name="company_full_name">Hafiz Travel &amp; Tours Sdn Bhd</string>
+    <string name="company_short_name">Hafiz Travel &amp; Tours</string>
+    <string name="about_hero_blurb">在马来西亚全国分行网络的支持下，提供透明的朝觐指导与优质的旅游配套。</string>
+    <string name="about_who_we_are_title">我们是谁</string>
+    <string name="about_who_we_are_body">Hafiz Travel &amp; Tours Sdn. Bhd.（注册号 KPK/LN: 10751）是一家在旅游、艺术及文化部（MOTAC）注册的旅行社及副朝运营商，正式成立于2022年。凭借在旅游与副朝管理行业的专业知识与经验，我们致力于提供透明、有序且专业的朝觐与旅游服务。\n\n我们总部设于新山拉京（Larkin），目前已发展至在柔佛、马六甲、雪兰莪、吉隆坡、霹雳、槟城、吉打、吉兰丹、登嘉楼及彭亨设有超过10间活跃分行，为全国朝觐者及顾客提供更便利的服务。</string>
+    <string name="about_services_title">主要服务</string>
+    <string name="about_service_umrah">副朝与朝圣配套 — 由经验丰富的领队带领前往圣地朝觐，提供朝觐者福利及舒适住宿。包括经济配套、女性专属配套、蜜月配套，以及伊斯坦布尔、迪拜等朝圣行程。</string>
+    <string name="about_service_tour">国际旅游 — 前往亚洲及欧洲热门目的地的旅游配套。</string>
+    <string name="about_why_choose_title">选择我们的理由</string>
+    <string name="about_reason_registered">正式注册代理（KPK/LN: 10751）— 符合马来西亚旅游法规的官方副朝运营商及旅行社。</string>
+    <string name="about_reason_branches">分行网络广泛 — 在10个州属设有本地分行，提供面对面咨询服务。</string>
+    <string name="about_reason_guidance">友善专业的指导 — 致力为每位朝觐者提供顺畅且充实的朝觐体验。</string>
+    <string name="label_vision">愿景</string>
+    <string name="about_vision_body">成为始终透明、价格合理，并深受社会大众信赖的首选旅游公司。</string>
+    <string name="label_mission">使命</string>
+    <string name="about_mission_body">以合理价格提供有保障的配套，并以令顾客最满意的服务为宗旨。</string>
+    <string name="about_registration_title">正式注册信息</string>
+    <string name="registration_motac">MOTAC注册号：KPK/LN 10751</string>
+    <string name="registration_ssm">SSM注册号：202201043065 (1488762-A)</string>
+    <string name="about_established_year">成立于2022年</string>
+
+    <string name="contact_us_title">联络我们</string>
+    <string name="contact_hero_blurb">对我们的副朝或旅游配套有任何疑问？欢迎通过以下任何渠道与我们联系，我们乐意为您提供协助。</string>
+    <string name="label_address">地址</string>
+    <string name="label_phone">电话</string>
+    <string name="label_email">电邮</string>
+    <string name="contact_whatsapp_cta">立即WhatsApp联络我们</string>
+    <string name="contact_social_title">我们的社交媒体</string>
+
+    <string name="default_user_name">用户</string>
+    <string name="profile_member_since">2026年起成为会员</string>
+    <string name="profile_account_section">我的账户</string>
+    <string name="profile_edit">更新个人资料</string>
+    <string name="profile_my_bookings">我的预订</string>
+    <string name="profile_notifications">通知</string>
+    <string name="profile_theme_section">应用主题</string>
+    <string name="profile_theme_light">浅色主题</string>
+    <string name="profile_theme_dark">深色主题</string>
+    <string name="profile_logout">登出</string>
+
 </resources>

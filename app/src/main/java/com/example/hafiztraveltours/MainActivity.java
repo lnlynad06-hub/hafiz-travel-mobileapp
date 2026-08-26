@@ -1,9 +1,13 @@
 package com.example.hafiztraveltours;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -12,17 +16,30 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.batoulapps.adhan.CalculationMethod;
+import com.batoulapps.adhan.CalculationParameters;
+import com.batoulapps.adhan.Coordinates;
+import com.batoulapps.adhan.data.DateComponents;
+import com.batoulapps.adhan.Madhab;
+import com.batoulapps.adhan.PrayerTimes;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,6 +62,9 @@ public class MainActivity extends AppCompatActivity {
     private boolean isLoggedIn;
     private String loggedInUserName;
 
+    // Prayer times location permission flow
+    private ActivityResultLauncher<String> locationPermissionLauncher;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleHelper.applySavedLocale(newBase));
@@ -66,6 +86,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         loadSessionState();
+
+        locationPermissionLauncher = registerForActivityResult(
+                new ActivityResultContracts.RequestPermission(),
+                granted -> {
+                    if (granted) {
+                        loadPrayerTimesForCurrentLocation();
+                    } else {
+                        showPrayerTimesLocationDenied();
+                    }
+                });
 
         setupHeroSection();
         setupPopularPackages();
@@ -368,7 +398,12 @@ public class MainActivity extends AppCompatActivity {
      */
     private void setupMenu() {
         findViewById(R.id.menuButton).setOnClickListener(v -> {
-            String[] options = new String[]{"Profil Saya", "Bahasa / Language", "Tentang Kami", "Hubungi Kami"};
+            String[] options = new String[]{
+                    getString(R.string.menu_profile),
+                    getString(R.string.menu_language),
+                    getString(R.string.menu_about_us),
+                    getString(R.string.menu_contact_us)
+            };
 
             new AlertDialog.Builder(this)
                     .setTitle("Menu")
@@ -545,35 +580,112 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // ================== WAKTU SOLAT (REAL, using Adhan library) ==================
+
     /**
      * "Daily use" hook so people open the app even when they're not booking.
      *
-     * IMPORTANT: times below are PLACEHOLDER/dummy - NOT calculated from real
-     * location + date. Do not ship as-is. Before launch, replace this with a
-     * proper prayer-time calculation library (e.g. an Adhan/PrayTimes library)
-     * fed by the device's GPS location and today's date - getting this wrong
-     * is a trust-breaking bug for a Muslim-facing app, so don't hand-roll the
-     * astronomical formula without validating against a trusted source first.
+     * Uses the Adhan library (com.batoulapps.adhan:adhan:1.2.1, MIT licensed,
+     * astronomical formulas from Jean Meeus' "Astronomical Algorithms") fed by
+     * the device's real GPS/network location + today's date. This replaces the
+     * old hardcoded placeholder times.
+     *
+     * REQUIRED before this compiles/runs:
+     * 1) Add to app/build.gradle(.kts):  implementation("com.batoulapps.adhan:adhan:1.2.1")
+     * 2) Add to AndroidManifest.xml (outside <application>):
+     *      <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+     *      <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+     *
+     * Calculation method used: SINGAPORE (Fajr 20 deg, Isha 18 deg) - this is
+     * the closest built-in preset to JAKIM's Malaysian parameters, but it is
+     * NOT an official JAKIM method. Cross-check against e-solat.gov.my before
+     * relying on this for real worship - getting this wrong is a
+     * trust-breaking bug for a Muslim-facing app.
      */
     private void setupPrayerTimesWidget() {
-        TextView dateText = findViewById(R.id.prayerTimesDateText);
-        dateText.setText("Waktu Solat Hari Ini (anggaran)");
+        boolean hasFineLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED;
+        boolean hasCoarseLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED;
 
+        if (hasFineLocation || hasCoarseLocation) {
+            loadPrayerTimesForCurrentLocation();
+        } else {
+            locationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+    }
+
+    private void loadPrayerTimesForCurrentLocation() {
+        TextView dateText = findViewById(R.id.prayerTimesDateText);
         LinearLayout row = findViewById(R.id.prayerTimesRow);
-        row.removeAllViews();
+
+        Location location = getBestLastKnownLocation();
+        if (location == null) {
+            dateText.setText(getString(R.string.prayer_default_location, "Johor Bahru"));
+            // Fallback to the office's own city so the widget isn't empty on
+            // first run before a GPS fix is available.
+            calculateAndDisplayPrayerTimes(1.4927, 103.7414, row);
+            return;
+        }
+
+        dateText.setText("Waktu Solat Hari Ini");
+        calculateAndDisplayPrayerTimes(location.getLatitude(), location.getLongitude(), row);
+    }
+
+    private Location getBestLastKnownLocation() {
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (locationManager == null) return null;
+
+        boolean hasFineLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED;
+        boolean hasCoarseLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED;
+        if (!hasFineLocation && !hasCoarseLocation) return null;
+
+        Location best = null;
+        for (String provider : new String[]{LocationManager.GPS_PROVIDER, LocationManager.NETWORK_PROVIDER}) {
+            try {
+                Location candidate = locationManager.getLastKnownLocation(provider);
+                if (candidate != null && (best == null || candidate.getTime() > best.getTime())) {
+                    best = candidate;
+                }
+            } catch (SecurityException ignored) {
+                // Permission was revoked between the check above and this call - skip.
+            }
+        }
+        return best;
+    }
+
+    private void calculateAndDisplayPrayerTimes(double latitude, double longitude, LinearLayout row) {
+        java.util.Calendar today = java.util.Calendar.getInstance();
+        DateComponents dateComponents = new DateComponents(
+                today.get(java.util.Calendar.YEAR),
+                today.get(java.util.Calendar.MONTH) + 1,
+                today.get(java.util.Calendar.DAY_OF_MONTH));
+
+        Coordinates coordinates = new Coordinates(latitude, longitude);
+        CalculationParameters params = CalculationMethod.SINGAPORE.getParameters();
+        params.madhab = Madhab.SHAFI;
+
+        PrayerTimes prayerTimes = new PrayerTimes(coordinates, dateComponents, params);
+
+        SimpleDateFormat formatter = new SimpleDateFormat("h:mm a", Locale.getDefault());
+        formatter.setTimeZone(TimeZone.getDefault());
 
         String[][] times = {
-                {"Subuh", "5:58"},
-                {"Zohor", "1:15"},
-                {"Asar", "4:35"},
-                {"Maghrib", "7:20"},
-                {"Isyak", "8:35"}
+                {getString(R.string.prayer_subuh), formatter.format(prayerTimes.fajr)},
+                {getString(R.string.prayer_zohor), formatter.format(prayerTimes.dhuhr)},
+                {getString(R.string.prayer_asar), formatter.format(prayerTimes.asr)},
+                {getString(R.string.prayer_maghrib), formatter.format(prayerTimes.maghrib)},
+                {getString(R.string.prayer_isyak), formatter.format(prayerTimes.isha)}
         };
 
+        row.removeAllViews();
         for (String[] t : times) {
             LinearLayout col = new LinearLayout(this);
             col.setOrientation(LinearLayout.VERTICAL);
             col.setGravity(android.view.Gravity.CENTER);
+            col.setPadding(dp(4), dp(6), dp(4), dp(6));
             LinearLayout.LayoutParams colParams = new LinearLayout.LayoutParams(
                     0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
             col.setLayoutParams(colParams);
@@ -586,7 +698,7 @@ public class MainActivity extends AppCompatActivity {
 
             TextView time = new TextView(this);
             time.setText(t[1]);
-            time.setTextSize(14);
+            time.setTextSize(13);
             time.setTypeface(null, android.graphics.Typeface.BOLD);
             time.setTextColor(getResources().getColor(R.color.text_dark));
             time.setGravity(android.view.Gravity.CENTER);
@@ -600,6 +712,39 @@ public class MainActivity extends AppCompatActivity {
             row.addView(col);
         }
     }
+
+    /**
+     * Permission denied - show a retry button instead of silently failing or
+     * making up numbers. Tapping it re-requests permission.
+     */
+    private void showPrayerTimesLocationDenied() {
+        TextView dateText = findViewById(R.id.prayerTimesDateText);
+        LinearLayout row = findViewById(R.id.prayerTimesRow);
+
+        dateText.setText("Aktifkan lokasi untuk lihat waktu solat");
+        row.removeAllViews();
+
+        TextView retryButton = new TextView(this);
+        retryButton.setText("Guna Lokasi Saya");
+        retryButton.setTextSize(13);
+        retryButton.setTypeface(null, android.graphics.Typeface.BOLD);
+        retryButton.setTextColor(getResources().getColor(R.color.pink_dark));
+        retryButton.setBackgroundResource(R.drawable.bg_pill_active_nav);
+        int h = dp(10);
+        int v = dp(8);
+        retryButton.setPadding(h, v, h, v);
+        retryButton.setClickable(true);
+        retryButton.setFocusable(true);
+        retryButton.setOnClickListener(v2 ->
+                locationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION));
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        retryButton.setLayoutParams(params);
+        row.addView(retryButton);
+    }
+
+    // ================== end waktu solat ==================
 
     private int dp(int value) {
         float density = getResources().getDisplayMetrics().density;
