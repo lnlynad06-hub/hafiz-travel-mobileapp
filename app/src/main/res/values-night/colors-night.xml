@@ -1,0 +1,44 @@
+<!--
+    DARK theme overrides. Goes in res/values-night/colors.xml
+    (create the "values-night" folder if it doesn't exist).
+
+    Same color NAMES as res/values/colors.xml - Android auto-picks this file
+    when the system/app is in night mode, no layout XML changes needed
+    (as long as layouts reference @color/xxx and not hardcoded hex).
+-->
+<resources>
+    <!-- Brand pink kept the SAME as light mode - the hero card, status bar and
+         accent circles stay vividly pink in both themes on purpose, so
+         pink_primary and pink_accent are unchanged here. -->
+    <color name="pink_primary">#EC407A</color>
+    <color name="pink_accent">#FF80AB</color>
+
+    <!-- pink_dark is used as TEXT/ICON color on top of pink_light chips -
+         since pink_light goes dark below, pink_dark is lightened here so it
+         still pops. (It is NOT used on pink_accent anymore - those spots were
+         switched to @color/white in activity_main.xml for safe contrast in
+         both themes - see notes sent separately.) -->
+    <color name="pink_dark">#FF6FA5</color>
+
+    <!-- pink_light was a pale pink chip/icon background - inverted to a
+         dark, muted rose so pink_dark text/icons on top of it stay readable -->
+    <color name="pink_light">#4A2733</color>
+
+    <!-- "white" stays LITERALLY white - it's used for text/icons on the pink
+         hero (colorOnPrimary) which must remain white in both themes -->
+    <color name="white">#FFFFFF</color>
+
+    <!-- Card / panel surface - THIS is the one that goes dark -->
+    <color name="surface">#1E1E1E</color>
+
+    <!-- Root window background -->
+    <color name="background">#121212</color>
+
+    <!-- Body text - flipped for readability on dark surfaces -->
+    <color name="text_dark">#F2F2F2</color>
+    <color name="text_gray">#B0B0B0</color>
+
+    <!-- Misc -->
+    <color name="field_border">#3A3A3A</color>
+    <color name="error_red">#EF5350</color>
+</resources>

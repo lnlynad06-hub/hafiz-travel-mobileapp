@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">HafizTravel&amp;Tours</string>
+
+    <!-- Welcome / Onboarding screen -->
+    <string name="welcome_trust_text">موثوق به من قبل مئات الحجاج والمعتمرين</string>
+    <string name="welcome_title">رفيقك في العمرة والحج والسفر</string>
+    <string name="welcome_subtitle">احجز بسهولة باقات العمرة والحج والرحلات الداخلية والخارجية مباشرة من هاتفك.</string>
+    <string name="welcome_start_now">ابدأ الآن</string>
+    <string name="welcome_already_have_account">لديك حساب بالفعل؟ تسجيل الدخول</string>
+
+    <!-- Login screen -->
+    <string name="login_title">مرحبًا بعودتك</string>
+    <string name="login_subtitle">سجّل الدخول للمتابعة</string>
+    <string name="hint_email">البريد الإلكتروني</string>
+    <string name="hint_password">كلمة المرور</string>
+    <string name="login_button">تسجيل الدخول</string>
+    <string name="login_no_account">ليس لديك حساب؟ سجّل الآن.</string>
+    <string name="login_or_with">أو سجّل الدخول باستخدام</string>
+    <string name="login_guest">الدخول كضيف</string>
+
+    <!-- Sign Up screen -->
+    <string name="signup_title">إنشاء حساب</string>
+    <string name="signup_subtitle">سجّل للبدء في التخطيط لرحلتك.</string>
+    <string name="hint_full_name">الاسم الكامل</string>
+    <string name="hint_phone">رقم الهاتف</string>
+    <string name="hint_confirm_password">تأكيد كلمة المرور</string>
+    <string name="signup_button">تسجيل</string>
+    <string name="signup_have_account">لديك حساب بالفعل؟ تسجيل الدخول</string>
+    <string name="signup_or_with">أو سجّل باستخدام</string>
+    <string name="signup_guest">الدخول كضيف</string>
+    <string name="social_login_google">تسجيل الدخول عبر Google - قريبًا</string>
+    <string name="social_login_facebook">تسجيل الدخول عبر Facebook - قريبًا</string>
+    <string name="social_login_phone">تسجيل الدخول برقم الهاتف - قريبًا</string>
+
+    <string name="social_signup_google">التسجيل عبر Google - قريبًا</string>
+    <string name="social_signup_facebook">التسجيل عبر Facebook - قريبًا</string>
+    <string name="social_signup_phone">التسجيل برقم الهاتف - قريبًا</string>
+
+    <string name="guest_greeting">السلام عليكم</string>
+    <string name="user_greeting">السلام عليكم، %1$s</string>
+    <string name="hero_subtitle_guest">مرحبًا بكم في\nHafiz Travel &amp; Tours</string>
+    <string name="hero_subtitle_user">مرحبًا بعودتك</string>
+    <string name="hero_headline_guest">مرحبًا بكم في\nHafiz Travel &amp; Tours</string>
+    <string name="hero_headline_user">إلى أين تودّ\nالذهاب؟</string>
+
+    <string name="nav_home">الرئيسية</string>
+    <string name="nav_umrah">العمرة</string>
+    <string name="nav_tour">الجولات</string>
+    <string name="nav_favorite">المفضلة</string>
+
+    <string name="quick_nusuk">نسك</string>
+    <string name="quick_guideline">دليل العمرة</string>
+    <string name="quick_checklist">قائمة التحقق</string>
+    <string name="quick_whatsapp">واتساب</string>
+
+    <string name="prayer_times_title">أوقات الصلاة اليوم (تقريبية)</string>
+    <string name="search_placeholder">ابحث عن وجهتك</string>
+    <string name="popular_packages">الباقات الشائعة</string>
+    <string name="see_all">عرض الكل</string>
+    <string name="select_language">اختر اللغة</string>
+    <string name="cancel">إلغاء</string>
+    <string name="no_notifications">لا توجد إشعارات جديدة</string>
+    <string name="faq_title">الأسئلة الشائعة</string>
+    <string name="gallery_title">معرض الصور</string>
+
+    <!-- NEW: previously hardcoded in MainActivity.java / activity_main.xml, now translatable -->
+    <string name="search_coming_soon">البحث - قريبًا</string>
+    <string name="signup_coming_soon">التسجيل - قريبًا</string>
+
+    <string name="google_review_count">استنادًا إلى 102 تقييم على Google</string>
+    <string name="review_label">التقييمات</string>
+
+    <string name="register_cta_text">سجّل لتصلك أحدث الباقات والعروض</string>
+    <string name="register_cta_button">تسجيل</string>
+
+    <string name="review_1_name">السيدة أمينة</string>
+    <string name="review_1_quote">رحلة عمرة منظمة جدًا، وكان المطوّف متعاونًا للغاية طوال الرحلة.</string>
+    <string name="review_2_name">السيد رزاق</string>
+    <string name="review_2_quote">إجراءات الحجز سهلة والدفع واضح وفريق العمل متجاوب عبر واتساب.</string>
+    <string name="review_3_name">السيدة سيتي</string>
+    <string name="review_3_quote">الفندق قريب من المسجد الحرام، وكان مريحًا جدًا للعائلة.</string>
+
+    <string name="faq_q1">كيف يمكنني دفع العربون؟</string>
+    <string name="faq_a1">يمكن دفع العربون عبر التحويل البنكي أو التواصل مباشرة مع فريقنا عبر واتساب للحصول على تعليمات الدفع.</string>
+    <string name="faq_q2">كم يجب أن تكون مدة صلاحية جواز السفر؟</string>
+    <string name="faq_a2">يجب أن يكون جواز السفر ساري المفعول لمدة لا تقل عن 6 أشهر من تاريخ المغادرة.</string>
+    <string name="faq_q3">هل يمكنني تغيير التاريخ بعد الحجز؟</string>
+    <string name="faq_a3">نعم، حسب توفر الأماكن وقد تُطبّق رسوم تغيير. يرجى التواصل مع الإدارة للتأكيد.</string>
+
+    <string name="package_duration_price">%1$d أيام %2$d ليالٍ - RM%3$s</string>
+
+</resources>

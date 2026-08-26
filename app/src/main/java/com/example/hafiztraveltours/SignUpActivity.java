@@ -1,5 +1,6 @@
 package com.example.hafiztraveltours;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -11,17 +12,39 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class SignUpActivity extends AppCompatActivity {
 
     private TextInputLayout nameLayout, emailLayout, phoneLayout, passwordLayout, confirmPasswordLayout;
     private TextInputEditText nameInput, emailInput, phoneInput, passwordInput, confirmPasswordInput;
     private MaterialButton signUpButton;
+    private FirebaseAuth mAuth;
 
     @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.applySavedLocale(newBase));
+    }
+
+    private String activeLanguage;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String currentSaved = LocaleHelper.getSavedLanguage(this);
+        if (activeLanguage != null && !activeLanguage.equals(currentSaved)) {
+            recreate();
+        }
+        activeLanguage = currentSaved;
+    }
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+
+        mAuth = FirebaseAuth.getInstance();
 
         nameLayout = findViewById(R.id.nameLayout);
         emailLayout = findViewById(R.id.emailLayout);
@@ -43,19 +66,38 @@ public class SignUpActivity extends AppCompatActivity {
             finish();
         });
 
-        // TODO: wire these up to real Firebase Authentication / Facebook SDK later
+        // TODO: Google/Facebook/Phone real signup - buat lepas ni
         findViewById(R.id.googleSignUpButton).setOnClickListener(v ->
-                Toast.makeText(this, "Daftar guna Google - akan datang", Toast.LENGTH_SHORT).show());
+                Toast.makeText(this, getString(R.string.social_signup_google), Toast.LENGTH_SHORT).show());
         findViewById(R.id.facebookSignUpButton).setOnClickListener(v ->
-                Toast.makeText(this, "Daftar guna Facebook - akan datang", Toast.LENGTH_SHORT).show());
+                Toast.makeText(this, getString(R.string.social_signup_facebook), Toast.LENGTH_SHORT).show());
         findViewById(R.id.phoneSignUpButton).setOnClickListener(v ->
-                Toast.makeText(this, "Daftar guna nombor telefon - akan datang", Toast.LENGTH_SHORT).show());
+                Toast.makeText(this, getString(R.string.social_signup_phone), Toast.LENGTH_SHORT).show());
 
-        // Guest: skip sign up entirely. Replace MainActivity.class with your real
-        // Homepage activity once it's built.
         findViewById(R.id.guestText).setOnClickListener(v ->
                 startActivity(new Intent(SignUpActivity.this, MainActivity.class))
         );
+
+        setupLanguageButton();
+    }
+
+    private void setupLanguageButton() {
+        findViewById(R.id.languageButton).setOnClickListener(v -> {
+            String[] options = {"English", "Bahasa Melayu", "العربية", "한국어", "日本語", "中文"};
+            new android.app.AlertDialog.Builder(this)
+                    .setTitle("Choose Language / Pilih Bahasa")
+                    .setItems(options, (dialog, which) -> {
+                        String lang = (which == 0) ? LocaleHelper.LANGUAGE_ENGLISH
+                                : (which == 1) ? LocaleHelper.LANGUAGE_MALAY
+                                  : (which == 2) ? LocaleHelper.LANGUAGE_ARABIC
+                                    : (which == 3) ? LocaleHelper.LANGUAGE_KOREAN
+                                      : (which == 4) ? LocaleHelper.LANGUAGE_JAPANESE
+                                        : LocaleHelper.LANGUAGE_CHINESE;
+                        LocaleHelper.saveLanguage(this, lang);
+                        recreate();
+                    })
+                    .show();
+        });
     }
 
     private void attemptSignUp() {
@@ -104,11 +146,31 @@ public class SignUpActivity extends AppCompatActivity {
 
         if (!valid) return;
 
-        // TODO: replace with real registration call (Firebase Auth / Laravel API)
-        Toast.makeText(this, "Pendaftaran berjaya (dummy) - " + name, Toast.LENGTH_SHORT).show();
+        signUpButton.setEnabled(false);
 
-        startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
-        finish();
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        if (user != null) {
+                            UserProfileChangeRequest profileUpdate =
+                                    new UserProfileChangeRequest.Builder()
+                                            .setDisplayName(name)
+                                            .build();
+                            user.updateProfile(profileUpdate);
+                        }
+                        signUpButton.setEnabled(true);
+                        Toast.makeText(this, "Pendaftaran berjaya!", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
+                        finish();
+                    } else {
+                        signUpButton.setEnabled(true);
+                        String errorMsg = task.getException() != null
+                                ? task.getException().getMessage()
+                                : "Pendaftaran gagal, sila cuba lagi";
+                        Toast.makeText(this, errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
     private String textOf(TextInputEditText field) {

@@ -1,3 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">HafizTravel&amp;Tours</string>
+
+    <!-- Welcome / Onboarding screen -->
+    <string name="welcome_trust_text">Trusted by hundreds of pilgrims</string>
+    <string name="welcome_title">Your Umrah, Hajj &amp; Travel Companion</string>
+    <string name="welcome_subtitle">Easily book Umrah, Hajj, and inbound &amp; outbound travel packages directly from your phone.</string>
+    <string name="welcome_start_now">Start Now</string>
+    <string name="welcome_already_have_account">Already have an account? Log In</string>
+
+    <!-- Login screen -->
+    <string name="login_title">Welcome Back</string>
+    <string name="login_subtitle">Log in to continue</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="login_button">Log In</string>
+    <string name="login_no_account">No account? Sign up now.</string>
+    <string name="login_or_with">Or Login With</string>
+    <string name="login_guest">Login as Guest</string>
+
+    <!-- Sign Up screen -->
+    <string name="signup_title">Create an Account</string>
+    <string name="signup_subtitle">Sign up to start planning your vacation.</string>
+    <string name="hint_full_name">Full name</string>
+    <string name="hint_phone">Phone Number</string>
+    <string name="hint_confirm_password">Confirm Password</string>
+    <string name="signup_button">Sign Up</string>
+    <string name="signup_have_account">Already have an account? Log in</string>
+    <string name="signup_or_with">Or Sign Up With</string>
+    <string name="signup_guest">Login as Guest</string>
+    <string name="social_login_google">Signing in with Google - coming soon</string>
+    <string name="social_login_facebook">Signing in with Facebook - coming soon</string>
+    <string name="social_login_phone">Signing in with phone number - coming soon</string>
+
+    <string name="social_signup_google">Signing up with Google - coming soon</string>
+    <string name="social_signup_facebook">Signing up with Facebook - coming soon</string>
+    <string name="social_signup_phone">Signing up with phone number - coming soon</string>
+
+    <string name="guest_greeting">Assalamualaikum</string>
+    <string name="user_greeting">Assalamualaikum, %1$s</string>
+    <string name="hero_subtitle_guest">Welcome to\nHafiz Travel &amp; Tours</string>
+    <string name="hero_subtitle_user">Welcome back</string>
+    <string name="hero_headline_guest">Welcome to\nHafiz Travel &amp; Tours</string>
+    <string name="hero_headline_user">Where do you \nwant to go?</string>
+
+    <string name="nav_home">Home</string>
+    <string name="nav_umrah">Umrah</string>
+    <string name="nav_tour">Tour</string>
+    <string name="nav_favorite">Favorite</string>
+
+    <string name="quick_nusuk">Nusuk</string>
+    <string name="quick_guideline">Umrah Guide</string>
+    <string name="quick_checklist">Checklist</string>
+    <string name="quick_whatsapp">WhatsApp</string>
+
+    <string name="prayer_times_title">Prayer Times Today (estimated)</string>
+    <string name="search_placeholder">Find your destination</string>
+    <string name="popular_packages">Popular Packages</string>
+    <string name="see_all">View All</string>
+    <string name="select_language">Select Language</string>
+    <string name="cancel">Cancel</string>
+    <string name="no_notifications">No new notifications</string>
+    <string name="faq_title">Frequently Asked Questions</string>
+    <string name="gallery_title">Gallery</string>
+
+    <!-- NEW: previously hardcoded in MainActivity.java / activity_main.xml, now translatable -->
+    <string name="search_coming_soon">Search - coming soon</string>
+    <string name="signup_coming_soon">Sign up - coming soon</string>
+
+    <string name="google_review_count">Based on 102 Google reviews</string>
+    <string name="review_label">Review</string>
+
+    <string name="register_cta_text">Sign up to receive our latest packages &amp; offers</string>
+    <string name="register_cta_button">Sign Up</string>
+
+    <string name="review_1_name">Mrs. Aminah</string>
+    <string name="review_1_quote">Well-organized umrah experience, the mutawif was very helpful throughout the trip.</string>
+    <string name="review_2_name">Mr. Razak</string>
+    <string name="review_2_quote">Easy booking process, clear payment, and responsive staff on WhatsApp.</string>
+    <string name="review_3_name">Mrs. Siti</string>
+    <string name="review_3_quote">Hotel close to Masjidil Haram, very comfortable for families.</string>
+
+    <string name="faq_q1">How do I pay the deposit?</string>
+    <string name="faq_a1">Deposit can be made via bank transfer or contact our staff directly on WhatsApp for payment instructions.</string>
+    <string name="faq_q2">How long must my passport be valid?</string>
+    <string name="faq_a2">Your passport must be valid for at least 6 months from the departure date.</string>
+    <string name="faq_q3">Can I change the date after booking?</string>
+    <string name="faq_a3">Yes, subject to slot availability and a change fee may apply. Contact admin for confirmation.</string>
+
+    <string name="package_duration_price">%1$d Days %2$d Nights - RM%3$s</string>
+
 </resources>

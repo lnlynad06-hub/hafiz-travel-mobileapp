@@ -1,8 +1,10 @@
 package com.example.hafiztraveltours;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -31,7 +33,21 @@ public class PackagePopularAdapter extends RecyclerView.Adapter<PackagePopularAd
         Package item = items.get(position);
         holder.title.setText(item.title);
         holder.subtitle.setText(item.subtitle);
-        // TODO: when this item is clicked, open the Package Detail screen
+
+        // Bind gambar drawable ke ImageView
+        if (item.imageResId != 0) {
+            holder.image.setImageResource(item.imageResId);
+        }
+
+        holder.itemView.setOnClickListener(v -> {
+            if (item.url == null || item.url.isEmpty()) {
+                return;
+            }
+            Intent intent = new Intent(v.getContext(), WebViewActivity.class);
+            intent.putExtra(WebViewActivity.EXTRA_TITLE, item.title);
+            intent.putExtra(WebViewActivity.EXTRA_URL, item.url);
+            v.getContext().startActivity(intent);
+        });
     }
 
     @Override
@@ -41,11 +57,13 @@ public class PackagePopularAdapter extends RecyclerView.Adapter<PackagePopularAd
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView title, subtitle;
+        ImageView image;
 
         ViewHolder(View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.packageTitle);
             subtitle = itemView.findViewById(R.id.packageSubtitle);
+            image = itemView.findViewById(R.id.packageImage);
         }
     }
 }

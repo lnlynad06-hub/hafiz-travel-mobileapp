@@ -7,4 +7,21 @@
         <item name="android:statusBarColor">@color/pink_primary</item>
         <item name="android:windowBackground">@color/background</item>
     </style>
+
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/pink_primary</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_logo_square</item>
+        <item name="postSplashScreenTheme">@style/Theme.HafizTravel</item>
+    </style>
+
+    <style name="LangPill">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingHorizontal">18dp</item>
+        <item name="android:paddingVertical">8dp</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
 </resources>

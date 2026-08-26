@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">HafizTravel&amp;Tours</string>
+
+    <!-- Welcome / Onboarding screen -->
+    <string name="welcome_trust_text">深受数百名朝觐者信赖</string>
+    <string name="welcome_title">您的副朝、朝觐与旅行伙伴</string>
+    <string name="welcome_subtitle">通过手机轻松预订副朝、朝觐以及国内外旅游套餐。</string>
+    <string name="welcome_start_now">立即开始</string>
+    <string name="welcome_already_have_account">已有账户？登录</string>
+
+    <!-- Login screen -->
+    <string name="login_title">欢迎回来</string>
+    <string name="login_subtitle">登录以继续</string>
+    <string name="hint_email">电子邮箱</string>
+    <string name="hint_password">密码</string>
+    <string name="login_button">登录</string>
+    <string name="login_no_account">还没有账户？立即注册。</string>
+    <string name="login_or_with">或使用以下方式登录</string>
+    <string name="login_guest">以访客身份登录</string>
+
+    <!-- Sign Up screen -->
+    <string name="signup_title">创建账户</string>
+    <string name="signup_subtitle">注册以开始规划您的旅程。</string>
+    <string name="hint_full_name">姓名</string>
+    <string name="hint_phone">电话号码</string>
+    <string name="hint_confirm_password">确认密码</string>
+    <string name="signup_button">注册</string>
+    <string name="signup_have_account">已有账户？登录</string>
+    <string name="signup_or_with">或使用以下方式注册</string>
+    <string name="signup_guest">以访客身份登录</string>
+    <string name="social_login_google">使用 Google 登录 - 即将推出</string>
+    <string name="social_login_facebook">使用 Facebook 登录 - 即将推出</string>
+    <string name="social_login_phone">使用手机号码登录 - 即将推出</string>
+
+    <string name="social_signup_google">使用 Google 注册 - 即将推出</string>
+    <string name="social_signup_facebook">使用 Facebook 注册 - 即将推出</string>
+    <string name="social_signup_phone">使用手机号码注册 - 即将推出</string>
+
+    <string name="guest_greeting">愿平安降临于你</string>
+    <string name="user_greeting">愿平安降临于你，%1$s</string>
+    <string name="hero_subtitle_guest">欢迎来到\nHafiz Travel &amp; Tours</string>
+    <string name="hero_subtitle_user">欢迎回来</string>
+    <string name="hero_headline_guest">欢迎来到\nHafiz Travel &amp; Tours</string>
+    <string name="hero_headline_user">您想去\n哪里？</string>
+
+    <string name="nav_home">首页</string>
+    <string name="nav_umrah">副朝</string>
+    <string name="nav_tour">旅游</string>
+    <string name="nav_favorite">收藏</string>
+
+    <string name="quick_nusuk">Nusuk</string>
+    <string name="quick_guideline">副朝指南</string>
+    <string name="quick_checklist">清单</string>
+    <string name="quick_whatsapp">WhatsApp</string>
+
+    <string name="prayer_times_title">今日礼拜时间（预估）</string>
+    <string name="search_placeholder">搜索您的目的地</string>
+    <string name="popular_packages">热门套餐</string>
+    <string name="see_all">查看全部</string>
+    <string name="select_language">选择语言</string>
+    <string name="cancel">取消</string>
+    <string name="no_notifications">暂无新通知</string>
+    <string name="faq_title">常见问题</string>
+    <string name="gallery_title">图库</string>
+
+    <!-- NEW: previously hardcoded in MainActivity.java / activity_main.xml, now translatable -->
+    <string name="search_coming_soon">搜索 - 即将推出</string>
+    <string name="signup_coming_soon">注册 - 即将推出</string>
+
+    <string name="google_review_count">基于 102 条 Google 评价</string>
+    <string name="review_label">评价</string>
+
+    <string name="register_cta_text">立即注册，获取最新套餐与优惠</string>
+    <string name="register_cta_button">注册</string>
+
+    <string name="review_1_name">Aminah 女士</string>
+    <string name="review_1_quote">副朝行程安排井然有序，向导（穆塔维夫）全程给予了很大帮助。</string>
+    <string name="review_2_name">Razak 先生</string>
+    <string name="review_2_quote">预订流程简单，付款清晰，WhatsApp 客服回应迅速。</string>
+    <string name="review_3_name">Siti 女士</string>
+    <string name="review_3_quote">酒店靠近禁寺，一家人住得非常舒适。</string>
+
+    <string name="faq_q1">如何支付订金？</string>
+    <string name="faq_a1">可通过银行转账支付订金，或直接通过 WhatsApp 联系我们的工作人员获取付款说明。</string>
+    <string name="faq_q2">护照有效期需要多久？</string>
+    <string name="faq_a2">护照有效期须自出发日起至少 6 个月。</string>
+    <string name="faq_q3">预订后可以更改日期吗？</string>
+    <string name="faq_a3">可以，视名额情况而定，可能需支付更改费用。请联系客服确认。</string>
+
+    <string name="package_duration_price">%1$d天%2$d晚 - RM%3$s</string>
+
+</resources>

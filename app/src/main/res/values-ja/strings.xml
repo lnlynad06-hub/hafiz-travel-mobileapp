@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">HafizTravel&amp;Tours</string>
+
+    <!-- Welcome / Onboarding screen -->
+    <string name="welcome_trust_text">数百人の巡礼者に信頼されています</string>
+    <string name="welcome_title">ウムラ・ハッジ・旅行のパートナー</string>
+    <string name="welcome_subtitle">スマートフォンから簡単にウムラ、ハッジ、国内外の旅行パッケージを予約できます。</string>
+    <string name="welcome_start_now">今すぐ始める</string>
+    <string name="welcome_already_have_account">すでにアカウントをお持ちですか？ログイン</string>
+
+    <!-- Login screen -->
+    <string name="login_title">おかえりなさい</string>
+    <string name="login_subtitle">続けるにはログインしてください</string>
+    <string name="hint_email">メールアドレス</string>
+    <string name="hint_password">パスワード</string>
+    <string name="login_button">ログイン</string>
+    <string name="login_no_account">アカウントをお持ちでない方は今すぐ登録</string>
+    <string name="login_or_with">または次でログイン</string>
+    <string name="login_guest">ゲストとしてログイン</string>
+
+    <!-- Sign Up screen -->
+    <string name="signup_title">アカウントを作成</string>
+    <string name="signup_subtitle">登録して旅行の計画を始めましょう。</string>
+    <string name="hint_full_name">氏名</string>
+    <string name="hint_phone">電話番号</string>
+    <string name="hint_confirm_password">パスワードの確認</string>
+    <string name="signup_button">登録する</string>
+    <string name="signup_have_account">すでにアカウントをお持ちですか？ログイン</string>
+    <string name="signup_or_with">または次で登録</string>
+    <string name="signup_guest">ゲストとしてログイン</string>
+    <string name="social_login_google">Googleでログイン - 近日公開</string>
+    <string name="social_login_facebook">Facebookでログイン - 近日公開</string>
+    <string name="social_login_phone">電話番号でログイン - 近日公開</string>
+
+    <string name="social_signup_google">Googleで登録 - 近日公開</string>
+    <string name="social_signup_facebook">Facebookで登録 - 近日公開</string>
+    <string name="social_signup_phone">電話番号で登録 - 近日公開</string>
+
+    <string name="guest_greeting">アッサラームアライクム</string>
+    <string name="user_greeting">アッサラームアライクム、%1$s さん</string>
+    <string name="hero_subtitle_guest">Hafiz Travel &amp; Toursへ\nようこそ</string>
+    <string name="hero_subtitle_user">おかえりなさい</string>
+    <string name="hero_headline_guest">Hafiz Travel &amp; Toursへ\nようこそ</string>
+    <string name="hero_headline_user">どこへ行き\nたいですか？</string>
+
+    <string name="nav_home">ホーム</string>
+    <string name="nav_umrah">ウムラ</string>
+    <string name="nav_tour">ツアー</string>
+    <string name="nav_favorite">お気に入り</string>
+
+    <string name="quick_nusuk">ヌスク</string>
+    <string name="quick_guideline">ウムラガイド</string>
+    <string name="quick_checklist">チェックリスト</string>
+    <string name="quick_whatsapp">WhatsApp</string>
+
+    <string name="prayer_times_title">本日の礼拝時間（目安）</string>
+    <string name="search_placeholder">目的地を検索</string>
+    <string name="popular_packages">人気パッケージ</string>
+    <string name="see_all">すべて見る</string>
+    <string name="select_language">言語を選択</string>
+    <string name="cancel">キャンセル</string>
+    <string name="no_notifications">新しい通知はありません</string>
+    <string name="faq_title">よくある質問</string>
+    <string name="gallery_title">ギャラリー</string>
+
+    <!-- NEW: previously hardcoded in MainActivity.java / activity_main.xml, now translatable -->
+    <string name="search_coming_soon">検索 - 近日公開</string>
+    <string name="signup_coming_soon">登録する - 近日公開</string>
+
+    <string name="google_review_count">Googleクチコミ102件に基づく</string>
+    <string name="review_label">レビュー</string>
+
+    <string name="register_cta_text">最新のパッケージや特典を受け取るには登録してください</string>
+    <string name="register_cta_button">登録する</string>
+
+    <string name="review_1_name">アミナさん</string>
+    <string name="review_1_quote">手配がしっかりしており、ムタウィフが旅行中ずっと親切にサポートしてくれました。</string>
+    <string name="review_2_name">ラザクさん</string>
+    <string name="review_2_quote">予約手続きが簡単で支払いも明確、WhatsAppでのスタッフ対応も迅速でした。</string>
+    <string name="review_3_name">シティさん</string>
+    <string name="review_3_quote">ホテルがマスジド・アル・ハラームに近く、家族にとってとても快適でした。</string>
+
+    <string name="faq_q1">デポジットはどのように支払えばよいですか？</string>
+    <string name="faq_a1">銀行振込でデポジットをお支払いいただくか、WhatsAppで直接スタッフにお問い合わせいただくと、お支払い方法をご案内します。</string>
+    <string name="faq_q2">パスポートの有効期限はどのくらい必要ですか？</string>
+    <string name="faq_a2">出発日から少なくとも6ヶ月以上有効なパスポートが必要です。</string>
+    <string name="faq_q3">予約後に日程を変更できますか？</string>
+    <string name="faq_a3">可能です。ただし空き状況によっては変更手数料が発生する場合があります。詳細は管理者にお問い合わせください。</string>
+
+    <string name="package_duration_price">%1$d日%2$d泊 - RM%3$s</string>
+
+</resources>

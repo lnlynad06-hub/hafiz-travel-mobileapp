@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">HafizTravel&amp;Tours</string>
+
+    <!-- Welcome / Onboarding screen -->
+    <string name="welcome_trust_text">Dipercayai oleh ratusan jemaah</string>
+    <string name="welcome_title">Rakan Perjalanan Umrah, Haji &amp; Pelancongan Anda</string>
+    <string name="welcome_subtitle">Tempah pakej Umrah, Haji, dan pelancongan inbound &amp; outbound dengan mudah, terus dari telefon anda.</string>
+    <string name="welcome_start_now">Mula Sekarang</string>
+    <string name="welcome_already_have_account">Sudah ada akaun? Log Masuk</string>
+
+    <string name="login_title">Selamat Kembali</string>
+    <string name="login_subtitle">Log masuk untuk teruskan</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Kata Laluan</string>
+    <string name="login_button">Log Masuk</string>
+    <string name="login_no_account">Tiada akaun? Daftar sekarang.</string>
+    <string name="login_or_with">Atau Log Masuk Dengan</string>
+    <string name="login_guest">Log Masuk sebagai Tetamu</string>
+
+    <string name="signup_title">Cipta Akaun</string>
+    <string name="signup_subtitle">Daftar untuk mula rancang percutian anda.</string>
+    <string name="hint_full_name">Nama Penuh</string>
+    <string name="hint_phone">Nombor Telefon</string>
+    <string name="hint_confirm_password">Sahkan Kata Laluan</string>
+    <string name="signup_button">Daftar</string>
+    <string name="signup_have_account">Dah ada akaun? Log masuk</string>
+    <string name="signup_or_with">Atau Daftar Dengan</string>
+    <string name="signup_guest">Daftar sebagai Tetamu</string>
+    <string name="social_login_google">Log masuk Google - akan datang</string>
+    <string name="social_login_facebook">Log masuk Facebook - akan datang</string>
+    <string name="social_login_phone">Log masuk nombor telefon - akan datang</string>
+
+    <string name="social_signup_google">Daftar guna Google - akan datang</string>
+    <string name="social_signup_facebook">Daftar guna Facebook - akan datang</string>
+    <string name="social_signup_phone">Daftar guna nombor telefon - akan datang</string>
+
+    <string name="guest_greeting">Assalamualaikum</string>
+    <string name="user_greeting">Assalamualaikum, %1$s</string>
+    <string name="hero_subtitle_guest">Selamat Datang ke\nHafiz Travel &amp; Tours</string>
+    <string name="hero_subtitle_user">Selamat kembali</string>
+    <string name="hero_headline_guest">Selamat Datang ke\nHafiz Travel &amp; Tours</string>
+    <string name="hero_headline_user">Ke Mana Anda\nNak Pergi?</string>
+
+    <string name="nav_home">Home</string>
+    <string name="nav_umrah">Umrah</string>
+    <string name="nav_tour">Tour</string>
+    <string name="nav_favorite">Kegemaran</string>
+
+    <string name="quick_nusuk">Nusuk</string>
+    <string name="quick_guideline">Panduan Umrah</string>
+    <string name="quick_checklist">Senarai Semak</string>
+    <string name="quick_whatsapp">WhatsApp</string>
+
+    <string name="prayer_times_title">Waktu Solat Hari Ini (anggaran)</string>
+    <string name="search_placeholder">Cari destinasi anda</string>
+    <string name="popular_packages">Pakej Popular</string>
+    <string name="see_all">Lihat Semua</string>
+    <string name="select_language">Pilih Bahasa</string>
+    <string name="cancel">Batal</string>
+    <string name="no_notifications">Tiada notifikasi baru</string>
+    <string name="faq_title">Soalan Lazim</string>
+    <string name="gallery_title">Galeri</string>
+
+    <!-- NEW: previously hardcoded in MainActivity.java / activity_main.xml, now translatable -->
+    <string name="search_coming_soon">Carian - akan datang</string>
+    <string name="signup_coming_soon">Daftar - akan datang</string>
+
+    <string name="google_review_count">Berdasarkan 102 review Google</string>
+    <string name="review_label">Review</string>
+
+    <string name="register_cta_text">Daftar untuk terima pakej &amp; tawaran terkini</string>
+    <string name="register_cta_button">Daftar</string>
+
+    <string name="review_1_name">Puan Aminah</string>
+    <string name="review_1_quote">Pengalaman umrah tersusun, mutawwif sangat membantu sepanjang perjalanan.</string>
+    <string name="review_2_name">Encik Razak</string>
+    <string name="review_2_quote">Proses tempahan senang, bayaran jelas dan staff responsif di WhatsApp.</string>
+    <string name="review_3_name">Puan Siti</string>
+    <string name="review_3_quote">Hotel dekat dengan Masjidil Haram, sangat selesa untuk keluarga.</string>
+
+    <string name="faq_q1">Bagaimana cara bayaran deposit?</string>
+    <string name="faq_a1">Deposit boleh dibuat melalui bank transfer atau hubungi terus staff kami di WhatsApp untuk arahan bayaran.</string>
+    <string name="faq_q2">Berapa lama pasport perlu sah?</string>
+    <string name="faq_a2">Pasport perlu sah sekurang-kurangnya 6 bulan dari tarikh berlepas.</string>
+    <string name="faq_q3">Boleh tak tukar tarikh selepas tempah?</string>
+    <string name="faq_a3">Boleh, tertakluk kepada slot yang ada dan mungkin dikenakan caj perubahan. Hubungi admin untuk semakan.</string>
+
+    <string name="package_duration_price">%1$d Hari %2$d Malam - RM%3$s</string>
+
+</resources>

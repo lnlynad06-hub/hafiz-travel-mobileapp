@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "764350978907",
+    "project_id": "hafiztraveltours-e2882",
+    "storage_bucket": "hafiztraveltours-e2882.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:764350978907:android:eb321d1cb251d52ee3587e",
+        "android_client_info": {
+          "package_name": "com.example.hafiztraveltours"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDoJcwbed4Qtm2NNhREbgumK4exHcHmC0U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

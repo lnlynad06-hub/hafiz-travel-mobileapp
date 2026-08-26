@@ -6,12 +6,18 @@
     android:layout_marginEnd="12dp"
     android:orientation="vertical">
 
-    <!-- TODO: replace this FrameLayout's background with a real ImageView
-         (destination photo) using Glide once you have actual package images -->
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="110dp"
-        android:background="@drawable/bg_image_placeholder">
+        android:layout_height="110dp">
+
+        <!-- ImageView menggantikan placeholder FrameLayout -->
+        <ImageView
+            android:id="@+id/packageImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:background="@drawable/bg_image_placeholder"
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:id="@+id/likeIcon"

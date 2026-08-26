@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,9 +14,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HafizTravel">
 
+        <activity android:name=".WebViewActivity" />
+
+        <activity android:name=".HubungiKamiActivity" />
+
+        <activity android:name=".TentangKamiActivity" />
+
+        <activity android:name=".ProfileActivity" />
+
         <activity android:name=".MainActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
 
-        <activity android:name=".SplashActivity" android:exported="true">
+        <activity android:name=".SplashActivity"
+            android:theme="@style/Theme.App.Starting"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
