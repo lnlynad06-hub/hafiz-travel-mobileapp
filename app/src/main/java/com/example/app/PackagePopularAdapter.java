@@ -1,4 +1,4 @@
-package com.example.hafiztraveltours;
+package com.hafiztraveltours.app;
 
 import android.content.Intent;
 import android.view.LayoutInflater;

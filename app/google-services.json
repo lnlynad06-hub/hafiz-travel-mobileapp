@@ -12,7 +12,12 @@
           "package_name": "com.example.hafiztraveltours"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "764350978907-jie6de22lhhjd1s05bkus41pteommk0m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDoJcwbed4Qtm2NNhREbgumK4exHcHmC0U"
@@ -20,7 +25,41 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "764350978907-jie6de22lhhjd1s05bkus41pteommk0m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:764350978907:android:f733a7c075f34063e3587e",
+        "android_client_info": {
+          "package_name": "com.hafiztraveltours.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "764350978907-jie6de22lhhjd1s05bkus41pteommk0m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDoJcwbed4Qtm2NNhREbgumK4exHcHmC0U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "764350978907-jie6de22lhhjd1s05bkus41pteommk0m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

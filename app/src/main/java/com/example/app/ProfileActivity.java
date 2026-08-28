@@ -1,4 +1,4 @@
-package com.example.hafiztraveltours;
+package com.hafiztraveltours.app;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -237,7 +237,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     /**
-     * Builds a TextInputLayout matching the app's rounded/pink Material style
+     * Builds a TextInputLayout matching the com.hafiztraveltours.app's rounded/pink Material style
      * (same corner radius and stroke color used on Sign Up / Login).
      */
     private TextInputLayout createStyledInputLayout(String hint) {

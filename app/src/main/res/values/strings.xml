@@ -142,4 +142,11 @@
     <string name="profile_theme_dark">Dark Theme</string>
     <string name="profile_logout">Log Out</string>
 
+    <string name="guideline_title">Umrah Guide</string>
+    <string name="guideline_hero_title">A Brief Guide to Umrah</string>
+    <string name="guideline_hero_blurb">Arranged in the actual sequence—from the etiquette of travel to the completion of the Umrah pilgrimage.</string>
+    <string name="guideline_pdf_title">Want a complete guide?</string>
+    <string name="guideline_pdf_subtitle">Download the full PDF with detailed explanations.</string>
+    <string name="guideline_pdf_button">Download</string>
+
 </resources>

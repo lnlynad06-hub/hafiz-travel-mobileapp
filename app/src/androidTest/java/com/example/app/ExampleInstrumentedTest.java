@@ -1,4 +1,4 @@
-package com.example.hafiztraveltours;
+package com.hafiztraveltours.app;
 
 import android.content.Context;
 
@@ -19,8 +19,8 @@ import static org.junit.Assert.*;
 public class ExampleInstrumentedTest {
     @Test
     public void useAppContext() {
-        // Context of the app under test.
+        // Context of the com.hafiztraveltours.app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("com.example.hafiztraveltours", appContext.getPackageName());
+        assertEquals("com.hafiztraveltours.app", appContext.getPackageName());
     }
 }

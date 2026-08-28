@@ -1,4 +1,4 @@
-package com.example.hafiztraveltours;
+package com.hafiztraveltours.app;
 
 import android.content.Context;
 import android.content.Intent;
@@ -45,7 +45,7 @@ public class WelcomeActivity extends AppCompatActivity {
         startFloatingLoop(imageCenter, 150);
         startFloatingLoop(imageRight, 300);
 
-        // "Mula Sekarang" takes the user straight into the app as a guest.
+        // "Mula Sekarang" takes the user straight into the com.hafiztraveltours.app as a guest.
         // Sign In / Sign Up is only required later, e.g. at checkout/booking.
         // TODO: replace MainActivity.class with your real Homepage activity once it's built.
         findViewById(R.id.getStartedButton).setOnClickListener(v ->

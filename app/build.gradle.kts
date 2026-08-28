@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    namespace = "com.example.hafiztraveltours"
+    namespace = "com.hafiztraveltours.app"
     compileSdk {
         version = release(37)
     }
 
     defaultConfig {
-        applicationId = "com.example.hafiztraveltours"
+        applicationId = "com.hafiztraveltours.app"
         minSdk = 24
         targetSdk = 37
         versionCode = 1

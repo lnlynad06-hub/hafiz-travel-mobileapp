@@ -1,4 +1,4 @@
-package com.example.hafiztraveltours;
+package com.hafiztraveltours.app;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -44,15 +44,14 @@ import java.util.TimeZone;
 public class MainActivity extends AppCompatActivity {
 
     // TODO: replace with your actual WhatsApp business number, format: countrycode+number, no + or spaces
-    private static final String WHATSAPP_PHONE_NUMBER = "60123456789";
-
-    // Official Nusuk app by the Ministry of Hajj and Umrah (verified package name)
+    private static final String WHATSAPP_PHONE_NUMBER = "60197859867";
+    // Official Nusuk com.hafiztraveltours.app by the Ministry of Hajj and Umrah (verified package name)
     private static final String NUSUK_PACKAGE_NAME = "com.moh.nusukapp";
 
     // Google Business review link - confirmed via Place ID (Hafiz Travel & Tours Sdn Bhd)
     private static final String GOOGLE_REVIEW_URL = "https://search.google.com/local/writereview?placeid=ChIJhyLSxhBt2jERN8jHNbZ59y4";
 
-    // Bottom nav Umrah/Tour open these pages in-app via WebViewActivity (confirmed real URLs)
+    // Bottom nav Umrah/Tour open these pages in-com.hafiztraveltours.app via WebViewActivity (confirmed real URLs)
     private static final String URL_UMRAH = "https://hafiztraveltours.com/pakej-umrah";
     private static final String URL_TOUR = "https://hafiztraveltours.com/tour";
 
@@ -139,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
             heroHeadline.setText(getString(R.string.hero_headline_user));
         } else {
             greetingText.setText(getString(R.string.guest_greeting));
-            heroSubtitle.setText("");
+            heroSubtitle.setText("Guest");
             heroHeadline.setText(getString(R.string.hero_headline_guest));
         }
 
@@ -152,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Reuses the same LocaleHelper that WelcomeActivity's language pills use,
-     * so switching language here stays consistent with the rest of the app.
+     * so switching language here stays consistent with the rest of the com.hafiztraveltours.app.
      * Now opened from the hamburger menu instead of a dedicated top icon.
      */
     private void showLanguagePicker() {
@@ -232,11 +231,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupQuickActions() {
-        // Nusuk - links out to the official Nusuk app on the Play Store
+        // Nusuk - links out to the official Nusuk com.hafiztraveltours.app on the Play Store
         findViewById(R.id.featureNusuk).setOnClickListener(v -> openNusukOnPlayStore());
 
         // Guideline - persediaan/checklist Umrah & Tour
-        findViewById(R.id.featureGuideline).setOnClickListener(v -> showGuidelineDialog());
+        findViewById(R.id.featureGuideline).setOnClickListener(v ->
+                startActivity(new Intent(this, PanduanUmrahActivity.class)));
 
         // Checklist - same items as Guideline, but interactive (tickable)
         findViewById(R.id.featureChecklist).setOnClickListener(v -> showChecklistDialog());
@@ -270,7 +270,7 @@ public class MainActivity extends AppCompatActivity {
      * Elektronik, Pertukaran Mata Wang. Grouped with category headers so it
      * matches how the PDF itself is organized.
      *
-     * TODO: this is currently one generic checklist for the whole app. Once
+     * TODO: this is currently one generic checklist for the whole com.hafiztraveltours.app. Once
      * each package/trip can have its own guide (like this Korea PDF), pull
      * the items per-trip from the backend instead of this hardcoded list -
      * e.g. destination-specific items like "suntikan meningitis" only apply
@@ -354,7 +354,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + NUSUK_PACKAGE_NAME)));
         } catch (android.content.ActivityNotFoundException e) {
-            // Play Store app not available - fall back to the web link
+            // Play Store com.hafiztraveltours.app not available - fall back to the web link
             startActivity(new Intent(Intent.ACTION_VIEW,
                     Uri.parse("https://play.google.com/store/apps/details?id=" + NUSUK_PACKAGE_NAME)));
         }
@@ -371,7 +371,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Umrah / Tour on the bottom nav now open the real website pages in-app
+     * Umrah / Tour on the bottom nav now open the real website pages in-com.hafiztraveltours.app
      * (via WebViewActivity) instead of filtering the Pakej Popular list.
      */
     private void setupBottomNav() {
@@ -583,7 +583,7 @@ public class MainActivity extends AppCompatActivity {
     // ================== WAKTU SOLAT (REAL, using Adhan library) ==================
 
     /**
-     * "Daily use" hook so people open the app even when they're not booking.
+     * "Daily use" hook so people open the com.hafiztraveltours.app even when they're not booking.
      *
      * Uses the Adhan library (com.batoulapps.adhan:adhan:1.2.1, MIT licensed,
      * astronomical formulas from Jean Meeus' "Astronomical Algorithms") fed by
@@ -591,7 +591,7 @@ public class MainActivity extends AppCompatActivity {
      * old hardcoded placeholder times.
      *
      * REQUIRED before this compiles/runs:
-     * 1) Add to app/build.gradle(.kts):  implementation("com.batoulapps.adhan:adhan:1.2.1")
+     * 1) Add to com.hafiztraveltours.app/build.gradle(.kts):  implementation("com.batoulapps.adhan:adhan:1.2.1")
      * 2) Add to AndroidManifest.xml (outside <application>):
      *      <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
      *      <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -600,7 +600,7 @@ public class MainActivity extends AppCompatActivity {
      * the closest built-in preset to JAKIM's Malaysian parameters, but it is
      * NOT an official JAKIM method. Cross-check against e-solat.gov.my before
      * relying on this for real worship - getting this wrong is a
-     * trust-breaking bug for a Muslim-facing app.
+     * trust-breaking bug for a Muslim-facing com.hafiztraveltours.app.
      */
     private void setupPrayerTimesWidget() {
         boolean hasFineLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)

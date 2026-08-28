@@ -19,6 +19,7 @@
         <activity android:name=".WebViewActivity" />
 
         <activity android:name=".HubungiKamiActivity" />
+        <activity android:name=".PanduanUmrahActivity" />
 
         <activity android:name=".TentangKamiActivity" />
 
