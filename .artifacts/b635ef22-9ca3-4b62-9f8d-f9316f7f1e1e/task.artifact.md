@@ -1,0 +1,2 @@
+- [x] Fix package name in `GuidelineActivity.java`
+- [x] Verify build with `gradlew app:assembleDebug`
