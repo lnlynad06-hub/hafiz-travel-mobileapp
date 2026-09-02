@@ -1,4 +1,4 @@
-package com.hafiztraveltours.app;
+package com.example.app;
 
 import org.junit.Test;
 
