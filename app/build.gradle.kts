@@ -13,7 +13,7 @@ android {
         applicationId = "com.hafiztraveltours.app"
         minSdk = 24
         targetSdk = 37
-        versionCode = 1
+        versionCode = 2
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -47,4 +47,5 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.android.flexbox:flexbox:3.0.0")
     implementation("com.batoulapps.adhan:adhan:1.2.1")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 }

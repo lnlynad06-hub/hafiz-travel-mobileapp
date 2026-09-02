@@ -149,4 +149,9 @@
     <string name="guideline_pdf_subtitle">Download the full PDF with detailed explanations.</string>
     <string name="guideline_pdf_button">Download</string>
 
+    <string name="prayer_times_title_jakim">Prayer Times Today (JAKIM)</string>
+    <string name="prayer_times_title_jakim_zone">Prayer Times Today (JAKIM - Zone %1$s)</string>
+
+    <string name="podcast_section_title">Podcast</string>
+
 </resources>

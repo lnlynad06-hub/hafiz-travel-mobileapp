@@ -149,4 +149,9 @@
     <string name="guideline_pdf_subtitle">下载包含详细说明的完整PDF</string>
     <string name="guideline_pdf_button">下载</string>
 
+    <string name="prayer_times_title_jakim">今日礼拜时间 (JAKIM)</string>
+    <string name="prayer_times_title_jakim_zone">今日礼拜时间 (JAKIM - 区域 %1$s)</string>
+
+    <string name="podcast_section_title">播客</string>
+
 </resources>

@@ -149,4 +149,9 @@
     <string name="guideline_pdf_subtitle">자세한 설명이 담긴 전체 PDF를 다운로드하세요</string>
     <string name="guideline_pdf_button">다운로드</string>
 
+    <string name="prayer_times_title_jakim">오늘의 예배 시간 (JAKIM)</string>
+    <string name="prayer_times_title_jakim_zone">오늘의 예배 시간 (JAKIM - 구역 %1$s)</string>
+
+    <string name="podcast_section_title">팟캐스트</string>
+
 </resources>

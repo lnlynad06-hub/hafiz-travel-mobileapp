@@ -149,4 +149,9 @@
     <string name="guideline_pdf_subtitle">詳細な説明付きの完全版PDFをダウンロード</string>
     <string name="guideline_pdf_button">ダウンロード</string>
 
+    <string name="prayer_times_title_jakim">本日の礼拝時間 (JAKIM)</string>
+    <string name="prayer_times_title_jakim_zone">本日の礼拝時間 (JAKIM - ゾーン %1$s)</string>
+
+    <string name="podcast_section_title">ポッドキャスト</string>
+
 </resources>
