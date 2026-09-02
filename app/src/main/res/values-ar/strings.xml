@@ -142,4 +142,16 @@
     <string name="profile_theme_dark">المظهر الداكن</string>
     <string name="profile_logout">تسجيل الخروج</string>
 
+    <string name="guideline_title">دليل العمرة</string>
+    <string name="guideline_hero_title">دليل موجز للعمرة</string>
+    <string name="guideline_hero_blurb">مرتب حسب الترتيب الفعلي - من آداب السفر حتى إتمام مناسك العمرة.</string>
+    <string name="guideline_pdf_title">تريد الدليل الكامل؟</string>
+    <string name="guideline_pdf_subtitle">حمّل ملف PDF الكامل مع شرح تفصيلي</string>
+    <string name="guideline_pdf_button">تحميل</string>
+
+    <string name="prayer_times_title_jakim">مواقيت الصلاة اليوم (JAKIM)</string>
+    <string name="prayer_times_title_jakim_zone">مواقيت الصلاة اليوم (JAKIM - المنطقة %1$s)</string>
+
+    <string name="podcast_section_title">بودكاست</string>
+
 </resources>

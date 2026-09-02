@@ -1,4 +1,4 @@
-package com.example.hafiztraveltours;
+package com.hafiztraveltours.app;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -8,7 +8,7 @@ import android.os.Build;
 import java.util.Locale;
 
 /**
- * Handles saving and applying the user's chosen app language.
+ * Handles saving and applying the user's chosen com.hafiztraveltours.app language.
  *
  * How to use in any Activity that should respect the chosen language:
  *   @Override
@@ -17,7 +17,7 @@ import java.util.Locale;
  *   }
  *
  * TODO: add the attachBaseContext override above to every other Activity
- * (Login, SignUp, MainActivity, etc.) so the whole app respects the chosen
+ * (Login, SignUp, MainActivity, etc.) so the whole com.hafiztraveltours.app respects the chosen
  * language, not just the Welcome screen.
  */
 public class LocaleHelper {

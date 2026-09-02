@@ -1,4 +1,4 @@
-package com.example.hafiztraveltours;
+package com.hafiztraveltours.app;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;

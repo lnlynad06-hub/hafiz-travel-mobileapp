@@ -1,4 +1,4 @@
-package com.example.hafiztraveltours;
+package com.hafiztraveltours.app;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -33,19 +33,30 @@ import com.batoulapps.adhan.PrayerTimes;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
 
     // TODO: replace with your actual WhatsApp business number, format: countrycode+number, no + or spaces
-    private static final String WHATSAPP_PHONE_NUMBER = "60123456789";
-
+    private static final String WHATSAPP_PHONE_NUMBER = "60197859867";
     // Official Nusuk app by the Ministry of Hajj and Umrah (verified package name)
     private static final String NUSUK_PACKAGE_NAME = "com.moh.nusukapp";
 
@@ -56,6 +67,15 @@ public class MainActivity extends AppCompatActivity {
     private static final String URL_UMRAH = "https://hafiztraveltours.com/pakej-umrah";
     private static final String URL_TOUR = "https://hafiztraveltours.com/tour";
 
+    // Malaysia Waktu Solat API (mptwaktusolat) - free, MIT licensed, sources data
+    // directly from JAKIM e-solat. Official domain as of 2026: api.waktusolat.app
+    private static final String JAKIM_API_BASE = "https://api.waktusolat.app/v2/solat/gps/";
+    private static final String ZONE_LOOKUP_URL = "https://api.waktusolat.app/zones/gps";
+    private static final String ZONE_SOLAT_URL = "https://api.waktusolat.app/v2/solat/";
+
+    // YouTube channel - JELAJAH HAFIZ (Podcast Jumaat series)
+    private static final String YOUTUBE_CHANNEL_URL = "https://www.youtube.com/@hafiztravelandtours";
+
     private String activeLanguage;
 
     // Now backed by real Firebase Authentication session (see loadSessionState()).
@@ -64,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Prayer times location permission flow
     private ActivityResultLauncher<String> locationPermissionLauncher;
+    private final ExecutorService networkExecutor = Executors.newSingleThreadExecutor();
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -103,7 +124,14 @@ public class MainActivity extends AppCompatActivity {
         setupBottomNav();
         setupMenu();
         setupInfoSection();
+        setupPodcastSection();
         setupPrayerTimesWidget();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        networkExecutor.shutdown();
     }
 
     /**
@@ -139,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
             heroHeadline.setText(getString(R.string.hero_headline_user));
         } else {
             greetingText.setText(getString(R.string.guest_greeting));
-            heroSubtitle.setText("");
+            heroSubtitle.setText("Guest");
             heroHeadline.setText(getString(R.string.hero_headline_guest));
         }
 
@@ -236,7 +264,8 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.featureNusuk).setOnClickListener(v -> openNusukOnPlayStore());
 
         // Guideline - persediaan/checklist Umrah & Tour
-        findViewById(R.id.featureGuideline).setOnClickListener(v -> showGuidelineDialog());
+        findViewById(R.id.featureGuideline).setOnClickListener(v ->
+                startActivity(new Intent(this, PanduanUmrahActivity.class)));
 
         // Checklist - same items as Guideline, but interactive (tickable)
         findViewById(R.id.featureChecklist).setOnClickListener(v -> showChecklistDialog());
@@ -516,15 +545,52 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Register CTA is only useful for guests (logged-in users are already
+     * registered), so it's hidden entirely once isLoggedIn is true. For
+     * guests, the Sign Up button now actually navigates to SignUpActivity
+     * instead of showing a "coming soon" toast.
+     */
     private void setupRegisterCta() {
         View ctaCard = findViewById(R.id.registerCtaCard);
 
+        if (isLoggedIn) {
+            ctaCard.setVisibility(View.GONE);
+            return;
+        }
+
+        ctaCard.setVisibility(View.VISIBLE);
+
         findViewById(R.id.registerCtaButton).setOnClickListener(v ->
-                Toast.makeText(this, getString(R.string.signup_coming_soon), Toast.LENGTH_SHORT).show());
-        // TODO: startActivity(new Intent(this, SignUpActivity.class));
+                startActivity(new Intent(this, SignUpActivity.class)));
 
         findViewById(R.id.registerCtaDismiss).setOnClickListener(v ->
                 ctaCard.setVisibility(View.GONE));
+    }
+
+    /**
+     * Podcast section (carousel) - "Podcast Jumaat" series from the JELAJAH HAFIZ
+     * YouTube channel. Tapping a card opens the video (YouTube app if installed,
+     * browser otherwise). "Lihat Semua" opens the full channel page.
+     * TODO: replace this hardcoded list with a real API/RSS feed call once
+     * the channel uploads more regularly, so new episodes show automatically.
+     */
+    private void setupPodcastSection() {
+        List<Podcast> podcasts = new ArrayList<>();
+        podcasts.add(new Podcast("Podcast Jumaat - Ustazah Hjh. Zalina", "_w1WTK3E2_w"));
+        podcasts.add(new Podcast("Podcast Jumaat - Almarhum Tn. Zaidee", "iBwVgdg1obc"));
+
+        RecyclerView recyclerView = findViewById(R.id.podcastRecyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        recyclerView.setAdapter(new PodcastAdapter(podcasts));
+
+        findViewById(R.id.seeAllPodcast).setOnClickListener(v -> {
+            try {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(YOUTUBE_CHANNEL_URL)));
+            } catch (Exception e) {
+                Toast.makeText(this, "Tidak dapat membuka YouTube", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     /**
@@ -580,27 +646,25 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // ================== WAKTU SOLAT (REAL, using Adhan library) ==================
+    // ================== WAKTU SOLAT ==================
+    // PRIMARY SOURCE: Malaysia Waktu Solat API (mptwaktusolat), which mirrors
+    // JAKIM e-solat data directly - this is what actually matches Google/
+    // MuslimPro for Malaysian users, since none of them hand-calculate either.
+    // FALLBACK: Adhan library (offline / API unreachable) - clearly labelled
+    // "(anggaran)" so nobody mistakes an estimate for the official JAKIM time.
 
     /**
      * "Daily use" hook so people open the app even when they're not booking.
      *
-     * Uses the Adhan library (com.batoulapps.adhan:adhan:1.2.1, MIT licensed,
-     * astronomical formulas from Jean Meeus' "Astronomical Algorithms") fed by
-     * the device's real GPS/network location + today's date. This replaces the
-     * old hardcoded placeholder times.
-     *
      * REQUIRED before this compiles/runs:
-     * 1) Add to app/build.gradle(.kts):  implementation("com.batoulapps.adhan:adhan:1.2.1")
+     * 1) Add to app/build.gradle.kts:  implementation("com.batoulapps.adhan:adhan:1.2.1")
      * 2) Add to AndroidManifest.xml (outside <application>):
      *      <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
      *      <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-     *
-     * Calculation method used: SINGAPORE (Fajr 20 deg, Isha 18 deg) - this is
-     * the closest built-in preset to JAKIM's Malaysian parameters, but it is
-     * NOT an official JAKIM method. Cross-check against e-solat.gov.my before
-     * relying on this for real worship - getting this wrong is a
-     * trust-breaking bug for a Muslim-facing app.
+     *      <uses-permission android:name="android.permission.INTERNET" />
+     *    (INTERNET is very likely already present since Firebase needs it too,
+     *    but double-check - without it the JAKIM API call will silently fail
+     *    and every request will fall back to the Adhan estimate.)
      */
     private void setupPrayerTimesWidget() {
         boolean hasFineLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -616,20 +680,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadPrayerTimesForCurrentLocation() {
-        TextView dateText = findViewById(R.id.prayerTimesDateText);
-        LinearLayout row = findViewById(R.id.prayerTimesRow);
-
         Location location = getBestLastKnownLocation();
-        if (location == null) {
-            dateText.setText(getString(R.string.prayer_default_location, "Johor Bahru"));
-            // Fallback to the office's own city so the widget isn't empty on
-            // first run before a GPS fix is available.
-            calculateAndDisplayPrayerTimes(1.4927, 103.7414, row);
-            return;
+        double lat = 1.4927;   // fallback: Johor Bahru (company's own city)
+        double lon = 103.7414;
+
+        if (location != null) {
+            lat = location.getLatitude();
+            lon = location.getLongitude();
         }
 
-        dateText.setText("Waktu Solat Hari Ini");
-        calculateAndDisplayPrayerTimes(location.getLatitude(), location.getLongitude(), row);
+        fetchPrayerTimesFromJakimApi(lat, lon);
     }
 
     private Location getBestLastKnownLocation() {
@@ -656,12 +716,131 @@ public class MainActivity extends AppCompatActivity {
         return best;
     }
 
-    private void calculateAndDisplayPrayerTimes(double latitude, double longitude, LinearLayout row) {
-        java.util.Calendar today = java.util.Calendar.getInstance();
+    /**
+     * Calls the Malaysia Waktu Solat API (JAKIM-sourced) on a background
+     * thread. On any failure (no internet, bad response, parse error) it
+     * falls back to the Adhan library estimate instead of leaving the
+     * widget blank.
+     */
+    private void fetchPrayerTimesFromJakimApi(double lat, double lon) {
+        networkExecutor.execute(() -> {
+            try {
+                String body = httpGet(JAKIM_API_BASE + lat + "/" + lon);
+                handleSolatV2Response(body);
+            } catch (Exception gpsBetaFailed) {
+                android.util.Log.w("PrayerTimesAPI", "GPS-beta endpoint failed, trying zone lookup", gpsBetaFailed);
+                try {
+                    String zone = resolveZoneFromGps(lat, lon);
+                    String body = httpGet(ZONE_SOLAT_URL + zone);
+                    handleSolatV2Response(body);
+                } catch (Exception zoneFailed) {
+                    android.util.Log.e("PrayerTimesAPI", "Zone-based lookup also failed, falling back to Adhan estimate", zoneFailed);
+                    runOnUiThread(() -> showFallbackCalculatedPrayerTimes(lat, lon));
+                }
+            }
+        });
+    }
+
+    /** Resolves GPS coordinates to a JAKIM zone code (e.g. "JHR01") via the stable /zones/gps endpoint. */
+    private String resolveZoneFromGps(double lat, double lon) throws Exception {
+        String url = ZONE_LOOKUP_URL + "?lat=" + lat + "&long=" + lon;
+        String body = httpGet(url);
+        JSONObject json = new JSONObject(body);
+        String zone = json.optString("zone", "");
+        if (zone.isEmpty()) {
+            throw new RuntimeException("No zone returned for GPS coordinates");
+        }
+        return zone;
+    }
+
+    /** Shared plain HTTP GET helper - throws on any non-200 response or network error. */
+    private String httpGet(String urlString) throws Exception {
+        URL url = new URL(urlString);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.setConnectTimeout(8000);
+        connection.setReadTimeout(8000);
+
+        int responseCode = connection.getResponseCode();
+        if (responseCode != HttpURLConnection.HTTP_OK) {
+            throw new RuntimeException("HTTP " + responseCode + " for " + urlString);
+        }
+
+        BufferedReader reader = new BufferedReader(
+                new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
+        StringBuilder responseBuilder = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            responseBuilder.append(line);
+        }
+        reader.close();
+        connection.disconnect();
+        return responseBuilder.toString();
+    }
+
+    /** Parses a SolatV2 JSON response (same shape for both the GPS-beta and zone endpoints) and renders it. */
+    private void handleSolatV2Response(String responseBody) throws Exception {
+        JSONObject json = new JSONObject(responseBody);
+        String zone = json.optString("zone", "");
+        JSONArray prayersArray = json.getJSONArray("prayers");
+
+        int todayOfMonth = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+        JSONObject todayPrayers = null;
+        for (int i = 0; i < prayersArray.length(); i++) {
+            JSONObject entry = prayersArray.getJSONObject(i);
+            if (entry.getInt("day") == todayOfMonth) {
+                todayPrayers = entry;
+                break;
+            }
+        }
+
+        if (todayPrayers == null) {
+            throw new RuntimeException("No entry for today in API response");
+        }
+
+        SimpleDateFormat formatter = new SimpleDateFormat("h:mm a", Locale.getDefault());
+        formatter.setTimeZone(TimeZone.getDefault());
+
+        JSONObject finalTodayPrayers = todayPrayers;
+        String[][] times = {
+                {getString(R.string.prayer_subuh), formatEpochSeconds(finalTodayPrayers.getLong("fajr"), formatter)},
+                {getString(R.string.prayer_zohor), formatEpochSeconds(finalTodayPrayers.getLong("dhuhr"), formatter)},
+                {getString(R.string.prayer_asar), formatEpochSeconds(finalTodayPrayers.getLong("asr"), formatter)},
+                {getString(R.string.prayer_maghrib), formatEpochSeconds(finalTodayPrayers.getLong("maghrib"), formatter)},
+                {getString(R.string.prayer_isyak), formatEpochSeconds(finalTodayPrayers.getLong("isha"), formatter)}
+        };
+
+        String finalZone = zone;
+        runOnUiThread(() -> {
+            TextView dateText = findViewById(R.id.prayerTimesDateText);
+            dateText.setText(finalZone.isEmpty()
+                    ? getString(R.string.prayer_times_title_jakim)
+                    : getString(R.string.prayer_times_title_jakim_zone, finalZone));
+            dateText.setTextColor(getResources().getColor(R.color.prayer_card_text_secondary));
+            renderPrayerTimesRow(times);
+        });
+    }
+
+    private String formatEpochSeconds(long epochSeconds, SimpleDateFormat formatter) {
+        return formatter.format(new Date(epochSeconds * 1000L));
+    }
+
+    /**
+     * OFFLINE FALLBACK ONLY - used when the JAKIM-sourced API call fails.
+     * These are calculated estimates (Adhan library, SINGAPORE method), NOT
+     * the official JAKIM times, and are labelled "(anggaran)" so that's clear
+     * to the user. Do not treat this path as equally authoritative.
+     */
+    private void showFallbackCalculatedPrayerTimes(double latitude, double longitude) {
+        TextView dateText = findViewById(R.id.prayerTimesDateText);
+        dateText.setText("Waktu Solat Hari Ini (anggaran - tiada sambungan internet)");
+        dateText.setTextColor(getResources().getColor(R.color.prayer_card_text_secondary));
+
+        Calendar today = Calendar.getInstance();
         DateComponents dateComponents = new DateComponents(
-                today.get(java.util.Calendar.YEAR),
-                today.get(java.util.Calendar.MONTH) + 1,
-                today.get(java.util.Calendar.DAY_OF_MONTH));
+                today.get(Calendar.YEAR),
+                today.get(Calendar.MONTH) + 1,
+                today.get(Calendar.DAY_OF_MONTH));
 
         Coordinates coordinates = new Coordinates(latitude, longitude);
         CalculationParameters params = CalculationMethod.SINGAPORE.getParameters();
@@ -680,7 +859,13 @@ public class MainActivity extends AppCompatActivity {
                 {getString(R.string.prayer_isyak), formatter.format(prayerTimes.isha)}
         };
 
+        renderPrayerTimesRow(times);
+    }
+
+    private void renderPrayerTimesRow(String[][] times) {
+        LinearLayout row = findViewById(R.id.prayerTimesRow);
         row.removeAllViews();
+
         for (String[] t : times) {
             LinearLayout col = new LinearLayout(this);
             col.setOrientation(LinearLayout.VERTICAL);
@@ -693,14 +878,14 @@ public class MainActivity extends AppCompatActivity {
             TextView name = new TextView(this);
             name.setText(t[0]);
             name.setTextSize(11);
-            name.setTextColor(getResources().getColor(R.color.text_gray));
+            name.setTextColor(getResources().getColor(R.color.prayer_card_text_secondary));
             name.setGravity(android.view.Gravity.CENTER);
 
             TextView time = new TextView(this);
             time.setText(t[1]);
             time.setTextSize(13);
             time.setTypeface(null, android.graphics.Typeface.BOLD);
-            time.setTextColor(getResources().getColor(R.color.text_dark));
+            time.setTextColor(getResources().getColor(R.color.prayer_card_text_primary));
             time.setGravity(android.view.Gravity.CENTER);
             LinearLayout.LayoutParams timeParams = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -722,13 +907,14 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout row = findViewById(R.id.prayerTimesRow);
 
         dateText.setText("Aktifkan lokasi untuk lihat waktu solat");
+        dateText.setTextColor(getResources().getColor(R.color.prayer_card_text_secondary));
         row.removeAllViews();
 
         TextView retryButton = new TextView(this);
         retryButton.setText("Guna Lokasi Saya");
         retryButton.setTextSize(13);
         retryButton.setTypeface(null, android.graphics.Typeface.BOLD);
-        retryButton.setTextColor(getResources().getColor(R.color.pink_dark));
+        retryButton.setTextColor(getResources().getColor(R.color.prayer_card_text_primary));
         retryButton.setBackgroundResource(R.drawable.bg_pill_active_nav);
         int h = dp(10);
         int v = dp(8);

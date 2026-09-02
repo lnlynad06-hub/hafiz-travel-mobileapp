@@ -142,4 +142,16 @@
     <string name="profile_theme_dark">다크 테마</string>
     <string name="profile_logout">로그아웃</string>
 
+    <string name="guideline_title">움라 가이드</string>
+    <string name="guideline_hero_title">간단 움라 가이드</string>
+    <string name="guideline_hero_blurb">여행 예절부터 움라 의식 완료까지 실제 순서대로 정리했습니다.</string>
+    <string name="guideline_pdf_title">전체 가이드가 필요하신가요?</string>
+    <string name="guideline_pdf_subtitle">자세한 설명이 담긴 전체 PDF를 다운로드하세요</string>
+    <string name="guideline_pdf_button">다운로드</string>
+
+    <string name="prayer_times_title_jakim">오늘의 예배 시간 (JAKIM)</string>
+    <string name="prayer_times_title_jakim_zone">오늘의 예배 시간 (JAKIM - 구역 %1$s)</string>
+
+    <string name="podcast_section_title">팟캐스트</string>
+
 </resources>

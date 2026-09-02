@@ -140,4 +140,16 @@
     <string name="profile_theme_dark">Tema Gelap</string>
     <string name="profile_logout">Log Keluar</string>
 
+    <string name="guideline_title">Panduan Umrah</string>
+    <string name="guideline_hero_title">Panduan Ringkas Umrah</string>
+    <string name="guideline_hero_blurb">Susunan mengikut urutan sebenar - dari adab bermusafir sehingga selesai ibadah umrah.</string>
+    <string name="guideline_pdf_title">Nak panduan lengkap?</string>
+    <string name="guideline_pdf_subtitle">Muat turun PDF penuh dengan penjelasan terperinci</string>
+    <string name="guideline_pdf_button">Muat Turun</string>
+
+    <string name="prayer_times_title_jakim">Waktu Solat Hari Ini (JAKIM)</string>
+    <string name="prayer_times_title_jakim_zone">Waktu Solat Hari Ini (JAKIM - Zon %1$s)</string>
+
+    <string name="podcast_section_title">Podcast</string>
+
 </resources>

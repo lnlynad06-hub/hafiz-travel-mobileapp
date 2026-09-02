@@ -142,4 +142,16 @@
     <string name="profile_theme_dark">ダークテーマ</string>
     <string name="profile_logout">ログアウト</string>
 
+    <string name="guideline_title">ウムラ・ガイド</string>
+    <string name="guideline_hero_title">簡易ウムラ・ガイド</string>
+    <string name="guideline_hero_blurb">旅の作法からウムラの儀式完了まで、実際の順序に沿って構成されています。</string>
+    <string name="guideline_pdf_title">完全版ガイドが必要ですか?</string>
+    <string name="guideline_pdf_subtitle">詳細な説明付きの完全版PDFをダウンロード</string>
+    <string name="guideline_pdf_button">ダウンロード</string>
+
+    <string name="prayer_times_title_jakim">本日の礼拝時間 (JAKIM)</string>
+    <string name="prayer_times_title_jakim_zone">本日の礼拝時間 (JAKIM - ゾーン %1$s)</string>
+
+    <string name="podcast_section_title">ポッドキャスト</string>
+
 </resources>

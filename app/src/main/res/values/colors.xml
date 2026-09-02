@@ -11,12 +11,11 @@
     <color name="field_border">#E0E0E0</color>
     <color name="error_red">#D32F2F</color>
 
-    <!-- NEW: dedicated "card surface" color, separate from "white".
-         In light mode it's the same as white so nothing visually changes.
-         Needed because "white" is also used for text/icons on the pink hero
-         (colorOnPrimary) which must stay white in BOTH themes - if we reused
-         "white" for card backgrounds too, redefining it for dark mode would
-         also turn that hero text dark. Use @color/surface for any card /
-         panel background instead of @color/white going forward. -->
     <color name="surface">#FFFFFF</color>
+
+    <!-- Waktu Solat card - white bg with pink text (light mode) -->
+    <color name="prayer_card_background">#FFFFFF</color>
+    <color name="prayer_card_border">#FCE4EC</color>
+    <color name="prayer_card_text_primary">#C2185B</color>
+    <color name="prayer_card_text_secondary">#EC407A</color>
 </resources>
