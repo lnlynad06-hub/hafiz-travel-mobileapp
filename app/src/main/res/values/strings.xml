@@ -2,6 +2,8 @@
 <resources>
     <string name="app_name">HafizTravel&amp;Tours</string>
 
+    <string name="default_web_client_id">6a8ba4d4fbfe50cdc5e36e76.apps.googleusercontent.com</string>
+
     <!-- Welcome / Onboarding screen -->
     <string name="welcome_trust_text">Trusted by hundreds of pilgrims</string>
     <string name="welcome_title">Your Umrah, Hajj &amp; Travel Companion</string>
