@@ -1,0 +1,76 @@
+{
+  "project_info": {
+    "project_number": "666889805941",
+    "project_id": "hafiz-travel-tour-bot",
+    "storage_bucket": "hafiz-travel-tour-bot.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:666889805941:android:3a6699970aa4d0c851583c",
+        "android_client_info": {
+          "package_name": "com.example.hafiztraveltours"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "666889805941-1cokivpulr7hd7b48u5rmlec0b13s7jg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.hafiztraveltours",
+            "certificate_hash": "dd9c68866ee0c3c696c0f80bc5daa6ee5577788a"
+          }
+        },
+        {
+          "client_id": "666889805941-p7domjkg8lfjrjdvho22i7ggb2sjd861.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYdNkXDKd_vqGnfKn6czoqICxkrjL5Lf0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "666889805941-p7domjkg8lfjrjdvho22i7ggb2sjd861.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:666889805941:android:c79e0da927d4e86851583c",
+        "android_client_info": {
+          "package_name": "com.hafiztraveltours.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "666889805941-p7domjkg8lfjrjdvho22i7ggb2sjd861.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYdNkXDKd_vqGnfKn6czoqICxkrjL5Lf0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "666889805941-p7domjkg8lfjrjdvho22i7ggb2sjd861.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

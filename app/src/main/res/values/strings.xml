@@ -2,7 +2,11 @@
 <resources>
     <string name="app_name">HafizTravel&amp;Tours</string>
 
-    <string name="default_web_client_id">6a8ba4d4fbfe50cdc5e36e76.apps.googleusercontent.com</string>
+    <!-- default_web_client_id is intentionally NOT declared here - it's auto-generated
+         by the com.google.gms.google-services plugin from google-services.json at build
+         time (app/build/generated/res/google-services/<variant>/values/values.xml).
+         Declaring it in this file too creates a duplicate "string/default_web_client_id"
+         resource, which fails the resource-linking step and breaks the whole build. -->
 
     <!-- Welcome / Onboarding screen -->
     <string name="welcome_trust_text">Trusted by hundreds of pilgrims</string>
