@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:666889805941:android:3a6699970aa4d0c851583c",
         "android_client_info": {
-          "package_name": "com.example.hafiztraveltours"
+          "package_name": "com.hafiztraveltours.app"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "666889805941-1cokivpulr7hd7b48u5rmlec0b13s7jg.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.hafiztraveltours",
+            "package_name": "com.hafiztraveltours.app",
             "certificate_hash": "dd9c68866ee0c3c696c0f80bc5daa6ee5577788a"
           }
         },
