@@ -284,31 +284,90 @@
 
                 </androidx.cardview.widget.CardView>
 
-                <!-- Waktu Solat Harian -->
+                <!-- prayerTimesCard — XML PENUH, dengan header dikembalikan -->
                 <LinearLayout
                     android:id="@+id/prayerTimesCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="12dp"
-                    android:background="@drawable/bg_prayer_card"
+                    android:layout_marginTop="8dp"
                     android:orientation="vertical"
-                    android:padding="14dp">
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="14dp">
 
+                    <!-- Header: "Waktu Solat Hari Ini (JAKIM - Zon JHR02)" -->
                     <TextView
                         android:id="@+id/prayerTimesDateText"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/prayer_times_title"
-                        android:textColor="@color/prayer_card_text_secondary"
-                        android:textSize="12sp" />
+                        android:textColor="#E91E63"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="6dp" />
 
+                    <!-- Baris 1: lokasi + tarikh Hijrah -->
                     <LinearLayout
-                        android:id="@+id/prayerTimesRow"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/prayerLocationLabel"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Larkin, Johor Bahru"
+                            android:textColor="@color/prayer_card_text_secondary"
+                            android:textSize="12sp"
+                            android:ellipsize="end"
+                            android:maxLines="1" />
+
+                        <TextView
+                            android:id="@+id/prayerHijriLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1 Rejab 1448H"
+                            android:textColor="@color/prayer_card_text_secondary"
+                            android:textSize="12sp" />
+
+                    </LinearLayout>
+
+                    <!-- Baris 2: arc SAHAJA - tiada text overlap -->
+                    <com.hafiztraveltours.app.PrayerArcView
+                        android:id="@+id/prayerArcView"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:layout_marginTop="14dp" />
+
+                    <!-- Baris 3: label nama + masa -->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:orientation="horizontal" />
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/prayerCurrentLabel"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="start"
+                            android:textColor="@color/prayer_card_text_primary"
+                            android:textSize="14sp"
+                            android:lineSpacingExtra="2dp" />
+
+                        <TextView
+                            android:id="@+id/prayerNextLabel"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:textColor="@color/prayer_card_text_primary"
+                            android:textSize="14sp"
+                            android:lineSpacingExtra="2dp" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 

@@ -154,4 +154,210 @@
 
     <string name="podcast_section_title">播客</string>
 
+    <string name="bab1_hero_title">旅行礼仪与圣行</string>
+    <string name="bab1_hero_blurb">旅途礼仪以及在旅途中如何礼拜。</string>
+    <string name="bab1_s1_title">启程礼仪</string>
+    <string name="bab1_s1_body">甲）旅行者的圣行沐浴\n-于出发旅行前进行\n\n沐浴的举意：\n\nنَوْيْتُ الْغُسْلَ لِلسَّفَرِ سُنَّةً لِلَّهِ تَعَالَى\n意思是：我为出行而进行圣行沐浴，为了至高的真主。\n\n乙）旅行的圣行礼拜（两拉卡阿特）\n-第一拉卡阿特：法谛哈章 + 卡菲伦章\n-第二拉卡阿特：法谛哈章 + 伊赫拉斯章\n\n礼拜的举意：\n\nأُصَلِّي سُنَّةَ السَّفَرِ رَكْعَتَيْنِ لِلَّهِ تَعَالَى\n意思是：我为至高的真主礼旅行圣行拜两拉卡阿特。\n\n丙）出门前应诵读的经文\n-台座经文（一遍）\n-古莱氏章（一遍）\n丁）乘坐交通工具时的祈祷文\n\nاللَّهُمَّ أَنْتَ الصَّاحِبُ فِي السَّفَرِ وَالْخَلِيفَةُ فِي الْأَهْلِ وَالْمَالِ وَالْوَلَدِ وَالصَّحَابِ، اللَّهُمَّ احْفَظْنَا وَإِيَّاهُمْ مِنْ آفَاتِ الدُّنْيَا وَعَاهَاتِهَا، اللَّهُمَّ إِنَّا نَسْأَلُكَ فِي سَفَرِنَا هَذَا الْبِرَّ وَالتَّقْوَى وَمِنَ الْعَمَلِ مَا تَرْضَى، اللَّهُمَّ إِنَّا نَسْأَلُكَ أَنْ تَطْوِيَ لَنَا الْأَرْضَ وَتُؤْمِنَ عَلَيْنَا السَّفَرَ وَأَنْ تَرْزُقَنَا فِي سَفَرِنَا هَذَا سَلَامَةً فِي الْبَدَنِ وَالدِّينِ وَالْمَالِ وَتُبْلِغَنَا عُمْرَةَ بَيْتِكَ وَزِيَارَةَ قَبْرِ نَبِيِّكَ مُحَمَّدٍ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ، اللَّهُمَّ إِنَّا نَعُوذُ بِكَ مِنْ وَعْثَاءِ السَّفَرِ وَكَآبَةِ الْمُنْقَلَبِ بِسُوءِ الْمَنْظَرِ فِي الْأَهْلِ وَالْمَالِ وَالْوَلَدِ وَالصَّحَابِ، اللَّهُمَّ اجْعَلْنَا وَإِيَّاهُمْ فِي جِوَارِكَ وَلَا تَسْلُبْنَا وَإِيَّاهُمْ نِعْمَتَكَ وَلَا تُغَيِّرْ مَا بِنَا وَبِهِمْ مِنْ عَافِيَتِكَ يَا أَرْحَمَ الرَّاحِمِينَ.\n</string>
+    <string name="bab1_s2_title">缩短礼拜（盖斯尔）</string>
+    <string name="bab1_s2_body">缩短礼拜（盖斯尔）：将四拉卡阿特的主命拜（晌礼、晡礼、宵礼）缩短为两拉卡阿特。\n\n缩短礼拜的条件：\n\n- 行程超过两站路程（约81公里）\n- 明确知道目的地\n- 已离开所在城市/地区的范围\n- 该旅行属于合法（非为犯罪目的）\n- 无意在当地停留四天或以上（不计来去两日）\n\n可选的执行方式：\n\n- 仅缩短\n- 仅合并\n- 缩短与合并同时进行\n缩短礼拜的举意：\n</string>
+    <string name="bab1_s3_title">合并礼拜（贾玛尔）</string>
+    <string name="bab1_s3_body">合并礼拜：将两项主命拜合并在同一时间内完成。\n可合并的礼拜：晌礼与晡礼合并，昏礼与宵礼合并。晨礼不可合并。\n两种方式：\n\n1. 提前合并（在第一项礼拜的时间内完成）\n- 条件：按顺序（先完成第一项礼拜）、在第一项礼拜开始的تكبير或结束前举意将第二项礼拜合并于其中、连续不间断、且旅程持续至第二项礼拜完成为止。\n\n提前合并的举意（不缩短）：\n\n- 晌礼与晡礼的举意\n\nأُصَلِّي فَرْضَ الظُّهْرِ أَرْبَعَ رَكَعَاتٍ مَجْمُوعًا إِلَيْهِ الْعَصْرُ أَدَاءً لِلَّهِ تَعَالَى\n意思是：我为至高的真主礼晌礼主命拜四拉卡阿特，并将晡礼合并于其中，按时完成。</string>
+    <string name="bab4_hero_title">剃发或剪发（支柱）</string>
+    <string name="bab1_s4_title">合并与缩短礼拜</string>
+    <string name="bab1_s4_body">3. 同时合并与缩短礼拜：\n可在同一时间内合并两项礼拜，并将晌礼、晡礼与宵礼缩短为两拉卡阿特，须同时符合缩短与合并的条件。\n\n提前合并并缩短的举意：\n\n晌礼 + 晡礼（在晌礼时间内）- 先完成晌礼：\n\n-晌礼的举意（缩短并合并）：\n\nأُصَلِّي فَرْضَ الظَّهْرِ رَكْعَتَيْنِ قَصْرًا مَجْمُوعًا إِلَيْهِ الْعَصْرُ أَدَاءً لِلَّهِ تَعَالَى\n意思是：我为至高的真主礼晌礼主命拜两拉卡阿特并缩短，晡礼合并于其中，按时完成。\n\n道安（سلام）后，晡礼的举意（缩短）：\n\nأُصَلِّي فَرْضَ الْعَصْرِ رَكْعَتَيْنِ قَصْرًا أَدَاءً لِلَّهِ تَعَالَى\n意思是：我为至高的真主礼晡礼主命拜两拉卡阿特并缩短，按时完成。</string>
+    <string name="bab2_hero_title">副朝简介</string>
+    <string name="bab2_hero_blurb">关于第二章的简要概述。</string>
+    <string name="bab2_s1_title">副朝简介</string>
+    <string name="bab2_s1_body">-定义：以特定方式拜访真主的房屋（天房）进行的功修。\n\n-教法判断：对有能力者一生须履行一次的主命。\n\n-依据：圣训（斋月中的副朝相当于一次朝觐）以及黄牛章第196节。\n\n-出发前的十四项礼仪：诚心为主、求知、忏悔、财物清净、偿还债务与义务、修正自身、注重良好品德、财产来源合法、准备充足的旅费、寻求真主的喜悦、选择合适的旅伴、祈求副朝被真主接受、行旅行拜、常记主并托靠真主。\n\n-必须履行的条件：必须是穆斯林、成年、理智健全、自由身、路途安全、有能力者。至于女性：须获得丈夫或监护人许可，并须有麻哈拉姆（近亲男眷）或可信赖女性同行。</string>
+    <string name="bab3_hero_title">副朝功修的实施</string>
+    <string name="bab3_hero_blurb">副朝功修的分步指南，从戒衣（伊哈拉姆）到赛尔仪式。</string>
+    <string name="bab3_s1_title">戒衣（伊哈拉姆）</string>
+    <string name="bab3_s1_body">举意戒衣前的圣行\n\n-戒衣前的圣行沐浴\n-穿戒衣\n-使用香料\n-使用发油\n-礼戒衣圣行拜\n\n举意戒衣时的圣行\n\n-面向天房方向\n-保持有水的洁净状态（有小净）\n\n举意戒衣后的圣行\n\n-诵读应召词（塔勒比亚）、祈祷文、古兰经及记主词\n-避免闲谈\n\n男性的戒衣\n穿两块未经缝制的布：\n- 一块用于遮盖肚脐与膝盖之间的羞体。\n- 另一块披于肩上作为披肩。\n-以白色为宜。</string>
+    <string name="bab3_s2_title">副朝的功修支柱</string>
+    <string name="bab3_s2_body">举意副朝的戒衣\n定义：从举意的那一刻起，直至完成剃发或剪发为止，须遵守戒衣期间的所有禁忌。\n\n举意的时间：\n-最合宜的时间是在朝觐者已经登上交通工具之时（效法先知穆罕默德的圣行）。\n-也可在完成戒衣圣行拜之后举意。\n-在举意时宜面向天房方向。</string>
+    <string name="bab3_s3_title">环游天房（塔瓦夫）</string>
+    <string name="bab3_s3_body">如何进行环游天房\n\n当朝觐者抵达禁寺准备进行环游天房时，应前往黑石所在的角落。\n\n朝觐者朝黑石方向前行，并宜在此时举意环游天房。\n\n副朝环游天房的举意词\n\nاللَّهُمَّ إِنِّي أُرِيدُ طَوَافَ بَيْتِكَ الْحَرَامِ فَيَسِّرْهُ لِي وَتَقَبَّلْهُ مِنِّي سَبْعَةَ أَشْوَاطٍ طَوَافَ الْعُمْرَةِ لِلَّهِ تَعَالَى\n\n随后，以手势示意接触黑石（伊斯提拉姆）。诵念：\n\nبِسْمِ اللهِ وَاللهُ أَكْبَرُ وَلِلَّهِ الْحَمْدُ\n\n若因人潮拥挤而无法靠近，可远远地以手势示意，并诵念以上经文。\n\n受戒者不可直接触摸黑石，因为黑石上涂有香料。</string>
+    <string name="bab3_s4_title">奔走（赛尔）</string>
+    <string name="bab3_s4_body">如何进行奔走（赛尔）\n\n-抵达萨法山时，面向天房方向，并举意进行赛尔。\n\n副朝赛尔的举意词：\n\nاللَّهُمَّ إِنِّي أُرِيدُ أَنْ أَسْعَى بَيْنَ الصَّفَا وَالْمَرُوَةِ سَبْعَةَ أَشْوَاطٍ سَعْيَ الْعُمْرَةِ لِلَّهِ تَعَالَى\n\n举意后（仍面向天房方向），宜诵念تكبير（真主至大词）：\n\nاللَّهُ أَكْبَرُ ، اللَّهُ أَكْبَرُ ، اللَّهُ أَكْبَرُ ، وَلِلَّهِ الْحَمْدُ\n\n诵念تكبير后，宜开始朝麦尔卧山方向前行，同时诵念祈祷文：\n\nاللَّهُ أَكْبَرُ عَلَى هَدَانَا وَالْحَمْدُ لِلَّهِ عَلَى مَا أَوْلَانَا لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ يُحْيِي وَيُمِيتُ بِيَدِهِ الْخَيْرُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ أَنْجَزَ وَعْدَهُ وَنَصَرَ عَبْدَهُ وَهَزَمَ الْأَحْزَابَ وَحْدَهُ لَا إِلَهَ إِلَّا اللَّهُ\n\n-宜为自己或家人祈祷，无论是今世或后世之事，可用自己所熟悉的言辞祈求。\n\n-然后：开始朝麦尔卧山方向进行赛尔。</string>
+    <string name="bab4_hero_blurb">关于第四章的简要概述。</string>
+    <string name="bab4_s1_title">剃发或剪发（支柱）</string>
+    <string name="bab4_s1_body">-含义：按规定的条件，剃除或剪去头部的头发：\n\n-须在赛尔之后进行\n-仅限于头发\n-不少于三根头发\n-男性最好剃光头；女性只需剪去约一指节长度即可\n-若无头发，将剃刀轻拂过头部即可</string>
+    <string name="bab4_s2_title">副朝的功修支柱</string>
+    <string name="bab4_s2_body">-举意副朝的戒衣\n-环游天房（塔瓦夫）\n-奔走（赛尔）\n-剃发或剪发\n-按顺序完成（依次进行）\n\n若四项支柱（举意、塔瓦夫、赛尔、剃发/剪发）均按正确顺序完成，朝觐者即解除戒衣的禁忌，其副朝有效。\n\n未按顺序进行的后果：若在塔瓦夫之前先进行赛尔，之后才完成塔瓦夫与剃发，则该次赛尔与剃发均不算数。朝觐者必须以正确的顺序完成所有支柱。若未如此，须在剃发之前先行罚赎（选择性或按序赎罪）。</string>
+    <string name="bab4_s3_title">第二次及以后的副朝</string>
+    <string name="bab4_s3_body">-第二次及以后的副朝，其步骤与首次副朝相同。\n\n-朝觐者须前往界外（哈勒），在指定的戒衣界（如塔尼姆、吉尔阿纳或侯代比亚）举意戒衣。\n\n-宜在戒衣前进行沐浴，然后在该戒衣界举意副朝并礼戒衣圣行拜。\n\n-之后返回麦加，进行副朝的环游天房、塔瓦夫圣行拜、赛尔及剃发。所诵念的祈祷文及经文与首次副朝相同。</string>
+    <string name="bab4_s4_title">副朝的执行步骤</string>
+    <string name="bab4_s4_body">-戒衣前的圣行沐浴 - 可在举意前的任何地点进行（教法判断：圣行）。\n\n-穿戒衣 - 在戒衣界进行（教法判断：圣行）。\n\n-戒衣圣行拜 - 在戒衣界进行（教法判断：圣行）。\n\n-举意副朝的戒衣 - 在戒衣界进行，效力自举意起持续至剃发为止（教法判断：功修支柱）。\n\n-遵守戒衣期间的禁忌 - 自举意起至开始塔瓦夫为止（教法判断：主命）。\n\n-诵念塔勒比亚（应召词）- 于天房处诵念（教法判断：圣行）。\n\n-副朝的塔瓦夫 - 在天房处进行（教法判断：功修支柱）。\n\n-副朝的赛尔 - 在赛尔场进行（教法判断：功修支柱）。\n\n-剃发或剪发 - 在麦尔卧山或任何地点进行（教法判断：功修支柱）。\n\n-按正确顺序完成所有支柱 - 不限地点（教法判断：功修支柱）。</string>
+    <string name="bab5_hero_title">辞朝巡游（塔瓦夫·维达尔）</string>
+    <string name="bab5_hero_blurb">关于第五章的简要概述。</string>
+    <string name="bab5_s1_title">辞朝巡游的教法</string>
+    <string name="bab5_s1_body">-对即将离开麦加前往目的地的朝觐者而言，此为主命。\n\n相关的部分教法规定：\n\n-若未完成辞朝巡游便离开麦加，须返回补行。\n\n-若在未超过两站路程（81公里）之前返回，则无须罚赎。\n\n-若无合理教法理由而未完成辞朝巡游便离开，须依序进行选择性或按序的罚赎。\n\n-完成辞朝巡游后不宜继续留在麦加；若无必要而滞留，其辞朝巡游即失效，须重新进行。</string>
+    <string name="bab5_s2_title">免除辞朝巡游的合法理由</string>
+    <string name="bab5_s2_body">-月经或产后出血期\n-大量出血的伤口（可能污染清真寺）\n-无水或无土可供洁净\n-担心自身、名誉或财产安全\n-担心与同行团队走散\n-与履行公务相关的顾虑\n-尿失禁\n-须紧急中途离开塔瓦夫（突发状况）\n-需要他人引导或搀扶者（此情况不允许使用轮椅代替）\n-已安排的密集医疗治疗\n-须频繁往返麦加内外办公的工作人员</string>
+    <string name="bab5_s3_title">辞朝巡游后的等候时间</string>
+    <string name="bab5_s3_body">8小时：在一般情况下，自抵达住宿地点起计算。若在8小时内未因合理的旅程理由离开麦加，须重新进行辞朝巡游。\n\n24小时：若在塔瓦夫后24小时内接获交通延误的通知，则无须重新进行。此时间同样自抵达住宿地点起计算。</string>
+    <string name="bab5_s4_title">如何进行辞朝巡游</string>
+    <string name="bab5_s4_body">اللَّهُمَّ إِنِّي أُرِيدُ طَوَافَ بَيْتِكَ الْحَرَامِ طَوَافَ الْوَدَاعِ لِلَّهِ تَعَالَى\n\n方式与副朝塔瓦夫或圣行塔瓦夫相同，唯一不同的是此时穿着日常服装（而非戒衣），且举意为主命性质的塔瓦夫。\n\n塔瓦夫之后：\n\n-礼两拉卡阿特塔瓦夫圣行拜（在易卜拉欣站后方，或禁寺内任何地点均可）。\n-在穆勒塔占处祈祷（可诵念传述的祈祷文，或以自己熟悉的言辞祈求）。\n-饮用渗渗泉水，并多多祈祷。</string>
+    <string name="bab5_s5_title">其他类型的巡游</string>
+    <string name="bab5_s5_body">-圣行塔瓦夫：宜多多进行。举意词：「主啊，我欲环游天房七圈，作为副功塔瓦夫……」\n\n-还愿塔瓦夫：举意词：「主啊，我欲环游天房七圈，作为还愿塔瓦夫……」\n\n-进殿致敬塔瓦夫：进入禁寺时最宜进行。举意词：「主啊，我欲环游天房七圈，作为致敬清真寺的塔瓦夫……」</string>
+    <string name="bab6_hero_title">探访麦地那</string>
+    <string name="bab6_hero_blurb">关于第六章的简要概述。</string>
+    <string name="bab6_s1_title">嘉行</string>
+    <string name="bab6_s1_body">-在整段旅程中及进入麦地那时：应多向先知穆罕默德（愿主福安之）诵念祝安词，并诵念祈祷文：「主啊，求你使这座城市成为免受火狱与刑罚的庇护所。」\n\n-进入清真寺时：诵念求保护及求慈悯的祈祷文。\n\n-进殿致敬礼：两拉卡阿特（第一拉卡阿特：卡菲伦章；第二拉卡阿特：伊赫拉斯章），若可能宜在花园（劳达）内进行，但不可打扰其他朝觐者。</string>
+    <string name="bab6_s2_title">麦地那的探访地点</string>
+    <string name="bab6_s2_body">拜格墓园\n\n-自先知穆罕默德（愿主福安之）时代起，即为麦地那的主要墓园。\n\n-先知的妻子们、女儿们及一位儿子均安葬于此。\n\n祈祷文（圣行）：向墓中人道安，并为先行者与后来者求恕饶，祈求不被剥夺他们的回赐，也不在他们之后陷入迷误。\n\n古巴清真寺\n\n-先知穆罕默德（愿主福安之）迁徙后所建的第一座清真寺，位于麦地那以南约3公里处。\n\n-德行：在古巴清真寺礼拜相当于一次副朝的回赐（伊本·马哲传述）。\n\n-先知曾定期于每周六前往探访，有时也在周一与周四前往。\n\n-此寺是以敬畏真主为根基而建（讨白章：108节）。\n\n乌胡德山\n\n-位于麦地那以北约5公里处，以乌胡德战役而闻名。\n\n-「乌胡德」意为「独立的」（未与其他山脉相连）。\n\n-圣训：「乌胡德是一座我们喜爱它、它也喜爱我们的山」（布哈里传述）。\n\n-山中安葬着哈姆宰·本·阿卜杜·穆塔利卜、阿卜杜拉·本·扎哈什、穆斯阿卜·本·欧麦尔等乌胡德战役的烈士。\n\n-宜在探访时祈祷。\n\n两朝向清真寺\n\n-此寺原为班尼·萨拉玛部落的清真寺，是朝向被改变的地点。\n\n-当先知穆罕默德（愿主福安之）正带领众人礼晌礼时，黄牛章第144节经文降示，命令穆斯林转向禁寺方向礼拜。\n\n-于是众人从朝向耶路撒冷改为朝向天房，因此此寺得名「两朝向清真寺」。</string>
+
+    <!-- Checklist - picker & titles -->
+    <string name="checklist_picker_title">选择清单</string>
+    <string name="checklist_option_umrah">副朝（Umrah）清单</string>
+    <string name="checklist_option_tour">旅游清单</string>
+    <string name="checklist_dialog_title_umrah">副朝准备清单</string>
+    <string name="checklist_dialog_title_tour">旅游准备清单</string>
+    <string name="dialog_close">关闭</string>
+
+    <!-- Checklist - section headers (shared) -->
+    <string name="checklist_section_travel_docs">旅行文件</string>
+    <string name="checklist_section_men_clothing">服装（男性朝圣者）</string>
+    <string name="checklist_section_women_clothing">服装（女性朝圣者）</string>
+    <string name="checklist_section_medicine">药品</string>
+    <string name="checklist_section_electronics">电子产品</string>
+    <string name="checklist_section_women_accessories">配件与饰品（女性）</string>
+    <string name="checklist_section_food">零食与食品</string>
+    <string name="checklist_section_finance">财务与卡类</string>
+    <string name="checklist_section_general">日常用品</string>
+    <string name="checklist_section_clothing">服装</string>
+
+    <!-- Checklist Umrah - Documents -->
+    <string name="checklist_umrah_docs_1">护照（有效期6个月或以上）</string>
+    <string name="checklist_umrah_docs_2">副朝签证 / 许可证书 (Tasrih)（如适用）</string>
+    <string name="checklist_umrah_docs_3">脑膜炎疫苗接种证书 (ICV)</string>
+    <string name="checklist_umrah_docs_4">带上旧护照（如近期有更新）</string>
+    <string name="checklist_umrah_docs_5">重要文件复印件（护照、机票、签证）</string>
+    <string name="checklist_umrah_docs_6">副朝指南与随身祈祷手册</string>
+
+    <!-- Checklist Umrah - Men -->
+    <string name="checklist_umrah_men_1">戒衣 (Ihram)</string>
+    <string name="checklist_umrah_men_2">副朝专用腰带</string>
+    <string name="checklist_umrah_men_3">拉链T恤</string>
+    <string name="checklist_umrah_men_4">长裤（通常穿在长袍内）</string>
+    <string name="checklist_umrah_men_5">沙笼 (Sarong)</string>
+    <string name="checklist_umrah_men_6">长袍 (Jubah) / 库尔塔 / 传统马衣服装（或白色T恤）</string>
+    <string name="checklist_umrah_men_7">小白帽 (Skullcap)</string>
+    <string name="checklist_umrah_men_8">凉鞋 / 鞋子（须清晰露出身脚趾）</string>
+    <string name="checklist_umrah_men_9">小毛巾</string>
+    <string name="checklist_umrah_men_10">鞋袋 / 塑料袋</string>
+    <string name="checklist_umrah_men_11">小洗礼 (Wudu\') 喷雾瓶</string>
+    <string name="checklist_umrah_men_12">小剪刀 / 剃须刀（请放入托运行李，不可随身携带）</string>
+    <string name="checklist_umrah_men_13">便携式祈祷垫</string>
+    <string name="checklist_umrah_men_14">鼻过滤口罩</string>
+
+    <!-- Checklist Umrah - Women -->
+    <string name="checklist_umrah_women_1">祈祷服 (Telekung)</string>
+    <string name="checklist_umrah_women_2">迷你祈祷服</string>
+    <string name="checklist_umrah_women_3">头巾 / 头巾布</string>
+    <string name="checklist_umrah_women_4">长袍 / 长袖上衣</string>
+    <string name="checklist_umrah_women_5">袜子</string>
+    <string name="checklist_umrah_women_6">袖套</string>
+    <string name="checklist_umrah_women_7">环游/奔走 (Tawaf/Sa\'ie) 专用鞋</string>
+    <string name="checklist_umrah_women_8">长裤</string>
+    <string name="checklist_umrah_women_9">拉链T恤</string>
+    <string name="checklist_umrah_women_10">鞋袋 / 塑料袋</string>
+    <string name="checklist_umrah_women_11">小洗礼 (Wudu\') 喷雾瓶</string>
+    <string name="checklist_umrah_women_12">剪刀 / 剃须工具</string>
+    <string name="checklist_umrah_women_13">鼻过滤口罩 / 面纱</string>
+
+    <!-- Checklist Umrah - Medicine -->
+    <string name="checklist_umrah_med_1">退烧药（如普拿疼/Panadol）</string>
+    <string name="checklist_umrah_med_2">感冒药</string>
+    <string name="checklist_umrah_med_3">止咳药</string>
+    <string name="checklist_umrah_med_4">止吐/晕车药</string>
+    <string name="checklist_umrah_med_5">润唇膏 / 脚跟防裂膏</string>
+    <string name="checklist_umrah_med_6">止痛/头痛药</string>
+    <string name="checklist_umrah_med_7">止泻药</string>
+    <string name="checklist_umrah_med_8">肌肉酸痛药/膏药贴</string>
+    <string name="checklist_umrah_med_9">药油/风油精</string>
+    <string name="checklist_umrah_med_10">橄榄油/护肤霜（防止寒冷天气导致皮疹及脚跟龟裂）</string>
+    <string name="checklist_umrah_med_11">便携牙刷与牙膏</string>
+    <string name="checklist_umrah_med_12">免洗洗手液</string>
+    <string name="checklist_umrah_med_13">足够的个人日常药物（麦加/麦地那药房价格高出2-3倍）</string>
+
+    <!-- Checklist Umrah - Electronics -->
+    <string name="checklist_umrah_elec_1">手机充电器</string>
+    <string name="checklist_umrah_elec_2">移动电源（充电宝）</string>
+    <string name="checklist_umrah_elec_3">电源插座扩展板/排插</string>
+    <string name="checklist_umrah_elec_4">迷你小风扇</string>
+    <string name="checklist_umrah_elec_5">电子念珠</string>
+
+    <!-- Checklist Umrah - Women's Accessories -->
+    <string name="checklist_umrah_acc_1">遮阳伞 / 雨伞</string>
+    <string name="checklist_umrah_acc_2">太阳镜</string>
+    <string name="checklist_umrah_acc_3">口罩</string>
+
+    <!-- Checklist Umrah - Food -->
+    <string name="checklist_umrah_food_1">干饼干</string>
+    <string name="checklist_umrah_food_2">糖果</string>
+    <string name="checklist_umrah_food_3">方便面</string>
+    <string name="checklist_umrah_food_4">辣椒酱 (Sambal)</string>
+
+    <!-- Checklist Umrah - Finance -->
+    <string name="checklist_umrah_finance_1">准备足够的沙特里亚尔现金</string>
+    <string name="checklist_umrah_finance_2">保留少量美元作为备用资金</string>
+    <string name="checklist_umrah_finance_3">开通借记卡/信用卡的境外支付功能</string>
+
+    <!-- Checklist Umrah - General -->
+    <string name="checklist_umrah_general_1">洗漱用品</string>
+    <string name="checklist_umrah_general_2">备用毛巾（麦地那酒店有时会出现毛巾短缺）</string>
+    <string name="checklist_umrah_general_3">其他个人合理物品</string>
+
+    <!-- Checklist Tour - Documents -->
+    <string name="checklist_tour_docs_1">护照（有效期6个月或以上）</string>
+    <string name="checklist_tour_docs_2">随身携带护照</string>
+    <string name="checklist_tour_docs_3">带上旧护照（如近期有更新）</string>
+    <string name="checklist_tour_docs_4">核查出境限制状态 (SSPI等)</string>
+
+    <!-- Checklist Tour - Medicine -->
+    <string name="checklist_tour_med_1">扑热息痛/退烧药 (Panadol)</string>
+    <string name="checklist_tour_med_2">喉咙痛药物</string>
+    <string name="checklist_tour_med_3">止泻药</string>
+    <string name="checklist_tour_med_4">晕车/止吐药</string>
+    <string name="checklist_tour_med_5">撒隆巴斯/止痛贴布</string>
+    <string name="checklist_tour_med_6">药油</string>
+    <string name="checklist_tour_med_7">橄榄油 / 保湿霜 / 润唇膏</string>
+    <string name="checklist_tour_med_8">暖宝宝 / 发热贴</string>
+
+    <!-- Checklist Tour - Clothing -->
+    <string name="checklist_tour_clothing_1">薄外套（中间层）</string>
+    <string name="checklist_tour_clothing_2">牛仔裤 / 薄长裤</string>
+    <string name="checklist_tour_clothing_3">保暖厚外套（防寒/防风）</string>
+    <string name="checklist_tour_clothing_4">舒适的包头鞋（运动鞋）</string>
+    <string name="checklist_tour_clothing_5">太阳镜与帽子</string>
+
+    <!-- Checklist Tour - Electronics -->
+    <string name="checklist_tour_elec_1">转换插头</string>
+    <string name="checklist_tour_elec_2">充电宝（最大20,000mAh - 须随身携带）</string>
+
+    <!-- Checklist Tour - Finance -->
+    <string name="checklist_tour_finance_1">根据目的地兑换当地货币</string>
+    <string name="checklist_tour_finance_2">开通借记卡/信用卡的境外支付功能</string>
+
+    <string name="forgot_password">忘记密码？</string>
+    <string name="reset_password_title">重置密码</string>
+    <string name="reset_password_msg">请输入您的电子邮箱，我们将向您发送重置密码的链接。</string>
+    <string name="hint_enter_email">输入您的电子邮件</string>
+    <string name="btn_send">发送</string>
+    <string name="btn_cancel">取消</string>
+
+    <string name="reset_password_invalid_email">请输入有效的电子邮件</string>
+    <string name="reset_password_sent">密码重置邮件已发送。请查看您的收件箱。</string>
+    <string name="reset_password_failed">发送邮件失败，请重试。</string>
+
+    <string name="login_google_signin_failed">Google 登录失败:代码 %1$d</string>
+    <string name="login_google_success">Google 登录成功！%1$s</string>
+    <string name="login_google_failed">Google 登录失败，请重试。</string>
+    <string name="login_email_invalid">请输入有效的电子邮件</string>
+    <string name="login_password_required">请输入密码</string>
+    <string name="login_success">登录成功！</string>
+    <string name="login_failed_default">登录失败，请重试</string>
+    <string name="language_picker_title">Choose Language / Pilih Bahasa</string>
+
 </resources>

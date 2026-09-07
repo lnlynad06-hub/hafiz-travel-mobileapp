@@ -160,4 +160,210 @@
 
     <string name="podcast_section_title">Podcast</string>
 
+    <string name="bab1_hero_title">Etiquette of Travel and Recommended Practices</string>
+    <string name="bab1_hero_blurb">Etiquette of traveling and performing prayers while on a journey.</string>
+    <string name="bab1_s1_title">Etiquette for Starting a Journey</string>
+    <string name="bab1_s1_body">A) Recommended Ritual Bath for Travelers\n-Performed before setting out on a journey\n\nIntention for the Bath:\n\nنَوْيْتُ الْغُسْلَ لِلسَّفَرِ سُنَّةً لِلَّهِ تَعَالَى\nI only take a circumcision bath to travel because of Allah Ta\'ala.\n\nB) Voluntary Prayer for a Traveler (2 rak\'ahs)\n-1st Rakaat: Surah al-Fatihah + Surah al-Kafirun\n-2nd Rak\'ah: Surah al-Fatihah + Surah al-Ikhlas\n\nIntention for Prayer:\n\nأُصَلِّي سُنَّةَ السَّفَرِ رَكْعَتَيْنِ لِلَّهِ تَعَالَى\nI only prayed two rakaats of the sunnah prayer for travelers because of Allah Ta\'ala.\n\nB) Reading Before Leaving the House\n-Ayat Kursi (1 time)\n-Surah Quraysh (1 kali)\nC) Supplication for Boarding a Vehicle\n\nاللَّهُمَّ أَنْتَ الصَّاحِبُ فِي السَّفَرِ وَالْخَلِيفَةُ فِي الْأَهْلِ وَالْمَالِ وَالْوَلَدِ وَالصَّحَابِ، اللَّهُمَّ احْفَظْنَا وَإِيَّاهُمْ مِنْ آفَاتِ الدُّنْيَا وَعَاهَاتِهَا، اللَّهُمَّ إِنَّا نَسْأَلُكَ فِي سَفَرِنَا هَذَا الْبِرَّ وَالتَّقْوَى وَمِنَ الْعَمَلِ مَا تَرْضَى، اللَّهُمَّ إِنَّا نَسْأَلُكَ أَنْ تَطْوِيَ لَنَا الْأَرْضَ وَتُؤْمِنَ عَلَيْنَا السَّفَرَ وَأَنْ تَرْزُقَنَا فِي سَفَرِنَا هَذَا سَلَامَةً فِي الْبَدَنِ وَالدِّينِ وَالْمَالِ وَتُبْلِغَنَا عُمْرَةَ بَيْتِكَ وَزِيَارَةَ قَبْرِ نَبِيِّكَ مُحَمَّدٍ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ، اللَّهُمَّ إِنَّا نَعُوذُ بِكَ مِنْ وَعْثَاءِ السَّفَرِ وَكَآبَةِ الْمُنْقَلَبِ بِسُوءِ الْمَنْظَرِ فِي الْأَهْلِ وَالْمَالِ وَالْوَلَدِ وَالصَّحَابِ، اللَّهُمَّ اجْعَلْنَا وَإِيَّاهُمْ فِي جِوَارِكَ وَلَا تَسْلُبْنَا وَإِيَّاهُمْ نِعْمَتَكَ وَلَا تُغَيِّرْ مَا بِنَا وَبِهِمْ مِنْ عَافِيَتِكَ يَا أَرْحَمَ الرَّاحِمِينَ.\n</string>
+    <string name="bab1_s2_title">Qasar Prayer (Shortened Prayer)</string>
+    <string name="bab1_s2_body">Qasar Prayer: Shortening a 4-rakaah obligatory prayer (Dhuhr, Asr, Isha) to 2 rak\'ahs.\n\nConditions for Qasar Prayer:\n\n- A journey exceeding 2 marhalah (81 km)\n- Knowing the destination\n- Carried out after passing the district or city boundary.\n- Travel is a must (not a vice)\n- Does not intend to travel for four days or more (excluding the days of departure and return).\n\nImplementation Options:\n\n- Qasar only\n- Jamak only\n- Combination of Qasar and Jamak\nIntention for Qasar Prayer:\n</string>
+    <string name="bab1_s3_title">Combining Prayers (Jamak)</string>
+    <string name="bab1_s3_body">JAMAK PRAYER: Combining two obligatory prayers into one time slot.\nPrayers that can be combined: Zuhur with Asar, and Maghrib with Isyak. Subuh cannot be combined.\nTwo methods:\n\n1. Jamak Taqdim (performed at the first prayer\'s time)\n- Conditions: Order (perform the first prayer first), intend to combine the second prayer with the first at the start of takbir or before the salam of the first prayer, continuity (muwalat), and the journey must continue until the second prayer is completed.\n\nJamak Taqdim Intention (without qasar):\n\n- Intention for Zuhur + Asar\n\nأُصَلِّي فَرْضَ الظُّهْرِ أَرْبَعَ رَكَعَاتٍ مَجْمُوعًا إِلَيْهِ الْعَصْرُ أَدَاءً لِلَّهِ تَعَالَى\nSahaja aku solat fardhu Zuhur empat rakaat dihimpunkan solat Asar kepadanya tunai kerana Allah Ta\'ala</string>
+    <string name="bab1_s4_title">Combining Prayers with Shortening (Jamak &amp; Qasar)</string>
+    <string name="bab1_s4_body">3. JAMAK COMBINED WITH QASAR:\nYou may combine two prayers at once while shortening Zuhur, Asar, and Isyak to two rakaat, following the conditions of both qasar and jamak.\n\nIntention for Jamak Taqdim &amp; Qasar:\n\nZuhur + Asar (at Zuhur time) - perform Zuhur first:\n\n-Zuhur intention (qasar + jamak):\n\nأُصَلِّي فَرْضَ الظَّهْرِ رَكْعَتَيْنِ قَصْرًا مَجْمُوعًا إِلَيْهِ الْعَصْرُ أَدَاءً لِلَّهِ تَعَالَى\nSahaja aku solat fardhu Zuhur dua rakaat qasar dihimpunkan Asar kepadanya tunai kerana Allah Ta\'ala\n\nAfter the salam, Asar intention (qasar):\n\nأُصَلِّي فَرْضَ الْعَصْرِ رَكْعَتَيْنِ قَصْرًا أَدَاءً لِلَّهِ تَعَالَى\nSahaja aku solat fardhu Asar dua rakaat qasar tunai kerana Allah Ta\'ala</string>
+    <string name="bab2_hero_title">Introduction to Umrah</string>
+    <string name="bab2_hero_blurb">A short overview of Chapter 2.</string>
+    <string name="bab2_s1_title">Introduction to Umrah</string>
+    <string name="bab2_s1_body">-Definition: A visit to the House of Allah to perform worship under specific conditions.\n\n-Ruling: Obligatory once in a lifetime for those who are able.\n\n-Evidence: Hadith (Umrah during Ramadan equals the reward of Hajj) &amp; Surah al-Baqarah 196.\n\n-Etiquette before departure (14 matters): Sincerity, seeking knowledge, repentance, purifying one\'s wealth, settling debts/obligations, self-improvement, observing proper conduct, halal source of funds, sufficient provisions, seeking Allah\'s pleasure, choosing a suitable travel companion, praying for an accepted Umrah, the travel prayer, remembrance and reliance on Allah.\n\n-Obligatory conditions: Muslim, of age, sane, free, safe journey, capable. For women: permission from husband/guardian &amp; accompanied by a mahram or a trusted woman.</string>
+    <string name="bab3_hero_title">Performing the Umrah Rites</string>
+    <string name="bab3_hero_blurb">Step-by-step guide to performing Umrah, from ihram to sa\'i.</string>
+    <string name="bab3_s1_title">Ihram</string>
+    <string name="bab3_s1_body">Recommended Acts Before Making the Ihram Intention\n\n-Recommended bath for ihram\n-Wearing ihram garments\n-Applying fragrance\n-Applying hair oil\n-Performing the recommended ihram prayer\n\nRecommended Acts While Making the Ihram Intention\n\n-Facing the qiblah\n-Being in a state of wudhu\'\n\nRecommended Acts After Making the Ihram Intention\n\n-Reciting talbiyah, supplications, Qur\'an, and dhikr\n-Avoiding idle conversation\n\nIhram for Men\nWearing two unstitched sheets of cloth:\n- One covering the awrah between the navel and the knees.\n- The other worn as a shawl.\n-Recommended to be white.</string>
+    <string name="bab3_s2_title">Pillars of Umrah</string>
+    <string name="bab3_s2_body">Ihram Intention for Umrah\nDefinition: The obligation to observe the ihram prohibitions from the moment of intention until the hair-cutting/shaving is completed.\n\nTime of Intention:\n-The most virtuous time is when the pilgrim is already on board the vehicle (following the example of the Prophet SAW).\n-The intention may be made after completing the recommended ihram prayer.\n-It is recommended to face the qiblah while pronouncing the intention.</string>
+    <string name="bab3_s3_title">Tawaf</string>
+    <string name="bab3_s3_body">How to Perform Tawaf\n\nUpon arriving inside Masjid al-Haram to perform tawaf, pilgrims should proceed to the corner of the Black Stone (Hajar Aswad).\n\nPilgrims should walk toward the corner of the Black Stone, facing it, and it is recommended to make the intention for tawaf.\n\nWording of the Tawaf Intention for Umrah\n\nاللَّهُمَّ إِنِّي أُرِيدُ طَوَافَ بَيْتِكَ الْحَرَامِ فَيَسِّرْهُ لِي وَتَقَبَّلْهُ مِنِّي سَبْعَةَ أَشْوَاطٍ طَوَافَ الْعُمْرَةِ لِلَّهِ تَعَالَى\n\nAfter that, one should acknowledge the Black Stone with a hand gesture. Say:\n\nبِسْمِ اللهِ وَاللهُ أَكْبَرُ وَلِلَّهِ الْحَمْدُ\n\nIf unable to get close due to large crowds, one may acknowledge it from a distance while reciting the above.\n\nPilgrims in ihram must not touch the Black Stone directly, as it has been perfumed.</string>
+    <string name="bab3_s4_title">Sa\'i</string>
+    <string name="bab3_s4_body">How to Perform Sa\'i\n\n-Upon arriving at Mount Safa, face the direction of the Kaabah and make the intention for Sa\'i.\n\nWording of the Sa\'i Intention for Umrah:\n\nاللَّهُمَّ إِنِّي أُرِيدُ أَنْ أَسْعَى بَيْنَ الصَّفَا وَالْمَرُوَةِ سَبْعَةَ أَشْوَاطٍ سَعْيَ الْعُمْرَةِ لِلَّهِ تَعَالَى\n\nAfter the intention (still facing the qiblah), it is recommended to recite takbir:\n\nاللَّهُ أَكْبَرُ ، اللَّهُ أَكْبَرُ ، اللَّهُ أَكْبَرُ ، وَلِلَّهِ الْحَمْدُ\n\nAfter the takbir, it is recommended to begin walking toward Mount Marwah while reciting the supplication:\n\nاللَّهُ أَكْبَرُ عَلَى هَدَانَا وَالْحَمْدُ لِلَّهِ عَلَى مَا أَوْلَانَا لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ يُحْيِي وَيُمِيتُ بِيَدِهِ الْخَيْرُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ أَنْجَزَ وَعْدَهُ وَنَصَرَ عَبْدَهُ وَهَزَمَ الْأَحْزَابَ وَحْدَهُ لَا إِلَهَ إِلَّا اللَّهُ\n\n-It is recommended to pray for oneself or one\'s family, whether for worldly or hereafter matters, in one\'s own words.\n\n-Then: begin the walk of Sa\'i toward Mount Marwah.</string>
+    <string name="bab4_hero_title">The Pillar of Shaving/Cutting Hair</string>
+    <string name="bab4_hero_blurb">A short overview of Chapter 4.</string>
+    <string name="bab4_s1_title">The Pillar of Shaving/Cutting Hair</string>
+    <string name="bab4_s1_body">-Meaning: removing/shedding hair on the head according to its valid conditions:\n\n-Timing of shaving/cutting is after Sa\'i\n-Only the hair on the head\n-Not less than 3 strands of hair\n-More virtuous for men to shave completely; for women, it is sufficient to cut hair about the length of a fingertip\n-If there is no hair, it is sufficient to simply pass a razor over the head</string>
+    <string name="bab4_s2_title">Pillars of Umrah</string>
+    <string name="bab4_s2_body">-Ihram Intention for Umrah\n-Tawaf\n-Sa\'i\n-Shaving/Cutting Hair\n-Order (performing them in sequence)\n\nOnce all four pillars (intention, tawaf, sa\'i, shaving/cutting) are completed in the correct order, the pilgrim is released from the ihram prohibitions and their Umrah is valid.\n\nConsequence of not following the order: If Sa\'i is performed before Tawaf, followed later by Tawaf and shaving, then that Sa\'i and shaving are not valid. Pilgrims must perform all pillars correctly. If not done properly, a dam (penalty) of takhyir and taqdir applies for shaving before its proper time.</string>
+    <string name="bab4_s3_title">Performing a Second or Subsequent Umrah</string>
+    <string name="bab4_s3_body">-Performing a second or subsequent Umrah follows the same steps as the first.\n\n-Pilgrims must travel out to the halal zone to make the ihram intention at a designated miqat such as Tan\'im, Ji\'ranah, or Hudaybiyah.\n\n-It is recommended to perform the ihram bath before wearing ihram, then enter ihram for Umrah and perform the recommended ihram prayer at that miqat.\n\n-Afterward, return to the city of Makkah to perform the Umrah tawaf, the recommended tawaf prayer, Sa\'i, and hair-cutting. The supplications and recitations are the same as for the first Umrah.</string>
+    <string name="bab4_s4_title">Steps for Performing Umrah</string>
+    <string name="bab4_s4_body">-Recommended ihram bath - performed anywhere before making the intention (ruling: recommended).\n\n-Wearing ihram garments - performed at the miqat (ruling: recommended).\n\n-Recommended ihram prayer - performed at the miqat (ruling: recommended).\n\n-Ihram intention for Umrah - performed at the miqat, effective from the intention until hair-cutting (ruling: pillar).\n\n-Observing the ihram prohibitions - observed from the intention until the start of tawaf (ruling: obligatory).\n\n-Talbiyah - recited at the House of Allah (ruling: recommended).\n\n-Umrah Tawaf - performed at the House of Allah (ruling: pillar).\n\n-Umrah Sa\'i - performed at Mas\'a (ruling: pillar).\n\n-Shaving/Cutting Hair - performed at Marwah or anywhere (ruling: pillar).\n\n-Performing all pillars in the correct order - performed anywhere (ruling: pillar).</string>
+    <string name="bab5_hero_title">Farewell Tawaf (Tawaf Wada\')</string>
+    <string name="bab5_hero_blurb">A short overview of Chapter 5.</string>
+    <string name="bab5_s1_title">Ruling on Farewell Tawaf</string>
+    <string name="bab5_s1_body">-Obligatory for pilgrims who intend to leave the city of Makkah for the destinations mentioned.\n\nSome related rulings:\n\n-Pilgrims who leave Makkah without performing the farewell tawaf must return to complete it.\n\n-If they return before covering a distance of 2 marhalah (81 km), no dam (penalty payment) is required.\n\n-A person who leaves without performing the farewell tawaf without a valid excuse recognized by Islamic law is liable for a dam of tertib and taqdir.\n\n-Once the farewell tawaf has been performed, one should no longer remain in Makkah; if they stay without necessity, the farewell tawaf is considered void and must be repeated.</string>
+    <string name="bab5_s2_title">Valid Excuses for Exemption from Farewell Tawaf</string>
+    <string name="bab5_s2_body">-Menstruation/postnatal bleeding\n-Excessive bleeding wounds (that would soil the mosque)\n-No water/earth available for purification\n-Fear for life, honour, or property\n-Fear of being left behind by companions\n-Fear related to official duties\n-Urinary incontinence\n-Being forced to leave tawaf (emergency)\n-Needing to be guided/carried (wheelchair not permitted in this context)\n-Scheduled intensive medical treatment\n-Officials who frequently travel in and out of Makkah</string>
+    <string name="bab5_s3_title">Waiting Period After Farewell Tawaf</string>
+    <string name="bab5_s3_body">8 hours: Under normal circumstances, counted from arrival at the accommodation. If one does not leave Makkah within 8 hours without a valid travel reason, the tawaf must be repeated.\n\n24 hours: If a delay in transport is notified within 24 hours after the tawaf, it need not be repeated. Counted from arrival at the accommodation.</string>
+    <string name="bab5_s4_title">Performing the Farewell Tawaf</string>
+    <string name="bab5_s4_body">اللَّهُمَّ إِنِّي أُرِيدُ طَوَافَ بَيْتِكَ الْحَرَامِ طَوَافَ الْوَدَاعِ لِلَّهِ تَعَالَى\n\nThe method is the same as Umrah/recommended tawaf, except regular clothing is worn (not ihram) and the intention is for an obligatory tawaf.\n\nAfter the tawaf:\n\n-Perform the 2-rakaat recommended tawaf prayer (behind Maqam Ibrahim or anywhere in Masjid al-Haram).\n-Supplicate at al-Multazam (using a transmitted supplication or one\'s own words).\n-Drink Zamzam water and increase in supplication.</string>
+    <string name="bab5_s5_title">Other Types of Tawaf</string>
+    <string name="bab5_s5_body">-Recommended Tawaf: Encouraged to be performed often. Intention: \"O my Lord, I intend to perform 7 circuits of recommended tawaf...\"\n\n-Vow Tawaf: Intention: \"O my Lord, I intend to perform 7 circuits of vow tawaf...\"\n\n-Tahiyyatul Bait (Greeting Tawaf): Most virtuous when entering Masjid al-Haram. Intention: \"O my Lord, I intend to perform 7 circuits of tahiyyatul bait tawaf...\"</string>
+    <string name="bab6_hero_title">Visiting Madinah</string>
+    <string name="bab6_hero_blurb">A short overview of Chapter 6.</string>
+    <string name="bab6_s1_title">Recommended Practices</string>
+    <string name="bab6_s1_body">-Throughout the journey and upon entering Madinah: Increase in sending blessings upon the Prophet and recite the supplication: \"O Allah, make this city a protection from Hellfire and punishment.\"\n\n-Upon entering the mosque: Recite the supplication for protection and seeking mercy.\n\n-Tahiyyatul Masjid: 2 rakaat (rakaat 1: al-Kafirun, rakaat 2: al-Ikhlas), at al-Raudhah if possible, without disturbing other pilgrims.</string>
+    <string name="bab6_s2_title">Places to Visit in Madinah</string>
+    <string name="bab6_s2_body">Jannatul Baqi\'\n\n-The main cemetery of Madinah from the time of the Prophet SAW.\n\n-The resting place of the Prophet\'s wives, daughters, and one of his sons.\n\n-Recommended supplication: A greeting of peace to the inhabitants of the graves, seeking forgiveness for those who came before and after them, and asking that their reward not be withheld and that we not be tested after them.\n\nMasjid Quba\'\n\n-The first mosque built by the Prophet SAW after the Hijrah, located 3 km south of Madinah.\n\n-Merit: Praying in Masjid Quba\' equals the reward of an Umrah (narrated by Ibn Majah).\n\n-The Prophet SAW would regularly visit on Saturdays, and sometimes on Mondays and Thursdays.\n\n-Built on a foundation of piety (Surah at-Taubah: 108).\n\nMount Uhud\n\n-Located 5 km north of Madinah, known for the Battle of Uhud.\n\n-The name \"Uhud\" means solitary (not connected to other mountains).\n\n-Hadith: \"Uhud is a mountain that loves us and we love it\" (narrated by al-Bukhari).\n\n-Contains the graves of Hamzah bin Abdul Muttalib, Abdullah bin Jahsy, Mus\'ab bin Umair, and other martyrs of Uhud.\n\n-Recommended to supplicate while visiting.\n\nMasjid Qiblatain\n\n-Formerly the mosque of Banu Salamah, the site where the change of qiblah occurred.\n\n-While the Prophet SAW was leading the Zuhur prayer with the congregation, Surah al-Baqarah verse 144 was revealed, commanding that they face Masjid al-Haram.\n\n-He turned from facing Baitulmaqdis toward the Kaabah, hence it is named the Mosque of the Two Qiblahs.</string>
+
+    <!-- Checklist - picker & titles -->
+    <string name="checklist_picker_title">Select Checklist</string>
+    <string name="checklist_option_umrah">Umrah Checklist</string>
+    <string name="checklist_option_tour">Tour Checklist</string>
+    <string name="checklist_dialog_title_umrah">Umrah Preparation Checklist</string>
+    <string name="checklist_dialog_title_tour">Tour Preparation Checklist</string>
+    <string name="dialog_close">Close</string>
+
+    <!-- Checklist - section headers (shared) -->
+    <string name="checklist_section_travel_docs">Travel Documents</string>
+    <string name="checklist_section_men_clothing">Clothing (Male Pilgrims)</string>
+    <string name="checklist_section_women_clothing">Clothing (Female Pilgrims)</string>
+    <string name="checklist_section_medicine">Medicine</string>
+    <string name="checklist_section_electronics">Electronics</string>
+    <string name="checklist_section_women_accessories">Accessories (Women)</string>
+    <string name="checklist_section_food">Snacks</string>
+    <string name="checklist_section_finance">Finance</string>
+    <string name="checklist_section_general">General Items</string>
+    <string name="checklist_section_clothing">Clothing</string>
+
+    <!-- Checklist Umrah - Documents -->
+    <string name="checklist_umrah_docs_1">Passport valid 6 months or more</string>
+    <string name="checklist_umrah_docs_2">Umrah Visa / Tasrih (if applicable)</string>
+    <string name="checklist_umrah_docs_3">Meningitis vaccine certificate (ICV)</string>
+    <string name="checklist_umrah_docs_4">Bring old passport (if recently renewed)</string>
+    <string name="checklist_umrah_docs_5">Copies of important documents (passport, ticket, visa)</string>
+    <string name="checklist_umrah_docs_6">Umrah book &amp; easy-to-carry prayer book</string>
+
+    <!-- Checklist Umrah - Men -->
+    <string name="checklist_umrah_men_1">Ihram cloth</string>
+    <string name="checklist_umrah_men_2">Umrah belt</string>
+    <string name="checklist_umrah_men_3">Zip t-shirt</string>
+    <string name="checklist_umrah_men_4">Pants (usually worn with jubah)</string>
+    <string name="checklist_umrah_men_5">Sarong</string>
+    <string name="checklist_umrah_men_6">Jubah / Kurta / Baju Melayu (or white t-shirt)</string>
+    <string name="checklist_umrah_men_7">Skullcap</string>
+    <string name="checklist_umrah_men_8">Sandals / shoes (must clearly show all 5 toes)</string>
+    <string name="checklist_umrah_men_9">Small towel</string>
+    <string name="checklist_umrah_men_10">Shoe bag / plastic bag</string>
+    <string name="checklist_umrah_men_11">Wudu\' spray bottle</string>
+    <string name="checklist_umrah_men_12">Small scissors / shaving tool (place in checked baggage, not hand carry)</string>
+    <string name="checklist_umrah_men_13">Small prayer mat</string>
+    <string name="checklist_umrah_men_14">Nose filter (mask)</string>
+
+    <!-- Checklist Umrah - Women -->
+    <string name="checklist_umrah_women_1">Telekung (prayer garment)</string>
+    <string name="checklist_umrah_women_2">Mini telekung</string>
+    <string name="checklist_umrah_women_3">Headscarf</string>
+    <string name="checklist_umrah_women_4">Jubah / long blouse</string>
+    <string name="checklist_umrah_women_5">Stockings</string>
+    <string name="checklist_umrah_women_6">Hand socks</string>
+    <string name="checklist_umrah_women_7">Tawaf/Sa\'ie shoes</string>
+    <string name="checklist_umrah_women_8">Long pants</string>
+    <string name="checklist_umrah_women_9">Zip t-shirt</string>
+    <string name="checklist_umrah_women_10">Shoe bag / plastic bag</string>
+    <string name="checklist_umrah_women_11">Wudu\' spray bottle</string>
+    <string name="checklist_umrah_women_12">Scissors / shaving tool</string>
+    <string name="checklist_umrah_women_13">Nose filter / niqab</string>
+
+    <!-- Checklist Umrah - Medicine -->
+    <string name="checklist_umrah_med_1">Fever medicine (Panadol)</string>
+    <string name="checklist_umrah_med_2">Flu medicine</string>
+    <string name="checklist_umrah_med_3">Cough medicine</string>
+    <string name="checklist_umrah_med_4">Anti-nausea medicine</string>
+    <string name="checklist_umrah_med_5">Lip balm / heel cream</string>
+    <string name="checklist_umrah_med_6">Headache medicine</string>
+    <string name="checklist_umrah_med_7">Diarrhea medicine</string>
+    <string name="checklist_umrah_med_8">Muscle pain medicine</string>
+    <string name="checklist_umrah_med_9">Medicated oil</string>
+    <string name="checklist_umrah_med_10">Olive oil/cream (prevents rash &amp; cracked heels from cold weather)</string>
+    <string name="checklist_umrah_med_11">Small toothbrush &amp; toothpaste</string>
+    <string name="checklist_umrah_med_12">Hand sanitizer</string>
+    <string name="checklist_umrah_med_13">Sufficient personal medication (pharmacy prices in Makkah/Madinah are 2-3x higher)</string>
+
+    <!-- Checklist Umrah - Electronics -->
+    <string name="checklist_umrah_elec_1">Phone charger</string>
+    <string name="checklist_umrah_elec_2">Powerbank</string>
+    <string name="checklist_umrah_elec_3">Extension plug</string>
+    <string name="checklist_umrah_elec_4">Mini fan</string>
+    <string name="checklist_umrah_elec_5">Digital tasbih</string>
+
+    <!-- Checklist Umrah - Women's Accessories -->
+    <string name="checklist_umrah_acc_1">Umbrella</string>
+    <string name="checklist_umrah_acc_2">Sunglasses</string>
+    <string name="checklist_umrah_acc_3">Face mask</string>
+
+    <!-- Checklist Umrah - Food -->
+    <string name="checklist_umrah_food_1">Dry biscuits</string>
+    <string name="checklist_umrah_food_2">Candy</string>
+    <string name="checklist_umrah_food_3">Instant noodles</string>
+    <string name="checklist_umrah_food_4">Dried chili paste (sambal)</string>
+
+    <!-- Checklist Umrah - Finance -->
+    <string name="checklist_umrah_finance_1">Sufficient Saudi Riyal exchange</string>
+    <string name="checklist_umrah_finance_2">Keep some USD as backup</string>
+    <string name="checklist_umrah_finance_3">Activate debit/credit card for overseas use</string>
+
+    <!-- Checklist Umrah - General -->
+    <string name="checklist_umrah_general_1">Toiletries</string>
+    <string name="checklist_umrah_general_2">Extra towel (Madinah hotels sometimes run short on towels)</string>
+    <string name="checklist_umrah_general_3">Other reasonable items</string>
+
+    <!-- Checklist Tour - Documents -->
+    <string name="checklist_tour_docs_1">Passport valid 6 months or more</string>
+    <string name="checklist_tour_docs_2">Bring your passport with you</string>
+    <string name="checklist_tour_docs_3">Bring old passport (if recently renewed)</string>
+    <string name="checklist_tour_docs_4">Check overseas travel status (SSPI)</string>
+
+    <!-- Checklist Tour - Medicine -->
+    <string name="checklist_tour_med_1">Panadol</string>
+    <string name="checklist_tour_med_2">Sore throat medicine</string>
+    <string name="checklist_tour_med_3">Diarrhea medicine</string>
+    <string name="checklist_tour_med_4">Anti-nausea medicine</string>
+    <string name="checklist_tour_med_5">Salonpas</string>
+    <string name="checklist_tour_med_6">Medicated oil</string>
+    <string name="checklist_tour_med_7">Olive oil / moisturizer / lip balm</string>
+    <string name="checklist_tour_med_8">Heat pad</string>
+
+    <!-- Checklist Tour - Clothing -->
+    <string name="checklist_tour_clothing_1">Thin jacket (mid layer)</string>
+    <string name="checklist_tour_clothing_2">Jeans / thin long pants</string>
+    <string name="checklist_tour_clothing_3">Extra jacket (for cold/windy weather)</string>
+    <string name="checklist_tour_clothing_4">Comfortable closed shoes (sneakers)</string>
+    <string name="checklist_tour_clothing_5">Sunglasses &amp; cap</string>
+
+    <!-- Checklist Tour - Electronics -->
+    <string name="checklist_tour_elec_1">Travel adaptor</string>
+    <string name="checklist_tour_elec_2">Powerbank (max. 20,000mAh - keep in hand carry)</string>
+
+    <!-- Checklist Tour - Finance -->
+    <string name="checklist_tour_finance_1">Currency exchange according to destination</string>
+    <string name="checklist_tour_finance_2">Activate debit/credit card for overseas use</string>
+
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="reset_password_title">Reset Password</string>
+    <string name="reset_password_msg">Enter your email, and we will send you a link to reset your password.</string>
+    <string name="hint_enter_email">Enter your email</string>
+    <string name="btn_send">SEND</string>
+    <string name="btn_cancel">CANCEL</string>
+
+    <string name="reset_password_invalid_email">Please enter a valid email</string>
+    <string name="reset_password_sent">Password reset email sent. Please check your inbox.</string>
+    <string name="reset_password_failed">Failed to send email. Please try again.</string>
+
+    <string name="login_google_signin_failed">Google Sign-In failed: Code %1$d</string>
+    <string name="login_google_success">Google login successful! %1$s</string>
+    <string name="login_google_failed">Google login failed. Please try again.</string>
+    <string name="login_email_invalid">Please enter a valid email</string>
+    <string name="login_password_required">Please enter your password</string>
+    <string name="login_success">Login successful!</string>
+    <string name="login_failed_default">Login failed, please try again</string>
+    <string name="language_picker_title">Choose Language / Pilih Bahasa</string>
+
 </resources>

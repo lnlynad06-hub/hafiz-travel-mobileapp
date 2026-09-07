@@ -16,6 +16,18 @@
     <!-- Waktu Solat card - white bg with pink text (light mode) -->
     <color name="prayer_card_background">#FFFFFF</color>
     <color name="prayer_card_border">#FCE4EC</color>
-    <color name="prayer_card_text_primary">#C2185B</color>
-    <color name="prayer_card_text_secondary">#EC407A</color>
+    <!-- values/colors.xml — LIGHT mode sahaja, warna teks dipisahkan dari warna arc -->
+    <!-- values/colors.xml — LIGHT mode, gradient pink konsisten dengan tema app -->
+    <color name="prayer_arc_start">#F06292</color>
+    <color name="prayer_arc_end">#AD1457</color>
+    <color name="prayer_arc_dot">#AD1457</color>
+
+    <!-- Teks primary/secondary charcoal neutral - TIDAK ikut tone arc supaya tak nampak "olive" -->
+    <color name="prayer_card_text_primary">#2A2A2A</color>
+    <color name="prayer_card_text_secondary">#7A7A7A</color>
+
+    <color name="input_background">#F5F5F5</color>
+    <color name="input_text">#212121</color>
+    <color name="input_hint">#757575</color>
+
 </resources>

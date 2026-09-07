@@ -152,4 +152,210 @@
 
     <string name="podcast_section_title">Podcast</string>
 
+    <string name="bab1_hero_title">Adab Musafir dan Amalan Sunat</string>
+    <string name="bab1_hero_blurb">Adab bermusafir dan solat semasa dalam perjalanan.</string>
+    <string name="bab1_s1_title">Adab-Adab Memulakan Perjalanan</string>
+    <string name="bab1_s1_body">A) Mandi Sunat Musafir\n-Dilakukan sebelum keluar untuk bermusafir\n\nNiat Mandi:\n\nنَوْيْتُ الْغُسْلَ لِلسَّفَرِ سُنَّةً لِلَّهِ تَعَالَى\nSahaja aku mandi sunat untuk bermusafir kerana Allah Ta\'ala.\n\nB) Solat Sunat Musafir (2 rakaat)\n-Rakaat 1: Surah al-Fatihah + Surah al-Kafirun\n-Rakaat 2: Surah al-Fatihah + Surah al-Ikhlas\n\nNiat Solat:\n\nأُصَلِّي سُنَّةَ السَّفَرِ رَكْعَتَيْنِ لِلَّهِ تَعَالَى\nSahaja aku solat sunat musafir dua rakaat kerana Allah Ta\'ala.\n\nB) Bacaan Sebelum Keluar Rumah\n-Ayat Kursi (1 kali)\n-Surah Quraisy (1 kali)\nC) Doa Menaiki Kenderaan\n\nاللَّهُمَّ أَنْتَ الصَّاحِبُ فِي السَّفَرِ وَالْخَلِيفَةُ فِي الْأَهْلِ وَالْمَالِ وَالْوَلَدِ وَالصَّحَابِ، اللَّهُمَّ احْفَظْنَا وَإِيَّاهُمْ مِنْ آفَاتِ الدُّنْيَا وَعَاهَاتِهَا، اللَّهُمَّ إِنَّا نَسْأَلُكَ فِي سَفَرِنَا هَذَا الْبِرَّ وَالتَّقْوَى وَمِنَ الْعَمَلِ مَا تَرْضَى، اللَّهُمَّ إِنَّا نَسْأَلُكَ أَنْ تَطْوِيَ لَنَا الْأَرْضَ وَتُؤْمِنَ عَلَيْنَا السَّفَرَ وَأَنْ تَرْزُقَنَا فِي سَفَرِنَا هَذَا سَلَامَةً فِي الْبَدَنِ وَالدِّينِ وَالْمَالِ وَتُبْلِغَنَا عُمْرَةَ بَيْتِكَ وَزِيَارَةَ قَبْرِ نَبِيِّكَ مُحَمَّدٍ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ، اللَّهُمَّ إِنَّا نَعُوذُ بِكَ مِنْ وَعْثَاءِ السَّفَرِ وَكَآبَةِ الْمُنْقَلَبِ بِسُوءِ الْمَنْظَرِ فِي الْأَهْلِ وَالْمَالِ وَالْوَلَدِ وَالصَّحَابِ، اللَّهُمَّ اجْعَلْنَا وَإِيَّاهُمْ فِي جِوَارِكَ وَلَا تَسْلُبْنَا وَإِيَّاهُمْ نِعْمَتَكَ وَلَا تُغَيِّرْ مَا بِنَا وَبِهِمْ مِنْ عَافِيَتِكَ يَا أَرْحَمَ الرَّاحِمِينَ.\n</string>
+    <string name="bab1_s2_title">Solat Qasar</string>
+    <string name="bab1_s2_body">Solat Qasar: Memendekkan solat fardhu 4 rakaat (Zuhur, Asar, Isyak) kepada 2 rakaat.\n\nSyarat Solat Qasar:\n\n- Perjalanan melebihi 2 marhalah (81 km)\n- Mengetahui destinasi\n- Dilaksanakan selepas melepasi daerah/sempadan bandar\n- Perjalanan adalah harus (bukan maksiat)\n- Tidak berniat bermusafir 4 hari atau lebih (tidak masuk hari pergi dan balik)\n\nPilihan Pelaksanaan:\n\n- Qasar sahaja\n- Jamak sahaja\n- Gabungan Qasar dan Jamak\nNiat Solat Qasar:\n</string>
+    <string name="bab1_s3_title">Solat Jamak</string>
+    <string name="bab1_s3_body">SOLAT JAMAK : Menghimpunkan dua solat fardu dalam satu waktu.\nSolat yang boleh dijamak: Zuhur dengan Asar, dan Maghrib dengan Isyak. Subuh tidak boleh dijamak.\nDua kaedah:\n\n1.Jamak Taqdim (dilakukan pada waktu pertama)\n- Syarat : Tertib (dahulukan solat waktu pertama), berniat menghimpunkan solat kedua bersama solat pertama di awal takbir atau sebelum salam solat pertama, berturut-turut (muwālat), dan perjalanan berterusan sehingga selesai solat kedua.\n\nNiat Jamak Taqdim (tanpa qasar):\n\n- Niat solat Zuhur + Asar\n\nأُصَلِّي فَرْضَ الظُّهْرِ أَرْبَعَ رَكَعَاتٍ مَجْمُوعًا إِلَيْهِ الْعَصْرُ أَدَاءً لِلَّهِ تَعَالَى\nSahaja aku solat fardhu Zuhur empat rakaat dihimpunkan solat Asar kepadanya tunai kerana Allah Ta\'ala</string>
+    <string name="bab1_s4_title">Solat Jamak Beserta Qasar</string>
+    <string name="bab1_s4_body">3.SOLAT JAMAK BESERTA QASAR :\nBoleh menghimpunkan dua solat sekaligus dengan memendekkan solat Zuhur, Asar dan Isyak kepada dua rakaat, mengikut syarat qasar dan jamak.\n\nNiat bagi Jamak Taqdim &amp; Qasar:\n\nZuhur + Asar (di waktu Zuhur) - dahulukan Zuhur:\n\n-Niat Zuhur (qasar + jamak):\n\nأُصَلِّي فَرْضَ الظَّهْرِ رَكْعَتَيْنِ قَصْرًا مَجْمُوعًا إِلَيْهِ الْعَصْرُ أَدَاءً لِلَّهِ تَعَالَى\nSahaja aku solat fardhu Zuhur dua rakaat qasar dihimpunkan Asar kepadanya tunai kerana Allah Ta\'ala\n\nSelepas salam, niat Asar (qasar):\n\nأُصَلِّي فَرْضَ الْعَصْرِ رَكْعَتَيْنِ قَصْرًا أَدَاءً لِلَّهِ تَعَالَى\nSahaja aku solat fardhu Asar dua rakaat qasar tunai kerana Allah Ta\'ala</string>
+    <string name="bab2_hero_title">Pengenalan Umrah</string>
+    <string name="bab2_hero_blurb">Ringkasan pendek pasal Bab 2 di sini.</string>
+    <string name="bab2_s1_title">Pengenalan Umrah</string>
+    <string name="bab2_s1_body">-Definisi: Ziarah ke Baitullah untuk ibadat dengan syarat tertentu.\n\n-Hukum: Wajib sekali seumur hidup bagi yang mampu.\n\n-Dalil: Hadis (umrah di Ramadhan menyamai haji) &amp; Surah al-Baqarah 196.\n\n-Adab sebelum berangkat (14 perkara): Ikhlas, pelajari ilmu, taubat, bersihkan harta, selesaikan hak, perbaiki diri, jaga qaidah, sumber kewangan halal, bekalan cukup, cari keredhaan, pilih teman sesuai, doa minta umrah mabrur, solat musafir, zikir &amp; tawakal.\n\n-Syarat Wajib: Islam, baligh, berakal, merdeka, perjalanan selamat, berkemampuan. Wanita: izin suami/wali &amp; bersama mahram/wanita dipercayai.</string>
+    <string name="bab3_hero_title">Pelaksanaan Ibadah Umrah</string>
+    <string name="bab3_hero_blurb">Langkah-langkah menunaikan ibadah umrah, dari ihram sehingga sa\'i.</string>
+    <string name="bab3_s1_title">Ihram</string>
+    <string name="bab3_s1_body">Amalan Sunat Sebelum Berniat Ihram\n\n-Mandi Sunat Ihram\n-Memakai Pakaian Ihram\n-Memakai Wangi-Wangian\n-Memakai Minyak Rambut\n-Melakukan Solat Sunat Ihram\n\nAmalan Sunat Semasa Berniat Ihram\n\n-Menghadap ke kiblat\n-Dalam keadaan berwudhuk\n\nAmalan Sunat Selepas Berniat Ihram\n\n-Bertalbiah, berdoa, bacaan Al-Quran, zikir\n-Elakkan berbual kosong\n\nIhram Lelaki\nMemakai dua helai kain lepas (tidak bercantum):\n- Sehelai menutup aurat antara pusat dan lutut.\n- Sehelai lagi dijadikan selendang.\n-Disunatkan berwarna putih.</string>
+    <string name="bab3_s2_title">Rukun Umrah</string>
+    <string name="bab3_s2_body">Niat Ihram Umrah\nDefinisi: Kewajipan mematuhi larangan ihram bermula dari saat berniat sehingga selesai bergunting/bercukur.\n\nWaktu Berniat:\n-Waktu yang paling afdal (terbaik) ialah ketika jemaah sudah berada di atas kenderaan (kerana mencontohi Rasulullah SAW).\n-Boleh berniat selepas selesai solat sunat ihram.\n-Disunatkan menghadap kiblat ketika melafazkan niat.</string>
+    <string name="bab3_s3_title">Tawaf</string>
+    <string name="bab3_s3_body">Cara Mengerjakan Tawaf\n\nSetibanya jemaah di dalam Masjid Haram untuk melaksanakan ibadah tawaf, mereka hendaklah menuju ke penjuru Hajar Aswad.\n\nJemaah perlu berjalan menuju ke penjuru Hajar Aswad dengan menghadap ke arahnya dan sunat berniat tawaf.\n\nLafaz Niat Tawaf Umrah\n\nاللَّهُمَّ إِنِّي أُرِيدُ طَوَافَ بَيْتِكَ الْحَرَامِ فَيَسِّرْهُ لِي وَتَقَبَّلْهُ مِنِّي سَبْعَةَ أَشْوَاطٍ طَوَافَ الْعُمْرَةِ لِلَّهِ تَعَالَى\n\nSetelah itu, hendaklah beristilam kepada Hajar Aswad dengan isyarat tangan. Ucapkanlah:\n\nبِسْمِ اللهِ وَاللهُ أَكْبَرُ وَلِلَّهِ الْحَمْدُ\n\nJika tidak mampu menghampiri atas sebab orang yang begitu ramai dan sesak, maka beristilamlah kepadanya Hajar Aswad dengan membaca bacaan di atas.\n\nBagi jemaah dalam ihram, jemaah tidak boleh menyentuh Hajar Aswad kerana ada wangian.</string>
+    <string name="bab3_s4_title">Sa\'i</string>
+    <string name="bab3_s4_body">Cara Mengerjakan Sa\'ie\n\n-Tiba di bukit Safa, Hadap ke arah Kaabah lalu berniat Sa\'ie.\n\nLafaz Niat Sa\'i Umrah:\n\nاللَّهُمَّ إِنِّي أُرِيدُ أَنْ أَسْعَى بَيْنَ الصَّفَا وَالْمَرُوَةِ سَبْعَةَ أَشْوَاطٍ سَعْيَ الْعُمْرَةِ لِلَّهِ تَعَالَى\n\nSelepas berniat (masih menghadap kiblat), disunatkan bertakbir :\n\nاللَّهُ أَكْبَرُ ، اللَّهُ أَكْبَرُ ، اللَّهُ أَكْبَرُ ، وَلِلَّهِ الْحَمْدُ\n\nSelepas takbir, disunatkan memulakan perjalanan ke bukit Marwah sambil membaca doa:\n\nاللَّهُ أَكْبَرُ عَلَى هَدَانَا وَالْحَمْدُ لِلَّهِ عَلَى مَا أَوْلَانَا لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ يُحْيِي وَيُمِيتُ بِيَدِهِ الْخَيْرُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ أَنْجَزَ وَعْدَهُ وَنَصَرَ عَبْدَهُ وَهَزَمَ الْأَحْزَابَ وَحْدَهُ لَا إِلَهَ إِلَّا اللَّهُ\n\n-Disunatkan berdoa untuk diri sendiri atau keluarga, sama ada urusan dunia atau akhirat, dengan doa yang difahami.\n\n-Kemudian : Memulakan perjalanan Sa\'ie ke bukit Marwah.</string>
+    <string name="bab4_hero_title">Rukun Bercukur\'</string>
+    <string name="bab4_hero_blurb">Ringkasan pendek pasal Bab 4 di sini.</string>
+    <string name="bab4_s1_title">Rukun Bercukur / Bergunting</string>
+    <string name="bab4_s1_body">-makna sa\'ie : menanggalkan / menghilangkan rambut di kepala menurut syarat syarat sahnya :\n\n-Waktu bercukur / bergunting selepas sa\'ie\n-Hanya rambut di kepala sahaja\n-Tidak kurang 3 helai rambut\n-Afdal bercukur bagi lelaki &amp; bagi perempuan memadai hanya bergunting rambut sekadar seruas jari\n-Sekiranya tiada rambut, boleh melalukan pisau cukur sahaja di kepala</string>
+    <string name="bab4_s2_title">Rukun umrah</string>
+    <string name="bab4_s2_body">-Niat Ihram Umrah\n-Tawaf\n-Sa\'ie\n-Bercukur / Bergunting\n-Tertib\n\nSetelah selesai keempat-empat rukun (niat, tawaf, sa\'ie, bercukur/bergunting) dengan tertib, maka jemaah bebas daripada larangan ihram dan sah umrahnya.\n\nKesan jika tidak tertib: Jika sa\'ie mendahului tawaf, kemudian barulah tawaf dan bercukur, maka sa\'ie dan bercukur itu tidak sah. Jemaah wajib melaksanakan kesemua rukun dengan sempurna. Jika tidak sempurna, dikenakan dam takhyir dan taqdir kerana bercukur sebelum waktunya.</string>
+    <string name="bab4_s3_title">Pelaksanaan Umrah Kedua Dan Seterusnya</string>
+    <string name="bab4_s3_body">-Pelaksanaan umrah kali kedua atau seterusnya adalah sama seperti umrah pertama.\n\n-Jemaah perlu keluar ke tanah halal untuk berniat ihram di miqat tertentu seperti Tan\'im, Ji\'ranah, atau Hudayyibiah.\n\n-Disunatkan mandi sunat ihram sebelum memakai ihram, kemudian berihram umrah dan solat sunat ihram di miqat tersebut.\n\n-Selepas itu, kembali ke kota Makkah untuk melaksanakan tawaf umrah, solat sunat tawaf, sa\'ie, dan bergunting. Doa dan bacaannya sama seperti umrah pertama.</string>
+    <string name="bab4_s4_title">Cara Mengerjakan Umrah</string>
+    <string name="bab4_s4_body">-Mandi sunat ihram - dilakukan di mana-mana sebelum berniat (hukum: sunat).\n\n-Memakai pakaian ihram - dilakukan di miqat (hukum: sunat).\n\n-Sembahyang sunat ihram - dilakukan di miqat (hukum: sunat).\n\n-Niat ihram umrah - dilakukan di miqat, selepas niat sehingga bergunting (hukum: rukun).\n\n-Menjaga larangan dalam masa berihram - dilakukan selepas niat sehingga mula tawaf (hukum: wajib).\n\n-Talbiyah - dilakukan di Baitullah (hukum: sunat).\n\n-Tawaf Umrah - dilakukan di Baitullah (hukum: rukun).\n\n-Sa\'ie Umrah - dilakukan di Mas\'a (hukum: rukun).\n\n-Bercukur / Bergunting - dilakukan di Marwah atau di mana-mana (hukum: rukun).\n\n-Tertib melaksanakan semua rukun - dilakukan di mana-mana (hukum: rukun).</string>
+    <string name="bab5_hero_title">Tawaf Wada\'</string>
+    <string name="bab5_hero_blurb">Ringkasan pendek pasal Bab 5 di sini.</string>
+    <string name="bab5_s1_title">Hukum Tawaf Wada\'</string>
+    <string name="bab5_s1_body">-Wajib bagi jemaah yang ingin meninggalkan kota Makkah menuju ke destinasi-destinasi yang telah disebutkan.\n\nBeberapa hukum berkaitan :\n\n-Jemaah yang meninggalkan Makkah tanpa tawaf wada\' wajib kembali untuk menyempurnakannya\n\n-Jika kembali sebelum menempuh jarak 2 marhala(81km), tidak dikenakan bayaran dam\n\n-Orang yang meninggalkan tawaf wada\' tanpa uzur yang dibenarkan syarak dikenakan dam tertib dan taqdir\n\n-Jika sudah melakukan tawaf wada\' tidak boleh lagi menetap di Makkah dan jika mereka tinggal tanpa keperluan, tawaf wada\' dianggap putus dan wajib diulang</string>
+    <string name="bab5_s2_title">Uzur Syarie Daripada Tawaf Wada\'</string>
+    <string name="bab5_s2_body">-Haid/nifas\n-Luka/berdarah banyak (najiskan masjid)\n-Tiada air/tanah untuk hadas\n-Takut ancaman nyawa, maruah, harta\n-Takut ditinggal rakan\n-Takut petugas kerana tugas\n-Sakit salasulbul (kencing tak lawas)\n-Dipaksa tinggalkan tawaf (kecemasan)\n-Perlu dipimpin/diusung (tak boleh kerusi roda)\n-Rawatan rapi berjadual\n-Petugas kerap keluar masuk Makkah</string>
+    <string name="bab5_s3_title">Tempoh Menunggu Selepas Tawaf Wada\'</string>
+    <string name="bab5_s3_body">8 jam: Dalam keadaan biasa, dikira dari sampai di penginapan. Jika tidak keluar Makkah dalam 8 jam tanpa sebab musafir, wajib ulang tawaf.\n\n24 jam: Jika kelewatan kenderaan dimaklumkan dalam 24 jam selepas tawaf, tidak perlu ulang. Dikira dari sampai di penginapan.</string>
+    <string name="bab5_s4_title">Pelaksanaan Tawaf Wada\'</string>
+    <string name="bab5_s4_body">اللَّهُمَّ إِنِّي أُرِيدُ طَوَافَ بَيْتِكَ الْحَرَامِ طَوَافَ الْوَدَاعِ لِلَّهِ تَعَالَى\n\nCara sama seperti tawaf umrah/sunat, bezanya pakai pakaian biasa (bukan ihram) dan niat wajib.\n\nSelepas tawaf:\n\n-Solat sunat tawaf 2 rakaat (belakang Maqam Ibrahim atau mana-mana di Masjid Haram).\n-Berdoa di Multazam (doa ma\'tsur atau peribadi).\n-Minum air Zamzam dan perbanyakkan doa.</string>
+    <string name="bab5_s5_title">Tawaf-Tawaf Lain</string>
+    <string name="bab5_s5_body">-Tawaf Sunat: Dianjurkan perbanyakkan. Niat: \"Ya Tuhanku, aku hendak tawaf sunat 7 keliling...\"\n\n-Tawaf Nazar: Niat: \"Ya Tuhanku, aku hendak tawaf nazar 7 keliling...\"\n\n-Tahyatul Bait: Paling afdhal ketika masuk Masjid al-Haram. Niat: \"Ya Tuhanku, aku hendak tawaf tahyatul bait 7 keliling...\"</string>
+    <string name="bab6_hero_title">Ziarah Madinah</string>
+    <string name="bab6_hero_blurb">Ringkasan pendek pasal Bab 6 di sini.</string>
+    <string name="bab6_s1_title">Amalan Sunat</string>
+    <string name="bab6_s1_body">-Sepanjang perjalanan &amp; masuk Madinah: Perbanyak selawat &amp; baca doa: \"Ya Allah, jadikan negeri ini pelindung dari neraka &amp; azab.\"\n\n-Masuk masjid: Baca doa perlindungan &amp; mohon rahmat.\n\n-Tahiyatul Masjid: 2 rakaat (rakaat 1: al-Kafirun, rakaat 2: al-Ikhlas) di Raudhah jika mampu, jangan ganggu jemaah lain.</string>
+    <string name="bab6_s2_title">Tempat Ziarah Madinah</string>
+    <string name="bab6_s2_body">Jannatul Baqi\'\n\n-Perkuburan utama Madinah dari zaman Rasulullah SAW.\n\n-Tempat persemadian isteri-isteri, puteri-puteri, dan putera Baginda.\n\n-Doa sunat: Salam penghormatan kepada penghuni kubur, memohon keampunan untuk mereka yang terdahulu dan terkemudian, serta memohon agar tidak diharamkan pahala dan tidak difitnah selepas mereka.\n\nMasjid Quba\'\n\n-Masjid pertama dibina Rasulullah SAW selepas hijrah, terletak 3 km selatan Madinah.\n\n-Kelebihan: Solat di Masjid Quba\' menyamai pahala umrah (Riwayat Ibnu Majah).\n\n-Rasulullah SAW selalu pergi pada hari Sabtu, kadang-kadang Isnin dan Khamis.\n\n-Dibina atas dasar takwa (Surah at-Taubah: 108).\n\nBukit Uhud\n\n-Terletak 5 km utara Madinah, terkenal dengan Perang Uhud.\n\n-Nama \"Uhud\" bermaksud menyendiri (tidak bersambung dengan bukit lain).\n\n-Hadis: \"Uhud adalah bukit yang mencintai kami dan kami mencintainya\" (Riwayat Bukhari).\n\n-Terdapat perkuburan Hamzah bin Abdul Muttalib, Abdullah bin Jahsy, Mus\'ab bin Umair, dan para syuhada Uhud yang lain.\n\n-Sunat berdoa ketika menziarahi.\n\nMasjid Qiblatain\n\n-Dahulu masjid Bani Salamah, tempat peristiwa pertukaran kiblat.\n\n-Ketika Rasulullah SAW solat Zuhur bersama jemaah, turun ayat Surah al-Baqarah: 144 yang memerintahkan menghadap ke Masjidil Haram.\n\n-Baginda berpusing ke belakang dari arah Baitulmaqdis ke arah Baitullah, maka dinamakan Masjid Dua Kiblat.</string>
+
+    <!-- Checklist - picker & titles -->
+    <string name="checklist_picker_title">Pilih Checklist</string>
+    <string name="checklist_option_umrah">Checklist Umrah</string>
+    <string name="checklist_option_tour">Checklist Tour</string>
+    <string name="checklist_dialog_title_umrah">Checklist Persediaan Umrah</string>
+    <string name="checklist_dialog_title_tour">Checklist Persediaan Tour</string>
+    <string name="dialog_close">Tutup</string>
+
+    <!-- Checklist - section headers (shared) -->
+    <string name="checklist_section_travel_docs">Dokumen Perjalanan</string>
+    <string name="checklist_section_men_clothing">Pakaian (Jemaah Lelaki)</string>
+    <string name="checklist_section_women_clothing">Pakaian (Jemaah Perempuan)</string>
+    <string name="checklist_section_medicine">Ubat-ubatan</string>
+    <string name="checklist_section_electronics">Peralatan Elektronik</string>
+    <string name="checklist_section_women_accessories">Aksesori (Perempuan)</string>
+    <string name="checklist_section_food">Makanan Ringkas</string>
+    <string name="checklist_section_finance">Kewangan</string>
+    <string name="checklist_section_general">Kelengkapan Am</string>
+    <string name="checklist_section_clothing">Pakaian</string>
+
+    <!-- Checklist Umrah - Dokumen -->
+    <string name="checklist_umrah_docs_1">Pasport sah 6 bulan ke atas</string>
+    <string name="checklist_umrah_docs_2">Visa Umrah / Tasrih (jika berkaitan)</string>
+    <string name="checklist_umrah_docs_3">Sijil vaksin meningitis (ICV)</string>
+    <string name="checklist_umrah_docs_4">Bawa pasport lama (jika baru perbaharui)</string>
+    <string name="checklist_umrah_docs_5">Salinan dokumen penting (pasport, tiket, visa)</string>
+    <string name="checklist_umrah_docs_6">Buku umrah &amp; buku doa yang mudah dibawa</string>
+
+    <!-- Checklist Umrah - Lelaki -->
+    <string name="checklist_umrah_men_1">Kain Ihram</string>
+    <string name="checklist_umrah_men_2">Tali pinggang umrah</string>
+    <string name="checklist_umrah_men_3">T-shirt Berzip</string>
+    <string name="checklist_umrah_men_4">Seluar (yang biasa dipakai dengan jubah)</string>
+    <string name="checklist_umrah_men_5">Kain Pelikat</string>
+    <string name="checklist_umrah_men_6">Jubah / Kurta / Baju Melayu (atau t-shirt putih)</string>
+    <string name="checklist_umrah_men_7">Kopiah</string>
+    <string name="checklist_umrah_men_8">Selipar / Kasut (boleh nampak 5 jari kaki dengan jelas)</string>
+    <string name="checklist_umrah_men_9">Tuala Kecil</string>
+    <string name="checklist_umrah_men_10">Uncang / Plastik Kasut</string>
+    <string name="checklist_umrah_men_11">Botol Wudu\'</string>
+    <string name="checklist_umrah_men_12">Gunting Kecil / Alat Cukuran (letak dalam bagasi daftar masuk, bukan handcarry)</string>
+    <string name="checklist_umrah_men_13">Sejadah Kecil / Ridak</string>
+    <string name="checklist_umrah_men_14">Penapis Hidung (Nosk)</string>
+
+    <!-- Checklist Umrah - Perempuan -->
+    <string name="checklist_umrah_women_1">Telekung</string>
+    <string name="checklist_umrah_women_2">Mini Telekung</string>
+    <string name="checklist_umrah_women_3">Tudung</string>
+    <string name="checklist_umrah_women_4">Jubah / Blouse Labuh</string>
+    <string name="checklist_umrah_women_5">Stoking</string>
+    <string name="checklist_umrah_women_6">Handsocks</string>
+    <string name="checklist_umrah_women_7">Kasut Tawaf/Sa\'ie</string>
+    <string name="checklist_umrah_women_8">Seluar Panjang</string>
+    <string name="checklist_umrah_women_9">T-shirt Berzip</string>
+    <string name="checklist_umrah_women_10">Uncang / Plastik Kasut</string>
+    <string name="checklist_umrah_women_11">Botol Spray Wudu\'</string>
+    <string name="checklist_umrah_women_12">Gunting / Alat Cukuran</string>
+    <string name="checklist_umrah_women_13">Penapis Hidung / Niqab</string>
+
+    <!-- Checklist Umrah - Ubat -->
+    <string name="checklist_umrah_med_1">Ubat Demam (Panadol)</string>
+    <string name="checklist_umrah_med_2">Ubat Selsema</string>
+    <string name="checklist_umrah_med_3">Ubat Batuk</string>
+    <string name="checklist_umrah_med_4">Ubat Tahan Muntah</string>
+    <string name="checklist_umrah_med_5">Krim Bibir / Krim Tumit</string>
+    <string name="checklist_umrah_med_6">Ubat Sakit Kepala</string>
+    <string name="checklist_umrah_med_7">Ubat Cirit Birit</string>
+    <string name="checklist_umrah_med_8">Ubat Sakit Otot</string>
+    <string name="checklist_umrah_med_9">Minyak Angin</string>
+    <string name="checklist_umrah_med_10">Krim/Minyak Zaitun (elak ruam &amp; tapak kaki pecah akibat cuaca sejuk)</string>
+    <string name="checklist_umrah_med_11">Berus gigi &amp; ubat gigi saiz kecil</string>
+    <string name="checklist_umrah_med_12">Hand sanitizer</string>
+    <string name="checklist_umrah_med_13">Ubat-ubatan peribadi secukupnya (farmasi di Mekah/Madinah 2-3x lebih mahal)</string>
+
+    <!-- Checklist Umrah - Elektronik -->
+    <string name="checklist_umrah_elec_1">Pengecas Telefon Bimbit</string>
+    <string name="checklist_umrah_elec_2">Powerbank</string>
+    <string name="checklist_umrah_elec_3">Extension Plug</string>
+    <string name="checklist_umrah_elec_4">Kipas Mini</string>
+    <string name="checklist_umrah_elec_5">Tasbih Digital</string>
+
+    <!-- Checklist Umrah - Aksesori Perempuan -->
+    <string name="checklist_umrah_acc_1">Payung</string>
+    <string name="checklist_umrah_acc_2">Cermin Mata Gelap</string>
+    <string name="checklist_umrah_acc_3">Face Mask</string>
+
+    <!-- Checklist Umrah - Makanan -->
+    <string name="checklist_umrah_food_1">Biskut Kering</string>
+    <string name="checklist_umrah_food_2">Gula-gula</string>
+    <string name="checklist_umrah_food_3">Mi Segera</string>
+    <string name="checklist_umrah_food_4">Sambal Kering</string>
+
+    <!-- Checklist Umrah - Kewangan -->
+    <string name="checklist_umrah_finance_1">Tukar mata wang Riyal Saudi secukupnya</string>
+    <string name="checklist_umrah_finance_2">Simpan sedikit USD sebagai simpanan</string>
+    <string name="checklist_umrah_finance_3">Aktifkan kad debit/kredit untuk kegunaan luar negara</string>
+
+    <!-- Checklist Umrah - Am -->
+    <string name="checklist_umrah_general_1">Alatan mandi</string>
+    <string name="checklist_umrah_general_2">Tuala tambahan (hotel di Madinah kadang-kadang kekurangan tuala)</string>
+    <string name="checklist_umrah_general_3">Lain-lain yang munasabah</string>
+
+    <!-- Checklist Tour - Dokumen -->
+    <string name="checklist_tour_docs_1">Pasport sah 6 bulan ke atas</string>
+    <string name="checklist_tour_docs_2">Bawa pasport bersama</string>
+    <string name="checklist_tour_docs_3">Bawa pasport lama (jika baru perbaharui)</string>
+    <string name="checklist_tour_docs_4">Semak status perjalanan luar negara (SSPI)</string>
+
+    <!-- Checklist Tour - Ubat -->
+    <string name="checklist_tour_med_1">Panadol</string>
+    <string name="checklist_tour_med_2">Ubat sakit tekak</string>
+    <string name="checklist_tour_med_3">Ubat cirit-birit</string>
+    <string name="checklist_tour_med_4">Ubat tahan muntah</string>
+    <string name="checklist_tour_med_5">Salonpas</string>
+    <string name="checklist_tour_med_6">Minyak angin</string>
+    <string name="checklist_tour_med_7">Olive oil / moisturizer / lipbalm</string>
+    <string name="checklist_tour_med_8">Heat pad</string>
+
+    <!-- Checklist Tour - Pakaian -->
+    <string name="checklist_tour_clothing_1">Jaket nipis (lapisan sederhana)</string>
+    <string name="checklist_tour_clothing_2">Jeans / seluar panjang nipis</string>
+    <string name="checklist_tour_clothing_3">Jaket tambahan (jika cuaca sejuk/berangin)</string>
+    <string name="checklist_tour_clothing_4">Kasut bertutup &amp; selesa (sneakers)</string>
+    <string name="checklist_tour_clothing_5">Sunglasses &amp; cap</string>
+
+    <!-- Checklist Tour - Elektronik -->
+    <string name="checklist_tour_elec_1">Travel adaptor</string>
+    <string name="checklist_tour_elec_2">Powerbank (maks. 20,000mAh - letak handcarry)</string>
+
+    <!-- Checklist Tour - Kewangan -->
+    <string name="checklist_tour_finance_1">Tukar mata wang mengikut destinasi</string>
+    <string name="checklist_tour_finance_2">Aktifkan kad debit/credit untuk kegunaan luar negara</string>
+
+    <string name="forgot_password">Lupa Kata Laluan?</string>
+    <string name="reset_password_title">Reset Kata Laluan</string>
+    <string name="reset_password_msg">Masukkan email anda, kami akan hantar pautan untuk reset kata laluan.</string>
+    <string name="hint_enter_email">Masukkan email anda</string>
+    <string name="btn_send">HANTAR</string>
+    <string name="btn_cancel">BATAL</string>
+
+    <string name="reset_password_invalid_email">Sila masukkan email yang sah</string>
+    <string name="reset_password_sent">Email reset kata laluan telah dihantar. Sila semak inbox anda.</string>
+    <string name="reset_password_failed">Gagal menghantar email. Sila cuba lagi.</string>
+
+    <string name="login_google_signin_failed">Log masuk Google gagal: Kod %1$d</string>
+    <string name="login_google_success">Log masuk Google berjaya! %1$s</string>
+    <string name="login_google_failed">Log masuk Google gagal. Sila cuba lagi.</string>
+    <string name="login_email_invalid">Sila masukkan email yang sah</string>
+    <string name="login_password_required">Sila masukkan kata laluan</string>
+    <string name="login_success">Log masuk berjaya!</string>
+    <string name="login_failed_default">Log masuk gagal, sila cuba lagi</string>
+    <string name="language_picker_title">Choose Language / Pilih Bahasa</string>
+
 </resources>

@@ -154,4 +154,210 @@
 
     <string name="podcast_section_title">ポッドキャスト</string>
 
+    <string name="bab1_hero_title">旅の作法と推奨される行い</string>
+    <string name="bab1_hero_blurb">旅の作法と、旅の途中に行う礼拝についての案内です。</string>
+    <string name="bab1_s1_title">旅を始める前の作法</string>
+    <string name="bab1_s1_body">A) 旅の前の推奨沐浴\n-旅に出る前に行います\n\n沐浴のニヤット(意図):\n\nنَوْيْتُ الْغُسْلَ لِلسَّفَرِ سُنَّةً لِلَّهِ تَعَالَى\n私はアッラーのために、旅のための推奨沐浴を行うことを意図します。\n\nB) 旅人のための推奨礼拝(2ラクアト)\n-1ラクアト目:スーラ・アルファーティハ + スーラ・アルカーフィルーン\n-2ラクアト目:スーラ・アルファーティハ + スーラ・アルイフラース\n\n礼拝のニヤット(意図):\n\nأُصَلِّي سُنَّةَ السَّفَرِ رَكْعَتَيْنِ لِلَّهِ تَعَالَى\n私はアッラーのために、旅人のための推奨礼拝2ラクアトを行うことを意図します。\n\nB) 家を出る前の朗誦\n-アーヤトゥル・クルシー(1回)\n-スーラ・クライシュ(1回)\nC) 乗り物に乗る際の祈り\n\nاللَّهُمَّ أَنْتَ الصَّاحِبُ فِي السَّفَرِ وَالْخَلِيفَةُ فِي الْأَهْلِ وَالْمَالِ وَالْوَلَدِ وَالصَّحَابِ، اللَّهُمَّ احْفَظْنَا وَإِيَّاهُمْ مِنْ آفَاتِ الدُّنْيَا وَعَاهَاتِهَا، اللَّهُمَّ إِنَّا نَسْأَلُكَ فِي سَفَرِنَا هَذَا الْبِرَّ وَالتَّقْوَى وَمِنَ الْعَمَلِ مَا تَرْضَى، اللَّهُمَّ إِنَّا نَسْأَلُكَ أَنْ تَطْوِيَ لَنَا الْأَرْضَ وَتُؤْمِنَ عَلَيْنَا السَّفَرَ وَأَنْ تَرْزُقَنَا فِي سَفَرِنَا هَذَا سَلَامَةً فِي الْبَدَنِ وَالدِّينِ وَالْمَالِ وَتُبْلِغَنَا عُمْرَةَ بَيْتِكَ وَزِيَارَةَ قَبْرِ نَبِيِّكَ مُحَمَّدٍ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ، اللَّهُمَّ إِنَّا نَعُوذُ بِكَ مِنْ وَعْثَاءِ السَّفَرِ وَكَآبَةِ الْمُنْقَلَبِ بِسُوءِ الْمَنْظَرِ فِي الْأَهْلِ وَالْمَالِ وَالْوَلَدِ وَالصَّحَابِ، اللَّهُمَّ اجْعَلْنَا وَإِيَّاهُمْ فِي جِوَارِكَ وَلَا تَسْلُبْنَا وَإِيَّاهُمْ نِعْمَتَكَ وَلَا تُغَيِّرْ مَا بِنَا وَبِهِمْ مِنْ عَافِيَتِكَ يَا أَرْحَمَ الرَّاحِمِينَ.\n</string>
+    <string name="bab1_s2_title">カサル(短縮)礼拝</string>
+    <string name="bab1_s2_body">カサル礼拝:4ラクアトの義務礼拝(ズフル、アスル、イシャー)を2ラクアトに短縮すること。\n\nカサル礼拝の条件:\n\n- 旅程が2マルハラ(81km)を超えること\n- 目的地が分かっていること\n- 地区・都市の境界を越えた後に行うこと\n- 旅行が許される目的であること(不法な目的でないこと)\n- 4日以上滞在する意図がないこと(出発日と帰還日は含まない)\n\n実施方法:\n\n- カサルのみ\n- ジャマウのみ\n- カサルとジャマウの組み合わせ\nカサル礼拝のニヤット(意図):\n</string>
+    <string name="bab1_s3_title">ジャマウ(合わせる)礼拝</string>
+    <string name="bab1_s3_body">ジャマウ礼拝:2つの義務礼拝を一つの時間帯にまとめて行うこと。\nまとめられる礼拝:ズフルとアスル、マグリブとイシャー。ファジュルはまとめられません。\n2つの方法:\n\n1.ジャマウ・タクディーム(最初の礼拝の時間に行う)\n- 条件:順序(最初の礼拝を先に行う)、最初の礼拝のタクビール開始時またはサラーム前に2番目の礼拝をまとめる意図を持つこと、連続性(ムワーラト)、2番目の礼拝が終わるまで旅を続けること。\n\nジャマウ・タクディームのニヤット(カサルなし):\n\n- ズフル+アスルのニヤット\n\nأُصَلِّي فَرْضَ الظُّهْرِ أَرْبَعَ رَكَعَاتٍ مَجْمُوعًا إِلَيْهِ الْعَصْرُ أَدَاءً لِلَّهِ تَعَالَى\n私はアッラーのために、ズフルの義務礼拝4ラクアトをアスルと合わせて、時間内に行うことを意図します。</string>
+    <string name="bab1_s4_title">ジャマウとカサルを合わせた礼拝</string>
+    <string name="bab1_s4_body">3.ジャマウとカサルを合わせる:\nカサルとジャマウの条件に従って、ズフル、アスル、イシャーを2ラクアトに短縮しながら、同時に2つの礼拝をまとめることができます。\n\nジャマウ・タクディーム&amp;カサルのニヤット(意図):\n\nズフル+アスル(ズフルの時間に)-ズフルを先に:\n\n-ズフルのニヤット(カサル+ジャマウ):\n\nأُصَلِّي فَرْضَ الظَّهْرِ رَكْعَتَيْنِ قَصْرًا مَجْمُوعًا إِلَيْهِ الْعَصْرُ أَدَاءً لِلَّهِ تَعَالَى\n私はアッラーのために、ズフルの義務礼拝2ラクアトを短縮(カサル)し、アスルと合わせて、時間内に行うことを意図します。\n\nサラームの後、アスルのニヤット(カサル):\n\nأُصَلِّي فَرْضَ الْعَصْرِ رَكْعَتَيْنِ قَصْرًا أَدَاءً لِلَّهِ تَعَالَى\n私はアッラーのために、アスルの義務礼拝2ラクアトを短縮(カサル)して、時間内に行うことを意図します。</string>
+    <string name="bab2_hero_title">ウムラの紹介</string>
+    <string name="bab2_hero_blurb">第2章の簡単な概要です。</string>
+    <string name="bab2_s1_title">ウムラの紹介</string>
+    <string name="bab2_s1_body">-定義:特定の条件のもとで礼拝を行うため、アッラーの家(カアバ)を訪れること。\n\n-法的位置づけ:能力がある者に生涯一度の義務。\n\n-根拠:ハディース(ラマダーン中のウムラはハッジに等しい報奨がある)&amp;スーラ・アルバカラ196節。\n\n-出発前の作法(14項目):誠実さ、知識の習得、悔い改め、財産の浄化、義務の履行、自己改善、正しい振る舞いを守ること、ハラールな資金源、十分な備え、アッラーの喜びを求めること、適切な同行者の選択、受け入れられるウムラのための祈り、旅の礼拝、想起と信頼。\n\n-義務の条件:ムスリムであること、成年であること、正気であること、自由人であること、安全な旅であること、能力があること。女性:夫/後見人の許可&amp;マフラムまたは信頼できる女性との同行。</string>
+    <string name="bab3_hero_title">ウムラの儀礼の実践</string>
+    <string name="bab3_hero_blurb">イフラームからサアイまで、ウムラを行う手順の案内です。</string>
+    <string name="bab3_s1_title">イフラーム</string>
+    <string name="bab3_s1_body">イフラームのニヤット(意図)前の推奨行為\n\n-イフラームのための推奨沐浴\n-イフラーム着用\n-香料をつけること\n-髪油をつけること\n-イフラームの推奨礼拝を行うこと\n\nイフラームのニヤット(意図)中の推奨行為\n\n-キブラを向くこと\n-ウドゥー(小浄)の状態であること\n\nイフラームのニヤット(意図)後の推奨行為\n\n-タルビヤ、祈り、クルアーンの朗誦、ズィクル\n-無駄な会話を避けること\n\n男性のイフラーム\n縫い目のない布2枚を着用:\n- 1枚はへそと膝の間のアウラを覆う。\n- もう1枚は肩にかける。\n-白色が推奨されます。</string>
+    <string name="bab3_s2_title">ウムラの柱(ルクン)</string>
+    <string name="bab3_s2_body">ウムラのイフラームのニヤット(意図)\n定義:ニヤット(意図)をした瞬間から、剃髪/断髪が完了するまでイフラームの禁止事項を守る義務。\n\nニヤット(意図)をする時:\n-最も優れた時は、巡礼者がすでに乗り物に乗っているときです(預言者ムハンマドの模範に従って)。\n-イフラームの推奨礼拝を終えた後にニヤットをすることができます。\n-ニヤットを唱える際にキブラを向くことが推奨されます。</string>
+    <string name="bab3_s3_title">タワーフ</string>
+    <string name="bab3_s3_body">タワーフの行い方\n\n巡礼者がタワーフを行うためにマスジド・アル・ハラームに到着したら、黒石(ハジャル・アスワド)の角に向かうべきです。\n\n巡礼者は黒石の角に向かって歩き、それに向き合い、タワーフのニヤット(意図)をすることが推奨されます。\n\nウムラのタワーフのニヤット(意図)の言葉\n\nاللَّهُمَّ إِنِّي أُرِيدُ طَوَافَ بَيْتِكَ الْحَرَامِ فَيَسِّرْهُ لِي وَتَقَبَّلْهُ مِنِّي سَبْعَةَ أَشْوَاطٍ طَوَافَ الْعُمْرَةِ لِلَّهِ تَعَالَى\n\nその後、手振りで黒石に挨拶をすべきです。次のように唱えてください:\n\nبِسْمِ اللهِ وَاللهُ أَكْبَرُ وَلِلَّهِ الْحَمْدُ\n\n人混みで近づけない場合は、上記の唱えを行いながら遠くから挨拶をしてください。\n\nイフラーム状態の巡礼者は、香料がついているため黒石に直接触れてはいけません。</string>
+    <string name="bab3_s4_title">サアイ</string>
+    <string name="bab3_s4_body">サアイの行い方\n\n-サファーの丘に着いたら、カアバの方向を向いてサアイのニヤット(意図)をしてください。\n\nウムラのサアイのニヤット(意図)の言葉:\n\nاللَّهُمَّ إِنِّي أُرِيدُ أَنْ أَسْعَى بَيْنَ الصَّفَا وَالْمَرُوَةِ سَبْعَةَ أَشْوَاطٍ سَعْيَ الْعُمْرَةِ لِلَّهِ تَعَالَى\n\nニヤットの後(まだキブラを向いた状態で)、タクビールを唱えることが推奨されます:\n\nاللَّهُ أَكْبَرُ ، اللَّهُ أَكْبَرُ ، اللَّهُ أَكْبَرُ ، وَلِلَّهِ الْحَمْدُ\n\nタクビールの後、以下の祈りを唱えながらマルワの丘へ向かって歩き始めることが推奨されます:\n\nاللَّهُ أَكْبَرُ عَلَى هَدَانَا وَالْحَمْدُ لِلَّهِ عَلَى مَا أَوْلَانَا لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ يُحْيِي وَيُمِيتُ بِيَدِهِ الْخَيْرُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ أَنْجَزَ وَعْدَهُ وَنَصَرَ عَبْدَهُ وَهَزَمَ الْأَحْزَابَ وَحْدَهُ لَا إِلَهَ إِلَّا اللَّهُ\n\n-自分自身や家族のために、現世や来世のことについて、自分が理解する言葉で祈ることが推奨されます。\n\n-その後:マルワの丘へのサアイの歩みを始めます。</string>
+    <string name="bab4_hero_title">剃髪/断髪の柱</string>
+    <string name="bab4_hero_blurb">第4章の簡単な概要です。</string>
+    <string name="bab4_s1_title">剃髪/断髪の柱</string>
+    <string name="bab4_s1_body">-意味:有効な条件に従って頭髪を取り除く/なくすこと:\n\n-剃髪/断髪の時期はサアイの後\n-頭髪のみ対象\n-3本未満は不可\n-男性は完全に剃るのが最も優れており、女性は指の関節ほどの長さを切るだけで十分\n-髪がない場合は、頭に剃刀を当てるだけで十分</string>
+    <string name="bab4_s2_title">ウムラの柱</string>
+    <string name="bab4_s2_body">-ウムラのイフラームのニヤット(意図)\n-タワーフ\n-サアイ\n-剃髪/断髪\n-順序(タルティーブ)を守ること\n\n4つの柱(ニヤット、タワーフ、サアイ、剃髪/断髪)を順序通りに完了すれば、巡礼者はイフラームの禁止事項から解放され、ウムラは有効となります。\n\n順序を守らなかった場合の影響:タワーフより先にサアイを行い、その後にタワーフと剃髪を行った場合、そのサアイと剃髪は無効です。巡礼者はすべての柱を完全に行わなければなりません。適切に行わなければ、時期前に剃髪したことに対してタクヒールとタクディールのダム(罰金)が課されます。</string>
+    <string name="bab4_s3_title">2回目以降のウムラの実施</string>
+    <string name="bab4_s3_body">-2回目以降のウムラの実施は、最初のウムラと同じです。\n\n-巡礼者はタンイーム、ジーラーナ、フダイビーヤなど指定されたミーカートでイフラームのニヤットをするため、ハラール地区へ出なければなりません。\n\n-イフラームを着る前にイフラームの推奨沐浴をすることが推奨され、その後そのミーカートでウムラのイフラームに入り、イフラームの推奨礼拝を行います。\n\n-その後、ウムラのタワーフ、タワーフの推奨礼拝、サアイ、断髪を行うためにマッカの街に戻ります。祈りと朗誦は最初のウムラと同じです。</string>
+    <string name="bab4_s4_title">ウムラの行い方</string>
+    <string name="bab4_s4_body">-イフラームの推奨沐浴 - ニヤットをする前にどこでも行う(法的位置づけ:推奨)。\n\n-イフラーム着用 - ミーカートで行う(法的位置づけ:推奨)。\n\n-イフラームの推奨礼拝 - ミーカートで行う(法的位置づけ:推奨)。\n\n-ウムラのイフラームのニヤット - ミーカートで行い、ニヤットから断髪まで有効(法的位置づけ:柱)。\n\n-イフラーム中の禁止事項の遵守 - ニヤットからタワーフ開始まで守る(法的位置づけ:義務)。\n\n-タルビヤ - アッラーの家で行う(法的位置づけ:推奨)。\n\n-ウムラのタワーフ - アッラーの家で行う(法的位置づけ:柱)。\n\n-ウムラのサアイ - マスアーで行う(法的位置づけ:柱)。\n\n-剃髪/断髪 - マルワまたはどこでも行う(法的位置づけ:柱)。\n\n-すべての柱を順序通りに行うこと - どこでも行う(法的位置づけ:柱)。</string>
+    <string name="bab5_hero_title">別れのタワーフ(タワーフ・ワダー)</string>
+    <string name="bab5_hero_blurb">第5章の簡単な概要です。</string>
+    <string name="bab5_s1_title">別れのタワーフの法的位置づけ</string>
+    <string name="bab5_s1_body">-言及された目的地へマッカを離れようとする巡礼者にとって義務です。\n\n関連する規定:\n\n-別れのタワーフをせずにマッカを離れた巡礼者は、それを完了するために戻らなければなりません。\n\n-2マルハラ(81km)の距離を進む前に戻れば、ダム(罰金の支払い)は必要ありません。\n\n-シャリーアで認められた正当な理由なく別れのタワーフをせずに去った者は、タルティーブとタクディールのダムが課されます。\n\n-別れのタワーフをすでに行った後は、もはやマッカに留まってはならず、必要なく留まった場合、別れのタワーフは無効とみなされ、やり直さなければなりません。</string>
+    <string name="bab5_s2_title">別れのタワーフの免除となる正当な理由</string>
+    <string name="bab5_s2_body">-月経/産後出血\n-出血が多い傷(モスクを汚す恐れがある場合)\n-浄化のための水/土がない\n-命、名誉、財産への脅威を恐れる\n-仲間に置いていかれることを恐れる\n-職務による担当者の懸念\n-尿失禁\n-タワーフを強制的に離れなければならない場合(緊急事態)\n-付き添い/運搬が必要(この文脈では車椅子は不可)\n-予定された集中治療\n-マッカを頻繁に出入りする担当者</string>
+    <string name="bab5_s3_title">別れのタワーフ後の待機期間</string>
+    <string name="bab5_s3_body">8時間:通常の場合、宿泊先到着から計算します。正当な旅の理由なく8時間以内にマッカを離れなければ、タワーフをやり直さなければなりません。\n\n24時間:タワーフ後24時間以内に交通機関の遅延が通知されれば、やり直す必要はありません。宿泊先到着から計算します。</string>
+    <string name="bab5_s4_title">別れのタワーフの行い方</string>
+    <string name="bab5_s4_body">اللَّهُمَّ إِنِّي أُرِيدُ طَوَافَ بَيْتِكَ الْحَرَامِ طَوَافَ الْوَدَاعِ لِلَّهِ تَعَالَى\n\n方法はウムラ/推奨タワーフと同じですが、イフラームではなく普段の服を着て、義務のタワーフとしてのニヤットをします。\n\nタワーフの後:\n\n-タワーフの推奨礼拝2ラクアト(マカーム・イブラーヒームの後ろ、またはマスジド・アル・ハラームのどこでも)。\n-ムルタザムで祈ること(伝承の祈りまたは自分の言葉で)。\n-ザムザムの水を飲み、祈りを多く行うこと。</string>
+    <string name="bab5_s5_title">その他のタワーフの種類</string>
+    <string name="bab5_s5_body">-推奨タワーフ:多く行うことが奨励されています。ニヤット:「主よ、私は推奨タワーフを7周行いたいと思います…」\n\n-誓願タワーフ:ニヤット:「主よ、私は誓願タワーフを7周行いたいと思います…」\n\n-タヒーヤトゥル・バイト:マスジド・アル・ハラームに入る際に最も優れています。ニヤット:「主よ、私はタヒーヤトゥル・バイトのタワーフを7周行いたいと思います…」</string>
+    <string name="bab6_hero_title">マディーナ訪問</string>
+    <string name="bab6_hero_blurb">第6章の簡単な概要です。</string>
+    <string name="bab6_s1_title">推奨される行い</string>
+    <string name="bab6_s1_body">-旅の間中、そしてマディーナに入る際:預言者への祝福を多く送り、次の祈りを唱えてください:「アッラーよ、この街を地獄の火と罰からの守りとしてください。」\n\n-モスクに入る際:守護を求め慈悲を願う祈りを唱えてください。\n\n-タヒーヤトゥル・マスジド:2ラクアト(1ラクアト目:アルカーフィルーン、2ラクアト目:アルイフラース)、可能であればラウダで、他の巡礼者を妨げないように。</string>
+    <string name="bab6_s2_title">マディーナの訪問地</string>
+    <string name="bab6_s2_body">ジャンナトゥル・バキー\n\n-預言者の時代からあるマディーナの主要な墓地。\n\n-預言者の妻たち、娘たち、そして息子の一人の安息の地。\n\n-推奨される祈り:墓地にいる人々への平安の挨拶を伝え、先に逝った人々と後に残る人々のために許しを求め、彼らの報奨が取り上げられないこと、そして彼らの後に私たちが試されないことを願います。\n\nクバー・モスク\n\n-預言者がヒジュラ後に建てた最初のモスクで、マディーナの南3kmに位置します。\n\n-功徳:クバー・モスクでの礼拝は、ウムラの報奨に等しいとされます(イブン・マージャ伝)。\n\n-預言者は主に土曜日に、時には月曜日と木曜日に訪れていました。\n\n-敬虔さの基盤の上に建てられています(スーラ・アッタウバ108節)。\n\nウフド山\n\n-マディーナの北5kmに位置し、ウフドの戦いで有名です。\n\n-「ウフド」という名前は「孤立」を意味します(他の山とつながっていません)。\n\n-ハディース:「ウフドは私たちを愛し、私たちも彼を愛する山である」(ブハーリー伝)。\n\n-ハムザ・ビン・アブドゥル・ムッタリブ、アブドゥッラー・ビン・ジャフシュ、ムスアブ・ビン・ウマイル、その他ウフドの殉教者たちの墓があります。\n\n-訪問時に祈ることが推奨されます。\n\nキブラタイン・モスク\n\n-かつてバヌー・サラマのモスクで、キブラの方向転換の出来事が起こった場所。\n\n-預言者が信徒たちとズフルの礼拝を導いていたとき、スーラ・アルバカラ144節が啓示され、マスジド・アル・ハラームを向くよう命じられました。\n\n-預言者はバイト・アル・マクディス方向からカアバの方向へ体の向きを変え、そのため「二つのキブラのモスク」と呼ばれています。</string>
+
+    <!-- Checklist - picker & titles -->
+    <string name="checklist_picker_title">チェックリストを選択</string>
+    <string name="checklist_option_umrah">ウンラ チェックリスト</string>
+    <string name="checklist_option_tour">ツアー チェックリスト</string>
+    <string name="checklist_dialog_title_umrah">ウンラ準備チェックリスト</string>
+    <string name="checklist_dialog_title_tour">ツアー準備チェックリスト</string>
+    <string name="dialog_close">閉じる</string>
+
+    <!-- Checklist - section headers (shared) -->
+    <string name="checklist_section_travel_docs">渡航書類</string>
+    <string name="checklist_section_men_clothing">衣類（男性巡礼者）</string>
+    <string name="checklist_section_women_clothing">衣類（女性巡礼者）</string>
+    <string name="checklist_section_medicine">医薬品</string>
+    <string name="checklist_section_electronics">電子機器</string>
+    <string name="checklist_section_women_accessories">アクセサリー・小物（女性）</string>
+    <string name="checklist_section_food">軽食・食品</string>
+    <string name="checklist_section_finance">お金・カード</string>
+    <string name="checklist_section_general">一般用品</string>
+    <string name="checklist_section_clothing">衣類</string>
+
+    <!-- Checklist Umrah - Documents -->
+    <string name="checklist_umrah_docs_1">パスポート（残存有効期間6ヶ月以上）</string>
+    <string name="checklist_umrah_docs_2">ウンラビザ / 許可証（Tasrih）（該当する場合）</string>
+    <string name="checklist_umrah_docs_3">髄膜炎予防接種証明書（ICV）</string>
+    <string name="checklist_umrah_docs_4">旧パスポート（最近更新した場合）</string>
+    <string name="checklist_umrah_docs_5">重要書類のコピー（パスポート、航空券、ビザ）</string>
+    <string name="checklist_umrah_docs_6">ウンラガイドブック ＆ 持ち歩き用祈祷書</string>
+
+    <!-- Checklist Umrah - Men -->
+    <string name="checklist_umrah_men_1">イハラーム（Ihram）の布</string>
+    <string name="checklist_umrah_men_2">ウンラ用ベルト</string>
+    <string name="checklist_umrah_men_3">ファスナー付きTシャツ</string>
+    <string name="checklist_umrah_men_4">ズボン（通常ジュバの下に着用）</string>
+    <string name="checklist_umrah_men_5">サロン（腰布）</string>
+    <string name="checklist_umrah_men_6">ジュバ / クルタ / バジュ・メラユ（または白Tシャツ）</string>
+    <string name="checklist_umrah_men_7">イスラム帽（Skullcap）</string>
+    <string name="checklist_umrah_men_8">サンダル / 靴（足の指が5本とも見えるもの）</string>
+    <string name="checklist_umrah_men_9">スモールタオル</string>
+    <string name="checklist_umrah_men_10">シューズバッグ / ポリ袋</string>
+    <string name="checklist_umrah_men_11">小袋用・ウドゥ（小水清浄）用スプレーボトル</string>
+    <string name="checklist_umrah_men_12">小型ハサミ / カミソリ（手荷物不可、預け入れ荷物へ）</string>
+    <string name="checklist_umrah_men_13">携帯用礼拝マット</string>
+    <string name="checklist_umrah_men_14">ノーズフィルター（マスク）</string>
+
+    <!-- Checklist Umrah - Women -->
+    <string name="checklist_umrah_women_1">テレコン（女性用礼拝着）</string>
+    <string name="checklist_umrah_women_2">ミニテレコン</string>
+    <string name="checklist_umrah_women_3">ヒジャブ / スカーフ</string>
+    <string name="checklist_umrah_women_4">ジュバ / ロングブラウス</string>
+    <string name="checklist_umrah_women_5">靴下</string>
+    <string name="checklist_umrah_women_6">アームカバー（Hand socks）</string>
+    <string name="checklist_umrah_women_7">タワーフ / サアイ用シューズ</string>
+    <string name="checklist_umrah_women_8">長ズボン</string>
+    <string name="checklist_umrah_women_9">ファスナー付きTシャツ</string>
+    <string name="checklist_umrah_women_10">シューズバッグ / ポリ袋</string>
+    <string name="checklist_umrah_women_11">ウドゥ（小水清浄）用スプレーボトル</string>
+    <string name="checklist_umrah_women_12">ハサミ / カミソリ</string>
+    <string name="checklist_umrah_women_13">ノーズフィルター / ニカーブ</string>
+
+    <!-- Checklist Umrah - Medicine -->
+    <string name="checklist_umrah_med_1">解熱鎮痛剤（パナドール等）</string>
+    <string name="checklist_umrah_med_2">風邪薬</string>
+    <string name="checklist_umrah_med_3">咳止め薬</string>
+    <string name="checklist_umrah_med_4">吐き気止め薬</string>
+    <string name="checklist_umrah_med_5">リップクリーム / かかと用クリーム</string>
+    <string name="checklist_umrah_med_6">頭痛薬</string>
+    <string name="checklist_umrah_med_7">下痢止め薬</string>
+    <string name="checklist_umrah_med_8">筋肉痛の薬 / 湿布</string>
+    <string name="checklist_umrah_med_9">薬用オイル（塗り薬）</string>
+    <string name="checklist_umrah_med_10">オリーブオイル / クリーム（寒さによる股擦れ・ひび割れ防止）</string>
+    <string name="checklist_umrah_med_11">携帯用歯ブラシ ＆ 歯磨き粉</string>
+    <string name="checklist_umrah_med_12">手指消毒ジェル</string>
+    <string name="checklist_umrah_med_13">常備薬（マッカ/マディナの薬局は2〜3倍高価なため十分な量を準備）</string>
+
+    <!-- Checklist Umrah - Electronics -->
+    <string name="checklist_umrah_elec_1">スマホ充電器</string>
+    <string name="checklist_umrah_elec_2">モバイルバッテリー</string>
+    <string name="checklist_umrah_elec_3">電源タップ / 延長コード</string>
+    <string name="checklist_umrah_elec_4">ハンディファン（小型扇風機）</string>
+    <string name="checklist_umrah_elec_5">デジタル数珠（Tasbih）</string>
+
+    <!-- Checklist Umrah - Women's Accessories -->
+    <string name="checklist_umrah_acc_1">日傘 / 傘</string>
+    <string name="checklist_umrah_acc_2">サングラス</string>
+    <string name="checklist_umrah_acc_3">マスク</string>
+
+    <!-- Checklist Umrah - Food -->
+    <string name="checklist_umrah_food_1">ビスケット・乾パン</string>
+    <string name="checklist_umrah_food_2">キャンディ・飴</string>
+    <string name="checklist_umrah_food_3">インスタント麺</string>
+    <string name="checklist_umrah_food_4">チリペースト（サンバル等）</string>
+
+    <!-- Checklist Umrah - Finance -->
+    <string name="checklist_umrah_finance_1">十分なサウジ・リヤル現金</string>
+    <string name="checklist_umrah_finance_2">予備として米ドル（USD）を用意</string>
+    <string name="checklist_umrah_finance_3">デビット / クレジットカードの海外利用設定</string>
+
+    <!-- Checklist Umrah - General -->
+    <string name="checklist_umrah_general_1">洗面用具（アメニティ）</string>
+    <string name="checklist_umrah_general_2">予備のタオル（マディナのホテルはタオルが不足することがあります）</string>
+    <string name="checklist_umrah_general_3">その他必要な身の回り品</string>
+
+    <!-- Checklist Tour - Documents -->
+    <string name="checklist_tour_docs_1">パスポート（残存有効期間6ヶ月以上）</string>
+    <string name="checklist_tour_docs_2">パスポートを常時携帯する</string>
+    <string name="checklist_tour_docs_3">旧パスポート（最近更新した場合）</string>
+    <string name="checklist_tour_docs_4">海外渡航規制・渡航可否の確認（SSPI等）</string>
+
+    <!-- Checklist Tour - Medicine -->
+    <string name="checklist_tour_med_1">解熱鎮痛剤（パナドール等）</string>
+    <string name="checklist_tour_med_2">のどの痛み止め</string>
+    <string name="checklist_tour_med_3">下痢止め薬</string>
+    <string name="checklist_tour_med_4">吐き気止め薬</string>
+    <string name="checklist_tour_med_5">サロンパス / 湿布</string>
+    <string name="checklist_tour_med_6">薬用オイル（塗り薬）</string>
+    <string name="checklist_tour_med_7">オリーブオイル / 保湿剤 / リップクリーム</string>
+    <string name="checklist_tour_med_8">カイロ / 温熱シート</string>
+
+    <!-- Checklist Tour - Clothing -->
+    <string name="checklist_tour_clothing_1">薄手のジャケット（ミドルレイヤー）</string>
+    <string name="checklist_tour_clothing_2">ジーンズ / 薄手の長ズボン</string>
+    <string name="checklist_tour_clothing_3">防寒用アウター（防寒・防風用）</string>
+    <string name="checklist_tour_clothing_4">歩きやすい靴（スニーカー）</string>
+    <string name="checklist_tour_clothing_5">サングラス ＆ 帽子</string>
+
+    <!-- Checklist Tour - Electronics -->
+    <string name="checklist_tour_elec_1">変換プラグ（トラベルアダプター）</string>
+    <string name="checklist_tour_elec_2">モバイルバッテリー（最大20,000mAhまで・手荷物に入れること）</string>
+
+    <!-- Checklist Tour - Finance -->
+    <string name="checklist_tour_finance_1">渡航先に合わせた現地通貨の両替</string>
+    <string name="checklist_tour_finance_2">デビット / クレジットカードの海外利用設定</string>
+
+    <string name="forgot_password">パスワードをお忘れですか？</string>
+    <string name="reset_password_title">パスワードをリセットする</string>
+    <string name="reset_password_msg">メールアドレスを入力してください。パスワードをリセットするためのリンクをお送りします。</string>
+    <string name="hint_enter_email">メールアドレスを入力してください</string>
+    <string name="btn_send">送信</string>
+    <string name="btn_cancel">キャンセル</string>
+
+    <string name="reset_password_invalid_email">有効なメールアドレスを入力してください</string>
+    <string name="reset_password_sent">パスワードリセットメールを送信しました。受信箱をご確認ください。</string>
+    <string name="reset_password_failed">メールの送信に失敗しました。もう一度お試しください。</string>
+
+    <string name="login_google_signin_failed">Googleログイン失敗:コード %1$d</string>
+    <string name="login_google_success">Googleログインに成功しました! %1$s</string>
+    <string name="login_google_failed">Googleログインに失敗しました。もう一度お試しください。</string>
+    <string name="login_email_invalid">有効なメールアドレスを入力してください</string>
+    <string name="login_password_required">パスワードを入力してください</string>
+    <string name="login_success">ログインに成功しました!</string>
+    <string name="login_failed_default">ログインに失敗しました。もう一度お試しください</string>
+    <string name="language_picker_title">Choose Language / Pilih Bahasa</string>
+
 </resources>

@@ -1,3 +1,4 @@
+// SignUpActivity.java — FAIL PENUH dengan fix guestText NPE
 package com.hafiztraveltours.app;
 
 import android.content.Context;
@@ -5,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -99,9 +101,16 @@ public class SignUpActivity extends AppCompatActivity {
         findViewById(R.id.phoneSignUpButton).setOnClickListener(v ->
                 Toast.makeText(this, getString(R.string.social_signup_phone), Toast.LENGTH_SHORT).show());
 
-        findViewById(R.id.guestText).setOnClickListener(v ->
-                startActivity(new Intent(SignUpActivity.this, MainActivity.class))
-        );
+        // FIX: activity_signup.xml tiada id "guestText" -> findViewById() pulangkan null ->
+        // .setOnClickListener() atas null = NullPointerException = app crash serta-merta.
+        // Null-check ni elak crash; kalau anda tambah View id "guestText" dalam
+        // activity_signup.xml kemudian, butang ni akan automatik berfungsi.
+        View guestSignUpText = findViewById(R.id.guestSignUpText);
+        if (guestSignUpText != null) {
+            guestSignUpText.setOnClickListener(v ->
+                    startActivity(new Intent(SignUpActivity.this, MainActivity.class))
+            );
+        }
 
         setupLanguageButton();
     }
@@ -145,7 +154,10 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void setupLanguageButton() {
-        findViewById(R.id.languageButton).setOnClickListener(v -> {
+        View languageButton = findViewById(R.id.languageButton);
+        if (languageButton == null) return;
+
+        languageButton.setOnClickListener(v -> {
             String[] options = {"English", "Bahasa Melayu", "العربية", "한국어", "日本語", "中文"};
             new android.app.AlertDialog.Builder(this)
                     .setTitle("Choose Language / Pilih Bahasa")

@@ -1,3 +1,4 @@
+// LoginActivity.java — FAIL PENUH, dengan null-guard pencegahan
 package com.hafiztraveltours.app;
 
 import android.content.Context;
@@ -5,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -98,9 +100,19 @@ public class LoginActivity extends AppCompatActivity {
         findViewById(R.id.phoneLoginButton).setOnClickListener(v ->
                 Toast.makeText(this, getString(R.string.social_login_phone), Toast.LENGTH_SHORT).show());
 
-        findViewById(R.id.guestText).setOnClickListener(v ->
-                startActivity(new Intent(LoginActivity.this, MainActivity.class))
-        );
+        // Null-guard pencegahan: sama corak isu yang jumpa dalam SignUpActivity
+        // (id "guestText" tiada dalam layout -> NPE -> crash). Kalau id ni
+        // sebenarnya wujud dalam activity_login.xml, kod ni tetap jalan normal.
+        View guestText = findViewById(R.id.guestText);
+        if (guestText != null) {
+            guestText.setOnClickListener(v -> {
+                // Sign out sesi Firebase sebelum ni (kalau ada) supaya "Guest"
+                // betul-betul masuk tanpa akaun, bukan terus papar akaun lama
+                // yang session dia masih tersimpan.
+                mAuth.signOut();
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            });
+        }
 
         setupLanguageButton();
     }
@@ -118,13 +130,11 @@ public class LoginActivity extends AppCompatActivity {
                     firebaseAuthWithGoogle(account.getIdToken());
                 }
             } catch (ApiException e) {
-                // THIS WILL SHOW US THE EXACT GOOGLE ERROR CODE
-                Toast.makeText(this, "Google Sign-In failed: Code " + e.getStatusCode(), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.login_google_signin_failed, e.getStatusCode()), Toast.LENGTH_LONG).show();
             }
         }
     }
 
-    // 5. Authenticate with Firebase using Google Credential
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         mAuth.signInWithCredential(credential)
@@ -132,12 +142,12 @@ public class LoginActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         FirebaseUser user = mAuth.getCurrentUser();
                         String name = user != null ? user.getDisplayName() : "";
-                        Toast.makeText(LoginActivity.this, "Log masuk Google berjaya! " + name, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, getString(R.string.login_google_success, name), Toast.LENGTH_SHORT).show();
 
                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         finish();
                     } else {
-                        Toast.makeText(LoginActivity.this, "Log masuk Google gagal. Sila cuba lagi.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, getString(R.string.login_google_failed), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -149,7 +159,7 @@ public class LoginActivity extends AppCompatActivity {
         languageButton.setOnClickListener(v -> {
             String[] options = {"English", "Bahasa Melayu", "العربية", "한국어", "日本語", "中文"};
             new android.app.AlertDialog.Builder(this)
-                    .setTitle("Choose Language / Pilih Bahasa")
+                    .setTitle(getString(R.string.language_picker_title))
                     .setItems(options, (dialog, which) -> {
                         String lang = (which == 0) ? LocaleHelper.LANGUAGE_ENGLISH
                                 : (which == 1) ? LocaleHelper.LANGUAGE_MALAY
@@ -182,14 +192,14 @@ public class LoginActivity extends AppCompatActivity {
         boolean valid = true;
 
         if (TextUtils.isEmpty(email) || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            emailLayout.setError("Sila masukkan email yang sah");
+            emailLayout.setError(getString(R.string.login_email_invalid));
             valid = false;
         } else {
             emailLayout.setError(null);
         }
 
         if (TextUtils.isEmpty(password)) {
-            passwordLayout.setError("Sila masukkan kata laluan");
+            passwordLayout.setError(getString(R.string.login_password_required));
             valid = false;
         } else {
             passwordLayout.setError(null);
@@ -203,13 +213,13 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, task -> {
                     loginButton.setEnabled(true);
                     if (task.isSuccessful()) {
-                        Toast.makeText(this, "Login berjaya!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.login_success), Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         finish();
                     } else {
                         String errorMsg = task.getException() != null
                                 ? task.getException().getMessage()
-                                : "Login gagal, sila cuba lagi";
+                                : getString(R.string.login_failed_default);
                         Toast.makeText(this, errorMsg, Toast.LENGTH_LONG).show();
                     }
                 });
@@ -217,7 +227,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void showForgotPasswordDialog() {
         final android.widget.EditText emailField = new android.widget.EditText(this);
-        emailField.setHint("Masukkan email anda");
+        emailField.setHint(getString(R.string.hint_enter_email));
         emailField.setInputType(android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
         int pad = (int) (20 * getResources().getDisplayMetrics().density);
         emailField.setPadding(pad, pad, pad, pad);
@@ -228,24 +238,24 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         new android.app.AlertDialog.Builder(this)
-                .setTitle("Reset Kata Laluan")
-                .setMessage("Masukkan email anda, kami akan hantar pautan untuk reset kata laluan.")
+                .setTitle(getString(R.string.reset_password_title))
+                .setMessage(getString(R.string.reset_password_msg))
                 .setView(emailField)
-                .setPositiveButton("Hantar", (dialog, which) -> {
+                .setPositiveButton(getString(R.string.btn_send), (dialog, which) -> {
                     String email = emailField.getText().toString().trim();
                     if (TextUtils.isEmpty(email) || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                        Toast.makeText(this, "Sila masukkan email yang sah", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.reset_password_invalid_email), Toast.LENGTH_SHORT).show();
                         return;
                     }
                     mAuth.sendPasswordResetEmail(email).addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            Toast.makeText(this, "Email reset kata laluan telah dihantar. Sila semak inbox anda.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(this, getString(R.string.reset_password_sent), Toast.LENGTH_LONG).show();
                         } else {
-                            Toast.makeText(this, "Gagal menghantar email. Sila cuba lagi.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, getString(R.string.reset_password_failed), Toast.LENGTH_SHORT).show();
                         }
                     });
                 })
-                .setNegativeButton("Batal", null)
+                .setNegativeButton(getString(R.string.btn_cancel), null)
                 .show();
     }
 }

@@ -53,6 +53,12 @@ import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.StyleSpan;
+import android.graphics.Typeface;
+
 public class MainActivity extends AppCompatActivity {
 
     // TODO: replace with your actual WhatsApp business number, format: countrycode+number, no + or spaces
@@ -126,6 +132,8 @@ public class MainActivity extends AppCompatActivity {
         setupInfoSection();
         setupPodcastSection();
         setupPrayerTimesWidget();
+        PrayerTimeScheduler.requestExactAlarmPermissionIfNeeded(this);
+        PrayerTimeScheduler.requestBatteryOptimizationExemption(this);
     }
 
     @Override
@@ -267,8 +275,8 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.featureGuideline).setOnClickListener(v ->
                 startActivity(new Intent(this, PanduanUmrahActivity.class)));
 
-        // Checklist - same items as Guideline, but interactive (tickable)
-        findViewById(R.id.featureChecklist).setOnClickListener(v -> showChecklistDialog());
+        // Checklist - shows a picker first (Umrah / Tour), then the matching interactive checklist
+        findViewById(R.id.featureChecklist).setOnClickListener(v -> showChecklistCategoryPicker());
 
         findViewById(R.id.featureWhatsapp).setOnClickListener(v -> openWhatsApp());
     }
@@ -294,52 +302,169 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Checklist adapted from the real "Travel Guide" PDF (Korea trip) sections:
-     * Dokumen Perjalanan, Keperluan Ubat-ubatan, Musim & Pakaian, Peralatan
-     * Elektronik, Pertukaran Mata Wang. Grouped with category headers so it
-     * matches how the PDF itself is organized.
-     *
-     * TODO: this is currently one generic checklist for the whole app. Once
-     * each package/trip can have its own guide (like this Korea PDF), pull
-     * the items per-trip from the backend instead of this hardcoded list -
-     * e.g. destination-specific items like "suntikan meningitis" only apply
-     * to Umrah/Haj trips, not a Korea tour.
+     * Small picker overlay shown when tapping the Checklist quick action -
+     * lets the user pick which checklist they want (Umrah or Tour) before
+     * the actual interactive checklist opens.
      */
-    private void showChecklistDialog() {
-        LinkedHashMap<String, String[]> sections = new LinkedHashMap<>();
-        sections.put("Dokumen Perjalanan", new String[]{
-                "Pasport sah 6 bulan ke atas",
-                "Bawa pasport bersama",
-                "Bawa pasport lama (jika baru perbaharui)",
-                "Semak status perjalanan luar negara (SSPI)"
-        });
-        sections.put("Ubat-ubatan", new String[]{
-                "Panadol",
-                "Ubat sakit tekak",
-                "Ubat cirit-birit",
-                "Ubat tahan muntah",
-                "Salonpas",
-                "Minyak angin",
-                "Olive oil / moisturizer / lipbalm",
-                "Heat pad"
-        });
-        sections.put("Pakaian", new String[]{
-                "Jaket nipis (lapisan sederhana)",
-                "Jeans / seluar panjang nipis",
-                "Jaket tambahan (jika cuaca sejuk/berangin)",
-                "Kasut bertutup & selesa (sneakers)",
-                "Sunglasses & cap"
-        });
-        sections.put("Peralatan Elektronik", new String[]{
-                "Travel adaptor",
-                "Powerbank (maks. 20,000mAh - letak handcarry)"
-        });
-        sections.put("Kewangan", new String[]{
-                "Tukar mata wang mengikut destinasi",
-                "Aktifkan kad debit/credit untuk kegunaan luar negara"
-        });
+    private void showChecklistCategoryPicker() {
+        String[] options = {getString(R.string.checklist_option_umrah), getString(R.string.checklist_option_tour)};
 
-        SharedPreferences checklistPrefs = getSharedPreferences("checklist_state", Context.MODE_PRIVATE);
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.checklist_picker_title))
+                .setItems(options, (dialog, which) -> {
+                    if (which == 0) {
+                        showChecklistDialog("umrah", getString(R.string.checklist_dialog_title_umrah), buildUmrahChecklistSections());
+                    } else {
+                        showChecklistDialog("tour", getString(R.string.checklist_dialog_title_tour), buildTourChecklistSections());
+                    }
+                })
+                .show();
+    }
+
+    /**
+     * Checklist items specific to Umrah/Haj trips - taken from the company's
+     * official "Checklist Keperluan Umrah" poster (Jemaah Lelaki / Jemaah
+     * Perempuan sections), plus extra practical notes folded into the
+     * relevant items (e.g. bring extra towel, nail clippers go in checked
+     * baggage, pharmacy prices in Makkah/Madinah are 2-3x higher).
+     */
+    private LinkedHashMap<String, String[]> buildUmrahChecklistSections() {
+        LinkedHashMap<String, String[]> sections = new LinkedHashMap<>();
+        sections.put(getString(R.string.checklist_section_travel_docs), new String[]{
+                getString(R.string.checklist_umrah_docs_1),
+                getString(R.string.checklist_umrah_docs_2),
+                getString(R.string.checklist_umrah_docs_3),
+                getString(R.string.checklist_umrah_docs_4),
+                getString(R.string.checklist_umrah_docs_5),
+                getString(R.string.checklist_umrah_docs_6)
+        });
+        sections.put(getString(R.string.checklist_section_men_clothing), new String[]{
+                getString(R.string.checklist_umrah_men_1),
+                getString(R.string.checklist_umrah_men_2),
+                getString(R.string.checklist_umrah_men_3),
+                getString(R.string.checklist_umrah_men_4),
+                getString(R.string.checklist_umrah_men_5),
+                getString(R.string.checklist_umrah_men_6),
+                getString(R.string.checklist_umrah_men_7),
+                getString(R.string.checklist_umrah_men_8),
+                getString(R.string.checklist_umrah_men_9),
+                getString(R.string.checklist_umrah_men_10),
+                getString(R.string.checklist_umrah_men_11),
+                getString(R.string.checklist_umrah_men_12),
+                getString(R.string.checklist_umrah_men_13),
+                getString(R.string.checklist_umrah_men_14)
+        });
+        sections.put(getString(R.string.checklist_section_women_clothing), new String[]{
+                getString(R.string.checklist_umrah_women_1),
+                getString(R.string.checklist_umrah_women_2),
+                getString(R.string.checklist_umrah_women_3),
+                getString(R.string.checklist_umrah_women_4),
+                getString(R.string.checklist_umrah_women_5),
+                getString(R.string.checklist_umrah_women_6),
+                getString(R.string.checklist_umrah_women_7),
+                getString(R.string.checklist_umrah_women_8),
+                getString(R.string.checklist_umrah_women_9),
+                getString(R.string.checklist_umrah_women_10),
+                getString(R.string.checklist_umrah_women_11),
+                getString(R.string.checklist_umrah_women_12),
+                getString(R.string.checklist_umrah_women_13)
+        });
+        sections.put(getString(R.string.checklist_section_medicine), new String[]{
+                getString(R.string.checklist_umrah_med_1),
+                getString(R.string.checklist_umrah_med_2),
+                getString(R.string.checklist_umrah_med_3),
+                getString(R.string.checklist_umrah_med_4),
+                getString(R.string.checklist_umrah_med_5),
+                getString(R.string.checklist_umrah_med_6),
+                getString(R.string.checklist_umrah_med_7),
+                getString(R.string.checklist_umrah_med_8),
+                getString(R.string.checklist_umrah_med_9),
+                getString(R.string.checklist_umrah_med_10),
+                getString(R.string.checklist_umrah_med_11),
+                getString(R.string.checklist_umrah_med_12),
+                getString(R.string.checklist_umrah_med_13)
+        });
+        sections.put(getString(R.string.checklist_section_electronics), new String[]{
+                getString(R.string.checklist_umrah_elec_1),
+                getString(R.string.checklist_umrah_elec_2),
+                getString(R.string.checklist_umrah_elec_3),
+                getString(R.string.checklist_umrah_elec_4),
+                getString(R.string.checklist_umrah_elec_5)
+        });
+        sections.put(getString(R.string.checklist_section_women_accessories), new String[]{
+                getString(R.string.checklist_umrah_acc_1),
+                getString(R.string.checklist_umrah_acc_2),
+                getString(R.string.checklist_umrah_acc_3)
+        });
+        sections.put(getString(R.string.checklist_section_food), new String[]{
+                getString(R.string.checklist_umrah_food_1),
+                getString(R.string.checklist_umrah_food_2),
+                getString(R.string.checklist_umrah_food_3),
+                getString(R.string.checklist_umrah_food_4)
+        });
+        sections.put(getString(R.string.checklist_section_finance), new String[]{
+                getString(R.string.checklist_umrah_finance_1),
+                getString(R.string.checklist_umrah_finance_2),
+                getString(R.string.checklist_umrah_finance_3)
+        });
+        sections.put(getString(R.string.checklist_section_general), new String[]{
+                getString(R.string.checklist_umrah_general_1),
+                getString(R.string.checklist_umrah_general_2),
+                getString(R.string.checklist_umrah_general_3)
+        });
+        return sections;
+    }
+
+    private LinkedHashMap<String, String[]> buildTourChecklistSections() {
+        LinkedHashMap<String, String[]> sections = new LinkedHashMap<>();
+        sections.put(getString(R.string.checklist_section_travel_docs), new String[]{
+                getString(R.string.checklist_tour_docs_1),
+                getString(R.string.checklist_tour_docs_2),
+                getString(R.string.checklist_tour_docs_3),
+                getString(R.string.checklist_tour_docs_4)
+        });
+        sections.put(getString(R.string.checklist_section_medicine), new String[]{
+                getString(R.string.checklist_tour_med_1),
+                getString(R.string.checklist_tour_med_2),
+                getString(R.string.checklist_tour_med_3),
+                getString(R.string.checklist_tour_med_4),
+                getString(R.string.checklist_tour_med_5),
+                getString(R.string.checklist_tour_med_6),
+                getString(R.string.checklist_tour_med_7),
+                getString(R.string.checklist_tour_med_8)
+        });
+        sections.put(getString(R.string.checklist_section_clothing), new String[]{
+                getString(R.string.checklist_tour_clothing_1),
+                getString(R.string.checklist_tour_clothing_2),
+                getString(R.string.checklist_tour_clothing_3),
+                getString(R.string.checklist_tour_clothing_4),
+                getString(R.string.checklist_tour_clothing_5)
+        });
+        sections.put(getString(R.string.checklist_section_electronics), new String[]{
+                getString(R.string.checklist_tour_elec_1),
+                getString(R.string.checklist_tour_elec_2)
+        });
+        sections.put(getString(R.string.checklist_section_finance), new String[]{
+                getString(R.string.checklist_tour_finance_1),
+                getString(R.string.checklist_tour_finance_2)
+        });
+        return sections;
+    }
+
+    /**
+     * Renders the interactive tickable checklist dialog for a given category.
+     * Each category uses its own SharedPreferences file (checklist_state_umrah
+     * / checklist_state_tour) so ticking an item in one checklist never
+     * affects the other, even if item text happens to be similar.
+     */
+    /**
+     * Renders the interactive tickable checklist dialog for a given category.
+     * Each category uses its own SharedPreferences file (checklist_state_umrah
+     * / checklist_state_tour) so ticking an item in one checklist never
+     * affects the other, even if item text happens to be similar.
+     */
+    private void showChecklistDialog(String category, String dialogTitle, LinkedHashMap<String, String[]> sections) {
+        SharedPreferences checklistPrefs = getSharedPreferences("checklist_state_" + category, Context.MODE_PRIVATE);
 
         android.widget.ScrollView scrollView = new android.widget.ScrollView(this);
         LinearLayout content = new LinearLayout(this);
@@ -353,6 +478,7 @@ public class MainActivity extends AppCompatActivity {
             header.setText(section.getKey());
             header.setTextSize(14);
             header.setTypeface(null, android.graphics.Typeface.BOLD);
+            // Header dikekalkan warna pink / boleh tukar ke hitam jika mahu
             header.setTextColor(getResources().getColor(R.color.pink_dark));
             LinearLayout.LayoutParams headerParams = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -364,7 +490,14 @@ public class MainActivity extends AppCompatActivity {
                 android.widget.CheckBox checkBox = new android.widget.CheckBox(this);
                 checkBox.setText(itemText);
                 checkBox.setTextSize(14);
-                checkBox.setTextColor(getResources().getColor(R.color.text_dark));
+
+                // --- PERUBAHAN DI SINI ---
+                // Tetapkan warna teks menjadi HITAM PEKAT (#000000)
+                checkBox.setTextColor(android.graphics.Color.BLACK);
+                // Tetapkan warna kotak semakan (checkbox) juga ke warna hitam pekat
+                checkBox.setButtonTintList(android.content.res.ColorStateList.valueOf(android.graphics.Color.BLACK));
+                // --------------------------
+
                 checkBox.setChecked(checklistPrefs.getBoolean(itemText, false));
                 checkBox.setOnCheckedChangeListener((btn, isChecked) ->
                         checklistPrefs.edit().putBoolean(itemText, isChecked).apply());
@@ -372,11 +505,19 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        new AlertDialog.Builder(this)
-                .setTitle("Checklist Persediaan")
+        // Membina Dialog
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle(dialogTitle)
                 .setView(scrollView)
-                .setPositiveButton("Tutup", null)
-                .show();
+                .setPositiveButton(getString(R.string.dialog_close), null)
+                .create();
+
+        // Pastikan butang "Close" / "Tutup" juga berwarna hitam pekat
+        dialog.setOnShowListener(dialogInterface -> {
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(android.graphics.Color.BLACK);
+        });
+
+        dialog.show();
     }
 
     private void openNusukOnPlayStore() {
@@ -779,6 +920,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /** Parses a SolatV2 JSON response (same shape for both the GPS-beta and zone endpoints) and renders it. */
+    /** Parses a SolatV2 JSON response (same shape for both the GPS-beta and zone endpoints) and renders it. */
     private void handleSolatV2Response(String responseBody) throws Exception {
         JSONObject json = new JSONObject(responseBody);
         String zone = json.optString("zone", "");
@@ -802,22 +944,32 @@ public class MainActivity extends AppCompatActivity {
         formatter.setTimeZone(TimeZone.getDefault());
 
         JSONObject finalTodayPrayers = todayPrayers;
-        String[][] times = {
-                {getString(R.string.prayer_subuh), formatEpochSeconds(finalTodayPrayers.getLong("fajr"), formatter)},
-                {getString(R.string.prayer_zohor), formatEpochSeconds(finalTodayPrayers.getLong("dhuhr"), formatter)},
-                {getString(R.string.prayer_asar), formatEpochSeconds(finalTodayPrayers.getLong("asr"), formatter)},
-                {getString(R.string.prayer_maghrib), formatEpochSeconds(finalTodayPrayers.getLong("maghrib"), formatter)},
-                {getString(R.string.prayer_isyak), formatEpochSeconds(finalTodayPrayers.getLong("isha"), formatter)}
+        String[] names = {
+                getString(R.string.prayer_subuh), getString(R.string.prayer_zohor),
+                getString(R.string.prayer_asar), getString(R.string.prayer_maghrib),
+                getString(R.string.prayer_isyak)
         };
+        long[] epochs = {
+                todayPrayers.getLong("fajr"), todayPrayers.getLong("dhuhr"),
+                todayPrayers.getLong("asr"), todayPrayers.getLong("maghrib"),
+                todayPrayers.getLong("isha")
+        };
+
+        // TAMBAHAN BARU: schedule alarm azan untuk setiap waktu solat hari ini
+        PrayerTimeScheduler.scheduleAll(this,
+                finalTodayPrayers.getLong("fajr"),
+                finalTodayPrayers.getLong("dhuhr"),
+                finalTodayPrayers.getLong("asr"),
+                finalTodayPrayers.getLong("maghrib"),
+                finalTodayPrayers.getLong("isha"));
 
         String finalZone = zone;
         runOnUiThread(() -> {
             TextView dateText = findViewById(R.id.prayerTimesDateText);
             dateText.setText(finalZone.isEmpty()
-                    ? getString(R.string.prayer_times_title_jakim)
-                    : getString(R.string.prayer_times_title_jakim_zone, finalZone));
-            dateText.setTextColor(getResources().getColor(R.color.prayer_card_text_secondary));
-            renderPrayerTimesRow(times);
+                    ? "Waktu Solat Hari Ini (JAKIM)"
+                    : "Waktu Solat Hari Ini (JAKIM - Zon " + finalZone + ")");
+            renderPrayerArc(names, epochs);
         });
     }
 
@@ -825,6 +977,12 @@ public class MainActivity extends AppCompatActivity {
         return formatter.format(new Date(epochSeconds * 1000L));
     }
 
+    /**
+     * OFFLINE FALLBACK ONLY - used when the JAKIM-sourced API call fails.
+     * These are calculated estimates (Adhan library, SINGAPORE method), NOT
+     * the official JAKIM times, and are labelled "(anggaran)" so that's clear
+     * to the user. Do not treat this path as equally authoritative.
+     */
     /**
      * OFFLINE FALLBACK ONLY - used when the JAKIM-sourced API call fails.
      * These are calculated estimates (Adhan library, SINGAPORE method), NOT
@@ -851,51 +1009,64 @@ public class MainActivity extends AppCompatActivity {
         SimpleDateFormat formatter = new SimpleDateFormat("h:mm a", Locale.getDefault());
         formatter.setTimeZone(TimeZone.getDefault());
 
-        String[][] times = {
-                {getString(R.string.prayer_subuh), formatter.format(prayerTimes.fajr)},
-                {getString(R.string.prayer_zohor), formatter.format(prayerTimes.dhuhr)},
-                {getString(R.string.prayer_asar), formatter.format(prayerTimes.asr)},
-                {getString(R.string.prayer_maghrib), formatter.format(prayerTimes.maghrib)},
-                {getString(R.string.prayer_isyak), formatter.format(prayerTimes.isha)}
+        String[] names = {
+                getString(R.string.prayer_subuh), getString(R.string.prayer_zohor),
+                getString(R.string.prayer_asar), getString(R.string.prayer_maghrib),
+                getString(R.string.prayer_isyak)
+        };
+        long[] epochs = {
+                prayerTimes.fajr.getTime() / 1000L, prayerTimes.dhuhr.getTime() / 1000L,
+                prayerTimes.asr.getTime() / 1000L, prayerTimes.maghrib.getTime() / 1000L,
+                prayerTimes.isha.getTime() / 1000L
         };
 
-        renderPrayerTimesRow(times);
+        // TAMBAHAN BARU: schedule alarm azan guna waktu anggaran (epoch seconds = milliseconds / 1000)
+        PrayerTimeScheduler.scheduleAll(this,
+                prayerTimes.fajr.getTime() / 1000,
+                prayerTimes.dhuhr.getTime() / 1000,
+                prayerTimes.asr.getTime() / 1000,
+                prayerTimes.maghrib.getTime() / 1000,
+                prayerTimes.isha.getTime() / 1000);
+
+        renderPrayerArc(names, epochs);
     }
 
-    private void renderPrayerTimesRow(String[][] times) {
-        LinearLayout row = findViewById(R.id.prayerTimesRow);
-        row.removeAllViews();
+    // renderPrayerArc — dikemaskini untuk masa 16sp bold + label lokasi/Hijrah placeholder
+    private void renderPrayerArc(String[] names, long[] epochSeconds) {
+        PrayerArcView arcView = findViewById(R.id.prayerArcView);
+        TextView currentLabel = findViewById(R.id.prayerCurrentLabel);
+        TextView nextLabel = findViewById(R.id.prayerNextLabel);
+        TextView locationLabel = findViewById(R.id.prayerLocationLabel);
+        TextView hijriLabel = findViewById(R.id.prayerHijriLabel);
 
-        for (String[] t : times) {
-            LinearLayout col = new LinearLayout(this);
-            col.setOrientation(LinearLayout.VERTICAL);
-            col.setGravity(android.view.Gravity.CENTER);
-            col.setPadding(dp(4), dp(6), dp(4), dp(6));
-            LinearLayout.LayoutParams colParams = new LinearLayout.LayoutParams(
-                    0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
-            col.setLayoutParams(colParams);
+        // TODO: gantikan dengan data lokasi & Hijrah sebenar bila sedia
+        locationLabel.setText("Larkin, Johor Bahru");
+        hijriLabel.setText("1 Rejab 1448H");
 
-            TextView name = new TextView(this);
-            name.setText(t[0]);
-            name.setTextSize(11);
-            name.setTextColor(getResources().getColor(R.color.prayer_card_text_secondary));
-            name.setGravity(android.view.Gravity.CENTER);
+        long nowEpoch = System.currentTimeMillis() / 1000L;
+        PrayerProgressCalculator.Result result =
+                PrayerProgressCalculator.calculate(names, epochSeconds, nowEpoch);
 
-            TextView time = new TextView(this);
-            time.setText(t[1]);
-            time.setTextSize(13);
-            time.setTypeface(null, android.graphics.Typeface.BOLD);
-            time.setTextColor(getResources().getColor(R.color.prayer_card_text_primary));
-            time.setGravity(android.view.Gravity.CENTER);
-            LinearLayout.LayoutParams timeParams = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            timeParams.topMargin = dp(2);
-            time.setLayoutParams(timeParams);
+        arcView.setProgress(result.progress);
 
-            col.addView(name);
-            col.addView(time);
-            row.addView(col);
-        }
+        SimpleDateFormat formatter = new SimpleDateFormat("h:mm a", Locale.getDefault());
+        formatter.setTimeZone(TimeZone.getDefault());
+
+        String currentTime = formatter.format(new Date(result.currentEpochSeconds * 1000L));
+        String nextTime = formatter.format(new Date(result.nextEpochSeconds * 1000L));
+
+        currentLabel.setText(buildLabelSpanned(result.currentName, currentTime));
+        nextLabel.setText(buildLabelSpanned(result.nextName, nextTime));
+    }
+
+    private CharSequence buildLabelSpanned(String name, String time) {
+        SpannableStringBuilder sb = new SpannableStringBuilder();
+        sb.append(name).append("\n");
+        int start = sb.length();
+        sb.append(time);
+        sb.setSpan(new StyleSpan(Typeface.BOLD), start, sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        sb.setSpan(new AbsoluteSizeSpan(16, true), start, sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return sb;
     }
 
     /**
@@ -904,30 +1075,24 @@ public class MainActivity extends AppCompatActivity {
      */
     private void showPrayerTimesLocationDenied() {
         TextView dateText = findViewById(R.id.prayerTimesDateText);
-        LinearLayout row = findViewById(R.id.prayerTimesRow);
+        PrayerArcView arcView = findViewById(R.id.prayerArcView);
+        TextView currentLabel = findViewById(R.id.prayerCurrentLabel);
+        TextView nextLabel = findViewById(R.id.prayerNextLabel);
 
         dateText.setText("Aktifkan lokasi untuk lihat waktu solat");
         dateText.setTextColor(getResources().getColor(R.color.prayer_card_text_secondary));
-        row.removeAllViews();
 
-        TextView retryButton = new TextView(this);
-        retryButton.setText("Guna Lokasi Saya");
-        retryButton.setTextSize(13);
-        retryButton.setTypeface(null, android.graphics.Typeface.BOLD);
-        retryButton.setTextColor(getResources().getColor(R.color.prayer_card_text_primary));
-        retryButton.setBackgroundResource(R.drawable.bg_pill_active_nav);
-        int h = dp(10);
-        int v = dp(8);
-        retryButton.setPadding(h, v, h, v);
-        retryButton.setClickable(true);
-        retryButton.setFocusable(true);
-        retryButton.setOnClickListener(v2 ->
+        // Kosongkan arc & label sebab takde data waktu solat
+        arcView.setProgress(0f);
+        currentLabel.setText("");
+
+        nextLabel.setText("Guna Lokasi Saya");
+        nextLabel.setTextColor(getResources().getColor(R.color.prayer_card_text_primary));
+        nextLabel.setTypeface(null, android.graphics.Typeface.BOLD);
+        nextLabel.setClickable(true);
+        nextLabel.setFocusable(true);
+        nextLabel.setOnClickListener(v2 ->
                 locationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION));
-
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        retryButton.setLayoutParams(params);
-        row.addView(retryButton);
     }
 
     // ================== end waktu solat ==================

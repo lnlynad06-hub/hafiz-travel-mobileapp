@@ -46,5 +46,12 @@
     <color name="prayer_card_border">#4A2333</color>
     <color name="prayer_card_text_primary">#FF80AB</color>
     <color name="prayer_card_text_secondary">#E0A9BE</color>
+    <color name="prayer_arc_start">#E91E63</color>
+    <color name="prayer_arc_end">#880E4F</color>
+    <color name="prayer_arc_dot">#E91E63</color>
+
+    <color name="input_background">#2C2C2C</color>
+    <color name="input_text">#F5F5F5</color>
+    <color name="input_hint">#B0B0B0</color>
 
 </resources>
