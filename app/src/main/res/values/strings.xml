@@ -366,4 +366,145 @@
     <string name="login_failed_default">Login failed, please try again</string>
     <string name="language_picker_title">Choose Language / Pilih Bahasa</string>
 
+    <string name="prayer_times_title_fallback">Today\'s prayer times (estimated - no internet connection)</string>
+    <string name="prayer_location_denied_text">Enable location services to display prayer times.</string>
+    <string name="prayer_use_my_location">Use current location</string>
+
+    <string name="umrah_section_popular">Popular Packages</string>
+    <string name="umrah_section_khas">Special Packages</string>
+    <string name="umrah_section_ziarah">Umrah Ziarah</string>
+    <string name="tour_section_inbound">Inbound</string>
+    <string name="tour_section_popular">Popular Packages</string>
+    <string name="tour_section_available">Available Packages</string>
+    <string name="tour_inbound_coming_soon">Domestic (inbound) packages are currently in the planning phase. Stay tuned for updates!</string>
+    <string name="tour_section_outbound">Outbound</string>
+
+    <string name="checklist_umrah_title">Procedures for Performing Umrah</string>
+    <string name="checklist_reset">Reset</string>
+    <string name="checklist_progress_suffix">Done</string>
+    <string name="all_packages_title">All Packages</string>
+
+    <!-- Section 1 -->
+    <string name="checklist_sec1_title">1. BEFORE DEPARTURE</string>
+    <string name="checklist_sec1_item1">Perform the sunnah ihram bath</string>
+    <string name="checklist_sec1_item2">Trim your nails / groom yourself before ihram</string>
+    <string name="checklist_sec1_item3">Put on ihram</string>
+    <string name="checklist_sec1_item3_sub1">Men: 2 pieces of ihram cloth</string>
+    <string name="checklist_sec1_item3_sub2">Women: modest, covering clothing</string>
+    <string name="checklist_sec1_item4">Perform the 2-rakaat sunnah ihram prayer</string>
+    <string name="checklist_sec1_item5">Make sure you know your Miqat</string>
+    <string name="checklist_sec1_item6">Prepare your ihram intention</string>
+
+    <!-- Section 2 -->
+    <string name="checklist_sec2_title">2. AT THE MIQAT \u2013 IHRAM INTENTION</string>
+    <string name="checklist_sec2_item1">Make the intention for Umrah</string>
+    <string name="checklist_sec2_heading1">Intention wording:</string>
+    <string name="checklist_sec2_arabic1">نَوَيْتُ الْعُمْرَةَ وَأَحْرَمْتُ بِهَا لِلَّهِ تَعَالَى</string>
+    <string name="checklist_sec2_item2">Begin the talbiyah</string>
+    <string name="checklist_sec2_heading2">Talbiyah:</string>
+    <string name="checklist_sec2_arabic2">لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لَا شَرِيكَ لَكَ لَبَّيْكَ، إِنَّ الْحَمْدَ وَالنِّعْمَةَ لَكَ وَالْمُلْكَ، لَا شَرِيكَ لَكَ</string>
+    <string name="checklist_sec2_item3">Observe all the restrictions of ihram</string>
+
+    <!-- Section 3 -->
+    <string name="checklist_sec3_title">3. JOURNEY TO MAKKAH</string>
+    <string name="checklist_sec3_item1">Recite the talbiyah often</string>
+    <string name="checklist_sec3_item2">Send blessings on the Prophet</string>
+    <string name="checklist_sec3_item3">Remember Allah (dhikr)</string>
+    <string name="checklist_sec3_item4">Make du\'a</string>
+    <string name="checklist_sec3_item5">Observe the restrictions of ihram</string>
+
+    <!-- Section 4 -->
+    <string name="checklist_sec4_title">4. ARRIVING AT MASJIDIL HARAM</string>
+    <string name="checklist_sec4_item1">Enter Masjidil Haram with your right foot</string>
+    <string name="checklist_sec4_item2">Recite the du\'a for entering the mosque</string>
+    <string name="checklist_sec4_item3">See the Kaabah \u2192 make du\'a</string>
+    <string name="checklist_sec4_item4">Prepare for tawaf</string>
+    <string name="checklist_sec4_item5">Make sure you have wudu</string>
+
+    <!-- Section 5 -->
+    <string name="checklist_sec5_title">5. TAWAF \u2013 7 CIRCUITS</string>
+    <string name="checklist_sec5_heading1">Important conditions:</string>
+    <string name="checklist_sec5_item1">Free from hadas (ritual impurity)</string>
+    <string name="checklist_sec5_item2">Clean body, clothing and place</string>
+    <string name="checklist_sec5_item3">Aurah covered</string>
+    <string name="checklist_sec5_item4">Kaabah kept on your left</string>
+    <string name="checklist_sec5_item5">Start at the Black Stone (Hajar Aswad)</string>
+    <string name="checklist_sec5_item6">Complete 7 circuits</string>
+    <string name="checklist_sec5_item7">Stay within the tawaf area</string>
+    <string name="checklist_sec5_heading2">Each circuit:</string>
+    <string name="checklist_sec5_info1">Start at the Black Stone</string>
+    <string name="checklist_sec5_info2">Circle the Kaabah</string>
+    <string name="checklist_sec5_info3">Return to the Black Stone = 1 circuit</string>
+    <string name="checklist_sec5_info4">Repeat until you complete 7 circuits</string>
+    <string name="checklist_sec5_info5">Recite plenty of du\'a, dhikr and blessings</string>
+    <string name="checklist_sec5_heading3">Surahs / du\'as you may recite:</string>
+    <string name="checklist_sec5_info6">Al-Fatihah</string>
+    <string name="checklist_sec5_info7">Al-Ikhlas</string>
+    <string name="checklist_sec5_info8">Al-Kafirun</string>
+    <string name="checklist_sec5_info9">Any du\'a you know well</string>
+    <string name="checklist_sec5_note1">There is no specific surah required for each circuit.</string>
+
+    <!-- Section 6 -->
+    <string name="checklist_sec6_title">6. AFTER TAWAF</string>
+    <string name="checklist_sec6_item1">Perform the 2-rakaat sunnah tawaf prayer</string>
+    <string name="checklist_sec6_item2">If possible, pray behind Maqam Ibrahim</string>
+    <string name="checklist_sec6_item3">Recite Al-Kafirun in the first rakaat</string>
+    <string name="checklist_sec6_item4">Recite Al-Ikhlas in the second rakaat</string>
+    <string name="checklist_sec6_item5">Make du\'a after the prayer</string>
+    <string name="checklist_sec6_item6">Drink Zamzam water</string>
+
+    <!-- Section 7 -->
+    <string name="checklist_sec7_title">7. SA\'I \u2013 7 TRIPS</string>
+    <string name="checklist_sec7_note1">Start: Safa \u2022 End: Marwah</string>
+    <string name="checklist_sec7_item1">Go to Safa</string>
+    <string name="checklist_sec7_item2">Set your intention / prepare for sa\'i</string>
+    <string name="checklist_sec7_item3">Safa \u2192 Marwah = 1</string>
+    <string name="checklist_sec7_item4">Marwah \u2192 Safa = 2</string>
+    <string name="checklist_sec7_item5">Safa \u2192 Marwah = 3</string>
+    <string name="checklist_sec7_item6">Marwah \u2192 Safa = 4</string>
+    <string name="checklist_sec7_item7">Safa \u2192 Marwah = 5</string>
+    <string name="checklist_sec7_item8">Marwah \u2192 Safa = 6</string>
+    <string name="checklist_sec7_item9">Safa \u2192 Marwah = 7</string>
+    <string name="checklist_sec7_heading1">During sa\'i:</string>
+    <string name="checklist_sec7_info1">Make du\'a at Safa</string>
+    <string name="checklist_sec7_info2">Face the qibla if possible</string>
+    <string name="checklist_sec7_info3">Say takbir and tahlil</string>
+    <string name="checklist_sec7_info4">Recite plenty of du\'a / dhikr</string>
+    <string name="checklist_sec7_info5">Men \u2192 jog between the two green markers</string>
+    <string name="checklist_sec7_info6">Women \u2192 walk normally</string>
+    <string name="checklist_sec7_info7">Keep the Safa \u2192 Marwah order</string>
+
+    <!-- Section 8 -->
+    <string name="checklist_sec8_title">8. TAHALLUL</string>
+    <string name="checklist_sec8_note1">After completing the 7 trips of sa\'i:</string>
+    <string name="checklist_sec8_item1">Men \u2192 shave or trim the hair</string>
+    <string name="checklist_sec8_item2">Women \u2192 trim a small amount of hair</string>
+    <string name="checklist_sec8_item3">Tahallul marks the completion of Umrah</string>
+    <string name="checklist_sec8_item4">After tahallul, the restrictions of ihram end</string>
+
+    <!-- Section 9 -->
+    <string name="checklist_sec9_title">9. FINAL UMRAH CHECKLIST</string>
+    <string name="checklist_sec9_note1">Make sure all of these are done:</string>
+    <string name="checklist_sec9_item1">Ihram</string>
+    <string name="checklist_sec9_item2">Umrah intention</string>
+    <string name="checklist_sec9_item3">Talbiyah</string>
+    <string name="checklist_sec9_item4">7 circuits of tawaf</string>
+    <string name="checklist_sec9_item5">Sunnah tawaf prayer</string>
+    <string name="checklist_sec9_item6">7 trips of sa\'i</string>
+    <string name="checklist_sec9_item7">Tahallul</string>
+    <string name="checklist_sec9_item8">Proper order</string>
+    <string name="checklist_sec9_item9">Umrah complete</string>
+
+    <string name="panduan_banner_title">Ready for Umrah?</string>
+    <string name="panduan_banner_subtitle">Check the procedures for performing Umrah.</string>
+    <string name="panduan_banner_button">View Checklist</string>
+
+    <string name="umrah_hero_title">Umrah Packages</string>
+    <string name="umrah_hero_subtitle">Find the right Umrah package for you</string>
+    <string name="umrah_empty_state">No packages found</string>
+
+    <string name="tour_hero_title">Tour Packages</string>
+    <string name="tour_hero_subtitle">Explore your next destination</string>
+    <string name="tour_empty_state">No packages found</string>
+
 </resources>

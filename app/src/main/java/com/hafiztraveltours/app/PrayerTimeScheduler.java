@@ -127,4 +127,20 @@ public class PrayerTimeScheduler {
                 .setNegativeButton("Nanti", null)
                 .show();
     }
+
+    // Baca semula waktu solat yang dah di-cache, untuk refresh arc widget
+    // tanpa perlu call API baru.
+    public static long[] getCachedEpochs(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        long fajr = prefs.getLong("fajr", 0);
+        if (fajr == 0) return null; // takde cache lagi
+
+        return new long[]{
+                fajr,
+                prefs.getLong("dhuhr", 0),
+                prefs.getLong("asr", 0),
+                prefs.getLong("maghrib", 0),
+                prefs.getLong("isha", 0)
+        };
+    }
 }

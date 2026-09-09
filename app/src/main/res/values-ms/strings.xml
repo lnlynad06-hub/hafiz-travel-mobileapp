@@ -339,14 +339,14 @@
     <string name="checklist_tour_finance_2">Aktifkan kad debit/credit untuk kegunaan luar negara</string>
 
     <string name="forgot_password">Lupa Kata Laluan?</string>
-    <string name="reset_password_title">Reset Kata Laluan</string>
+    <string name="reset_password_title">Tetap Semula Kata Laluan</string>
     <string name="reset_password_msg">Masukkan email anda, kami akan hantar pautan untuk reset kata laluan.</string>
     <string name="hint_enter_email">Masukkan email anda</string>
     <string name="btn_send">HANTAR</string>
     <string name="btn_cancel">BATAL</string>
 
     <string name="reset_password_invalid_email">Sila masukkan email yang sah</string>
-    <string name="reset_password_sent">Email reset kata laluan telah dihantar. Sila semak inbox anda.</string>
+    <string name="reset_password_sent">Email tetapkan semula kata laluan telah dihantar. Sila semak inbox anda.</string>
     <string name="reset_password_failed">Gagal menghantar email. Sila cuba lagi.</string>
 
     <string name="login_google_signin_failed">Log masuk Google gagal: Kod %1$d</string>
@@ -357,5 +357,145 @@
     <string name="login_success">Log masuk berjaya!</string>
     <string name="login_failed_default">Log masuk gagal, sila cuba lagi</string>
     <string name="language_picker_title">Choose Language / Pilih Bahasa</string>
+
+    <string name="prayer_times_title_fallback">Waktu Solat Hari Ini (anggaran - tiada sambungan internet)</string>
+    <string name="prayer_location_denied_text">Aktifkan lokasi untuk lihat waktu solat</string>
+    <string name="prayer_use_my_location">Guna Lokasi Saya</string>
+
+    <string name="umrah_section_popular">Pakej Popular</string>
+    <string name="umrah_section_khas">Pakej Khas</string>
+    <string name="umrah_section_ziarah">Umrah Ziarah</string>
+    <string name="tour_section_inbound">Inbound</string>
+    <string name="tour_section_popular">Pakej Popular</string>
+    <string name="tour_section_available">Pakej Tersedia</string>
+    <string name="tour_inbound_coming_soon">Pakej domestik (inbound) sedang dalam fasa perancangan. Nantikan kemas kini!</string>
+    <string name="tour_section_outbound">Outbound</string>
+    <string name="checklist_umrah_title">Tatacara mengerjakan Umrah</string>
+    <string name="checklist_reset">Tetap semula</string>
+    <string name="checklist_progress_suffix">Selesai</string>
+    <string name="all_packages_title">Semua Pakej</string>
+
+    <!-- Section 1 -->
+    <string name="checklist_sec1_title">1. SEBELUM BERANGKAT</string>
+    <string name="checklist_sec1_item1">Mandi sunat ihram</string>
+    <string name="checklist_sec1_item2">Potong kuku / kemaskan diri sebelum ihram</string>
+    <string name="checklist_sec1_item3">Pakai ihram</string>
+    <string name="checklist_sec1_item3_sub1">Lelaki: 2 helai kain ihram</string>
+    <string name="checklist_sec1_item3_sub2">Perempuan: pakaian menutup aurat</string>
+    <string name="checklist_sec1_item4">Solat sunat ihram 2 rakaat</string>
+    <string name="checklist_sec1_item5">Pastikan sudah tahu Miqat</string>
+    <string name="checklist_sec1_item6">Sediakan niat ihram</string>
+
+    <!-- Section 2 -->
+    <string name="checklist_sec2_title">2. DI MIQAT \u2013 NIAT IHRAM</string>
+    <string name="checklist_sec2_item1">Niat Umrah</string>
+    <string name="checklist_sec2_heading1">Lafaz niat:</string>
+    <string name="checklist_sec2_arabic1">نَوَيْتُ الْعُمْرَةَ وَأَحْرَمْتُ بِهَا لِلَّهِ تَعَالَى</string>
+    <string name="checklist_sec2_item2">Mula bertalbiah</string>
+    <string name="checklist_sec2_heading2">Talbiah:</string>
+    <string name="checklist_sec2_arabic2">لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لَا شَرِيكَ لَكَ لَبَّيْكَ، إِنَّ الْحَمْدَ وَالنِّعْمَةَ لَكَ وَالْمُلْكَ، لَا شَرِيكَ لَكَ</string>
+    <string name="checklist_sec2_item3">Jaga semua larangan ihram</string>
+
+    <!-- Section 3 -->
+    <string name="checklist_sec3_title">3. PERJALANAN KE MAKKAH</string>
+    <string name="checklist_sec3_item1">Banyakkan talbiah</string>
+    <string name="checklist_sec3_item2">Selawat</string>
+    <string name="checklist_sec3_item3">Zikir</string>
+    <string name="checklist_sec3_item4">Doa</string>
+    <string name="checklist_sec3_item5">Jaga larangan ihram</string>
+
+    <!-- Section 4 -->
+    <string name="checklist_sec4_title">4. SAMPAI DI MASJIDIL HARAM</string>
+    <string name="checklist_sec4_item1">Masuk Masjidil Haram dengan kaki kanan</string>
+    <string name="checklist_sec4_item2">Baca doa masuk masjid</string>
+    <string name="checklist_sec4_item3">Lihat Kaabah \u2192 berdoa</string>
+    <string name="checklist_sec4_item4">Bersedia untuk tawaf</string>
+    <string name="checklist_sec4_item5">Pastikan wuduk</string>
+
+    <!-- Section 5 -->
+    <string name="checklist_sec5_title">5. TAWAF \u2013 7 PUSINGAN</string>
+    <string name="checklist_sec5_heading1">Syarat penting:</string>
+    <string name="checklist_sec5_item1">Suci daripada hadas</string>
+    <string name="checklist_sec5_item2">Suci badan, pakaian dan tempat</string>
+    <string name="checklist_sec5_item3">Menutup aurat</string>
+    <string name="checklist_sec5_item4">Kaabah di sebelah kiri</string>
+    <string name="checklist_sec5_item5">Bermula di Hajar Aswad</string>
+    <string name="checklist_sec5_item6">Cukup 7 pusingan</string>
+    <string name="checklist_sec5_item7">Berpusing dalam kawasan tawaf</string>
+    <string name="checklist_sec5_heading2">Setiap pusingan:</string>
+    <string name="checklist_sec5_info1">Mula di Hajar Aswad</string>
+    <string name="checklist_sec5_info2">Mengelilingi Kaabah</string>
+    <string name="checklist_sec5_info3">Sampai semula Hajar Aswad = 1 pusingan</string>
+    <string name="checklist_sec5_info4">Ulang sehingga 7 pusingan</string>
+    <string name="checklist_sec5_info5">Banyakkan doa, zikir dan selawat</string>
+    <string name="checklist_sec5_heading3">Surah/doa yang boleh dibaca:</string>
+    <string name="checklist_sec5_info6">Al-Fatihah</string>
+    <string name="checklist_sec5_info7">Al-Ikhlas</string>
+    <string name="checklist_sec5_info8">Al-Kafirun</string>
+    <string name="checklist_sec5_info9">Doa yang mudah dihafal</string>
+    <string name="checklist_sec5_note1">Tidak ada surah tertentu yang diwajibkan untuk setiap pusingan.</string>
+
+    <!-- Section 6 -->
+    <string name="checklist_sec6_title">6. SELEPAS TAWAF</string>
+    <string name="checklist_sec6_item1">Solat sunat tawaf 2 rakaat</string>
+    <string name="checklist_sec6_item2">Jika boleh, solat di belakang Maqam Ibrahim</string>
+    <string name="checklist_sec6_item3">Baca Al-Kafirun pada rakaat pertama</string>
+    <string name="checklist_sec6_item4">Baca Al-Ikhlas pada rakaat kedua</string>
+    <string name="checklist_sec6_item5">Berdoa selepas solat</string>
+    <string name="checklist_sec6_item6">Minum air Zamzam</string>
+
+    <!-- Section 7 -->
+    <string name="checklist_sec7_title">7. SA\'I \u2013 7 PERJALANAN</string>
+    <string name="checklist_sec7_note1">Mula: Safa \u2022 Tamat: Marwah</string>
+    <string name="checklist_sec7_item1">Pergi ke Safa</string>
+    <string name="checklist_sec7_item2">Niat / bersedia untuk sa\'i</string>
+    <string name="checklist_sec7_item3">Safa \u2192 Marwah = 1</string>
+    <string name="checklist_sec7_item4">Marwah \u2192 Safa = 2</string>
+    <string name="checklist_sec7_item5">Safa \u2192 Marwah = 3</string>
+    <string name="checklist_sec7_item6">Marwah \u2192 Safa = 4</string>
+    <string name="checklist_sec7_item7">Safa \u2192 Marwah = 5</string>
+    <string name="checklist_sec7_item8">Marwah \u2192 Safa = 6</string>
+    <string name="checklist_sec7_item9">Safa \u2192 Marwah = 7</string>
+    <string name="checklist_sec7_heading1">Semasa sa\'i:</string>
+    <string name="checklist_sec7_info1">Berdoa di Safa</string>
+    <string name="checklist_sec7_info2">Menghadap kiblat jika berkesempatan</string>
+    <string name="checklist_sec7_info3">Bertakbir dan bertahlil</string>
+    <string name="checklist_sec7_info4">Banyakkan doa/zikir</string>
+    <string name="checklist_sec7_info5">Lelaki \u2192 berlari anak antara dua lampu hijau</string>
+    <string name="checklist_sec7_info6">Perempuan \u2192 berjalan seperti biasa</string>
+    <string name="checklist_sec7_info7">Jaga tertib perjalanan Safa \u2192 Marwah</string>
+
+    <!-- Section 8 -->
+    <string name="checklist_sec8_title">8. TAHALLUL</string>
+    <string name="checklist_sec8_note1">Selepas selesai 7 perjalanan sa\'i:</string>
+    <string name="checklist_sec8_item1">Lelaki \u2192 cukur atau gunting rambut</string>
+    <string name="checklist_sec8_item2">Perempuan \u2192 gunting sedikit rambut</string>
+    <string name="checklist_sec8_item3">Tahallul menandakan selesai ibadah Umrah</string>
+    <string name="checklist_sec8_item4">Selepas tahallul \u2192 larangan ihram tamat</string>
+
+    <!-- Section 9 -->
+    <string name="checklist_sec9_title">9. CHECKLIST AKHIR UMRAH</string>
+    <string name="checklist_sec9_note1">Pastikan semua ini dah selesai:</string>
+    <string name="checklist_sec9_item1">Ihram</string>
+    <string name="checklist_sec9_item2">Niat Umrah</string>
+    <string name="checklist_sec9_item3">Talbiah</string>
+    <string name="checklist_sec9_item4">Tawaf 7 pusingan</string>
+    <string name="checklist_sec9_item5">Solat sunat tawaf</string>
+    <string name="checklist_sec9_item6">Sa\'i 7 perjalanan</string>
+    <string name="checklist_sec9_item7">Tahallul</string>
+    <string name="checklist_sec9_item8">Tertib</string>
+    <string name="checklist_sec9_item9">Umrah selesai</string>
+
+    <string name="panduan_banner_title">Bersedia untuk Umrah?</string>
+    <string name="panduan_banner_subtitle">Semak tatacara semasa menunaikan Umrah</string>
+    <string name="panduan_banner_button">Lihat senarai tatacara</string>
+
+    <string name="umrah_hero_title">Pakej Umrah</string>
+    <string name="umrah_hero_subtitle">Cari pakej umrah pilihan anda</string>
+    <string name="umrah_empty_state">Tiada pakej dijumpai</string>
+
+    <string name="tour_hero_title">Pakej Tour</string>
+    <string name="tour_hero_subtitle">Terokai destinasi pilihan anda</string>
+    <string name="tour_empty_state">Tiada pakej dijumpai</string>
 
 </resources>

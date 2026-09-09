@@ -360,4 +360,145 @@
     <string name="login_failed_default">登录失败，请重试</string>
     <string name="language_picker_title">Choose Language / Pilih Bahasa</string>
 
+    <string name="prayer_times_title_fallback">今日服务时间（估算值 - 无网络连接）</string>
+    <string name="prayer_location_denied_text">启用定位服务以显示服务时间。</string>
+    <string name="prayer_use_my_location">使用当前位置</string>
+
+    <string name="umrah_section_popular">热门套餐</string>
+    <string name="umrah_section_khas">特别套餐</string>
+    <string name="umrah_section_ziarah">副朝朝觐之旅</string>
+    <string name="tour_section_inbound">入境游</string>
+    <string name="tour_section_popular">热门套餐</string>
+    <string name="tour_section_available">现有套餐</string>
+    <string name="tour_inbound_coming_soon">国内（入境）套餐目前处于规划阶段，敬请期待更新！</string>
+    <string name="tour_section_outbound">出境游</string>
+
+    <string name="checklist_umrah_title">副朝（Umrah）的办理程序</string>
+    <string name="checklist_reset">重置</string>
+    <string name="checklist_progress_suffix">完毕</string>
+    <string name="all_packages_title">全部套餐</string>
+
+    <!-- Section 1 -->
+    <string name="checklist_sec1_title">1. 出发前</string>
+    <string name="checklist_sec1_item1">进行受戒前的圣行沐浴</string>
+    <string name="checklist_sec1_item2">剪指甲／受戒前整理仪容</string>
+    <string name="checklist_sec1_item3">穿戴戒衣</string>
+    <string name="checklist_sec1_item3_sub1">男性：两块戒衣布</string>
+    <string name="checklist_sec1_item3_sub2">女性：遮盖全身的服装</string>
+    <string name="checklist_sec1_item4">礼两拜受戒圣行拜</string>
+    <string name="checklist_sec1_item5">确认已了解米卡特（受戒地点）</string>
+    <string name="checklist_sec1_item6">准备好受戒的举意</string>
+
+    <!-- Section 2 -->
+    <string name="checklist_sec2_title">2. 在米卡特 \u2013 受戒举意</string>
+    <string name="checklist_sec2_item1">举意副朝</string>
+    <string name="checklist_sec2_heading1">举意词：</string>
+    <string name="checklist_sec2_arabic1">نَوَيْتُ الْعُمْرَةَ وَأَحْرَمْتُ بِهَا لِلَّهِ تَعَالَى</string>
+    <string name="checklist_sec2_item2">开始念应召词</string>
+    <string name="checklist_sec2_heading2">应召词（塔勒比亚）：</string>
+    <string name="checklist_sec2_arabic2">لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لَا شَرِيكَ لَكَ لَبَّيْكَ، إِنَّ الْحَمْدَ وَالنِّعْمَةَ لَكَ وَالْمُلْكَ، لَا شَرِيكَ لَكَ</string>
+    <string name="checklist_sec2_item3">遵守所有受戒禁忌</string>
+
+    <!-- Section 3 -->
+    <string name="checklist_sec3_title">3. 前往麦加途中</string>
+    <string name="checklist_sec3_item1">多念应召词</string>
+    <string name="checklist_sec3_item2">多做赞圣</string>
+    <string name="checklist_sec3_item3">多做记主（迪克尔）</string>
+    <string name="checklist_sec3_item4">多做祈祷</string>
+    <string name="checklist_sec3_item5">遵守受戒禁忌</string>
+
+    <!-- Section 4 -->
+    <string name="checklist_sec4_title">4. 抵达禁寺</string>
+    <string name="checklist_sec4_item1">用右脚进入禁寺</string>
+    <string name="checklist_sec4_item2">念入寺祈祷词</string>
+    <string name="checklist_sec4_item3">望见天房 \u2192 祈祷</string>
+    <string name="checklist_sec4_item4">准备巡游天房</string>
+    <string name="checklist_sec4_item5">确认已有小净</string>
+
+    <!-- Section 5 -->
+    <string name="checklist_sec5_title">5. 巡游天房 \u2013 七圈</string>
+    <string name="checklist_sec5_heading1">重要条件：</string>
+    <string name="checklist_sec5_item1">无大小净的障碍</string>
+    <string name="checklist_sec5_item2">身体、衣物与场所洁净</string>
+    <string name="checklist_sec5_item3">遮盖羞体</string>
+    <string name="checklist_sec5_item4">天房在左侧</string>
+    <string name="checklist_sec5_item5">从黑石处开始</string>
+    <string name="checklist_sec5_item6">完成七圈</string>
+    <string name="checklist_sec5_item7">在巡游区域内进行</string>
+    <string name="checklist_sec5_heading2">每一圈：</string>
+    <string name="checklist_sec5_info1">从黑石处开始</string>
+    <string name="checklist_sec5_info2">绕行天房</string>
+    <string name="checklist_sec5_info3">回到黑石处 = 一圈</string>
+    <string name="checklist_sec5_info4">重复直到满七圈</string>
+    <string name="checklist_sec5_info5">多做祈祷、记主与赞圣</string>
+    <string name="checklist_sec5_heading3">可诵读的经文／祈祷词：</string>
+    <string name="checklist_sec5_info6">开端章</string>
+    <string name="checklist_sec5_info7">忠诚章</string>
+    <string name="checklist_sec5_info8">不信道者章</string>
+    <string name="checklist_sec5_info9">任何容易记住的祈祷词</string>
+    <string name="checklist_sec5_note1">每一圈并没有规定必须诵读的特定经文。</string>
+
+    <!-- Section 6 -->
+    <string name="checklist_sec6_title">6. 巡游天房之后</string>
+    <string name="checklist_sec6_item1">礼两拜巡游天房圣行拜</string>
+    <string name="checklist_sec6_item2">若可能，在易卜拉欣立足处后方礼拜</string>
+    <string name="checklist_sec6_item3">第一拜诵读不信道者章</string>
+    <string name="checklist_sec6_item4">第二拜诵读忠诚章</string>
+    <string name="checklist_sec6_item5">礼拜后祈祷</string>
+    <string name="checklist_sec6_item6">饮用渗渗泉水</string>
+
+    <!-- Section 7 -->
+    <string name="checklist_sec7_title">7. 奔走 \u2013 七趟</string>
+    <string name="checklist_sec7_note1">起点：萨法 \u2022 终点：麦尔卧</string>
+    <string name="checklist_sec7_item1">前往萨法</string>
+    <string name="checklist_sec7_item2">举意／准备奔走</string>
+    <string name="checklist_sec7_item3">萨法 \u2192 麦尔卧 = 1</string>
+    <string name="checklist_sec7_item4">麦尔卧 \u2192 萨法 = 2</string>
+    <string name="checklist_sec7_item5">萨法 \u2192 麦尔卧 = 3</string>
+    <string name="checklist_sec7_item6">麦尔卧 \u2192 萨法 = 4</string>
+    <string name="checklist_sec7_item7">萨法 \u2192 麦尔卧 = 5</string>
+    <string name="checklist_sec7_item8">麦尔卧 \u2192 萨法 = 6</string>
+    <string name="checklist_sec7_item9">萨法 \u2192 麦尔卧 = 7</string>
+    <string name="checklist_sec7_heading1">奔走期间：</string>
+    <string name="checklist_sec7_info1">在萨法祈祷</string>
+    <string name="checklist_sec7_info2">若可能面向天房方向</string>
+    <string name="checklist_sec7_info3">念大赞词与赞词</string>
+    <string name="checklist_sec7_info4">多做祈祷／记主</string>
+    <string name="checklist_sec7_info5">男性：在两根绿色标志之间小跑</string>
+    <string name="checklist_sec7_info6">女性：正常行走</string>
+    <string name="checklist_sec7_info7">保持萨法 \u2192 麦尔卧的顺序</string>
+
+    <!-- Section 8 -->
+    <string name="checklist_sec8_title">8. 解除戒律</string>
+    <string name="checklist_sec8_note1">完成七趟奔走之后：</string>
+    <string name="checklist_sec8_item1">男性：剃发或剪发</string>
+    <string name="checklist_sec8_item2">女性：剪去少许头发</string>
+    <string name="checklist_sec8_item3">解除戒律标志着副朝的完成</string>
+    <string name="checklist_sec8_item4">解除戒律后，受戒禁忌解除</string>
+
+    <!-- Section 9 -->
+    <string name="checklist_sec9_title">9. 副朝最终清单</string>
+    <string name="checklist_sec9_note1">确认以下事项皆已完成：</string>
+    <string name="checklist_sec9_item1">受戒</string>
+    <string name="checklist_sec9_item2">副朝举意</string>
+    <string name="checklist_sec9_item3">应召词</string>
+    <string name="checklist_sec9_item4">巡游天房七圈</string>
+    <string name="checklist_sec9_item5">巡游圣行拜</string>
+    <string name="checklist_sec9_item6">奔走七趟</string>
+    <string name="checklist_sec9_item7">解除戒律</string>
+    <string name="checklist_sec9_item8">顺序</string>
+    <string name="checklist_sec9_item9">副朝完成</string>
+
+    <string name="panduan_banner_title">准备好副朝了吗?</string>
+    <string name="panduan_banner_subtitle">查看进行副朝（Umrah）的流程。</string>
+    <string name="panduan_banner_button">查看清单</string>
+
+    <string name="umrah_hero_title">副朝套餐</string>
+    <string name="umrah_hero_subtitle">寻找适合您的副朝套餐</string>
+    <string name="umrah_empty_state">找不到套餐</string>
+
+    <string name="tour_hero_title">旅游套餐</string>
+    <string name="tour_hero_subtitle">探索您心仪的目的地</string>
+    <string name="tour_empty_state">找不到套餐</string>
+
 </resources>

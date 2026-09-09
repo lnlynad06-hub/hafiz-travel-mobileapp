@@ -45,6 +45,11 @@
         <activity android:name=".WelcomeActivity" android:exported="false" />
         <activity android:name=".LoginActivity" android:exported="false" />
         <activity android:name=".SignUpActivity" android:exported="false" />
+        <activity android:name=".UmrahActivity" android:exported="false" />
+        <activity android:name=".TourActivity" android:exported="false" />
+        <activity android:name=".FavoriteActivity" android:exported="false" />
+        <activity android:name=".ChecklistUmrahActivity" />
+        <activity android:name=".AllPackagesActivity" android:exported="false" />
 
         <receiver android:name=".PrayerAlarmReceiver" android:exported="false" />
         <receiver android:name=".BootReceiver" android:exported="true">

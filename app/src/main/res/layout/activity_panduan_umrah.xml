@@ -8,7 +8,6 @@
     android:orientation="vertical"
     android:background="@color/background">
 
-    <!-- Top bar -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -42,7 +41,6 @@
 
     </LinearLayout>
 
-    <!-- Chapter tab row -->
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -73,7 +71,6 @@
             android:orientation="vertical"
             android:padding="20dp">
 
-            <!-- Pink hero blurb - text changes per chapter -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -103,7 +100,6 @@
 
             </LinearLayout>
 
-            <!-- Sections injected here at runtime, per chapter -->
             <LinearLayout
                 android:id="@+id/guidelineSectionsContainer"
                 android:layout_width="match_parent"
@@ -111,7 +107,65 @@
                 android:layout_marginTop="20dp"
                 android:orientation="vertical" />
 
-            <!-- Paid full PDF CTA - per chapter -->
+            <!-- Banner "Checklist Tatacara" - static, sama untuk setiap Bab -->
+            <FrameLayout
+                android:id="@+id/checklistBannerCard"
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                android:layout_marginTop="20dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/bg_checklist_banner" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginStart="20dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/panduan_banner_title"
+                        android:textColor="@color/white"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="180dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/panduan_banner_subtitle"
+                        android:textColor="@color/white"
+                        android:alpha="0.9"
+                        android:textSize="11sp"
+                        android:lineSpacingExtra="1dp" />
+
+                    <TextView
+                        android:id="@+id/checklistBannerButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/bg_button_white_square"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="8dp"
+                        android:text="@string/panduan_banner_button"
+                        android:textColor="@color/pink_dark"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+            </FrameLayout>
+
             <LinearLayout
                 android:id="@+id/downloadPdfButton"
                 android:layout_width="match_parent"
@@ -155,7 +209,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:background="@drawable/circle_bg_light"
+                    android:background="@drawable/bg_button_white_square"
                     android:paddingHorizontal="16dp"
                     android:paddingVertical="10dp"
                     android:text="@string/guideline_pdf_button"

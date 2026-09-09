@@ -360,4 +360,145 @@
     <string name="login_failed_default">فشل تسجيل الدخول، يرجى المحاولة مرة أخرى</string>
     <string name="language_picker_title">Choose Language / Pilih Bahasa</string>
 
+    <string name="prayer_times_title_fallback">أوقات العبادة لهذا اليوم (تقديرية – لا يوجد اتصال بالإنترنت)</string>
+    <string name="prayer_location_denied_text">فعّل خدمات الموقع لعرض مواقيت الصلاة.</string>
+    <string name="prayer_use_my_location">استخدام الموقع الحالي</string>
+
+    <string name="umrah_section_popular">الباقات الشائعة</string>
+    <string name="umrah_section_khas">باقات خاصة</string>
+    <string name="umrah_section_ziarah">زيارة العمرة</string>
+    <string name="tour_section_inbound">داخلي</string>
+    <string name="tour_section_popular">الباقات الشائعة</string>
+    <string name="tour_section_available">الباقات المتاحة</string>
+    <string name="tour_inbound_coming_soon">باقات السياحة الداخلية لا تزال في مرحلة التخطيط. ترقبوا التحديثات!</string>
+    <string name="tour_section_outbound">خارجي</string>
+
+    <string name="checklist_umrah_title">إجراءات أداء العمرة</string>
+    <string name="checklist_reset">إعادة ضبط</string>
+    <string name="checklist_progress_suffix">منتهي</string>
+    <string name="all_packages_title">جميع الباقات</string>
+
+    <!-- Section 1 -->
+    <string name="checklist_sec1_title">1. قبل السفر</string>
+    <string name="checklist_sec1_item1">الاغتسال المسنون للإحرام</string>
+    <string name="checklist_sec1_item2">تقليم الأظافر والتنظف قبل الإحرام</string>
+    <string name="checklist_sec1_item3">لبس الإحرام</string>
+    <string name="checklist_sec1_item3_sub1">الرجال: قطعتان من قماش الإحرام</string>
+    <string name="checklist_sec1_item3_sub2">النساء: لباس ساتر</string>
+    <string name="checklist_sec1_item4">صلاة ركعتي سنة الإحرام</string>
+    <string name="checklist_sec1_item5">التأكد من معرفة الميقات</string>
+    <string name="checklist_sec1_item6">تحضير نية الإحرام</string>
+
+    <!-- Section 2 -->
+    <string name="checklist_sec2_title">2. في الميقات \u2013 نية الإحرام</string>
+    <string name="checklist_sec2_item1">نية العمرة</string>
+    <string name="checklist_sec2_heading1">صيغة النية:</string>
+    <string name="checklist_sec2_arabic1">نَوَيْتُ الْعُمْرَةَ وَأَحْرَمْتُ بِهَا لِلَّهِ تَعَالَى</string>
+    <string name="checklist_sec2_item2">البدء بالتلبية</string>
+    <string name="checklist_sec2_heading2">التلبية:</string>
+    <string name="checklist_sec2_arabic2">لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لَا شَرِيكَ لَكَ لَبَّيْكَ، إِنَّ الْحَمْدَ وَالنِّعْمَةَ لَكَ وَالْمُلْكَ، لَا شَرِيكَ لَكَ</string>
+    <string name="checklist_sec2_item3">الالتزام بجميع محظورات الإحرام</string>
+
+    <!-- Section 3 -->
+    <string name="checklist_sec3_title">3. الرحلة إلى مكة</string>
+    <string name="checklist_sec3_item1">الإكثار من التلبية</string>
+    <string name="checklist_sec3_item2">الصلاة على النبي صلى الله عليه وسلم</string>
+    <string name="checklist_sec3_item3">الذكر</string>
+    <string name="checklist_sec3_item4">الدعاء</string>
+    <string name="checklist_sec3_item5">الالتزام بمحظورات الإحرام</string>
+
+    <!-- Section 4 -->
+    <string name="checklist_sec4_title">4. الوصول إلى المسجد الحرام</string>
+    <string name="checklist_sec4_item1">دخول المسجد الحرام بالرجل اليمنى</string>
+    <string name="checklist_sec4_item2">قراءة دعاء دخول المسجد</string>
+    <string name="checklist_sec4_item3">النظر إلى الكعبة والدعاء</string>
+    <string name="checklist_sec4_item4">الاستعداد للطواف</string>
+    <string name="checklist_sec4_item5">التأكد من الوضوء</string>
+
+    <!-- Section 5 -->
+    <string name="checklist_sec5_title">5. الطواف \u2013 7 أشواط</string>
+    <string name="checklist_sec5_heading1">شروط مهمة:</string>
+    <string name="checklist_sec5_item1">الطهارة من الحدث</string>
+    <string name="checklist_sec5_item2">طهارة البدن والثياب والمكان</string>
+    <string name="checklist_sec5_item3">ستر العورة</string>
+    <string name="checklist_sec5_item4">جعل الكعبة عن اليسار</string>
+    <string name="checklist_sec5_item5">البدء من الحجر الأسود</string>
+    <string name="checklist_sec5_item6">إتمام 7 أشواط</string>
+    <string name="checklist_sec5_item7">الطواف داخل منطقة الطواف</string>
+    <string name="checklist_sec5_heading2">في كل شوط:</string>
+    <string name="checklist_sec5_info1">البدء من الحجر الأسود</string>
+    <string name="checklist_sec5_info2">الطواف حول الكعبة</string>
+    <string name="checklist_sec5_info3">العودة إلى الحجر الأسود = شوط واحد</string>
+    <string name="checklist_sec5_info4">التكرار حتى إتمام 7 أشواط</string>
+    <string name="checklist_sec5_info5">الإكثار من الدعاء والذكر والصلاة على النبي</string>
+    <string name="checklist_sec5_heading3">سور/أدعية يمكن قراءتها:</string>
+    <string name="checklist_sec5_info6">الفاتحة</string>
+    <string name="checklist_sec5_info7">الإخلاص</string>
+    <string name="checklist_sec5_info8">الكافرون</string>
+    <string name="checklist_sec5_info9">أي دعاء يسهل حفظه</string>
+    <string name="checklist_sec5_note1">لا توجد سورة معينة واجبة في كل شوط.</string>
+
+    <!-- Section 6 -->
+    <string name="checklist_sec6_title">6. بعد الطواف</string>
+    <string name="checklist_sec6_item1">صلاة ركعتي سنة الطواف</string>
+    <string name="checklist_sec6_item2">الصلاة خلف مقام إبراهيم إن أمكن</string>
+    <string name="checklist_sec6_item3">قراءة سورة الكافرون في الركعة الأولى</string>
+    <string name="checklist_sec6_item4">قراءة سورة الإخلاص في الركعة الثانية</string>
+    <string name="checklist_sec6_item5">الدعاء بعد الصلاة</string>
+    <string name="checklist_sec6_item6">شرب ماء زمزم</string>
+
+    <!-- Section 7 -->
+    <string name="checklist_sec7_title">7. السعي \u2013 7 أشواط</string>
+    <string name="checklist_sec7_note1">البداية: الصفا \u2022 النهاية: المروة</string>
+    <string name="checklist_sec7_item1">التوجه إلى الصفا</string>
+    <string name="checklist_sec7_item2">النية والاستعداد للسعي</string>
+    <string name="checklist_sec7_item3">الصفا \u2190 المروة = 1</string>
+    <string name="checklist_sec7_item4">المروة \u2190 الصفا = 2</string>
+    <string name="checklist_sec7_item5">الصفا \u2190 المروة = 3</string>
+    <string name="checklist_sec7_item6">المروة \u2190 الصفا = 4</string>
+    <string name="checklist_sec7_item7">الصفا \u2190 المروة = 5</string>
+    <string name="checklist_sec7_item8">المروة \u2190 الصفا = 6</string>
+    <string name="checklist_sec7_item9">الصفا \u2190 المروة = 7</string>
+    <string name="checklist_sec7_heading1">أثناء السعي:</string>
+    <string name="checklist_sec7_info1">الدعاء عند الصفا</string>
+    <string name="checklist_sec7_info2">استقبال القبلة إن أمكن</string>
+    <string name="checklist_sec7_info3">التكبير والتهليل</string>
+    <string name="checklist_sec7_info4">الإكثار من الدعاء والذكر</string>
+    <string name="checklist_sec7_info5">الرجال: الهرولة بين العلمين الأخضرين</string>
+    <string name="checklist_sec7_info6">النساء: المشي العادي</string>
+    <string name="checklist_sec7_info7">مراعاة الترتيب من الصفا إلى المروة</string>
+
+    <!-- Section 8 -->
+    <string name="checklist_sec8_title">8. التحلل</string>
+    <string name="checklist_sec8_note1">بعد إتمام 7 أشواط من السعي:</string>
+    <string name="checklist_sec8_item1">الرجال: حلق أو تقصير الشعر</string>
+    <string name="checklist_sec8_item2">النساء: تقصير جزء يسير من الشعر</string>
+    <string name="checklist_sec8_item3">التحلل يعني إتمام العمرة</string>
+    <string name="checklist_sec8_item4">بعد التحلل تنتهي محظورات الإحرام</string>
+
+    <!-- Section 9 -->
+    <string name="checklist_sec9_title">9. القائمة النهائية للعمرة</string>
+    <string name="checklist_sec9_note1">تأكد من إتمام كل ما يلي:</string>
+    <string name="checklist_sec9_item1">الإحرام</string>
+    <string name="checklist_sec9_item2">نية العمرة</string>
+    <string name="checklist_sec9_item3">التلبية</string>
+    <string name="checklist_sec9_item4">الطواف 7 أشواط</string>
+    <string name="checklist_sec9_item5">صلاة سنة الطواف</string>
+    <string name="checklist_sec9_item6">السعي 7 أشواط</string>
+    <string name="checklist_sec9_item7">التحلل</string>
+    <string name="checklist_sec9_item8">الترتيب</string>
+    <string name="checklist_sec9_item9">اكتملت العمرة</string>
+
+    <string name="panduan_banner_title">مستعد للعمرة؟</string>
+    <string name="panduan_banner_subtitle">اطلع على إجراءات أداء العمرة.</string>
+    <string name="panduan_banner_button">قائمة التحقق</string>
+
+    <string name="umrah_hero_title">باقات العمرة</string>
+    <string name="umrah_hero_subtitle">اعثر على باقة العمرة المناسبة لك</string>
+    <string name="umrah_empty_state">لم يتم العثور على باقات</string>
+
+    <string name="tour_hero_title">باقات الجولات</string>
+    <string name="tour_hero_subtitle">اكتشف وجهتك المفضلة</string>
+    <string name="tour_empty_state">لم يتم العثور على باقات</string>
+
 </resources>

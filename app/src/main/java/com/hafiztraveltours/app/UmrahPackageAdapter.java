@@ -14,35 +14,59 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class PackagePopularAdapter extends RecyclerView.Adapter<PackagePopularAdapter.ViewHolder> {
+public class UmrahPackageAdapter extends RecyclerView.Adapter<UmrahPackageAdapter.ViewHolder> {
 
-    private final Context context;
-    private final List<UmrahPackage> items;
-
-    private final int layoutResId;
-
-    public PackagePopularAdapter(Context context, List<UmrahPackage> items) {
-        this(context, items, false);
+    public interface OnFavoriteToggleListener {
+        void onToggled(UmrahPackage pkg, boolean isFavoriteNow);
     }
 
-    public PackagePopularAdapter(Context context, List<UmrahPackage> items, boolean featured) {
+    private final Context context;
+    private List<UmrahPackage> fullList;
+    private List<UmrahPackage> filteredList;
+    private final OnFavoriteToggleListener toggleListener; // nullable
+
+    public UmrahPackageAdapter(Context context, List<UmrahPackage> items, OnFavoriteToggleListener toggleListener) {
         this.context = context;
-        this.items = items;
-        this.layoutResId = featured ? R.layout.item_package_featured : R.layout.item_package_popular;
+        this.fullList = new ArrayList<>(items);
+        this.filteredList = new ArrayList<>(items);
+        this.toggleListener = toggleListener;
+    }
+
+    public void setItems(List<UmrahPackage> items) {
+        this.fullList = new ArrayList<>(items);
+        this.filteredList = new ArrayList<>(items);
+        notifyDataSetChanged();
+    }
+
+    /** Filters by package name, case-insensitive. Pass "" to reset. */
+    public void filter(String query) {
+        String q = query.trim().toLowerCase();
+        filteredList.clear();
+        if (q.isEmpty()) {
+            filteredList.addAll(fullList);
+        } else {
+            for (UmrahPackage pkg : fullList) {
+                if (pkg.name.toLowerCase().contains(q)) {
+                    filteredList.add(pkg);
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(layoutResId, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_umrah_package, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        UmrahPackage pkg = items.get(position);
+        UmrahPackage pkg = filteredList.get(position);
 
         holder.name.setText(pkg.name);
         holder.durationPrice.setText(context.getString(
@@ -55,12 +79,12 @@ public class PackagePopularAdapter extends RecyclerView.Adapter<PackagePopularAd
 
         updateFavoriteIcon(holder.favoriteIcon, pkg.id);
 
-        // Heart PUNYA listener sendiri - tap sini TIDAK akan propagate ke itemView di bawah
         holder.favoriteIcon.setOnClickListener(v ->
-                FavoritesManager.handleFavoriteToggle(context, pkg, isFavoriteNow ->
-                        updateFavoriteIcon(holder.favoriteIcon, pkg.id)));
+                FavoritesManager.handleFavoriteToggle(context, pkg, isFavoriteNow -> {
+                    updateFavoriteIcon(holder.favoriteIcon, pkg.id);
+                    if (toggleListener != null) toggleListener.onToggled(pkg, isFavoriteNow);
+                }));
 
-        // itemView punya listener berasingan - buka WebView pakej
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, WebViewActivity.class);
             intent.putExtra(WebViewActivity.EXTRA_TITLE, pkg.name);
@@ -71,12 +95,12 @@ public class PackagePopularAdapter extends RecyclerView.Adapter<PackagePopularAd
 
     private void updateFavoriteIcon(ImageView icon, String packageId) {
         boolean isFav = FavoritesManager.isFavorite(context, packageId);
-        icon.setColorFilter(isFav ? Color.parseColor("#E91E63") : Color.parseColor("#FFFFFF"));
+        icon.setColorFilter(isFav ? Color.parseColor("#E91E63") : Color.parseColor("#B0B0B0"));
     }
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return filteredList.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

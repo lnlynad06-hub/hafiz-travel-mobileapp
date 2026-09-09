@@ -360,4 +360,145 @@
     <string name="login_failed_default">로그인 실패, 다시 시도해 주세요</string>
     <string name="language_picker_title">Choose Language / Pilih Bahasa</string>
 
+    <string name="prayer_times_title_fallback">오늘의 예배 시간 (추정치 - 인터넷 연결 없음)</string>
+    <string name="prayer_location_denied_text">위치 정보를 활성화하여 예배 시간 표시</string>
+    <string name="prayer_use_my_location">현재 위치 사용</string>
+
+    <string name="umrah_section_popular">인기 패키지</string>
+    <string name="umrah_section_khas">스페셜 패키지</string>
+    <string name="umrah_section_ziarah">우므라 지아라</string>
+    <string name="tour_section_inbound">인바운드</string>
+    <string name="tour_section_popular">인기 패키지</string>
+    <string name="tour_section_available">이용 가능한 패키지</string>
+    <string name="tour_inbound_coming_soon">국내(인바운드) 패키지는 현재 기획 단계입니다. 업데이트를 기대해 주세요!</string>
+    <string name="tour_section_outbound">아웃바운드</string>
+
+    <string name="checklist_umrah_title">움라 수행 절차</string>
+    <string name="checklist_reset">다시 놓기</string>
+    <string name="checklist_progress_suffix">완료</string>
+    <string name="all_packages_title">모든 패키지</string>
+
+    <!-- Section 1 -->
+    <string name="checklist_sec1_title">1. 출발 전</string>
+    <string name="checklist_sec1_item1">이흐람 순나 목욕(구슬) 하기</string>
+    <string name="checklist_sec1_item2">이흐람 전 손톱 정리 / 몸단장하기</string>
+    <string name="checklist_sec1_item3">이흐람 착용하기</string>
+    <string name="checklist_sec1_item3_sub1">남성: 이흐람 천 2장</string>
+    <string name="checklist_sec1_item3_sub2">여성: 몸을 가리는 옷차림</string>
+    <string name="checklist_sec1_item4">이흐람 순나 예배 2라카트 드리기</string>
+    <string name="checklist_sec1_item5">미카트를 알고 있는지 확인하기</string>
+    <string name="checklist_sec1_item6">이흐람 니야(의도) 준비하기</string>
+
+    <!-- Section 2 -->
+    <string name="checklist_sec2_title">2. 미카트에서 \u2013 이흐람 니야</string>
+    <string name="checklist_sec2_item1">움라 니야(의도) 하기</string>
+    <string name="checklist_sec2_heading1">니야 문구:</string>
+    <string name="checklist_sec2_arabic1">نَوَيْتُ الْعُمْرَةَ وَأَحْرَمْتُ بِهَا لِلَّهِ تَعَالَى</string>
+    <string name="checklist_sec2_item2">탈비야 시작하기</string>
+    <string name="checklist_sec2_heading2">탈비야:</string>
+    <string name="checklist_sec2_arabic2">لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لَا شَرِيكَ لَكَ لَبَّيْكَ، إِنَّ الْحَمْدَ وَالنِّعْمَةَ لَكَ وَالْمُلْكَ، لَا شَرِيكَ لَكَ</string>
+    <string name="checklist_sec2_item3">이흐람 금기 사항 모두 지키기</string>
+
+    <!-- Section 3 -->
+    <string name="checklist_sec3_title">3. 마카로 가는 여정</string>
+    <string name="checklist_sec3_item1">탈비야 많이 외우기</string>
+    <string name="checklist_sec3_item2">살라왓(축복 기원) 외우기</string>
+    <string name="checklist_sec3_item3">지크르(염원) 하기</string>
+    <string name="checklist_sec3_item4">두아(기도) 하기</string>
+    <string name="checklist_sec3_item5">이흐람 금기 사항 지키기</string>
+
+    <!-- Section 4 -->
+    <string name="checklist_sec4_title">4. 마스지딜 하람 도착</string>
+    <string name="checklist_sec4_item1">오른발로 마스지딜 하람 들어가기</string>
+    <string name="checklist_sec4_item2">입장 두아 외우기</string>
+    <string name="checklist_sec4_item3">카바를 보며 \u2192 기도하기</string>
+    <string name="checklist_sec4_item4">타와프 준비하기</string>
+    <string name="checklist_sec4_item5">우두(소정) 상태 확인하기</string>
+
+    <!-- Section 5 -->
+    <string name="checklist_sec5_title">5. 타와프 \u2013 7바퀴</string>
+    <string name="checklist_sec5_heading1">중요 조건:</string>
+    <string name="checklist_sec5_item1">하다스(부정)로부터 정결할 것</string>
+    <string name="checklist_sec5_item2">몸, 옷, 장소가 청결할 것</string>
+    <string name="checklist_sec5_item3">아우라를 가릴 것</string>
+    <string name="checklist_sec5_item4">카바를 왼쪽에 둘 것</string>
+    <string name="checklist_sec5_item5">하절 아스와드에서 시작할 것</string>
+    <string name="checklist_sec5_item6">7바퀴를 완료할 것</string>
+    <string name="checklist_sec5_item7">타와프 구역 안에서 돌 것</string>
+    <string name="checklist_sec5_heading2">매 바퀴마다:</string>
+    <string name="checklist_sec5_info1">하절 아스와드에서 시작</string>
+    <string name="checklist_sec5_info2">카바 주위를 돌기</string>
+    <string name="checklist_sec5_info3">하절 아스와드로 돌아오면 = 1바퀴</string>
+    <string name="checklist_sec5_info4">7바퀴가 될 때까지 반복</string>
+    <string name="checklist_sec5_info5">두아, 지크르, 살라왓 많이 외우기</string>
+    <string name="checklist_sec5_heading3">읽어도 되는 수라/두아:</string>
+    <string name="checklist_sec5_info6">알 파티하</string>
+    <string name="checklist_sec5_info7">알 이클라스</string>
+    <string name="checklist_sec5_info8">알 카피룬</string>
+    <string name="checklist_sec5_info9">외우기 쉬운 두아</string>
+    <string name="checklist_sec5_note1">각 바퀴마다 반드시 읽어야 하는 특정 수라는 없습니다.</string>
+
+    <!-- Section 6 -->
+    <string name="checklist_sec6_title">6. 타와프 이후</string>
+    <string name="checklist_sec6_item1">타와프 순나 예배 2라카트 드리기</string>
+    <string name="checklist_sec6_item2">가능하다면 마캄 이브라힘 뒤에서 예배하기</string>
+    <string name="checklist_sec6_item3">첫 번째 라카트에서 알 카피룬 읽기</string>
+    <string name="checklist_sec6_item4">두 번째 라카트에서 알 이클라스 읽기</string>
+    <string name="checklist_sec6_item5">예배 후 두아 하기</string>
+    <string name="checklist_sec6_item6">잠잠수 마시기</string>
+
+    <!-- Section 7 -->
+    <string name="checklist_sec7_title">7. 사이 \u2013 7왕복</string>
+    <string name="checklist_sec7_note1">시작: 사파 \u2022 끝: 마르와</string>
+    <string name="checklist_sec7_item1">사파로 이동하기</string>
+    <string name="checklist_sec7_item2">사이 니야 / 준비하기</string>
+    <string name="checklist_sec7_item3">사파 \u2192 마르와 = 1</string>
+    <string name="checklist_sec7_item4">마르와 \u2192 사파 = 2</string>
+    <string name="checklist_sec7_item5">사파 \u2192 마르와 = 3</string>
+    <string name="checklist_sec7_item6">마르와 \u2192 사파 = 4</string>
+    <string name="checklist_sec7_item7">사파 \u2192 마르와 = 5</string>
+    <string name="checklist_sec7_item8">마르와 \u2192 사파 = 6</string>
+    <string name="checklist_sec7_item9">사파 \u2192 마르와 = 7</string>
+    <string name="checklist_sec7_heading1">사이 중에:</string>
+    <string name="checklist_sec7_info1">사파에서 기도하기</string>
+    <string name="checklist_sec7_info2">가능하면 끼블라를 향하기</string>
+    <string name="checklist_sec7_info3">타크비르와 타흘릴 외우기</string>
+    <string name="checklist_sec7_info4">두아/지크르 많이 하기</string>
+    <string name="checklist_sec7_info5">남성: 두 초록 표시 사이에서 빠르게 걷기</string>
+    <string name="checklist_sec7_info6">여성: 평소처럼 걷기</string>
+    <string name="checklist_sec7_info7">사파 \u2192 마르와 순서 지키기</string>
+
+    <!-- Section 8 -->
+    <string name="checklist_sec8_title">8. 타할룰</string>
+    <string name="checklist_sec8_note1">사이 7왕복을 마친 후:</string>
+    <string name="checklist_sec8_item1">남성: 머리를 밀거나 자르기</string>
+    <string name="checklist_sec8_item2">여성: 머리카락을 조금 자르기</string>
+    <string name="checklist_sec8_item3">타할룰은 움라의 완료를 의미함</string>
+    <string name="checklist_sec8_item4">타할룰 이후 이흐람 금기 사항 종료</string>
+
+    <!-- Section 9 -->
+    <string name="checklist_sec9_title">9. 움라 최종 체크리스트</string>
+    <string name="checklist_sec9_note1">다음 사항이 모두 완료되었는지 확인:</string>
+    <string name="checklist_sec9_item1">이흐람</string>
+    <string name="checklist_sec9_item2">움라 니야</string>
+    <string name="checklist_sec9_item3">탈비야</string>
+    <string name="checklist_sec9_item4">타와프 7바퀴</string>
+    <string name="checklist_sec9_item5">타와프 순나 예배</string>
+    <string name="checklist_sec9_item6">사이 7왕복</string>
+    <string name="checklist_sec9_item7">타할룰</string>
+    <string name="checklist_sec9_item8">순서</string>
+    <string name="checklist_sec9_item9">움라 완료</string>
+
+    <string name="panduan_banner_title">우므라 준비되셨나요?</string>
+    <string name="panduan_banner_subtitle">우므라(Umrah) 수행 절차를 확인하십시오.</string>
+    <string name="panduan_banner_button">체크리스트 보기</string>
+
+    <string name="umrah_hero_title">움라 패키지</string>
+    <string name="umrah_hero_subtitle">나에게 맞는 움라 패키지를 찾아보세요</string>
+    <string name="umrah_empty_state">패키지를 찾을 수 없습니다</string>
+
+    <string name="tour_hero_title">투어 패키지</string>
+    <string name="tour_hero_subtitle">원하는 여행지를 찾아보세요</string>
+    <string name="tour_empty_state">패키지를 찾을 수 없습니다</string>
+
 </resources>

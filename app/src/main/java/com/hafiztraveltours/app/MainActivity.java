@@ -58,6 +58,13 @@ import android.text.SpannableStringBuilder;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.StyleSpan;
 import android.graphics.Typeface;
+import android.text.Editable;
+import android.text.TextWatcher;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -91,6 +98,8 @@ public class MainActivity extends AppCompatActivity {
     // Prayer times location permission flow
     private ActivityResultLauncher<String> locationPermissionLauncher;
     private final ExecutorService networkExecutor = Executors.newSingleThreadExecutor();
+    private android.os.Handler arcRefreshHandler;
+    private Runnable arcRefreshRunnable;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -105,6 +114,13 @@ public class MainActivity extends AppCompatActivity {
             recreate();
         }
         activeLanguage = currentSaved;
+        startArcAutoRefresh();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopArcAutoRefresh();
     }
 
     @Override
@@ -182,8 +198,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.notificationButton).setOnClickListener(v ->
                 Toast.makeText(this, getString(R.string.no_notifications), Toast.LENGTH_SHORT).show());
 
-        findViewById(R.id.searchBarHero).setOnClickListener(v ->
-                Toast.makeText(this, getString(R.string.search_coming_soon), Toast.LENGTH_SHORT).show());
+        setupHomeSearch();
     }
 
     /**
@@ -222,7 +237,10 @@ public class MainActivity extends AppCompatActivity {
                 .show();
     }
 
-    private List<Package> allPopularPackages = new ArrayList<>();
+    private List<UmrahPackage> allPopularPackages = new ArrayList<>();
+    private final List<UmrahPackage> homeSearchUmrahCache = new ArrayList<>();
+    private final List<UmrahPackage> homeSearchTourCache = new ArrayList<>();
+    private boolean homeSearchPackagesLoaded = false;
 
     /**
      * Pakej Popular - pulled from the "Popular" sections on hafiztraveltours.com
@@ -236,35 +254,126 @@ public class MainActivity extends AppCompatActivity {
      * (lowercase, no spaces, .png or .jpg). If a drawable is missing, the
      * project will fail to build - add all 6 before running.
      */
+    /**
+     * Pakej Popular - sekarang fetch dari Firestore (kedua-dua collection
+     * umrah_packages & tour_packages), filter field "isPopular" == true.
+     * Kawal terus dari Firebase Console - toggle isPopular pakej mana-mana
+     * tanpa perlu update app.
+     */
     private void setupPopularPackages() {
-        allPopularPackages = new ArrayList<>();
-        // Umrah Popular (from hafiztraveltours.com/pakej-umrah)
-        allPopularPackages.add(new Package("ASB", getString(R.string.package_duration_price, 10, 8, "6,050"),
-                "https://hafiztraveltours.com/pakej-umrah/asb",
-                R.drawable.img_asb));
-        allPopularPackages.add(new Package("EMAS MH", getString(R.string.package_duration_price, 12, 10, "8,450"),
-                "https://hafiztraveltours.com/pakej-umrah/umrah-emas",
-                R.drawable.img_emas));
-        allPopularPackages.add(new Package("SUKUK MH", getString(R.string.package_duration_price, 12, 10, "8,850"),
-                "https://hafiztraveltours.com/pakej-umrah/umrah-sukuk",
-                R.drawable.img_sukuk));
-        // Tour Popular (from hafiztraveltours.com/tour)
-        allPopularPackages.add(new Package("Korea (Seoul)", getString(R.string.package_duration_price, 6, 4, "3,250"),
-                "https://hafiztraveltours.com/tour/pakej/korea-seoul-6h4m",
-                R.drawable.img_korea1));
-        allPopularPackages.add(new Package("Korea (Seoul)", getString(R.string.package_duration_price, 4, 3, "2,950"),
-                "https://hafiztraveltours.com/tour/pakej/korea-seoul-4h3m",
-                R.drawable.img_korea2));
-        allPopularPackages.add(new Package("Turkiye", getString(R.string.package_duration_price, 9, 7, "4,850"),
-                "https://hafiztraveltours.com/tour/pakej/turkiye",
-                R.drawable.img_turkiye));
-
         RecyclerView recyclerView = findViewById(R.id.popularPackagesRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        recyclerView.setAdapter(new PackagePopularAdapter(allPopularPackages));
+
+        com.google.firebase.firestore.FirebaseFirestore db = com.google.firebase.firestore.FirebaseFirestore.getInstance();
+
+        com.google.android.gms.tasks.Task<com.google.firebase.firestore.QuerySnapshot> umrahTask =
+                db.collection("umrah_packages").whereEqualTo("isPopular", true).get();
+        com.google.android.gms.tasks.Task<com.google.firebase.firestore.QuerySnapshot> tourTask =
+                db.collection("tour_packages").whereEqualTo("isPopular", true).get();
+
+        com.google.android.gms.tasks.Tasks.whenAllSuccess(umrahTask, tourTask)
+                .addOnSuccessListener(results -> {
+                    allPopularPackages = new ArrayList<>();
+                    for (Object result : results) {
+                        com.google.firebase.firestore.QuerySnapshot snapshot =
+                                (com.google.firebase.firestore.QuerySnapshot) result;
+                        for (com.google.firebase.firestore.DocumentSnapshot doc : snapshot.getDocuments()) {
+                            UmrahPackage pkg = new UmrahPackage(
+                                    doc.getId(),
+                                    doc.getString("name"),
+                                    doc.getLong("durationDays") != null ? doc.getLong("durationDays").intValue() : 0,
+                                    doc.getLong("nightsCount") != null ? doc.getLong("nightsCount").intValue() : 0,
+                                    doc.getString("price"),
+                                    doc.getString("url"),
+                                    doc.getString("imageUrl"));
+                            allPopularPackages.add(pkg);
+                        }
+                    }
+                    recyclerView.setAdapter(new PackagePopularAdapter(this, allPopularPackages));
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(this, "Gagal muat pakej popular", Toast.LENGTH_SHORT).show());
 
         findViewById(R.id.seeAllPopular).setOnClickListener(v ->
-                openCategoryPage("Hafiz Travel & Tours", "https://hafiztraveltours.com/"));
+                startActivity(new Intent(this, AllPackagesActivity.class)));
+    }
+
+    /**
+     * Search homepage sekarang function terus (tak navigate ke page lain).
+     * Data pakej hanya di-fetch SEKALI (lazy load bila user mula taip),
+     * bukan setiap kali homepage dibuka - jimat Firestore reads.
+     */
+    private void setupHomeSearch() {
+        android.widget.EditText searchInput = findViewById(R.id.searchInputHero);
+        RecyclerView resultsRecyclerView = findViewById(R.id.homeSearchResultsRecyclerView);
+        resultsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        searchInput.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String query = s.toString().trim();
+                if (query.isEmpty()) {
+                    resultsRecyclerView.setVisibility(View.GONE);
+                    return;
+                }
+                if (!homeSearchPackagesLoaded) {
+                    loadHomeSearchPackages(() -> filterAndShowHomeSearch(query, resultsRecyclerView));
+                } else {
+                    filterAndShowHomeSearch(query, resultsRecyclerView);
+                }
+            }
+            @Override public void afterTextChanged(Editable s) {}
+        });
+    }
+
+    private void loadHomeSearchPackages(Runnable onLoaded) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Task<QuerySnapshot> umrahTask = db.collection("umrah_packages").get();
+        Task<QuerySnapshot> tourTask = db.collection("tour_packages").get();
+
+        Tasks.whenAllSuccess(umrahTask, tourTask)
+                .addOnSuccessListener(results -> {
+                    homeSearchUmrahCache.clear();
+                    homeSearchTourCache.clear();
+
+                    QuerySnapshot umrahSnapshot = (QuerySnapshot) results.get(0);
+                    for (DocumentSnapshot doc : umrahSnapshot.getDocuments()) {
+                        homeSearchUmrahCache.add(mapDocToPackage(doc));
+                    }
+                    QuerySnapshot tourSnapshot = (QuerySnapshot) results.get(1);
+                    for (DocumentSnapshot doc : tourSnapshot.getDocuments()) {
+                        homeSearchTourCache.add(mapDocToPackage(doc));
+                    }
+
+                    homeSearchPackagesLoaded = true;
+                    onLoaded.run();
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(this, "Gagal muat pakej", Toast.LENGTH_SHORT).show());
+    }
+
+    private UmrahPackage mapDocToPackage(DocumentSnapshot doc) {
+        return new UmrahPackage(
+                doc.getId(),
+                doc.getString("name"),
+                doc.getLong("durationDays") != null ? doc.getLong("durationDays").intValue() : 0,
+                doc.getLong("nightsCount") != null ? doc.getLong("nightsCount").intValue() : 0,
+                doc.getString("price"),
+                doc.getString("url"),
+                doc.getString("imageUrl"));
+    }
+
+    private void filterAndShowHomeSearch(String query, RecyclerView resultsRecyclerView) {
+        String q = query.toLowerCase();
+        List<UmrahPackage> results = new ArrayList<>();
+        for (UmrahPackage pkg : homeSearchUmrahCache) {
+            if (pkg.name != null && pkg.name.toLowerCase().contains(q)) results.add(pkg);
+        }
+        for (UmrahPackage pkg : homeSearchTourCache) {
+            if (pkg.name != null && pkg.name.toLowerCase().contains(q)) results.add(pkg);
+        }
+        resultsRecyclerView.setVisibility(View.VISIBLE);
+        resultsRecyclerView.setAdapter(new UmrahPackageAdapter(this, results, null));
     }
 
     private void setupQuickActions() {
@@ -545,10 +654,12 @@ public class MainActivity extends AppCompatActivity {
      * (via WebViewActivity) instead of filtering the Pakej Popular list.
      */
     private void setupBottomNav() {
-        findViewById(R.id.navUmrah).setOnClickListener(v -> openCategoryPage("Umrah", URL_UMRAH));
-        findViewById(R.id.navTour).setOnClickListener(v -> openCategoryPage("Tour", URL_TOUR));
+        findViewById(R.id.navUmrah).setOnClickListener(v ->
+                startActivity(new Intent(this, UmrahActivity.class)));
+        findViewById(R.id.navTour).setOnClickListener(v ->
+                startActivity(new Intent(this, TourActivity.class)));
         findViewById(R.id.navFavorite).setOnClickListener(v ->
-                Toast.makeText(this, "Favorite - akan datang", Toast.LENGTH_SHORT).show());
+                startActivity(new Intent(this, FavoriteActivity.class)));
     }
 
     private void openCategoryPage(String title, String url) {
@@ -967,8 +1078,9 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(() -> {
             TextView dateText = findViewById(R.id.prayerTimesDateText);
             dateText.setText(finalZone.isEmpty()
-                    ? "Waktu Solat Hari Ini (JAKIM)"
-                    : "Waktu Solat Hari Ini (JAKIM - Zon " + finalZone + ")");
+                    ? getString(R.string.prayer_times_title_jakim)
+                    : getString(R.string.prayer_times_title_jakim_zone, finalZone));
+            dateText.setTextSize(20f);
             renderPrayerArc(names, epochs);
         });
     }
@@ -991,8 +1103,9 @@ public class MainActivity extends AppCompatActivity {
      */
     private void showFallbackCalculatedPrayerTimes(double latitude, double longitude) {
         TextView dateText = findViewById(R.id.prayerTimesDateText);
-        dateText.setText("Waktu Solat Hari Ini (anggaran - tiada sambungan internet)");
+        dateText.setText(getString(R.string.prayer_times_title_fallback));
         dateText.setTextColor(getResources().getColor(R.color.prayer_card_text_secondary));
+        dateText.setTextSize(20f);
 
         Calendar today = Calendar.getInstance();
         DateComponents dateComponents = new DateComponents(
@@ -1042,6 +1155,8 @@ public class MainActivity extends AppCompatActivity {
         // TODO: gantikan dengan data lokasi & Hijrah sebenar bila sedia
         locationLabel.setText("Larkin, Johor Bahru");
         hijriLabel.setText("1 Rejab 1448H");
+        locationLabel.setTextSize(16f);
+        hijriLabel.setTextSize(20f);
 
         long nowEpoch = System.currentTimeMillis() / 1000L;
         PrayerProgressCalculator.Result result =
@@ -1057,6 +1172,37 @@ public class MainActivity extends AppCompatActivity {
 
         currentLabel.setText(buildLabelSpanned(result.currentName, currentTime));
         nextLabel.setText(buildLabelSpanned(result.nextName, nextTime));
+    }
+
+    private void startArcAutoRefresh() {
+        arcRefreshHandler = new android.os.Handler(android.os.Looper.getMainLooper());
+        arcRefreshRunnable = new Runnable() {
+            @Override
+            public void run() {
+                refreshArcFromCache();
+                arcRefreshHandler.postDelayed(this, 60_000L); // refresh setiap 60 saat
+            }
+        };
+        arcRefreshHandler.post(arcRefreshRunnable);
+    }
+
+    private void stopArcAutoRefresh() {
+        if (arcRefreshHandler != null && arcRefreshRunnable != null) {
+            arcRefreshHandler.removeCallbacks(arcRefreshRunnable);
+        }
+    }
+
+    private void refreshArcFromCache() {
+        long[] epochs = PrayerTimeScheduler.getCachedEpochs(this);
+        if (epochs == null) return; // takde cache lagi, skip
+
+        String[] names = {
+                getString(R.string.prayer_subuh), getString(R.string.prayer_zohor),
+                getString(R.string.prayer_asar), getString(R.string.prayer_maghrib),
+                getString(R.string.prayer_isyak)
+        };
+
+        renderPrayerArc(names, epochs);
     }
 
     private CharSequence buildLabelSpanned(String name, String time) {
@@ -1079,14 +1225,15 @@ public class MainActivity extends AppCompatActivity {
         TextView currentLabel = findViewById(R.id.prayerCurrentLabel);
         TextView nextLabel = findViewById(R.id.prayerNextLabel);
 
-        dateText.setText("Aktifkan lokasi untuk lihat waktu solat");
+        dateText.setText(getString(R.string.prayer_location_denied_text));
         dateText.setTextColor(getResources().getColor(R.color.prayer_card_text_secondary));
+        dateText.setTextSize(16f);
 
         // Kosongkan arc & label sebab takde data waktu solat
         arcView.setProgress(0f);
         currentLabel.setText("");
 
-        nextLabel.setText("Guna Lokasi Saya");
+        nextLabel.setText(getString(R.string.prayer_use_my_location));
         nextLabel.setTextColor(getResources().getColor(R.color.prayer_card_text_primary));
         nextLabel.setTypeface(null, android.graphics.Typeface.BOLD);
         nextLabel.setClickable(true);

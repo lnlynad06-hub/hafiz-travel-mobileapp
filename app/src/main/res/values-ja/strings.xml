@@ -360,4 +360,145 @@
     <string name="login_failed_default">ログインに失敗しました。もう一度お試しください</string>
     <string name="language_picker_title">Choose Language / Pilih Bahasa</string>
 
+    <string name="prayer_times_title_fallback">本日の礼拝時間（推定 - インターネット接続なし）</string>
+    <string name="prayer_location_denied_text">位置情報を有効にして礼拝時間を表示</string>
+    <string name="prayer_use_my_location">現在地を使用</string>
+
+    <string name="umrah_section_popular">人気パッケージ</string>
+    <string name="umrah_section_khas">特別パッケージ</string>
+    <string name="umrah_section_ziarah">ウムラ・ジアラ</string>
+    <string name="tour_section_inbound">インバウンド</string>
+    <string name="tour_section_popular">人気パッケージ</string>
+    <string name="tour_section_available">利用可能なパッケージ</string>
+    <string name="tour_inbound_coming_soon">国内(インバウンド)パッケージは現在計画段階です。今後の更新をお待ちください!</string>
+    <string name="tour_section_outbound">アウトバウンド</string>
+
+    <string name="checklist_umrah_title">ウムラを行うための手順</string>
+    <string name="checklist_reset">リセット</string>
+    <string name="checklist_progress_suffix">終了した</string>
+    <string name="all_packages_title">すべてのパッケージ</string>
+
+    <!-- Section 1 -->
+    <string name="checklist_sec1_title">1. 出発前</string>
+    <string name="checklist_sec1_item1">イフラームのスンナの沐浴を行う</string>
+    <string name="checklist_sec1_item2">爪を切る／イフラーム前に身だしなみを整える</string>
+    <string name="checklist_sec1_item3">イフラームを着用する</string>
+    <string name="checklist_sec1_item3_sub1">男性：イフラーム用の布2枚</string>
+    <string name="checklist_sec1_item3_sub2">女性：肌を覆う服装</string>
+    <string name="checklist_sec1_item4">イフラームのスンナ礼拝2ラクアットを行う</string>
+    <string name="checklist_sec1_item5">ミーカートを確認しておく</string>
+    <string name="checklist_sec1_item6">イフラームのニヤ（意図）を準備する</string>
+
+    <!-- Section 2 -->
+    <string name="checklist_sec2_title">2. ミーカートにて \u2013 イフラームのニヤ</string>
+    <string name="checklist_sec2_item1">ウムラのニヤを行う</string>
+    <string name="checklist_sec2_heading1">ニヤの文言：</string>
+    <string name="checklist_sec2_arabic1">نَوَيْتُ الْعُمْرَةَ وَأَحْرَمْتُ بِهَا لِلَّهِ تَعَالَى</string>
+    <string name="checklist_sec2_item2">タルビアを始める</string>
+    <string name="checklist_sec2_heading2">タルビア：</string>
+    <string name="checklist_sec2_arabic2">لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لَا شَرِيكَ لَكَ لَبَّيْكَ، إِنَّ الْحَمْدَ وَالنِّعْمَةَ لَكَ وَالْمُلْكَ، لَا شَرِيكَ لَكَ</string>
+    <string name="checklist_sec2_item3">イフラーム中の禁止事項をすべて守る</string>
+
+    <!-- Section 3 -->
+    <string name="checklist_sec3_title">3. マッカへの道中</string>
+    <string name="checklist_sec3_item1">タルビアを多く唱える</string>
+    <string name="checklist_sec3_item2">預言者への祝福（サラワート）を唱える</string>
+    <string name="checklist_sec3_item3">ズィクル（唱念）を行う</string>
+    <string name="checklist_sec3_item4">ドゥアー（祈願）を捧げる</string>
+    <string name="checklist_sec3_item5">イフラームの禁止事項を守る</string>
+
+    <!-- Section 4 -->
+    <string name="checklist_sec4_title">4. マスジド・ハラームに到着</string>
+    <string name="checklist_sec4_item1">右足からマスジド・ハラームに入る</string>
+    <string name="checklist_sec4_item2">入堂の祈願（ドゥアー）を唱える</string>
+    <string name="checklist_sec4_item3">カアバを見て祈願する</string>
+    <string name="checklist_sec4_item4">タワーフの準備をする</string>
+    <string name="checklist_sec4_item5">ウドゥー（小浄）を確認する</string>
+
+    <!-- Section 5 -->
+    <string name="checklist_sec5_title">5. タワーフ \u2013 7周</string>
+    <string name="checklist_sec5_heading1">重要な条件：</string>
+    <string name="checklist_sec5_item1">ハダス（不浄）がないこと</string>
+    <string name="checklist_sec5_item2">体・衣服・場所が清浄であること</string>
+    <string name="checklist_sec5_item3">アウラを覆うこと</string>
+    <string name="checklist_sec5_item4">カアバを左側にすること</string>
+    <string name="checklist_sec5_item5">ハジャルアスワドから始めること</string>
+    <string name="checklist_sec5_item6">7周を完了すること</string>
+    <string name="checklist_sec5_item7">タワーフの区域内で回ること</string>
+    <string name="checklist_sec5_heading2">各周について：</string>
+    <string name="checklist_sec5_info1">ハジャルアスワドから開始</string>
+    <string name="checklist_sec5_info2">カアバの周りを回る</string>
+    <string name="checklist_sec5_info3">ハジャルアスワドに戻る＝1周</string>
+    <string name="checklist_sec5_info4">7周になるまで繰り返す</string>
+    <string name="checklist_sec5_info5">ドゥアー・ズィクル・サラワートを多く唱える</string>
+    <string name="checklist_sec5_heading3">読んでもよいスーラ／ドゥアー：</string>
+    <string name="checklist_sec5_info6">開端章（アル・ファーティハ）</string>
+    <string name="checklist_sec5_info7">純正章（アル・イフラース）</string>
+    <string name="checklist_sec5_info8">不信仰者章（アル・カーフィルーン）</string>
+    <string name="checklist_sec5_info9">覚えやすいドゥアー</string>
+    <string name="checklist_sec5_note1">各周に読まなければならない特定のスーラはありません。</string>
+
+    <!-- Section 6 -->
+    <string name="checklist_sec6_title">6. タワーフの後</string>
+    <string name="checklist_sec6_item1">タワーフのスンナ礼拝2ラクアットを行う</string>
+    <string name="checklist_sec6_item2">可能であればマカーム・イブラーヒームの後ろで礼拝する</string>
+    <string name="checklist_sec6_item3">1ラクアット目にアル・カーフィルーンを読む</string>
+    <string name="checklist_sec6_item4">2ラクアット目にアル・イフラースを読む</string>
+    <string name="checklist_sec6_item5">礼拝の後にドゥアーを唱える</string>
+    <string name="checklist_sec6_item6">ザムザムの水を飲む</string>
+
+    <!-- Section 7 -->
+    <string name="checklist_sec7_title">7. サーイ \u2013 7往復</string>
+    <string name="checklist_sec7_note1">開始：サファー \u2022 終了：マルワ</string>
+    <string name="checklist_sec7_item1">サファーへ向かう</string>
+    <string name="checklist_sec7_item2">サーイのニヤ／準備をする</string>
+    <string name="checklist_sec7_item3">サファー\u2192マルワ＝1</string>
+    <string name="checklist_sec7_item4">マルワ\u2192サファー＝2</string>
+    <string name="checklist_sec7_item5">サファー\u2192マルワ＝3</string>
+    <string name="checklist_sec7_item6">マルワ\u2192サファー＝4</string>
+    <string name="checklist_sec7_item7">サファー\u2192マルワ＝5</string>
+    <string name="checklist_sec7_item8">マルワ\u2192サファー＝6</string>
+    <string name="checklist_sec7_item9">サファー\u2192マルワ＝7</string>
+    <string name="checklist_sec7_heading1">サーイの間：</string>
+    <string name="checklist_sec7_info1">サファーでドゥアーを唱える</string>
+    <string name="checklist_sec7_info2">可能であればキブラの方を向く</string>
+    <string name="checklist_sec7_info3">タクビール・タハリールを唱える</string>
+    <string name="checklist_sec7_info4">ドゥアー・ズィクルを多く唱える</string>
+    <string name="checklist_sec7_info5">男性：緑色の標識の間は小走りする</string>
+    <string name="checklist_sec7_info6">女性：通常通り歩く</string>
+    <string name="checklist_sec7_info7">サファー\u2192マルワの順序を守る</string>
+
+    <!-- Section 8 -->
+    <string name="checklist_sec8_title">8. タハッルル</string>
+    <string name="checklist_sec8_note1">サーイの7往復を終えた後：</string>
+    <string name="checklist_sec8_item1">男性：頭髪を剃る、または切る</string>
+    <string name="checklist_sec8_item2">女性：髪を少し切る</string>
+    <string name="checklist_sec8_item3">タハッルルはウムラの完了を意味する</string>
+    <string name="checklist_sec8_item4">タハッルルの後、イフラームの禁止事項は終了する</string>
+
+    <!-- Section 9 -->
+    <string name="checklist_sec9_title">9. ウムラ最終チェックリスト</string>
+    <string name="checklist_sec9_note1">以下すべてが完了しているか確認：</string>
+    <string name="checklist_sec9_item1">イフラーム</string>
+    <string name="checklist_sec9_item2">ウムラのニヤ</string>
+    <string name="checklist_sec9_item3">タルビア</string>
+    <string name="checklist_sec9_item4">タワーフ7周</string>
+    <string name="checklist_sec9_item5">タワーフのスンナ礼拝</string>
+    <string name="checklist_sec9_item6">サーイ7往復</string>
+    <string name="checklist_sec9_item7">タハッルル</string>
+    <string name="checklist_sec9_item8">順序（タルティーブ）</string>
+    <string name="checklist_sec9_item9">ウムラ完了</string>
+
+    <string name="panduan_banner_title">ウムラの準備はできましたか?</string>
+    <string name="panduan_banner_subtitle">ウムラを行う際の手順を確認してください。</string>
+    <string name="panduan_banner_button">チェックリストを見る</string>
+
+    <string name="umrah_hero_title">ウムラパッケージ</string>
+    <string name="umrah_hero_subtitle">あなたに合ったウムラパッケージを探す</string>
+    <string name="umrah_empty_state">パッケージが見つかりません</string>
+
+    <string name="tour_hero_title">ツアーパッケージ</string>
+    <string name="tour_hero_subtitle">お好みの旅先を探す</string>
+    <string name="tour_empty_state">パッケージが見つかりません</string>
+
 </resources>
