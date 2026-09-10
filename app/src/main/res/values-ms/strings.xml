@@ -41,11 +41,11 @@
     <string name="social_signup_phone">Daftar guna nombor telefon - akan datang</string>
 
     <string name="guest_greeting">Assalamualaikum</string>
-    <string name="user_greeting">Assalamualaikum, %1$s</string>
-    <string name="hero_subtitle_guest">Selamat Datang ke\nHafiz Travel &amp; Tours</string>
+    <string name="user_greeting">Assalamualaikum</string>
+    <string name="hero_subtitle_guest">Tetamu Jemaah</string>
     <string name="hero_subtitle_user">Selamat kembali</string>
-    <string name="hero_headline_guest">Selamat Datang ke\nHafiz Travel &amp; Tours</string>
-    <string name="hero_headline_user">Ke Mana Anda\nNak Pergi?</string>
+    <string name="hero_headline_guest">Ke mana destinasi\nimpian anda?</string>
+    <string name="hero_headline_user">Ke mana destinasi\nimpian anda?</string>
 
     <string name="nav_home">Home</string>
     <string name="nav_explore">Teroka</string>
@@ -93,6 +93,12 @@
     <string name="faq_a3">Boleh, tertakluk kepada slot yang ada dan mungkin dikenakan caj perubahan. Hubungi admin untuk semakan.</string>
 
     <string name="package_duration_price">%1$d Hari %2$d Malam - RM%3$s</string>
+
+    <string name="help_support_title">Pusat Bantuan &amp; Sokongan</string>
+    <string name="help_support_headline">Perlukan Bantuan Perjalanan Anda?</string>
+    <string name="help_support_sub">Pasukan perunding Hafiz Travel sedia membantu anda mengenai pakej, visa &amp; pertanyaan tempahan.</string>
+    <string name="help_support_btn_contact">Hubungi Kami</string>
+    <string name="help_support_btn_whatsapp">WhatsApp Kami</string>
 
     <string name="prayer_subuh">Subuh</string>
     <string name="prayer_zohor">Zohor</string>
@@ -156,7 +162,7 @@
     <string name="prayer_times_title_jakim">Waktu Solat Hari Ini (JAKIM)</string>
     <string name="prayer_times_title_jakim_zone">Waktu Solat Hari Ini (JAKIM - Zon %1$s)</string>
 
-    <string name="podcast_section_title">Podcast</string>
+    <string name="podcast_section_title">Podcast Jelajah Hafiz</string>
 
     <string name="bab1_hero_title">Adab Musafir dan Amalan Sunat</string>
     <string name="bab1_hero_blurb">Adab bermusafir dan solat semasa dalam perjalanan.</string>
@@ -528,5 +534,54 @@
     <string name="package_detail_gallery_title">Galeri Perjalanan</string>
     <string name="package_detail_whatsapp_default_message">Assalamualaikum, saya berminat dengan pakej %1$s. Boleh kongsi maklumat lanjut?</string>
 
+    <string name="removed_from_favorites">Dikeluarkan daripada Kegemaran</string>
+    <string name="added_to_favorites">Disimpan ke Kegemaran</string>
+    <string name="undo">BATAL</string>
+
+    <string name="filter_title">Penapis Pakej</string>
+    <string name="filter_reset">Set Semula</string>
+    <string name="filter_category_header">Kategori</string>
+    <string name="filter_cat_umrah">Umrah</string>
+    <string name="filter_cat_tour">Tour</string>
+    <string name="filter_destination_header">Destinasi / Negara</string>
+    <string name="filter_all_destinations">Semua Destinasi</string>
+    <string name="filter_price_header">Julat Harga</string>
+    <string name="filter_price_presets_header">Pilihan Cepat Harga</string>
+    <string name="filter_price_below_3k">&lt; RM3,000</string>
+    <string name="filter_price_3k_6k">RM3,000 - RM6,000</string>
+    <string name="filter_price_6k_10k">RM6,000 - RM10,000</string>
+    <string name="filter_price_above_10k">&gt; RM10,000</string>
+    <string name="filter_custom_slider_header">Gelangsar Harga Tersuai</string>
+    <string name="filter_min_label">Terendah</string>
+    <string name="filter_max_label">Tertinggi</string>
+    <string name="filter_apply_button">Gunakan Penapis (%1$d Pakej)</string>
+    <string name="filter_active_tag_category">Kategori: %1$s</string>
+    <string name="filter_active_tag_destination">Destinasi: %1$s</string>
+    <string name="filter_active_tag_price">Harga: RM%1$s - RM%2$s</string>
+    <string name="filter_clear_all">Padam Penapis</string>
+    <string name="dest_turkey">Turki</string>
+    <string name="dest_korea">Korea</string>
+    <string name="dest_japan">Jepun</string>
+    <string name="dest_saudi">Arab Saudi</string>
+    <string name="dest_europe">Eropah / Balkan</string>
+    <string name="dest_vietnam">Vietnam</string>
+    <string name="dest_china">China</string>
+
+    <string name="prayer_times_header">Waktu Solat Hari Ini</string>
+    <string name="prayer_times_today_format">Waktu Solat Hari Ini (%1$s)</string>
+    <string name="explore_package_arrow">Teroka Pakej →</string>
+    <string name="exclusive_offer_title">Tawaran Eksklusif Jemaah</string>
+    <string name="exclusive_offer_sub">Daftar akaun untuk terima info promosi dan diskaun terkini.</string>
+    <string name="google_review_write_btn">Tulis Ulasan →</string>
+    <string name="all_packages_empty">Tiada pakej dijumpai</string>
+    <string name="prayer_name_subuh">Subuh</string>
+    <string name="prayer_name_syuruk">Syuruk</string>
+    <string name="prayer_name_zohor">Zohor</string>
+    <string name="prayer_name_asar">Asar</string>
+    <string name="prayer_name_maghrib">Maghrib</string>
+    <string name="prayer_name_isyak">Isyak</string>
+    <string name="prayer_countdown_entered">Waktu telah masuk</string>
+    <string name="prayer_countdown_min">%1$s dlm %2$dm</string>
+    <string name="prayer_countdown_hour_min">%1$s dlm %2$dj %3$dm</string>
 
 </resources>

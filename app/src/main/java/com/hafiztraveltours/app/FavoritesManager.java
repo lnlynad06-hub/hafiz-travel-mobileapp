@@ -74,14 +74,14 @@ public class FavoritesManager {
     private static String toJson(UmrahPackage pkg) {
         try {
             JSONObject obj = new JSONObject();
-            obj.put("id", pkg.id);
-            obj.put("name", pkg.name);
+            obj.put("id", pkg.id != null ? pkg.id : "");
+            obj.put("name", pkg.name != null ? pkg.name : "");
             obj.put("durationDays", pkg.durationDays);
             obj.put("nightsCount", pkg.nightsCount);
-            obj.put("price", pkg.price);
-            obj.put("url", pkg.url);
-            obj.put("imageUrl", pkg.imageUrl);
-            obj.put("collectionName", pkg.collectionName);
+            obj.put("price", pkg.price != null ? pkg.price : "");
+            obj.put("url", pkg.url != null ? pkg.url : "");
+            obj.put("imageUrl", pkg.imageUrl != null ? pkg.imageUrl : "");
+            obj.put("collectionName", pkg.collectionName != null ? pkg.collectionName : "umrah_packages");
             return obj.toString();
         } catch (Exception e) {
             return "{}";
@@ -92,9 +92,14 @@ public class FavoritesManager {
         try {
             JSONObject obj = new JSONObject(json);
             UmrahPackage pkg = new UmrahPackage(
-                    obj.getString("id"), obj.getString("name"),
-                    obj.getInt("durationDays"), obj.getInt("nightsCount"),
-                    obj.getString("price"), obj.getString("url"), obj.getString("imageUrl"));
+                    obj.optString("id", ""),
+                    obj.optString("name", ""),
+                    obj.optInt("durationDays", 0),
+                    obj.optInt("nightsCount", 0),
+                    obj.optString("price", ""),
+                    obj.optString("url", ""),
+                    obj.optString("imageUrl", "")
+            );
             pkg.collectionName = obj.optString("collectionName", "umrah_packages");
             return pkg;
         } catch (Exception e) {
@@ -107,28 +112,60 @@ public class FavoritesManager {
     }
 
     /**
-     * Bungkus toggleFavorite() dengan UX yang betul:
-     * - ADD (belum favorite) -> terus tambah + Toast "Ditambah ke Favorite"
-     * - REMOVE (dah favorite) -> confirm dialog dulu, cuma buang kalau user tekan "Buang"
+     * Animate heart icon with a tactile bounce / spring effect.
+     */
+    public static void animateHeart(android.view.View heartIcon, boolean isNowFavorited) {
+        if (heartIcon == null) return;
+        heartIcon.animate().cancel();
+        if (isNowFavorited) {
+            heartIcon.setScaleX(0.7f);
+            heartIcon.setScaleY(0.7f);
+            heartIcon.animate()
+                    .scaleX(1.35f)
+                    .scaleY(1.35f)
+                    .setDuration(160)
+                    .setInterpolator(new android.view.animation.OvershootInterpolator(2.5f))
+                    .withEndAction(() -> {
+                        heartIcon.animate()
+                                .scaleX(1.0f)
+                                .scaleY(1.0f)
+                                .setDuration(120)
+                                .start();
+                    })
+                    .start();
+        } else {
+            heartIcon.animate()
+                    .scaleX(0.7f)
+                    .scaleY(0.7f)
+                    .setDuration(120)
+                    .withEndAction(() -> {
+                        heartIcon.animate()
+                                .scaleX(1.0f)
+                                .scaleY(1.0f)
+                                .setDuration(100)
+                                .start();
+                    })
+                    .start();
+        }
+    }
+
+    /**
+     * Instant smooth favorite toggle with tactile feedback.
      */
     public static void handleFavoriteToggle(Context context, UmrahPackage pkg, OnFavoriteChangeListener listener) {
-        boolean isFav = isFavorite(context, pkg.id);
+        handleFavoriteToggle(context, pkg, null, listener);
+    }
 
-        if (isFav) {
-            new android.app.AlertDialog.Builder(context)
-                    .setTitle("Buang dari Favorite?")
-                    .setMessage("Pakej \"" + pkg.name + "\" akan dibuang daripada senarai Favorite anda.")
-                    .setPositiveButton("Buang", (dialog, which) -> {
-                        toggleFavorite(context, pkg);
-                        android.widget.Toast.makeText(context, "Dibuang dari Favorite", android.widget.Toast.LENGTH_SHORT).show();
-                        if (listener != null) listener.onChanged(false);
-                    })
-                    .setNegativeButton("Batal", null)
-                    .show();
-        } else {
-            toggleFavorite(context, pkg);
-            android.widget.Toast.makeText(context, "Ditambah ke Favorite", android.widget.Toast.LENGTH_SHORT).show();
-            if (listener != null) listener.onChanged(true);
+    public static void handleFavoriteToggle(Context context, UmrahPackage pkg, android.view.View heartIcon, OnFavoriteChangeListener listener) {
+        boolean newFavState = toggleFavorite(context, pkg);
+        if (heartIcon != null) {
+            animateHeart(heartIcon, newFavState);
+        }
+        if (newFavState) {
+            android.widget.Toast.makeText(context, context.getString(R.string.added_to_favorites), android.widget.Toast.LENGTH_SHORT).show();
+        }
+        if (listener != null) {
+            listener.onChanged(newFavState);
         }
     }
 }

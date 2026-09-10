@@ -43,11 +43,11 @@
     <string name="social_signup_phone">التسجيل برقم الهاتف - قريبًا</string>
 
     <string name="guest_greeting">السلام عليكم</string>
-    <string name="user_greeting">السلام عليكم، %1$s</string>
-    <string name="hero_subtitle_guest">مرحبًا بكم في\nHafiz Travel &amp; Tours</string>
+    <string name="user_greeting">السلام عليكم</string>
+    <string name="hero_subtitle_guest">ضيف الرحمن</string>
     <string name="hero_subtitle_user">مرحبًا بعودتك</string>
-    <string name="hero_headline_guest">مرحبًا بكم في\nHafiz Travel &amp; Tours</string>
-    <string name="hero_headline_user">إلى أين تودّ\nالذهاب؟</string>
+    <string name="hero_headline_guest">إلى أين وجهتك\nالقادمة؟</string>
+    <string name="hero_headline_user">إلى أين وجهتك\nالقادمة؟</string>
 
     <string name="nav_home">الرئيسية</string>
     <string name="nav_explore">استكشف</string>
@@ -158,7 +158,7 @@
     <string name="prayer_times_title_jakim">مواقيت الصلاة اليوم (JAKIM)</string>
     <string name="prayer_times_title_jakim_zone">مواقيت الصلاة اليوم (JAKIM - المنطقة %1$s)</string>
 
-    <string name="podcast_section_title">بودكاست</string>
+    <string name="podcast_section_title">بودكاست رحلة حافظ</string>
 
     <string name="bab1_hero_title">آداب السفر والممارسات المستحبة</string>
     <string name="bab1_hero_blurb">آداب السفر وكيفية الصلاة أثناء الرحلة.</string>
@@ -531,5 +531,60 @@
     <string name="package_detail_gallery_title">معرض الصور</string>
     <string name="package_detail_whatsapp_default_message">السلام عليكم، أنا مهتم بباقة %1$s. هل يمكنكم مشاركة المزيد من التفاصيل؟</string>
 
+    <string name="removed_from_favorites">تمت الإزالة من المفضلة</string>
+    <string name="added_to_favorites">تم الحفظ في المفضلة</string>
+    <string name="undo">تراجع</string>
+
+    <string name="filter_title">فلترة الباقات</string>
+    <string name="filter_reset">إعادة تعيين</string>
+    <string name="filter_category_header">الفئة</string>
+    <string name="filter_cat_umrah">عمرة</string>
+    <string name="filter_cat_tour">سياحة</string>
+    <string name="filter_destination_header">الوجهة / الدولة</string>
+    <string name="filter_all_destinations">جميع الوجهات</string>
+    <string name="filter_price_header">نطاق السعر</string>
+    <string name="filter_price_presets_header">خيارات سريعة</string>
+    <string name="filter_price_below_3k">&lt; RM3,000</string>
+    <string name="filter_price_3k_6k">RM3,000 - RM6,000</string>
+    <string name="filter_price_6k_10k">RM6,000 - RM10,000</string>
+    <string name="filter_price_above_10k">&gt; RM10,000</string>
+    <string name="filter_custom_slider_header">شريط تمرير السعر المخصص</string>
+    <string name="filter_min_label">الأدنى</string>
+    <string name="filter_max_label">الأعلى</string>
+    <string name="filter_apply_button">تطبيق الفلتر (%1$d باقة)</string>
+    <string name="filter_active_tag_category">الفئة: %1$s</string>
+    <string name="filter_active_tag_destination">الوجهة: %1$s</string>
+    <string name="filter_active_tag_price">السعر: RM%1$s - RM%2$s</string>
+    <string name="filter_clear_all">مسح الفلتر</string>
+    <string name="dest_turkey">تركيا</string>
+    <string name="dest_korea">كوريا</string>
+    <string name="dest_japan">اليابان</string>
+    <string name="dest_saudi">المملكة العربية السعودية</string>
+    <string name="dest_europe">أوروبا / البلقان</string>
+    <string name="dest_vietnam">فيتنام</string>
+    <string name="dest_china">الصين</string>
+
+    <string name="help_support_title">مركز المساعدة والدعم</string>
+    <string name="help_support_headline">هل تحتاج إلى مساعدة في رحلتك؟</string>
+    <string name="help_support_sub">مستشارو رعاية العملاء لدينا على استعداد لمساعدتك في الباقات والتأشيرات واستفسارات الحجز.</string>
+    <string name="help_support_btn_contact">اتصل بنا</string>
+    <string name="help_support_btn_whatsapp">تواصل عبر واتساب</string>
+
+    <string name="prayer_times_header">مواقيت الصلاة اليوم</string>
+    <string name="prayer_times_today_format">أوقات الصلاة اليوم (%1$s)</string>
+    <string name="explore_package_arrow">استكشف الباقة ←</string>
+    <string name="exclusive_offer_title">عرض حصري للحجاج</string>
+    <string name="exclusive_offer_sub">سجل حساباً لتلقي أحدث العروض الترويجية والخصومات الخاصة.</string>
+    <string name="google_review_write_btn">اكتب تقييماً ←</string>
+    <string name="all_packages_empty">لم يتم العثور على باقات</string>
+    <string name="prayer_name_subuh">الفجر</string>
+    <string name="prayer_name_syuruk">الشروق</string>
+    <string name="prayer_name_zohor">الظهر</string>
+    <string name="prayer_name_asar">العصر</string>
+    <string name="prayer_name_maghrib">المغرب</string>
+    <string name="prayer_name_isyak">العشاء</string>
+    <string name="prayer_countdown_entered">حان وقت الصلاة</string>
+    <string name="prayer_countdown_min">%1$s خلال %2$d دقيقة</string>
+    <string name="prayer_countdown_hour_min">%1$s خلال %2$d ساعة و %3$d دقيقة</string>
 
 </resources>

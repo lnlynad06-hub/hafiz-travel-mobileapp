@@ -12,17 +12,23 @@ import androidx.core.widget.NestedScrollView;
 
 /**
  * Shared controller and click-binder for the Floating Luxury Bottom Navigation Dock.
- * Eliminates duplicate navigation code across all main screens.
+ * Handles active styling, tactile bounce, and directional luxury transitions.
  */
 public class BottomNavHelper {
 
     public enum Tab {
-        HOME,
-        UMRAH,
-        EXPLORE,
-        TOUR,
-        FAVORITE,
-        NONE
+        HOME(0),
+        UMRAH(1),
+        EXPLORE(2),
+        TOUR(3),
+        FAVORITE(4),
+        NONE(-1);
+
+        public final int index;
+
+        Tab(int index) {
+            this.index = index;
+        }
     }
 
     public static void setup(Activity activity, Tab activeTab) {
@@ -40,7 +46,7 @@ public class BottomNavHelper {
         setTabStyle(activity, navTour, R.id.icNavTour, R.id.tvNavTour, activeTab == Tab.TOUR);
         setTabStyle(activity, navFavorite, R.id.icNavFavorite, R.id.tvNavFavorite, activeTab == Tab.FAVORITE);
 
-        // 2. Bind click routing with tactile bounce animations
+        // 2. Bind click routing with tactile bounce and directional luxury animation
         setupTactileButton(navHome, () -> {
             if (activeTab == Tab.HOME) {
                 NestedScrollView scrollView = activity.findViewById(R.id.mainScrollView);
@@ -49,6 +55,7 @@ public class BottomNavHelper {
                 Intent intent = new Intent(activity, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 activity.startActivity(intent);
+                applyTabTransition(activity, activeTab, Tab.HOME);
                 if (!(activity instanceof MainActivity)) activity.finish();
             }
         });
@@ -57,6 +64,7 @@ public class BottomNavHelper {
             if (activeTab != Tab.UMRAH) {
                 Intent intent = new Intent(activity, UmrahActivity.class);
                 activity.startActivity(intent);
+                applyTabTransition(activity, activeTab, Tab.UMRAH);
                 if (!(activity instanceof MainActivity)) activity.finish();
             }
         });
@@ -64,12 +72,14 @@ public class BottomNavHelper {
         setupTactileButton(navCenterAction, () -> {
             Intent intent = new Intent(activity, AllPackagesActivity.class);
             activity.startActivity(intent);
+            applyTabTransition(activity, activeTab, Tab.EXPLORE);
         });
 
         setupTactileButton(navTour, () -> {
             if (activeTab != Tab.TOUR) {
                 Intent intent = new Intent(activity, TourActivity.class);
                 activity.startActivity(intent);
+                applyTabTransition(activity, activeTab, Tab.TOUR);
                 if (!(activity instanceof MainActivity)) activity.finish();
             }
         });
@@ -78,11 +88,21 @@ public class BottomNavHelper {
             if (activeTab != Tab.FAVORITE) {
                 Intent intent = new Intent(activity, FavoriteActivity.class);
                 activity.startActivity(intent);
+                applyTabTransition(activity, activeTab, Tab.FAVORITE);
                 if (!(activity instanceof MainActivity)) activity.finish();
             }
         });
 
         updateFavoriteBadge(activity);
+    }
+
+    /**
+     * Applies seamless ultra-fast crossfade transition between tabs (Touch 'n Go e-wallet style).
+     * Eliminates directional shifting for an instantaneous, buttery smooth switch.
+     */
+    public static void applyTabTransition(Activity activity, Tab fromTab, Tab toTab) {
+        if (activity == null || fromTab == null || toTab == null || fromTab == toTab) return;
+        activity.overridePendingTransition(R.anim.nav_seamless_fade_in, R.anim.nav_seamless_fade_out);
     }
 
     private static void setTabStyle(Activity activity, View tabView, int iconId, int textId, boolean isActive) {
@@ -93,15 +113,14 @@ public class BottomNavHelper {
         int activeColor = ContextCompat.getColor(activity, R.color.brand_magenta);
         int inactiveColor = ContextCompat.getColor(activity, R.color.text_gray);
 
+        tabView.setBackgroundColor(Color.TRANSPARENT);
         if (isActive) {
-            tabView.setBackgroundResource(R.drawable.bg_pill_active_nav);
             if (icon != null) icon.setColorFilter(activeColor);
             if (text != null) {
                 text.setTextColor(activeColor);
                 text.setTypeface(null, android.graphics.Typeface.BOLD);
             }
         } else {
-            tabView.setBackgroundColor(Color.TRANSPARENT);
             if (icon != null) icon.setColorFilter(inactiveColor);
             if (text != null) {
                 text.setTextColor(inactiveColor);
@@ -111,15 +130,7 @@ public class BottomNavHelper {
     }
 
     public static void updateFavoriteBadge(Activity activity) {
-        TextView tvBadge = activity.findViewById(R.id.tvFavoriteBadge);
-        if (tvBadge == null) return;
-        int count = FavoritesManager.getFavoriteCount(activity);
-        if (count > 0) {
-            tvBadge.setVisibility(View.VISIBLE);
-            tvBadge.setText(count > 9 ? "9+" : String.valueOf(count));
-        } else {
-            tvBadge.setVisibility(View.GONE);
-        }
+        // Favorite badge removed as requested for clean and uniform navigation aesthetic
     }
 
     private static void setupTactileButton(View view, Runnable onClick) {

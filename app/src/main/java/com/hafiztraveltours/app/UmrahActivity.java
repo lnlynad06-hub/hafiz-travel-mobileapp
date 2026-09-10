@@ -55,13 +55,24 @@ public class UmrahActivity extends AppCompatActivity {
         ziarahRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
         TextInputEditText searchInput = findViewById(R.id.umrahSearchInput);
-        searchInput.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-                renderSections(s.toString());
-            }
-            @Override public void afterTextChanged(Editable s) {}
-        });
+        if (searchInput != null) {
+            searchInput.addTextChangedListener(new TextWatcher() {
+                @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    renderSections(s.toString());
+                }
+                @Override public void afterTextChanged(Editable s) {}
+            });
+        }
+
+        View btnFilter = findViewById(R.id.btnUmrahFilter);
+        if (btnFilter != null) {
+            btnFilter.setOnClickListener(v -> {
+                Intent intent = new Intent(this, AllPackagesActivity.class);
+                intent.putExtra(AllPackagesActivity.EXTRA_OPEN_FILTER, true);
+                startActivity(intent);
+            });
+        }
 
         BottomNavHelper.setup(this, BottomNavHelper.Tab.UMRAH);
         loadPackagesFromApi();
@@ -78,6 +89,12 @@ public class UmrahActivity extends AppCompatActivity {
         ApiClient.getApiService().getPackages("umrah", null, null, null).enqueue(new Callback<ApiResponse<List<UmrahPackage>>>() {
             @Override
             public void onResponse(Call<ApiResponse<List<UmrahPackage>>> call, Response<ApiResponse<List<UmrahPackage>>> response) {
+                com.facebook.shimmer.ShimmerFrameLayout shimmer = findViewById(R.id.umrahShimmerContainer);
+                if (shimmer != null) {
+                    shimmer.stopShimmer();
+                    shimmer.setVisibility(View.GONE);
+                }
+
                 popularPackages.clear();
                 khasPackages.clear();
                 ziarahPackages.clear();
@@ -100,6 +117,12 @@ public class UmrahActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ApiResponse<List<UmrahPackage>>> call, Throwable t) {
+                com.facebook.shimmer.ShimmerFrameLayout shimmer = findViewById(R.id.umrahShimmerContainer);
+                if (shimmer != null) {
+                    shimmer.stopShimmer();
+                    shimmer.setVisibility(View.GONE);
+                }
+
                 popularPackages.clear();
                 khasPackages.clear();
                 ziarahPackages.clear();

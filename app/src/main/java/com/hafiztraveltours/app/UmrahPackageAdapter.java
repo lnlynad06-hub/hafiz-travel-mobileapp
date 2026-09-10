@@ -20,7 +20,7 @@ import java.util.List;
 public class UmrahPackageAdapter extends RecyclerView.Adapter<UmrahPackageAdapter.ViewHolder> {
 
     public interface OnFavoriteToggleListener {
-        void onToggled(UmrahPackage pkg, boolean isFavoriteNow);
+        void onToggled(UmrahPackage pkg, boolean isFavoriteNow, int position, View itemView);
     }
 
     private final Context context;
@@ -39,6 +39,24 @@ public class UmrahPackageAdapter extends RecyclerView.Adapter<UmrahPackageAdapte
         this.fullList = new ArrayList<>(items);
         this.filteredList = new ArrayList<>(items);
         notifyDataSetChanged();
+    }
+
+    public void removeItemAt(int position) {
+        if (position >= 0 && position < filteredList.size()) {
+            UmrahPackage removed = filteredList.remove(position);
+            fullList.remove(removed);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, filteredList.size() - position);
+        }
+    }
+
+    public void insertItemAt(int position, UmrahPackage pkg) {
+        if (position >= 0 && position <= filteredList.size()) {
+            filteredList.add(position, pkg);
+            fullList.add(pkg);
+            notifyItemInserted(position);
+            notifyItemRangeChanged(position, filteredList.size() - position);
+        }
     }
 
     /** Filters by package name, case-insensitive. Pass "" to reset. */
@@ -68,9 +86,10 @@ public class UmrahPackageAdapter extends RecyclerView.Adapter<UmrahPackageAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         UmrahPackage pkg = filteredList.get(position);
 
-        holder.name.setText(pkg.name);
+        holder.name.setText(pkg.getDisplayName());
+        String cleanPrice = (pkg.price != null) ? pkg.price.replace("RM", "").replace("rm", "").trim() : "";
         holder.durationPrice.setText(context.getString(
-                R.string.package_duration_price, pkg.durationDays, pkg.nightsCount, pkg.price));
+                R.string.package_duration_price, pkg.durationDays, pkg.nightsCount, cleanPrice));
 
         Glide.with(context)
                 .load(pkg.imageUrl)
@@ -79,11 +98,15 @@ public class UmrahPackageAdapter extends RecyclerView.Adapter<UmrahPackageAdapte
 
         updateFavoriteIcon(holder.favoriteIcon, pkg.id);
 
-        holder.favoriteIcon.setOnClickListener(v ->
-                FavoritesManager.handleFavoriteToggle(context, pkg, isFavoriteNow -> {
-                    updateFavoriteIcon(holder.favoriteIcon, pkg.id);
-                    if (toggleListener != null) toggleListener.onToggled(pkg, isFavoriteNow);
-                }));
+        holder.favoriteIcon.setOnClickListener(v -> {
+            v.performHapticFeedback(android.view.HapticFeedbackConstants.KEYBOARD_TAP);
+            FavoritesManager.handleFavoriteToggle(context, pkg, holder.favoriteIcon, isFavoriteNow -> {
+                updateFavoriteIcon(holder.favoriteIcon, pkg.id);
+                if (toggleListener != null) {
+                    toggleListener.onToggled(pkg, isFavoriteNow, holder.getBindingAdapterPosition(), holder.itemView);
+                }
+            });
+        });
 
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, PackageDetailActivity.class);

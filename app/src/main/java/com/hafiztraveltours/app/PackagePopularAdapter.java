@@ -57,13 +57,15 @@ public class PackagePopularAdapter extends RecyclerView.Adapter<PackagePopularAd
         updateFavoriteIcon(holder.favoriteIcon, pkg.id);
 
         // Heart PUNYA listener sendiri - tap sini TIDAK akan propagate ke itemView di bawah
-        holder.favoriteIcon.setOnClickListener(v ->
-                FavoritesManager.handleFavoriteToggle(context, pkg, isFavoriteNow -> {
-                    updateFavoriteIcon(holder.favoriteIcon, pkg.id);
-                    if (context instanceof MainActivity) {
-                        ((MainActivity) context).updateFavoriteBadge();
-                    }
-                }));
+        holder.favoriteIcon.setOnClickListener(v -> {
+            v.performHapticFeedback(android.view.HapticFeedbackConstants.KEYBOARD_TAP);
+            FavoritesManager.handleFavoriteToggle(context, pkg, holder.favoriteIcon, isFavoriteNow -> {
+                updateFavoriteIcon(holder.favoriteIcon, pkg.id);
+                if (context instanceof android.app.Activity) {
+                    BottomNavHelper.updateFavoriteBadge((android.app.Activity) context);
+                }
+            });
+        });
 
         // itemView punya listener berasingan - buka WebView pakej
         holder.itemView.setOnClickListener(v -> {

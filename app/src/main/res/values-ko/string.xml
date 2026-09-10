@@ -43,11 +43,11 @@
     <string name="social_signup_phone">전화번호로 가입 - 곧 제공 예정</string>
 
     <string name="guest_greeting">앗살라무알라이쿰</string>
-    <string name="user_greeting">앗살라무알라이쿰, %1$s</string>
-    <string name="hero_subtitle_guest">Hafiz Travel &amp; Tours에\n오신 것을 환영합니다</string>
+    <string name="user_greeting">앗살라무알라이쿰</string>
+    <string name="hero_subtitle_guest">게스트 여행자</string>
     <string name="hero_subtitle_user">다시 오신 것을 환영합니다</string>
-    <string name="hero_headline_guest">Hafiz Travel &amp; Tours에\n오신 것을 환영합니다</string>
-    <string name="hero_headline_user">어디로 떠나고\n싶으신가요?</string>
+    <string name="hero_headline_guest">다음에는 어디로\n떠나고 싶으신가요?</string>
+    <string name="hero_headline_user">다음에는 어디로\n떠나고 싶으신가요?</string>
 
     <string name="nav_home">홈</string>
     <string name="nav_explore">탐색</string>
@@ -158,7 +158,7 @@
     <string name="prayer_times_title_jakim">오늘의 예배 시간 (JAKIM)</string>
     <string name="prayer_times_title_jakim_zone">오늘의 예배 시간 (JAKIM - 구역 %1$s)</string>
 
-    <string name="podcast_section_title">팟캐스트</string>
+    <string name="podcast_section_title">하피즈 여정 팟캐스트</string>
 
     <string name="bab1_hero_title">여행 예절과 순나 행위</string>
     <string name="bab1_hero_blurb">여행 중의 예절과 기도(솔랏)에 대한 안내입니다.</string>
@@ -530,5 +530,61 @@
     <string name="package_detail_price_options_title">가격/객실 옵션</string>
     <string name="package_detail_gallery_title">여행 갤러리</string>
     <string name="package_detail_whatsapp_default_message">안녕하세요, %1$s 패키지에 관심이 있습니다. 자세한 정보를 공유해 주시겠어요?</string>
+
+    <string name="removed_from_favorites">즐겨찾기에서 삭제되었습니다</string>
+    <string name="added_to_favorites">즐겨찾기에 추가되었습니다</string>
+    <string name="undo">실행 취소</string>
+
+    <string name="filter_title">패키지 필터</string>
+    <string name="filter_reset">초기화</string>
+    <string name="filter_category_header">카테고리</string>
+    <string name="filter_cat_umrah">움라</string>
+    <string name="filter_cat_tour">투어</string>
+    <string name="filter_destination_header">목적지 / 국가</string>
+    <string name="filter_all_destinations">모든 목적지</string>
+    <string name="filter_price_header">가격 범위</string>
+    <string name="filter_price_presets_header">빠른 가격 선택</string>
+    <string name="filter_price_below_3k">&lt; RM3,000</string>
+    <string name="filter_price_3k_6k">RM3,000 - RM6,000</string>
+    <string name="filter_price_6k_10k">RM6,000 - RM10,000</string>
+    <string name="filter_price_above_10k">&gt; RM10,000</string>
+    <string name="filter_custom_slider_header">사용자 지정 가격 슬라이더</string>
+    <string name="filter_min_label">최저</string>
+    <string name="filter_max_label">최고</string>
+    <string name="filter_apply_button">필터 적용 (%1$d개 패키지)</string>
+    <string name="filter_active_tag_category">카테고리: %1$s</string>
+    <string name="filter_active_tag_destination">목적지: %1$s</string>
+    <string name="filter_active_tag_price">가격: RM%1$s - RM%2$s</string>
+    <string name="filter_clear_all">필터 지우기</string>
+    <string name="dest_turkey">튀르키예</string>
+    <string name="dest_korea">대한민국</string>
+    <string name="dest_japan">일본</string>
+    <string name="dest_saudi">사우디아라비아</string>
+    <string name="dest_europe">유럽 / 발칸</string>
+    <string name="dest_vietnam">베트남</string>
+    <string name="dest_china">중국</string>
+
+    <string name="help_support_title">고객 지원 센터</string>
+    <string name="help_support_headline">여행에 도움이 필요하신가요?</string>
+    <string name="help_support_sub">하피즈 트래블 전담 상담원이 패키지, 비자 및 예약 관련 문의를 친절하게 안내해 드립니다.</string>
+    <string name="help_support_btn_contact">문의하기</string>
+    <string name="help_support_btn_whatsapp">WhatsApp 상담</string>
+
+    <string name="prayer_times_header">오늘의 기도 시간</string>
+    <string name="prayer_times_today_format">오늘의 기도 시간 (%1$s)</string>
+    <string name="explore_package_arrow">패키지 보기 →</string>
+    <string name="exclusive_offer_title">순례자 전용 특별 혜택</string>
+    <string name="exclusive_offer_sub">최신 프로모션 및 특별 할인 정보를 받아보려면 계정을 등록하세요.</string>
+    <string name="google_review_write_btn">리뷰 작성 →</string>
+    <string name="all_packages_empty">패키지를 찾을 수 없습니다</string>
+    <string name="prayer_name_subuh">파지르 (새벽)</string>
+    <string name="prayer_name_syuruk">일출</string>
+    <string name="prayer_name_zohor">주흐르 (정오)</string>
+    <string name="prayer_name_asar">아스르 (오후)</string>
+    <string name="prayer_name_maghrib">마그립 (일몰)</string>
+    <string name="prayer_name_isyak">이샤 (밤)</string>
+    <string name="prayer_countdown_entered">기도 시간이 되었습니다</string>
+    <string name="prayer_countdown_min">%1$s까지 %2$d분</string>
+    <string name="prayer_countdown_hour_min">%1$s까지 %2$d시간 %3$d분</string>
 
 </resources>

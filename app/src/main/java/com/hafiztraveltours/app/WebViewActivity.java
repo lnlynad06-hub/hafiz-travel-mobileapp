@@ -19,6 +19,11 @@ public class WebViewActivity extends AppCompatActivity {
 
     private WebView webView;
 
+    @Override
+    protected void attachBaseContext(android.content.Context newBase) {
+        super.attachBaseContext(LocaleHelper.applySavedLocale(newBase));
+    }
+
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {

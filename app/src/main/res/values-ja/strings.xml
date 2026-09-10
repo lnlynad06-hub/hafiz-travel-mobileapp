@@ -43,11 +43,11 @@
     <string name="social_signup_phone">電話番号で登録 - 近日公開</string>
 
     <string name="guest_greeting">アッサラームアライクム</string>
-    <string name="user_greeting">アッサラームアライクム、%1$s さん</string>
-    <string name="hero_subtitle_guest">Hafiz Travel &amp; Toursへ\nようこそ</string>
+    <string name="user_greeting">アッサラームアライクム</string>
+    <string name="hero_subtitle_guest">ゲスト旅行者</string>
     <string name="hero_subtitle_user">おかえりなさい</string>
-    <string name="hero_headline_guest">Hafiz Travel &amp; Toursへ\nようこそ</string>
-    <string name="hero_headline_user">どこへ行き\nたいですか？</string>
+    <string name="hero_headline_guest">次はどこへ旅に\n出かけますか？</string>
+    <string name="hero_headline_user">次はどこへ旅に\n出かけますか？</string>
 
     <string name="nav_home">ホーム</string>
     <string name="nav_explore">探索</string>
@@ -158,7 +158,7 @@
     <string name="prayer_times_title_jakim">本日の礼拝時間 (JAKIM)</string>
     <string name="prayer_times_title_jakim_zone">本日の礼拝時間 (JAKIM - ゾーン %1$s)</string>
 
-    <string name="podcast_section_title">ポッドキャスト</string>
+    <string name="podcast_section_title">ハフィズ・ジャーニー・ポッドキャスト</string>
 
     <string name="bab1_hero_title">旅の作法と推奨される行い</string>
     <string name="bab1_hero_blurb">旅の作法と、旅の途中に行う礼拝についての案内です。</string>
@@ -531,5 +531,60 @@
     <string name="package_detail_gallery_title">写真ギャラリー</string>
     <string name="package_detail_whatsapp_default_message">こんにちは、%1$sパッケージに興味があります。詳細を教えていただけますか?</string>
 
+    <string name="removed_from_favorites">お気に入りから削除しました</string>
+    <string name="added_to_favorites">お気に入りに追加しました</string>
+    <string name="undo">元に戻す</string>
+
+    <string name="filter_title">パッケージを絞り込む</string>
+    <string name="filter_reset">リセット</string>
+    <string name="filter_category_header">カテゴリー</string>
+    <string name="filter_cat_umrah">ウムラ</string>
+    <string name="filter_cat_tour">ツアー</string>
+    <string name="filter_destination_header">目的地・国</string>
+    <string name="filter_all_destinations">すべての目的地</string>
+    <string name="filter_price_header">価格帯</string>
+    <string name="filter_price_presets_header">クイック価格</string>
+    <string name="filter_price_below_3k">&lt; RM3,000</string>
+    <string name="filter_price_3k_6k">RM3,000 - RM6,000</string>
+    <string name="filter_price_6k_10k">RM6,000 - RM10,000</string>
+    <string name="filter_price_above_10k">&gt; RM10,000</string>
+    <string name="filter_custom_slider_header">カスタム価格スライダー</string>
+    <string name="filter_min_label">最低</string>
+    <string name="filter_max_label">最高</string>
+    <string name="filter_apply_button">フィルターを適用 (%1$d 件)</string>
+    <string name="filter_active_tag_category">カテゴリー: %1$s</string>
+    <string name="filter_active_tag_destination">目的地: %1$s</string>
+    <string name="filter_active_tag_price">価格: RM%1$s - RM%2$s</string>
+    <string name="filter_clear_all">フィルター解除</string>
+    <string name="dest_turkey">トルコ</string>
+    <string name="dest_korea">韓国</string>
+    <string name="dest_japan">日本</string>
+    <string name="dest_saudi">サウジアラビア</string>
+    <string name="dest_europe">ヨーロッパ・バルカン</string>
+    <string name="dest_vietnam">ベトナム</string>
+    <string name="dest_china">中国</string>
+
+    <string name="help_support_title">ヘルプ＆サポートセンター</string>
+    <string name="help_support_headline">旅のご相談はお気軽にどうぞ</string>
+    <string name="help_support_sub">ハフィズ・トラベルのコンサルタントが、パッケージ、ビザ、予約に関するお問い合わせをサポートします。</string>
+    <string name="help_support_btn_contact">お問い合わせ</string>
+    <string name="help_support_btn_whatsapp">WhatsAppでお問い合わせ</string>
+
+    <string name="prayer_times_header">本日の礼拝時間</string>
+    <string name="prayer_times_today_format">本日の礼拝時間 (%1$s)</string>
+    <string name="explore_package_arrow">パッケージを見る →</string>
+    <string name="exclusive_offer_title">巡礼者限定オファー</string>
+    <string name="exclusive_offer_sub">最新のプロモーションと特別割引を受け取るためにアカウントを登録してください。</string>
+    <string name="google_review_write_btn">レビューを書く →</string>
+    <string name="all_packages_empty">パッケージが見つかりません</string>
+    <string name="prayer_name_subuh">ファジュル (夜明け)</string>
+    <string name="prayer_name_syuruk">日の出</string>
+    <string name="prayer_name_zohor">ズフル (正午)</string>
+    <string name="prayer_name_asar">アスル (午後)</string>
+    <string name="prayer_name_maghrib">マグリブ (日没)</string>
+    <string name="prayer_name_isyak">イシャー (夜)</string>
+    <string name="prayer_countdown_entered">礼拝時間になりました</string>
+    <string name="prayer_countdown_min">%1$sまであと%2$d分</string>
+    <string name="prayer_countdown_hour_min">%1$sまであと%2$d時間%3$d分</string>
 
 </resources>

@@ -49,11 +49,11 @@
     <string name="social_signup_phone">Signing up with phone number - coming soon</string>
 
     <string name="guest_greeting">Assalamualaikum</string>
-    <string name="user_greeting">Assalamualaikum, %1$s</string>
-    <string name="hero_subtitle_guest">Welcome to\nHafiz Travel &amp; Tours</string>
+    <string name="user_greeting">Assalamualaikum</string>
+    <string name="hero_subtitle_guest">Guest Traveler</string>
     <string name="hero_subtitle_user">Welcome back</string>
-    <string name="hero_headline_guest">Welcome to\nHafiz Travel &amp; Tours</string>
-    <string name="hero_headline_user">Where do you \nwant to go?</string>
+    <string name="hero_headline_guest">Where is your next\ndream journey?</string>
+    <string name="hero_headline_user">Where is your next\ndream journey?</string>
 
     <string name="nav_home">Home</string>
     <string name="nav_explore">Explore</string>
@@ -101,6 +101,12 @@
     <string name="faq_a3">Yes, subject to slot availability and a change fee may apply. Contact admin for confirmation.</string>
 
     <string name="package_duration_price">%1$d Days %2$d Nights - RM%3$s</string>
+
+    <string name="help_support_title">Help &amp; Support</string>
+    <string name="help_support_headline">Need Assistance with Your Journey?</string>
+    <string name="help_support_sub">Our customer care consultants are ready to assist you with packages, flights &amp; booking inquiries.</string>
+    <string name="help_support_btn_contact">Contact Us</string>
+    <string name="help_support_btn_whatsapp">WhatsApp Us</string>
 
     <string name="prayer_subuh">Fajr</string>
     <string name="prayer_zohor">Dhuhr</string>
@@ -164,7 +170,7 @@
     <string name="prayer_times_title_jakim">Prayer Times Today (JAKIM)</string>
     <string name="prayer_times_title_jakim_zone">Prayer Times Today (JAKIM - Zone %1$s)</string>
 
-    <string name="podcast_section_title">Podcast</string>
+    <string name="podcast_section_title">Hafiz Journey Podcast</string>
 
     <string name="bab1_hero_title">Etiquette of Travel and Recommended Practices</string>
     <string name="bab1_hero_blurb">Etiquette of traveling and performing prayers while on a journey.</string>
@@ -537,5 +543,54 @@
     <string name="package_detail_gallery_title">Photo Gallery</string>
     <string name="package_detail_whatsapp_default_message">Hello, I\'m interested in the %1$s package. Could you share more details?</string>
 
+    <string name="removed_from_favorites">Removed from Favorites</string>
+    <string name="added_to_favorites">Saved to Favorites</string>
+    <string name="undo">UNDO</string>
+
+    <string name="filter_title">Filter Packages</string>
+    <string name="filter_reset">Reset</string>
+    <string name="filter_category_header">Category</string>
+    <string name="filter_cat_umrah">Umrah</string>
+    <string name="filter_cat_tour">Tour</string>
+    <string name="filter_destination_header">Destination / Country</string>
+    <string name="filter_all_destinations">All Destinations</string>
+    <string name="filter_price_header">Price Range</string>
+    <string name="filter_price_presets_header">Quick Price</string>
+    <string name="filter_price_below_3k">&lt; RM3,000</string>
+    <string name="filter_price_3k_6k">RM3,000 - RM6,000</string>
+    <string name="filter_price_6k_10k">RM6,000 - RM10,000</string>
+    <string name="filter_price_above_10k">&gt; RM10,000</string>
+    <string name="filter_custom_slider_header">Custom Price Slider</string>
+    <string name="filter_min_label">Lowest</string>
+    <string name="filter_max_label">Highest</string>
+    <string name="filter_apply_button">Apply Filters (%1$d Packages)</string>
+    <string name="filter_active_tag_category">Category: %1$s</string>
+    <string name="filter_active_tag_destination">Destination: %1$s</string>
+    <string name="filter_active_tag_price">Price: RM%1$s - RM%2$s</string>
+    <string name="filter_clear_all">Clear Filters</string>
+    <string name="dest_turkey">Turkey</string>
+    <string name="dest_korea">Korea</string>
+    <string name="dest_japan">Japan</string>
+    <string name="dest_saudi">Saudi Arabia</string>
+    <string name="dest_europe">Europe / Balkan</string>
+    <string name="dest_vietnam">Vietnam</string>
+    <string name="dest_china">China</string>
+
+    <string name="prayer_times_header">Prayer Times Today</string>
+    <string name="prayer_times_today_format">Prayer Times Today (%1$s)</string>
+    <string name="explore_package_arrow">Explore Package →</string>
+    <string name="exclusive_offer_title">Exclusive Pilgrim Offer</string>
+    <string name="exclusive_offer_sub">Sign up to receive the latest promotions and special discounts.</string>
+    <string name="google_review_write_btn">Write a Review →</string>
+    <string name="all_packages_empty">No packages found</string>
+    <string name="prayer_name_subuh">Fajr</string>
+    <string name="prayer_name_syuruk">Sunrise</string>
+    <string name="prayer_name_zohor">Dhuhr</string>
+    <string name="prayer_name_asar">Asr</string>
+    <string name="prayer_name_maghrib">Maghrib</string>
+    <string name="prayer_name_isyak">Isha</string>
+    <string name="prayer_countdown_entered">Prayer time has arrived</string>
+    <string name="prayer_countdown_min">%1$s in %2$dm</string>
+    <string name="prayer_countdown_hour_min">%1$s in %2$dh %3$dm</string>
 
 </resources>

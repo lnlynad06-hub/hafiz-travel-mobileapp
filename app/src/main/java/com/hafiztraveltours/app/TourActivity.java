@@ -53,13 +53,24 @@ public class TourActivity extends AppCompatActivity {
         availableRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         TextInputEditText searchInput = findViewById(R.id.tourSearchInput);
-        searchInput.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-                renderSections(s.toString());
-            }
-            @Override public void afterTextChanged(Editable s) {}
-        });
+        if (searchInput != null) {
+            searchInput.addTextChangedListener(new TextWatcher() {
+                @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    renderSections(s.toString());
+                }
+                @Override public void afterTextChanged(Editable s) {}
+            });
+        }
+
+        View btnFilter = findViewById(R.id.btnTourFilter);
+        if (btnFilter != null) {
+            btnFilter.setOnClickListener(v -> {
+                Intent intent = new Intent(this, AllPackagesActivity.class);
+                intent.putExtra(AllPackagesActivity.EXTRA_OPEN_FILTER, true);
+                startActivity(intent);
+            });
+        }
 
         BottomNavHelper.setup(this, BottomNavHelper.Tab.TOUR);
         loadPackagesFromApi();
@@ -100,6 +111,12 @@ public class TourActivity extends AppCompatActivity {
         ApiClient.getApiService().getPackages("tour", null, null, null).enqueue(new Callback<ApiResponse<List<UmrahPackage>>>() {
             @Override
             public void onResponse(Call<ApiResponse<List<UmrahPackage>>> call, Response<ApiResponse<List<UmrahPackage>>> response) {
+                com.facebook.shimmer.ShimmerFrameLayout shimmer = findViewById(R.id.tourShimmerContainer);
+                if (shimmer != null) {
+                    shimmer.stopShimmer();
+                    shimmer.setVisibility(View.GONE);
+                }
+
                 allPackages.clear();
                 popularPackages.clear();
 
@@ -117,6 +134,12 @@ public class TourActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ApiResponse<List<UmrahPackage>>> call, Throwable t) {
+                com.facebook.shimmer.ShimmerFrameLayout shimmer = findViewById(R.id.tourShimmerContainer);
+                if (shimmer != null) {
+                    shimmer.stopShimmer();
+                    shimmer.setVisibility(View.GONE);
+                }
+
                 allPackages.clear();
                 popularPackages.clear();
                 renderSections("");

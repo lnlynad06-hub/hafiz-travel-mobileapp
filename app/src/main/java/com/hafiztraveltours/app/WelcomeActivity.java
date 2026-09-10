@@ -283,25 +283,8 @@ public class WelcomeActivity extends AppCompatActivity {
 
     private void updateActiveLanguageLabel() {
         String current = LocaleHelper.getSavedLanguage(this);
-        switch (current) {
-            case LocaleHelper.LANGUAGE_ENGLISH:
-                tvActiveLanguage.setText("EN");
-                break;
-            case LocaleHelper.LANGUAGE_ARABIC:
-                tvActiveLanguage.setText("AR");
-                break;
-            case LocaleHelper.LANGUAGE_KOREAN:
-                tvActiveLanguage.setText("KO");
-                break;
-            case LocaleHelper.LANGUAGE_JAPANESE:
-                tvActiveLanguage.setText("JA");
-                break;
-            case LocaleHelper.LANGUAGE_CHINESE:
-                tvActiveLanguage.setText("ZH");
-                break;
-            default:
-                tvActiveLanguage.setText("BM");
-                break;
+        if (tvActiveLanguage != null) {
+            tvActiveLanguage.setText(LocaleHelper.getLanguageBadge(current));
         }
     }
 

@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingHorizontal="4dp"
+        android:paddingHorizontal="6dp"
         android:paddingVertical="6dp">
 
         <!-- Tab 1: Utama / Home -->
@@ -28,17 +28,16 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/bg_pill_active_nav"
             android:clickable="true"
             android:focusable="true"
             android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingVertical="8dp">
+            android:orientation="vertical"
+            android:paddingVertical="4dp">
 
             <ImageView
                 android:id="@+id/icNavHome"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:src="@drawable/ic_home"
                 app:tint="@color/brand_magenta"
                 tools:ignore="ContentDescription" />
@@ -47,10 +46,10 @@
                 android:id="@+id/tvNavHome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
+                android:layout_marginTop="2dp"
                 android:text="@string/nav_home"
                 android:textColor="@color/brand_magenta"
-                android:textSize="12sp"
+                android:textSize="10sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -64,7 +63,7 @@
             android:focusable="true"
             android:gravity="center"
             android:orientation="vertical"
-            android:paddingVertical="5dp">
+            android:paddingVertical="4dp">
 
             <ImageView
                 android:id="@+id/icNavUmrah"
@@ -132,7 +131,7 @@
             android:focusable="true"
             android:gravity="center"
             android:orientation="vertical"
-            android:paddingVertical="5dp">
+            android:paddingVertical="4dp">
 
             <ImageView
                 android:id="@+id/icNavTour"
@@ -162,37 +161,15 @@
             android:focusable="true"
             android:gravity="center"
             android:orientation="vertical"
-            android:paddingVertical="5dp">
+            android:paddingVertical="4dp">
 
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:id="@+id/icNavFavorite"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_favorite"
-                    app:tint="@color/text_gray"
-                    tools:ignore="ContentDescription" />
-
-                <!-- Live Badge Counter -->
-                <TextView
-                    android:id="@+id/tvFavoriteBadge"
-                    android:layout_width="14dp"
-                    android:layout_height="14dp"
-                    android:layout_gravity="top|end"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="-3dp"
-                    android:background="@drawable/bg_badge_counter"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:textSize="8sp"
-                    android:textStyle="bold"
-                    android:visibility="gone"
-                    tools:text="1"
-                    tools:visibility="visible" />
-            </FrameLayout>
+            <ImageView
+                android:id="@+id/icNavFavorite"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_favorite"
+                app:tint="@color/text_gray"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/tvNavFavorite"

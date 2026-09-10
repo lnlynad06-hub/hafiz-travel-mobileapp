@@ -60,32 +60,112 @@
 
             </LinearLayout>
 
-            <!-- Search bar - overlaps the hero's bottom edge, same "floating card" style as Home -->
-            <androidx.cardview.widget.CardView
+            <!-- Unified Luxury Search & Filter Bar (Matching All Packages) -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="-34dp"
-                app:cardCornerRadius="14dp"
-                app:cardElevation="6dp"
-                app:cardBackgroundColor="@color/surface">
+                android:layout_marginTop="-24dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/umrahSearchInput"
-                    android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    android:background="@android:color/transparent"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_search_white"
                     android:drawableStart="@drawable/ic_search"
                     android:drawablePadding="10dp"
-                    android:drawableTint="@color/pink_dark"
                     android:hint="@string/search_placeholder"
-                    android:paddingHorizontal="16dp"
+                    android:paddingHorizontal="14dp"
                     android:singleLine="true"
                     android:textColor="@color/text_dark"
                     android:textColorHint="@color/text_gray"
                     android:textSize="14sp" />
 
-            </androidx.cardview.widget.CardView>
+                <FrameLayout
+                    android:id="@+id/btnUmrahFilter"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/bg_search_white"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_tune"
+                        app:tint="@color/text_dark"
+                        tools:ignore="ContentDescription" />
+
+                    <View
+                        android:id="@+id/filterActiveBadgeUmrah"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_gravity="top|end"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/bg_filter_badge"
+                        android:visibility="gone" />
+
+                </FrameLayout>
+
+            </LinearLayout>
+
+            <!-- Skeleton Shimmer Loading Placeholder -->
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/umrahShimmerContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="24dp"
+                app:shimmer_auto_start="true"
+                app:shimmer_base_alpha="0.6"
+                app:shimmer_highlight_alpha="1.0"
+                app:shimmer_duration="1200">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <View
+                        android:layout_width="140dp"
+                        android:layout_height="16dp"
+                        android:background="@drawable/bg_skeleton_rect" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:orientation="horizontal">
+
+                        <include layout="@layout/item_skeleton_horizontal_card" />
+                        <include layout="@layout/item_skeleton_horizontal_card" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="140dp"
+                        android:layout_height="16dp"
+                        android:layout_marginTop="24dp"
+                        android:background="@drawable/bg_skeleton_rect" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:orientation="vertical">
+
+                        <include layout="@layout/item_skeleton_vertical_card" />
+                        <include layout="@layout/item_skeleton_vertical_card" />
+
+                    </LinearLayout>
+                </LinearLayout>
+            </com.facebook.shimmer.ShimmerFrameLayout>
 
             <!-- Seksyen: Pakej Popular -->
             <LinearLayout
@@ -94,7 +174,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="24dp">
+                android:layout_marginTop="24dp"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/umrahPopularTitle"

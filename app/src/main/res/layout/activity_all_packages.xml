@@ -38,20 +38,81 @@
 
     </LinearLayout>
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/allPackagesSearchInput"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_margin="16dp"
-        android:background="@drawable/bg_search_white"
-        android:drawableStart="@drawable/ic_search"
-        android:drawablePadding="10dp"
-        android:hint="@string/search_placeholder"
-        android:paddingHorizontal="14dp"
-        android:singleLine="true"
-        android:textColor="@color/text_dark"
-        android:textColorHint="@color/text_gray"
-        android:textSize="14sp" />
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/allPackagesSearchInput"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_search_white"
+            android:drawableStart="@drawable/ic_search"
+            android:drawablePadding="10dp"
+            android:hint="@string/search_placeholder"
+            android:paddingHorizontal="14dp"
+            android:singleLine="true"
+            android:textColor="@color/text_dark"
+            android:textColorHint="@color/text_gray"
+            android:textSize="14sp" />
+
+        <FrameLayout
+            android:id="@+id/btnAllPackagesFilter"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/bg_search_white"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:id="@+id/icAllPackagesFilter"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_tune"
+                app:tint="@color/text_dark" />
+
+            <View
+                android:id="@+id/filterActiveBadge"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_gravity="top|end"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/bg_filter_badge"
+                android:visibility="gone" />
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <!-- Active Filters Chip Bar -->
+    <HorizontalScrollView
+        android:id="@+id/activeFiltersScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:paddingHorizontal="16dp"
+        android:scrollbars="none"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/activeFiltersContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" />
+
+    </HorizontalScrollView>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -65,13 +126,65 @@
             android:orientation="vertical"
             android:paddingBottom="24dp">
 
+            <!-- Skeleton Shimmer Loading Placeholder -->
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/allPackagesShimmer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="12dp"
+                app:shimmer_auto_start="true"
+                app:shimmer_base_alpha="0.6"
+                app:shimmer_highlight_alpha="1.0"
+                app:shimmer_duration="1200">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <View
+                        android:layout_width="140dp"
+                        android:layout_height="16dp"
+                        android:background="@drawable/bg_skeleton_rect" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:orientation="horizontal">
+
+                        <include layout="@layout/item_skeleton_horizontal_card" />
+                        <include layout="@layout/item_skeleton_horizontal_card" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="140dp"
+                        android:layout_height="16dp"
+                        android:layout_marginTop="24dp"
+                        android:background="@drawable/bg_skeleton_rect" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:orientation="vertical">
+
+                        <include layout="@layout/item_skeleton_vertical_card" />
+                        <include layout="@layout/item_skeleton_vertical_card" />
+
+                    </LinearLayout>
+                </LinearLayout>
+            </com.facebook.shimmer.ShimmerFrameLayout>
+
             <!-- Mode BROWSE: 3 carousel, nampak bila search kosong -->
             <LinearLayout
                 android:id="@+id/browseContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <LinearLayout
                     android:id="@+id/allPopularSection"
@@ -180,7 +293,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="60dp"
                 android:gravity="center"
-                android:text="Tiada pakej dijumpai"
+                android:text="@string/all_packages_empty"
                 android:textColor="@color/text_gray"
                 android:textSize="14sp"
                 android:visibility="gone" />

@@ -86,11 +86,15 @@
             android:paddingVertical="13dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:layout_marginEnd="14dp"
-                android:text="🇬🇧"
-                android:textSize="22sp" />
+                android:background="@drawable/bg_lang_badge"
+                android:gravity="center"
+                android:text="EN"
+                android:textColor="#141414"
+                android:textSize="12sp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -137,11 +141,15 @@
             android:paddingVertical="13dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:layout_marginEnd="14dp"
-                android:text="🇲🇾"
-                android:textSize="22sp" />
+                android:background="@drawable/bg_lang_badge"
+                android:gravity="center"
+                android:text="BM"
+                android:textColor="#141414"
+                android:textSize="12sp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -188,11 +196,15 @@
             android:paddingVertical="13dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:layout_marginEnd="14dp"
-                android:text="🇸🇦"
-                android:textSize="22sp" />
+                android:background="@drawable/bg_lang_badge"
+                android:gravity="center"
+                android:text="AR"
+                android:textColor="#141414"
+                android:textSize="12sp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -239,11 +251,15 @@
             android:paddingVertical="13dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:layout_marginEnd="14dp"
-                android:text="🇰🇷"
-                android:textSize="22sp" />
+                android:background="@drawable/bg_lang_badge"
+                android:gravity="center"
+                android:text="KO"
+                android:textColor="#141414"
+                android:textSize="12sp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -290,11 +306,15 @@
             android:paddingVertical="13dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:layout_marginEnd="14dp"
-                android:text="🇯🇵"
-                android:textSize="22sp" />
+                android:background="@drawable/bg_lang_badge"
+                android:gravity="center"
+                android:text="JA"
+                android:textColor="#141414"
+                android:textSize="12sp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -340,11 +360,15 @@
             android:paddingVertical="13dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:layout_marginEnd="14dp"
-                android:text="🇨🇳"
-                android:textSize="22sp" />
+                android:background="@drawable/bg_lang_badge"
+                android:gravity="center"
+                android:text="ZH"
+                android:textColor="#141414"
+                android:textSize="12sp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="0dp"
