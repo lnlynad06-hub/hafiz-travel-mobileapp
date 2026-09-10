@@ -2,12 +2,16 @@
 <resources>
     <string name="app_name">HafizTravel&amp;Tours</string>
 
-    <!-- Welcome / Onboarding screen -->
-    <string name="welcome_trust_text">Dipercayai oleh ratusan jemaah</string>
-    <string name="welcome_title">Rakan Perjalanan Umrah, Haji &amp; Pelancongan Anda</string>
-    <string name="welcome_subtitle">Tempah pakej Umrah, Haji, dan pelancongan inbound &amp; outbound dengan mudah, terus dari telefon anda.</string>
-    <string name="welcome_start_now">Mula Sekarang</string>
-    <string name="welcome_already_have_account">Sudah ada akaun? Log Masuk</string>
+    <!-- Welcome / Onboarding screen (Editorial Luxury) -->
+    <string name="welcome_brand_name">HAFIZ TRAVEL &amp; TOURS</string>
+    <string name="welcome_eyebrow">PREMIER TRAVEL CURATION</string>
+    <string name="welcome_title">Perjalanan Luar Biasa,\nDireka dengan Keanggunan.</string>
+    <string name="welcome_subtitle">Daripada percutian antarabangsa ikonik merentasi Asia, Eropah dan sekitarnya, sehingga ibadah Umrah yang disusun dengan penuh ketenangan.</string>
+    <string name="welcome_chip_worldwide">Pakej Percutian</string>
+    <string name="welcome_chip_umrah">Umrah &amp; Ziarah</string>
+    <string name="welcome_chip_custom">Pakej Khas</string>
+    <string name="welcome_start_now">Mula Meneroka</string>
+    <string name="welcome_already_have_account_full">Sudah mempunyai akaun? &lt;font color=\'#D81B60\'&gt;&lt;b&gt;Log Masuk&lt;/b&gt;&lt;/font&gt;</string>
 
     <string name="login_title">Selamat Kembali</string>
     <string name="login_subtitle">Log masuk untuk teruskan</string>
@@ -356,7 +360,8 @@
     <string name="login_password_required">Sila masukkan kata laluan</string>
     <string name="login_success">Log masuk berjaya!</string>
     <string name="login_failed_default">Log masuk gagal, sila cuba lagi</string>
-    <string name="language_picker_title">Choose Language / Pilih Bahasa</string>
+    <string name="language_picker_title">Pilih Bahasa</string>
+    <string name="language_picker_subtitle">Pilih bahasa pilihan anda</string>
 
     <string name="prayer_times_title_fallback">Waktu Solat Hari Ini (anggaran - tiada sambungan internet)</string>
     <string name="prayer_location_denied_text">Aktifkan lokasi untuk lihat waktu solat</string>

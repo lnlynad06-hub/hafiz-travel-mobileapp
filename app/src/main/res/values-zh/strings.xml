@@ -2,12 +2,16 @@
 <resources>
     <string name="app_name">HafizTravel&amp;Tours</string>
 
-    <!-- Welcome / Onboarding screen -->
-    <string name="welcome_trust_text">深受数百名朝觐者信赖</string>
-    <string name="welcome_title">您的副朝、朝觐与旅行伙伴</string>
-    <string name="welcome_subtitle">通过手机轻松预订副朝、朝觐以及国内外旅游套餐。</string>
-    <string name="welcome_start_now">立即开始</string>
-    <string name="welcome_already_have_account">已有账户？登录</string>
+    <!-- Welcome / Onboarding screen (Editorial Luxury) -->
+    <string name="welcome_brand_name">HAFIZ TRAVEL &amp; TOURS</string>
+    <string name="welcome_eyebrow">尊享定制奢华之旅</string>
+    <string name="welcome_title">卓越非凡之旅，\n缔造优雅体验。</string>
+    <string name="welcome_subtitle">无论是遍及亚欧的全球经典游览，还是安心宁谧的朝觐圣旅，皆为您悉心定制。</string>
+    <string name="welcome_chip_worldwide">全球旅游</string>
+    <string name="welcome_chip_umrah">朝觐与朝圣</string>
+    <string name="welcome_chip_custom">定制包团</string>
+    <string name="welcome_start_now">开启探索</string>
+    <string name="welcome_already_have_account_full">已有账号？ &lt;font color=\'#D81B60\'&gt;&lt;b&gt;立即登录&lt;/b&gt;&lt;/font&gt;</string>
 
     <!-- Login screen -->
     <string name="login_title">欢迎回来</string>
@@ -358,7 +362,8 @@
     <string name="login_password_required">请输入密码</string>
     <string name="login_success">登录成功！</string>
     <string name="login_failed_default">登录失败，请重试</string>
-    <string name="language_picker_title">Choose Language / Pilih Bahasa</string>
+    <string name="language_picker_title">选择语言</string>
+    <string name="language_picker_subtitle">选择您的首选语言</string>
 
     <string name="prayer_times_title_fallback">今日服务时间（估算值 - 无网络连接）</string>
     <string name="prayer_location_denied_text">启用定位服务以显示服务时间。</string>

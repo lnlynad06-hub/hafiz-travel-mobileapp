@@ -2,12 +2,16 @@
 <resources>
     <string name="app_name">HafizTravel&amp;Tours</string>
 
-    <!-- Welcome / Onboarding screen -->
-    <string name="welcome_trust_text">数百人の巡礼者に信頼されています</string>
-    <string name="welcome_title">ウムラ・ハッジ・旅行のパートナー</string>
-    <string name="welcome_subtitle">スマートフォンから簡単にウムラ、ハッジ、国内外の旅行パッケージを予約できます。</string>
-    <string name="welcome_start_now">今すぐ始める</string>
-    <string name="welcome_already_have_account">すでにアカウントをお持ちですか？ログイン</string>
+    <!-- Welcome / Onboarding screen (Editorial Luxury) -->
+    <string name="welcome_brand_name">HAFIZ TRAVEL &amp; TOURS</string>
+    <string name="welcome_eyebrow">プレミアム旅行キュレーション</string>
+    <string name="welcome_title">洗練された美しさと、\n心揺さぶる特別な旅へ。</string>
+    <string name="welcome_subtitle">アジアやヨーロッパを巡る贅沢な世界旅行から、心安らぐ聖地ウムラ巡礼まで、最高の安心をお届けします。</string>
+    <string name="welcome_chip_worldwide">世界ツアー</string>
+    <string name="welcome_chip_umrah">ウムラ＆巡礼</string>
+    <string name="welcome_chip_custom">オーダーメイド</string>
+    <string name="welcome_start_now">旅を始める</string>
+    <string name="welcome_already_have_account_full">すでにアカウントをお持ちですか？ &lt;font color=\'#D81B60\'&gt;&lt;b&gt;ログイン&lt;/b&gt;&lt;/font&gt;</string>
 
     <!-- Login screen -->
     <string name="login_title">おかえりなさい</string>
@@ -358,7 +362,8 @@
     <string name="login_password_required">パスワードを入力してください</string>
     <string name="login_success">ログインに成功しました!</string>
     <string name="login_failed_default">ログインに失敗しました。もう一度お試しください</string>
-    <string name="language_picker_title">Choose Language / Pilih Bahasa</string>
+    <string name="language_picker_title">言語を選択</string>
+    <string name="language_picker_subtitle">ご希望の言語を選択してください</string>
 
     <string name="prayer_times_title_fallback">本日の礼拝時間（推定 - インターネット接続なし）</string>
     <string name="prayer_location_denied_text">位置情報を有効にして礼拝時間を表示</string>

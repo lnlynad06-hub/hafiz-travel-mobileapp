@@ -3,9 +3,12 @@ package com.hafiztraveltours.app;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.splashscreen.SplashScreen;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -16,14 +19,68 @@ public class SplashActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // The System Splash Screen (pink background + logo) is shown
-        // automatically by Android while this Activity is starting up.
-        // We don't need our own custom splash UI/animation on top of it.
-        SplashScreen.installSplashScreen(this);
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_splash);
 
-        startActivity(new Intent(this, WelcomeActivity.class));
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-        finish();
+        View splashLogo = findViewById(R.id.splashLogo);
+        View splashTitle = findViewById(R.id.splashTitle);
+        View splashSubtitle = findViewById(R.id.splashSubtitle);
+        View splashFooter = findViewById(R.id.splashFooter);
+
+        // Initial invisible states
+        if (splashLogo != null) {
+            splashLogo.setAlpha(0f);
+            splashLogo.setScaleX(0.85f);
+            splashLogo.setScaleY(0.85f);
+
+            splashLogo.animate()
+                    .alpha(1f)
+                    .scaleX(1f)
+                    .scaleY(1f)
+                    .setDuration(650)
+                    .setInterpolator(new DecelerateInterpolator(1.8f))
+                    .start();
+        }
+
+        if (splashTitle != null) {
+            splashTitle.setAlpha(0f);
+            splashTitle.setTranslationY(18f);
+            splashTitle.animate()
+                    .alpha(1f)
+                    .translationY(0f)
+                    .setDuration(550)
+                    .setStartDelay(120)
+                    .setInterpolator(new DecelerateInterpolator(1.5f))
+                    .start();
+        }
+
+        if (splashSubtitle != null) {
+            splashSubtitle.setAlpha(0f);
+            splashSubtitle.setTranslationY(18f);
+            splashSubtitle.animate()
+                    .alpha(1f)
+                    .translationY(0f)
+                    .setDuration(550)
+                    .setStartDelay(200)
+                    .setInterpolator(new DecelerateInterpolator(1.5f))
+                    .start();
+        }
+
+        if (splashFooter != null) {
+            splashFooter.setAlpha(0f);
+            splashFooter.animate()
+                    .alpha(1f)
+                    .setDuration(500)
+                    .setStartDelay(300)
+                    .start();
+        }
+
+        // Seamless transition into WelcomeActivity
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            Intent intent = new Intent(SplashActivity.this, WelcomeActivity.class);
+            startActivity(intent);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            finish();
+        }, 1350);
     }
 }

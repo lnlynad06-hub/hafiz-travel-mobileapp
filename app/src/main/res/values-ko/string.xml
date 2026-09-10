@@ -2,12 +2,16 @@
 <resources>
     <string name="app_name">HafizTravel&amp;Tours</string>
 
-    <!-- Welcome / Onboarding screen -->
-    <string name="welcome_trust_text">수백 명의 순례자가 신뢰하는 서비스</string>
-    <string name="welcome_title">움라, 하지 및 여행의 동반자</string>
-    <string name="welcome_subtitle">스마트폰으로 간편하게 움라, 하지 및 국내외 여행 패키지를 예약하세요.</string>
-    <string name="welcome_start_now">지금 시작하기</string>
-    <string name="welcome_already_have_account">이미 계정이 있으신가요? 로그인</string>
+    <!-- Welcome / Onboarding screen (Editorial Luxury) -->
+    <string name="welcome_brand_name">HAFIZ TRAVEL &amp; TOURS</string>
+    <string name="welcome_eyebrow">프리미엄 맞춤형 여행 큐레이션</string>
+    <string name="welcome_title">품격 있는 여정,\n당신만을 위한 특별한 여행.</string>
+    <string name="welcome_subtitle">아시아와 유럽을 아우르는 럭셔리 세계 여행부터 편안하고 성스러운 움라 순례까지 완벽한 여정을 선사합니다.</string>
+    <string name="welcome_chip_worldwide">해외 여행</string>
+    <string name="welcome_chip_umrah">움라 &amp; 성지순례</string>
+    <string name="welcome_chip_custom">맞춤 여행</string>
+    <string name="welcome_start_now">여행 시작하기</string>
+    <string name="welcome_already_have_account_full">이미 계정이 있으신가요? &lt;font color=\'#D81B60\'&gt;&lt;b&gt;로그인&lt;/b&gt;&lt;/font&gt;</string>
 
     <!-- Login screen -->
     <string name="login_title">다시 오신 것을 환영합니다</string>
@@ -358,7 +362,8 @@
     <string name="login_password_required">비밀번호를 입력해 주세요</string>
     <string name="login_success">로그인 성공!</string>
     <string name="login_failed_default">로그인 실패, 다시 시도해 주세요</string>
-    <string name="language_picker_title">Choose Language / Pilih Bahasa</string>
+    <string name="language_picker_title">언어 선택</string>
+    <string name="language_picker_subtitle">선호하는 언어를 선택하세요</string>
 
     <string name="prayer_times_title_fallback">오늘의 예배 시간 (추정치 - 인터넷 연결 없음)</string>
     <string name="prayer_location_denied_text">위치 정보를 활성화하여 예배 시간 표시</string>

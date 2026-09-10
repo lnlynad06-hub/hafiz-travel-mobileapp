@@ -8,10 +8,10 @@
         <item name="android:windowBackground">@color/background</item>
     </style>
 
-    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/pink_primary</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_logo_square</item>
-        <item name="postSplashScreenTheme">@style/Theme.HafizTravel</item>
+    <style name="Theme.App.Starting" parent="Theme.HafizTravel">
+        <item name="android:windowBackground">#FAF9F6</item>
+        <item name="android:statusBarColor">#FAF9F6</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
     </style>
 
     <style name="LangPill">

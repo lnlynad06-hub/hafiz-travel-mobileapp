@@ -8,12 +8,16 @@
          Declaring it in this file too creates a duplicate "string/default_web_client_id"
          resource, which fails the resource-linking step and breaks the whole build. -->
 
-    <!-- Welcome / Onboarding screen -->
-    <string name="welcome_trust_text">Trusted by hundreds of pilgrims</string>
-    <string name="welcome_title">Your Umrah, Hajj &amp; Travel Companion</string>
-    <string name="welcome_subtitle">Easily book Umrah, Hajj, and inbound &amp; outbound travel packages directly from your phone.</string>
-    <string name="welcome_start_now">Start Now</string>
-    <string name="welcome_already_have_account">Already have an account? Log In</string>
+    <!-- Welcome / Onboarding screen (Editorial Luxury) -->
+    <string name="welcome_brand_name">HAFIZ TRAVEL &amp; TOURS</string>
+    <string name="welcome_eyebrow">PREMIER TRAVEL CURATION</string>
+    <string name="welcome_title">Extraordinary Journeys,\nCrafted with Elegance.</string>
+    <string name="welcome_subtitle">From iconic international tours across Asia, Europe and beyond, to sacred Umrah pilgrimages tailored with complete peace of mind.</string>
+    <string name="welcome_chip_worldwide">Worldwide Tours</string>
+    <string name="welcome_chip_umrah">Umrah &amp; Ziarah</string>
+    <string name="welcome_chip_custom">Custom Travel</string>
+    <string name="welcome_start_now">Start Exploring</string>
+    <string name="welcome_already_have_account_full">Already have an account? &lt;font color=\'#D81B60\'&gt;&lt;b&gt;Log In&lt;/b&gt;&lt;/font&gt;</string>
 
     <!-- Login screen -->
     <string name="login_title">Welcome Back</string>
@@ -364,7 +368,8 @@
     <string name="login_password_required">Please enter your password</string>
     <string name="login_success">Login successful!</string>
     <string name="login_failed_default">Login failed, please try again</string>
-    <string name="language_picker_title">Choose Language / Pilih Bahasa</string>
+    <string name="language_picker_title">Select Language</string>
+    <string name="language_picker_subtitle">Choose your preferred language</string>
 
     <string name="prayer_times_title_fallback">Today\'s prayer times (estimated - no internet connection)</string>
     <string name="prayer_location_denied_text">Enable location services to display prayer times.</string>

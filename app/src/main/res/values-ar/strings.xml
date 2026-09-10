@@ -2,12 +2,16 @@
 <resources>
     <string name="app_name">HafizTravel&amp;Tours</string>
 
-    <!-- Welcome / Onboarding screen -->
-    <string name="welcome_trust_text">موثوق به من قبل مئات الحجاج والمعتمرين</string>
-    <string name="welcome_title">رفيقك في العمرة والحج والسفر</string>
-    <string name="welcome_subtitle">احجز بسهولة باقات العمرة والحج والرحلات الداخلية والخارجية مباشرة من هاتفك.</string>
-    <string name="welcome_start_now">ابدأ الآن</string>
-    <string name="welcome_already_have_account">لديك حساب بالفعل؟ تسجيل الدخول</string>
+    <!-- Welcome / Onboarding screen (Editorial Luxury) -->
+    <string name="welcome_brand_name">HAFIZ TRAVEL &amp; TOURS</string>
+    <string name="welcome_eyebrow">تنسيق رحلات فاخرة ومميزة</string>
+    <string name="welcome_title">رحلات استثنائية،\nصُممت برقيّ وأناقة.</string>
+    <string name="welcome_subtitle">من الجولات السياحية العالمية عبر آسيا وأوروبا إلى رحلات العمرة المباركة المصممة بأعلى درجات الراحة والسكينة.</string>
+    <string name="welcome_chip_worldwide">جولات عالمية</string>
+    <string name="welcome_chip_umrah">العمرة والزيارة</string>
+    <string name="welcome_chip_custom">رحلات خاصة</string>
+    <string name="welcome_start_now">ابدأ الاستكشاف</string>
+    <string name="welcome_already_have_account_full">لديك حساب بالفعل؟ &lt;font color=\'#D81B60\'&gt;&lt;b&gt;تسجيل الدخول&lt;/b&gt;&lt;/font&gt;</string>
 
     <!-- Login screen -->
     <string name="login_title">مرحبًا بعودتك</string>
@@ -358,7 +362,8 @@
     <string name="login_password_required">يرجى إدخال كلمة المرور</string>
     <string name="login_success">تم تسجيل الدخول بنجاح!</string>
     <string name="login_failed_default">فشل تسجيل الدخول، يرجى المحاولة مرة أخرى</string>
-    <string name="language_picker_title">Choose Language / Pilih Bahasa</string>
+    <string name="language_picker_title">اختر اللغة</string>
+    <string name="language_picker_subtitle">اختر لغتك المفضلة</string>
 
     <string name="prayer_times_title_fallback">أوقات العبادة لهذا اليوم (تقديرية – لا يوجد اتصال بالإنترنت)</string>
     <string name="prayer_location_denied_text">فعّل خدمات الموقع لعرض مواقيت الصلاة.</string>
