@@ -498,4 +498,28 @@
     <string name="tour_hero_subtitle">Terokai destinasi pilihan anda</string>
     <string name="tour_empty_state">Tiada pakej dijumpai</string>
 
+    <string name="favorite_hero_title">Kegemaran</string>
+    <string name="favorite_hero_subtitle">Pakej yang anda simpan untuk dilihat kemudian</string>
+    <string name="favorite_empty_state">Tiada pakej disimpan lagi</string>
+
+    <string name="package_detail_price_from_label">Dari</string>
+    <string name="package_detail_whatsapp_button">WhatsApp Perunding</string>
+    <string name="package_detail_poster_title">Poster Pakej</string>
+    <string name="package_detail_summary_title">Ringkasan Pakej</string>
+    <string name="package_detail_departure_title">Tarikh Pelepasan</string>
+    <string name="package_detail_stay_title">Penginapan</string>
+    <string name="package_detail_itinerary_title">Itinerary Lengkap</string>
+    <string name="package_detail_hotel_label">Penginapan</string>
+    <string name="package_detail_meals_label">Sajian</string>
+    <string name="package_detail_notes_title">Nota Penting &amp; Panduan Jemaah</string>
+    <string name="package_detail_included_title">Termasuk</string>
+    <string name="package_detail_excluded_title">Tidak Termasuk</string>
+    <string name="package_detail_packing_title">Panduan Barang</string>
+    <string name="package_detail_packing_summer">Musim Panas</string>
+    <string name="package_detail_packing_winter">Musim Sejuk</string>
+    <string name="package_detail_price_options_title">Pilihan Harga/Bilik</string>
+    <string name="package_detail_gallery_title">Galeri Perjalanan</string>
+    <string name="package_detail_whatsapp_default_message">Assalamualaikum, saya berminat dengan pakej %1$s. Boleh kongsi maklumat lanjut?</string>
+
+
 </resources>

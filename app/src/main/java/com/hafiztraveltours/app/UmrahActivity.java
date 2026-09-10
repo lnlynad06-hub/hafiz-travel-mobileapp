@@ -105,6 +105,7 @@ public class UmrahActivity extends AppCompatActivity {
                                 doc.getString("imageUrl"));
 
                         String category = doc.getString("category");
+                        pkg.collectionName = "umrah_packages";
                         if ("popular".equals(category)) {
                             popularPackages.add(pkg);
                         } else if ("ziarah".equals(category)) {

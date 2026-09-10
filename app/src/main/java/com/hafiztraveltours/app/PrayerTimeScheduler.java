@@ -51,14 +51,24 @@ public class PrayerTimeScheduler {
     }
 
     private static void scheduleOne(Context context, String prayerName, long epochSeconds, int requestCode) {
-        if (epochSeconds == 0) return;
+        if (epochSeconds == 0) {
+            android.util.Log.d("PrayerScheduler", prayerName + ": SKIP - epochSeconds = 0");
+            return;
+        }
 
         long triggerTimeMillis = epochSeconds * 1000L;
 
-        if (triggerTimeMillis < System.currentTimeMillis()) return;
+        if (triggerTimeMillis < System.currentTimeMillis()) {
+            android.util.Log.d("PrayerScheduler", prayerName + ": SKIP - waktu dah lepas ("
+                    + new java.util.Date(triggerTimeMillis) + " < sekarang)");
+            return;
+        }
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        if (alarmManager == null) return;
+        if (alarmManager == null) {
+            android.util.Log.e("PrayerScheduler", prayerName + ": ERROR - AlarmManager null");
+            return;
+        }
 
         Intent intent = new Intent(context, PrayerAlarmReceiver.class);
         intent.putExtra("prayer_name", prayerName);
@@ -67,23 +77,25 @@ public class PrayerTimeScheduler {
                 context, requestCode, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-        // Android 12+ (API 31+) perlukan permission SCHEDULE_EXACT_ALARM sebelum
-        // boleh guna exact alarm - check dulu, kalau takde, guna inexact alarm
-        // sebagai fallback (elak crash, walau timing mungkin lari beberapa minit).
         boolean canScheduleExact = true;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
             canScheduleExact = alarmManager.canScheduleExactAlarms();
         }
 
+        android.util.Log.d("PrayerScheduler", prayerName + ": SCHEDULING untuk "
+                + new java.util.Date(triggerTimeMillis) + " | canScheduleExact=" + canScheduleExact);
+
         if (canScheduleExact) {
             alarmManager.setExactAndAllowWhileIdle(
                     AlarmManager.RTC_WAKEUP, triggerTimeMillis, pendingIntent);
         } else {
-            // Fallback: inexact alarm, tak perlukan permission khas
             alarmManager.setAndAllowWhileIdle(
                     AlarmManager.RTC_WAKEUP, triggerTimeMillis, pendingIntent);
         }
+
+        android.util.Log.d("PrayerScheduler", prayerName + ": DONE scheduling");
     }
+
     // Panggil ni dari MainActivity untuk minta user enable "exact alarm"
     // permission secara manual (Android 12+ sahaja).
     public static void requestExactAlarmPermissionIfNeeded(Context context) {

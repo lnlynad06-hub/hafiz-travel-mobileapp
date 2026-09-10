@@ -9,6 +9,10 @@ public class UmrahPackage {
     public String url;
     public String imageUrl;
 
+    /** "umrah_packages" atau "tour_packages" - wajib diisi selepas objek dicipta,
+     *  supaya PackageDetailActivity tahu collection mana nak query semula. */
+    public String collectionName;
+
     public UmrahPackage() {}
 
     public UmrahPackage(String id, String name, int durationDays, int nightsCount,

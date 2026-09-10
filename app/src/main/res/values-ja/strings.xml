@@ -501,4 +501,28 @@
     <string name="tour_hero_subtitle">お好みの旅先を探す</string>
     <string name="tour_empty_state">パッケージが見つかりません</string>
 
+    <string name="favorite_hero_title">お気に入り</string>
+    <string name="favorite_hero_subtitle">後で見るために保存したパッケージ</string>
+    <string name="favorite_empty_state">まだ保存されたパッケージはありません</string>
+
+    <string name="package_detail_price_from_label">価格</string>
+    <string name="package_detail_whatsapp_button">WhatsAppで相談</string>
+    <string name="package_detail_poster_title">パッケージポスター</string>
+    <string name="package_detail_summary_title">パッケージ概要</string>
+    <string name="package_detail_departure_title">出発日</string>
+    <string name="package_detail_stay_title">宿泊</string>
+    <string name="package_detail_itinerary_title">詳細な旅程</string>
+    <string name="package_detail_hotel_label">宿泊先</string>
+    <string name="package_detail_meals_label">食事</string>
+    <string name="package_detail_notes_title">重要な注意事項とガイドライン</string>
+    <string name="package_detail_included_title">含まれるもの</string>
+    <string name="package_detail_excluded_title">含まれないもの</string>
+    <string name="package_detail_packing_title">持ち物ガイド</string>
+    <string name="package_detail_packing_summer">夏季</string>
+    <string name="package_detail_packing_winter">冬季</string>
+    <string name="package_detail_price_options_title">料金・部屋タイプ</string>
+    <string name="package_detail_gallery_title">写真ギャラリー</string>
+    <string name="package_detail_whatsapp_default_message">こんにちは、%1$sパッケージに興味があります。詳細を教えていただけますか?</string>
+
+
 </resources>

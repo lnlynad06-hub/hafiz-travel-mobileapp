@@ -125,6 +125,7 @@ public class TourActivity extends AppCompatActivity {
                                 doc.getString("imageUrl"));
 
                         allPackages.add(pkg);
+                        pkg.collectionName = "tour_packages";
 
                         Boolean isPopular = doc.getBoolean("isPopular");
                         if (Boolean.TRUE.equals(isPopular)) {

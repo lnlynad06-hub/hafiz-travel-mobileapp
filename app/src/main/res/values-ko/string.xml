@@ -501,4 +501,27 @@
     <string name="tour_hero_subtitle">원하는 여행지를 찾아보세요</string>
     <string name="tour_empty_state">패키지를 찾을 수 없습니다</string>
 
+    <string name="favorite_hero_title">즐겨찾기</string>
+    <string name="favorite_hero_subtitle">나중에 보려고 저장한 패키지</string>
+    <string name="favorite_empty_state">저장된 패키지가 없습니다</string>
+
+    <string name="package_detail_price_from_label">최저가</string>
+    <string name="package_detail_whatsapp_button">WhatsApp 상담</string>
+    <string name="package_detail_poster_title">패키지 포스터</string>
+    <string name="package_detail_summary_title">패키지 요약</string>
+    <string name="package_detail_departure_title">출발 날짜</string>
+    <string name="package_detail_stay_title">숙박</string>
+    <string name="package_detail_itinerary_title">전체 일정</string>
+    <string name="package_detail_hotel_label">숙박</string>
+    <string name="package_detail_meals_label">식사</string>
+    <string name="package_detail_notes_title">중요 안내 및 순례자 가이드</string>
+    <string name="package_detail_included_title">포함 사항</string>
+    <string name="package_detail_excluded_title">불포함 사항</string>
+    <string name="package_detail_packing_title">준비물 가이드</string>
+    <string name="package_detail_packing_summer">여름철</string>
+    <string name="package_detail_packing_winter">겨울철</string>
+    <string name="package_detail_price_options_title">가격/객실 옵션</string>
+    <string name="package_detail_gallery_title">여행 갤러리</string>
+    <string name="package_detail_whatsapp_default_message">안녕하세요, %1$s 패키지에 관심이 있습니다. 자세한 정보를 공유해 주시겠어요?</string>
+
 </resources>

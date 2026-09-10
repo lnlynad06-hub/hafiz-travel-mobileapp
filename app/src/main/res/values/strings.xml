@@ -507,4 +507,28 @@
     <string name="tour_hero_subtitle">Explore your next destination</string>
     <string name="tour_empty_state">No packages found</string>
 
+    <string name="favorite_hero_title">Favorites</string>
+    <string name="favorite_hero_subtitle">Packages you\'ve saved to view later</string>
+    <string name="favorite_empty_state">No packages saved yet</string>
+
+    <string name="package_detail_price_from_label">From</string>
+    <string name="package_detail_whatsapp_button">WhatsApp Advisor</string>
+    <string name="package_detail_poster_title">Package Poster</string>
+    <string name="package_detail_summary_title">Package Summary</string>
+    <string name="package_detail_departure_title">Departure Dates</string>
+    <string name="package_detail_stay_title">Accommodation</string>
+    <string name="package_detail_itinerary_title">Full Itinerary</string>
+    <string name="package_detail_hotel_label">Accommodation</string>
+    <string name="package_detail_meals_label">Meals</string>
+    <string name="package_detail_notes_title">Important Notes &amp; Guidelines</string>
+    <string name="package_detail_included_title">Included</string>
+    <string name="package_detail_excluded_title">Not Included</string>
+    <string name="package_detail_packing_title">Packing Guide</string>
+    <string name="package_detail_packing_summer">Summer Season</string>
+    <string name="package_detail_packing_winter">Winter Season</string>
+    <string name="package_detail_price_options_title">Price / Room Options</string>
+    <string name="package_detail_gallery_title">Photo Gallery</string>
+    <string name="package_detail_whatsapp_default_message">Hello, I\'m interested in the %1$s package. Could you share more details?</string>
+
+
 </resources>

@@ -50,6 +50,7 @@
         <activity android:name=".FavoriteActivity" android:exported="false" />
         <activity android:name=".ChecklistUmrahActivity" />
         <activity android:name=".AllPackagesActivity" android:exported="false" />
+        <activity android:name=".PackageDetailActivity" android:exported="false" />
 
         <receiver android:name=".PrayerAlarmReceiver" android:exported="false" />
         <receiver android:name=".BootReceiver" android:exported="true">

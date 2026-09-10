@@ -1,6 +1,7 @@
 package com.hafiztraveltours.app;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -12,7 +13,7 @@ public class FavoriteActivity extends AppCompatActivity {
 
     private UmrahPackageAdapter adapter;
     private RecyclerView recyclerView;
-    private View emptyText;
+    private View emptyContainer;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -24,10 +25,10 @@ public class FavoriteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite);
 
-        findViewById(R.id.favoriteBackButton).setOnClickListener(v -> finish());
+        setupBottomNav();
 
         recyclerView = findViewById(R.id.favoriteRecyclerView);
-        emptyText = findViewById(R.id.favoriteEmptyText);
+        emptyContainer = findViewById(R.id.favoriteEmptyContainer);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         adapter = new UmrahPackageAdapter(this, java.util.Collections.emptyList(),
@@ -44,10 +45,30 @@ public class FavoriteActivity extends AppCompatActivity {
         refreshList(); // refresh setiap kali page ni dibuka semula (contoh lepas favorite dari UmrahActivity)
     }
 
+    /**
+     * Same fixed bottom nav as MainActivity/UmrahActivity/TourActivity. This
+     * page IS the Favorite tab, so navFavorite is just shown as the active
+     * tab (no click action needed) while the other tabs navigate away and
+     * finish() this activity.
+     */
+    private void setupBottomNav() {
+        findViewById(R.id.navHome).setOnClickListener(v -> finish());
+
+        findViewById(R.id.navUmrah).setOnClickListener(v -> {
+            startActivity(new Intent(this, UmrahActivity.class));
+            finish();
+        });
+
+        findViewById(R.id.navTour).setOnClickListener(v -> {
+            startActivity(new Intent(this, TourActivity.class));
+            finish();
+        });
+    }
+
     private void refreshList() {
         java.util.List<UmrahPackage> favorites = FavoritesManager.getAllFavorites(this);
         adapter.setItems(favorites);
-        emptyText.setVisibility(favorites.isEmpty() ? View.VISIBLE : View.GONE);
+        emptyContainer.setVisibility(favorites.isEmpty() ? View.VISIBLE : View.GONE);
         recyclerView.setVisibility(favorites.isEmpty() ? View.GONE : View.VISIBLE);
     }
 }

@@ -148,6 +148,13 @@ public class MainActivity extends AppCompatActivity {
         setupInfoSection();
         setupPodcastSection();
         setupPrayerTimesWidget();
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.POST_NOTIFICATIONS}, 100);
+            }
+        }
         PrayerTimeScheduler.requestExactAlarmPermissionIfNeeded(this);
         PrayerTimeScheduler.requestBatteryOptimizationExemption(this);
     }
@@ -274,21 +281,31 @@ public class MainActivity extends AppCompatActivity {
         com.google.android.gms.tasks.Tasks.whenAllSuccess(umrahTask, tourTask)
                 .addOnSuccessListener(results -> {
                     allPopularPackages = new ArrayList<>();
-                    for (Object result : results) {
-                        com.google.firebase.firestore.QuerySnapshot snapshot =
-                                (com.google.firebase.firestore.QuerySnapshot) result;
-                        for (com.google.firebase.firestore.DocumentSnapshot doc : snapshot.getDocuments()) {
-                            UmrahPackage pkg = new UmrahPackage(
-                                    doc.getId(),
-                                    doc.getString("name"),
-                                    doc.getLong("durationDays") != null ? doc.getLong("durationDays").intValue() : 0,
-                                    doc.getLong("nightsCount") != null ? doc.getLong("nightsCount").intValue() : 0,
-                                    doc.getString("price"),
-                                    doc.getString("url"),
-                                    doc.getString("imageUrl"));
-                            allPopularPackages.add(pkg);
-                        }
+
+                    com.google.firebase.firestore.QuerySnapshot umrahSnapshot =
+                            (com.google.firebase.firestore.QuerySnapshot) results.get(0);
+                    for (com.google.firebase.firestore.DocumentSnapshot doc : umrahSnapshot.getDocuments()) {
+                        UmrahPackage pkg = new UmrahPackage(
+                                doc.getId(), doc.getString("name"),
+                                doc.getLong("durationDays") != null ? doc.getLong("durationDays").intValue() : 0,
+                                doc.getLong("nightsCount") != null ? doc.getLong("nightsCount").intValue() : 0,
+                                doc.getString("price"), doc.getString("url"), doc.getString("imageUrl"));
+                        pkg.collectionName = "umrah_packages";
+                        allPopularPackages.add(pkg);
                     }
+
+                    com.google.firebase.firestore.QuerySnapshot tourSnapshot =
+                            (com.google.firebase.firestore.QuerySnapshot) results.get(1);
+                    for (com.google.firebase.firestore.DocumentSnapshot doc : tourSnapshot.getDocuments()) {
+                        UmrahPackage pkg = new UmrahPackage(
+                                doc.getId(), doc.getString("name"),
+                                doc.getLong("durationDays") != null ? doc.getLong("durationDays").intValue() : 0,
+                                doc.getLong("nightsCount") != null ? doc.getLong("nightsCount").intValue() : 0,
+                                doc.getString("price"), doc.getString("url"), doc.getString("imageUrl"));
+                        pkg.collectionName = "tour_packages";
+                        allPopularPackages.add(pkg);
+                    }
+
                     recyclerView.setAdapter(new PackagePopularAdapter(this, allPopularPackages));
                 })
                 .addOnFailureListener(e ->
@@ -338,11 +355,11 @@ public class MainActivity extends AppCompatActivity {
 
                     QuerySnapshot umrahSnapshot = (QuerySnapshot) results.get(0);
                     for (DocumentSnapshot doc : umrahSnapshot.getDocuments()) {
-                        homeSearchUmrahCache.add(mapDocToPackage(doc));
+                        homeSearchUmrahCache.add(mapDocToPackage(doc, "umrah_packages"));
                     }
                     QuerySnapshot tourSnapshot = (QuerySnapshot) results.get(1);
                     for (DocumentSnapshot doc : tourSnapshot.getDocuments()) {
-                        homeSearchTourCache.add(mapDocToPackage(doc));
+                        homeSearchTourCache.add(mapDocToPackage(doc, "tour_packages"));
                     }
 
                     homeSearchPackagesLoaded = true;
@@ -352,8 +369,8 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(this, "Gagal muat pakej", Toast.LENGTH_SHORT).show());
     }
 
-    private UmrahPackage mapDocToPackage(DocumentSnapshot doc) {
-        return new UmrahPackage(
+    private UmrahPackage mapDocToPackage(DocumentSnapshot doc, String collectionName) {
+        UmrahPackage pkg = new UmrahPackage(
                 doc.getId(),
                 doc.getString("name"),
                 doc.getLong("durationDays") != null ? doc.getLong("durationDays").intValue() : 0,
@@ -361,6 +378,8 @@ public class MainActivity extends AppCompatActivity {
                 doc.getString("price"),
                 doc.getString("url"),
                 doc.getString("imageUrl"));
+        pkg.collectionName = collectionName;
+        return pkg;
     }
 
     private void filterAndShowHomeSearch(String query, RecyclerView resultsRecyclerView) {

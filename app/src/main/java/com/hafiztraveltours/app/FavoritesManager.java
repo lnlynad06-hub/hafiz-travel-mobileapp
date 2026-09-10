@@ -76,6 +76,7 @@ public class FavoritesManager {
             obj.put("price", pkg.price);
             obj.put("url", pkg.url);
             obj.put("imageUrl", pkg.imageUrl);
+            obj.put("collectionName", pkg.collectionName);
             return obj.toString();
         } catch (Exception e) {
             return "{}";
@@ -85,10 +86,12 @@ public class FavoritesManager {
     private static UmrahPackage fromJson(String json) {
         try {
             JSONObject obj = new JSONObject(json);
-            return new UmrahPackage(
+            UmrahPackage pkg = new UmrahPackage(
                     obj.getString("id"), obj.getString("name"),
                     obj.getInt("durationDays"), obj.getInt("nightsCount"),
                     obj.getString("price"), obj.getString("url"), obj.getString("imageUrl"));
+            pkg.collectionName = obj.optString("collectionName", "umrah_packages");
+            return pkg;
         } catch (Exception e) {
             return null;
         }

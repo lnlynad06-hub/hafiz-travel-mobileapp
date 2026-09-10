@@ -62,9 +62,9 @@ public class PackagePopularAdapter extends RecyclerView.Adapter<PackagePopularAd
 
         // itemView punya listener berasingan - buka WebView pakej
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, WebViewActivity.class);
-            intent.putExtra(WebViewActivity.EXTRA_TITLE, pkg.name);
-            intent.putExtra(WebViewActivity.EXTRA_URL, pkg.url);
+            Intent intent = new Intent(context, PackageDetailActivity.class);
+            intent.putExtra(PackageDetailActivity.EXTRA_COLLECTION, pkg.collectionName);
+            intent.putExtra(PackageDetailActivity.EXTRA_PACKAGE_ID, pkg.id);
             context.startActivity(intent);
         });
     }

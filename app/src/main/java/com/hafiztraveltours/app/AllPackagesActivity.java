@@ -81,14 +81,14 @@ public class AllPackagesActivity extends AppCompatActivity {
 
                     QuerySnapshot umrahSnapshot = (QuerySnapshot) results.get(0);
                     for (DocumentSnapshot doc : umrahSnapshot.getDocuments()) {
-                        UmrahPackage pkg = mapDoc(doc);
+                        UmrahPackage pkg = mapDoc(doc, "umrah_packages");
                         allUmrah.add(pkg);
                         if (Boolean.TRUE.equals(doc.getBoolean("isPopular"))) popularCombined.add(pkg);
                     }
 
                     QuerySnapshot tourSnapshot = (QuerySnapshot) results.get(1);
                     for (DocumentSnapshot doc : tourSnapshot.getDocuments()) {
-                        UmrahPackage pkg = mapDoc(doc);
+                        UmrahPackage pkg = mapDoc(doc, "tour_packages");
                         allTour.add(pkg);
                         if (Boolean.TRUE.equals(doc.getBoolean("isPopular"))) popularCombined.add(pkg);
                     }
@@ -101,8 +101,8 @@ public class AllPackagesActivity extends AppCompatActivity {
                         Toast.makeText(this, "Gagal muat pakej", Toast.LENGTH_SHORT).show());
     }
 
-    private UmrahPackage mapDoc(DocumentSnapshot doc) {
-        return new UmrahPackage(
+    private UmrahPackage mapDoc(DocumentSnapshot doc, String collectionName) {
+        UmrahPackage pkg = new UmrahPackage(
                 doc.getId(),
                 doc.getString("name"),
                 doc.getLong("durationDays") != null ? doc.getLong("durationDays").intValue() : 0,
@@ -110,6 +110,8 @@ public class AllPackagesActivity extends AppCompatActivity {
                 doc.getString("price"),
                 doc.getString("url"),
                 doc.getString("imageUrl"));
+        pkg.collectionName = collectionName;
+        return pkg;
     }
 
     private void onSearchChanged(String query) {

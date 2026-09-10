@@ -501,4 +501,28 @@
     <string name="tour_hero_subtitle">اكتشف وجهتك المفضلة</string>
     <string name="tour_empty_state">لم يتم العثور على باقات</string>
 
+    <string name="favorite_hero_title">المفضلة</string>
+    <string name="favorite_hero_subtitle">الباقات التي حفظتها لمشاهدتها لاحقاً</string>
+    <string name="favorite_empty_state">لا توجد باقات محفوظة بعد</string>
+
+    <string name="package_detail_price_from_label">يبدأ من</string>
+    <string name="package_detail_whatsapp_button">واتساب المستشار</string>
+    <string name="package_detail_poster_title">ملصق الباقة</string>
+    <string name="package_detail_summary_title">ملخص الباقة</string>
+    <string name="package_detail_departure_title">تواريخ المغادرة</string>
+    <string name="package_detail_stay_title">الإقامة</string>
+    <string name="package_detail_itinerary_title">البرنامج الكامل</string>
+    <string name="package_detail_hotel_label">الإقامة</string>
+    <string name="package_detail_meals_label">الوجبات</string>
+    <string name="package_detail_notes_title">ملاحظات مهمة وإرشادات للمعتمرين</string>
+    <string name="package_detail_included_title">يشمل</string>
+    <string name="package_detail_excluded_title">لا يشمل</string>
+    <string name="package_detail_packing_title">دليل الأغراض المقترحة</string>
+    <string name="package_detail_packing_summer">فصل الصيف</string>
+    <string name="package_detail_packing_winter">فصل الشتاء</string>
+    <string name="package_detail_price_options_title">خيارات السعر/الغرفة</string>
+    <string name="package_detail_gallery_title">معرض الصور</string>
+    <string name="package_detail_whatsapp_default_message">السلام عليكم، أنا مهتم بباقة %1$s. هل يمكنكم مشاركة المزيد من التفاصيل؟</string>
+
+
 </resources>
