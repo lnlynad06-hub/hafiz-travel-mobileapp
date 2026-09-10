@@ -9,6 +9,15 @@ public class UmrahPackage {
     @SerializedName("name")
     public String name;
 
+    @SerializedName("title")
+    public String title;
+
+    public String getDisplayName() {
+        if (name != null && !name.trim().isEmpty()) return name;
+        if (title != null && !title.trim().isEmpty()) return title;
+        return "Pakej Pelancongan";
+    }
+
     @SerializedName("duration_days")
     public int durationDays;
 

@@ -7,103 +7,12 @@
     android:layout_height="match_parent"
     android:background="@color/background">
 
-    <!-- Fixed bottom navigation - same as MainActivity/UmrahActivity, Tour shown as the active tab -->
-    <LinearLayout
-        android:id="@+id/bottomNav"
+    <!-- Shared Floating Luxury Bottom Navigation Dock -->
+    <include
+        layout="@layout/layout_luxury_bottom_nav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/surface"
-        android:elevation="12dp"
-        android:orientation="horizontal"
-        android:paddingHorizontal="8dp"
-        android:paddingVertical="12dp"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <LinearLayout
-            android:id="@+id/navHome"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:paddingVertical="8dp"
-            android:clickable="true"
-            android:focusable="true">
-
-            <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:src="@drawable/ic_home" app:tint="@color/text_gray" android:padding="1dp" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="@string/nav_home" android:textColor="@color/text_gray" android:textSize="11sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/navUmrah"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:paddingVertical="8dp"
-            android:clickable="true"
-            android:focusable="true">
-
-            <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:src="@drawable/ic_kiblat" app:tint="@color/text_gray" android:padding="1dp" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="@string/nav_umrah" android:textColor="@color/text_gray" android:textSize="11sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/navTour"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/bg_pill_active_nav"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingVertical="8dp"
-            tools:ignore="TouchTargetSizeCheck">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_flight"
-                app:tint="@color/pink_dark"
-                android:padding="3dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="6dp"
-                android:text="@string/nav_tour"
-                android:textColor="@color/pink_dark"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/navFavorite"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:paddingVertical="8dp"
-            android:clickable="true"
-            android:focusable="true">
-
-            <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:src="@drawable/ic_favorite" app:tint="@color/text_gray" android:padding="1dp" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="@string/nav_favorite" android:textColor="@color/text_gray" android:textSize="11sp" />
-        </LinearLayout>
-
-    </LinearLayout>
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <!-- Scrollable content -->
     <androidx.core.widget.NestedScrollView
@@ -111,8 +20,9 @@
         android:layout_height="0dp"
         android:clipToPadding="false"
         android:overScrollMode="never"
+        android:paddingBottom="96dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/bottomNav">
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"

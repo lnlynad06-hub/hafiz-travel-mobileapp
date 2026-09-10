@@ -43,10 +43,11 @@ public class PackagePopularAdapter extends RecyclerView.Adapter<PackagePopularAd
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         UmrahPackage pkg = items.get(position);
+        holder.name.setText(pkg.getDisplayName());
 
-        holder.name.setText(pkg.name);
+        String cleanPrice = (pkg.price != null) ? pkg.price.replace("RM", "").replace("rm", "").trim() : "";
         holder.durationPrice.setText(context.getString(
-                R.string.package_duration_price, pkg.durationDays, pkg.nightsCount, pkg.price));
+                R.string.package_duration_price, pkg.durationDays, pkg.nightsCount, cleanPrice));
 
         Glide.with(context)
                 .load(pkg.imageUrl)
@@ -57,8 +58,12 @@ public class PackagePopularAdapter extends RecyclerView.Adapter<PackagePopularAd
 
         // Heart PUNYA listener sendiri - tap sini TIDAK akan propagate ke itemView di bawah
         holder.favoriteIcon.setOnClickListener(v ->
-                FavoritesManager.handleFavoriteToggle(context, pkg, isFavoriteNow ->
-                        updateFavoriteIcon(holder.favoriteIcon, pkg.id)));
+                FavoritesManager.handleFavoriteToggle(context, pkg, isFavoriteNow -> {
+                    updateFavoriteIcon(holder.favoriteIcon, pkg.id);
+                    if (context instanceof MainActivity) {
+                        ((MainActivity) context).updateFavoriteBadge();
+                    }
+                }));
 
         // itemView punya listener berasingan - buka WebView pakej
         holder.itemView.setOnClickListener(v -> {

@@ -12,9 +12,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.OvershootInterpolator;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -116,16 +122,20 @@ public class MainActivity extends AppCompatActivity {
         }
         activeLanguage = currentSaved;
         startArcAutoRefresh();
+        startHeroShowcase();
+        updateFavoriteBadge();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         stopArcAutoRefresh();
+        stopHeroShowcase();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -142,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
                 });
 
         setupHeroSection();
+        setupHeroShowcase();
         setupPopularPackages();
         setupQuickActions();
         setupBottomNav();
@@ -203,19 +214,76 @@ public class MainActivity extends AppCompatActivity {
             heroHeadline.setText(getString(R.string.hero_headline_guest));
         }
 
+        // Profile Avatar click
+        View profileAvatar = findViewById(R.id.profileAvatar);
+        if (profileAvatar != null) {
+            profileAvatar.setOnClickListener(v -> {
+                if (isLoggedIn) {
+                    startActivity(new Intent(this, ProfileActivity.class));
+                } else {
+                    startActivity(new Intent(this, SignUpActivity.class));
+                }
+            });
+        }
+
+        // Luxury Language Pill Button
+        View btnLanguagePicker = findViewById(R.id.btnLanguagePicker);
+        if (btnLanguagePicker != null) {
+            TextView tvActiveLanguage = findViewById(R.id.tvActiveLanguage);
+            if (tvActiveLanguage != null) {
+                String savedLang = LocaleHelper.getSavedLanguage(this);
+                tvActiveLanguage.setText(getLanguageShortLabel(savedLang));
+            }
+            btnLanguagePicker.setOnClickListener(v -> showLanguageBottomSheet());
+        }
+
         findViewById(R.id.notificationButton).setOnClickListener(v ->
                 Toast.makeText(this, getString(R.string.no_notifications), Toast.LENGTH_SHORT).show());
 
         setupHomeSearch();
     }
 
+    private String getLanguageShortLabel(String langCode) {
+        if (langCode == null) return "EN";
+        switch (langCode.toLowerCase()) {
+            case "ms": return "BM";
+            case "ar": return "AR";
+            case "ko": return "KO";
+            case "ja": return "JA";
+            case "zh": return "ZH";
+            default: return "EN";
+        }
+    }
+
     /**
-     * Reuses the same LocaleHelper that WelcomeActivity's language pills use,
-     * so switching language here stays consistent with the rest of the app.
-     * Now opened from the hamburger menu instead of a dedicated top icon.
+     * Shows a unified, luxury bottom sheet language picker with spring animations.
      */
-    private void showLanguagePicker() {
-        String[] labels = {"English", "Bahasa Melayu", "\u0627\u0644\u0639\u0631\u0628\u064a\u0629", "\ud55c\uad6d\uc5b4", "\u65e5\u672c\u8a9e", "\u4e2d\u6587"};
+    private void showLanguageBottomSheet() {
+        BottomSheetDialog dialog = new BottomSheetDialog(this, com.google.android.material.R.style.Theme_Design_BottomSheetDialog);
+        View sheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_language_picker, null);
+        dialog.setContentView(sheetView);
+
+        if (sheetView.getParent() instanceof View) {
+            ((View) sheetView.getParent()).setBackgroundColor(android.graphics.Color.TRANSPARENT);
+        }
+
+        View btnClose = sheetView.findViewById(R.id.btnCloseSheet);
+        if (btnClose != null) {
+            btnClose.setOnClickListener(v -> dialog.dismiss());
+        }
+
+        String current = LocaleHelper.getSavedLanguage(this);
+        if (current == null) current = LocaleHelper.LANGUAGE_ENGLISH;
+
+        View[] items = {
+                sheetView.findViewById(R.id.itemLangEnglish),
+                sheetView.findViewById(R.id.itemLangMalay),
+                sheetView.findViewById(R.id.itemLangArabic),
+                sheetView.findViewById(R.id.itemLangKorean),
+                sheetView.findViewById(R.id.itemLangJapanese),
+                sheetView.findViewById(R.id.itemLangChinese)
+        };
+
         String[] codes = {
                 LocaleHelper.LANGUAGE_ENGLISH,
                 LocaleHelper.LANGUAGE_MALAY,
@@ -225,43 +293,169 @@ public class MainActivity extends AppCompatActivity {
                 LocaleHelper.LANGUAGE_CHINESE
         };
 
-        String current = LocaleHelper.getSavedLanguage(this);
-        int checkedIndex = -1;
-        for (int i = 0; i < codes.length; i++) {
-            if (codes[i].equals(current)) {
-                checkedIndex = i;
-                break;
-            }
+        int[] radioIds = {
+                R.id.icRadioEnglish,
+                R.id.icRadioMalay,
+                R.id.icRadioArabic,
+                R.id.icRadioKorean,
+                R.id.icRadioJapanese,
+                R.id.icRadioChinese
+        };
+
+        for (int i = 0; i < items.length; i++) {
+            final int index = i;
+            setupLanguageItem(sheetView, items[i], radioIds[i], codes[i], current, dialog, index);
         }
 
-        new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.select_language))
-                .setSingleChoiceItems(labels, checkedIndex, (dialog, which) -> {
-                    LocaleHelper.saveLanguage(this, codes[which]);
-                    dialog.dismiss();
-                    recreate();
-                })
-                .setNegativeButton(getString(R.string.cancel), null)
-                .show();
+        dialog.show();
+    }
+
+    private void setupLanguageItem(View sheet, View item, int radioId, String langCode, String currentLang, BottomSheetDialog dialog, int index) {
+        if (item == null) return;
+        ImageView radio = sheet.findViewById(radioId);
+
+        boolean isSelected = langCode.equalsIgnoreCase(currentLang);
+        if (isSelected) {
+            item.setBackgroundResource(R.drawable.bg_language_item_selected);
+            if (radio != null) radio.setImageResource(R.drawable.ic_check_circle_magenta);
+        } else {
+            item.setBackgroundResource(R.drawable.bg_language_item_normal);
+            if (radio != null) radio.setImageResource(R.drawable.ic_circle_unselected);
+        }
+
+        item.setAlpha(0f);
+        item.setTranslationY(32f);
+        item.setScaleX(0.96f);
+        item.setScaleY(0.96f);
+        item.animate()
+                .alpha(1f)
+                .translationY(0f)
+                .scaleX(1f)
+                .scaleY(1f)
+                .setStartDelay(35L * index)
+                .setDuration(280)
+                .setInterpolator(new DecelerateInterpolator(1.6f))
+                .start();
+
+        if (isSelected && radio != null) {
+            radio.setScaleX(0f);
+            radio.setScaleY(0f);
+            radio.animate()
+                    .scaleX(1f)
+                    .scaleY(1f)
+                    .setStartDelay(35L * index + 80)
+                    .setDuration(240)
+                    .setInterpolator(new OvershootInterpolator(2.4f))
+                    .start();
+        }
+
+        item.setOnClickListener(v -> {
+            item.animate()
+                    .scaleX(0.95f)
+                    .scaleY(0.95f)
+                    .setDuration(70)
+                    .withEndAction(() -> {
+                        item.animate()
+                                .scaleX(1.0f)
+                                .scaleY(1.0f)
+                                .setDuration(90)
+                                .withEndAction(() -> {
+                                    dialog.dismiss();
+                                    if (!langCode.equalsIgnoreCase(currentLang)) {
+                                        LocaleHelper.saveLanguage(MainActivity.this, langCode);
+                                        recreate();
+                                    }
+                                })
+                                .start();
+                    })
+                    .start();
+        });
+    }
+
+    private final List<UmrahPackage> heroShowcaseList = new ArrayList<>();
+    private int heroShowcaseIndex = 0;
+    private final android.os.Handler showcaseHandler = new android.os.Handler(android.os.Looper.getMainLooper());
+    private final Runnable showcaseRunnable = new Runnable() {
+        @Override
+        public void run() {
+            advanceHeroShowcase();
+            showcaseHandler.postDelayed(this, 4200);
+        }
+    };
+
+    private void setupHeroShowcase() {
+        View heroShowcaseCard = findViewById(R.id.heroShowcaseCard);
+        if (heroShowcaseCard == null) return;
+
+        heroShowcaseCard.setOnClickListener(v -> {
+            if (!heroShowcaseList.isEmpty() && heroShowcaseIndex < heroShowcaseList.size()) {
+                UmrahPackage pkg = heroShowcaseList.get(heroShowcaseIndex);
+                Intent intent = new Intent(MainActivity.this, PackageDetailActivity.class);
+                intent.putExtra(PackageDetailActivity.EXTRA_COLLECTION, pkg.collectionName != null ? pkg.collectionName : "umrah_packages");
+                intent.putExtra(PackageDetailActivity.EXTRA_PACKAGE_ID, pkg.id);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void startHeroShowcase() {
+        showcaseHandler.removeCallbacks(showcaseRunnable);
+        if (!heroShowcaseList.isEmpty()) {
+            displayHeroShowcase(heroShowcaseIndex);
+            showcaseHandler.postDelayed(showcaseRunnable, 4200);
+        }
+    }
+
+    private void stopHeroShowcase() {
+        showcaseHandler.removeCallbacks(showcaseRunnable);
+    }
+
+    private void advanceHeroShowcase() {
+        if (heroShowcaseList.isEmpty()) return;
+        heroShowcaseIndex = (heroShowcaseIndex + 1) % heroShowcaseList.size();
+        displayHeroShowcase(heroShowcaseIndex);
+    }
+
+    private void displayHeroShowcase(int index) {
+        if (heroShowcaseList.isEmpty() || index >= heroShowcaseList.size()) return;
+        UmrahPackage pkg = heroShowcaseList.get(index);
+
+        ImageView image = findViewById(R.id.heroShowcaseImage);
+        TextView tag = findViewById(R.id.heroShowcaseTag);
+        TextView title = findViewById(R.id.heroShowcaseTitle);
+        TextView price = findViewById(R.id.heroShowcasePrice);
+
+        if (image != null && pkg.imageUrl != null) {
+            Glide.with(this)
+                    .load(pkg.imageUrl)
+                    .transition(DrawableTransitionOptions.withCrossFade(400))
+                    .placeholder(R.drawable.bg_image_placeholder)
+                    .into(image);
+        }
+
+        if (title != null && pkg.name != null) {
+            title.setText(pkg.name);
+        }
+
+        if (tag != null) {
+            String dest = (pkg.destination != null) ? pkg.destination.toUpperCase() : "MAKKAH & MADINAH";
+            if (dest.length() > 20) dest = dest.substring(0, 20);
+            tag.setText(dest);
+        }
+
+        if (price != null) {
+            String rawPrice = (pkg.price != null && !pkg.price.isEmpty()) ? pkg.price : "7,990";
+            String cleanPrice = rawPrice.replace("RM", "").replace("rm", "").trim();
+            price.setText(getString(R.string.package_duration_price, pkg.durationDays, pkg.nightsCount, cleanPrice));
+        }
     }
 
     private List<UmrahPackage> allPopularPackages = new ArrayList<>();
     private final List<UmrahPackage> homeSearchUmrahCache = new ArrayList<>();
     private final List<UmrahPackage> homeSearchTourCache = new ArrayList<>();
     private boolean homeSearchPackagesLoaded = false;
+    private String currentCategoryFilter = "all";
 
-    /**
-     * Pakej Popular - pulled from the "Popular" sections on hafiztraveltours.com
-     * (/pakej-umrah and /tour) on 2026-08-24, including each package's real
-     * detail page URL and a local image. Tapping a card opens that URL in
-     * WebViewActivity. Prices/durations/links WILL drift as the website changes.
-     * TODO: replace with real API call to the backend so this stays in sync
-     * automatically instead of needing manual updates here.
-     *
-     * IMAGES: put each file in res/drawable using the exact names below
-     * (lowercase, no spaces, .png or .jpg). If a drawable is missing, the
-     * project will fail to build - add all 6 before running.
-     */
     /**
      * Pakej Popular - Muat turun daripada Laravel REST API Backend (Database MySQL).
      */
@@ -269,31 +463,38 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.popularPackagesRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
+        setupCategoryFilters(recyclerView);
+
         // Panggil Laravel REST API
         ApiClient.getApiService().getHomeData().enqueue(new Callback<ApiResponse<HomeDataResponse>>() {
             @Override
             public void onResponse(Call<ApiResponse<HomeDataResponse>> call, Response<ApiResponse<HomeDataResponse>> response) {
                 if (response.isSuccessful() && response.body() != null && response.body().isSuccess() && response.body().data != null) {
                     allPopularPackages = new ArrayList<>();
+                    heroShowcaseList.clear();
                     HomeDataResponse homeData = response.body().data;
 
                     if (homeData.featured != null && !homeData.featured.isEmpty()) {
                         allPopularPackages.addAll(homeData.featured);
+                        heroShowcaseList.addAll(homeData.featured);
                     }
                     if (homeData.popularUmrah != null) {
                         for (UmrahPackage p : homeData.popularUmrah) {
                             p.collectionName = "umrah_packages";
                             allPopularPackages.add(p);
+                            if (heroShowcaseList.size() < 5) heroShowcaseList.add(p);
                         }
                     }
                     if (homeData.popularTour != null) {
                         for (UmrahPackage p : homeData.popularTour) {
                             p.collectionName = "tour_packages";
                             allPopularPackages.add(p);
+                            if (heroShowcaseList.size() < 5) heroShowcaseList.add(p);
                         }
                     }
 
-                    recyclerView.setAdapter(new PackagePopularAdapter(MainActivity.this, allPopularPackages));
+                    startHeroShowcase();
+                    filterPopularPackages(recyclerView, currentCategoryFilter);
                 }
             }
 
@@ -305,6 +506,84 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById(R.id.seeAllPopular).setOnClickListener(v ->
                 startActivity(new Intent(this, AllPackagesActivity.class)));
+    }
+
+    private void setupCategoryFilters(RecyclerView recyclerView) {
+        TextView chipAll = findViewById(R.id.chipFilterAll);
+        TextView chipUmrah = findViewById(R.id.chipFilterUmrah);
+        TextView chipTour = findViewById(R.id.chipFilterTour);
+        TextView chipPopular = findViewById(R.id.chipFilterPopular);
+
+        if (chipAll == null || chipUmrah == null || chipTour == null || chipPopular == null) return;
+
+        TextView[] chips = {chipAll, chipUmrah, chipTour, chipPopular};
+        String[] filterKeys = {"all", "umrah", "tour", "popular"};
+
+        for (int i = 0; i < chips.length; i++) {
+            final String key = filterKeys[i];
+            final TextView clickedChip = chips[i];
+
+            clickedChip.setOnClickListener(v -> {
+                // Tactile feedback animation
+                clickedChip.animate().scaleX(0.92f).scaleY(0.92f).setDuration(80).withEndAction(() ->
+                        clickedChip.animate().scaleX(1f).scaleY(1f).setDuration(100).start()).start();
+
+                currentCategoryFilter = key;
+
+                // Update chip styles
+                for (TextView chip : chips) {
+                    if (chip == clickedChip) {
+                        chip.setBackgroundResource(R.drawable.bg_category_chip_active);
+                        chip.setTextColor(android.graphics.Color.WHITE);
+                    } else {
+                        chip.setBackgroundResource(R.drawable.bg_category_chip_inactive);
+                        chip.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.chip_inactive_text));
+                    }
+                }
+
+                filterPopularPackages(recyclerView, key);
+            });
+        }
+    }
+
+    private void filterPopularPackages(RecyclerView recyclerView, String category) {
+        if (allPopularPackages == null || allPopularPackages.isEmpty()) return;
+
+        List<UmrahPackage> filtered = new ArrayList<>();
+        if ("all".equalsIgnoreCase(category)) {
+            filtered.addAll(allPopularPackages);
+        } else if ("umrah".equalsIgnoreCase(category)) {
+            for (UmrahPackage p : allPopularPackages) {
+                String cat = (p.category != null) ? p.category.toLowerCase() : "";
+                String name = (p.name != null) ? p.name.toLowerCase() : "";
+                String dest = (p.destination != null) ? p.destination.toLowerCase() : "";
+                if ("umrah_packages".equals(p.collectionName) || "umrah".equals(cat)
+                        || name.contains("umrah") || name.contains("ziarah") || dest.contains("makkah") || dest.contains("madinah")) {
+                    filtered.add(p);
+                }
+            }
+        } else if ("tour".equalsIgnoreCase(category)) {
+            for (UmrahPackage p : allPopularPackages) {
+                String cat = (p.category != null) ? p.category.toLowerCase() : "";
+                String name = (p.name != null) ? p.name.toLowerCase() : "";
+                String dest = (p.destination != null) ? p.destination.toLowerCase() : "";
+                if ("tour_packages".equals(p.collectionName) || "tour".equals(cat)
+                        || (!name.contains("umrah") && !dest.contains("makkah") && !dest.contains("madinah"))) {
+                    filtered.add(p);
+                }
+            }
+        } else if ("popular".equalsIgnoreCase(category)) {
+            for (UmrahPackage p : allPopularPackages) {
+                if (p.isFeatured) {
+                    filtered.add(p);
+                }
+            }
+            if (filtered.isEmpty()) {
+                filtered.addAll(allPopularPackages);
+            }
+        }
+
+        recyclerView.setAdapter(new PackagePopularAdapter(MainActivity.this, filtered));
     }
 
     /**
@@ -377,18 +656,47 @@ public class MainActivity extends AppCompatActivity {
         resultsRecyclerView.setAdapter(new UmrahPackageAdapter(this, results, null));
     }
 
+    private void setupTactileButton(View view, Runnable onClick) {
+        if (view == null) return;
+        view.setOnClickListener(v -> {
+            view.animate()
+                    .scaleX(0.92f)
+                    .scaleY(0.92f)
+                    .setDuration(70)
+                    .withEndAction(() -> {
+                        view.animate()
+                                .scaleX(1.0f)
+                                .scaleY(1.0f)
+                                .setDuration(90)
+                                .withEndAction(() -> {
+                                    if (onClick != null) onClick.run();
+                                })
+                                .start();
+                    })
+                    .start();
+        });
+    }
+
     private void setupQuickActions() {
         // Nusuk - links out to the official Nusuk app on the Play Store
-        findViewById(R.id.featureNusuk).setOnClickListener(v -> openNusukOnPlayStore());
+        setupTactileButton(findViewById(R.id.featureNusuk), this::openNusukOnPlayStore);
 
         // Guideline - persediaan/checklist Umrah & Tour
-        findViewById(R.id.featureGuideline).setOnClickListener(v ->
+        setupTactileButton(findViewById(R.id.featureGuideline), () ->
                 startActivity(new Intent(this, PanduanUmrahActivity.class)));
 
         // Checklist - shows a picker first (Umrah / Tour), then the matching interactive checklist
-        findViewById(R.id.featureChecklist).setOnClickListener(v -> showChecklistCategoryPicker());
+        setupTactileButton(findViewById(R.id.featureChecklist), this::showChecklistCategoryPicker);
 
-        findViewById(R.id.featureWhatsapp).setOnClickListener(v -> openWhatsApp());
+        setupTactileButton(findViewById(R.id.featureWhatsapp), this::openWhatsApp);
+    }
+
+    private void setupBottomNav() {
+        BottomNavHelper.setup(this, BottomNavHelper.Tab.HOME);
+    }
+
+    public void updateFavoriteBadge() {
+        BottomNavHelper.updateFavoriteBadge(this);
     }
 
     /**
@@ -650,18 +958,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Umrah / Tour on the bottom nav now open the real website pages in-app
-     * (via WebViewActivity) instead of filtering the Pakej Popular list.
-     */
-    private void setupBottomNav() {
-        findViewById(R.id.navUmrah).setOnClickListener(v ->
-                startActivity(new Intent(this, UmrahActivity.class)));
-        findViewById(R.id.navTour).setOnClickListener(v ->
-                startActivity(new Intent(this, TourActivity.class)));
-        findViewById(R.id.navFavorite).setOnClickListener(v ->
-                startActivity(new Intent(this, FavoriteActivity.class)));
-    }
+
 
     private void openCategoryPage(String title, String url) {
         Intent intent = new Intent(this, WebViewActivity.class);
@@ -675,8 +972,7 @@ public class MainActivity extends AppCompatActivity {
      * Theme toggle and Log Keluar live inside ProfileActivity.
      * Session state comes from real Firebase Authentication - see
      * loadSessionState() - so guests are simply routed to sign up.
-     * Language picker moved here from the top hero row (previously its own icon).
-     * TODO: swap this simple dialog for a proper navigation drawer / bottom sheet later.
+     * Uses the unified BottomSheet language picker.
      */
     private void setupMenu() {
         findViewById(R.id.menuButton).setOnClickListener(v -> {
@@ -699,7 +995,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
                                 break;
                             case 1:
-                                showLanguagePicker();
+                                showLanguageBottomSheet();
                                 break;
                             case 2:
                                 startActivity(new Intent(this, TentangKamiActivity.class));
@@ -837,13 +1133,16 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setAdapter(new PodcastAdapter(podcasts));
 
-        findViewById(R.id.seeAllPodcast).setOnClickListener(v -> {
-            try {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(YOUTUBE_CHANNEL_URL)));
-            } catch (Exception e) {
-                Toast.makeText(this, "Tidak dapat membuka YouTube", Toast.LENGTH_SHORT).show();
-            }
-        });
+        View seeAllPodcasts = findViewById(R.id.seeAllPodcasts);
+        if (seeAllPodcasts != null) {
+            seeAllPodcasts.setOnClickListener(v -> {
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(YOUTUBE_CHANNEL_URL)));
+                } catch (Exception e) {
+                    Toast.makeText(this, "Tidak dapat membuka YouTube", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     /**
@@ -863,7 +1162,7 @@ public class MainActivity extends AppCompatActivity {
         for (String[] faq : faqs) {
             LinearLayout item = new LinearLayout(this);
             item.setOrientation(LinearLayout.VERTICAL);
-            item.setBackgroundResource(R.drawable.bg_search_white);
+            item.setBackgroundResource(R.drawable.bg_prayer_compact_card);
             LinearLayout.LayoutParams itemParams = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             itemParams.bottomMargin = dp(10);

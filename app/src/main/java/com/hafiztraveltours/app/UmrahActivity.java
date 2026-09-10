@@ -41,8 +41,6 @@ public class UmrahActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_umrah);
 
-        setupBottomNav();
-
         popularSection = findViewById(R.id.umrahPopularSection);
         khasSection = findViewById(R.id.umrahKhasSection);
         ziarahSection = findViewById(R.id.umrahZiarahSection);
@@ -65,27 +63,14 @@ public class UmrahActivity extends AppCompatActivity {
             @Override public void afterTextChanged(Editable s) {}
         });
 
+        BottomNavHelper.setup(this, BottomNavHelper.Tab.UMRAH);
         loadPackagesFromApi();
     }
 
-    /**
-     * Same fixed bottom nav as MainActivity. This page IS the Umrah tab, so
-     * navUmrah is just shown as the active tab (no click action needed) while
-     * the other tabs navigate away and finish() this activity - matches how
-     * MainActivity does NOT keep stacking activities when switching tabs.
-     */
-    private void setupBottomNav() {
-        findViewById(R.id.navHome).setOnClickListener(v -> finish());
-
-        findViewById(R.id.navTour).setOnClickListener(v -> {
-            startActivity(new Intent(this, TourActivity.class));
-            finish();
-        });
-
-        findViewById(R.id.navFavorite).setOnClickListener(v -> {
-            startActivity(new Intent(this, FavoriteActivity.class));
-            finish();
-        });
+    @Override
+    protected void onResume() {
+        super.onResume();
+        BottomNavHelper.updateFavoriteBadge(this);
     }
 
     private void loadPackagesFromApi() {

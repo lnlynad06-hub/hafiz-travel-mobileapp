@@ -12,6 +12,7 @@
     <string name="welcome_chip_custom">맞춤 여행</string>
     <string name="welcome_start_now">여행 시작하기</string>
     <string name="welcome_already_have_account_full">이미 계정이 있으신가요? &lt;font color=\'#D81B60\'&gt;&lt;b&gt;로그인&lt;/b&gt;&lt;/font&gt;</string>
+    <string name="filter_all">전체</string>
 
     <!-- Login screen -->
     <string name="login_title">다시 오신 것을 환영합니다</string>
@@ -49,6 +50,7 @@
     <string name="hero_headline_user">어디로 떠나고\n싶으신가요?</string>
 
     <string name="nav_home">홈</string>
+    <string name="nav_explore">탐색</string>
     <string name="nav_umrah">움라</string>
     <string name="nav_tour">투어</string>
     <string name="nav_favorite">즐겨찾기</string>

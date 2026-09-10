@@ -25,7 +25,7 @@ public class FavoriteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite);
 
-        setupBottomNav();
+        BottomNavHelper.setup(this, BottomNavHelper.Tab.FAVORITE);
 
         recyclerView = findViewById(R.id.favoriteRecyclerView);
         emptyContainer = findViewById(R.id.favoriteEmptyContainer);
@@ -43,26 +43,7 @@ public class FavoriteActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         refreshList(); // refresh setiap kali page ni dibuka semula (contoh lepas favorite dari UmrahActivity)
-    }
-
-    /**
-     * Same fixed bottom nav as MainActivity/UmrahActivity/TourActivity. This
-     * page IS the Favorite tab, so navFavorite is just shown as the active
-     * tab (no click action needed) while the other tabs navigate away and
-     * finish() this activity.
-     */
-    private void setupBottomNav() {
-        findViewById(R.id.navHome).setOnClickListener(v -> finish());
-
-        findViewById(R.id.navUmrah).setOnClickListener(v -> {
-            startActivity(new Intent(this, UmrahActivity.class));
-            finish();
-        });
-
-        findViewById(R.id.navTour).setOnClickListener(v -> {
-            startActivity(new Intent(this, TourActivity.class));
-            finish();
-        });
+        BottomNavHelper.updateFavoriteBadge(this);
     }
 
     private void refreshList() {

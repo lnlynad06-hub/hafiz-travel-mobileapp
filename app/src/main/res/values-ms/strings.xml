@@ -12,6 +12,7 @@
     <string name="welcome_chip_custom">Pakej Khas</string>
     <string name="welcome_start_now">Mula Meneroka</string>
     <string name="welcome_already_have_account_full">Sudah mempunyai akaun? &lt;font color=\'#D81B60\'&gt;&lt;b&gt;Log Masuk&lt;/b&gt;&lt;/font&gt;</string>
+    <string name="filter_all">Semua</string>
 
     <string name="login_title">Selamat Kembali</string>
     <string name="login_subtitle">Log masuk untuk teruskan</string>
@@ -47,6 +48,7 @@
     <string name="hero_headline_user">Ke Mana Anda\nNak Pergi?</string>
 
     <string name="nav_home">Home</string>
+    <string name="nav_explore">Teroka</string>
     <string name="nav_umrah">Umrah</string>
     <string name="nav_tour">Tour</string>
     <string name="nav_favorite">Kegemaran</string>

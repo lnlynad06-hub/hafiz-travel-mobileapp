@@ -18,6 +18,7 @@
     <string name="welcome_chip_custom">Custom Travel</string>
     <string name="welcome_start_now">Start Exploring</string>
     <string name="welcome_already_have_account_full">Already have an account? &lt;font color=\'#D81B60\'&gt;&lt;b&gt;Log In&lt;/b&gt;&lt;/font&gt;</string>
+    <string name="filter_all">All</string>
 
     <!-- Login screen -->
     <string name="login_title">Welcome Back</string>
@@ -55,6 +56,7 @@
     <string name="hero_headline_user">Where do you \nwant to go?</string>
 
     <string name="nav_home">Home</string>
+    <string name="nav_explore">Explore</string>
     <string name="nav_umrah">Umrah</string>
     <string name="nav_tour">Tour</string>
     <string name="nav_favorite">Favorite</string>

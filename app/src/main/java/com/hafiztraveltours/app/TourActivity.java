@@ -40,7 +40,6 @@ public class TourActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tour);
 
-        setupBottomNav();
         setupBoundToggle();
 
         popularSection = findViewById(R.id.tourPopularSection);
@@ -62,26 +61,14 @@ public class TourActivity extends AppCompatActivity {
             @Override public void afterTextChanged(Editable s) {}
         });
 
+        BottomNavHelper.setup(this, BottomNavHelper.Tab.TOUR);
         loadPackagesFromApi();
     }
 
-    /**
-     * Same fixed bottom nav as MainActivity/UmrahActivity. This page IS the
-     * Tour tab, so navTour is just shown as the active tab (no click action
-     * needed) while the other tabs navigate away and finish() this activity.
-     */
-    private void setupBottomNav() {
-        findViewById(R.id.navHome).setOnClickListener(v -> finish());
-
-        findViewById(R.id.navUmrah).setOnClickListener(v -> {
-            startActivity(new Intent(this, UmrahActivity.class));
-            finish();
-        });
-
-        findViewById(R.id.navFavorite).setOnClickListener(v -> {
-            startActivity(new Intent(this, FavoriteActivity.class));
-            finish();
-        });
+    @Override
+    protected void onResume() {
+        super.onResume();
+        BottomNavHelper.updateFavoriteBadge(this);
     }
 
     private void setupBoundToggle() {

@@ -1,57 +1,60 @@
 <!--
-    DARK theme overrides. Goes in res/values-night/colors.xml
-    (create the "values-night" folder if it doesn't exist).
-
-    Same color NAMES as res/values/colors.xml - Android auto-picks this file
-    when the system/com.hafiztraveltours.app is in night mode, no layout XML changes needed
-    (as long as layouts reference @color/xxx and not hardcoded hex).
+    Luxury Clean Theme Colors (Bright & Elegant).
 -->
 <resources>
-    <!-- Brand pink kept the SAME as light mode - the hero card, status bar and
-         accent circles stay vividly pink in both themes on purpose, so
-         pink_primary and pink_accent are unchanged here. -->
-    <color name="pink_primary">#EC407A</color>
-    <color name="pink_accent">#FF80AB</color>
-
-    <!-- pink_dark is used as TEXT/ICON color on top of pink_light chips -
-         since pink_light goes dark below, pink_dark is lightened here so it
-         still pops. (It is NOT used on pink_accent anymore - those spots were
-         switched to @color/white in activity_main.xml for safe contrast in
-         both themes - see notes sent separately.) -->
-    <color name="pink_dark">#FF6FA5</color>
-
-    <!-- pink_light was a pale pink chip/icon background - inverted to a
-         dark, muted rose so pink_dark text/icons on top of it stay readable -->
-    <color name="pink_light">#4A2733</color>
-
-    <!-- "white" stays LITERALLY white - it's used for text/icons on the pink
-         hero (colorOnPrimary) which must remain white in both themes -->
+    <!-- Brand pink -->
+    <color name="pink_primary">#D81B60</color>
+    <color name="pink_dark">#AD1457</color>
+    <color name="pink_light">#FCE4EC</color>
+    <color name="pink_accent">#FF4081</color>
     <color name="white">#FFFFFF</color>
 
-    <!-- Card / panel surface - THIS is the one that goes dark -->
-    <color name="surface">#1E1E1E</color>
+    <!-- Canvas & Surfaces -->
+    <color name="background">#F8F9FA</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="card_surface">#FFFFFF</color>
+    <color name="card_border">#EBEAE6</color>
+    <color name="card_border_subtle">#F0EFEA</color>
 
-    <!-- Root window background -->
-    <color name="background">#121212</color>
+    <!-- Typography -->
+    <color name="text_dark">#18181B</color>
+    <color name="text_gray">#71717A</color>
+    <color name="text_muted">#A1A1AA</color>
+    <color name="field_border">#E4E4E7</color>
+    <color name="error_red">#EF4444</color>
 
-    <!-- Body text - flipped for readability on dark surfaces -->
-    <color name="text_dark">#F2F2F2</color>
-    <color name="text_gray">#B0B0B0</color>
+    <!-- Luxury Brand Palette -->
+    <color name="brand_magenta">#D81B60</color>
+    <color name="brand_magenta_dark">#AD1457</color>
+    <color name="brand_magenta_light">#FCE4EC</color>
+    <color name="brand_magenta_soft">#FFF0F5</color>
+    <color name="brand_magenta_accent">#E91E63</color>
 
-    <!-- Misc -->
-    <color name="field_border">#3A3A3A</color>
-    <color name="error_red">#EF5350</color>
+    <!-- Neutrals -->
+    <color name="luxury_charcoal">#18181B</color>
+    <color name="luxury_subtext">#52525B</color>
+    <color name="luxury_ivory">#FDFBF7</color>
+    <color name="luxury_border">#EBEAE6</color>
 
-    <color name="prayer_card_background">#2A1220</color>
-    <color name="prayer_card_border">#4A2333</color>
-    <color name="prayer_card_text_primary">#FF80AB</color>
-    <color name="prayer_card_text_secondary">#E0A9BE</color>
-    <color name="prayer_arc_start">#E91E63</color>
-    <color name="prayer_arc_end">#880E4F</color>
-    <color name="prayer_arc_dot">#E91E63</color>
+    <!-- Interactive Chips & Badges -->
+    <color name="service_bg">#FFF0F5</color>
+    <color name="search_bg">#FFFFFF</color>
+    <color name="nav_bg">#FFFFFF</color>
+    <color name="pill_active_bg">#FFF0F5</color>
+    <color name="pill_inactive_bg">#F4F4F5</color>
+    <color name="chip_inactive_text">#3F3F46</color>
 
-    <color name="input_background">#2C2C2C</color>
-    <color name="input_text">#F5F5F5</color>
-    <color name="input_hint">#B0B0B0</color>
+    <!-- Waktu Solat card -->
+    <color name="prayer_card_background">#FFFFFF</color>
+    <color name="prayer_card_border">#FCE4EC</color>
+    <color name="prayer_arc_start">#F472B6</color>
+    <color name="prayer_arc_end">#D81B60</color>
+    <color name="prayer_arc_dot">#D81B60</color>
+    <color name="prayer_card_text_primary">#18181B</color>
+    <color name="prayer_card_text_secondary">#71717A</color>
 
+    <!-- Inputs -->
+    <color name="input_background">#F4F4F5</color>
+    <color name="input_text">#18181B</color>
+    <color name="input_hint">#A1A1AA</color>
 </resources>

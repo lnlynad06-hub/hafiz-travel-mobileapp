@@ -12,6 +12,7 @@
     <string name="welcome_chip_custom">オーダーメイド</string>
     <string name="welcome_start_now">旅を始める</string>
     <string name="welcome_already_have_account_full">すでにアカウントをお持ちですか？ &lt;font color=\'#D81B60\'&gt;&lt;b&gt;ログイン&lt;/b&gt;&lt;/font&gt;</string>
+    <string name="filter_all">すべて</string>
 
     <!-- Login screen -->
     <string name="login_title">おかえりなさい</string>
@@ -49,6 +50,7 @@
     <string name="hero_headline_user">どこへ行き\nたいですか？</string>
 
     <string name="nav_home">ホーム</string>
+    <string name="nav_explore">探索</string>
     <string name="nav_umrah">ウムラ</string>
     <string name="nav_tour">ツアー</string>
     <string name="nav_favorite">お気に入り</string>

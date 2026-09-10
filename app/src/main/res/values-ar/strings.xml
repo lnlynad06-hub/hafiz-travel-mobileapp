@@ -12,6 +12,7 @@
     <string name="welcome_chip_custom">رحلات خاصة</string>
     <string name="welcome_start_now">ابدأ الاستكشاف</string>
     <string name="welcome_already_have_account_full">لديك حساب بالفعل؟ &lt;font color=\'#D81B60\'&gt;&lt;b&gt;تسجيل الدخول&lt;/b&gt;&lt;/font&gt;</string>
+    <string name="filter_all">الكل</string>
 
     <!-- Login screen -->
     <string name="login_title">مرحبًا بعودتك</string>
@@ -49,6 +50,7 @@
     <string name="hero_headline_user">إلى أين تودّ\nالذهاب؟</string>
 
     <string name="nav_home">الرئيسية</string>
+    <string name="nav_explore">استكشف</string>
     <string name="nav_umrah">العمرة</string>
     <string name="nav_tour">الجولات</string>
     <string name="nav_favorite">المفضلة</string>

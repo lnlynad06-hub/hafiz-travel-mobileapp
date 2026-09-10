@@ -12,6 +12,7 @@
     <string name="welcome_chip_custom">定制包团</string>
     <string name="welcome_start_now">开启探索</string>
     <string name="welcome_already_have_account_full">已有账号？ &lt;font color=\'#D81B60\'&gt;&lt;b&gt;立即登录&lt;/b&gt;&lt;/font&gt;</string>
+    <string name="filter_all">全部</string>
 
     <!-- Login screen -->
     <string name="login_title">欢迎回来</string>
@@ -49,6 +50,7 @@
     <string name="hero_headline_user">您想去\n哪里？</string>
 
     <string name="nav_home">首页</string>
+    <string name="nav_explore">探索</string>
     <string name="nav_umrah">副朝</string>
     <string name="nav_tour">旅游</string>
     <string name="nav_favorite">收藏</string>

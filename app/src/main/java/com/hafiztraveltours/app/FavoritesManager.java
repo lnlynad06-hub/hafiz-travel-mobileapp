@@ -27,6 +27,11 @@ public class FavoritesManager {
         return ids.contains(packageId);
     }
 
+    public static int getFavoriteCount(Context context) {
+        Set<String> ids = getPrefs(context).getStringSet(KEY_ID_SET, new HashSet<>());
+        return ids.size();
+    }
+
     /** Toggle status; return the NEW favorite state (true = now favorited). */
     public static boolean toggleFavorite(Context context, UmrahPackage pkg) {
         SharedPreferences prefs = getPrefs(context);
