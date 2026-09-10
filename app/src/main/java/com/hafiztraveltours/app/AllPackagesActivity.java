@@ -11,12 +11,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
+import com.hafiztraveltours.app.network.ApiClient;
+import com.hafiztraveltours.app.network.ApiResponse;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,49 +69,42 @@ public class AllPackagesActivity extends AppCompatActivity {
     }
 
     private void loadAllPackages() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Task<QuerySnapshot> umrahTask = db.collection("umrah_packages").get();
-        Task<QuerySnapshot> tourTask = db.collection("tour_packages").get();
+        ApiClient.getApiService().getPackages(null, null, null, null).enqueue(new Callback<ApiResponse<List<UmrahPackage>>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<List<UmrahPackage>>> call, Response<ApiResponse<List<UmrahPackage>>> response) {
+                allUmrah.clear();
+                allTour.clear();
+                popularCombined.clear();
 
-        Tasks.whenAllSuccess(umrahTask, tourTask)
-                .addOnSuccessListener(results -> {
-                    allUmrah.clear();
-                    allTour.clear();
-                    popularCombined.clear();
+                if (response.isSuccessful() && response.body() != null && response.body().data != null) {
+                    for (UmrahPackage pkg : response.body().data) {
+                        if ("umrah".equalsIgnoreCase(pkg.category)) {
+                            pkg.collectionName = "umrah_packages";
+                            allUmrah.add(pkg);
+                        } else {
+                            pkg.collectionName = "tour_packages";
+                            allTour.add(pkg);
+                        }
 
-                    QuerySnapshot umrahSnapshot = (QuerySnapshot) results.get(0);
-                    for (DocumentSnapshot doc : umrahSnapshot.getDocuments()) {
-                        UmrahPackage pkg = mapDoc(doc, "umrah_packages");
-                        allUmrah.add(pkg);
-                        if (Boolean.TRUE.equals(doc.getBoolean("isPopular"))) popularCombined.add(pkg);
+                        if (pkg.isFeatured) {
+                            popularCombined.add(pkg);
+                        }
                     }
+                }
 
-                    QuerySnapshot tourSnapshot = (QuerySnapshot) results.get(1);
-                    for (DocumentSnapshot doc : tourSnapshot.getDocuments()) {
-                        UmrahPackage pkg = mapDoc(doc, "tour_packages");
-                        allTour.add(pkg);
-                        if (Boolean.TRUE.equals(doc.getBoolean("isPopular"))) popularCombined.add(pkg);
-                    }
+                popularRecyclerView.setAdapter(new PackagePopularAdapter(AllPackagesActivity.this, popularCombined, true));
+                umrahRecyclerView.setAdapter(new PackagePopularAdapter(AllPackagesActivity.this, allUmrah, false));
+                tourRecyclerView.setAdapter(new PackagePopularAdapter(AllPackagesActivity.this, allTour, false));
+            }
 
-                    popularRecyclerView.setAdapter(new PackagePopularAdapter(this, popularCombined, true));
-                    umrahRecyclerView.setAdapter(new PackagePopularAdapter(this, allUmrah, false));
-                    tourRecyclerView.setAdapter(new PackagePopularAdapter(this, allTour, false));
-                })
-                .addOnFailureListener(e ->
-                        Toast.makeText(this, "Gagal muat pakej", Toast.LENGTH_SHORT).show());
-    }
-
-    private UmrahPackage mapDoc(DocumentSnapshot doc, String collectionName) {
-        UmrahPackage pkg = new UmrahPackage(
-                doc.getId(),
-                doc.getString("name"),
-                doc.getLong("durationDays") != null ? doc.getLong("durationDays").intValue() : 0,
-                doc.getLong("nightsCount") != null ? doc.getLong("nightsCount").intValue() : 0,
-                doc.getString("price"),
-                doc.getString("url"),
-                doc.getString("imageUrl"));
-        pkg.collectionName = collectionName;
-        return pkg;
+            @Override
+            public void onFailure(Call<ApiResponse<List<UmrahPackage>>> call, Throwable t) {
+                allUmrah.clear();
+                allTour.clear();
+                popularCombined.clear();
+                Toast.makeText(AllPackagesActivity.this, "Gagal menyambung ke pelayan backend", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void onSearchChanged(String query) {

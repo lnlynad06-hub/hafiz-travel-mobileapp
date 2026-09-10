@@ -60,11 +60,12 @@ import android.text.style.StyleSpan;
 import android.graphics.Typeface;
 import android.text.Editable;
 import android.text.TextWatcher;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
+import com.hafiztraveltours.app.network.ApiClient;
+import com.hafiztraveltours.app.network.ApiResponse;
+import com.hafiztraveltours.app.network.HomeDataResponse;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -262,63 +263,52 @@ public class MainActivity extends AppCompatActivity {
      * project will fail to build - add all 6 before running.
      */
     /**
-     * Pakej Popular - sekarang fetch dari Firestore (kedua-dua collection
-     * umrah_packages & tour_packages), filter field "isPopular" == true.
-     * Kawal terus dari Firebase Console - toggle isPopular pakej mana-mana
-     * tanpa perlu update app.
+     * Pakej Popular - Muat turun daripada Laravel REST API Backend (Database MySQL).
      */
     private void setupPopularPackages() {
         RecyclerView recyclerView = findViewById(R.id.popularPackagesRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
-        com.google.firebase.firestore.FirebaseFirestore db = com.google.firebase.firestore.FirebaseFirestore.getInstance();
-
-        com.google.android.gms.tasks.Task<com.google.firebase.firestore.QuerySnapshot> umrahTask =
-                db.collection("umrah_packages").whereEqualTo("isPopular", true).get();
-        com.google.android.gms.tasks.Task<com.google.firebase.firestore.QuerySnapshot> tourTask =
-                db.collection("tour_packages").whereEqualTo("isPopular", true).get();
-
-        com.google.android.gms.tasks.Tasks.whenAllSuccess(umrahTask, tourTask)
-                .addOnSuccessListener(results -> {
+        // Panggil Laravel REST API
+        ApiClient.getApiService().getHomeData().enqueue(new Callback<ApiResponse<HomeDataResponse>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<HomeDataResponse>> call, Response<ApiResponse<HomeDataResponse>> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess() && response.body().data != null) {
                     allPopularPackages = new ArrayList<>();
+                    HomeDataResponse homeData = response.body().data;
 
-                    com.google.firebase.firestore.QuerySnapshot umrahSnapshot =
-                            (com.google.firebase.firestore.QuerySnapshot) results.get(0);
-                    for (com.google.firebase.firestore.DocumentSnapshot doc : umrahSnapshot.getDocuments()) {
-                        UmrahPackage pkg = new UmrahPackage(
-                                doc.getId(), doc.getString("name"),
-                                doc.getLong("durationDays") != null ? doc.getLong("durationDays").intValue() : 0,
-                                doc.getLong("nightsCount") != null ? doc.getLong("nightsCount").intValue() : 0,
-                                doc.getString("price"), doc.getString("url"), doc.getString("imageUrl"));
-                        pkg.collectionName = "umrah_packages";
-                        allPopularPackages.add(pkg);
+                    if (homeData.featured != null && !homeData.featured.isEmpty()) {
+                        allPopularPackages.addAll(homeData.featured);
+                    }
+                    if (homeData.popularUmrah != null) {
+                        for (UmrahPackage p : homeData.popularUmrah) {
+                            p.collectionName = "umrah_packages";
+                            allPopularPackages.add(p);
+                        }
+                    }
+                    if (homeData.popularTour != null) {
+                        for (UmrahPackage p : homeData.popularTour) {
+                            p.collectionName = "tour_packages";
+                            allPopularPackages.add(p);
+                        }
                     }
 
-                    com.google.firebase.firestore.QuerySnapshot tourSnapshot =
-                            (com.google.firebase.firestore.QuerySnapshot) results.get(1);
-                    for (com.google.firebase.firestore.DocumentSnapshot doc : tourSnapshot.getDocuments()) {
-                        UmrahPackage pkg = new UmrahPackage(
-                                doc.getId(), doc.getString("name"),
-                                doc.getLong("durationDays") != null ? doc.getLong("durationDays").intValue() : 0,
-                                doc.getLong("nightsCount") != null ? doc.getLong("nightsCount").intValue() : 0,
-                                doc.getString("price"), doc.getString("url"), doc.getString("imageUrl"));
-                        pkg.collectionName = "tour_packages";
-                        allPopularPackages.add(pkg);
-                    }
+                    recyclerView.setAdapter(new PackagePopularAdapter(MainActivity.this, allPopularPackages));
+                }
+            }
 
-                    recyclerView.setAdapter(new PackagePopularAdapter(this, allPopularPackages));
-                })
-                .addOnFailureListener(e ->
-                        Toast.makeText(this, "Gagal muat pakej popular", Toast.LENGTH_SHORT).show());
+            @Override
+            public void onFailure(Call<ApiResponse<HomeDataResponse>> call, Throwable t) {
+                // Tiada sambungan API atau pelayan luar talian
+            }
+        });
 
         findViewById(R.id.seeAllPopular).setOnClickListener(v ->
                 startActivity(new Intent(this, AllPackagesActivity.class)));
     }
 
     /**
-     * Search homepage sekarang function terus (tak navigate ke page lain).
-     * Data pakej hanya di-fetch SEKALI (lazy load bila user mula taip),
-     * bukan setiap kali homepage dibuka - jimat Firestore reads.
+     * Search homepage - Data pakej di-fetch SEKALI dari API bila user mula taip.
      */
     private void setupHomeSearch() {
         android.widget.EditText searchInput = findViewById(R.id.searchInputHero);
@@ -344,42 +334,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadHomeSearchPackages(Runnable onLoaded) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Task<QuerySnapshot> umrahTask = db.collection("umrah_packages").get();
-        Task<QuerySnapshot> tourTask = db.collection("tour_packages").get();
+        ApiClient.getApiService().getPackages(null, null, null, null).enqueue(new Callback<ApiResponse<List<UmrahPackage>>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<List<UmrahPackage>>> call, Response<ApiResponse<List<UmrahPackage>>> response) {
+                homeSearchUmrahCache.clear();
+                homeSearchTourCache.clear();
 
-        Tasks.whenAllSuccess(umrahTask, tourTask)
-                .addOnSuccessListener(results -> {
-                    homeSearchUmrahCache.clear();
-                    homeSearchTourCache.clear();
-
-                    QuerySnapshot umrahSnapshot = (QuerySnapshot) results.get(0);
-                    for (DocumentSnapshot doc : umrahSnapshot.getDocuments()) {
-                        homeSearchUmrahCache.add(mapDocToPackage(doc, "umrah_packages"));
+                if (response.isSuccessful() && response.body() != null && response.body().data != null) {
+                    for (UmrahPackage pkg : response.body().data) {
+                        if ("umrah".equalsIgnoreCase(pkg.category)) {
+                            pkg.collectionName = "umrah_packages";
+                            homeSearchUmrahCache.add(pkg);
+                        } else {
+                            pkg.collectionName = "tour_packages";
+                            homeSearchTourCache.add(pkg);
+                        }
                     }
-                    QuerySnapshot tourSnapshot = (QuerySnapshot) results.get(1);
-                    for (DocumentSnapshot doc : tourSnapshot.getDocuments()) {
-                        homeSearchTourCache.add(mapDocToPackage(doc, "tour_packages"));
-                    }
+                }
 
-                    homeSearchPackagesLoaded = true;
-                    onLoaded.run();
-                })
-                .addOnFailureListener(e ->
-                        Toast.makeText(this, "Gagal muat pakej", Toast.LENGTH_SHORT).show());
-    }
+                homeSearchPackagesLoaded = true;
+                onLoaded.run();
+            }
 
-    private UmrahPackage mapDocToPackage(DocumentSnapshot doc, String collectionName) {
-        UmrahPackage pkg = new UmrahPackage(
-                doc.getId(),
-                doc.getString("name"),
-                doc.getLong("durationDays") != null ? doc.getLong("durationDays").intValue() : 0,
-                doc.getLong("nightsCount") != null ? doc.getLong("nightsCount").intValue() : 0,
-                doc.getString("price"),
-                doc.getString("url"),
-                doc.getString("imageUrl"));
-        pkg.collectionName = collectionName;
-        return pkg;
+            @Override
+            public void onFailure(Call<ApiResponse<List<UmrahPackage>>> call, Throwable t) {
+                homeSearchPackagesLoaded = true;
+                onLoaded.run();
+            }
+        });
     }
 
     private void filterAndShowHomeSearch(String query, RecyclerView resultsRecyclerView) {

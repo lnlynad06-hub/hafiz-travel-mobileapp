@@ -17,7 +17,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.hafiztraveltours.app.network.ApiClient;
+import com.hafiztraveltours.app.network.ApiResponse;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import java.util.List;
 
@@ -84,23 +88,24 @@ public class PackageDetailActivity extends AppCompatActivity {
     }
 
     private void loadPackage(String collection, String packageId) {
-        FirebaseFirestore.getInstance()
-                .collection(collection)
-                .document(packageId)
-                .get()
-                .addOnSuccessListener(doc -> {
-                    if (!doc.exists()) {
-                        Toast.makeText(this, "Pakej tidak dijumpai", Toast.LENGTH_SHORT).show();
-                        finish();
-                        return;
-                    }
-                    detail = PackageDetail.fromDocument(doc);
+        ApiClient.getApiService().getPackageDetail(packageId).enqueue(new Callback<ApiResponse<UmrahPackage>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<UmrahPackage>> call, Response<ApiResponse<UmrahPackage>> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().data != null) {
+                    detail = PackageDetail.fromUmrahPackage(response.body().data);
                     renderAll();
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Gagal muat butiran pakej. Sila cuba lagi.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(PackageDetailActivity.this, "Pakej tidak dijumpai", Toast.LENGTH_SHORT).show();
                     finish();
-                });
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<UmrahPackage>> call, Throwable t) {
+                Toast.makeText(PackageDetailActivity.this, "Gagal menyambung ke pelayan backend", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
     }
 
     private void renderAll() {

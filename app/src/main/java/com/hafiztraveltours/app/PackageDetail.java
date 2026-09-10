@@ -1,21 +1,8 @@
 package com.hafiztraveltours.app;
 
-import com.google.firebase.firestore.DocumentSnapshot;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-/**
- * Full package detail (itinerary, hotels, pricing tiers, included/excluded,
- * packing guide, gallery) - parsed from a single umrah_packages / tour_packages
- * Firestore document. See firestore_schema_package_detail.md for the field
- * layout each document should follow.
- *
- * Every getter below is defensive - a package that hasn't had a section
- * filled in yet returns an empty list/string instead of throwing, so
- * PackageDetailActivity can simply skip rendering that section.
- */
 public class PackageDetail {
 
     public String id;
@@ -43,7 +30,7 @@ public class PackageDetail {
     public static class NightBreakdown {
         public String city;
         public int nights;
-        NightBreakdown(String city, int nights) {
+        public NightBreakdown(String city, int nights) {
             this.city = city;
             this.nights = nights;
         }
@@ -53,7 +40,7 @@ public class PackageDetail {
         public String type; // "mekah" | "madinah" | "flight"
         public String title;
         public String subtitle;
-        HotelInfo(String type, String title, String subtitle) {
+        public HotelInfo(String type, String title, String subtitle) {
             this.type = type;
             this.title = title;
             this.subtitle = subtitle;
@@ -82,107 +69,25 @@ public class PackageDetail {
     public static class PriceOption {
         public String price;
         public String occupancyLabel;
-        PriceOption(String price, String occupancyLabel) {
+        public PriceOption(String price, String occupancyLabel) {
             this.price = price;
             this.occupancyLabel = occupancyLabel;
         }
     }
 
-    public static PackageDetail fromDocument(DocumentSnapshot doc) {
+    public static PackageDetail fromUmrahPackage(UmrahPackage pkg) {
         PackageDetail d = new PackageDetail();
-        d.id = doc.getId();
-        d.name = str(doc.getString("name"));
-        d.summaryLine = str(doc.getString("summaryLine"));
-        d.durationDays = doc.getLong("durationDays") != null ? doc.getLong("durationDays").intValue() : 0;
-        d.nightsCount = doc.getLong("nightsCount") != null ? doc.getLong("nightsCount").intValue() : 0;
-        d.price = str(doc.getString("price"));
-        d.imageUrl = str(doc.getString("imageUrl"));
-        d.posterImageUrl = str(doc.getString("posterImageUrl"));
-        d.departureDatesNote = str(doc.getString("departureDatesNote"));
-        d.whatsappMessage = str(doc.getString("whatsappMessage"));
+        if (pkg == null) return d;
 
-        for (Object raw : safeList(doc.get("nightsBreakdown"))) {
-            Map<?, ?> m = asMap(raw);
-            if (m == null) continue;
-            d.nightsBreakdown.add(new NightBreakdown(
-                    strOf(m.get("city")), intOf(m.get("nights"))));
-        }
-
-        for (Object raw : safeList(doc.get("hotels"))) {
-            Map<?, ?> m = asMap(raw);
-            if (m == null) continue;
-            d.hotels.add(new HotelInfo(
-                    strOf(m.get("type")), strOf(m.get("title")), strOf(m.get("subtitle"))));
-        }
-
-        for (Object raw : safeList(doc.get("itinerary"))) {
-            Map<?, ?> m = asMap(raw);
-            if (m == null) continue;
-            ItineraryDay day = new ItineraryDay();
-            day.dayNumber = intOf(m.get("dayNumber"));
-            day.dayLabel = strOf(m.get("dayLabel"));
-            day.tag = strOf(m.get("tag"));
-            day.timeNote = strOf(m.get("timeNote"));
-            day.title = strOf(m.get("title"));
-            day.routeText = strOf(m.get("routeText"));
-            day.highlights = strList(m.get("highlights"));
-            day.activities = strList(m.get("activities"));
-            day.hotelNote = strOf(m.get("hotelNote"));
-            day.mealNote = strOf(m.get("mealNote"));
-            d.itinerary.add(day);
-        }
-
-        for (Object raw : safeList(doc.get("importantNotes"))) {
-            Map<?, ?> m = asMap(raw);
-            if (m == null) continue;
-            ImportantNote note = new ImportantNote();
-            note.title = strOf(m.get("title"));
-            note.badge = strOf(m.get("badge"));
-            note.bullets = strList(m.get("bullets"));
-            d.importantNotes.add(note);
-        }
-
-        d.included = strList(doc.get("included"));
-        d.excluded = strList(doc.get("excluded"));
-        d.packingSummer = strList(doc.get("packingSummer"));
-        d.packingWinter = strList(doc.get("packingWinter"));
-        d.galleryImageUrls = strList(doc.get("galleryImageUrls"));
-
-        for (Object raw : safeList(doc.get("priceOptions"))) {
-            Map<?, ?> m = asMap(raw);
-            if (m == null) continue;
-            d.priceOptions.add(new PriceOption(strOf(m.get("price")), strOf(m.get("occupancyLabel"))));
-        }
+        d.id = pkg.id;
+        d.name = pkg.name != null ? pkg.name : "";
+        d.summaryLine = pkg.summary != null ? pkg.summary : "";
+        d.durationDays = pkg.durationDays;
+        d.nightsCount = pkg.nightsCount;
+        d.price = pkg.price != null ? pkg.price : "";
+        d.imageUrl = pkg.imageUrl != null ? pkg.imageUrl : "";
+        d.whatsappMessage = "Salam, saya berminat dengan pakej " + d.name;
 
         return d;
-    }
-
-    // ---- small parsing helpers (all null-safe) ----
-
-    private static String str(String s) { return s != null ? s : ""; }
-
-    private static String strOf(Object o) { return o != null ? String.valueOf(o) : ""; }
-
-    private static int intOf(Object o) {
-        if (o instanceof Number) return ((Number) o).intValue();
-        return 0;
-    }
-
-    private static List<?> safeList(Object o) {
-        return (o instanceof List) ? (List<?>) o : new ArrayList<>();
-    }
-
-    private static Map<?, ?> asMap(Object o) {
-        return (o instanceof Map) ? (Map<?, ?>) o : null;
-    }
-
-    private static List<String> strList(Object o) {
-        List<String> result = new ArrayList<>();
-        if (o instanceof List) {
-            for (Object item : (List<?>) o) {
-                if (item != null) result.add(String.valueOf(item));
-            }
-        }
-        return result;
     }
 }

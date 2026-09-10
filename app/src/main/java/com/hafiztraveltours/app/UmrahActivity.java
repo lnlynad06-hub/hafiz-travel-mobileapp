@@ -13,8 +13,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.hafiztraveltours.app.network.ApiClient;
+import com.hafiztraveltours.app.network.ApiResponse;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +65,7 @@ public class UmrahActivity extends AppCompatActivity {
             @Override public void afterTextChanged(Editable s) {}
         });
 
-        loadPackagesFromFirestore();
+        loadPackagesFromApi();
     }
 
     /**
@@ -85,40 +88,40 @@ public class UmrahActivity extends AppCompatActivity {
         });
     }
 
-    private void loadPackagesFromFirestore() {
-        FirebaseFirestore.getInstance()
-                .collection("umrah_packages")
-                .get()
-                .addOnSuccessListener(snapshot -> {
-                    popularPackages.clear();
-                    khasPackages.clear();
-                    ziarahPackages.clear();
+    private void loadPackagesFromApi() {
+        // Panggil Laravel REST API
+        ApiClient.getApiService().getPackages("umrah", null, null, null).enqueue(new Callback<ApiResponse<List<UmrahPackage>>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<List<UmrahPackage>>> call, Response<ApiResponse<List<UmrahPackage>>> response) {
+                popularPackages.clear();
+                khasPackages.clear();
+                ziarahPackages.clear();
 
-                    for (DocumentSnapshot doc : snapshot.getDocuments()) {
-                        UmrahPackage pkg = new UmrahPackage(
-                                doc.getId(),
-                                doc.getString("name"),
-                                doc.getLong("durationDays") != null ? doc.getLong("durationDays").intValue() : 0,
-                                doc.getLong("nightsCount") != null ? doc.getLong("nightsCount").intValue() : 0,
-                                doc.getString("price"),
-                                doc.getString("url"),
-                                doc.getString("imageUrl"));
-
-                        String category = doc.getString("category");
+                if (response.isSuccessful() && response.body() != null && response.body().data != null) {
+                    List<UmrahPackage> apiPackages = response.body().data;
+                    for (UmrahPackage pkg : apiPackages) {
                         pkg.collectionName = "umrah_packages";
-                        if ("popular".equals(category)) {
+                        if (pkg.isFeatured) {
                             popularPackages.add(pkg);
-                        } else if ("ziarah".equals(category)) {
+                        } else if ("ziarah".equalsIgnoreCase(pkg.category) || (pkg.name != null && pkg.name.toLowerCase().contains("ziarah"))) {
                             ziarahPackages.add(pkg);
                         } else {
-                            khasPackages.add(pkg); // default fallback kalau category tak set
+                            khasPackages.add(pkg);
                         }
                     }
+                }
+                renderSections("");
+            }
 
-                    renderSections("");
-                })
-                .addOnFailureListener(e ->
-                        Toast.makeText(this, "Gagal muat pakej Umrah. Sila cuba lagi.", Toast.LENGTH_SHORT).show());
+            @Override
+            public void onFailure(Call<ApiResponse<List<UmrahPackage>>> call, Throwable t) {
+                popularPackages.clear();
+                khasPackages.clear();
+                ziarahPackages.clear();
+                renderSections("");
+                Toast.makeText(UmrahActivity.this, "Gagal menyambung ke pelayan backend", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     /** Filter setiap seksyen ikut nama pakej, sembunyi seksyen yang kosong selepas filter. */

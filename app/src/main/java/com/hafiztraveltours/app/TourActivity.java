@@ -13,8 +13,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.hafiztraveltours.app.network.ApiClient;
+import com.hafiztraveltours.app.network.ApiResponse;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +62,7 @@ public class TourActivity extends AppCompatActivity {
             @Override public void afterTextChanged(Editable s) {}
         });
 
-        loadPackagesFromFirestore();
+        loadPackagesFromApi();
     }
 
     /**
@@ -106,37 +109,33 @@ public class TourActivity extends AppCompatActivity {
         });
     }
 
-    private void loadPackagesFromFirestore() {
-        FirebaseFirestore.getInstance()
-                .collection("tour_packages")
-                .get()
-                .addOnSuccessListener(snapshot -> {
-                    allPackages.clear();
-                    popularPackages.clear();
+    private void loadPackagesFromApi() {
+        ApiClient.getApiService().getPackages("tour", null, null, null).enqueue(new Callback<ApiResponse<List<UmrahPackage>>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<List<UmrahPackage>>> call, Response<ApiResponse<List<UmrahPackage>>> response) {
+                allPackages.clear();
+                popularPackages.clear();
 
-                    for (DocumentSnapshot doc : snapshot.getDocuments()) {
-                        UmrahPackage pkg = new UmrahPackage(
-                                doc.getId(),
-                                doc.getString("name"),
-                                doc.getLong("durationDays") != null ? doc.getLong("durationDays").intValue() : 0,
-                                doc.getLong("nightsCount") != null ? doc.getLong("nightsCount").intValue() : 0,
-                                doc.getString("price"),
-                                doc.getString("url"),
-                                doc.getString("imageUrl"));
-
-                        allPackages.add(pkg);
+                if (response.isSuccessful() && response.body() != null && response.body().data != null) {
+                    for (UmrahPackage pkg : response.body().data) {
                         pkg.collectionName = "tour_packages";
-
-                        Boolean isPopular = doc.getBoolean("isPopular");
-                        if (Boolean.TRUE.equals(isPopular)) {
+                        allPackages.add(pkg);
+                        if (pkg.isFeatured) {
                             popularPackages.add(pkg);
                         }
                     }
+                }
+                renderSections("");
+            }
 
-                    renderSections("");
-                })
-                .addOnFailureListener(e ->
-                        Toast.makeText(this, "Gagal muat pakej Tour. Sila cuba lagi.", Toast.LENGTH_SHORT).show());
+            @Override
+            public void onFailure(Call<ApiResponse<List<UmrahPackage>>> call, Throwable t) {
+                allPackages.clear();
+                popularPackages.clear();
+                renderSections("");
+                Toast.makeText(TourActivity.this, "Gagal menyambung ke pelayan backend", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     /** "Available" papar SEMUA pakej (termasuk yang popular juga - sama macam website). */
