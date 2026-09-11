@@ -24,4 +24,16 @@ public interface ApiService {
 
     @GET("v1/packages/{id}")
     Call<ApiResponse<UmrahPackage>> getPackageDetail(@Path("id") String packageId);
+
+    @retrofit2.http.POST("v1/auth/login")
+    Call<ApiResponse<AuthResponse>> login(@retrofit2.http.Body LoginRequest request);
+
+    @retrofit2.http.POST("v1/auth/google")
+    Call<ApiResponse<AuthResponse>> googleLogin(@retrofit2.http.Body GoogleLoginRequest request);
+
+    @retrofit2.http.POST("v1/auth/register")
+    Call<ApiResponse<AuthResponse>> register(@retrofit2.http.Body RegisterRequest request);
+
+    @retrofit2.http.POST("v1/auth/forgot-password")
+    Call<ApiResponse<Object>> forgotPassword(@retrofit2.http.Body java.util.Map<String, String> body);
 }

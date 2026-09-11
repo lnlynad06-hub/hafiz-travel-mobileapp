@@ -16,13 +16,22 @@
 
     <!-- Login screen -->
     <string name="login_title">欢迎回来</string>
-    <string name="login_subtitle">登录以继续</string>
+    <string name="login_subtitle">登录以规划您的梦想假期</string>
     <string name="hint_email">电子邮箱</string>
     <string name="hint_password">密码</string>
+    <string name="remember_me">记住我</string>
     <string name="login_button">登录</string>
-    <string name="login_no_account">还没有账户？立即注册。</string>
-    <string name="login_or_with">或使用以下方式登录</string>
-    <string name="login_guest">以访客身份登录</string>
+    <string name="login_signing_in">正在登录…</string>
+    <string name="login_no_account">还没有账户？立即注册</string>
+    <string name="login_or_with">或使用以下方式继续</string>
+    <string name="login_guest">以访客身份继续</string>
+    <string name="forgot_password_title">重置密码</string>
+    <string name="forgot_password_desc">请输入您的注册电子邮箱，我们将向您发送密码重置链接。</string>
+    <string name="btn_send_reset">发送重置链接</string>
+    <string name="reset_link_sent_success">密码重置邮件已发送！请检查您的收件箱。</string>
+    <string name="login_failed_user_not_found">未找到此电子邮箱对应的账户。</string>
+    <string name="login_failed_wrong_password">密码错误，请重试。</string>
+    <string name="login_failed_default">登录失败，请检查您的凭据。</string>
 
     <!-- Sign Up screen -->
     <string name="signup_title">创建账户</string>
@@ -31,16 +40,16 @@
     <string name="hint_phone">电话号码</string>
     <string name="hint_confirm_password">确认密码</string>
     <string name="signup_button">注册</string>
+    <string name="signup_signing_up">正在注册...</string>
+    <string name="hint_password_min">至少 6 个字符</string>
+    <string name="signup_terms_disclaimer">注册即表示您同意我们的&lt;b&gt;服务条款&lt;/b&gt;和&lt;b&gt;隐私政策&lt;/b&gt;。</string>
+    <string name="dialog_terms_title">服务条款与隐私政策</string>
     <string name="signup_have_account">已有账户？登录</string>
     <string name="signup_or_with">或使用以下方式注册</string>
     <string name="signup_guest">以访客身份登录</string>
-    <string name="social_login_google">使用 Google 登录 - 即将推出</string>
-    <string name="social_login_facebook">使用 Facebook 登录 - 即将推出</string>
-    <string name="social_login_phone">使用手机号码登录 - 即将推出</string>
-
-    <string name="social_signup_google">使用 Google 注册 - 即将推出</string>
-    <string name="social_signup_facebook">使用 Facebook 注册 - 即将推出</string>
-    <string name="social_signup_phone">使用手机号码注册 - 即将推出</string>
+    <string name="btn_continue_google">使用 Google 继续</string>
+    <string name="social_login_google">使用 Google 登录</string>
+    <string name="social_signup_google">使用 Google 注册</string>
 
     <string name="guest_greeting">愿平安降临于你</string>
     <string name="user_greeting">愿平安降临于你</string>
@@ -363,7 +372,6 @@
     <string name="login_email_invalid">请输入有效的电子邮件</string>
     <string name="login_password_required">请输入密码</string>
     <string name="login_success">登录成功！</string>
-    <string name="login_failed_default">登录失败，请重试</string>
     <string name="language_picker_title">选择语言</string>
     <string name="language_picker_subtitle">选择您的首选语言</string>
 

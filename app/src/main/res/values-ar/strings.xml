@@ -16,13 +16,22 @@
 
     <!-- Login screen -->
     <string name="login_title">مرحبًا بعودتك</string>
-    <string name="login_subtitle">سجّل الدخول للمتابعة</string>
+    <string name="login_subtitle">سجّل الدخول لتخطيط رحلتك المميزة</string>
     <string name="hint_email">البريد الإلكتروني</string>
     <string name="hint_password">كلمة المرور</string>
+    <string name="remember_me">تذكرني</string>
     <string name="login_button">تسجيل الدخول</string>
-    <string name="login_no_account">ليس لديك حساب؟ سجّل الآن.</string>
-    <string name="login_or_with">أو سجّل الدخول باستخدام</string>
-    <string name="login_guest">الدخول كضيف</string>
+    <string name="login_signing_in">جارٍ تسجيل الدخول…</string>
+    <string name="login_no_account">ليس لديك حساب؟ إنشاء حساب</string>
+    <string name="login_or_with">أو المتابعة عبر</string>
+    <string name="login_guest">المتابعة كضيف</string>
+    <string name="forgot_password_title">إعادة تعيين كلمة المرور</string>
+    <string name="forgot_password_desc">أدخل بريدك الإلكتروني المسجل وسنرسل لك رابط إعادة تعيين كلمة المرور.</string>
+    <string name="btn_send_reset">إرسال الرابط</string>
+    <string name="reset_link_sent_success">تم إرسال رابط إعادة التعيين! يرجى التحقق من صندوق بريدك.</string>
+    <string name="login_failed_user_not_found">لم يتم العثور على حساب بهذا البريد الإلكتروني.</string>
+    <string name="login_failed_wrong_password">كلمة المرور غير صحيحة. يرجى المحاولة مرة أخرى.</string>
+    <string name="login_failed_default">فشل تسجيل الدخول. يرجى التحقق من بياناتك.</string>
 
     <!-- Sign Up screen -->
     <string name="signup_title">إنشاء حساب</string>
@@ -30,17 +39,17 @@
     <string name="hint_full_name">الاسم الكامل</string>
     <string name="hint_phone">رقم الهاتف</string>
     <string name="hint_confirm_password">تأكيد كلمة المرور</string>
-    <string name="signup_button">تسجيل</string>
+    <string name="signup_button">إنشاء حساب</string>
+    <string name="signup_signing_up">جاري إنشاء الحساب...</string>
+    <string name="hint_password_min">٦ أحرف على الأقل</string>
+    <string name="signup_terms_disclaimer">بالتسجيل، فإنك توافق على &lt;b&gt;شروط الخدمة&lt;/b&gt; و &lt;b&gt;سياسة الخصوصية&lt;/b&gt;.</string>
+    <string name="dialog_terms_title">الشروط وسياسة الخصوصية</string>
     <string name="signup_have_account">لديك حساب بالفعل؟ تسجيل الدخول</string>
     <string name="signup_or_with">أو سجّل باستخدام</string>
     <string name="signup_guest">الدخول كضيف</string>
-    <string name="social_login_google">تسجيل الدخول عبر Google - قريبًا</string>
-    <string name="social_login_facebook">تسجيل الدخول عبر Facebook - قريبًا</string>
-    <string name="social_login_phone">تسجيل الدخول برقم الهاتف - قريبًا</string>
-
-    <string name="social_signup_google">التسجيل عبر Google - قريبًا</string>
-    <string name="social_signup_facebook">التسجيل عبر Facebook - قريبًا</string>
-    <string name="social_signup_phone">التسجيل برقم الهاتف - قريبًا</string>
+    <string name="btn_continue_google">المتابعة باستخدام Google</string>
+    <string name="social_login_google">تسجيل الدخول عبر Google</string>
+    <string name="social_signup_google">التسجيل عبر Google</string>
 
     <string name="guest_greeting">السلام عليكم</string>
     <string name="user_greeting">السلام عليكم</string>
@@ -363,7 +372,6 @@
     <string name="login_email_invalid">يرجى إدخال بريد إلكتروني صحيح</string>
     <string name="login_password_required">يرجى إدخال كلمة المرور</string>
     <string name="login_success">تم تسجيل الدخول بنجاح!</string>
-    <string name="login_failed_default">فشل تسجيل الدخول، يرجى المحاولة مرة أخرى</string>
     <string name="language_picker_title">اختر اللغة</string>
     <string name="language_picker_subtitle">اختر لغتك المفضلة</string>
 

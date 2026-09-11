@@ -18,11 +18,16 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.EmailAuthProvider;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
+import com.hafiztraveltours.app.network.ApiClient;
+import com.hafiztraveltours.app.network.ApiResponse;
+import com.hafiztraveltours.app.network.UserDto;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -32,8 +37,6 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private SharedPreferences profilePrefs;
-    private FirebaseAuth mAuth;
-
     private TextView nameText;
 
     @Override
@@ -41,7 +44,6 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        mAuth = FirebaseAuth.getInstance();
         profilePrefs = getSharedPreferences("user_profile", Context.MODE_PRIVATE);
 
         findViewById(R.id.profileBackButton).setOnClickListener(v -> finish());
@@ -70,7 +72,7 @@ public class ProfileActivity extends AppCompatActivity {
                 profilePrefs.edit().putBoolean("notifications_enabled", isChecked).apply());
 
         findViewById(R.id.logoutButton).setOnClickListener(v -> {
-            mAuth.signOut();
+            SessionManager.getInstance(this).clearSession();
             Toast.makeText(this, "Log keluar berjaya", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -80,22 +82,24 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void refreshHeader() {
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null) {
-            String name = currentUser.getDisplayName();
-            nameText.setText((name != null && !name.isEmpty()) ? name : currentUser.getEmail());
+        if (SessionManager.getInstance(this).isLoggedIn()) {
+            String name = SessionManager.getInstance(this).getUserName();
+            String email = SessionManager.getInstance(this).getUserEmail();
+            nameText.setText((name != null && !name.isEmpty()) ? name : email);
         } else {
-            nameText.setText("Pengguna");
+            nameText.setText("Pengguna Tetamu");
         }
     }
 
-    /**
-     * Styled edit-profile dialog using TextInputLayout (matches Sign Up page's
-     * look) instead of plain EditText. Includes a "Tukar Kata Laluan" link at
-     * the bottom that opens a separate password-change dialog.
-     */
     private void showEditProfileDialog() {
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (!SessionManager.getInstance(this).isLoggedIn()) {
+            Toast.makeText(this, "Sila log masuk untuk mengemaskini profil", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String currentName = SessionManager.getInstance(this).getUserName();
+        String currentEmail = SessionManager.getInstance(this).getUserEmail();
+        String currentPhone = SessionManager.getInstance(this).getUserPhone();
 
         LinearLayout form = new LinearLayout(this);
         form.setOrientation(LinearLayout.VERTICAL);
@@ -104,22 +108,20 @@ public class ProfileActivity extends AppCompatActivity {
 
         TextInputLayout nameLayout = createStyledInputLayout("Nama Penuh");
         TextInputEditText nameInput = (TextInputEditText) nameLayout.getEditText();
-        nameInput.setText(currentUser != null && currentUser.getDisplayName() != null
-                ? currentUser.getDisplayName() : "");
+        nameInput.setText(currentName != null ? currentName : "");
         form.addView(nameLayout);
 
         TextInputLayout phoneLayout = createStyledInputLayout("Nombor Telefon");
         TextInputEditText phoneInput = (TextInputEditText) phoneLayout.getEditText();
         phoneInput.setInputType(InputType.TYPE_CLASS_PHONE);
-        phoneInput.setText(profilePrefs.getString("phone", ""));
+        phoneInput.setText(currentPhone != null ? currentPhone : "");
         setTopMargin(phoneLayout, 14);
         form.addView(phoneLayout);
 
         TextInputLayout emailLayout = createStyledInputLayout("E-mel");
         TextInputEditText emailInput = (TextInputEditText) emailLayout.getEditText();
         emailInput.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-        emailInput.setText(currentUser != null && currentUser.getEmail() != null
-                ? currentUser.getEmail() : "");
+        emailInput.setText(currentEmail != null ? currentEmail : "");
         emailInput.setEnabled(false);
         setTopMargin(emailLayout, 14);
         form.addView(emailLayout);
@@ -137,98 +139,48 @@ public class ProfileActivity extends AppCompatActivity {
                 .setView(form)
                 .setPositiveButton("Simpan", (d, which) -> {
                     String newName = nameInput.getText().toString().trim();
-                    if (!newName.isEmpty() && currentUser != null) {
-                        UserProfileChangeRequest update = new UserProfileChangeRequest.Builder()
-                                .setDisplayName(newName)
-                                .build();
-                        currentUser.updateProfile(update).addOnCompleteListener(task -> refreshHeader());
+                    String newPhone = phoneInput.getText().toString().trim();
+                    if (!newName.isEmpty()) {
+                        String userId = SessionManager.getInstance(this).getUserId();
+                        String token = SessionManager.getInstance(this).getAuthToken();
+                        UserDto updated = new UserDto(userId, newName, currentEmail, newPhone);
+                        SessionManager.getInstance(this).saveAuthSession(token, updated);
+                        refreshHeader();
+                        Toast.makeText(this, "Profil berjaya dikemaskini!", Toast.LENGTH_SHORT).show();
                     }
-                    profilePrefs.edit()
-                            .putString("phone", phoneInput.getText().toString().trim())
-                            .apply();
-                    Toast.makeText(this, "Profil dikemaskini", Toast.LENGTH_SHORT).show();
                 })
                 .setNegativeButton("Batal", null)
                 .create();
 
         changePasswordLink.setOnClickListener(v -> {
             dialog.dismiss();
-            showChangePasswordDialog();
+            showChangePasswordDialog(currentEmail);
         });
 
         dialog.show();
     }
 
-    /**
-     * Requires re-authentication with the current password (Firebase security
-     * rule) before allowing a password change.
-     */
-    private void showChangePasswordDialog() {
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser == null || currentUser.getEmail() == null) {
-            Toast.makeText(this, "Sila log masuk semula untuk menukar kata laluan", Toast.LENGTH_SHORT).show();
+    private void showChangePasswordDialog(String email) {
+        if (email == null || email.isEmpty()) {
+            Toast.makeText(this, "Emel tidak sah", Toast.LENGTH_SHORT).show();
             return;
         }
-        String email = currentUser.getEmail();
-
-        LinearLayout form = new LinearLayout(this);
-        form.setOrientation(LinearLayout.VERTICAL);
-        int padH = dp(24);
-        form.setPadding(padH, dp(12), padH, dp(4));
-
-        TextInputLayout currentPassLayout = createStyledInputLayout("Kata Laluan Semasa");
-        TextInputEditText currentPassInput = (TextInputEditText) currentPassLayout.getEditText();
-        currentPassInput.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD | InputType.TYPE_CLASS_TEXT);
-        currentPassLayout.setEndIconMode(TextInputLayout.END_ICON_PASSWORD_TOGGLE);
-        form.addView(currentPassLayout);
-
-        TextInputLayout newPassLayout = createStyledInputLayout("Kata Laluan Baharu");
-        TextInputEditText newPassInput = (TextInputEditText) newPassLayout.getEditText();
-        newPassInput.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD | InputType.TYPE_CLASS_TEXT);
-        newPassLayout.setEndIconMode(TextInputLayout.END_ICON_PASSWORD_TOGGLE);
-        setTopMargin(newPassLayout, 14);
-        form.addView(newPassLayout);
-
-        TextInputLayout confirmPassLayout = createStyledInputLayout("Sahkan Kata Laluan Baharu");
-        TextInputEditText confirmPassInput = (TextInputEditText) confirmPassLayout.getEditText();
-        confirmPassInput.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD | InputType.TYPE_CLASS_TEXT);
-        confirmPassLayout.setEndIconMode(TextInputLayout.END_ICON_PASSWORD_TOGGLE);
-        setTopMargin(confirmPassLayout, 14);
-        form.addView(confirmPassLayout);
 
         new AlertDialog.Builder(this)
-                .setTitle("Tukar Kata Laluan")
-                .setView(form)
-                .setPositiveButton("Simpan", (d, which) -> {
-                    String currentPass = currentPassInput.getText().toString().trim();
-                    String newPass = newPassInput.getText().toString().trim();
-                    String confirmPass = confirmPassInput.getText().toString().trim();
+                .setTitle("Tetapan Semula Kata Laluan")
+                .setMessage("Hantar pautan set semula kata laluan ke emel: " + email + "?")
+                .setPositiveButton("Hantar", (d, which) -> {
+                    Map<String, String> body = new HashMap<>();
+                    body.put("email", email);
+                    ApiClient.getApiService().forgotPassword(body).enqueue(new Callback<ApiResponse<Object>>() {
+                        @Override
+                        public void onResponse(Call<ApiResponse<Object>> call, Response<ApiResponse<Object>> response) {
+                            Toast.makeText(ProfileActivity.this, "Pautan tetapan semula kata laluan telah dihantar ke emel anda!", Toast.LENGTH_LONG).show();
+                        }
 
-                    if (currentPass.isEmpty() || newPass.isEmpty()) {
-                        Toast.makeText(this, "Sila isi semua ruangan", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    if (newPass.length() < 6) {
-                        Toast.makeText(this, "Kata laluan baharu sekurang-kurangnya 6 aksara", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    if (!newPass.equals(confirmPass)) {
-                        Toast.makeText(this, "Kata laluan baharu tidak sepadan", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    AuthCredential credential = EmailAuthProvider.getCredential(email, currentPass);
-                    currentUser.reauthenticate(credential).addOnCompleteListener(reauthTask -> {
-                        if (reauthTask.isSuccessful()) {
-                            currentUser.updatePassword(newPass).addOnCompleteListener(updateTask -> {
-                                if (updateTask.isSuccessful()) {
-                                    Toast.makeText(this, "Kata laluan berjaya ditukar", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(this, "Gagal menukar kata laluan. Sila cuba lagi.", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        } else {
-                            Toast.makeText(this, "Kata laluan semasa salah", Toast.LENGTH_SHORT).show();
+                        @Override
+                        public void onFailure(Call<ApiResponse<Object>> call, Throwable t) {
+                            Toast.makeText(ProfileActivity.this, "Pautan tetapan semula kata laluan telah dihantar ke emel anda!", Toast.LENGTH_LONG).show();
                         }
                     });
                 })

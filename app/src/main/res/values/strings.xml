@@ -22,13 +22,22 @@
 
     <!-- Login screen -->
     <string name="login_title">Welcome Back</string>
-    <string name="login_subtitle">Log in to continue</string>
+    <string name="login_subtitle">Sign in to plan your dream vacation</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
+    <string name="remember_me">Remember Me</string>
     <string name="login_button">Log In</string>
-    <string name="login_no_account">No account? Sign up now.</string>
-    <string name="login_or_with">Or Login With</string>
-    <string name="login_guest">Login as Guest</string>
+    <string name="login_signing_in">Signing in…</string>
+    <string name="login_no_account">Don\'t have an account? Sign Up</string>
+    <string name="login_or_with">Or continue with</string>
+    <string name="login_guest">Continue as Guest</string>
+    <string name="forgot_password_title">Reset Password</string>
+    <string name="forgot_password_desc">Enter your registered email address and we will send you a password reset link.</string>
+    <string name="btn_send_reset">Send Reset Link</string>
+    <string name="reset_link_sent_success">Password reset email sent! Please check your inbox.</string>
+    <string name="login_failed_user_not_found">No account found with this email address.</string>
+    <string name="login_failed_wrong_password">Incorrect password. Please try again.</string>
+    <string name="login_failed_default">Login failed. Please check your credentials.</string>
 
     <!-- Sign Up screen -->
     <string name="signup_title">Create an Account</string>
@@ -37,16 +46,16 @@
     <string name="hint_phone">Phone Number</string>
     <string name="hint_confirm_password">Confirm Password</string>
     <string name="signup_button">Sign Up</string>
+    <string name="signup_signing_up">Signing Up...</string>
+    <string name="hint_password_min">Minimum 6 characters</string>
+    <string name="signup_terms_disclaimer">By signing up, you agree to our &lt;b&gt;Terms of Service&lt;/b&gt; and &lt;b&gt;Privacy Policy&lt;/b&gt;.</string>
+    <string name="dialog_terms_title">Terms of Service &amp; Privacy</string>
     <string name="signup_have_account">Already have an account? Log in</string>
     <string name="signup_or_with">Or Sign Up With</string>
     <string name="signup_guest">Login as Guest</string>
-    <string name="social_login_google">Signing in with Google - coming soon</string>
-    <string name="social_login_facebook">Signing in with Facebook - coming soon</string>
-    <string name="social_login_phone">Signing in with phone number - coming soon</string>
-
-    <string name="social_signup_google">Signing up with Google - coming soon</string>
-    <string name="social_signup_facebook">Signing up with Facebook - coming soon</string>
-    <string name="social_signup_phone">Signing up with phone number - coming soon</string>
+    <string name="btn_continue_google">Continue with Google</string>
+    <string name="social_login_google">Sign in with Google</string>
+    <string name="social_signup_google">Sign up with Google</string>
 
     <string name="guest_greeting">Assalamualaikum</string>
     <string name="user_greeting">Assalamualaikum</string>
@@ -375,7 +384,6 @@
     <string name="login_email_invalid">Please enter a valid email</string>
     <string name="login_password_required">Please enter your password</string>
     <string name="login_success">Login successful!</string>
-    <string name="login_failed_default">Login failed, please try again</string>
     <string name="language_picker_title">Select Language</string>
     <string name="language_picker_subtitle">Choose your preferred language</string>
 

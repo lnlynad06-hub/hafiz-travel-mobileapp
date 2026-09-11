@@ -49,10 +49,17 @@ public class PackagePopularAdapter extends RecyclerView.Adapter<PackagePopularAd
         holder.durationPrice.setText(context.getString(
                 R.string.package_duration_price, pkg.durationDays, pkg.nightsCount, cleanPrice));
 
-        Glide.with(context)
-                .load(pkg.imageUrl)
-                .placeholder(R.drawable.bg_image_placeholder)
-                .into(holder.image);
+        if (context instanceof android.app.Activity) {
+            android.app.Activity act = (android.app.Activity) context;
+            if (act.isFinishing() || act.isDestroyed()) return;
+        }
+
+        try {
+            Glide.with(holder.itemView)
+                    .load(pkg.imageUrl)
+                    .placeholder(R.drawable.bg_image_placeholder)
+                    .into(holder.image);
+        } catch (Exception ignored) {}
 
         updateFavoriteIcon(holder.favoriteIcon, pkg);
 

@@ -15,13 +15,22 @@
     <string name="filter_all">Semua</string>
 
     <string name="login_title">Selamat Kembali</string>
-    <string name="login_subtitle">Log masuk untuk teruskan</string>
-    <string name="hint_email">Email</string>
+    <string name="login_subtitle">Log masuk untuk rancang percutian impian anda</string>
+    <string name="hint_email">Emel</string>
     <string name="hint_password">Kata Laluan</string>
+    <string name="remember_me">Ingat Saya</string>
     <string name="login_button">Log Masuk</string>
-    <string name="login_no_account">Tiada akaun? Daftar sekarang.</string>
-    <string name="login_or_with">Atau Log Masuk Dengan</string>
-    <string name="login_guest">Log Masuk sebagai Tetamu</string>
+    <string name="login_signing_in">Sedang log masuk…</string>
+    <string name="login_no_account">Belum ada akaun? Daftar Sekarang</string>
+    <string name="login_or_with">Atau teruskan dengan</string>
+    <string name="login_guest">Teruskan sebagai Tetamu</string>
+    <string name="forgot_password_title">Tetapkan Semula Kata Laluan</string>
+    <string name="forgot_password_desc">Masukkan alamat emel berdaftar anda dan kami akan menghantar pautan tetapan semula kata laluan.</string>
+    <string name="btn_send_reset">Hantar Pautan</string>
+    <string name="reset_link_sent_success">Pautan tetapan semula telah dihantar! Sila semak peti masuk emel anda.</string>
+    <string name="login_failed_user_not_found">Tiada akaun dijumpai dengan emel ini.</string>
+    <string name="login_failed_wrong_password">Kata laluan tidak tepat. Sila cuba lagi.</string>
+    <string name="login_failed_default">Log masuk gagal. Sila periksa maklumat anda.</string>
 
     <string name="signup_title">Cipta Akaun</string>
     <string name="signup_subtitle">Daftar untuk mula rancang percutian anda.</string>
@@ -29,16 +38,16 @@
     <string name="hint_phone">Nombor Telefon</string>
     <string name="hint_confirm_password">Sahkan Kata Laluan</string>
     <string name="signup_button">Daftar</string>
+    <string name="signup_signing_up">Mendaftar...</string>
+    <string name="hint_password_min">Minimum 6 aksara</string>
+    <string name="signup_terms_disclaimer">Dengan mendaftar, anda bersetuju dengan &lt;b&gt;Terma Perkhidmatan&lt;/b&gt; dan &lt;b&gt;Dasar Privasi&lt;/b&gt;.</string>
+    <string name="dialog_terms_title">Terma &amp; Dasar Privasi</string>
     <string name="signup_have_account">Dah ada akaun? Log masuk</string>
     <string name="signup_or_with">Atau Daftar Dengan</string>
     <string name="signup_guest">Daftar sebagai Tetamu</string>
-    <string name="social_login_google">Log masuk Google - akan datang</string>
-    <string name="social_login_facebook">Log masuk Facebook - akan datang</string>
-    <string name="social_login_phone">Log masuk nombor telefon - akan datang</string>
-
-    <string name="social_signup_google">Daftar guna Google - akan datang</string>
-    <string name="social_signup_facebook">Daftar guna Facebook - akan datang</string>
-    <string name="social_signup_phone">Daftar guna nombor telefon - akan datang</string>
+    <string name="btn_continue_google">Teruskan dengan Google</string>
+    <string name="social_login_google">Log masuk dengan Google</string>
+    <string name="social_signup_google">Daftar dengan Google</string>
 
     <string name="guest_greeting">Assalamualaikum</string>
     <string name="user_greeting">Assalamualaikum</string>
@@ -367,7 +376,6 @@
     <string name="login_email_invalid">Sila masukkan email yang sah</string>
     <string name="login_password_required">Sila masukkan kata laluan</string>
     <string name="login_success">Log masuk berjaya!</string>
-    <string name="login_failed_default">Log masuk gagal, sila cuba lagi</string>
     <string name="language_picker_title">Pilih Bahasa</string>
     <string name="language_picker_subtitle">Pilih bahasa pilihan anda</string>
 

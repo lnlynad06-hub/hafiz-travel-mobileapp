@@ -63,11 +63,18 @@ public class RemoveFavoriteDialog {
             tvPriceDuration.setText(context.getString(
                     R.string.package_duration_price, pkg.durationDays, pkg.nightsCount, cleanPrice));
 
-            Glide.with(context)
-                    .load(pkg.imageUrl)
-                    .placeholder(R.drawable.bg_image_placeholder)
-                    .centerCrop()
-                    .into(ivImage);
+            if (context instanceof android.app.Activity) {
+                android.app.Activity act = (android.app.Activity) context;
+                if (act.isFinishing() || act.isDestroyed()) return;
+            }
+
+            try {
+                Glide.with(view)
+                        .load(pkg.imageUrl)
+                        .placeholder(R.drawable.bg_image_placeholder)
+                        .centerCrop()
+                        .into(ivImage);
+            } catch (Exception ignored) {}
         }
 
         btnCancel.setOnClickListener(v -> {

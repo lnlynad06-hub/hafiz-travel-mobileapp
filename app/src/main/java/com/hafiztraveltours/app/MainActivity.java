@@ -127,8 +127,11 @@ public class MainActivity extends AppCompatActivity {
         String currentSaved = LocaleHelper.getSavedLanguage(this);
         if (activeLanguage != null && !activeLanguage.equals(currentSaved)) {
             recreate();
+            return;
         }
         activeLanguage = currentSaved;
+        loadSessionState();
+        setupHeroSection();
         startArcAutoRefresh();
         startHeroShowcase();
         updateFavoriteBadge();
@@ -186,23 +189,29 @@ public class MainActivity extends AppCompatActivity {
         PrayerTimeScheduler.requestBatteryOptimizationExemption(this);
     }
 
+
+
     @Override
     protected void onDestroy() {
+        stopHeroShowcase();
+        stopArcAutoRefresh();
+        showcaseHandler.removeCallbacksAndMessages(null);
+        if (arcRefreshHandler != null) {
+            arcRefreshHandler.removeCallbacksAndMessages(null);
+        }
         super.onDestroy();
         networkExecutor.shutdown();
     }
 
     /**
-     * Checks the real Firebase Authentication session instead of a manual
-     * SharedPreferences flag. If a user is signed in, show their real name
-     * (falls back to their email if no display name was set).
+     * Checks the MySQL / REST API session from SessionManager.
+     * If a user is signed in, show their real name.
      */
     private void loadSessionState() {
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser != null) {
+        SessionManager session = SessionManager.getInstance(this);
+        if (session.isLoggedIn()) {
             isLoggedIn = true;
-            String name = currentUser.getDisplayName();
-            loggedInUserName = (name != null && !name.isEmpty()) ? name : currentUser.getEmail();
+            loggedInUserName = session.getUserName();
         } else {
             isLoggedIn = false;
             loggedInUserName = "Pengguna";
@@ -431,12 +440,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void advanceHeroShowcase() {
+        if (isFinishing() || isDestroyed()) return;
         if (heroShowcaseList.isEmpty()) return;
         heroShowcaseIndex = (heroShowcaseIndex + 1) % heroShowcaseList.size();
         displayHeroShowcase(heroShowcaseIndex);
     }
 
     private void displayHeroShowcase(int index) {
+        if (isFinishing() || isDestroyed()) return;
         if (heroShowcaseList.isEmpty() || index >= heroShowcaseList.size()) return;
         UmrahPackage pkg = heroShowcaseList.get(index);
 
@@ -446,11 +457,13 @@ public class MainActivity extends AppCompatActivity {
         TextView price = findViewById(R.id.heroShowcasePrice);
 
         if (image != null && pkg.imageUrl != null) {
-            Glide.with(this)
-                    .load(pkg.imageUrl)
-                    .transition(DrawableTransitionOptions.withCrossFade(400))
-                    .placeholder(R.drawable.bg_image_placeholder)
-                    .into(image);
+            try {
+                Glide.with(this)
+                        .load(pkg.imageUrl)
+                        .transition(DrawableTransitionOptions.withCrossFade(400))
+                        .placeholder(R.drawable.bg_image_placeholder)
+                        .into(image);
+            } catch (Exception ignored) {}
         }
 
         if (title != null && pkg.name != null) {

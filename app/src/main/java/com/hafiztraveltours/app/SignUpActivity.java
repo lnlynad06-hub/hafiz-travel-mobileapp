@@ -1,17 +1,29 @@
-// SignUpActivity.java — FAIL PENUH dengan fix guestText NPE
+// SignUpActivity.java
 package com.hafiztraveltours.app;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Patterns;
+import android.view.HapticFeedbackConstants;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.OvershootInterpolator;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -24,12 +36,16 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
-// Firebase Auth
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.auth.UserProfileChangeRequest;
+import com.hafiztraveltours.app.network.ApiClient;
+import com.hafiztraveltours.app.network.ApiResponse;
+import com.hafiztraveltours.app.network.AuthResponse;
+import com.hafiztraveltours.app.network.GoogleLoginRequest;
+import com.hafiztraveltours.app.network.RegisterRequest;
+import com.hafiztraveltours.app.network.UserDto;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -40,14 +56,16 @@ public class SignUpActivity extends AppCompatActivity {
     private TextInputLayout nameLayout, emailLayout, phoneLayout, passwordLayout, confirmPasswordLayout;
     private TextInputEditText nameInput, emailInput, phoneInput, passwordInput, confirmPasswordInput;
     private MaterialButton signUpButton;
-    private FirebaseAuth mAuth;
+    private ProgressBar signUpProgressBar;
+    private TextView tvActiveLanguage;
+    private TextView tvTermsDisclaimer;
+
+    private String activeLanguage;
 
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleHelper.applySavedLocale(newBase));
     }
-
-    private String activeLanguage;
 
     @Override
     protected void onResume() {
@@ -55,15 +73,17 @@ public class SignUpActivity extends AppCompatActivity {
         String currentSaved = LocaleHelper.getSavedLanguage(this);
         if (activeLanguage != null && !activeLanguage.equals(currentSaved)) {
             recreate();
+            return;
         }
         activeLanguage = currentSaved;
+        updateActiveLanguageLabel();
     }
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
+        androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-
-        mAuth = FirebaseAuth.getInstance();
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -83,101 +103,289 @@ public class SignUpActivity extends AppCompatActivity {
         passwordInput = findViewById(R.id.passwordInput);
         confirmPasswordInput = findViewById(R.id.confirmPasswordInput);
 
+        tvActiveLanguage = findViewById(R.id.tvActiveLanguage);
         signUpButton = findViewById(R.id.signUpButton);
-        signUpButton.setOnClickListener(v -> attemptSignUp());
+        signUpProgressBar = findViewById(R.id.signUpProgressBar);
+        tvTermsDisclaimer = findViewById(R.id.tvTermsDisclaimer);
+
+        // Clear errors as user types
+        setupClearErrorOnType(nameInput, nameLayout);
+        setupClearErrorOnType(emailInput, emailLayout);
+        setupClearErrorOnType(phoneInput, phoneLayout);
+        setupClearErrorOnType(passwordInput, passwordLayout);
+        setupClearErrorOnType(confirmPasswordInput, confirmPasswordLayout);
+
+        if (tvTermsDisclaimer != null) {
+            tvTermsDisclaimer.setText(Html.fromHtml(getString(R.string.signup_terms_disclaimer)));
+            tvTermsDisclaimer.setOnClickListener(v -> {
+                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                showTermsBottomSheet();
+            });
+        }
+
+        signUpButton.setOnClickListener(v -> {
+            v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+            attemptSignUp();
+        });
 
         findViewById(R.id.goToLogin).setOnClickListener(v -> {
+            v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
             startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
             finish();
         });
 
-        // TODO: Facebook/Phone real signup - buat lepas ni
-        findViewById(R.id.googleSignUpButton).setOnClickListener(v -> {
-            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-            startActivityForResult(signInIntent, RC_SIGN_IN);
-        });
-        findViewById(R.id.facebookSignUpButton).setOnClickListener(v ->
-                Toast.makeText(this, getString(R.string.social_signup_facebook), Toast.LENGTH_SHORT).show());
-        findViewById(R.id.phoneSignUpButton).setOnClickListener(v ->
-                Toast.makeText(this, getString(R.string.social_signup_phone), Toast.LENGTH_SHORT).show());
-
-        // FIX: activity_signup.xml tiada id "guestText" -> findViewById() pulangkan null ->
-        // .setOnClickListener() atas null = NullPointerException = app crash serta-merta.
-        // Null-check ni elak crash; kalau anda tambah View id "guestText" dalam
-        // activity_signup.xml kemudian, butang ni akan automatik berfungsi.
-        View guestSignUpText = findViewById(R.id.guestSignUpText);
-        if (guestSignUpText != null) {
-            guestSignUpText.setOnClickListener(v ->
-                    startActivity(new Intent(SignUpActivity.this, MainActivity.class))
-            );
+        View googleBtn = findViewById(R.id.googleSignUpButton);
+        if (googleBtn != null) {
+            googleBtn.setOnClickListener(v -> {
+                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                setLoadingState(true);
+                Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+                startActivityForResult(signInIntent, RC_SIGN_IN);
+            });
         }
 
-        setupLanguageButton();
+        View guestSignUpText = findViewById(R.id.guestSignUpText);
+        if (guestSignUpText != null) {
+            guestSignUpText.setOnClickListener(v -> {
+                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                SessionManager.getInstance(SignUpActivity.this).clearSession();
+                startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+                finish();
+            });
+        }
+
+        View btnLanguagePicker = findViewById(R.id.btnLanguagePicker);
+        if (btnLanguagePicker != null) {
+            btnLanguagePicker.setOnClickListener(v -> {
+                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                showLanguageBottomSheet();
+            });
+        }
+
+        updateActiveLanguageLabel();
     }
 
-    // Handle Google Sign-In Account Selection Result
+    private void setLoadingState(boolean loading) {
+        if (isFinishing() || isDestroyed()) return;
+        if (signUpButton != null) {
+            signUpButton.setEnabled(!loading);
+            signUpButton.setText(loading ? getString(R.string.signup_signing_up) : getString(R.string.signup_button));
+        }
+        if (signUpProgressBar != null) {
+            signUpProgressBar.setVisibility(loading ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    private void setupClearErrorOnType(TextInputEditText input, TextInputLayout layout) {
+        if (input == null || layout == null) return;
+        input.addTextChangedListener(new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                layout.setError(null);
+            }
+            @Override public void afterTextChanged(android.text.Editable s) {}
+        });
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == RC_SIGN_IN) {
+            setLoadingState(false);
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                if (account != null && account.getIdToken() != null) {
-                    firebaseAuthWithGoogle(account.getIdToken());
+                if (account != null) {
+                    String name = account.getDisplayName() != null ? account.getDisplayName() : "Google User";
+                    String email = account.getEmail() != null ? account.getEmail() : "";
+                    String googleId = account.getId() != null ? account.getId() : "";
+                    String avatar = account.getPhotoUrl() != null ? account.getPhotoUrl().toString() : "";
+
+                    setLoadingState(true);
+                    GoogleLoginRequest request = new GoogleLoginRequest(email, name, googleId, avatar);
+                    ApiClient.getApiService().googleLogin(request)
+                            .enqueue(new Callback<ApiResponse<AuthResponse>>() {
+                                @Override
+                                public void onResponse(Call<ApiResponse<AuthResponse>> call, Response<ApiResponse<AuthResponse>> response) {
+                                    if (isFinishing() || isDestroyed()) return;
+                                    setLoadingState(false);
+
+                                    if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                                        AuthResponse authData = response.body().data;
+                                        String token = authData != null ? authData.token : "";
+                                        UserDto user = authData != null ? authData.user : null;
+                                        if (user == null) {
+                                            user = new UserDto("1", name, email, "");
+                                        }
+                                        SessionManager.getInstance(SignUpActivity.this).saveAuthSession(token, user);
+                                        Toast.makeText(SignUpActivity.this, "Log masuk Google berjaya! " + name, Toast.LENGTH_SHORT).show();
+                                        startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+                                        finish();
+                                    } else {
+                                        String err = "Log masuk Google gagal. Sila cuba lagi.";
+                                        if (response.body() != null && response.body().message != null) {
+                                            err = response.body().message;
+                                        }
+                                        Toast.makeText(SignUpActivity.this, err, Toast.LENGTH_LONG).show();
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<ApiResponse<AuthResponse>> call, Throwable t) {
+                                    if (isFinishing() || isDestroyed()) return;
+                                    setLoadingState(false);
+                                    Toast.makeText(SignUpActivity.this, "Ralat sambungan: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            });
                 }
             } catch (ApiException e) {
+                setLoadingState(false);
                 Toast.makeText(this, "Google Sign-In failed: Code " + e.getStatusCode(), Toast.LENGTH_LONG).show();
             }
         }
     }
 
-    // Authenticate with Firebase using the Google credential. Firebase creates a new
-    // account automatically the first time a given Google account signs in, so this
-    // works for both "sign up" and "log in" without any extra logic.
-    private void firebaseAuthWithGoogle(String idToken) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, task -> {
-                    if (task.isSuccessful()) {
-                        FirebaseUser user = mAuth.getCurrentUser();
-                        String name = user != null ? user.getDisplayName() : "";
-                        Toast.makeText(SignUpActivity.this, "Log masuk Google berjaya! " + name, Toast.LENGTH_SHORT).show();
+    private void showTermsBottomSheet() {
+        BottomSheetDialog dialog = new BottomSheetDialog(this);
+        View sheet = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_forgot_password, null);
+        dialog.setContentView(sheet);
 
-                        startActivity(new Intent(SignUpActivity.this, MainActivity.class));
-                        finish();
-                    } else {
-                        Toast.makeText(SignUpActivity.this, "Log masuk Google gagal. Sila cuba lagi.", Toast.LENGTH_SHORT).show();
-                    }
-                });
+        Window w = dialog.getWindow();
+        if (w != null) {
+            w.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            w.setDimAmount(0.55f);
+        }
+
+        // Show quick Terms info
+        Toast.makeText(this, "Hafiz Travel & Tours Sdn Bhd - Privasi & Terma", Toast.LENGTH_SHORT).show();
     }
 
-    private void setupLanguageButton() {
-        View languageButton = findViewById(R.id.languageButton);
-        if (languageButton == null) return;
+    private void updateActiveLanguageLabel() {
+        if (tvActiveLanguage == null) return;
+        String lang = LocaleHelper.getSavedLanguage(this);
+        tvActiveLanguage.setText(LocaleHelper.getLanguageBadge(lang));
+    }
 
-        languageButton.setOnClickListener(v -> {
-            String[] options = {"English", "Bahasa Melayu", "العربية", "한국어", "日本語", "中文"};
-            new android.app.AlertDialog.Builder(this)
-                    .setTitle("Choose Language / Pilih Bahasa")
-                    .setItems(options, (dialog, which) -> {
-                        String lang = (which == 0) ? LocaleHelper.LANGUAGE_ENGLISH
-                                : (which == 1) ? LocaleHelper.LANGUAGE_MALAY
-                                  : (which == 2) ? LocaleHelper.LANGUAGE_ARABIC
-                                    : (which == 3) ? LocaleHelper.LANGUAGE_KOREAN
-                                      : (which == 4) ? LocaleHelper.LANGUAGE_JAPANESE
-                                        : LocaleHelper.LANGUAGE_CHINESE;
-                        LocaleHelper.applyAndSaveLanguage(this, lang);
+    private void showLanguageBottomSheet() {
+        BottomSheetDialog dialog = new BottomSheetDialog(this);
+        View sheetView = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_language_picker, null);
+        dialog.setContentView(sheetView);
+
+        Window w = dialog.getWindow();
+        if (w != null) {
+            w.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            w.setDimAmount(0.55f);
+        }
+
+        View btnClose = sheetView.findViewById(R.id.btnCloseSheet);
+        if (btnClose != null) {
+            btnClose.setOnClickListener(v -> dialog.dismiss());
+        }
+
+        String current = LocaleHelper.getSavedLanguage(this);
+
+        View[] items = {
+                sheetView.findViewById(R.id.itemLangEnglish),
+                sheetView.findViewById(R.id.itemLangMalay),
+                sheetView.findViewById(R.id.itemLangArabic),
+                sheetView.findViewById(R.id.itemLangKorean),
+                sheetView.findViewById(R.id.itemLangJapanese),
+                sheetView.findViewById(R.id.itemLangChinese)
+        };
+
+        String[] codes = {
+                LocaleHelper.LANGUAGE_ENGLISH,
+                LocaleHelper.LANGUAGE_MALAY,
+                LocaleHelper.LANGUAGE_ARABIC,
+                LocaleHelper.LANGUAGE_KOREAN,
+                LocaleHelper.LANGUAGE_JAPANESE,
+                LocaleHelper.LANGUAGE_CHINESE
+        };
+
+        int[] radioIds = {
+                R.id.icRadioEnglish,
+                R.id.icRadioMalay,
+                R.id.icRadioArabic,
+                R.id.icRadioKorean,
+                R.id.icRadioJapanese,
+                R.id.icRadioChinese
+        };
+
+        for (int i = 0; i < items.length; i++) {
+            setupLanguageItem(sheetView, items[i], radioIds[i], codes[i], current, dialog, i);
+        }
+
+        dialog.show();
+    }
+
+    private void setupLanguageItem(View sheet, View item, int radioId, String langCode, String currentLang, BottomSheetDialog dialog, int index) {
+        if (item == null) return;
+        ImageView radio = sheet.findViewById(radioId);
+
+        boolean isSelected = langCode.equalsIgnoreCase(currentLang);
+        if (isSelected) {
+            item.setBackgroundResource(R.drawable.bg_language_item_selected);
+            if (radio != null) radio.setImageResource(R.drawable.ic_check_circle_magenta);
+        } else {
+            item.setBackgroundResource(R.drawable.bg_language_item_normal);
+            if (radio != null) radio.setImageResource(R.drawable.ic_circle_unselected);
+        }
+
+        item.setAlpha(0f);
+        item.setTranslationY(32f);
+        item.setScaleX(0.96f);
+        item.setScaleY(0.96f);
+        item.animate()
+                .alpha(1f)
+                .translationY(0f)
+                .scaleX(1f)
+                .scaleY(1f)
+                .setStartDelay(35L * index)
+                .setDuration(280)
+                .setInterpolator(new DecelerateInterpolator(1.6f))
+                .start();
+
+        if (isSelected && radio != null) {
+            radio.setScaleX(0f);
+            radio.setScaleY(0f);
+            radio.animate()
+                    .scaleX(1f)
+                    .scaleY(1f)
+                    .setStartDelay(35L * index + 80)
+                    .setDuration(240)
+                    .setInterpolator(new OvershootInterpolator(2.4f))
+                    .start();
+        }
+
+        item.setOnClickListener(v -> {
+            v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+            item.animate()
+                    .scaleX(0.95f)
+                    .scaleY(0.95f)
+                    .setDuration(80)
+                    .withEndAction(() -> {
+                        item.animate()
+                                .scaleX(1.0f)
+                                .scaleY(1.0f)
+                                .setDuration(120)
+                                .setInterpolator(new OvershootInterpolator(1.8f))
+                                .withEndAction(() -> {
+                                    dialog.dismiss();
+                                    if (!langCode.equalsIgnoreCase(currentLang)) {
+                                        LocaleHelper.applyAndSaveLanguage(SignUpActivity.this, langCode);
+                                    }
+                                })
+                                .start();
                     })
-                    .show();
+                    .start();
         });
     }
 
     private void attemptSignUp() {
         String name = textOf(nameInput);
         String email = textOf(emailInput);
-        String phone = textOf(phoneInput);
+        String rawPhone = textOf(phoneInput);
         String password = textOf(passwordInput);
         String confirmPassword = textOf(confirmPasswordInput);
 
@@ -197,7 +405,7 @@ public class SignUpActivity extends AppCompatActivity {
             emailLayout.setError(null);
         }
 
-        if (TextUtils.isEmpty(phone) || phone.length() < 9) {
+        if (TextUtils.isEmpty(rawPhone) || rawPhone.length() < 7) {
             phoneLayout.setError("Sila masukkan nombor telefon yang sah");
             valid = false;
         } else {
@@ -220,29 +428,61 @@ public class SignUpActivity extends AppCompatActivity {
 
         if (!valid) return;
 
-        signUpButton.setEnabled(false);
+        // Normalize phone number with +60 prefix
+        final String normalizedPhone;
+        if (rawPhone.startsWith("+60")) {
+            normalizedPhone = rawPhone;
+        } else if (rawPhone.startsWith("60")) {
+            normalizedPhone = "+" + rawPhone;
+        } else if (rawPhone.startsWith("0")) {
+            normalizedPhone = "+60" + rawPhone.substring(1);
+        } else {
+            normalizedPhone = "+60" + rawPhone;
+        }
 
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, task -> {
-                    if (task.isSuccessful()) {
-                        FirebaseUser user = mAuth.getCurrentUser();
-                        if (user != null) {
-                            UserProfileChangeRequest profileUpdate =
-                                    new UserProfileChangeRequest.Builder()
-                                            .setDisplayName(name)
-                                            .build();
-                            user.updateProfile(profileUpdate);
+        setLoadingState(true);
+
+        RegisterRequest request = new RegisterRequest(name, email, normalizedPhone, password, confirmPassword);
+        ApiClient.getApiService().register(request)
+                .enqueue(new Callback<ApiResponse<AuthResponse>>() {
+                    @Override
+                    public void onResponse(Call<ApiResponse<AuthResponse>> call, Response<ApiResponse<AuthResponse>> response) {
+                        if (isFinishing() || isDestroyed()) return;
+                        setLoadingState(false);
+
+                        if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                            AuthResponse authData = response.body().data;
+                            String token = authData != null ? authData.token : "";
+                            UserDto user = authData != null ? authData.user : null;
+                            if (user == null) {
+                                user = new UserDto("1", name, email, normalizedPhone);
+                            }
+                            SessionManager.getInstance(SignUpActivity.this).saveAuthSession(token, user);
+                            Toast.makeText(SignUpActivity.this, "Pendaftaran berjaya disimpan!", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+                            finish();
+                        } else {
+                            String errorMsg = "Pendaftaran gagal, sila cuba lagi.";
+                            if (response.body() != null && response.body().message != null && !response.body().message.isEmpty()) {
+                                errorMsg = response.body().message;
+                            } else if (response.errorBody() != null) {
+                                try {
+                                    String errJson = response.errorBody().string();
+                                    org.json.JSONObject obj = new org.json.JSONObject(errJson);
+                                    if (obj.has("message")) {
+                                        errorMsg = obj.getString("message");
+                                    }
+                                } catch (Exception ignored) {}
+                            }
+                            Toast.makeText(SignUpActivity.this, errorMsg, Toast.LENGTH_LONG).show();
                         }
-                        signUpButton.setEnabled(true);
-                        Toast.makeText(this, "Pendaftaran berjaya!", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
-                        finish();
-                    } else {
-                        signUpButton.setEnabled(true);
-                        String errorMsg = task.getException() != null
-                                ? task.getException().getMessage()
-                                : "Pendaftaran gagal, sila cuba lagi";
-                        Toast.makeText(this, errorMsg, Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onFailure(Call<ApiResponse<AuthResponse>> call, Throwable t) {
+                        if (isFinishing() || isDestroyed()) return;
+                        setLoadingState(false);
+                        Toast.makeText(SignUpActivity.this, "Ralat sambungan: " + t.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
     }

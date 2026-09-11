@@ -433,4 +433,11 @@ public class WelcomeActivity extends AppCompatActivity {
             }
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        stopShowcase();
+        showcaseHandler.removeCallbacksAndMessages(null);
+        super.onDestroy();
+    }
 }

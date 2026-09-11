@@ -91,6 +91,7 @@ public class PackageDetailActivity extends AppCompatActivity {
         ApiClient.getApiService().getPackageDetail(packageId).enqueue(new Callback<ApiResponse<UmrahPackage>>() {
             @Override
             public void onResponse(Call<ApiResponse<UmrahPackage>> call, Response<ApiResponse<UmrahPackage>> response) {
+                if (isFinishing() || isDestroyed()) return;
                 if (response.isSuccessful() && response.body() != null && response.body().data != null) {
                     detail = PackageDetail.fromUmrahPackage(response.body().data);
                     renderAll();
@@ -102,6 +103,7 @@ public class PackageDetailActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ApiResponse<UmrahPackage>> call, Throwable t) {
+                if (isFinishing() || isDestroyed()) return;
                 Toast.makeText(PackageDetailActivity.this, "Gagal menyambung ke pelayan backend", Toast.LENGTH_SHORT).show();
                 finish();
             }
@@ -109,7 +111,10 @@ public class PackageDetailActivity extends AppCompatActivity {
     }
 
     private void renderAll() {
-        Glide.with(this).load(detail.imageUrl).into(heroImage);
+        if (isFinishing() || isDestroyed()) return;
+        try {
+            Glide.with(this).load(detail.imageUrl).into(heroImage);
+        } catch (Exception ignored) {}
 
         findViewById(R.id.detailWhatsappButton).setOnClickListener(v -> openWhatsAppForPackage());
         bottomPrice.setText(detail.price);
@@ -199,16 +204,23 @@ public class PackageDetailActivity extends AppCompatActivity {
                 ViewGroup.LayoutParams.MATCH_PARENT, dp(220));
         p.topMargin = dp(12);
         poster.setLayoutParams(p);
-        Glide.with(this).load(detail.posterImageUrl).into(poster);
+        if (!isFinishing() && !isDestroyed()) {
+            try {
+                Glide.with(this).load(detail.posterImageUrl).into(poster);
+            } catch (Exception ignored) {}
+        }
         poster.setOnClickListener(v -> showZoomedImage(detail.posterImageUrl));
         container.addView(poster);
     }
 
     private void showZoomedImage(String url) {
+        if (isFinishing() || isDestroyed()) return;
         ImageView fullImage = new ImageView(this);
         fullImage.setAdjustViewBounds(true);
         fullImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        Glide.with(this).load(url).into(fullImage);
+        try {
+            Glide.with(this).load(url).into(fullImage);
+        } catch (Exception ignored) {}
 
         AlertDialog dialog = new AlertDialog.Builder(this).setView(fullImage).create();
         fullImage.setOnClickListener(v -> dialog.dismiss());
@@ -585,7 +597,11 @@ public class PackageDetailActivity extends AppCompatActivity {
             image.setBackgroundResource(R.drawable.bg_search_white);
             image.setClickable(true);
             image.setFocusable(true);
-            Glide.with(this).load(url).into(image);
+            if (!isFinishing() && !isDestroyed()) {
+                try {
+                    Glide.with(this).load(url).into(image);
+                } catch (Exception ignored) {}
+            }
             image.setOnClickListener(v -> showZoomedImage(url));
             row.addView(image);
         }

@@ -38,9 +38,11 @@ public class PodcastAdapter extends RecyclerView.Adapter<PodcastAdapter.PodcastV
         holder.title.setText(podcast.title);
 
         String thumbnailUrl = "https://img.youtube.com/vi/" + podcast.videoId + "/hqdefault.jpg";
-        Glide.with(holder.itemView.getContext())
-                .load(thumbnailUrl)
-                .into(holder.thumbnail);
+        try {
+            Glide.with(holder.itemView)
+                    .load(thumbnailUrl)
+                    .into(holder.thumbnail);
+        } catch (Exception ignored) {}
 
         holder.itemView.setOnClickListener(v -> {
             Uri appUri = Uri.parse("vnd.youtube:" + podcast.videoId);
