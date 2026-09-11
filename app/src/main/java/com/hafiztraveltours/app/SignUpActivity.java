@@ -59,7 +59,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     // Phone compound field
     private LinearLayout btnCountryCode;
-    private TextView tvCountryFlag, tvCountryCode;
+    private TextView tvCountryCode;
     private ImageView phoneCheckIcon;
     private TextView phoneErrorText;
     private String selectedCountryCode = "+60";
@@ -116,7 +116,6 @@ public class SignUpActivity extends AppCompatActivity {
         
         // Phone compound field
         btnCountryCode = findViewById(R.id.btnCountryCode);
-        tvCountryFlag = findViewById(R.id.tvCountryFlag);
         tvCountryCode = findViewById(R.id.tvCountryCode);
         phoneCheckIcon = findViewById(R.id.phoneCheckIcon);
         phoneErrorText = findViewById(R.id.phoneErrorText);
@@ -670,7 +669,6 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void updateCountryUI() {
-        if (tvCountryFlag != null) tvCountryFlag.setText(selectedCountryFlag);
         if (tvCountryCode != null) tvCountryCode.setText(selectedCountryCode);
     }
 

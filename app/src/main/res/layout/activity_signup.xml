@@ -181,6 +181,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
+                android:layout_marginBottom="16dp"
                 android:orientation="vertical">
 
                 <!-- Field Row -->
@@ -193,31 +194,23 @@
                     android:gravity="center_vertical"
                     android:clipToPadding="false">
 
-                    <!-- Country Code Button -->
+                    <!-- Country Code Button (Text only, flags available in bottom sheet) -->
                     <LinearLayout
                         android:id="@+id/btnCountryCode"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
-                        android:paddingStart="12dp"
+                        android:paddingStart="14dp"
                         android:paddingEnd="10dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:clickable="true"
                         android:focusable="true">
 
                         <TextView
-                            android:id="@+id/tvCountryFlag"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="🇲🇾"
-                            android:textSize="18sp" />
-
-                        <TextView
                             android:id="@+id/tvCountryCode"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
                             android:text="+60"
                             android:textColor="@color/pink_dark"
                             android:textSize="13sp"
@@ -226,10 +219,10 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="2dp"
+                            android:layout_marginStart="3dp"
                             android:text="▾"
                             android:textColor="@color/pink_dark"
-                            android:textSize="10sp" />
+                            android:textSize="11sp" />
                     </LinearLayout>
 
                     <!-- Divider -->
