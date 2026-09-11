@@ -115,183 +115,240 @@
 
             </LinearLayout>
 
-            <!-- Toggle Inbound / Outbound -->
-            <LinearLayout
+            <!-- Active Filters Chip Bar -->
+            <HorizontalScrollView
+                android:id="@+id/activeFiltersScrollViewTour"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="18dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/tourInboundTab"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="6dp"
-                    android:background="@drawable/circle_bg_light"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:gravity="center"
-                    android:paddingVertical="10dp"
-                    android:text="@string/tour_section_inbound"
-                    android:textColor="@color/pink_dark"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tourOutboundTab"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="6dp"
-                    android:background="@drawable/bg_button_pink"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:gravity="center"
-                    android:paddingVertical="10dp"
-                    android:text="@string/tour_section_outbound"
-                    android:textColor="@color/white"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-            <!-- Kandungan Inbound (disembunyikan by default) -->
-            <LinearLayout
-                android:id="@+id/tourInboundContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingTop="16dp"
+                android:layout_marginTop="10dp"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
                 android:paddingHorizontal="20dp"
+                android:scrollbars="none"
                 android:visibility="gone">
 
-                <TextView
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:id="@+id/activeFiltersContainerTour"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_search_white"
-                    android:padding="16dp"
-                    android:text="@string/tour_inbound_coming_soon"
-                    android:textColor="@color/text_gray"
-                    android:textSize="13sp"
-                    android:gravity="center" />
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal" />
 
-            </LinearLayout>
+            </HorizontalScrollView>
 
-            <!-- Kandungan Outbound (aktif by default) -->
+            <!-- MODE BROWSE (Default) -->
             <LinearLayout
-                android:id="@+id/tourOutboundContainer"
+                android:id="@+id/tourBrowseContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="visible">
+                android:orientation="vertical">
 
-                <!-- Skeleton Shimmer Loading Placeholder -->
-                <com.facebook.shimmer.ShimmerFrameLayout
-                    android:id="@+id/tourShimmerContainer"
+                <!-- Toggle Inbound / Outbound -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="24dp"
-                    app:shimmer_auto_start="true"
-                    app:shimmer_base_alpha="0.6"
-                    app:shimmer_highlight_alpha="1.0"
-                    app:shimmer_duration="1200">
+                    android:layout_marginTop="18dp"
+                    android:orientation="horizontal">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/tourInboundTab"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:layout_weight="1"
+                        android:layout_marginEnd="6dp"
+                        android:background="@drawable/circle_bg_light"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:paddingVertical="10dp"
+                        android:text="@string/tour_section_inbound"
+                        android:textColor="@color/pink_dark"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
-                        <View
-                            android:layout_width="140dp"
-                            android:layout_height="16dp"
-                            android:background="@drawable/bg_skeleton_rect" />
+                    <TextView
+                        android:id="@+id/tourOutboundTab"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="6dp"
+                        android:background="@drawable/bg_button_pink"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:paddingVertical="10dp"
+                        android:text="@string/tour_section_outbound"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
-                            android:orientation="horizontal">
+                </LinearLayout>
 
-                            <include layout="@layout/item_skeleton_horizontal_card" />
-                            <include layout="@layout/item_skeleton_horizontal_card" />
-
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="140dp"
-                            android:layout_height="16dp"
-                            android:layout_marginTop="24dp"
-                            android:background="@drawable/bg_skeleton_rect" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
-                            android:orientation="vertical">
-
-                            <include layout="@layout/item_skeleton_vertical_card" />
-                            <include layout="@layout/item_skeleton_vertical_card" />
-
-                        </LinearLayout>
-                    </LinearLayout>
-                </com.facebook.shimmer.ShimmerFrameLayout>
-
-                <!-- Seksyen: Pakej Popular (featured, besar) -->
+                <!-- Kandungan Inbound (disembunyikan by default) -->
                 <LinearLayout
-                    android:id="@+id/tourPopularSection"
+                    android:id="@+id/tourInboundContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="24dp"
+                    android:paddingTop="16dp"
+                    android:paddingHorizontal="20dp"
                     android:visibility="gone">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/tour_section_popular"
-                        android:textColor="@color/text_dark"
-                        android:textSize="17sp"
-                        android:textStyle="bold" />
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/tourPopularRecyclerView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:clipToPadding="false"
-                        android:paddingEnd="4dp" />
+                        android:background="@drawable/bg_search_white"
+                        android:padding="16dp"
+                        android:text="@string/tour_inbound_coming_soon"
+                        android:textColor="@color/text_gray"
+                        android:textSize="13sp"
+                        android:gravity="center" />
 
                 </LinearLayout>
 
-                <!-- Seksyen: Pakej Tersedia (list biasa) -->
+                <!-- Kandungan Outbound (aktif by default) -->
                 <LinearLayout
-                    android:id="@+id/tourAvailableSection"
+                    android:id="@+id/tourOutboundContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="24dp">
+                    android:visibility="visible">
 
-                    <TextView
+                    <!-- Skeleton Shimmer Loading Placeholder -->
+                    <com.facebook.shimmer.ShimmerFrameLayout
+                        android:id="@+id/tourShimmerContainer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/tour_section_available"
-                        android:textColor="@color/text_dark"
-                        android:textSize="17sp"
-                        android:textStyle="bold" />
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginTop="24dp"
+                        app:shimmer_auto_start="true"
+                        app:shimmer_base_alpha="0.6"
+                        app:shimmer_highlight_alpha="1.0"
+                        app:shimmer_duration="1200">
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/tourAvailableRecyclerView"
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <View
+                                android:layout_width="140dp"
+                                android:layout_height="16dp"
+                                android:background="@drawable/bg_skeleton_rect" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:orientation="horizontal">
+
+                                <include layout="@layout/item_skeleton_horizontal_card" />
+                                <include layout="@layout/item_skeleton_horizontal_card" />
+
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="140dp"
+                                android:layout_height="16dp"
+                                android:layout_marginTop="24dp"
+                                android:background="@drawable/bg_skeleton_rect" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:orientation="vertical">
+
+                                <include layout="@layout/item_skeleton_vertical_card" />
+                                <include layout="@layout/item_skeleton_vertical_card" />
+
+                            </LinearLayout>
+                        </LinearLayout>
+                    </com.facebook.shimmer.ShimmerFrameLayout>
+
+                    <!-- Seksyen: Pakej Popular (featured, besar) -->
+                    <LinearLayout
+                        android:id="@+id/tourPopularSection"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:nestedScrollingEnabled="false" />
+                        android:orientation="vertical"
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginTop="24dp"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tour_section_popular"
+                            android:textColor="@color/text_dark"
+                            android:textSize="17sp"
+                            android:textStyle="bold" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/tourPopularRecyclerView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:clipToPadding="false"
+                            android:paddingEnd="4dp" />
+
+                    </LinearLayout>
+
+                    <!-- Seksyen: Pakej Tersedia (list biasa) -->
+                    <LinearLayout
+                        android:id="@+id/tourAvailableSection"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginTop="24dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tour_section_available"
+                            android:textColor="@color/text_dark"
+                            android:textSize="17sp"
+                            android:textStyle="bold" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/tourAvailableRecyclerView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:nestedScrollingEnabled="false" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- MODE SEARCH / FILTER RESULTS -->
+            <LinearLayout
+                android:id="@+id/tourSearchResultsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="20dp"
+                android:paddingTop="16dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tvTourResultsCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:textColor="@color/text_gray"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/tourSearchResultsRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false" />
 
             </LinearLayout>
 

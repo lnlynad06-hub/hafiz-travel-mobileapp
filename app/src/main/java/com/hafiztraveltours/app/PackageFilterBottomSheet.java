@@ -30,6 +30,7 @@ public class PackageFilterBottomSheet extends BottomSheetDialogFragment {
     private FilterCriteria criteria;
     private List<UmrahPackage> allPackages = new ArrayList<>();
     private OnFilterAppliedListener listener;
+    private String scopedCategory = null;
 
     private ChipGroup chipGroupCategory, chipGroupDestination, chipGroupPricePreset;
     private RangeSlider priceRangeSlider;
@@ -37,8 +38,16 @@ public class PackageFilterBottomSheet extends BottomSheetDialogFragment {
     private MaterialButton btnApplyFilter;
 
     public static PackageFilterBottomSheet newInstance(FilterCriteria current, List<UmrahPackage> packages) {
+        return newInstance(current, packages, null);
+    }
+
+    public static PackageFilterBottomSheet newInstance(FilterCriteria current, List<UmrahPackage> packages, String scopedCategory) {
         PackageFilterBottomSheet sheet = new PackageFilterBottomSheet();
         sheet.criteria = new FilterCriteria(current);
+        sheet.scopedCategory = scopedCategory;
+        if (scopedCategory != null) {
+            sheet.criteria.category = scopedCategory;
+        }
         if (packages != null) {
             sheet.allPackages = new ArrayList<>(packages);
         }
@@ -54,6 +63,9 @@ public class PackageFilterBottomSheet extends BottomSheetDialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (criteria == null) {
             criteria = new FilterCriteria();
+            if (scopedCategory != null) {
+                criteria.category = scopedCategory;
+            }
         }
         return inflater.inflate(R.layout.layout_filter_bottom_sheet, container, false);
     }
@@ -86,6 +98,13 @@ public class PackageFilterBottomSheet extends BottomSheetDialogFragment {
         chipDestChina = view.findViewById(R.id.chipDestChina);
 
         view.findViewById(R.id.btnResetFilter).setOnClickListener(v -> resetFilters());
+
+        if (scopedCategory != null) {
+            View secCat = view.findViewById(R.id.sectionCategoryContainer);
+            if (secCat != null) {
+                secCat.setVisibility(View.GONE);
+            }
+        }
 
         bindCriteriaToViews();
         applyCategoryDestinationRules();
@@ -258,6 +277,9 @@ public class PackageFilterBottomSheet extends BottomSheetDialogFragment {
 
     private void resetFilters() {
         criteria.reset();
+        if (scopedCategory != null) {
+            criteria.category = scopedCategory;
+        }
         bindCriteriaToViews();
         applyCategoryDestinationRules();
         updateMatchingCount();

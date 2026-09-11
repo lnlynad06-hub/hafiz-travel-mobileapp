@@ -71,59 +71,67 @@
             android:paddingTop="16dp">
 
             <!-- SECTION 1: KATEGORI -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/filter_category_header"
-                android:textColor="@color/text_dark"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/chipGroupCategory"
+            <LinearLayout
+                android:id="@+id/sectionCategoryContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
-                app:chipSpacingHorizontal="8dp"
-                app:selectionRequired="true"
-                app:singleSelection="true">
+                android:orientation="vertical">
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipCatAll"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:text="@string/filter_all"
-                    android:textColor="@color/filter_chip_text"
-                    app:chipBackgroundColor="@color/filter_chip_bg"
-                    app:chipStrokeColor="@color/filter_chip_stroke"
-                    app:chipStrokeWidth="1.5dp" />
+                    android:text="@string/filter_category_header"
+                    android:textColor="@color/text_dark"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipCatUmrah"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroupCategory"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/filter_cat_umrah"
-                    android:textColor="@color/filter_chip_text"
-                    app:chipBackgroundColor="@color/filter_chip_bg"
-                    app:chipStrokeColor="@color/filter_chip_stroke"
-                    app:chipStrokeWidth="1.5dp" />
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="16dp"
+                    app:chipSpacingHorizontal="8dp"
+                    app:selectionRequired="true"
+                    app:singleSelection="true">
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipCatTour"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/filter_cat_tour"
-                    android:textColor="@color/filter_chip_text"
-                    app:chipBackgroundColor="@color/filter_chip_bg"
-                    app:chipStrokeColor="@color/filter_chip_stroke"
-                    app:chipStrokeWidth="1.5dp" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipCatAll"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="@string/filter_all"
+                        android:textColor="@color/filter_chip_text"
+                        app:chipBackgroundColor="@color/filter_chip_bg"
+                        app:chipStrokeColor="@color/filter_chip_stroke"
+                        app:chipStrokeWidth="1.5dp" />
 
-            </com.google.android.material.chip.ChipGroup>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipCatUmrah"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/filter_cat_umrah"
+                        android:textColor="@color/filter_chip_text"
+                        app:chipBackgroundColor="@color/filter_chip_bg"
+                        app:chipStrokeColor="@color/filter_chip_stroke"
+                        app:chipStrokeWidth="1.5dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipCatTour"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/filter_cat_tour"
+                        android:textColor="@color/filter_chip_text"
+                        app:chipBackgroundColor="@color/filter_chip_bg"
+                        app:chipStrokeColor="@color/filter_chip_stroke"
+                        app:chipStrokeWidth="1.5dp" />
+
+                </com.google.android.material.chip.ChipGroup>
+
+            </LinearLayout>
 
             <!-- SECTION 2: DESTINASI / NEGARA -->
             <TextView

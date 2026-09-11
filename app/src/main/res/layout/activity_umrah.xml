@@ -115,6 +115,27 @@
 
             </LinearLayout>
 
+            <!-- Active Filters Chip Bar -->
+            <HorizontalScrollView
+                android:id="@+id/activeFiltersScrollViewUmrah"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:paddingHorizontal="20dp"
+                android:scrollbars="none"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:id="@+id/activeFiltersContainerUmrah"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal" />
+
+            </HorizontalScrollView>
+
             <!-- Skeleton Shimmer Loading Placeholder -->
             <com.facebook.shimmer.ShimmerFrameLayout
                 android:id="@+id/umrahShimmerContainer"
@@ -167,88 +188,124 @@
                 </LinearLayout>
             </com.facebook.shimmer.ShimmerFrameLayout>
 
-            <!-- Seksyen: Pakej Popular -->
+            <!-- MODE BROWSE (Default) -->
             <LinearLayout
-                android:id="@+id/umrahPopularSection"
+                android:id="@+id/umrahBrowseContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Seksyen: Pakej Popular -->
+                <LinearLayout
+                    android:id="@+id/umrahPopularSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="24dp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/umrahPopularTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/umrah_section_popular"
+                        android:textColor="@color/text_dark"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/umrahPopularRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:clipToPadding="false"
+                        android:paddingEnd="4dp" />
+
+                </LinearLayout>
+
+                <!-- Seksyen: Pakej Khas -->
+                <LinearLayout
+                    android:id="@+id/umrahKhasSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="24dp">
+
+                    <TextView
+                        android:id="@+id/umrahKhasTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/umrah_section_khas"
+                        android:textColor="@color/text_dark"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/umrahKhasRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:clipToPadding="false"
+                        android:paddingEnd="4dp" />
+
+                </LinearLayout>
+
+                <!-- Seksyen: Umrah Ziarah -->
+                <LinearLayout
+                    android:id="@+id/umrahZiarahSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="24dp">
+
+                    <TextView
+                        android:id="@+id/umrahZiarahTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/umrah_section_ziarah"
+                        android:textColor="@color/text_dark"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/umrahZiarahRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:clipToPadding="false"
+                        android:paddingEnd="4dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- MODE SEARCH / FILTER RESULTS -->
+            <LinearLayout
+                android:id="@+id/umrahSearchResultsContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="24dp"
+                android:paddingHorizontal="20dp"
+                android:paddingTop="16dp"
                 android:visibility="gone">
 
                 <TextView
-                    android:id="@+id/umrahPopularTitle"
+                    android:id="@+id/tvUmrahResultsCount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/umrah_section_popular"
-                    android:textColor="@color/text_dark"
-                    android:textSize="17sp"
+                    android:layout_marginBottom="12dp"
+                    android:textColor="@color/text_gray"
+                    android:textSize="13sp"
                     android:textStyle="bold" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/umrahPopularRecyclerView"
+                    android:id="@+id/umrahSearchResultsRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:clipToPadding="false"
-                    android:paddingEnd="4dp" />
-
-            </LinearLayout>
-
-            <!-- Seksyen: Pakej Khas -->
-            <LinearLayout
-                android:id="@+id/umrahKhasSection"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="24dp">
-
-                <TextView
-                    android:id="@+id/umrahKhasTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/umrah_section_khas"
-                    android:textColor="@color/text_dark"
-                    android:textSize="17sp"
-                    android:textStyle="bold" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/umrahKhasRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:clipToPadding="false"
-                    android:paddingEnd="4dp" />
-
-            </LinearLayout>
-
-            <!-- Seksyen: Umrah Ziarah -->
-            <LinearLayout
-                android:id="@+id/umrahZiarahSection"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="24dp">
-
-                <TextView
-                    android:id="@+id/umrahZiarahTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/umrah_section_ziarah"
-                    android:textColor="@color/text_dark"
-                    android:textSize="17sp"
-                    android:textStyle="bold" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/umrahZiarahRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:clipToPadding="false"
-                    android:paddingEnd="4dp" />
+                    android:nestedScrollingEnabled="false" />
 
             </LinearLayout>
 
