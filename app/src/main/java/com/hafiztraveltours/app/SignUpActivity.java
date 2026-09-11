@@ -60,6 +60,11 @@ public class SignUpActivity extends AppCompatActivity {
     private TextView tvActiveLanguage;
     private TextView tvTermsDisclaimer;
 
+    // Password strength meter
+    private View passwordStrengthContainer;
+    private View passwordStrengthBar;
+    private TextView tvPasswordStrength;
+
     private String activeLanguage;
 
     @Override
@@ -108,12 +113,18 @@ public class SignUpActivity extends AppCompatActivity {
         signUpProgressBar = findViewById(R.id.signUpProgressBar);
         tvTermsDisclaimer = findViewById(R.id.tvTermsDisclaimer);
 
-        // Clear errors as user types
-        setupClearErrorOnType(nameInput, nameLayout);
-        setupClearErrorOnType(emailInput, emailLayout);
-        setupClearErrorOnType(phoneInput, phoneLayout);
-        setupClearErrorOnType(passwordInput, passwordLayout);
-        setupClearErrorOnType(confirmPasswordInput, confirmPasswordLayout);
+        // Clear errors as user types + real-time validation
+        setupRealtimeNameValidation();
+        setupRealtimeEmailValidation();
+        setupRealtimePhoneValidation();
+        setupRealtimePasswordValidation();
+        setupRealtimeConfirmPasswordValidation();
+
+        // Password strength meter
+        passwordStrengthContainer = findViewById(R.id.passwordStrengthContainer);
+        passwordStrengthBar = findViewById(R.id.passwordStrengthBar);
+        tvPasswordStrength = (TextView) findViewById(R.id.tvPasswordStrength);
+        setupPasswordStrengthMeter();
 
         if (tvTermsDisclaimer != null) {
             tvTermsDisclaimer.setText(Html.fromHtml(getString(R.string.signup_terms_disclaimer)));
@@ -131,6 +142,7 @@ public class SignUpActivity extends AppCompatActivity {
         findViewById(R.id.goToLogin).setOnClickListener(v -> {
             v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
             startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             finish();
         });
 
@@ -176,16 +188,219 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
-    private void setupClearErrorOnType(TextInputEditText input, TextInputLayout layout) {
-        if (input == null || layout == null) return;
-        input.addTextChangedListener(new android.text.TextWatcher() {
+    // ── Real-time validation helpers ─────────────────────────────────────────
+
+    private void setupRealtimeNameValidation() {
+        if (nameInput == null || nameLayout == null) return;
+        nameInput.addTextChangedListener(new android.text.TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-                layout.setError(null);
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override public void afterTextChanged(android.text.Editable s) {
+                String val = s.toString().trim();
+                if (val.isEmpty()) {
+                    nameLayout.setError(null);
+                    nameLayout.setEndIconDrawable(null);
+                } else if (val.length() >= 2) {
+                    nameLayout.setError(null);
+                    nameLayout.setEndIconMode(com.google.android.material.textfield.TextInputLayout.END_ICON_CUSTOM);
+                    nameLayout.setEndIconDrawable(R.drawable.ic_check_circle_magenta);
+                } else {
+                    nameLayout.setEndIconDrawable(null);
+                    nameLayout.setError("Sila masukkan nama penuh");
+                }
             }
-            @Override public void afterTextChanged(android.text.Editable s) {}
         });
     }
+
+    private void setupRealtimeEmailValidation() {
+        if (emailInput == null || emailLayout == null) return;
+        emailInput.addTextChangedListener(new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override public void afterTextChanged(android.text.Editable s) {
+                String val = s.toString().trim();
+                if (val.isEmpty()) {
+                    emailLayout.setError(null);
+                    emailLayout.setEndIconDrawable(null);
+                } else if (android.util.Patterns.EMAIL_ADDRESS.matcher(val).matches()) {
+                    emailLayout.setError(null);
+                    emailLayout.setEndIconMode(com.google.android.material.textfield.TextInputLayout.END_ICON_CUSTOM);
+                    emailLayout.setEndIconDrawable(R.drawable.ic_check_circle_magenta);
+                } else {
+                    emailLayout.setEndIconDrawable(null);
+                    emailLayout.setError("Sila masukkan email yang sah");
+                }
+            }
+        });
+    }
+
+    private void setupRealtimePhoneValidation() {
+        if (phoneInput == null || phoneLayout == null) return;
+        phoneInput.addTextChangedListener(new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override public void afterTextChanged(android.text.Editable s) {
+                String val = s.toString().trim();
+                if (val.isEmpty()) {
+                    phoneLayout.setError(null);
+                    phoneLayout.setEndIconDrawable(null);
+                } else if (val.length() >= 7) {
+                    phoneLayout.setError(null);
+                    phoneLayout.setEndIconMode(com.google.android.material.textfield.TextInputLayout.END_ICON_CUSTOM);
+                    phoneLayout.setEndIconDrawable(R.drawable.ic_check_circle_magenta);
+                } else {
+                    phoneLayout.setEndIconDrawable(null);
+                    phoneLayout.setError("Sila masukkan nombor telefon yang sah");
+                }
+            }
+        });
+    }
+
+    private void setupRealtimePasswordValidation() {
+        if (passwordInput == null || passwordLayout == null) return;
+        passwordInput.addTextChangedListener(new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override public void afterTextChanged(android.text.Editable s) {
+                String val = s.toString();
+                if (val.isEmpty()) {
+                    passwordLayout.setError(null);
+                } else if (val.length() >= 6) {
+                    passwordLayout.setError(null);
+                } else {
+                    passwordLayout.setError("Kata laluan sekurang-kurangnya 6 aksara");
+                }
+                // Re-validate confirm password when password changes
+                if (confirmPasswordInput != null && confirmPasswordLayout != null) {
+                    String confirmVal = confirmPasswordInput.getText() != null ? confirmPasswordInput.getText().toString() : "";
+                    if (!confirmVal.isEmpty()) {
+                        if (confirmVal.equals(val)) {
+                            confirmPasswordLayout.setError(null);
+                            confirmPasswordLayout.setEndIconMode(com.google.android.material.textfield.TextInputLayout.END_ICON_CUSTOM);
+                            confirmPasswordLayout.setEndIconDrawable(R.drawable.ic_check_circle_magenta);
+                        } else {
+                            confirmPasswordLayout.setEndIconDrawable(null);
+                            confirmPasswordLayout.setError("Kata laluan tidak sepadan");
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    private void setupRealtimeConfirmPasswordValidation() {
+        if (confirmPasswordInput == null || confirmPasswordLayout == null) return;
+        confirmPasswordInput.addTextChangedListener(new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override public void afterTextChanged(android.text.Editable s) {
+                String val = s.toString();
+                String passwordVal = passwordInput != null && passwordInput.getText() != null
+                        ? passwordInput.getText().toString() : "";
+                if (val.isEmpty()) {
+                    confirmPasswordLayout.setError(null);
+                    confirmPasswordLayout.setEndIconDrawable(null);
+                } else if (val.equals(passwordVal)) {
+                    confirmPasswordLayout.setError(null);
+                    confirmPasswordLayout.setEndIconMode(com.google.android.material.textfield.TextInputLayout.END_ICON_CUSTOM);
+                    confirmPasswordLayout.setEndIconDrawable(R.drawable.ic_check_circle_magenta);
+                } else {
+                    confirmPasswordLayout.setEndIconDrawable(null);
+                    confirmPasswordLayout.setError("Kata laluan tidak sepadan");
+                }
+            }
+        });
+    }
+
+    // ── Password Strength Meter ───────────────────────────────────────────────
+
+    private void setupPasswordStrengthMeter() {
+        if (passwordInput == null) return;
+        passwordInput.addTextChangedListener(new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override public void afterTextChanged(android.text.Editable s) {
+                String val = s.toString();
+                if (val.isEmpty()) {
+                    if (passwordStrengthContainer != null)
+                        passwordStrengthContainer.setVisibility(View.GONE);
+                    return;
+                }
+                if (passwordStrengthContainer != null)
+                    passwordStrengthContainer.setVisibility(View.VISIBLE);
+
+                int level = calculatePasswordStrength(val);
+                updateStrengthBar(level);
+            }
+        });
+    }
+
+    /** Returns 0=Weak, 1=Medium, 2=Strong */
+    private int calculatePasswordStrength(String password) {
+        if (password.length() < 6) return 0;
+        boolean hasNumber = password.matches(".*\\d.*");
+        boolean hasSymbol = password.matches(".*[^a-zA-Z0-9].*");
+        if (password.length() >= 10 && hasNumber && hasSymbol) return 2;
+        if (password.length() >= 6 && (hasNumber || hasSymbol)) return 1;
+        if (password.length() >= 6) return 1;
+        return 0;
+    }
+
+    private void updateStrengthBar(int level) {
+        if (passwordStrengthBar == null || tvPasswordStrength == null) return;
+
+        android.view.ViewGroup.LayoutParams params = passwordStrengthBar.getLayoutParams();
+        android.view.ViewTreeObserver vto = passwordStrengthContainer.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new android.view.ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                passwordStrengthContainer.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                int totalWidth = passwordStrengthBar.getParent() instanceof android.view.View
+                        ? ((android.view.View) passwordStrengthBar.getParent()).getWidth() : 0;
+                if (totalWidth == 0) return;
+
+                int targetWidth;
+                int color;
+                String label;
+
+                switch (level) {
+                    case 2:
+                        targetWidth = totalWidth;
+                        color = 0xFF2E7D32; // dark green
+                        label = getString(R.string.password_strength_strong);
+                        break;
+                    case 1:
+                        targetWidth = totalWidth * 2 / 3;
+                        color = 0xFFE65100; // deep orange
+                        label = getString(R.string.password_strength_medium);
+                        break;
+                    default:
+                        targetWidth = totalWidth / 3;
+                        color = 0xFFE53935; // red
+                        label = getString(R.string.password_strength_weak);
+                        break;
+                }
+
+                android.animation.ValueAnimator animator = android.animation.ValueAnimator.ofInt(passwordStrengthBar.getWidth(), targetWidth);
+                animator.setDuration(300);
+                animator.setInterpolator(new android.view.animation.DecelerateInterpolator());
+                animator.addUpdateListener(a -> {
+                    android.view.ViewGroup.LayoutParams lp = passwordStrengthBar.getLayoutParams();
+                    lp.width = (int) a.getAnimatedValue();
+                    passwordStrengthBar.setLayoutParams(lp);
+                });
+                animator.start();
+
+                passwordStrengthBar.setBackgroundColor(color);
+                tvPasswordStrength.setText(label);
+                tvPasswordStrength.setTextColor(color);
+            }
+        });
+        // Trigger the layout listener
+        passwordStrengthContainer.requestLayout();
+    }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

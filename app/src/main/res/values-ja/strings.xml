@@ -47,6 +47,9 @@
     <string name="signup_have_account">すでにアカウントをお持ちですか？ログイン</string>
     <string name="signup_or_with">または次で登録</string>
     <string name="signup_guest">ゲストとしてログイン</string>
+    <string name="password_strength_weak">弱い</string>
+    <string name="password_strength_medium">普通</string>
+    <string name="password_strength_strong">強い</string>
     <string name="btn_continue_google">Googleで続行</string>
     <string name="social_login_google">Googleでログイン</string>
     <string name="social_signup_google">Googleで登録</string>

@@ -257,7 +257,40 @@
                     android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Confirm Password Input -->
+            <!-- Password Strength Meter -->
+            <LinearLayout
+                android:id="@+id/passwordStrengthContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="2dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"
+                    android:background="#E5E9EC"
+                    android:clipChildren="true">
+
+                    <View
+                        android:id="@+id/passwordStrengthBar"
+                        android:layout_width="0dp"
+                        android:layout_height="4dp"
+                        android:background="#E53935" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/tvPasswordStrength"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:textSize="11sp"
+                    android:textColor="#E53935"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/confirmPasswordLayout"
                 android:layout_width="match_parent"

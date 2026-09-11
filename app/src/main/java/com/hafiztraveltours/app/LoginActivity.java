@@ -113,23 +113,43 @@ public class LoginActivity extends AppCompatActivity {
         loginProgressBar = findViewById(R.id.loginProgressBar);
         tvActiveLanguage = findViewById(R.id.tvActiveLanguage);
 
-        // 3. Clear errors dynamically as user types
+        // 3. Real-time field validation as user types
         if (emailInput != null) {
             emailInput.addTextChangedListener(new android.text.TextWatcher() {
                 @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-                @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if (emailLayout != null) emailLayout.setError(null);
+                @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                @Override public void afterTextChanged(android.text.Editable s) {
+                    if (emailLayout == null) return;
+                    String val = s.toString().trim();
+                    if (val.isEmpty()) {
+                        emailLayout.setError(null);
+                        emailLayout.setEndIconDrawable(null);
+                    } else if (android.util.Patterns.EMAIL_ADDRESS.matcher(val).matches()) {
+                        emailLayout.setError(null);
+                        emailLayout.setEndIconMode(com.google.android.material.textfield.TextInputLayout.END_ICON_CUSTOM);
+                        emailLayout.setEndIconDrawable(R.drawable.ic_check_circle_magenta);
+                    } else {
+                        emailLayout.setEndIconDrawable(null);
+                        emailLayout.setError(getString(R.string.login_email_invalid));
+                    }
                 }
-                @Override public void afterTextChanged(android.text.Editable s) {}
             });
         }
         if (passwordInput != null) {
             passwordInput.addTextChangedListener(new android.text.TextWatcher() {
                 @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-                @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if (passwordLayout != null) passwordLayout.setError(null);
+                @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                @Override public void afterTextChanged(android.text.Editable s) {
+                    if (passwordLayout == null) return;
+                    String val = s.toString();
+                    if (val.isEmpty()) {
+                        passwordLayout.setError(null);
+                    } else if (val.length() >= 6) {
+                        passwordLayout.setError(null);
+                    } else {
+                        passwordLayout.setError(getString(R.string.login_password_required));
+                    }
                 }
-                @Override public void afterTextChanged(android.text.Editable s) {}
             });
         }
 
@@ -150,6 +170,7 @@ public class LoginActivity extends AppCompatActivity {
         findViewById(R.id.goToSignUp).setOnClickListener(v -> {
             v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
             startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         });
 
         View btnLanguagePicker = findViewById(R.id.btnLanguagePicker);

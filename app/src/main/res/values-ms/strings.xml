@@ -45,6 +45,9 @@
     <string name="signup_have_account">Dah ada akaun? Log masuk</string>
     <string name="signup_or_with">Atau Daftar Dengan</string>
     <string name="signup_guest">Daftar sebagai Tetamu</string>
+    <string name="password_strength_weak">Lemah</string>
+    <string name="password_strength_medium">Sederhana</string>
+    <string name="password_strength_strong">Kuat</string>
     <string name="btn_continue_google">Teruskan dengan Google</string>
     <string name="social_login_google">Log masuk dengan Google</string>
     <string name="social_signup_google">Daftar dengan Google</string>

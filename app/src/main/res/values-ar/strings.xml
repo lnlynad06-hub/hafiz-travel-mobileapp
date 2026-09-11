@@ -47,6 +47,9 @@
     <string name="signup_have_account">لديك حساب بالفعل؟ تسجيل الدخول</string>
     <string name="signup_or_with">أو سجّل باستخدام</string>
     <string name="signup_guest">الدخول كضيف</string>
+    <string name="password_strength_weak">ضعيف</string>
+    <string name="password_strength_medium">متوسط</string>
+    <string name="password_strength_strong">قوي</string>
     <string name="btn_continue_google">المتابعة باستخدام Google</string>
     <string name="social_login_google">تسجيل الدخول عبر Google</string>
     <string name="social_signup_google">التسجيل عبر Google</string>

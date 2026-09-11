@@ -53,6 +53,9 @@
     <string name="signup_have_account">Already have an account? Log in</string>
     <string name="signup_or_with">Or Sign Up With</string>
     <string name="signup_guest">Login as Guest</string>
+    <string name="password_strength_weak">Weak</string>
+    <string name="password_strength_medium">Medium</string>
+    <string name="password_strength_strong">Strong</string>
     <string name="btn_continue_google">Continue with Google</string>
     <string name="social_login_google">Sign in with Google</string>
     <string name="social_signup_google">Sign up with Google</string>
