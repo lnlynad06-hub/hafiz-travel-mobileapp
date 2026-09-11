@@ -80,10 +80,11 @@ public class PrayerArcView extends View {
         arcPath.reset();
         if (w <= 0 || h <= 0) return;
 
+        float horizontalInset = dp(DOT_RADIUS_DP + DOT_BORDER_WIDTH_DP);
         float verticalInset = dp(DOT_RADIUS_DP + DOT_BORDER_WIDTH_DP);
 
-        float startX = dp(4);
-        float endX = w - dp(4);
+        float startX = horizontalInset;
+        float endX = w - horizontalInset;
         float startY = h - verticalInset;
         float endY = h - verticalInset;
         float controlX = w / 2f;
