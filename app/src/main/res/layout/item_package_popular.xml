@@ -67,13 +67,30 @@
                 android:id="@+id/packageDurationPrice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="5dp"
                 android:textColor="@color/brand_magenta"
                 android:textSize="12sp"
                 android:textStyle="bold"
                 android:maxLines="1"
                 android:ellipsize="end"
                 tools:text="12H 10M • Dari RM 7,990" />
+
+            <TextView
+                android:id="@+id/packageHotelDistance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:drawableStart="@drawable/ic_hotel"
+                android:drawablePadding="4dp"
+                android:drawableTint="@color/text_gray"
+                android:textColor="@color/text_gray"
+                android:textSize="11sp"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:visibility="gone"
+                tools:visibility="visible"
+                tools:text="50m ke Masjidil Haram" />
 
         </LinearLayout>
 

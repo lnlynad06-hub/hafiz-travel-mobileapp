@@ -49,6 +49,16 @@ public class PackagePopularAdapter extends RecyclerView.Adapter<PackagePopularAd
         holder.durationPrice.setText(context.getString(
                 R.string.package_duration_price, pkg.durationDays, pkg.nightsCount, cleanPrice));
 
+        if (holder.hotelDistance != null) {
+            String hotelDist = pkg.getHotelDistanceDisplay();
+            if (hotelDist != null && !hotelDist.trim().isEmpty()) {
+                holder.hotelDistance.setVisibility(View.VISIBLE);
+                holder.hotelDistance.setText(hotelDist);
+            } else {
+                holder.hotelDistance.setVisibility(View.GONE);
+            }
+        }
+
         if (context instanceof android.app.Activity) {
             android.app.Activity act = (android.app.Activity) context;
             if (act.isFinishing() || act.isDestroyed()) return;
@@ -95,13 +105,14 @@ public class PackagePopularAdapter extends RecyclerView.Adapter<PackagePopularAd
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView image, favoriteIcon;
-        TextView name, durationPrice;
+        TextView name, durationPrice, hotelDistance;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.packageImage);
             name = itemView.findViewById(R.id.packageName);
             durationPrice = itemView.findViewById(R.id.packageDurationPrice);
+            hotelDistance = itemView.findViewById(R.id.packageHotelDistance);
             favoriteIcon = itemView.findViewById(R.id.packageFavoriteIcon);
         }
     }

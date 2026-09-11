@@ -16,8 +16,6 @@ public class PackageDetail {
 
     public List<NightBreakdown> nightsBreakdown = new ArrayList<>();
     public String departureDatesNote;
-    public List<DepartureDate> departureDates = new ArrayList<>();
-    public TourGuide guideInfo;
     public List<HotelInfo> hotels = new ArrayList<>();
     public List<ItineraryDay> itinerary = new ArrayList<>();
     public List<ImportantNote> importantNotes = new ArrayList<>();
@@ -29,36 +27,6 @@ public class PackageDetail {
     public List<String> galleryImageUrls = new ArrayList<>();
     public String whatsappMessage;
 
-    public static class DepartureDate {
-        public String dateRange;
-        public String seasonTag;
-        public String status; // "Tersedia" | "Tempat Terhad" | "Hampir Penuh"
-        public boolean isPopular;
-        public DepartureDate(String dateRange, String seasonTag, String status, boolean isPopular) {
-            this.dateRange = dateRange;
-            this.seasonTag = seasonTag;
-            this.status = status;
-            this.isPopular = isPopular;
-        }
-    }
-
-    public static class TourGuide {
-        public String name;
-        public String role;
-        public String credentials;
-        public String rating;
-        public String experienceYears;
-        public String photoUrl;
-        public TourGuide(String name, String role, String credentials, String rating, String experienceYears, String photoUrl) {
-            this.name = name;
-            this.role = role;
-            this.credentials = credentials;
-            this.rating = rating;
-            this.experienceYears = experienceYears;
-            this.photoUrl = photoUrl;
-        }
-    }
-
     public static class NightBreakdown {
         public String city;
         public int nights;
@@ -69,7 +37,7 @@ public class PackageDetail {
     }
 
     public static class HotelInfo {
-        public String type; // "mekah" | "madinah" | "flight" | "hotel"
+        public String type; // "mekah" | "madinah" | "flight"
         public String title;
         public String subtitle;
         public HotelInfo(String type, String title, String subtitle) {
@@ -99,20 +67,11 @@ public class PackageDetail {
     }
 
     public static class PriceOption {
-        public String roomType;
         public String price;
         public String occupancyLabel;
-        public String badge;
-        public boolean isDefault;
-        public PriceOption(String roomType, String price, String occupancyLabel, String badge, boolean isDefault) {
-            this.roomType = roomType;
+        public PriceOption(String price, String occupancyLabel) {
             this.price = price;
             this.occupancyLabel = occupancyLabel;
-            this.badge = badge;
-            this.isDefault = isDefault;
-        }
-        public PriceOption(String price, String occupancyLabel) {
-            this(occupancyLabel, price, occupancyLabel, null, false);
         }
     }
 
@@ -151,20 +110,6 @@ public class PackageDetail {
             }
 
             d.departureDatesNote = "Penerbangan dibuka setiap minggu sepanjang musim 1448H / 2026. Tempat adalah terhad mengikut kuota visa.";
-
-            d.departureDates.add(new DepartureDate("18 Okt - 29 Okt 2026", "Awal Musim 1448H", "Tersedia", false));
-            d.departureDates.add(new DepartureDate("15 Nov - 26 Nov 2026", "Cuti Sekolah", "Hampir Penuh", true));
-            d.departureDates.add(new DepartureDate("05 Dis - 16 Dis 2026", "Musim Sejuk", "Tempat Terhad", false));
-            d.departureDates.add(new DepartureDate("10 Jan - 21 Jan 2027", "Awal Tahun", "Tersedia", false));
-
-            d.guideInfo = new TourGuide(
-                    "Ustaz Ahmad Hafiz Al-Azhari",
-                    "Ketua Mutawwif & Pembimbing Ibadah",
-                    "B.A Syariah Universiti Al-Azhar Mesir",
-                    "5.0 (350+ Jemaah)",
-                    "12+ Tahun",
-                    "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80"
-            );
 
             d.hotels.add(new HotelInfo("mekah", "Hotel Makkah (5 Bintang)", "Pullman Zamzam Tower / Movenpick Hajar Hotel (50 meter dari perkarangan Masjidil Haram)"));
             d.hotels.add(new HotelInfo("madinah", "Hotel Madinah (5 Bintang)", "Frontel Al Harithia / Anwar Al Madinah (100 meter dari perkarangan Masjid Nabawi)"));
@@ -232,25 +177,26 @@ public class PackageDetail {
             d5.dayNumber = 5;
             d5.dayLabel = "Hari 5";
             d5.tag = "Perjalanan Haramain Train";
-            d5.title = "Makkah ➔ Madinah Al-Munawwarah";
-            d5.routeText = "Makkah Train Station - Haramain High Speed Train - Madinah";
-            d5.activities.add("Tawaf Wada' sebelum berlepas meninggalkan Kota Makkah.");
-            d5.activities.add("Menaiki keretapi laju Haramain Bullet Train menuju ke Kota Madinah.");
-            d5.activities.add("Daftar masuk hotel di Madinah.");
-            d5.activities.add("Ziarah Salam ke Makam Rasulullah SAW, Sayyidina Abu Bakar RA & Sayyidina Umar RA.");
+            d5.title = "Makkah ➔ Madinah Munawwarah";
+            d5.routeText = "Masjidil Haram - Haramain High Speed Rail - Madinah";
+            d5.activities.add("Melaksanakan Tawaf Wada' (Tawaf Selamat Tinggal) di Masjidil Haram.");
+            d5.activities.add("Daftar keluar hotel dan bertolak ke stesen Kereta Api Laju Haramain.");
+            d5.activities.add("Perjalanan pantas dan selesa ke Madinah (kira-kira 2 jam perjalanan).");
+            d5.activities.add("Ketibaan di Madinah, daftar masuk hotel dan solat berjemaah di Masjid Nabawi.");
             d5.hotelNote = "Frontel Al Harithia Madinah";
-            d5.mealNote = "Sarapan Hotel & Makan Malam Hotel";
+            d5.mealNote = "Sarapan Hotel, Makan Tengah Hari & Makan Malam di Madinah";
             d.itinerary.add(d5);
 
             ItineraryDay d6 = new ItineraryDay();
             d6.dayNumber = 6;
             d6.dayLabel = "Hari 6";
-            d6.tag = "Ibadah & Raudhah";
-            d6.title = "Masjid Nabawi & Masuk ke Raudhah Al-Syarifah";
-            d6.routeText = "Masjid Nabawi - Raudhah Al-Syarifah - Perkuburan Baqi'";
-            d6.activities.add("Solat fardhu berjemaah di Masjid Nabawi.");
-            d6.activities.add("Sesi ziarah khas ke Raudhah (Taman Syurga) mengikut slot permit rasmi Nusuk.");
-            d6.activities.add("Melawat Perkuburan Baqi' selepas waktu Subuh.");
+            d6.tag = "Ziarah Raudhah";
+            d6.title = "Ziarah Makam Rasulullah SAW & Raudhah";
+            d6.routeText = "Masjid Nabawi - Makam Rasulullah SAW - Perkuburan Baqi'";
+            d6.activities.add("Ziarah Makam Rasulullah SAW, Sayyidina Abu Bakar As-Siddiq RA & Sayyidina Umar Al-Khattab RA.");
+            d6.activities.add("Ziarah Perkuburan Baqi' bersebelahan Masjid Nabawi.");
+            d6.activities.add("Sesi masuk ke Raudhah (Taman Syurga) mengikut slot permit rasmi Nusuk.");
+            d6.activities.add("Solat dan munajat di Raudhah bersama bimbingan Mutawwif.");
             d6.hotelNote = "Frontel Al Harithia Madinah";
             d6.mealNote = "Sarapan, Makan Tengah Hari & Makan Malam di Madinah";
             d.itinerary.add(d6);
@@ -259,7 +205,7 @@ public class PackageDetail {
             d7.dayNumber = 7;
             d7.dayLabel = "Hari 7";
             d7.tag = "Ziarah Luar Madinah";
-            d7.title = "Ziarah Sejarah & Ladang Kurma";
+            d7.title = "Ziarah Bersejarah Kota Madinah";
             d7.routeText = "Masjid Quba - Jabal Uhud - Masjid Qiblatain - Ladang Kurma";
             d7.activities.add("Melawat Masjid Quba (masjid pertama dalam Islam, solat sunat bernilai pahala 1 umrah).");
             d7.activities.add("Ziarah Jabal Uhud dan Makam 70 Syuhada Perang Uhud termasuk Sayyidina Hamzah RA.");
@@ -324,9 +270,9 @@ public class PackageDetail {
             d.packingSummer.add("Ubat-ubatan peribadi & cermin mata hitam");
 
             // Pricing room options
-            d.priceOptions.add(new PriceOption("Bilik Ber-4 (Quad)", d.price, "4 Jemaah Sebilik", "Paling Jimat", true));
-            d.priceOptions.add(new PriceOption("Bilik Ber-3 (Triple)", "RM 9,590", "3 Jemaah Sebilik", "Paling Selesa", false));
-            d.priceOptions.add(new PriceOption("Bilik Berdua (Double)", "RM 10,490", "2 Jemaah (Suami Isteri)", "Privasi Penuh", false));
+            d.priceOptions.add(new PriceOption(d.price, "Bilik Berempat (Quad)"));
+            d.priceOptions.add(new PriceOption("RM 12,300", "Bilik Bertiga (Triple)"));
+            d.priceOptions.add(new PriceOption("RM 13,800", "Bilik Berdua (Double)"));
 
             // Gallery
             d.galleryImageUrls.add("https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?w=800&q=80");
@@ -342,19 +288,6 @@ public class PackageDetail {
             d.nightsBreakdown.add(new NightBreakdown("Bursa", 1));
 
             d.departureDatesNote = "Penerbangan dibuka untuk musim Bunga (Spring), Musim Luruh (Autumn) & Musim Sejuk (Winter).";
-
-            d.departureDates.add(new DepartureDate("20 Okt - 28 Okt 2026", "Musim Luruh (Autumn)", "Tersedia", false));
-            d.departureDates.add(new DepartureDate("22 Nov - 30 Nov 2026", "Cuti Sekolah", "Tempat Terhad", true));
-            d.departureDates.add(new DepartureDate("18 Dis - 26 Dis 2026", "Salji Musim Sejuk (Winter)", "Hampir Penuh", false));
-
-            d.guideInfo = new TourGuide(
-                    "Syed Danial Al-Idrus",
-                    "Pengurus Pemandu Pelancong (Tour Leader)",
-                    "Lesen MOTAC Berdaftar & Fasih Bahasa Tempatan",
-                    "4.95 (180+ Pelancong)",
-                    "8+ Tahun",
-                    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80"
-            );
 
             d.hotels.add(new HotelInfo("hotel", "Crowne Plaza Istanbul Old City (5⭐)", "Terletak berhampiran Grand Bazaar & Blue Mosque"));
             d.hotels.add(new HotelInfo("hotel", "Dinler Cave Hotel Cappadocia (5⭐)", "Pengalaman menginap di hotel gua eksklusif dengan pemandangan lembah"));
@@ -533,19 +466,6 @@ public class PackageDetail {
             g4.mealNote = "Sarapan Hotel & Makanan Penerbangan";
             d.itinerary.add(g4);
 
-            d.departureDates.add(new DepartureDate("01 Nov - 08 Nov 2026", "Musim Santai", "Tersedia", false));
-            d.departureDates.add(new DepartureDate("06 Dis - 13 Dis 2026", "Cuti Akhir Tahun", "Tempat Terhad", true));
-            d.departureDates.add(new DepartureDate("15 Jan - 22 Jan 2027", "Awal Tahun", "Tersedia", false));
-
-            d.guideInfo = new TourGuide(
-                    "Hj. Ridzwan Sulaiman",
-                    "Pemandu Pelancong Muslim Berpengalaman",
-                    "Lesen Pemandu Pelancong Antarabangsa MOTAC",
-                    "4.9 (120+ Pelancong)",
-                    "10+ Tahun",
-                    "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80"
-            );
-
             // Inclusions
             d.included.add("Tiket Penerbangan Antarabangsa Pergi & Balik");
             d.included.add("Penginapan Hotel 4/5 Bintang Sepanjang Lawatan");
@@ -560,9 +480,8 @@ public class PackageDetail {
             d.excluded.add("Aktiviti pilihan luar jadual (*optional tours*)");
 
             // Price Options
-            d.priceOptions.add(new PriceOption("Bilik Berdua (Twin / Double)", d.price, "2 Orang Sebilik", "Pilihan Standard", true));
-            d.priceOptions.add(new PriceOption("Bilik Bertiga (Triple)", "RM 4,490", "3 Orang Sebilik", "Keluarga", false));
-            d.priceOptions.add(new PriceOption("Bilik Single", "RM 5,790", "1 Orang Sebilik", "Privasi", false));
+            d.priceOptions.add(new PriceOption(d.price, "Bilik Berdua (Twin Sharing)"));
+            d.priceOptions.add(new PriceOption("Diskaun 15%", "Kanak-Kanak Dengan Katil"));
 
             // Gallery
             d.galleryImageUrls.add(d.imageUrl);

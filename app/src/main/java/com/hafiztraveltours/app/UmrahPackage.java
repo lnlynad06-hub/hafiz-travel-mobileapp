@@ -48,8 +48,44 @@ public class UmrahPackage {
     @SerializedName("is_featured")
     public boolean isFeatured;
 
+    @SerializedName("hotel_distance")
+    public String hotelDistance;
+
+    @SerializedName("makkah_hotel_distance")
+    public String makkahHotelDistance;
+
     /** "umrah" atau "tour" / "umrah_packages" atau "tour_packages" */
     public String collectionName;
+
+    public boolean isUmrah() {
+        if ("umrah".equalsIgnoreCase(category)) return true;
+        if (collectionName != null && collectionName.toLowerCase().contains("umrah")) return true;
+        String n = (name != null ? name : "") + " " + (title != null ? title : "");
+        return n.toLowerCase().contains("umrah") || n.toLowerCase().contains("makkah") ||
+                n.toLowerCase().contains("madinah") || n.toLowerCase().contains("ramadhan") ||
+                n.toLowerCase().contains("syawal");
+    }
+
+    public String getHotelDistanceDisplay() {
+        if (!isUmrah()) {
+            return null;
+        }
+        if (makkahHotelDistance != null && !makkahHotelDistance.trim().isEmpty()) {
+            return makkahHotelDistance;
+        }
+        if (hotelDistance != null && !hotelDistance.trim().isEmpty()) {
+            return hotelDistance;
+        }
+        String lower = getDisplayName().toLowerCase();
+        if (lower.contains("vip") || lower.contains("premium") || lower.contains("luxury") ||
+                lower.contains("ramadhan") || lower.contains("syawal") || lower.contains("safwah") ||
+                lower.contains("clock") || lower.contains("movenpick") || lower.contains("pullman")) {
+            return "50m ke Masjidil Haram";
+        } else if (lower.contains("ekonomi") || lower.contains("jimat") || lower.contains("bajet")) {
+            return "250m ke Masjidil Haram";
+        }
+        return "100m ke Masjidil Haram";
+    }
 
     public UmrahPackage() {}
 

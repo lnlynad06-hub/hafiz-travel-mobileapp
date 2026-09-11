@@ -162,15 +162,7 @@
                 android:textColor="@color/brand_magenta"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                tools:text="RM 8,990" />
-
-            <TextView
-                android:id="@+id/detailBottomRoomType"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/text_gray"
-                android:textSize="10sp"
-                tools:text="Bilik Ber-4 (Quad) / pax" />
+                tools:text="RM 11,500" />
 
         </LinearLayout>
 
