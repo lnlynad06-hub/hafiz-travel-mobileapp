@@ -231,9 +231,7 @@
                 app:boxStrokeWidth="1dp"
                 app:boxStrokeWidthFocused="1.5dp"
                 app:boxStrokeErrorColor="@color/error_red"
-                app:helperText="@string/hint_password_min"
-                app:helperTextTextColor="@color/text_gray"
-                app:helperTextEnabled="true"
+                app:helperTextEnabled="false"
                 app:hintEnabled="false"
                 app:errorEnabled="true"
                 app:errorIconDrawable="@null"
@@ -257,37 +255,98 @@
                     android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Password Strength Meter -->
+            <!-- Password Strength Meter + Tips -->
             <LinearLayout
                 android:id="@+id/passwordStrengthContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginBottom="2dp"
                 android:orientation="vertical"
                 android:visibility="gone">
 
-                <FrameLayout
+                <!-- Strength Bar -->
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="4dp"
-                    android:background="#E5E9EC"
-                    android:clipChildren="true">
-
-                    <View
-                        android:id="@+id/passwordStrengthBar"
-                        android:layout_width="0dp"
-                        android:layout_height="4dp"
-                        android:background="#E53935" />
-                </FrameLayout>
-
-                <TextView
-                    android:id="@+id/tvPasswordStrength"
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
-                    android:textSize="11sp"
-                    android:textColor="#E53935"
-                    android:textStyle="bold" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="5dp"
+                        android:layout_weight="1"
+                        android:background="#E5E9EC"
+                        android:clipChildren="true">
+
+                        <View
+                            android:id="@+id/passwordStrengthBar"
+                            android:layout_width="0dp"
+                            android:layout_height="5dp"
+                            android:background="#E53935" />
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/tvPasswordStrength"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:textSize="11sp"
+                        android:textColor="#E53935"
+                        android:textStyle="bold"
+                        android:minWidth="52dp" />
+                </LinearLayout>
+
+                <!-- Tips Checklist -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal"
+                    android:gravity="start">
+
+                    <TextView
+                        android:id="@+id/tipLength"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/bg_tip_pill"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:paddingTop="3dp"
+                        android:paddingBottom="3dp"
+                        android:text="✗ 8+ chars"
+                        android:textSize="10sp"
+                        android:textColor="#E53935" />
+
+                    <TextView
+                        android:id="@+id/tipNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/bg_tip_pill"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:paddingTop="3dp"
+                        android:paddingBottom="3dp"
+                        android:text="✗ 0–9"
+                        android:textSize="10sp"
+                        android:textColor="#E53935" />
+
+                    <TextView
+                        android:id="@+id/tipSymbol"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_tip_pill"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:paddingTop="3dp"
+                        android:paddingBottom="3dp"
+                        android:text="✗ !@#$"
+                        android:textSize="10sp"
+                        android:textColor="#E53935" />
+
+                </LinearLayout>
             </LinearLayout>
 
 

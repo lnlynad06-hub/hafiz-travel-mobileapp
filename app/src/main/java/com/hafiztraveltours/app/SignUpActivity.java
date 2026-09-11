@@ -64,6 +64,7 @@ public class SignUpActivity extends AppCompatActivity {
     private View passwordStrengthContainer;
     private View passwordStrengthBar;
     private TextView tvPasswordStrength;
+    private TextView tipLength, tipNumber, tipSymbol;
 
     private String activeLanguage;
 
@@ -124,6 +125,9 @@ public class SignUpActivity extends AppCompatActivity {
         passwordStrengthContainer = findViewById(R.id.passwordStrengthContainer);
         passwordStrengthBar = findViewById(R.id.passwordStrengthBar);
         tvPasswordStrength = (TextView) findViewById(R.id.tvPasswordStrength);
+        tipLength = (TextView) findViewById(R.id.tipLength);
+        tipNumber = (TextView) findViewById(R.id.tipNumber);
+        tipSymbol = (TextView) findViewById(R.id.tipSymbol);
         setupPasswordStrengthMeter();
 
         if (tvTermsDisclaimer != null) {
@@ -329,10 +333,32 @@ public class SignUpActivity extends AppCompatActivity {
                 if (passwordStrengthContainer != null)
                     passwordStrengthContainer.setVisibility(View.VISIBLE);
 
+                updateTips(val);
                 int level = calculatePasswordStrength(val);
                 updateStrengthBar(level);
             }
         });
+    }
+
+    private void updateTips(String password) {
+        boolean hasLength = password.length() >= 8;
+        boolean hasNumber = password.matches(".*\\d.*");
+        boolean hasSymbol = password.matches(".*[^a-zA-Z0-9].*");
+
+        applyTip(tipLength, hasLength, "8+ chars");
+        applyTip(tipNumber, hasNumber, "0\u20139");
+        applyTip(tipSymbol, hasSymbol, "!@#$");
+    }
+
+    private void applyTip(TextView tip, boolean passed, String label) {
+        if (tip == null) return;
+        if (passed) {
+            tip.setText("\u2713 " + label);
+            tip.setTextColor(0xFF2E7D32);  // green
+        } else {
+            tip.setText("\u2717 " + label);
+            tip.setTextColor(0xFFE53935);  // red
+        }
     }
 
     /** Returns 0=Weak, 1=Medium, 2=Strong */
