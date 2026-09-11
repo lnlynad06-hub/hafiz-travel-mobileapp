@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
     private final ExecutorService networkExecutor = Executors.newSingleThreadExecutor();
     private android.os.Handler arcRefreshHandler;
     private Runnable arcRefreshRunnable;
-    private String currentResolvedLocationName = "Larkin, Johor Bahru";
+    private String currentResolvedLocationName = "Johor Bahru";
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -1179,14 +1179,21 @@ public class MainActivity extends AppCompatActivity {
                         String subAdmin = addr.getSubAdminArea();
                         String admin = addr.getAdminArea();
 
-                        if (locality != null && admin != null) {
-                            locName = locality + ", " + admin;
-                        } else if (locality != null) {
-                            locName = locality;
-                        } else if (subAdmin != null && admin != null) {
-                            locName = subAdmin + ", " + admin;
-                        } else if (admin != null) {
-                            locName = admin;
+                        if (locality != null && !locality.trim().isEmpty()) {
+                            locName = locality.trim();
+                        } else if (subAdmin != null && !subAdmin.trim().isEmpty()) {
+                            locName = subAdmin.trim();
+                        } else if (admin != null && !admin.trim().isEmpty()) {
+                            locName = admin.trim();
+                        }
+
+                        if (locName != null) {
+                            if (locName.contains(",")) {
+                                locName = locName.split(",")[0].trim();
+                            }
+                            if (locName.toLowerCase().startsWith("daerah ")) {
+                                locName = locName.substring(7).trim();
+                            }
                         }
                     }
                 } catch (Exception ignored) {}

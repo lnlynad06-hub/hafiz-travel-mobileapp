@@ -329,21 +329,21 @@
 
                         <LinearLayout
                             android:id="@+id/btnRefreshPrayerLocation"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:gravity="center_vertical"
                             android:orientation="horizontal"
                             android:clickable="true"
                             android:focusable="true"
                             android:paddingVertical="2dp"
+                            android:paddingEnd="4dp"
                             android:background="?attr/selectableItemBackgroundBorderless">
 
                             <TextView
                                 android:id="@+id/prayerLocationLabel"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Larkin, Johor Bahru"
+                                android:text="Johor Bahru"
                                 android:textColor="@color/text_gray"
                                 android:textSize="12sp"
                                 android:ellipsize="end"
@@ -351,14 +351,18 @@
 
                             <ImageView
                                 android:id="@+id/ivRefreshPrayerLocation"
-                                android:layout_width="15dp"
-                                android:layout_height="15dp"
-                                android:layout_marginStart="4dp"
-                                android:layout_marginEnd="6dp"
+                                android:layout_width="14dp"
+                                android:layout_height="14dp"
+                                android:layout_marginStart="5dp"
                                 android:src="@drawable/ic_refresh"
                                 app:tint="@color/brand_magenta"
                                 android:contentDescription="@string/prayer_refresh_location" />
                         </LinearLayout>
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            android:layout_weight="1" />
 
                         <TextView
                             android:id="@+id/prayerHijriLabel"
