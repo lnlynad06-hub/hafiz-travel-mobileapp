@@ -16,6 +16,7 @@ import android.view.Window;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,8 +54,16 @@ public class SignUpActivity extends AppCompatActivity {
 
     private GoogleSignInClient mGoogleSignInClient;
 
-    private TextInputLayout nameLayout, emailLayout, phoneLayout, passwordLayout, confirmPasswordLayout;
+    private TextInputLayout nameLayout, emailLayout, passwordLayout, confirmPasswordLayout;
     private TextInputEditText nameInput, emailInput, phoneInput, passwordInput, confirmPasswordInput;
+
+    // Phone compound field
+    private LinearLayout btnCountryCode;
+    private TextView tvCountryFlag, tvCountryCode;
+    private ImageView phoneCheckIcon;
+    private TextView phoneErrorText;
+    private String selectedCountryCode = "+60";
+    private String selectedCountryFlag = "\uD83C\uDDF2\uD83C\uDDFE"; // 🇲🇾
     private MaterialButton signUpButton;
     private ProgressBar signUpProgressBar;
     private TextView tvActiveLanguage;
@@ -99,13 +108,26 @@ public class SignUpActivity extends AppCompatActivity {
 
         nameLayout = findViewById(R.id.nameLayout);
         emailLayout = findViewById(R.id.emailLayout);
-        phoneLayout = findViewById(R.id.phoneLayout);
         passwordLayout = findViewById(R.id.passwordLayout);
         confirmPasswordLayout = findViewById(R.id.confirmPasswordLayout);
 
         nameInput = findViewById(R.id.nameInput);
         emailInput = findViewById(R.id.emailInput);
+        
+        // Phone compound field
+        btnCountryCode = findViewById(R.id.btnCountryCode);
+        tvCountryFlag = findViewById(R.id.tvCountryFlag);
+        tvCountryCode = findViewById(R.id.tvCountryCode);
+        phoneCheckIcon = findViewById(R.id.phoneCheckIcon);
+        phoneErrorText = findViewById(R.id.phoneErrorText);
         phoneInput = findViewById(R.id.phoneInput);
+        if (btnCountryCode != null) {
+            btnCountryCode.setOnClickListener(v -> {
+                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                showCountryPicker();
+            });
+        }
+
         passwordInput = findViewById(R.id.passwordInput);
         confirmPasswordInput = findViewById(R.id.confirmPasswordInput);
 
@@ -239,25 +261,35 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void setupRealtimePhoneValidation() {
-        if (phoneInput == null || phoneLayout == null) return;
+        if (phoneInput == null) return;
         phoneInput.addTextChangedListener(new android.text.TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
             @Override public void afterTextChanged(android.text.Editable s) {
                 String val = s.toString().trim();
                 if (val.isEmpty()) {
-                    phoneLayout.setError(null);
-                    phoneLayout.setEndIconDrawable(null);
-                } else if (val.length() >= 7) {
-                    phoneLayout.setError(null);
-                    phoneLayout.setEndIconMode(com.google.android.material.textfield.TextInputLayout.END_ICON_CUSTOM);
-                    phoneLayout.setEndIconDrawable(R.drawable.ic_check_circle_magenta);
+                    setPhoneError(null);
+                    if (phoneCheckIcon != null) phoneCheckIcon.setVisibility(View.GONE);
+                } else if (val.length() >= 5) {
+                    setPhoneError(null);
+                    if (phoneCheckIcon != null) phoneCheckIcon.setVisibility(View.VISIBLE);
                 } else {
-                    phoneLayout.setEndIconDrawable(null);
-                    phoneLayout.setError("Sila masukkan nombor telefon yang sah");
+                    if (phoneCheckIcon != null) phoneCheckIcon.setVisibility(View.GONE);
+                    setPhoneError("Sila masukkan nombor telefon yang sah");
                 }
             }
         });
+    }
+
+    private void setPhoneError(String error) {
+        if (phoneErrorText == null) return;
+        if (error == null || error.isEmpty()) {
+            phoneErrorText.setVisibility(View.GONE);
+            phoneErrorText.setText("");
+        } else {
+            phoneErrorText.setText(error);
+            phoneErrorText.setVisibility(View.VISIBLE);
+        }
     }
 
     private void setupRealtimePasswordValidation() {
@@ -508,6 +540,140 @@ public class SignUpActivity extends AppCompatActivity {
         tvActiveLanguage.setText(LocaleHelper.getLanguageBadge(lang));
     }
 
+    private void showCountryPicker() {
+        BottomSheetDialog dialog = new BottomSheetDialog(this);
+        View sheetView = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_country_picker, null);
+        dialog.setContentView(sheetView);
+
+        Window w = dialog.getWindow();
+        if (w != null) {
+            w.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            w.setDimAmount(0.55f);
+        }
+
+        View btnClose = sheetView.findViewById(R.id.btnCloseSheet);
+        if (btnClose != null) {
+            btnClose.setOnClickListener(v -> dialog.dismiss());
+        }
+
+        View itemMalaysia = sheetView.findViewById(R.id.itemMalaysia);
+        View itemSingapore = sheetView.findViewById(R.id.itemSingapore);
+        View itemIndonesia = sheetView.findViewById(R.id.itemIndonesia);
+        View itemBrunei = sheetView.findViewById(R.id.itemBrunei);
+        View itemThailand = sheetView.findViewById(R.id.itemThailand);
+        View itemVietnam = sheetView.findViewById(R.id.itemVietnam);
+        View itemPhilippines = sheetView.findViewById(R.id.itemPhilippines);
+        View itemChina = sheetView.findViewById(R.id.itemChina);
+        View itemIndia = sheetView.findViewById(R.id.itemIndia);
+        View itemUk = sheetView.findViewById(R.id.itemUk);
+        View itemUsa = sheetView.findViewById(R.id.itemUsa);
+        View itemAustralia = sheetView.findViewById(R.id.itemAustralia);
+
+        if (itemMalaysia != null) {
+            itemMalaysia.setOnClickListener(v -> {
+                selectedCountryCode = "+60";
+                selectedCountryFlag = "\uD83C\uDDF2\uD83C\uDDFE";
+                updateCountryUI();
+                dialog.dismiss();
+            });
+        }
+        if (itemSingapore != null) {
+            itemSingapore.setOnClickListener(v -> {
+                selectedCountryCode = "+65";
+                selectedCountryFlag = "\uD83C\uDDF8\uD83C\uDDEC";
+                updateCountryUI();
+                dialog.dismiss();
+            });
+        }
+        if (itemIndonesia != null) {
+            itemIndonesia.setOnClickListener(v -> {
+                selectedCountryCode = "+62";
+                selectedCountryFlag = "\uD83C\uDDEE\uD83C\uDDE9";
+                updateCountryUI();
+                dialog.dismiss();
+            });
+        }
+        if (itemBrunei != null) {
+            itemBrunei.setOnClickListener(v -> {
+                selectedCountryCode = "+673";
+                selectedCountryFlag = "\uD83C\uDde7\uD83C\uDdf0";
+                updateCountryUI();
+                dialog.dismiss();
+            });
+        }
+        if (itemThailand != null) {
+            itemThailand.setOnClickListener(v -> {
+                selectedCountryCode = "+66";
+                selectedCountryFlag = "\uD83C\uDDF9\uD83C\uDDED";
+                updateCountryUI();
+                dialog.dismiss();
+            });
+        }
+        if (itemVietnam != null) {
+            itemVietnam.setOnClickListener(v -> {
+                selectedCountryCode = "+84";
+                selectedCountryFlag = "\uD83C\uDDFB\uD83C\uDDF3";
+                updateCountryUI();
+                dialog.dismiss();
+            });
+        }
+        if (itemPhilippines != null) {
+            itemPhilippines.setOnClickListener(v -> {
+                selectedCountryCode = "+63";
+                selectedCountryFlag = "\uD83C\uDDF5\uD83C\uDDED";
+                updateCountryUI();
+                dialog.dismiss();
+            });
+        }
+        if (itemChina != null) {
+            itemChina.setOnClickListener(v -> {
+                selectedCountryCode = "+86";
+                selectedCountryFlag = "\uD83C\uDde8\uD83C\uDdf3";
+                updateCountryUI();
+                dialog.dismiss();
+            });
+        }
+        if (itemIndia != null) {
+            itemIndia.setOnClickListener(v -> {
+                selectedCountryCode = "+91";
+                selectedCountryFlag = "\uD83C\uDDEE\uD83C\uDDF3";
+                updateCountryUI();
+                dialog.dismiss();
+            });
+        }
+        if (itemUk != null) {
+            itemUk.setOnClickListener(v -> {
+                selectedCountryCode = "+44";
+                selectedCountryFlag = "\uD83C\uDDEC\uD83C\uDde7";
+                updateCountryUI();
+                dialog.dismiss();
+            });
+        }
+        if (itemUsa != null) {
+            itemUsa.setOnClickListener(v -> {
+                selectedCountryCode = "+1";
+                selectedCountryFlag = "\uD83C\uDDFA\uD83C\uDDF8";
+                updateCountryUI();
+                dialog.dismiss();
+            });
+        }
+        if (itemAustralia != null) {
+            itemAustralia.setOnClickListener(v -> {
+                selectedCountryCode = "+61";
+                selectedCountryFlag = "\uD83C\uDDE6\uD83C\uDDFA";
+                updateCountryUI();
+                dialog.dismiss();
+            });
+        }
+
+        dialog.show();
+    }
+
+    private void updateCountryUI() {
+        if (tvCountryFlag != null) tvCountryFlag.setText(selectedCountryFlag);
+        if (tvCountryCode != null) tvCountryCode.setText(selectedCountryCode);
+    }
+
     private void showLanguageBottomSheet() {
         BottomSheetDialog dialog = new BottomSheetDialog(this);
         View sheetView = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_language_picker, null);
@@ -646,11 +812,11 @@ public class SignUpActivity extends AppCompatActivity {
             emailLayout.setError(null);
         }
 
-        if (TextUtils.isEmpty(rawPhone) || rawPhone.length() < 7) {
-            phoneLayout.setError("Sila masukkan nombor telefon yang sah");
+        if (TextUtils.isEmpty(rawPhone) || rawPhone.length() < 5) {
+            setPhoneError("Sila masukkan nombor telefon yang sah");
             valid = false;
         } else {
-            phoneLayout.setError(null);
+            setPhoneError(null);
         }
 
         if (TextUtils.isEmpty(password) || password.length() < 6) {
@@ -669,16 +835,16 @@ public class SignUpActivity extends AppCompatActivity {
 
         if (!valid) return;
 
-        // Normalize phone number with +60 prefix
+        // Build normalized phone using selected country code
         final String normalizedPhone;
-        if (rawPhone.startsWith("+60")) {
-            normalizedPhone = rawPhone;
-        } else if (rawPhone.startsWith("60")) {
-            normalizedPhone = "+" + rawPhone;
+        String digits = rawPhone.replaceAll("[^\\d]", "");
+        if (rawPhone.startsWith("+")) {
+            normalizedPhone = rawPhone; // already has a code
         } else if (rawPhone.startsWith("0")) {
-            normalizedPhone = "+60" + rawPhone.substring(1);
+            // Strip leading 0, add selected country code
+            normalizedPhone = selectedCountryCode + digits.substring(1);
         } else {
-            normalizedPhone = "+60" + rawPhone;
+            normalizedPhone = selectedCountryCode + digits;
         }
 
         setLoadingState(true);

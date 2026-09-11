@@ -176,44 +176,107 @@
                     android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Phone Input -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/phoneLayout"
+            <!-- Phone Input with Country Code Picker -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                app:boxBackgroundMode="outline"
-                app:boxCornerRadiusTopStart="14dp"
-                app:boxCornerRadiusTopEnd="14dp"
-                app:boxCornerRadiusBottomStart="14dp"
-                app:boxCornerRadiusBottomEnd="14dp"
-                app:boxStrokeColor="@color/box_stroke_selector"
-                app:boxBackgroundColor="@color/box_bg_selector"
-                app:boxStrokeWidth="1dp"
-                app:boxStrokeWidthFocused="1.5dp"
-                app:boxStrokeErrorColor="@color/error_red"
+                android:orientation="vertical">
 
-                app:prefixTextColor="@color/text_dark"
-                app:hintEnabled="false"
-                app:errorEnabled="true"
-                app:errorIconDrawable="@null"
-                app:startIconDrawable="@drawable/ic_phone_vector"
-                app:startIconTint="@color/pink_dark">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/phoneInput"
+                <!-- Field Row -->
+                <LinearLayout
+                    android:id="@+id/phoneFieldContainer"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
+                    android:background="@drawable/bg_phone_field"
+                    android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:paddingVertical="0dp"
-                    android:paddingStart="4dp"
-                    android:paddingEnd="12dp"
-                    android:hint="@string/hint_phone"
-                    android:inputType="phone"
-                    android:textColor="@color/input_text"
-                    android:textColorHint="@color/input_hint"
-                    android:textSize="14sp" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:clipToPadding="false">
+
+                    <!-- Country Code Button -->
+                    <LinearLayout
+                        android:id="@+id/btnCountryCode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="10dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <TextView
+                            android:id="@+id/tvCountryFlag"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🇲🇾"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/tvCountryCode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:text="+60"
+                            android:textColor="@color/pink_dark"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="2dp"
+                            android:text="▾"
+                            android:textColor="@color/pink_dark"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <!-- Divider -->
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="24dp"
+                        android:background="#E0E0E0" />
+
+                    <!-- Phone Number EditText -->
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/phoneInput"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:gravity="center_vertical"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:hint="@string/hint_phone"
+                        android:inputType="phone"
+                        android:textColor="@color/input_text"
+                        android:textColorHint="@color/input_hint"
+                        android:textSize="14sp" />
+
+                    <!-- Valid checkmark -->
+                    <ImageView
+                        android:id="@+id/phoneCheckIcon"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginEnd="12dp"
+                        android:src="@drawable/ic_check_circle_magenta"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+                <!-- Error text -->
+                <TextView
+                    android:id="@+id/phoneErrorText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="3dp"
+                    android:textSize="12sp"
+                    android:textColor="@color/error_red"
+                    android:visibility="gone" />
+
+            </LinearLayout>
 
             <!-- Password Input -->
             <com.google.android.material.textfield.TextInputLayout
