@@ -534,6 +534,10 @@
     <string name="removed_from_favorites">تمت الإزالة من المفضلة</string>
     <string name="added_to_favorites">تم الحفظ في المفضلة</string>
     <string name="undo">تراجع</string>
+    <string name="remove_favorite_dialog_title">الإزالة من المفضلة؟</string>
+    <string name="remove_favorite_dialog_message">هل أنت متأكد من أنك تريد إزالة هذه الباقة من قائمة المفضلة لديك؟</string>
+    <string name="remove_favorite_dialog_confirm">إزالة</string>
+    <string name="remove_favorite_dialog_cancel">إلغاء</string>
 
     <string name="filter_title">فلترة الباقات</string>
     <string name="filter_reset">إعادة تعيين</string>

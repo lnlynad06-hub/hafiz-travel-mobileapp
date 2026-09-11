@@ -537,6 +537,10 @@
     <string name="removed_from_favorites">Dikeluarkan daripada Kegemaran</string>
     <string name="added_to_favorites">Disimpan ke Kegemaran</string>
     <string name="undo">BATAL</string>
+    <string name="remove_favorite_dialog_title">Keluarkan dari Kegemaran?</string>
+    <string name="remove_favorite_dialog_message">Adakah anda pasti ingin mengeluarkan pakej ini daripada senarai kegemaran anda?</string>
+    <string name="remove_favorite_dialog_confirm">Keluarkan</string>
+    <string name="remove_favorite_dialog_cancel">Batal</string>
 
     <string name="filter_title">Penapis Pakej</string>
     <string name="filter_reset">Set Semula</string>

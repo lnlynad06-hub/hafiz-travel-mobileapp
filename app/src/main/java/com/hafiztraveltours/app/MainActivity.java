@@ -253,14 +253,21 @@ public class MainActivity extends AppCompatActivity {
         }
 
         View notificationButton = findViewById(R.id.notificationButton);
-        if (notificationButton != null) {
-            notificationButton.setOnClickListener(v ->
-                    Toast.makeText(this, getString(R.string.no_notifications), Toast.LENGTH_SHORT).show());
+        View notificationDot = findViewById(R.id.viewNotificationDot);
+        if (notificationDot != null) {
+            boolean hasUnread = getSharedPreferences("app_prefs", MODE_PRIVATE).getBoolean("has_unread_notifications", false);
+            notificationDot.setVisibility(hasUnread ? View.VISIBLE : View.GONE);
         }
-
-
-
-
+        if (notificationButton != null) {
+            notificationButton.setOnClickListener(v -> {
+                v.performHapticFeedback(android.view.HapticFeedbackConstants.KEYBOARD_TAP);
+                if (notificationDot != null) {
+                    notificationDot.setVisibility(View.GONE);
+                    getSharedPreferences("app_prefs", MODE_PRIVATE).edit().putBoolean("has_unread_notifications", false).apply();
+                }
+                Toast.makeText(this, getString(R.string.no_notifications), Toast.LENGTH_SHORT).show();
+            });
+        }
     }
 
     private String getLanguageShortLabel(String langCode) {
@@ -362,20 +369,21 @@ public class MainActivity extends AppCompatActivity {
         }
 
         item.setOnClickListener(v -> {
+            v.performHapticFeedback(android.view.HapticFeedbackConstants.VIRTUAL_KEY);
             item.animate()
                     .scaleX(0.95f)
                     .scaleY(0.95f)
-                    .setDuration(70)
+                    .setDuration(80)
                     .withEndAction(() -> {
                         item.animate()
                                 .scaleX(1.0f)
                                 .scaleY(1.0f)
-                                .setDuration(90)
+                                .setDuration(120)
+                                .setInterpolator(new OvershootInterpolator(1.8f))
                                 .withEndAction(() -> {
                                     dialog.dismiss();
                                     if (!langCode.equalsIgnoreCase(currentLang)) {
-                                        LocaleHelper.saveLanguage(MainActivity.this, langCode);
-                                        recreate();
+                                        LocaleHelper.applyAndSaveLanguage(MainActivity.this, langCode);
                                     }
                                 })
                                 .start();
@@ -1106,40 +1114,71 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void resolveLocationName(double lat, double lon) {
-        networkExecutor.execute(() -> {
-            String locName = null;
-            try {
-                Locale activeLocale = LocaleHelper.getCurrentLocale(this);
-                Geocoder geocoder = new Geocoder(this, activeLocale);
-                List<Address> addresses = geocoder.getFromLocation(lat, lon, 1);
-                if (addresses != null && !addresses.isEmpty()) {
-                    Address addr = addresses.get(0);
-                    String locality = addr.getLocality();
-                    String subAdmin = addr.getSubAdminArea();
-                    String admin = addr.getAdminArea();
+        if (networkExecutor.isShutdown() || isFinishing() || isDestroyed()) return;
+        try {
+            networkExecutor.execute(() -> {
+                String locName = null;
+                try {
+                    Locale activeLocale = LocaleHelper.getCurrentLocale(this);
+                    Geocoder geocoder = new Geocoder(this, activeLocale);
+                    List<Address> addresses = geocoder.getFromLocation(lat, lon, 1);
+                    if (addresses != null && !addresses.isEmpty()) {
+                        Address addr = addresses.get(0);
+                        String locality = addr.getLocality();
+                        String subAdmin = addr.getSubAdminArea();
+                        String admin = addr.getAdminArea();
 
-                    if (locality != null && admin != null) {
-                        locName = locality + ", " + admin;
-                    } else if (locality != null) {
-                        locName = locality;
-                    } else if (subAdmin != null && admin != null) {
-                        locName = subAdmin + ", " + admin;
-                    } else if (admin != null) {
-                        locName = admin;
+                        if (locality != null && admin != null) {
+                            locName = locality + ", " + admin;
+                        } else if (locality != null) {
+                            locName = locality;
+                        } else if (subAdmin != null && admin != null) {
+                            locName = subAdmin + ", " + admin;
+                        } else if (admin != null) {
+                            locName = admin;
+                        }
+                    }
+                } catch (Exception ignored) {}
+
+                if (locName != null && !locName.isEmpty()) {
+                    currentResolvedLocationName = locName;
+                    runOnUiThread(() -> {
+                        TextView locationLabel = findViewById(R.id.prayerLocationLabel);
+                        if (locationLabel != null) {
+                            locationLabel.setText(currentResolvedLocationName);
+                        }
+                    });
+                }
+            });
+        } catch (Exception ignored) {}
+    }
+
+    /**
+     * Attempts to fetch official JAKIM prayer times on the background network
+     * thread. On any failure (no internet, bad response, parse error) it
+     * falls back to the Adhan library estimate instead of leaving the
+     * widget blank.
+     */
+    private void fetchPrayerTimesFromJakimApi(double lat, double lon) {
+        if (networkExecutor.isShutdown() || isFinishing() || isDestroyed()) return;
+        try {
+            networkExecutor.execute(() -> {
+                try {
+                    String body = httpGet(JAKIM_API_BASE + lat + "/" + lon);
+                    handleSolatV2Response(body);
+                } catch (Exception gpsBetaFailed) {
+                    android.util.Log.w("PrayerTimesAPI", "GPS-beta endpoint failed, trying zone lookup", gpsBetaFailed);
+                    try {
+                        String zone = resolveZoneFromGps(lat, lon);
+                        String body = httpGet(ZONE_SOLAT_URL + zone);
+                        handleSolatV2Response(body);
+                    } catch (Exception zoneFailed) {
+                        android.util.Log.e("PrayerTimesAPI", "Zone-based lookup also failed, falling back to Adhan estimate", zoneFailed);
+                        runOnUiThread(() -> showFallbackCalculatedPrayerTimes(lat, lon));
                     }
                 }
-            } catch (Exception ignored) {}
-
-            if (locName != null && !locName.isEmpty()) {
-                currentResolvedLocationName = locName;
-                runOnUiThread(() -> {
-                    TextView locationLabel = findViewById(R.id.prayerLocationLabel);
-                    if (locationLabel != null) {
-                        locationLabel.setText(currentResolvedLocationName);
-                    }
-                });
-            }
-        });
+            });
+        } catch (Exception ignored) {}
     }
 
     private String getDynamicHijriDate() {
@@ -1203,31 +1242,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return best;
-    }
-
-    /**
-     * Calls the Malaysia Waktu Solat API (JAKIM-sourced) on a background
-     * thread. On any failure (no internet, bad response, parse error) it
-     * falls back to the Adhan library estimate instead of leaving the
-     * widget blank.
-     */
-    private void fetchPrayerTimesFromJakimApi(double lat, double lon) {
-        networkExecutor.execute(() -> {
-            try {
-                String body = httpGet(JAKIM_API_BASE + lat + "/" + lon);
-                handleSolatV2Response(body);
-            } catch (Exception gpsBetaFailed) {
-                android.util.Log.w("PrayerTimesAPI", "GPS-beta endpoint failed, trying zone lookup", gpsBetaFailed);
-                try {
-                    String zone = resolveZoneFromGps(lat, lon);
-                    String body = httpGet(ZONE_SOLAT_URL + zone);
-                    handleSolatV2Response(body);
-                } catch (Exception zoneFailed) {
-                    android.util.Log.e("PrayerTimesAPI", "Zone-based lookup also failed, falling back to Adhan estimate", zoneFailed);
-                    runOnUiThread(() -> showFallbackCalculatedPrayerTimes(lat, lon));
-                }
-            }
-        });
     }
 
     /** Resolves GPS coordinates to a JAKIM zone code (e.g. "JHR01") via the stable /zones/gps endpoint. */

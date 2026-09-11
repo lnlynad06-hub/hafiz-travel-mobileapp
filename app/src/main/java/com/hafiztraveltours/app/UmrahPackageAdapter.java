@@ -96,12 +96,12 @@ public class UmrahPackageAdapter extends RecyclerView.Adapter<UmrahPackageAdapte
                 .placeholder(R.drawable.bg_image_placeholder)
                 .into(holder.image);
 
-        updateFavoriteIcon(holder.favoriteIcon, pkg.id);
+        updateFavoriteIcon(holder.favoriteIcon, pkg);
 
         holder.favoriteIcon.setOnClickListener(v -> {
             v.performHapticFeedback(android.view.HapticFeedbackConstants.KEYBOARD_TAP);
             FavoritesManager.handleFavoriteToggle(context, pkg, holder.favoriteIcon, isFavoriteNow -> {
-                updateFavoriteIcon(holder.favoriteIcon, pkg.id);
+                updateFavoriteIcon(holder.favoriteIcon, pkg);
                 if (toggleListener != null) {
                     toggleListener.onToggled(pkg, isFavoriteNow, holder.getBindingAdapterPosition(), holder.itemView);
                 }
@@ -116,8 +116,8 @@ public class UmrahPackageAdapter extends RecyclerView.Adapter<UmrahPackageAdapte
         });
     }
 
-    private void updateFavoriteIcon(ImageView icon, String packageId) {
-        boolean isFav = FavoritesManager.isFavorite(context, packageId);
+    private void updateFavoriteIcon(ImageView icon, UmrahPackage pkg) {
+        boolean isFav = FavoritesManager.isFavorite(context, pkg);
         icon.setColorFilter(isFav ? Color.parseColor("#E91E63") : Color.parseColor("#B0B0B0"));
     }
 

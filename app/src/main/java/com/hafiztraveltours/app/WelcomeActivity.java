@@ -73,11 +73,8 @@ public class WelcomeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        String currentSaved = LocaleHelper.getSavedLanguage(this);
-        if (activeLanguage != null && !activeLanguage.equals(currentSaved)) {
-            recreate();
-        }
-        activeLanguage = currentSaved;
+        activeLanguage = LocaleHelper.getSavedLanguage(this);
+        updateActiveLanguageLabel();
 
         fetchLivePackagesFromApi();
         startShowcase();
@@ -241,17 +238,20 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     private void displayCurrentShowcase(boolean animate) {
+        if (isFinishing() || isDestroyed()) return;
         if (showcaseList.isEmpty() || currentShowcaseIndex >= showcaseList.size()) return;
         ShowcaseItem item = showcaseList.get(currentShowcaseIndex);
 
         if (heroImageMain != null) {
-            Glide.with(WelcomeActivity.this)
-                    .load(item.imageSource)
-                    .transition(DrawableTransitionOptions.withCrossFade(400))
-                    .placeholder(R.drawable.bg_image_placeholder)
-                    .error(R.drawable.img_turkiye)
-                    .centerCrop()
-                    .into(heroImageMain);
+            try {
+                Glide.with(WelcomeActivity.this)
+                        .load(item.imageSource)
+                        .transition(DrawableTransitionOptions.withCrossFade(400))
+                        .placeholder(R.drawable.bg_image_placeholder)
+                        .error(R.drawable.img_turkiye)
+                        .centerCrop()
+                        .into(heroImageMain);
+            } catch (Exception ignored) {}
         }
 
         if (tvHeroTag != null) {
@@ -383,20 +383,21 @@ public class WelcomeActivity extends AppCompatActivity {
 
         // 3. Tactile Press-Bounce Micro-Animation on selection
         item.setOnClickListener(v -> {
+            v.performHapticFeedback(android.view.HapticFeedbackConstants.VIRTUAL_KEY);
             item.animate()
                     .scaleX(0.95f)
                     .scaleY(0.95f)
-                    .setDuration(70)
+                    .setDuration(80)
                     .withEndAction(() -> {
                         item.animate()
                                 .scaleX(1.0f)
                                 .scaleY(1.0f)
-                                .setDuration(90)
+                                .setDuration(120)
+                                .setInterpolator(new OvershootInterpolator(1.8f))
                                 .withEndAction(() -> {
                                     dialog.dismiss();
                                     if (!langCode.equalsIgnoreCase(currentLang)) {
-                                        LocaleHelper.saveLanguage(WelcomeActivity.this, langCode);
-                                        recreate();
+                                        LocaleHelper.applyAndSaveLanguage(WelcomeActivity.this, langCode);
                                     }
                                 })
                                 .start();

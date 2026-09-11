@@ -39,6 +39,8 @@ public class FavoriteActivity extends AppCompatActivity {
                 (pkg, isFavoriteNow, position, itemView) -> {
                     if (!isFavoriteNow) {
                         handleUnfavoriteWithAnimation(pkg, position, itemView);
+                    } else {
+                        refreshList();
                     }
                 });
         recyclerView.setAdapter(adapter);
@@ -73,35 +75,6 @@ public class FavoriteActivity extends AppCompatActivity {
             BottomNavHelper.updateFavoriteBadge(FavoriteActivity.this);
             checkEmptyState();
         }
-
-        showUndoSnackbar(pkg, position);
-    }
-
-    private void showUndoSnackbar(UmrahPackage pkg, int position) {
-        Snackbar snackbar = Snackbar.make(
-                findViewById(android.R.id.content),
-                getString(R.string.removed_from_favorites),
-                Snackbar.LENGTH_LONG
-        );
-
-        snackbar.setAction(getString(R.string.undo), v -> {
-            FavoritesManager.toggleFavorite(FavoriteActivity.this, pkg);
-            adapter.insertItemAt(position, pkg);
-            BottomNavHelper.updateFavoriteBadge(FavoriteActivity.this);
-            checkEmptyState();
-            recyclerView.smoothScrollToPosition(position);
-        });
-
-        snackbar.setActionTextColor(ContextCompat.getColor(this, R.color.brand_magenta));
-
-        View snackView = snackbar.getView();
-        snackView.setBackgroundResource(R.drawable.bg_snackbar_luxury);
-        if (snackView.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
-            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) snackView.getLayoutParams();
-            params.setMargins(params.leftMargin + 36, params.topMargin, params.rightMargin + 36, params.bottomMargin + 200);
-            snackView.setLayoutParams(params);
-        }
-        snackbar.show();
     }
 
     private void checkEmptyState() {

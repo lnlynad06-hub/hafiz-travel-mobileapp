@@ -167,8 +167,7 @@ public class LoginActivity extends AppCompatActivity {
                                     : (which == 3) ? LocaleHelper.LANGUAGE_KOREAN
                                       : (which == 4) ? LocaleHelper.LANGUAGE_JAPANESE
                                         : LocaleHelper.LANGUAGE_CHINESE;
-                        LocaleHelper.saveLanguage(this, lang);
-                        recreate();
+                        LocaleHelper.applyAndSaveLanguage(this, lang);
                     })
                     .show();
         });

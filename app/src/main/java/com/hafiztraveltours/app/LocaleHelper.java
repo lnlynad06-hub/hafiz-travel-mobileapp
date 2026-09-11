@@ -1,8 +1,11 @@
 package com.hafiztraveltours.app;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.LocaleList;
 
@@ -36,12 +39,51 @@ public class LocaleHelper {
     public static void saveLanguage(Context context, String languageCode) {
         if (context == null || languageCode == null) return;
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        prefs.edit().putString(KEY_LANGUAGE, languageCode).apply();
+        prefs.edit().putString(KEY_LANGUAGE, languageCode).commit();
+        Locale.setDefault(getLocaleForCode(languageCode));
+    }
+
+    /**
+     * Smoothly switches language and restarts the given activity without black screen or freezing.
+     */
+    public static void changeLanguage(Activity activity, String languageCode) {
+        applyAndSaveLanguage(activity, languageCode);
+    }
+
+    public static void applyAndSaveLanguage(Activity activity, String languageCode) {
+        if (activity == null || languageCode == null) return;
+        saveLanguage(activity, languageCode);
+
+        Locale locale = getLocaleForCode(languageCode);
+        Locale.setDefault(locale);
 
         try {
             LocaleListCompat appLocale = LocaleListCompat.forLanguageTags(languageCode);
             AppCompatDelegate.setApplicationLocales(appLocale);
         } catch (Exception ignored) {}
+
+        Resources resources = activity.getResources();
+        Configuration config = new Configuration(resources.getConfiguration());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            config.setLocales(new LocaleList(locale));
+        } else {
+            config.locale = locale;
+        }
+        config.setLayoutDirection(locale);
+        try {
+            resources.updateConfiguration(config, resources.getDisplayMetrics());
+        } catch (Exception ignored) {}
+
+        Intent intent = new Intent(activity, activity.getClass());
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        activity.startActivity(intent);
+        activity.finish();
+
+        if (Build.VERSION.SDK_INT >= 34) {
+            activity.overrideActivityTransition(Activity.OVERRIDE_TRANSITION_OPEN, R.anim.lang_switch_fade_in, R.anim.lang_switch_fade_out);
+        } else {
+            activity.overridePendingTransition(R.anim.lang_switch_fade_in, R.anim.lang_switch_fade_out);
+        }
     }
 
     public static Locale getCurrentLocale(Context context) {
@@ -116,7 +158,8 @@ public class LocaleHelper {
         Locale locale = getLocaleForCode(languageCode);
         Locale.setDefault(locale);
 
-        Configuration config = new Configuration(context.getResources().getConfiguration());
+        Resources resources = context.getResources();
+        Configuration config = new Configuration(resources.getConfiguration());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             config.setLocales(new LocaleList(locale));
         } else {
@@ -124,6 +167,14 @@ public class LocaleHelper {
         }
         config.setLayoutDirection(locale);
 
-        return context.createConfigurationContext(config);
+        try {
+            resources.updateConfiguration(config, resources.getDisplayMetrics());
+        } catch (Exception ignored) {}
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            return context.createConfigurationContext(config);
+        } else {
+            return context;
+        }
     }
 }

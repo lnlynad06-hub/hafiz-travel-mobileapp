@@ -534,6 +534,10 @@
     <string name="removed_from_favorites">已从收藏中移除</string>
     <string name="added_to_favorites">已保存到收藏</string>
     <string name="undo">撤销</string>
+    <string name="remove_favorite_dialog_title">从收藏中移除？</string>
+    <string name="remove_favorite_dialog_message">您确定要从收藏夹中移除此套餐吗？</string>
+    <string name="remove_favorite_dialog_confirm">移除</string>
+    <string name="remove_favorite_dialog_cancel">取消</string>
 
     <string name="filter_title">筛选套餐</string>
     <string name="filter_reset">重置</string>

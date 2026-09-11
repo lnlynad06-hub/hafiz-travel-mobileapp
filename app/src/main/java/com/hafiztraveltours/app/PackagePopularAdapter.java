@@ -54,13 +54,13 @@ public class PackagePopularAdapter extends RecyclerView.Adapter<PackagePopularAd
                 .placeholder(R.drawable.bg_image_placeholder)
                 .into(holder.image);
 
-        updateFavoriteIcon(holder.favoriteIcon, pkg.id);
+        updateFavoriteIcon(holder.favoriteIcon, pkg);
 
         // Heart PUNYA listener sendiri - tap sini TIDAK akan propagate ke itemView di bawah
         holder.favoriteIcon.setOnClickListener(v -> {
             v.performHapticFeedback(android.view.HapticFeedbackConstants.KEYBOARD_TAP);
             FavoritesManager.handleFavoriteToggle(context, pkg, holder.favoriteIcon, isFavoriteNow -> {
-                updateFavoriteIcon(holder.favoriteIcon, pkg.id);
+                updateFavoriteIcon(holder.favoriteIcon, pkg);
                 if (context instanceof android.app.Activity) {
                     BottomNavHelper.updateFavoriteBadge((android.app.Activity) context);
                 }
@@ -76,8 +76,8 @@ public class PackagePopularAdapter extends RecyclerView.Adapter<PackagePopularAd
         });
     }
 
-    private void updateFavoriteIcon(ImageView icon, String packageId) {
-        boolean isFav = FavoritesManager.isFavorite(context, packageId);
+    private void updateFavoriteIcon(ImageView icon, UmrahPackage pkg) {
+        boolean isFav = FavoritesManager.isFavorite(context, pkg);
         icon.setColorFilter(isFav ? Color.parseColor("#E91E63") : Color.parseColor("#FFFFFF"));
     }
 
