@@ -393,6 +393,9 @@
     <string name="prayer_times_title_fallback">Today\'s prayer times (estimated - no internet connection)</string>
     <string name="prayer_location_denied_text">Enable location services to display prayer times.</string>
     <string name="prayer_use_my_location">Use current location</string>
+    <string name="prayer_refresh_location">Update location</string>
+    <string name="prayer_updating_location">Updating prayer location...</string>
+    <string name="prayer_location_updated">Location updated</string>
 
     <string name="umrah_section_popular">Popular Packages</string>
     <string name="umrah_section_khas">Special Packages</string>

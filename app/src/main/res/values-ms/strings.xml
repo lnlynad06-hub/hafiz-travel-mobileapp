@@ -385,6 +385,9 @@
     <string name="prayer_times_title_fallback">Waktu Solat Hari Ini (anggaran - tiada sambungan internet)</string>
     <string name="prayer_location_denied_text">Aktifkan lokasi untuk lihat waktu solat</string>
     <string name="prayer_use_my_location">Guna Lokasi Saya</string>
+    <string name="prayer_refresh_location">Kemas kini lokasi</string>
+    <string name="prayer_updating_location">Mengemas kini lokasi waktu solat...</string>
+    <string name="prayer_location_updated">Lokasi dikemas kini</string>
 
     <string name="umrah_section_popular">Pakej Popular</string>
     <string name="umrah_section_khas">Pakej Khas</string>

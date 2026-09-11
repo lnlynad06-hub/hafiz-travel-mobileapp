@@ -381,6 +381,9 @@
     <string name="prayer_times_title_fallback">今日服务时间（估算值 - 无网络连接）</string>
     <string name="prayer_location_denied_text">启用定位服务以显示服务时间。</string>
     <string name="prayer_use_my_location">使用当前位置</string>
+    <string name="prayer_refresh_location">更新位置</string>
+    <string name="prayer_updating_location">正在更新礼拜时间位置...</string>
+    <string name="prayer_location_updated">位置已更新</string>
 
     <string name="umrah_section_popular">热门套餐</string>
     <string name="umrah_section_khas">特别套餐</string>

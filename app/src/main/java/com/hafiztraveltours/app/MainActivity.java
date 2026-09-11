@@ -1059,6 +1059,44 @@ public class MainActivity extends AppCompatActivity {
      *    and every request will fall back to the Adhan estimate.)
      */
     private void setupPrayerTimesWidget() {
+        View btnRefresh = findViewById(R.id.btnRefreshPrayerLocation);
+        if (btnRefresh != null) {
+            btnRefresh.setOnClickListener(v -> refreshPrayerTimesLocation(true));
+        }
+        View ivRefresh = findViewById(R.id.ivRefreshPrayerLocation);
+        if (ivRefresh != null) {
+            ivRefresh.setOnClickListener(v -> refreshPrayerTimesLocation(true));
+        }
+
+        boolean hasFineLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED;
+        boolean hasCoarseLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED;
+
+        if (hasFineLocation || hasCoarseLocation) {
+            loadPrayerTimesForCurrentLocation();
+        } else {
+            locationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+    }
+
+    private void refreshPrayerTimesLocation(boolean userInitiated) {
+        ImageView ivRefresh = findViewById(R.id.ivRefreshPrayerLocation);
+        if (ivRefresh != null) {
+            ivRefresh.clearAnimation();
+            android.view.animation.RotateAnimation rotate = new android.view.animation.RotateAnimation(
+                    0, 360,
+                    android.view.animation.Animation.RELATIVE_TO_SELF, 0.5f,
+                    android.view.animation.Animation.RELATIVE_TO_SELF, 0.5f);
+            rotate.setDuration(700);
+            rotate.setRepeatCount(1);
+            ivRefresh.startAnimation(rotate);
+        }
+
+        if (userInitiated) {
+            Toast.makeText(this, R.string.prayer_updating_location, Toast.LENGTH_SHORT).show();
+        }
+
         boolean hasFineLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED;
         boolean hasCoarseLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
