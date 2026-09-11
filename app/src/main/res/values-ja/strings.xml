@@ -51,8 +51,22 @@
     <string name="password_strength_medium">普通</string>
     <string name="password_strength_strong">強い</string>
     <string name="btn_continue_google">Googleで続行</string>
-    <string name="social_login_google">Googleでログイン</string>
     <string name="social_signup_google">Googleで登録</string>
+    <string name="select_country_code">国番号を選択</string>
+    <string name="region_southeast_asia">東南アジア</string>
+    <string name="region_international">その他の国</string>
+    <string name="err_name_required">氏名を入力してください</string>
+    <string name="err_email_invalid">有効なメールアドレスを入力してください</string>
+    <string name="err_phone_invalid">有効な電話番号を入力してください</string>
+    <string name="err_password_short">パスワードは6文字以上にする必要があります</string>
+    <string name="err_password_mismatch">パスワードが一致しません</string>
+    <string name="err_signup_failed">登録に失敗しました。もう一度お試しください。</string>
+    <string name="err_signup_email_exists">メールアドレスまたは電話番号は既に登録されています</string>
+    <string name="err_network">接続エラーです。インターネット接続を確認してください。</string>
+    <string name="signup_success">登録が完了しました！</string>
+    <string name="password_tip_length">8文字以上</string>
+    <string name="password_tip_number">数字 0–9</string>
+    <string name="password_tip_symbol">記号 !@#$</string>
 
     <string name="guest_greeting">アッサラームアライクム</string>
     <string name="user_greeting">アッサラームアライクム</string>

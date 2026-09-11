@@ -49,8 +49,22 @@
     <string name="password_strength_medium">Sederhana</string>
     <string name="password_strength_strong">Kuat</string>
     <string name="btn_continue_google">Teruskan dengan Google</string>
-    <string name="social_login_google">Log masuk dengan Google</string>
     <string name="social_signup_google">Daftar dengan Google</string>
+    <string name="select_country_code">Pilih Kod Negara</string>
+    <string name="region_southeast_asia">ASIA TENGGARA</string>
+    <string name="region_international">ANTARABANGSA LAIN</string>
+    <string name="err_name_required">Sila masukkan nama penuh</string>
+    <string name="err_email_invalid">Sila masukkan emel yang sah</string>
+    <string name="err_phone_invalid">Sila masukkan nombor telefon yang sah</string>
+    <string name="err_password_short">Kata laluan sekurang-kurangnya 6 aksara</string>
+    <string name="err_password_mismatch">Kata laluan tidak sepadan</string>
+    <string name="err_signup_failed">Pendaftaran gagal. Sila cuba lagi.</string>
+    <string name="err_signup_email_exists">Emel atau nombor telefon telah didaftarkan</string>
+    <string name="err_network">Ralat sambungan. Sila periksa internet anda.</string>
+    <string name="signup_success">Pendaftaran berjaya!</string>
+    <string name="password_tip_length">8+ aksara</string>
+    <string name="password_tip_number">0–9</string>
+    <string name="password_tip_symbol">!@#$</string>
 
     <string name="guest_greeting">Assalamualaikum</string>
     <string name="user_greeting">Assalamualaikum</string>

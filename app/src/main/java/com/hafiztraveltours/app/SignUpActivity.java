@@ -231,7 +231,7 @@ public class SignUpActivity extends AppCompatActivity {
                     nameLayout.setEndIconDrawable(R.drawable.ic_check_circle_magenta);
                 } else {
                     nameLayout.setEndIconDrawable(null);
-                    nameLayout.setError("Sila masukkan nama penuh");
+                    nameLayout.setError(getString(R.string.err_name_required));
                 }
             }
         });
@@ -253,7 +253,7 @@ public class SignUpActivity extends AppCompatActivity {
                     emailLayout.setEndIconDrawable(R.drawable.ic_check_circle_magenta);
                 } else {
                     emailLayout.setEndIconDrawable(null);
-                    emailLayout.setError("Sila masukkan email yang sah");
+                    emailLayout.setError(getString(R.string.err_email_invalid));
                 }
             }
         });
@@ -274,7 +274,7 @@ public class SignUpActivity extends AppCompatActivity {
                     if (phoneCheckIcon != null) phoneCheckIcon.setVisibility(View.VISIBLE);
                 } else {
                     if (phoneCheckIcon != null) phoneCheckIcon.setVisibility(View.GONE);
-                    setPhoneError("Sila masukkan nombor telefon yang sah");
+                    setPhoneError(getString(R.string.err_phone_invalid));
                 }
             }
         });
@@ -303,7 +303,7 @@ public class SignUpActivity extends AppCompatActivity {
                 } else if (val.length() >= 6) {
                     passwordLayout.setError(null);
                 } else {
-                    passwordLayout.setError("Kata laluan sekurang-kurangnya 6 aksara");
+                    passwordLayout.setError(getString(R.string.err_password_short));
                 }
                 // Re-validate confirm password when password changes
                 if (confirmPasswordInput != null && confirmPasswordLayout != null) {
@@ -315,7 +315,7 @@ public class SignUpActivity extends AppCompatActivity {
                             confirmPasswordLayout.setEndIconDrawable(R.drawable.ic_check_circle_magenta);
                         } else {
                             confirmPasswordLayout.setEndIconDrawable(null);
-                            confirmPasswordLayout.setError("Kata laluan tidak sepadan");
+                            confirmPasswordLayout.setError(getString(R.string.err_password_mismatch));
                         }
                     }
                 }
@@ -341,7 +341,7 @@ public class SignUpActivity extends AppCompatActivity {
                     confirmPasswordLayout.setEndIconDrawable(R.drawable.ic_check_circle_magenta);
                 } else {
                     confirmPasswordLayout.setEndIconDrawable(null);
-                    confirmPasswordLayout.setError("Kata laluan tidak sepadan");
+                    confirmPasswordLayout.setError(getString(R.string.err_password_mismatch));
                 }
             }
         });
@@ -376,9 +376,9 @@ public class SignUpActivity extends AppCompatActivity {
         boolean hasNumber = password.matches(".*\\d.*");
         boolean hasSymbol = password.matches(".*[^a-zA-Z0-9].*");
 
-        applyTip(tipLength, hasLength, "8+ chars");
-        applyTip(tipNumber, hasNumber, "0\u20139");
-        applyTip(tipSymbol, hasSymbol, "!@#$");
+        applyTip(tipLength, hasLength, getString(R.string.password_tip_length));
+        applyTip(tipNumber, hasNumber, getString(R.string.password_tip_number));
+        applyTip(tipSymbol, hasSymbol, getString(R.string.password_tip_symbol));
     }
 
     private void applyTip(TextView tip, boolean passed, String label) {
@@ -797,35 +797,35 @@ public class SignUpActivity extends AppCompatActivity {
         boolean valid = true;
 
         if (TextUtils.isEmpty(name)) {
-            nameLayout.setError("Sila masukkan nama penuh");
+            nameLayout.setError(getString(R.string.err_name_required));
             valid = false;
         } else {
             nameLayout.setError(null);
         }
 
         if (TextUtils.isEmpty(email) || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            emailLayout.setError("Sila masukkan email yang sah");
+            emailLayout.setError(getString(R.string.err_email_invalid));
             valid = false;
         } else {
             emailLayout.setError(null);
         }
 
         if (TextUtils.isEmpty(rawPhone) || rawPhone.length() < 5) {
-            setPhoneError("Sila masukkan nombor telefon yang sah");
+            setPhoneError(getString(R.string.err_phone_invalid));
             valid = false;
         } else {
             setPhoneError(null);
         }
 
         if (TextUtils.isEmpty(password) || password.length() < 6) {
-            passwordLayout.setError("Kata laluan sekurang-kurangnya 6 aksara");
+            passwordLayout.setError(getString(R.string.err_password_short));
             valid = false;
         } else {
             passwordLayout.setError(null);
         }
 
         if (!password.equals(confirmPassword)) {
-            confirmPasswordLayout.setError("Kata laluan tidak sepadan");
+            confirmPasswordLayout.setError(getString(R.string.err_password_mismatch));
             valid = false;
         } else {
             confirmPasswordLayout.setError(null);
@@ -863,11 +863,11 @@ public class SignUpActivity extends AppCompatActivity {
                                 user = new UserDto("1", name, email, normalizedPhone);
                             }
                             SessionManager.getInstance(SignUpActivity.this).saveAuthSession(token, user);
-                            Toast.makeText(SignUpActivity.this, "Pendaftaran berjaya disimpan!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignUpActivity.this, getString(R.string.signup_success), Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(SignUpActivity.this, MainActivity.class));
                             finish();
                         } else {
-                            String errorMsg = "Pendaftaran gagal, sila cuba lagi.";
+                            String errorMsg = getString(R.string.err_signup_failed);
                             if (response.body() != null && response.body().message != null && !response.body().message.isEmpty()) {
                                 errorMsg = response.body().message;
                             } else if (response.errorBody() != null) {
@@ -887,7 +887,7 @@ public class SignUpActivity extends AppCompatActivity {
                     public void onFailure(Call<ApiResponse<AuthResponse>> call, Throwable t) {
                         if (isFinishing() || isDestroyed()) return;
                         setLoadingState(false);
-                        Toast.makeText(SignUpActivity.this, "Ralat sambungan: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(SignUpActivity.this, getString(R.string.err_network), Toast.LENGTH_LONG).show();
                     }
                 });
     }

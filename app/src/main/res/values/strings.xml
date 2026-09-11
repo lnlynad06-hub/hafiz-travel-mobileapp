@@ -57,8 +57,22 @@
     <string name="password_strength_medium">Medium</string>
     <string name="password_strength_strong">Strong</string>
     <string name="btn_continue_google">Continue with Google</string>
-    <string name="social_login_google">Sign in with Google</string>
     <string name="social_signup_google">Sign up with Google</string>
+    <string name="select_country_code">Select Country Code</string>
+    <string name="region_southeast_asia">SOUTHEAST ASIA</string>
+    <string name="region_international">OTHER INTERNATIONAL</string>
+    <string name="err_name_required">Please enter your full name</string>
+    <string name="err_email_invalid">Please enter a valid email address</string>
+    <string name="err_phone_invalid">Please enter a valid phone number</string>
+    <string name="err_password_short">Password must be at least 6 characters</string>
+    <string name="err_password_mismatch">Passwords do not match</string>
+    <string name="err_signup_failed">Registration failed. Please try again.</string>
+    <string name="err_signup_email_exists">Email or phone number is already registered</string>
+    <string name="err_network">Connection error. Please check your internet.</string>
+    <string name="signup_success">Registration successful!</string>
+    <string name="password_tip_length">8+ chars</string>
+    <string name="password_tip_number">0–9</string>
+    <string name="password_tip_symbol">!@#$</string>
 
     <string name="guest_greeting">Assalamualaikum</string>
     <string name="user_greeting">Assalamualaikum</string>

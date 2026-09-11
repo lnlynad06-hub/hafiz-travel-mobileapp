@@ -51,8 +51,22 @@
     <string name="password_strength_medium">中等</string>
     <string name="password_strength_strong">强</string>
     <string name="btn_continue_google">使用 Google 继续</string>
-    <string name="social_login_google">使用 Google 登录</string>
     <string name="social_signup_google">使用 Google 注册</string>
+    <string name="select_country_code">选择国家区号</string>
+    <string name="region_southeast_asia">东南亚</string>
+    <string name="region_international">其他国际国家</string>
+    <string name="err_name_required">请输入您的全名</string>
+    <string name="err_email_invalid">请输入有效的电子邮件地址</string>
+    <string name="err_phone_invalid">请输入有效的电话号码</string>
+    <string name="err_password_short">密码至少需要 6 个字符</string>
+    <string name="err_password_mismatch">密码不匹配</string>
+    <string name="err_signup_failed">注册失败，请重试。</string>
+    <string name="err_signup_email_exists">该电子邮件或电话号码已被注册</string>
+    <string name="err_network">网络连接错误，请检查您的网络。</string>
+    <string name="signup_success">注册成功！</string>
+    <string name="password_tip_length">8+ 个字符</string>
+    <string name="password_tip_number">数字 0–9</string>
+    <string name="password_tip_symbol">特殊符号 !@#$</string>
 
     <string name="guest_greeting">愿平安降临于你</string>
     <string name="user_greeting">愿平安降临于你</string>
