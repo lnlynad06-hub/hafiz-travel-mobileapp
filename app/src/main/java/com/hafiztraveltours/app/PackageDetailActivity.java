@@ -23,6 +23,7 @@ import com.bumptech.glide.Glide;
 import com.hafiztraveltours.app.network.ApiClient;
 import com.hafiztraveltours.app.network.ApiResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -40,11 +41,18 @@ public class PackageDetailActivity extends AppCompatActivity {
     private ImageView heroImage;
     private TextView heroCategoryBadge;
     private TextView bottomPrice;
+    private TextView bottomRoomType;
     private ImageView favoriteButton;
     private ImageView shareButton;
 
     private PackageDetail detail;
     private UmrahPackage rawPackage;
+
+    // Interactive state
+    private PackageDetail.DepartureDate selectedDepartureDate;
+    private PackageDetail.PriceOption selectedPriceOption;
+    private final List<View> dateChipViews = new ArrayList<>();
+    private final List<View> priceCardViews = new ArrayList<>();
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -62,6 +70,7 @@ public class PackageDetailActivity extends AppCompatActivity {
         heroCategoryBadge = findViewById(R.id.detailHeroCategoryBadge);
         container = findViewById(R.id.detailContainer);
         bottomPrice = findViewById(R.id.detailBottomPrice);
+        bottomRoomType = findViewById(R.id.detailBottomRoomType);
         favoriteButton = findViewById(R.id.detailFavoriteButton);
         shareButton = findViewById(R.id.detailShareButton);
 
@@ -97,7 +106,6 @@ public class PackageDetailActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<ApiResponse<UmrahPackage>> call, Throwable t) {
                 if (isFinishing() || isDestroyed()) return;
-                // Fallback: build default detail from package ID if available
                 rawPackage = new UmrahPackage();
                 rawPackage.id = packageId;
                 rawPackage.collectionName = collection;
@@ -109,7 +117,7 @@ public class PackageDetailActivity extends AppCompatActivity {
     }
 
     private void renderAll() {
-        if (isFinishing() || isDestroyed()) return;
+        if (isFinishing() || isDestroyed() || detail == null) return;
 
         // 1. Hero Image
         try {
@@ -131,25 +139,64 @@ public class PackageDetailActivity extends AppCompatActivity {
         // 3. Top Actions (Favorite & Share)
         setupTopActions();
 
-        // 4. Bottom Price & WhatsApp CTA
-        bottomPrice.setText(detail.price);
-        View whatsappBtn = findViewById(R.id.detailWhatsappButton);
-        if (whatsappBtn != null) {
-            whatsappBtn.setOnClickListener(v -> openWhatsAppForPackage());
+        // 4. Default Selected Date & Room Option
+        if (!detail.departureDates.isEmpty()) {
+            selectedDepartureDate = detail.departureDates.get(0);
+            for (PackageDetail.DepartureDate dd : detail.departureDates) {
+                if (dd.isPopular) {
+                    selectedDepartureDate = dd;
+                    break;
+                }
+            }
         }
 
-        // 5. Build Content Sections
+        if (!detail.priceOptions.isEmpty()) {
+            selectedPriceOption = detail.priceOptions.get(0);
+            for (PackageDetail.PriceOption po : detail.priceOptions) {
+                if (po.isDefault) {
+                    selectedPriceOption = po;
+                    break;
+                }
+            }
+        }
+
+        updateBottomBarPrice();
+
+        // 5. Bottom WhatsApp CTA
+        View whatsappBtn = findViewById(R.id.detailWhatsappButton);
+        if (whatsappBtn != null) {
+            whatsappBtn.setOnClickListener(v -> {
+                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                openWhatsAppForPackage();
+            });
+        }
+
+        // 6. Build Content Sections
         container.removeAllViews();
         addTitleSection();
         addQuickSpecsSection();
+        addDepartureDatesSection();
+        addPriceOptionsSection();
         addNightsBreakdownSection();
         addHotelsSection();
+        addTourGuideSection();
         addItinerarySection();
-        addPriceOptionsSection();
         addIncludedExcludedSection();
+        addDownloadBrochureSection();
         addPackingGuideSection();
         addImportantNotesSection();
         addGallerySection();
+    }
+
+    private void updateBottomBarPrice() {
+        if (selectedPriceOption != null) {
+            bottomPrice.setText(selectedPriceOption.price);
+            if (bottomRoomType != null) {
+                bottomRoomType.setText(selectedPriceOption.roomType + " • seorang");
+            }
+        } else {
+            bottomPrice.setText(detail.price);
+        }
     }
 
     private void setupTopActions() {
@@ -191,7 +238,6 @@ public class PackageDetailActivity extends AppCompatActivity {
     // =========================================================================
 
     private void addTitleSection() {
-        // Title
         TextView title = new TextView(this);
         title.setText(detail.name);
         title.setTextSize(22);
@@ -199,7 +245,6 @@ public class PackageDetailActivity extends AppCompatActivity {
         title.setTextColor(getResources().getColor(R.color.text_dark));
         container.addView(title);
 
-        // Summary
         if (!detail.summaryLine.isEmpty()) {
             TextView summary = new TextView(this);
             summary.setText(detail.summaryLine);
@@ -222,14 +267,10 @@ public class PackageDetailActivity extends AppCompatActivity {
         rowParams.topMargin = dp(14);
         row.setLayoutParams(rowParams);
 
-        // Spec 1: Duration
         row.addView(buildSpecChip("⏱️ " + detail.durationDays + " Hari " + detail.nightsCount + " Malam"));
-
-        // Spec 2: Flights
         row.addView(buildSpecChip("✈️ Terus"));
-
-        // Spec 3: 5-Star Hotel
         row.addView(buildSpecChip("🏨 Hotel 5⭐"));
+        row.addView(buildSpecChip("⭐ 4.9 Rating"));
 
         container.addView(row);
     }
@@ -248,6 +289,211 @@ public class PackageDetailActivity extends AppCompatActivity {
         p.setMarginEnd(dp(6));
         chip.setLayoutParams(p);
         return chip;
+    }
+
+    private void addDepartureDatesSection() {
+        if (detail.departureDates.isEmpty()) return;
+
+        container.addView(sectionHeading("Pilihan Tarikh Pelepasan (2026 / 2027)"));
+
+        TextView hint = new TextView(this);
+        hint.setText("Pilih tarikh yang bersesuaian dengan cuti & jadual anda:");
+        hint.setTextSize(12);
+        hint.setTextColor(getResources().getColor(R.color.text_gray));
+        LinearLayout.LayoutParams hp = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        hp.topMargin = dp(2);
+        hint.setLayoutParams(hp);
+        container.addView(hint);
+
+        HorizontalScrollView scroll = new HorizontalScrollView(this);
+        scroll.setScrollBarSize(0);
+        scroll.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        LinearLayout.LayoutParams sp = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        sp.topMargin = dp(10);
+        scroll.setLayoutParams(sp);
+
+        LinearLayout row = new LinearLayout(this);
+        row.setOrientation(LinearLayout.HORIZONTAL);
+        dateChipViews.clear();
+
+        for (int i = 0; i < detail.departureDates.size(); i++) {
+            PackageDetail.DepartureDate dd = detail.departureDates.get(i);
+            boolean isSelected = (selectedDepartureDate != null && selectedDepartureDate.dateRange.equals(dd.dateRange));
+
+            LinearLayout card = new LinearLayout(this);
+            card.setOrientation(LinearLayout.VERTICAL);
+            card.setBackgroundResource(isSelected ? R.drawable.bg_date_chip_selected : R.drawable.bg_date_chip_unselected);
+            card.setPadding(dp(14), dp(10), dp(14), dp(10));
+            card.setClickable(true);
+            card.setFocusable(true);
+
+            LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            cp.setMarginEnd(dp(10));
+            card.setLayoutParams(cp);
+
+            // Tag & Status Row
+            LinearLayout topRow = new LinearLayout(this);
+            topRow.setOrientation(LinearLayout.HORIZONTAL);
+            topRow.setGravity(Gravity.CENTER_VERTICAL);
+
+            TextView tag = new TextView(this);
+            tag.setText(dd.seasonTag);
+            tag.setTextSize(10);
+            tag.setTypeface(null, Typeface.BOLD);
+            tag.setTextColor(getResources().getColor(R.color.brand_magenta));
+
+            View spacer = new View(this);
+            spacer.setLayoutParams(new LinearLayout.LayoutParams(dp(8), 1));
+
+            TextView status = new TextView(this);
+            status.setText("● " + dd.status);
+            status.setTextSize(10);
+            status.setTypeface(null, Typeface.BOLD);
+            if ("Hampir Penuh".equalsIgnoreCase(dd.status) || "Tempat Terhad".equalsIgnoreCase(dd.status)) {
+                status.setTextColor(Color.parseColor("#E65100"));
+            } else {
+                status.setTextColor(Color.parseColor("#2E7D32"));
+            }
+
+            topRow.addView(tag);
+            topRow.addView(spacer);
+            topRow.addView(status);
+
+            // Date text
+            TextView dateText = new TextView(this);
+            dateText.setText("📅 " + dd.dateRange);
+            dateText.setTextSize(13);
+            dateText.setTypeface(null, Typeface.BOLD);
+            dateText.setTextColor(getResources().getColor(R.color.text_dark));
+            LinearLayout.LayoutParams dpParam = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            dpParam.topMargin = dp(4);
+            dateText.setLayoutParams(dpParam);
+
+            card.addView(topRow);
+            card.addView(dateText);
+
+            dateChipViews.add(card);
+
+            card.setOnClickListener(v -> {
+                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                selectedDepartureDate = dd;
+                for (int j = 0; j < dateChipViews.size(); j++) {
+                    boolean sel = (detail.departureDates.get(j).dateRange.equals(dd.dateRange));
+                    dateChipViews.get(j).setBackgroundResource(
+                            sel ? R.drawable.bg_date_chip_selected : R.drawable.bg_date_chip_unselected);
+                }
+            });
+
+            row.addView(card);
+        }
+
+        scroll.addView(row);
+        container.addView(scroll);
+    }
+
+    private void addPriceOptionsSection() {
+        if (detail.priceOptions.isEmpty()) return;
+
+        container.addView(sectionHeading("Pilihan Bilik & Pakej Harga"));
+
+        TextView hint = new TextView(this);
+        hint.setText("Tekan jenis bilik di bawah untuk melihat kemas kini harga terus:");
+        hint.setTextSize(12);
+        hint.setTextColor(getResources().getColor(R.color.text_gray));
+        LinearLayout.LayoutParams hp = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        hp.topMargin = dp(2);
+        hint.setLayoutParams(hp);
+        container.addView(hint);
+
+        HorizontalScrollView scroll = new HorizontalScrollView(this);
+        scroll.setScrollBarSize(0);
+        scroll.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        LinearLayout.LayoutParams scrollParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        scrollParams.topMargin = dp(10);
+        scroll.setLayoutParams(scrollParams);
+
+        LinearLayout row = new LinearLayout(this);
+        row.setOrientation(LinearLayout.HORIZONTAL);
+        priceCardViews.clear();
+
+        for (int i = 0; i < detail.priceOptions.size(); i++) {
+            PackageDetail.PriceOption option = detail.priceOptions.get(i);
+            boolean isSelected = (selectedPriceOption != null && selectedPriceOption.roomType.equals(option.roomType));
+
+            LinearLayout card = new LinearLayout(this);
+            card.setOrientation(LinearLayout.VERTICAL);
+            card.setBackgroundResource(isSelected ? R.drawable.bg_detail_card_selected : R.drawable.bg_detail_card);
+            card.setPadding(dp(14), dp(12), dp(14), dp(12));
+            card.setClickable(true);
+            card.setFocusable(true);
+
+            LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(
+                    dp(160), ViewGroup.LayoutParams.WRAP_CONTENT);
+            cardParams.setMarginEnd(dp(10));
+            card.setLayoutParams(cardParams);
+
+            if (option.badge != null && !option.badge.isEmpty()) {
+                TextView badge = new TextView(this);
+                badge.setText(option.badge);
+                badge.setTextSize(10);
+                badge.setTypeface(null, Typeface.BOLD);
+                badge.setTextColor(getResources().getColor(R.color.brand_magenta));
+                card.addView(badge);
+            }
+
+            TextView room = new TextView(this);
+            room.setText(option.roomType);
+            room.setTextSize(13);
+            room.setTypeface(null, Typeface.BOLD);
+            room.setTextColor(getResources().getColor(R.color.text_dark));
+            LinearLayout.LayoutParams rp = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            rp.topMargin = dp(2);
+            room.setLayoutParams(rp);
+
+            TextView priceText = new TextView(this);
+            priceText.setText(option.price);
+            priceText.setTextSize(16);
+            priceText.setTypeface(null, Typeface.BOLD);
+            priceText.setTextColor(getResources().getColor(R.color.brand_magenta));
+            LinearLayout.LayoutParams pp = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            pp.topMargin = dp(4);
+            priceText.setLayoutParams(pp);
+
+            TextView occupancy = new TextView(this);
+            occupancy.setText(option.occupancyLabel);
+            occupancy.setTextSize(11);
+            occupancy.setTextColor(getResources().getColor(R.color.text_gray));
+
+            card.addView(room);
+            card.addView(priceText);
+            card.addView(occupancy);
+
+            priceCardViews.add(card);
+
+            card.setOnClickListener(v -> {
+                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                selectedPriceOption = option;
+                updateBottomBarPrice();
+                for (int j = 0; j < priceCardViews.size(); j++) {
+                    boolean sel = (detail.priceOptions.get(j).roomType.equals(option.roomType));
+                    priceCardViews.get(j).setBackgroundResource(
+                            sel ? R.drawable.bg_detail_card_selected : R.drawable.bg_detail_card);
+                }
+            });
+
+            row.addView(card);
+        }
+
+        scroll.addView(row);
+        container.addView(scroll);
     }
 
     private void addNightsBreakdownSection() {
@@ -284,7 +530,6 @@ public class PackageDetailActivity extends AppCompatActivity {
             city.setText(nb.city);
             city.setTextSize(12);
             city.setTextColor(getResources().getColor(R.color.text_gray));
-            city.setTypeface(null, Typeface.NORMAL);
 
             card.addView(count);
             card.addView(city);
@@ -332,6 +577,82 @@ public class PackageDetailActivity extends AppCompatActivity {
         }
     }
 
+    private void addTourGuideSection() {
+        if (detail.guideInfo == null) return;
+
+        boolean isUmrah = detail.name.toLowerCase().contains("umrah") ||
+                detail.name.toLowerCase().contains("ramadhan") ||
+                detail.name.toLowerCase().contains("syawal");
+
+        container.addView(sectionHeading(isUmrah ? "Bimbingan Mutawwif Bertauliah" : "Pemandu Pelancong (Tour Leader)"));
+
+        LinearLayout card = new LinearLayout(this);
+        card.setOrientation(LinearLayout.HORIZONTAL);
+        card.setGravity(Gravity.CENTER_VERTICAL);
+        card.setBackgroundResource(R.drawable.bg_detail_card);
+        int pad = dp(14);
+        card.setPadding(pad, pad, pad, pad);
+
+        LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        cp.topMargin = dp(10);
+        card.setLayoutParams(cp);
+
+        // Guide Photo
+        ImageView photo = new ImageView(this);
+        photo.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        photo.setBackgroundResource(R.drawable.bg_detail_card);
+        photo.setClipToOutline(true);
+        LinearLayout.LayoutParams ip = new LinearLayout.LayoutParams(dp(54), dp(54));
+        ip.setMarginEnd(dp(12));
+        photo.setLayoutParams(ip);
+
+        try {
+            Glide.with(this).load(detail.guideInfo.photoUrl).placeholder(R.color.surface).into(photo);
+        } catch (Exception ignored) {}
+
+        // Guide Details
+        LinearLayout info = new LinearLayout(this);
+        info.setOrientation(LinearLayout.VERTICAL);
+        info.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+
+        TextView name = new TextView(this);
+        name.setText(detail.guideInfo.name);
+        name.setTextSize(14);
+        name.setTypeface(null, Typeface.BOLD);
+        name.setTextColor(getResources().getColor(R.color.text_dark));
+
+        TextView role = new TextView(this);
+        role.setText(detail.guideInfo.role);
+        role.setTextSize(12);
+        role.setTextColor(getResources().getColor(R.color.brand_magenta));
+        role.setTypeface(null, Typeface.BOLD);
+
+        TextView cred = new TextView(this);
+        cred.setText(detail.guideInfo.credentials);
+        cred.setTextSize(11);
+        cred.setTextColor(getResources().getColor(R.color.text_gray));
+
+        TextView badges = new TextView(this);
+        badges.setText("⭐ " + detail.guideInfo.rating + " • 🛡️ " + detail.guideInfo.experienceYears);
+        badges.setTextSize(11);
+        badges.setTextColor(getResources().getColor(R.color.text_dark));
+        badges.setTypeface(null, Typeface.BOLD);
+        LinearLayout.LayoutParams bp = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        bp.topMargin = dp(2);
+        badges.setLayoutParams(bp);
+
+        info.addView(name);
+        info.addView(role);
+        info.addView(cred);
+        info.addView(badges);
+
+        card.addView(photo);
+        card.addView(info);
+        container.addView(card);
+    }
+
     private void addItinerarySection() {
         if (detail.itinerary.isEmpty()) return;
 
@@ -364,7 +685,6 @@ public class PackageDetailActivity extends AppCompatActivity {
             cardParams.topMargin = dp(8);
             card.setLayoutParams(cardParams);
 
-            // Header row with Day Badge + Expand Chevron
             LinearLayout headerRow = new LinearLayout(this);
             headerRow.setOrientation(LinearLayout.HORIZONTAL);
             headerRow.setGravity(Gravity.CENTER_VERTICAL);
@@ -388,7 +708,6 @@ public class PackageDetailActivity extends AppCompatActivity {
             headerRow.addView(spacer);
             headerRow.addView(chevron);
 
-            // Title
             TextView title = new TextView(this);
             title.setText(day.title);
             title.setTextSize(14);
@@ -399,7 +718,6 @@ public class PackageDetailActivity extends AppCompatActivity {
             titleParams.topMargin = dp(4);
             title.setLayoutParams(titleParams);
 
-            // Route text
             TextView route = new TextView(this);
             route.setText("📍 " + day.routeText);
             route.setTextSize(12);
@@ -409,7 +727,6 @@ public class PackageDetailActivity extends AppCompatActivity {
             routeParams.topMargin = dp(2);
             route.setLayoutParams(routeParams);
 
-            // Collapsible Body
             LinearLayout body = new LinearLayout(this);
             body.setOrientation(LinearLayout.VERTICAL);
             body.setVisibility(isFirst ? View.VISIBLE : View.GONE);
@@ -463,66 +780,6 @@ public class PackageDetailActivity extends AppCompatActivity {
 
             container.addView(card);
         }
-    }
-
-    private void addPriceOptionsSection() {
-        if (detail.priceOptions.isEmpty()) return;
-
-        container.addView(sectionHeading("Pilihan Bilik & Harga"));
-
-        HorizontalScrollView scroll = new HorizontalScrollView(this);
-        scroll.setScrollBarSize(0);
-        scroll.setOverScrollMode(View.OVER_SCROLL_NEVER);
-        LinearLayout.LayoutParams scrollParams = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        scrollParams.topMargin = dp(10);
-        scroll.setLayoutParams(scrollParams);
-
-        LinearLayout row = new LinearLayout(this);
-        row.setOrientation(LinearLayout.HORIZONTAL);
-
-        for (int i = 0; i < detail.priceOptions.size(); i++) {
-            PackageDetail.PriceOption option = detail.priceOptions.get(i);
-            boolean isFirst = (i == 0);
-
-            LinearLayout card = new LinearLayout(this);
-            card.setOrientation(LinearLayout.VERTICAL);
-            card.setBackgroundResource(R.drawable.bg_detail_card);
-            card.setPadding(dp(14), dp(14), dp(14), dp(14));
-
-            LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(dp(150), ViewGroup.LayoutParams.WRAP_CONTENT);
-            cardParams.setMarginEnd(dp(10));
-            card.setLayoutParams(cardParams);
-
-            TextView occupancy = new TextView(this);
-            occupancy.setText(option.occupancyLabel);
-            occupancy.setTextSize(12);
-            occupancy.setTypeface(null, Typeface.BOLD);
-            occupancy.setTextColor(getResources().getColor(R.color.text_dark));
-
-            TextView priceText = new TextView(this);
-            priceText.setText(option.price);
-            priceText.setTextSize(16);
-            priceText.setTypeface(null, Typeface.BOLD);
-            priceText.setTextColor(getResources().getColor(R.color.brand_magenta));
-            LinearLayout.LayoutParams pp = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            pp.topMargin = dp(4);
-            priceText.setLayoutParams(pp);
-
-            TextView perPax = new TextView(this);
-            perPax.setText("/ seorang");
-            perPax.setTextSize(11);
-            perPax.setTextColor(getResources().getColor(R.color.text_gray));
-
-            card.addView(occupancy);
-            card.addView(priceText);
-            card.addView(perPax);
-            row.addView(card);
-        }
-
-        scroll.addView(row);
-        container.addView(scroll);
     }
 
     private void addIncludedExcludedSection() {
@@ -590,6 +847,57 @@ public class PackageDetailActivity extends AppCompatActivity {
         container.addView(card);
     }
 
+    private void addDownloadBrochureSection() {
+        LinearLayout card = new LinearLayout(this);
+        card.setOrientation(LinearLayout.HORIZONTAL);
+        card.setGravity(Gravity.CENTER_VERTICAL);
+        card.setBackgroundResource(R.drawable.bg_date_chip_selected);
+        card.setPadding(dp(16), dp(14), dp(16), dp(14));
+        card.setClickable(true);
+        card.setFocusable(true);
+
+        LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        cp.topMargin = dp(16);
+        card.setLayoutParams(cp);
+
+        LinearLayout textCol = new LinearLayout(this);
+        textCol.setOrientation(LinearLayout.VERTICAL);
+        textCol.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+
+        TextView title = new TextView(this);
+        title.setText("📄 Muat Turun Brosur PDF");
+        title.setTextSize(14);
+        title.setTypeface(null, Typeface.BOLD);
+        title.setTextColor(getResources().getColor(R.color.text_dark));
+
+        TextView sub = new TextView(this);
+        sub.setText("Simpan & kongsi jadual lengkap bersama keluarga.");
+        sub.setTextSize(11);
+        sub.setTextColor(getResources().getColor(R.color.text_gray));
+
+        textCol.addView(title);
+        textCol.addView(sub);
+
+        TextView actionBtn = new TextView(this);
+        actionBtn.setText("Muat Turun");
+        actionBtn.setTextSize(12);
+        actionBtn.setTypeface(null, Typeface.BOLD);
+        actionBtn.setTextColor(Color.WHITE);
+        actionBtn.setBackgroundResource(R.drawable.bg_whatsapp_button);
+        actionBtn.setPadding(dp(12), dp(8), dp(12), dp(8));
+
+        card.addView(textCol);
+        card.addView(actionBtn);
+
+        card.setOnClickListener(v -> {
+            v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+            Toast.makeText(this, "Memuat turun brosur rasmi " + detail.name + " (PDF)...", Toast.LENGTH_LONG).show();
+        });
+
+        container.addView(card);
+    }
+
     private void addPackingGuideSection() {
         if (detail.packingSummer.isEmpty()) return;
 
@@ -638,7 +946,7 @@ public class PackageDetailActivity extends AppCompatActivity {
             card.setBackgroundResource(R.drawable.bg_detail_card);
             card.setPadding(dp(14), dp(14), dp(14), dp(14));
             LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             cp.topMargin = dp(8);
             card.setLayoutParams(cp);
 
@@ -735,13 +1043,28 @@ public class PackageDetailActivity extends AppCompatActivity {
     }
 
     private void openWhatsAppForPackage() {
-        String message = !detail.whatsappMessage.isEmpty()
-                ? detail.whatsappMessage
-                : "Salam, saya berminat dengan pakej " + detail.name;
+        StringBuilder sb = new StringBuilder();
+        sb.append("Salam Admin Hafiz Travel & Tours,\n");
+        sb.append("Saya berminat untuk bertanya / mendaftar bagi pakej berikut:\n\n");
+        sb.append("🕋 *Pakej:* ").append(detail.name).append("\n");
+
+        if (selectedDepartureDate != null) {
+            sb.append("📅 *Tarikh Pilihan:* ").append(selectedDepartureDate.dateRange)
+              .append(" (").append(selectedDepartureDate.seasonTag).append(")\n");
+        }
+
+        if (selectedPriceOption != null) {
+            sb.append("🛏️ *Pilihan Bilik:* ").append(selectedPriceOption.roomType)
+              .append(" - *").append(selectedPriceOption.price).append("*\n");
+        } else {
+            sb.append("💰 *Harga:* ").append(detail.price).append("\n");
+        }
+
+        sb.append("\nBoleh bantu semak kekosongan kuota & kongsikan cara pendaftaran? Terima kasih!");
 
         try {
             Uri uri = Uri.parse("https://wa.me/" + WHATSAPP_PHONE_NUMBER
-                    + "?text=" + Uri.encode(message));
+                    + "?text=" + Uri.encode(sb.toString()));
             startActivity(new Intent(Intent.ACTION_VIEW, uri));
         } catch (Exception e) {
             Toast.makeText(this, "WhatsApp tidak dijumpai", Toast.LENGTH_SHORT).show();
