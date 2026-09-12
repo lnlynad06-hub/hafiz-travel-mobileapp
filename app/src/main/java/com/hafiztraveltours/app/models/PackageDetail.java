@@ -24,6 +24,11 @@ public class PackageDetail {
     public String price;
     public String imageUrl;
     public String posterImageUrl;
+    public String durationFormatted;
+    public Integer nightsTaif;
+    public String hotelTaifName;
+    public String hotelTaifRating;
+    public String hotelTaifDistance;
 
     public List<NightBreakdown> nightsBreakdown = new ArrayList<>();
     public String departureDatesNote;
@@ -98,6 +103,7 @@ public class PackageDetail {
         d.price = pkg.price != null && !pkg.price.trim().isEmpty() ? pkg.price : "Hubungi Kami";
         d.imageUrl = pkg.imageUrl != null && !pkg.imageUrl.trim().isEmpty() ? pkg.imageUrl : "";
         d.posterImageUrl = d.imageUrl;
+        d.durationFormatted = pkg.getDurationFormatted();
         d.whatsappMessage = "Salam, saya berminat untuk mengetahui lebih lanjut mengenai pakej " + d.name + " (" + d.price + "). Boleh kongsikan jadual dan kekosongan terkini?";
 
         boolean isUmrah = pkg.isUmrah();
@@ -106,6 +112,9 @@ public class PackageDetail {
         if (pkg.nightsMakkah != null && pkg.nightsMakkah > 0) {
             String city1 = isUmrah ? "Makkah" : (pkg.destination != null && !pkg.destination.isEmpty() ? pkg.destination.split("[,&/-]")[0].trim() : "Bandar Utama");
             d.nightsBreakdown.add(new NightBreakdown(city1, pkg.nightsMakkah));
+        }
+        if (pkg.nightsTaif != null && pkg.nightsTaif > 0) {
+            d.nightsBreakdown.add(new NightBreakdown("Taif", pkg.nightsTaif));
         }
         if (pkg.nightsMadinah != null && pkg.nightsMadinah > 0) {
             String city2 = isUmrah ? "Madinah" : "Destinasi Seterusnya";
@@ -133,6 +142,18 @@ public class PackageDetail {
             String subtitle = pkg.hotelMadinahName.trim() +
                     ((pkg.hotelMadinahDistance != null && !pkg.hotelMadinahDistance.trim().isEmpty())
                             ? " (" + pkg.hotelMadinahDistance.trim() + ")"
+                            : "");
+            d.hotels.add(new HotelInfo("hotel", title, subtitle));
+        }
+
+        if (pkg.hotelTaifName != null && !pkg.hotelTaifName.trim().isEmpty()) {
+            String star = (pkg.hotelTaifRating != null && !pkg.hotelTaifRating.trim().isEmpty())
+                    ? pkg.hotelTaifRating
+                    : "Hotel Pilihan";
+            String title = "Penginapan Taif (" + star + ")";
+            String subtitle = pkg.hotelTaifName.trim() +
+                    ((pkg.hotelTaifDistance != null && !pkg.hotelTaifDistance.trim().isEmpty())
+                            ? " (" + pkg.hotelTaifDistance.trim() + ")"
                             : "");
             d.hotels.add(new HotelInfo("hotel", title, subtitle));
         }
@@ -174,6 +195,9 @@ public class PackageDetail {
         }
 
         // 4. Pecahan Harga Bilik (Room Pricing Tiers)
+        if (pkg.priceQuint != null && !pkg.priceQuint.trim().isEmpty() && !pkg.priceQuint.equals("0.00")) {
+            d.priceOptions.add(new PriceOption(formatCurrency(pkg.priceQuint), "Bilik Berlima (Quint)"));
+        }
         if (pkg.priceQuad != null && !pkg.priceQuad.trim().isEmpty() && !pkg.priceQuad.equals("0.00")) {
             d.priceOptions.add(new PriceOption(formatCurrency(pkg.priceQuad), "Bilik Berempat (Quad)"));
         }

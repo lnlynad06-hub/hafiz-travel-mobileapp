@@ -70,6 +70,9 @@ public class UmrahPackage {
     @SerializedName("nights_madinah")
     public Integer nightsMadinah;
 
+    @SerializedName("nights_taif")
+    public Integer nightsTaif;
+
     @SerializedName("airline_name")
     public String airlineName;
 
@@ -97,8 +100,23 @@ public class UmrahPackage {
     @SerializedName("hotel_madinah_distance")
     public String hotelMadinahDistance;
 
+    @SerializedName("hotel_taif_name")
+    public String hotelTaifName;
+
+    @SerializedName("hotel_taif_rating")
+    public String hotelTaifRating;
+
+    @SerializedName("hotel_taif_distance")
+    public String hotelTaifDistance;
+
+    @SerializedName("price_quint")
+    public String priceQuint;
+
     @SerializedName("price_quad")
     public String priceQuad;
+
+    @SerializedName("duration_formatted")
+    public String durationFormatted;
 
     @SerializedName("price_triple")
     public String priceTriple;
@@ -175,6 +193,19 @@ public class UmrahPackage {
             return "250m ke Masjidil Haram";
         }
         return "100m ke Masjidil Haram";
+    }
+
+            public String getDurationFormatted() {
+        if (durationFormatted != null && !durationFormatted.trim().isEmpty()) {
+            return durationFormatted;
+        }
+        if (nightsCount > 0) {
+            return (nightsCount + 1) + " Hari " + nightsCount + " Malam";
+        }
+        if (durationDays > 0) {
+            return durationDays + " Hari";
+        }
+        return "Pakej Penuh";
     }
 
     public UmrahPackage() {}
