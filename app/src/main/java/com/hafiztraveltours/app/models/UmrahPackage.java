@@ -195,12 +195,12 @@ public class UmrahPackage {
         return "100m ke Masjidil Haram";
     }
 
-            public String getDurationFormatted() {
+    public String getDurationFormatted() {
         if (durationFormatted != null && !durationFormatted.trim().isEmpty()) {
             return durationFormatted;
         }
         if (nightsCount > 0) {
-            return (nightsCount + 1) + " Hari " + nightsCount + " Malam";
+            return (nightsCount + 2) + " Hari " + nightsCount + " Malam";
         }
         if (durationDays > 0) {
             return durationDays + " Hari";
