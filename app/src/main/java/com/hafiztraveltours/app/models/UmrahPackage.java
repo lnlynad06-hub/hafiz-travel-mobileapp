@@ -166,18 +166,15 @@ public class UmrahPackage {
     public String collectionName;
 
     public boolean isUmrah() {
-        if ("umrah".equalsIgnoreCase(category)) return true;
+        if (category != null && category.toLowerCase().contains("umrah")) return true;
         if (collectionName != null && collectionName.toLowerCase().contains("umrah")) return true;
         String n = (name != null ? name : "") + " " + (title != null ? title : "");
         return n.toLowerCase().contains("umrah") || n.toLowerCase().contains("makkah") ||
                 n.toLowerCase().contains("madinah") || n.toLowerCase().contains("ramadhan") ||
-                n.toLowerCase().contains("syawal");
+                n.toLowerCase().contains("syawal") || (destination != null && destination.toLowerCase().contains("makkah"));
     }
 
     public String getHotelDistanceDisplay() {
-        if (!isUmrah()) {
-            return null;
-        }
         if (hotelMakkahDistance != null && !hotelMakkahDistance.trim().isEmpty()) {
             String dist = hotelMakkahDistance.trim();
             if (!dist.toLowerCase().contains("masjid")) {
