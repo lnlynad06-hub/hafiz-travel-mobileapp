@@ -426,13 +426,18 @@ public class MainActivity extends AppCompatActivity {
         View heroShowcaseCard = findViewById(R.id.heroShowcaseCard);
         if (heroShowcaseCard == null) return;
 
-        heroShowcaseCard.setOnClickListener(v -> {
-            if (!heroShowcaseList.isEmpty() && heroShowcaseIndex < heroShowcaseList.size()) {
+        setupTactileButton(heroShowcaseCard, () -> {
+            if (!heroShowcaseList.isEmpty() && heroShowcaseIndex >= 0 && heroShowcaseIndex < heroShowcaseList.size()) {
                 UmrahPackage pkg = heroShowcaseList.get(heroShowcaseIndex);
                 Intent intent = new Intent(MainActivity.this, PackageDetailActivity.class);
-                intent.putExtra(PackageDetailActivity.EXTRA_COLLECTION, pkg.collectionName != null ? pkg.collectionName : "umrah_packages");
+                String collection = (pkg.collectionName != null && !pkg.collectionName.trim().isEmpty())
+                        ? pkg.collectionName
+                        : (pkg.isUmrah() ? "umrah_packages" : "tour_packages");
+                intent.putExtra(PackageDetailActivity.EXTRA_COLLECTION, collection);
                 intent.putExtra(PackageDetailActivity.EXTRA_PACKAGE_ID, pkg.id);
                 startActivity(intent);
+            } else {
+                startActivity(new Intent(MainActivity.this, AllPackagesActivity.class));
             }
         });
     }
@@ -523,8 +528,13 @@ public class MainActivity extends AppCompatActivity {
                     HomeDataResponse homeData = response.body().data;
 
                     if (homeData.featured != null && !homeData.featured.isEmpty()) {
-                        allPopularPackages.addAll(homeData.featured);
-                        heroShowcaseList.addAll(homeData.featured);
+                        for (UmrahPackage p : homeData.featured) {
+                            if (p.collectionName == null || p.collectionName.trim().isEmpty()) {
+                                p.collectionName = p.isUmrah() ? "umrah_packages" : "tour_packages";
+                            }
+                            allPopularPackages.add(p);
+                            heroShowcaseList.add(p);
+                        }
                     }
                     if (homeData.popularUmrah != null) {
                         for (UmrahPackage p : homeData.popularUmrah) {
