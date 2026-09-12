@@ -178,21 +178,28 @@ public class UmrahPackage {
         if (!isUmrah()) {
             return null;
         }
+        if (hotelMakkahDistance != null && !hotelMakkahDistance.trim().isEmpty()) {
+            String dist = hotelMakkahDistance.trim();
+            if (!dist.toLowerCase().contains("masjid")) {
+                return dist + " ke Masjidil Haram";
+            }
+            return dist;
+        }
         if (makkahHotelDistance != null && !makkahHotelDistance.trim().isEmpty()) {
-            return makkahHotelDistance;
+            String dist = makkahHotelDistance.trim();
+            if (!dist.toLowerCase().contains("masjid")) {
+                return dist + " ke Masjidil Haram";
+            }
+            return dist;
         }
         if (hotelDistance != null && !hotelDistance.trim().isEmpty()) {
-            return hotelDistance;
+            String dist = hotelDistance.trim();
+            if (!dist.toLowerCase().contains("masjid")) {
+                return dist + " ke Masjidil Haram";
+            }
+            return dist;
         }
-        String lower = getDisplayName().toLowerCase();
-        if (lower.contains("vip") || lower.contains("premium") || lower.contains("luxury") ||
-                lower.contains("ramadhan") || lower.contains("syawal") || lower.contains("safwah") ||
-                lower.contains("clock") || lower.contains("movenpick") || lower.contains("pullman")) {
-            return "50m ke Masjidil Haram";
-        } else if (lower.contains("ekonomi") || lower.contains("jimat") || lower.contains("bajet")) {
-            return "250m ke Masjidil Haram";
-        }
-        return "100m ke Masjidil Haram";
+        return null;
     }
 
     public String getDurationFormatted() {
