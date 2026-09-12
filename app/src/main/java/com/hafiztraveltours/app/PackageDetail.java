@@ -90,37 +90,41 @@ public class PackageDetail {
         d.posterImageUrl = d.imageUrl;
         d.whatsappMessage = "Salam, saya berminat untuk mengetahui lebih lanjut mengenai pakej " + d.name + " (" + d.price + "). Boleh kongsikan jadual dan kekosongan terkini?";
 
+        boolean isUmrah = pkg.isUmrah();
+
         // 1. Ringkasan Penginapan (Nights Breakdown)
         if (pkg.nightsMakkah != null && pkg.nightsMakkah > 0) {
-            d.nightsBreakdown.add(new NightBreakdown("Makkah", pkg.nightsMakkah));
+            String city1 = isUmrah ? "Makkah" : (pkg.destination != null && !pkg.destination.isEmpty() ? pkg.destination.split("[,&/-]")[0].trim() : "Bandar Utama");
+            d.nightsBreakdown.add(new NightBreakdown(city1, pkg.nightsMakkah));
         }
         if (pkg.nightsMadinah != null && pkg.nightsMadinah > 0) {
-            d.nightsBreakdown.add(new NightBreakdown("Madinah", pkg.nightsMadinah));
+            String city2 = isUmrah ? "Madinah" : "Destinasi Seterusnya";
+            d.nightsBreakdown.add(new NightBreakdown(city2, pkg.nightsMadinah));
         }
 
         // 2. Hotel & Penerbangan
         if (pkg.hotelMakkahName != null && !pkg.hotelMakkahName.trim().isEmpty()) {
             String star = (pkg.hotelMakkahRating != null && !pkg.hotelMakkahRating.trim().isEmpty())
                     ? pkg.hotelMakkahRating
-                    : "5 Bintang";
-            String title = "Hotel Makkah (" + star + ")";
+                    : "Hotel Pilihan";
+            String title = (isUmrah ? "Hotel Makkah (" : "Penginapan Utama (") + star + ")";
             String subtitle = pkg.hotelMakkahName.trim() +
                     ((pkg.hotelMakkahDistance != null && !pkg.hotelMakkahDistance.trim().isEmpty())
                             ? " (" + pkg.hotelMakkahDistance.trim() + ")"
                             : "");
-            d.hotels.add(new HotelInfo("mekah", title, subtitle));
+            d.hotels.add(new HotelInfo("hotel", title, subtitle));
         }
 
         if (pkg.hotelMadinahName != null && !pkg.hotelMadinahName.trim().isEmpty()) {
             String star = (pkg.hotelMadinahRating != null && !pkg.hotelMadinahRating.trim().isEmpty())
                     ? pkg.hotelMadinahRating
-                    : "5 Bintang";
-            String title = "Hotel Madinah (" + star + ")";
+                    : "Hotel Pilihan";
+            String title = (isUmrah ? "Hotel Madinah (" : "Penginapan Tambahan (") + star + ")";
             String subtitle = pkg.hotelMadinahName.trim() +
                     ((pkg.hotelMadinahDistance != null && !pkg.hotelMadinahDistance.trim().isEmpty())
                             ? " (" + pkg.hotelMadinahDistance.trim() + ")"
                             : "");
-            d.hotels.add(new HotelInfo("madinah", title, subtitle));
+            d.hotels.add(new HotelInfo("hotel", title, subtitle));
         }
 
         if (pkg.airlineName != null && !pkg.airlineName.trim().isEmpty()) {
