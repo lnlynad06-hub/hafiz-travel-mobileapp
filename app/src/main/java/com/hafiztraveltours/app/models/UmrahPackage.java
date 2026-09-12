@@ -166,12 +166,27 @@ public class UmrahPackage {
     public String collectionName;
 
     public boolean isUmrah() {
-        if (category != null && category.toLowerCase().contains("umrah")) return true;
-        if (collectionName != null && collectionName.toLowerCase().contains("umrah")) return true;
-        String n = (name != null ? name : "") + " " + (title != null ? title : "");
-        return n.toLowerCase().contains("umrah") || n.toLowerCase().contains("makkah") ||
-                n.toLowerCase().contains("madinah") || n.toLowerCase().contains("ramadhan") ||
-                n.toLowerCase().contains("syawal") || (destination != null && destination.toLowerCase().contains("makkah"));
+        if (category != null) {
+            String cat = category.toLowerCase();
+            if (cat.contains("umrah") || cat.contains("haji") || cat.contains("hajj") || cat.contains("ziarah")) return true;
+            if (cat.contains("tour") || cat.contains("pelancongan") || cat.contains("holiday") || cat.contains("travel")) return false;
+        }
+        if (collectionName != null) {
+            String col = collectionName.toLowerCase();
+            if (col.contains("umrah")) return true;
+            if (col.contains("tour")) return false;
+        }
+        if (nightsMakkah != null && nightsMakkah > 0) return true;
+        if (hotelMakkahName != null && !hotelMakkahName.trim().isEmpty()) return true;
+
+        String combined = ((name != null ? name : "") + " " +
+                (title != null ? title : "") + " " +
+                (destination != null ? destination : "") + " " +
+                (summary != null ? summary : "")).toLowerCase();
+
+        return combined.contains("umrah") || combined.contains("makkah") ||
+                combined.contains("madinah") || combined.contains("ramadhan") ||
+                combined.contains("syawal");
     }
 
     public String getHotelDistanceDisplay() {
@@ -245,17 +260,18 @@ public class UmrahPackage {
         if (filterCategory == null || filterCategory.trim().isEmpty() || "ALL".equalsIgnoreCase(filterCategory)) {
             return true;
         }
-        boolean isUmrah = ("umrah".equalsIgnoreCase(category) ||
-                (collectionName != null && collectionName.contains("umrah")) ||
-                (name != null && name.toLowerCase().contains("umrah")) ||
-                (title != null && title.toLowerCase().contains("umrah")));
+        boolean isUmrahPkg = isUmrah();
 
         if ("UMRAH".equalsIgnoreCase(filterCategory)) {
-            return isUmrah;
+            return isUmrahPkg;
         } else if ("TOUR".equalsIgnoreCase(filterCategory)) {
-            return !isUmrah;
+            return !isUmrahPkg;
         }
-        return true;
+
+        if (category != null && category.toLowerCase().contains(filterCategory.toLowerCase())) {
+            return true;
+        }
+        return false;
     }
 
     public boolean matchesDestination(String destCode) {
@@ -264,6 +280,7 @@ public class UmrahPackage {
         }
         String combined = ((name != null ? name : "") + " " +
                 (title != null ? title : "") + " " +
+                (category != null ? category : "") + " " +
                 (destination != null ? destination : "") + " " +
                 (summary != null ? summary : "")).toLowerCase();
 

@@ -132,7 +132,7 @@ public class AllPackagesActivity extends AppCompatActivity {
 
                 if (response.isSuccessful() && response.body() != null && response.body().data != null) {
                     for (UmrahPackage pkg : response.body().data) {
-                        if ("umrah".equalsIgnoreCase(pkg.category)) {
+                        if (pkg.isUmrah()) {
                             pkg.collectionName = "umrah_packages";
                             allUmrah.add(pkg);
                         } else {
