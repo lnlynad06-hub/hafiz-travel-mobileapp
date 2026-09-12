@@ -97,35 +97,30 @@ public class PackageDetailActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<ApiResponse<UmrahPackage>> call, Throwable t) {
                 if (isFinishing() || isDestroyed()) return;
-                // Fallback: build default detail from package ID if available
-                rawPackage = new UmrahPackage();
-                rawPackage.id = packageId;
-                rawPackage.collectionName = collection;
-                rawPackage.name = "Pakej Umrah Pilihan";
-                detail = PackageDetail.fromUmrahPackage(rawPackage);
-                renderAll();
+                Toast.makeText(PackageDetailActivity.this, "Gagal memuatkan data pakej", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
     }
 
     private void renderAll() {
-        if (isFinishing() || isDestroyed()) return;
+        if (isFinishing() || isDestroyed() || detail == null) return;
 
         // 1. Hero Image
         try {
-            Glide.with(this)
-                    .load(detail.imageUrl)
-                    .placeholder(R.color.surface)
-                    .error(R.color.surface)
-                    .into(heroImage);
+            if (detail.imageUrl != null && !detail.imageUrl.isEmpty()) {
+                Glide.with(this)
+                        .load(detail.imageUrl)
+                        .placeholder(R.color.surface)
+                        .error(R.color.surface)
+                        .into(heroImage);
+            }
         } catch (Exception ignored) {}
 
         // 2. Category badge on Hero
         if (heroCategoryBadge != null) {
-            boolean isUmrah = detail.name.toLowerCase().contains("umrah") ||
-                    detail.name.toLowerCase().contains("ramadhan") ||
-                    detail.name.toLowerCase().contains("syawal");
-            heroCategoryBadge.setText(isUmrah ? "✨ PAKEJ UMRAH VIP" : "✈️ PAKEJ PELANCONGAN");
+            boolean isUmrah = rawPackage != null ? rawPackage.isUmrah() : detail.name.toLowerCase().contains("umrah");
+            heroCategoryBadge.setText(isUmrah ? "✨ PAKEJ UMRAH" : "✈️ PAKEJ PELANCONGAN");
         }
 
         // 3. Top Actions (Favorite & Share)
@@ -144,8 +139,8 @@ public class PackageDetailActivity extends AppCompatActivity {
         addQuickSpecsSection();
         addNightsBreakdownSection();
         addHotelsSection();
-        addItinerarySection();
         addPriceOptionsSection();
+        addItinerarySection();
         addIncludedExcludedSection();
         addPackingGuideSection();
         addImportantNotesSection();
@@ -157,9 +152,7 @@ public class PackageDetailActivity extends AppCompatActivity {
             updateFavoriteState();
             favoriteButton.setOnClickListener(v -> {
                 v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                FavoritesManager.handleFavoriteToggle(this, rawPackage, favoriteButton, isFav -> {
-                    updateFavoriteState();
-                });
+                FavoritesManager.handleFavoriteToggle(this, rawPackage, favoriteButton, isFav -> updateFavoriteState());
             });
         }
 
@@ -170,8 +163,8 @@ public class PackageDetailActivity extends AppCompatActivity {
                 shareIntent.setType("text/plain");
                 String shareText = "🕋 *" + detail.name + "*\n" +
                         "💰 Harga Dari: *" + detail.price + "*\n" +
-                        "⏱️ Tempoh: *" + detail.durationDays + " Hari " + detail.nightsCount + " Malam*\n\n" +
-                        detail.summaryLine + "\n\n" +
+                        (detail.durationDays > 0 ? ("⏱️ Tempoh: *" + detail.durationDays + " Hari " + detail.nightsCount + " Malam*\n\n") : "\n") +
+                        (detail.summaryLine != null && !detail.summaryLine.isEmpty() ? (detail.summaryLine + "\n\n") : "") +
                         "📲 Tempah atau tanya lanjut: https://wa.me/" + WHATSAPP_PHONE_NUMBER;
                 shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
                 startActivity(Intent.createChooser(shareIntent, "Kongsi Pakej Melalui"));
@@ -191,7 +184,6 @@ public class PackageDetailActivity extends AppCompatActivity {
     // =========================================================================
 
     private void addTitleSection() {
-        // Title
         TextView title = new TextView(this);
         title.setText(detail.name);
         title.setTextSize(22);
@@ -199,8 +191,7 @@ public class PackageDetailActivity extends AppCompatActivity {
         title.setTextColor(getResources().getColor(R.color.text_dark));
         container.addView(title);
 
-        // Summary
-        if (!detail.summaryLine.isEmpty()) {
+        if (detail.summaryLine != null && !detail.summaryLine.isEmpty()) {
             TextView summary = new TextView(this);
             summary.setText(detail.summaryLine);
             summary.setTextSize(13);
@@ -222,16 +213,21 @@ public class PackageDetailActivity extends AppCompatActivity {
         rowParams.topMargin = dp(14);
         row.setLayoutParams(rowParams);
 
-        // Spec 1: Duration
-        row.addView(buildSpecChip("⏱️ " + detail.durationDays + " Hari " + detail.nightsCount + " Malam"));
+        if (detail.durationDays > 0) {
+            row.addView(buildSpecChip("⏱️ " + detail.durationDays + " Hari " + detail.nightsCount + " Malam"));
+        }
 
-        // Spec 2: Flights
-        row.addView(buildSpecChip("✈️ Terus"));
+        if (rawPackage != null && rawPackage.airlineName != null && !rawPackage.airlineName.isEmpty()) {
+            row.addView(buildSpecChip("✈️ " + rawPackage.airlineName));
+        }
 
-        // Spec 3: 5-Star Hotel
-        row.addView(buildSpecChip("🏨 Hotel 5⭐"));
+        if (rawPackage != null && rawPackage.hotelMakkahRating != null && !rawPackage.hotelMakkahRating.isEmpty()) {
+            row.addView(buildSpecChip("🏨 " + rawPackage.hotelMakkahRating));
+        }
 
-        container.addView(row);
+        if (row.getChildCount() > 0) {
+            container.addView(row);
+        }
     }
 
     private View buildSpecChip(String text) {
@@ -294,9 +290,12 @@ public class PackageDetailActivity extends AppCompatActivity {
     }
 
     private void addHotelsSection() {
-        if (detail.hotels.isEmpty()) return;
-
         container.addView(sectionHeading("Hotel & Penerbangan"));
+
+        if (detail.hotels.isEmpty()) {
+            container.addView(buildEmptyNoticeCard("Maklumat hotel & penerbangan akan dikemaskini kemudian."));
+            return;
+        }
 
         for (PackageDetail.HotelInfo hotel : detail.hotels) {
             LinearLayout card = new LinearLayout(this);
@@ -332,10 +331,70 @@ public class PackageDetailActivity extends AppCompatActivity {
         }
     }
 
-    private void addItinerarySection() {
-        if (detail.itinerary.isEmpty()) return;
+    private void addPriceOptionsSection() {
+        if (detail.priceOptions.isEmpty()) return;
 
+        container.addView(sectionHeading("Pilihan Bilik & Harga"));
+
+        HorizontalScrollView scroll = new HorizontalScrollView(this);
+        scroll.setScrollBarSize(0);
+        scroll.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        LinearLayout.LayoutParams scrollParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        scrollParams.topMargin = dp(10);
+        scroll.setLayoutParams(scrollParams);
+
+        LinearLayout row = new LinearLayout(this);
+        row.setOrientation(LinearLayout.HORIZONTAL);
+
+        for (PackageDetail.PriceOption option : detail.priceOptions) {
+            LinearLayout card = new LinearLayout(this);
+            card.setOrientation(LinearLayout.VERTICAL);
+            card.setBackgroundResource(R.drawable.bg_detail_card);
+            card.setPadding(dp(14), dp(14), dp(14), dp(14));
+
+            LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(dp(150), ViewGroup.LayoutParams.WRAP_CONTENT);
+            cardParams.setMarginEnd(dp(10));
+            card.setLayoutParams(cardParams);
+
+            TextView occupancy = new TextView(this);
+            occupancy.setText(option.occupancyLabel);
+            occupancy.setTextSize(12);
+            occupancy.setTypeface(null, Typeface.BOLD);
+            occupancy.setTextColor(getResources().getColor(R.color.text_dark));
+
+            TextView priceText = new TextView(this);
+            priceText.setText(option.price);
+            priceText.setTextSize(16);
+            priceText.setTypeface(null, Typeface.BOLD);
+            priceText.setTextColor(getResources().getColor(R.color.brand_magenta));
+            LinearLayout.LayoutParams pp = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            pp.topMargin = dp(4);
+            priceText.setLayoutParams(pp);
+
+            TextView perPax = new TextView(this);
+            perPax.setText("/ seorang");
+            perPax.setTextSize(11);
+            perPax.setTextColor(getResources().getColor(R.color.text_gray));
+
+            card.addView(occupancy);
+            card.addView(priceText);
+            card.addView(perPax);
+            row.addView(card);
+        }
+
+        scroll.addView(row);
+        container.addView(scroll);
+    }
+
+    private void addItinerarySection() {
         container.addView(sectionHeading("Jadual Perjalanan (Itinerary)"));
+
+        if (detail.itinerary.isEmpty()) {
+            container.addView(buildEmptyNoticeCard("Jadual perjalanan terperinci akan dikemaskini kemudian."));
+            return;
+        }
 
         TextView hint = new TextView(this);
         hint.setText("Tekan mana-mana hari untuk melihat aktiviti terperinci.");
@@ -364,7 +423,6 @@ public class PackageDetailActivity extends AppCompatActivity {
             cardParams.topMargin = dp(8);
             card.setLayoutParams(cardParams);
 
-            // Header row with Day Badge + Expand Chevron
             LinearLayout headerRow = new LinearLayout(this);
             headerRow.setOrientation(LinearLayout.HORIZONTAL);
             headerRow.setGravity(Gravity.CENTER_VERTICAL);
@@ -388,7 +446,6 @@ public class PackageDetailActivity extends AppCompatActivity {
             headerRow.addView(spacer);
             headerRow.addView(chevron);
 
-            // Title
             TextView title = new TextView(this);
             title.setText(day.title);
             title.setTextSize(14);
@@ -399,9 +456,8 @@ public class PackageDetailActivity extends AppCompatActivity {
             titleParams.topMargin = dp(4);
             title.setLayoutParams(titleParams);
 
-            // Route text
             TextView route = new TextView(this);
-            route.setText("📍 " + day.routeText);
+            route.setText("📍 " + (day.routeText != null && !day.routeText.isEmpty() ? day.routeText : "Destinasi Perjalanan"));
             route.setTextSize(12);
             route.setTextColor(getResources().getColor(R.color.text_gray));
             LinearLayout.LayoutParams routeParams = new LinearLayout.LayoutParams(
@@ -409,7 +465,6 @@ public class PackageDetailActivity extends AppCompatActivity {
             routeParams.topMargin = dp(2);
             route.setLayoutParams(routeParams);
 
-            // Collapsible Body
             LinearLayout body = new LinearLayout(this);
             body.setOrientation(LinearLayout.VERTICAL);
             body.setVisibility(isFirst ? View.VISIBLE : View.GONE);
@@ -465,68 +520,10 @@ public class PackageDetailActivity extends AppCompatActivity {
         }
     }
 
-    private void addPriceOptionsSection() {
-        if (detail.priceOptions.isEmpty()) return;
-
-        container.addView(sectionHeading("Pilihan Bilik & Harga"));
-
-        HorizontalScrollView scroll = new HorizontalScrollView(this);
-        scroll.setScrollBarSize(0);
-        scroll.setOverScrollMode(View.OVER_SCROLL_NEVER);
-        LinearLayout.LayoutParams scrollParams = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        scrollParams.topMargin = dp(10);
-        scroll.setLayoutParams(scrollParams);
-
-        LinearLayout row = new LinearLayout(this);
-        row.setOrientation(LinearLayout.HORIZONTAL);
-
-        for (int i = 0; i < detail.priceOptions.size(); i++) {
-            PackageDetail.PriceOption option = detail.priceOptions.get(i);
-            boolean isFirst = (i == 0);
-
-            LinearLayout card = new LinearLayout(this);
-            card.setOrientation(LinearLayout.VERTICAL);
-            card.setBackgroundResource(R.drawable.bg_detail_card);
-            card.setPadding(dp(14), dp(14), dp(14), dp(14));
-
-            LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(dp(150), ViewGroup.LayoutParams.WRAP_CONTENT);
-            cardParams.setMarginEnd(dp(10));
-            card.setLayoutParams(cardParams);
-
-            TextView occupancy = new TextView(this);
-            occupancy.setText(option.occupancyLabel);
-            occupancy.setTextSize(12);
-            occupancy.setTypeface(null, Typeface.BOLD);
-            occupancy.setTextColor(getResources().getColor(R.color.text_dark));
-
-            TextView priceText = new TextView(this);
-            priceText.setText(option.price);
-            priceText.setTextSize(16);
-            priceText.setTypeface(null, Typeface.BOLD);
-            priceText.setTextColor(getResources().getColor(R.color.brand_magenta));
-            LinearLayout.LayoutParams pp = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            pp.topMargin = dp(4);
-            priceText.setLayoutParams(pp);
-
-            TextView perPax = new TextView(this);
-            perPax.setText("/ seorang");
-            perPax.setTextSize(11);
-            perPax.setTextColor(getResources().getColor(R.color.text_gray));
-
-            card.addView(occupancy);
-            card.addView(priceText);
-            card.addView(perPax);
-            row.addView(card);
-        }
-
-        scroll.addView(row);
-        container.addView(scroll);
-    }
-
     private void addIncludedExcludedSection() {
-        if (detail.included.isEmpty() && detail.excluded.isEmpty()) return;
+        if (detail.included.isEmpty() && detail.excluded.isEmpty()) {
+            return;
+        }
 
         container.addView(sectionHeading("Pakej Termasuk & Tidak Termasuk"));
 
@@ -707,6 +704,26 @@ public class PackageDetailActivity extends AppCompatActivity {
         container.addView(scroll);
     }
 
+    private View buildEmptyNoticeCard(String message) {
+        LinearLayout card = new LinearLayout(this);
+        card.setOrientation(LinearLayout.VERTICAL);
+        card.setBackgroundResource(R.drawable.bg_detail_card);
+        card.setPadding(dp(16), dp(16), dp(16), dp(16));
+        LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        p.topMargin = dp(8);
+        card.setLayoutParams(p);
+
+        TextView tv = new TextView(this);
+        tv.setText(message);
+        tv.setTextSize(12);
+        tv.setTextColor(getResources().getColor(R.color.text_gray));
+        tv.setTypeface(null, Typeface.ITALIC);
+        card.addView(tv);
+
+        return card;
+    }
+
     private void showZoomedImage(String url) {
         if (isFinishing() || isDestroyed()) return;
         ImageView fullImage = new ImageView(this);
@@ -735,9 +752,9 @@ public class PackageDetailActivity extends AppCompatActivity {
     }
 
     private void openWhatsAppForPackage() {
-        String message = !detail.whatsappMessage.isEmpty()
+        String message = (detail != null && detail.whatsappMessage != null && !detail.whatsappMessage.isEmpty())
                 ? detail.whatsappMessage
-                : "Salam, saya berminat dengan pakej " + detail.name;
+                : "Salam, saya berminat dengan pakej " + (detail != null ? detail.name : "");
 
         try {
             Uri uri = Uri.parse("https://wa.me/" + WHATSAPP_PHONE_NUMBER

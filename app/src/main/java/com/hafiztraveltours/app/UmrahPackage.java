@@ -54,6 +54,86 @@ public class UmrahPackage {
     @SerializedName("makkah_hotel_distance")
     public String makkahHotelDistance;
 
+    @SerializedName("nights_makkah")
+    public Integer nightsMakkah;
+
+    @SerializedName("nights_madinah")
+    public Integer nightsMadinah;
+
+    @SerializedName("airline_name")
+    public String airlineName;
+
+    @SerializedName("flight_type")
+    public String flightType;
+
+    @SerializedName("flight_route")
+    public String flightRoute;
+
+    @SerializedName("hotel_makkah_name")
+    public String hotelMakkahName;
+
+    @SerializedName("hotel_makkah_rating")
+    public String hotelMakkahRating;
+
+    @SerializedName("hotel_makkah_distance")
+    public String hotelMakkahDistance;
+
+    @SerializedName("hotel_madinah_name")
+    public String hotelMadinahName;
+
+    @SerializedName("hotel_madinah_rating")
+    public String hotelMadinahRating;
+
+    @SerializedName("hotel_madinah_distance")
+    public String hotelMadinahDistance;
+
+    @SerializedName("price_quad")
+    public String priceQuad;
+
+    @SerializedName("price_triple")
+    public String priceTriple;
+
+    @SerializedName("price_double")
+    public String priceDouble;
+
+    @SerializedName("price_single")
+    public String priceSingle;
+
+    @SerializedName("inclusions")
+    public java.util.List<String> inclusions;
+
+    @SerializedName("exclusions")
+    public java.util.List<String> exclusions;
+
+    @SerializedName("required_documents")
+    public java.util.List<String> requiredDocuments;
+
+    @SerializedName("packing_guide")
+    public java.util.List<String> packingGuide;
+
+    @SerializedName("important_notes")
+    public java.util.List<String> importantNotes;
+
+    @SerializedName("itineraries")
+    public java.util.List<ItineraryItem> itineraries;
+
+    public static class ItineraryItem {
+        @SerializedName("day_number")
+        public int dayNumber;
+
+        @SerializedName("title")
+        public String title;
+
+        @SerializedName("description")
+        public String description;
+
+        @SerializedName("accommodation")
+        public String accommodation;
+
+        @SerializedName("meals")
+        public String meals;
+    }
+
     /** "umrah" atau "tour" / "umrah_packages" atau "tour_packages" */
     public String collectionName;
 
