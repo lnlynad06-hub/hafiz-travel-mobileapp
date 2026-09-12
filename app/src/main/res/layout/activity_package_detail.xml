@@ -55,7 +55,8 @@
                     android:text="@string/package_vip_badge"
                     android:textColor="@color/white"
                     android:textSize="11sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="gone" />
 
             </FrameLayout>
 

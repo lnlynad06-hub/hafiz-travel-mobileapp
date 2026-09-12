@@ -139,8 +139,7 @@ public class PackageDetailActivity extends AppCompatActivity {
 
         // 2. Category badge on Hero
         if (heroCategoryBadge != null) {
-            boolean isUmrah = rawPackage != null ? rawPackage.isUmrah() : detail.name.toLowerCase().contains("umrah");
-            heroCategoryBadge.setText(getString(isUmrah ? R.string.package_badge_umrah : R.string.package_badge_tour));
+            heroCategoryBadge.setVisibility(View.GONE);
         }
 
         // 3. Top Actions (Favorite & Share)
