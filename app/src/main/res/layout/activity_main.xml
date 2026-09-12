@@ -375,7 +375,7 @@
                     </LinearLayout>
 
                     <!-- Progress Arc -->
-                    <com.hafiztraveltours.app.PrayerArcView
+                    <com.hafiztraveltours.app.views.PrayerArcView
                         android:id="@+id/prayerArcView"
                         android:layout_width="match_parent"
                         android:layout_height="46dp"

@@ -1,4 +1,7 @@
 package com.hafiztraveltours.app.network;
+import com.hafiztraveltours.app.models.*;
+import com.hafiztraveltours.app.R;
+
 
 import java.util.concurrent.TimeUnit;
 

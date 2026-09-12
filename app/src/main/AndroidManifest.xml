@@ -23,18 +23,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HafizTravel">
 
-        <activity android:name=".WebViewActivity" />
+        <activity android:name=".ui.WebViewActivity" />
 
-        <activity android:name=".HubungiKamiActivity" />
-        <activity android:name=".PanduanUmrahActivity" />
+        <activity android:name=".ui.HubungiKamiActivity" />
+        <activity android:name=".ui.PanduanUmrahActivity" />
 
-        <activity android:name=".TentangKamiActivity" />
+        <activity android:name=".ui.TentangKamiActivity" />
 
-        <activity android:name=".ProfileActivity" />
+        <activity android:name=".ui.ProfileActivity" />
 
-        <activity android:name=".MainActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.MainActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
 
-        <activity android:name=".SplashActivity"
+        <activity android:name=".ui.SplashActivity"
             android:theme="@style/Theme.App.Starting"
             android:exported="true">
             <intent-filter>
@@ -43,24 +43,24 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".WelcomeActivity" android:exported="false" />
-        <activity android:name=".LoginActivity" android:exported="false" />
-        <activity android:name=".SignUpActivity" android:exported="false" />
-        <activity android:name=".UmrahActivity" android:exported="false" />
-        <activity android:name=".TourActivity" android:exported="false" />
-        <activity android:name=".FavoriteActivity" android:exported="false" />
-        <activity android:name=".ChecklistUmrahActivity" />
-        <activity android:name=".AllPackagesActivity" android:exported="false" />
-        <activity android:name=".PackageDetailActivity" android:exported="false" />
+        <activity android:name=".ui.WelcomeActivity" android:exported="false" />
+        <activity android:name=".ui.LoginActivity" android:exported="false" />
+        <activity android:name=".ui.SignUpActivity" android:exported="false" />
+        <activity android:name=".ui.UmrahActivity" android:exported="false" />
+        <activity android:name=".ui.TourActivity" android:exported="false" />
+        <activity android:name=".ui.FavoriteActivity" android:exported="false" />
+        <activity android:name=".ui.ChecklistUmrahActivity" />
+        <activity android:name=".ui.AllPackagesActivity" android:exported="false" />
+        <activity android:name=".ui.PackageDetailActivity" android:exported="false" />
 
-        <receiver android:name=".PrayerAlarmReceiver" android:exported="false" />
-        <receiver android:name=".BootReceiver" android:exported="true">
+        <receiver android:name=".services.PrayerAlarmReceiver" android:exported="false" />
+        <receiver android:name=".services.BootReceiver" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".StopAzanReceiver" android:exported="false" />
-        <service android:name=".AzanService"
+        <receiver android:name=".services.StopAzanReceiver" android:exported="false" />
+        <service android:name=".services.AzanService"
             android:exported="false"
             android:foregroundServiceType="mediaPlayback" />
 

@@ -1,6 +1,9 @@
 package com.hafiztraveltours.app.network;
+import com.hafiztraveltours.app.models.*;
+import com.hafiztraveltours.app.R;
 
-import com.hafiztraveltours.app.UmrahPackage;
+
+import com.hafiztraveltours.app.models.UmrahPackage;
 
 import java.util.List;
 
