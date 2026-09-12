@@ -471,30 +471,45 @@ public class MainActivity extends AppCompatActivity {
         TextView title = findViewById(R.id.heroShowcaseTitle);
         TextView price = findViewById(R.id.heroShowcasePrice);
 
-        if (image != null && pkg.imageUrl != null) {
+        if (image != null) {
             try {
-                Glide.with(this)
-                        .load(pkg.imageUrl)
-                        .transition(DrawableTransitionOptions.withCrossFade(400))
-                        .placeholder(R.drawable.bg_image_placeholder)
-                        .into(image);
+                if (pkg.imageUrl != null && !pkg.imageUrl.trim().isEmpty()) {
+                    Glide.with(this)
+                            .load(pkg.imageUrl)
+                            .transition(DrawableTransitionOptions.withCrossFade(400))
+                            .placeholder(R.drawable.bg_image_placeholder)
+                            .error(R.drawable.bg_image_placeholder)
+                            .into(image);
+                } else {
+                    Glide.with(this)
+                            .load(R.drawable.bg_image_placeholder)
+                            .into(image);
+                }
             } catch (Exception ignored) {}
         }
 
-        if (title != null && pkg.name != null) {
-            title.setText(pkg.name);
+        if (title != null) {
+            title.setText(pkg.getDisplayName());
         }
 
         if (tag != null) {
-            String dest = (pkg.destination != null) ? pkg.destination.toUpperCase() : "MAKKAH & MADINAH";
+            String dest = (pkg.destination != null && !pkg.destination.trim().isEmpty())
+                    ? pkg.destination.toUpperCase()
+                    : (pkg.isUmrah() ? "UMRAH" : "PELANCONGAN");
             if (dest.length() > 20) dest = dest.substring(0, 20);
             tag.setText(dest);
         }
 
         if (price != null) {
-            String rawPrice = (pkg.price != null && !pkg.price.isEmpty()) ? pkg.price : "7,990";
+            String rawPrice = (pkg.price != null && !pkg.price.isEmpty()) ? pkg.price : "";
             String cleanPrice = rawPrice.replace("RM", "").replace("rm", "").trim();
-            price.setText(getString(R.string.package_duration_price, pkg.durationDays, pkg.nightsCount, cleanPrice));
+            if (!cleanPrice.isEmpty()) {
+                price.setText(getString(R.string.package_duration_price, pkg.durationDays, pkg.nightsCount, cleanPrice));
+            } else if (pkg.durationDays > 0) {
+                price.setText(pkg.durationDays + " Hari " + pkg.nightsCount + " Malam");
+            } else {
+                price.setText("Hubungi Kami");
+            }
         }
     }
 
