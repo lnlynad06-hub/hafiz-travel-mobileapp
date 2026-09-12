@@ -381,10 +381,11 @@ public class PackageDetailActivity extends AppCompatActivity {
                 int[] tourKeys  = {R.string.hotel_title_tour_hotel1, R.string.hotel_title_tour_hotel2, R.string.hotel_title_tour_extra};
                 int slot = Math.min(hotel.slot, 2);
                 String base = getString(isUmrah ? umrahKeys[slot] : tourKeys[slot]);
-                String star = !hotel.rawRating.isEmpty()
-                        ? hotel.rawRating
-                        : getString(R.string.hotel_rating_fallback);
-                hotelTitle = base + " (" + star + ")";
+                if (!hotel.rawRating.trim().isEmpty()) {
+                    hotelTitle = base + " (" + hotel.rawRating.trim() + ")";
+                } else {
+                    hotelTitle = base;
+                }
             }
 
             LinearLayout card = new LinearLayout(this);
