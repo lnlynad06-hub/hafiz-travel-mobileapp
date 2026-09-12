@@ -188,6 +188,7 @@ public class MainActivity extends AppCompatActivity {
         setupInfoSection();
         setupPodcastSection();
         setupPrayerTimesWidget();
+        setupSwipeRefresh();
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
                     != PackageManager.PERMISSION_GRANTED) {
@@ -197,6 +198,21 @@ public class MainActivity extends AppCompatActivity {
         }
         PrayerTimeScheduler.requestExactAlarmPermissionIfNeeded(this);
         PrayerTimeScheduler.requestBatteryOptimizationExemption(this);
+    }
+
+    private void setupSwipeRefresh() {
+        androidx.swiperefreshlayout.widget.SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.setColorSchemeResources(R.color.brand_magenta, R.color.gold_accent, R.color.brand_dark_pink);
+            swipeRefreshLayout.setOnRefreshListener(() -> {
+                loadSessionState();
+                setupHeroSection();
+                setupPopularPackages();
+                loadPrayerTimesForCurrentLocation();
+                updateFavoriteBadge();
+                swipeRefreshLayout.postDelayed(() -> swipeRefreshLayout.setRefreshing(false), 1000);
+            });
+        }
     }
 
 

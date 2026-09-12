@@ -54,6 +54,15 @@ public class FavoriteActivity extends AppCompatActivity {
                     }
                 });
         recyclerView.setAdapter(adapter);
+
+        androidx.swiperefreshlayout.widget.SwipeRefreshLayout swipeRefresh = findViewById(R.id.favoriteSwipeRefresh);
+        if (swipeRefresh != null) {
+            swipeRefresh.setColorSchemeResources(R.color.brand_magenta, R.color.gold_accent, R.color.brand_dark_pink);
+            swipeRefresh.setOnRefreshListener(() -> {
+                refreshList();
+                swipeRefresh.postDelayed(() -> swipeRefresh.setRefreshing(false), 600);
+            });
+        }
     }
 
     @Override

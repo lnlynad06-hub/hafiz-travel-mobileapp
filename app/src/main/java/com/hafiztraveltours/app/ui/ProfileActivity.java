@@ -9,7 +9,6 @@ import com.hafiztraveltours.app.utils.*;
 import com.hafiztraveltours.app.views.*;
 import com.hafiztraveltours.app.ui.*;
 
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -48,6 +47,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private SharedPreferences profilePrefs;
     private TextView nameText;
+    private androidx.swiperefreshlayout.widget.SwipeRefreshLayout profileSwipeRefresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +57,19 @@ public class ProfileActivity extends AppCompatActivity {
         profilePrefs = getSharedPreferences("user_profile", Context.MODE_PRIVATE);
 
         findViewById(R.id.profileBackButton).setOnClickListener(v -> finish());
+
+        profileSwipeRefresh = findViewById(R.id.profileSwipeRefresh);
+        if (profileSwipeRefresh != null) {
+            profileSwipeRefresh.setColorSchemeResources(
+                    R.color.brand_magenta,
+                    R.color.gold_accent,
+                    R.color.brand_dark_pink
+            );
+            profileSwipeRefresh.setOnRefreshListener(() -> {
+                refreshHeader();
+                profileSwipeRefresh.setRefreshing(false);
+            });
+        }
 
         nameText = findViewById(R.id.profileNameText);
         refreshHeader();

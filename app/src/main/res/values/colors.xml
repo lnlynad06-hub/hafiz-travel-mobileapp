@@ -27,6 +27,8 @@
     <color name="brand_magenta_light">#FCE4EC</color>
     <color name="brand_magenta_soft">#FFF0F5</color>
     <color name="brand_magenta_accent">#E91E63</color>
+    <color name="gold_accent">#D4AF37</color>
+    <color name="brand_dark_pink">#AD1457</color>
 
     <!-- Neutrals -->
     <color name="luxury_charcoal">#18181B</color>

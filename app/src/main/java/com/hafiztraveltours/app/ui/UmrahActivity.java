@@ -106,6 +106,12 @@ public class UmrahActivity extends AppCompatActivity {
             btnFilter.setOnClickListener(v -> openFilterBottomSheet());
         }
 
+        androidx.swiperefreshlayout.widget.SwipeRefreshLayout swipeRefresh = findViewById(R.id.umrahSwipeRefresh);
+        if (swipeRefresh != null) {
+            swipeRefresh.setColorSchemeResources(R.color.brand_magenta, R.color.gold_accent, R.color.brand_dark_pink);
+            swipeRefresh.setOnRefreshListener(this::loadPackagesFromApi);
+        }
+
         BottomNavHelper.setup(this, BottomNavHelper.Tab.UMRAH);
         loadPackagesFromApi();
     }
@@ -131,6 +137,9 @@ public class UmrahActivity extends AppCompatActivity {
         ApiClient.getApiService().getPackages("umrah", null, null, null).enqueue(new Callback<ApiResponse<List<UmrahPackage>>>() {
             @Override
             public void onResponse(Call<ApiResponse<List<UmrahPackage>>> call, Response<ApiResponse<List<UmrahPackage>>> response) {
+                androidx.swiperefreshlayout.widget.SwipeRefreshLayout swipeRefresh = findViewById(R.id.umrahSwipeRefresh);
+                if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
+
                 com.facebook.shimmer.ShimmerFrameLayout shimmer = findViewById(R.id.umrahShimmerContainer);
                 if (shimmer != null) {
                     shimmer.stopShimmer();
@@ -171,6 +180,9 @@ public class UmrahActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ApiResponse<List<UmrahPackage>>> call, Throwable t) {
+                androidx.swiperefreshlayout.widget.SwipeRefreshLayout swipeRefresh = findViewById(R.id.umrahSwipeRefresh);
+                if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
+
                 com.facebook.shimmer.ShimmerFrameLayout shimmer = findViewById(R.id.umrahShimmerContainer);
                 if (shimmer != null) {
                     shimmer.stopShimmer();

@@ -104,6 +104,11 @@ public class TourActivity extends AppCompatActivity {
         }
 
         BottomNavHelper.setup(this, BottomNavHelper.Tab.TOUR);
+        androidx.swiperefreshlayout.widget.SwipeRefreshLayout swipeRefresh = findViewById(R.id.tourSwipeRefresh);
+        if (swipeRefresh != null) {
+            swipeRefresh.setColorSchemeResources(R.color.brand_magenta, R.color.gold_accent, R.color.brand_dark_pink);
+            swipeRefresh.setOnRefreshListener(this::loadPackagesFromApi);
+        }
         loadPackagesFromApi();
     }
 
@@ -155,6 +160,8 @@ public class TourActivity extends AppCompatActivity {
         ApiClient.getApiService().getPackages("tour", null, null, null).enqueue(new Callback<ApiResponse<List<UmrahPackage>>>() {
             @Override
             public void onResponse(Call<ApiResponse<List<UmrahPackage>>> call, Response<ApiResponse<List<UmrahPackage>>> response) {
+                androidx.swiperefreshlayout.widget.SwipeRefreshLayout swipeRefresh = findViewById(R.id.tourSwipeRefresh);
+                if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
                 com.facebook.shimmer.ShimmerFrameLayout shimmer = findViewById(R.id.tourShimmerContainer);
                 if (shimmer != null) {
                     shimmer.stopShimmer();
@@ -185,6 +192,8 @@ public class TourActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ApiResponse<List<UmrahPackage>>> call, Throwable t) {
+                androidx.swiperefreshlayout.widget.SwipeRefreshLayout swipeRefresh = findViewById(R.id.tourSwipeRefresh);
+                if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
                 com.facebook.shimmer.ShimmerFrameLayout shimmer = findViewById(R.id.tourShimmerContainer);
                 if (shimmer != null) {
                     shimmer.stopShimmer();
@@ -361,4 +370,4 @@ public class TourActivity extends AppCompatActivity {
         float density = getResources().getDisplayMetrics().density;
         return Math.round(dp * density);
     }
-}
+}

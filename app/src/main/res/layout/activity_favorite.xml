@@ -45,75 +45,92 @@
 
     </LinearLayout>
 
-    <!-- Skeleton Shimmer Loading Placeholder -->
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/favoriteShimmerContainer"
+    <!-- SwipeRefresh & Content -->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/favoriteSwipeRefresh"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:paddingHorizontal="20dp"
-        android:paddingTop="20dp"
-        app:shimmer_auto_start="true"
-        app:shimmer_base_alpha="0.6"
-        app:shimmer_highlight_alpha="1.0"
-        app:shimmer_duration="1200"
         app:layout_constraintTop_toBottomOf="@id/favoriteHeroCard"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <LinearLayout
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
-            <include layout="@layout/item_skeleton_vertical_card" />
-            <include layout="@layout/item_skeleton_vertical_card" />
-            <include layout="@layout/item_skeleton_vertical_card" />
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        </LinearLayout>
-    </com.facebook.shimmer.ShimmerFrameLayout>
+                <!-- Skeleton Shimmer Loading Placeholder -->
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/favoriteShimmerContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="20dp"
+                    android:paddingTop="20dp"
+                    app:shimmer_auto_start="true"
+                    app:shimmer_base_alpha="0.6"
+                    app:shimmer_highlight_alpha="1.0"
+                    app:shimmer_duration="1200">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/favoriteRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:clipToPadding="false"
-        android:paddingHorizontal="20dp"
-        android:paddingTop="20dp"
-        android:paddingBottom="96dp"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/favoriteHeroCard"
-        app:layout_constraintBottom_toBottomOf="parent" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-    <!-- Nicer empty state: heart icon + message, centered in the space below the hero -->
-    <LinearLayout
-        android:id="@+id/favoriteEmptyContainer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/favoriteHeroCard"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias="0.35">
+                        <include layout="@layout/item_skeleton_vertical_card" />
+                        <include layout="@layout/item_skeleton_vertical_card" />
+                        <include layout="@layout/item_skeleton_vertical_card" />
 
-        <ImageView
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:src="@drawable/ic_favorite"
-            app:tint="@color/field_border"
-            tools:ignore="ContentDescription" />
+                    </LinearLayout>
+                </com.facebook.shimmer.ShimmerFrameLayout>
 
-        <TextView
-            android:id="@+id/favoriteEmptyText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:gravity="center"
-            android:text="@string/favorite_empty_state"
-            android:textColor="@color/text_gray"
-            android:textSize="14sp" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/favoriteRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:paddingHorizontal="20dp"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="96dp"
+                    android:nestedScrollingEnabled="false"
+                    android:visibility="gone" />
 
-    </LinearLayout>
+                <!-- Nicer empty state: heart icon + message -->
+                <LinearLayout
+                    android:id="@+id/favoriteEmptyContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    android:paddingTop="60dp">
+
+                    <ImageView
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:src="@drawable/ic_favorite"
+                        app:tint="@color/field_border"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/favoriteEmptyText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:gravity="center"
+                        android:text="@string/favorite_empty_state"
+                        android:textColor="@color/text_gray"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

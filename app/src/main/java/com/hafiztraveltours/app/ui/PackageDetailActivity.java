@@ -55,6 +55,7 @@ public class PackageDetailActivity extends AppCompatActivity {
     private View bookButton;
     private ImageView favoriteButton;
     private ImageView shareButton;
+    private androidx.swiperefreshlayout.widget.SwipeRefreshLayout swipeRefreshLayout;
 
     private PackageDetail detail;
     private UmrahPackage rawPackage;
@@ -89,6 +90,18 @@ public class PackageDetailActivity extends AppCompatActivity {
         String collection = getIntent().getStringExtra(EXTRA_COLLECTION);
         if (collection == null) collection = "umrah_packages";
 
+        swipeRefreshLayout = findViewById(R.id.packageDetailSwipeRefresh);
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.setColorSchemeResources(
+                    R.color.brand_magenta,
+                    R.color.gold_accent,
+                    R.color.brand_dark_pink
+            );
+            final String finalCollection = collection;
+            final String finalPackageId = packageId;
+            swipeRefreshLayout.setOnRefreshListener(() -> loadPackage(finalCollection, finalPackageId));
+        }
+
         if (packageId == null) {
             Toast.makeText(this, getString(R.string.err_package_not_found), Toast.LENGTH_SHORT).show();
             finish();
@@ -102,6 +115,9 @@ public class PackageDetailActivity extends AppCompatActivity {
         ApiClient.getApiService().getPackageDetail(packageId).enqueue(new Callback<ApiResponse<UmrahPackage>>() {
             @Override
             public void onResponse(Call<ApiResponse<UmrahPackage>> call, Response<ApiResponse<UmrahPackage>> response) {
+                if (swipeRefreshLayout != null) {
+                    swipeRefreshLayout.setRefreshing(false);
+                }
                 if (isFinishing() || isDestroyed()) return;
                 if (response.isSuccessful() && response.body() != null && response.body().data != null) {
                     rawPackage = response.body().data;
@@ -116,6 +132,9 @@ public class PackageDetailActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ApiResponse<UmrahPackage>> call, Throwable t) {
+                if (swipeRefreshLayout != null) {
+                    swipeRefreshLayout.setRefreshing(false);
+                }
                 if (isFinishing() || isDestroyed()) return;
                 Toast.makeText(PackageDetailActivity.this, getString(R.string.err_package_load_failed), Toast.LENGTH_SHORT).show();
                 finish();

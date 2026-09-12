@@ -87,6 +87,12 @@ public class AllPackagesActivity extends AppCompatActivity {
         tourRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         searchResultsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        androidx.swiperefreshlayout.widget.SwipeRefreshLayout swipeRefresh = findViewById(R.id.allPackagesSwipeRefresh);
+        if (swipeRefresh != null) {
+            swipeRefresh.setColorSchemeResources(R.color.brand_magenta, R.color.gold_accent, R.color.brand_dark_pink);
+            swipeRefresh.setOnRefreshListener(this::loadAllPackages);
+        }
+
         View btnFilter = findViewById(R.id.btnAllPackagesFilter);
         if (btnFilter != null) {
             btnFilter.setOnClickListener(v -> openFilterBottomSheet());
@@ -102,6 +108,10 @@ public class AllPackagesActivity extends AppCompatActivity {
         });
 
         loadAllPackages();
+
+        if (getIntent().getBooleanExtra(EXTRA_OPEN_FILTER, false)) {
+            openFilterBottomSheet();
+        }
     }
 
     private void openFilterBottomSheet() {
@@ -118,6 +128,9 @@ public class AllPackagesActivity extends AppCompatActivity {
         ApiClient.getApiService().getPackages(null, null, null, null).enqueue(new Callback<ApiResponse<List<UmrahPackage>>>() {
             @Override
             public void onResponse(Call<ApiResponse<List<UmrahPackage>>> call, Response<ApiResponse<List<UmrahPackage>>> response) {
+                androidx.swiperefreshlayout.widget.SwipeRefreshLayout swipeRefresh = findViewById(R.id.allPackagesSwipeRefresh);
+                if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
+
                 com.facebook.shimmer.ShimmerFrameLayout shimmer = findViewById(R.id.allPackagesShimmer);
                 if (shimmer != null) {
                     shimmer.stopShimmer();
@@ -159,6 +172,9 @@ public class AllPackagesActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ApiResponse<List<UmrahPackage>>> call, Throwable t) {
+                androidx.swiperefreshlayout.widget.SwipeRefreshLayout swipeRefresh = findViewById(R.id.allPackagesSwipeRefresh);
+                if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
+
                 com.facebook.shimmer.ShimmerFrameLayout shimmer = findViewById(R.id.allPackagesShimmer);
                 if (shimmer != null) {
                     shimmer.stopShimmer();
