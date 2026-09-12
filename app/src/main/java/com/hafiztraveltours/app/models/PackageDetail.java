@@ -14,7 +14,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PackageDetail {
+public class PackageDetail implements java.io.Serializable {
 
     public String id;
     public String name;
@@ -32,6 +32,7 @@ public class PackageDetail {
 
     public List<NightBreakdown> nightsBreakdown = new ArrayList<>();
     public String departureDatesNote;
+    public List<String> availableDepartureDates = new ArrayList<>();
     public List<HotelInfo> hotels = new ArrayList<>();
     public List<ItineraryDay> itinerary = new ArrayList<>();
     public List<ImportantNote> importantNotes = new ArrayList<>();
@@ -44,7 +45,7 @@ public class PackageDetail {
     public String whatsappMessage;
     public boolean isUmrah; // set from UmrahPackage.isUmrah() during parsing
 
-    public static class NightBreakdown {
+    public static class NightBreakdown implements java.io.Serializable {
         public String city;          // set by Activity from getString() using slot
         public int nights;
         public int slot;             // 0=Makkah/Hotel1, 1=Madinah/Hotel2, 2=Taif/Hotel3
@@ -55,7 +56,7 @@ public class PackageDetail {
         }
     }
 
-    public static class HotelInfo {
+    public static class HotelInfo implements java.io.Serializable {
         public String type; // "hotel" | "flight"
         public String title;  // built lazily; overridden by Activity with getString()
         public String subtitle;
@@ -70,9 +71,10 @@ public class PackageDetail {
         }
     }
 
-    public static class ItineraryDay {
+    public static class ItineraryDay implements java.io.Serializable {
         public int dayNumber;
         public String dayLabel;
+        public String dateLabel;
         public String tag;
         public String timeNote;
         public String title;
@@ -83,13 +85,13 @@ public class PackageDetail {
         public String mealNote = "";
     }
 
-    public static class ImportantNote {
+    public static class ImportantNote implements java.io.Serializable {
         public String title;
         public String badge;
         public List<String> bullets = new ArrayList<>();
     }
 
-    public static class PriceOption {
+    public static class PriceOption implements java.io.Serializable {
         public String price;
         public String occupancyLabel;
         public PriceOption(String price, String occupancyLabel) {
@@ -183,12 +185,13 @@ public class PackageDetail {
             for (UmrahPackage.ItineraryItem item : pkg.itineraries) {
                 ItineraryDay day = new ItineraryDay();
                 day.dayNumber = item.dayNumber;
+                day.dateLabel = item.dateLabel != null && !item.dateLabel.trim().isEmpty() ? item.dateLabel.trim() : null;
                 // Localized by the Activity via R.string.day_label_format /
                 // R.string.itinerary_daily (dayNumber is the locale-neutral key).
                 day.dayLabel = null;
                 day.tag = null;
                 day.title = item.title != null && !item.title.trim().isEmpty() ? item.title.trim() : null;
-                day.routeText = pkg.destination != null ? pkg.destination : "";
+                day.routeText = "";
 
                 if (item.description != null && !item.description.trim().isEmpty()) {
                     String[] lines = item.description.split("\r?\n");
@@ -255,7 +258,20 @@ public class PackageDetail {
             d.importantNotes.add(docNote);
         }
 
-        // 8. Gallery
+        // 8. Departures
+        if (pkg.departures != null && !pkg.departures.isEmpty()) {
+            for (UmrahPackage.DepartureItem item : pkg.departures) {
+                if (item.departureDate != null && !item.departureDate.isEmpty()) {
+                    String label = item.departureDate;
+                    if (item.returnDate != null && !item.returnDate.isEmpty()) {
+                        label += " hingga " + item.returnDate;
+                    }
+                    d.availableDepartureDates.add(label);
+                }
+            }
+        }
+
+        // 9. Gallery
         if (d.imageUrl != null && !d.imageUrl.isEmpty()) {
             d.galleryImageUrls.add(d.imageUrl);
         }

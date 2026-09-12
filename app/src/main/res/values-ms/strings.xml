@@ -693,11 +693,11 @@
     <string name="hotel_title_tour_extra">Hotel Tambahan</string>
     <string name="hotel_rating_fallback">Standard</string>
     <string name="share_package_via">Kongsi Pakej Melalui</string>
-    <string name="share_price_from">💰 Harga Dari: *%1$s*</string>
-    <string name="share_duration">⏱️ Tempoh: *%1$d Hari %2$d Malam*</string>
-    <string name="share_cta">📲 Tempah atau tanya lanjut</string>
-    <string name="package_badge_umrah">✨ PAKEJ UMRAH</string>
-    <string name="package_badge_tour">✈️ PAKEJ PELANCONGAN</string>
+    <string name="share_price_from">Harga Dari: *%1$s*</string>
+    <string name="share_duration">Tempoh: *%1$d Hari %2$d Malam*</string>
+    <string name="share_cta">Tempah atau tanya lanjut</string>
+    <string name="package_badge_umrah">PAKEJ UMRAH</string>
+    <string name="package_badge_tour">PAKEJ PELANCONGAN</string>
     <string name="results_packages_format">%1$d pakej</string>
     <string name="filter_slider_min_label">RM0 (Terendah)</string>
     <string name="filter_slider_max_label">RM20,000+ (Tertinggi)</string>
@@ -706,10 +706,10 @@
     <string name="promo_hero_kicker">MAKKAH &amp; MADINAH</string>
     <string name="promo_hero_title">Pakej Umrah Cuti Sekolah &amp; Syawal</string>
     <string name="promo_hero_price">Dari RM 7,990 • 12 Hari 10 Malam</string>
-    <string name="google_review_summary">4.9 ★★★★★ (250+ Ulasan Google)</string>
+    <string name="google_review_summary">4.9 (250+ Ulasan Google)</string>
 
     <!-- Lencana detail pakej (sebelum ini hardcoded dalam layout) -->
-    <string name="package_vip_badge">✨ PAKEJ PILIHAN VIP</string>
+    <string name="package_vip_badge">PAKEJ PILIHAN VIP</string>
     <string name="package_whatsapp_enquiry">Tanya WhatsApp</string>
 
     <!-- Tagline splash (sebelum ini hardcoded dalam layout) -->
@@ -733,5 +733,10 @@
     <string name="battery_now">Setkan Sekarang</string>
     <string name="battery_later">Nanti</string>
     <string name="hijri_date_fallback">1 Rejab 1448H</string>
+
+    <string name="btn_book_now">TEMPAH SEKARANG</string>
+    <string name="btn_ask_questions">Tanya</string>
+    <string name="selected_room_label">Bilik Terpilih</string>
+    <string name="booking_flow_notice">Pilihan terpilih: %1$s (%2$s). Sila teruskan ke borang maklumat jemaah.</string>
 
 </resources>

@@ -50,11 +50,15 @@ public class PackageDetailActivity extends AppCompatActivity {
     private ImageView heroImage;
     private TextView heroCategoryBadge;
     private TextView bottomPrice;
+    private TextView bottomPriceSublabel;
+    private TextView bottomPriceLabel;
+    private View bookButton;
     private ImageView favoriteButton;
     private ImageView shareButton;
 
     private PackageDetail detail;
     private UmrahPackage rawPackage;
+    private int selectedPriceOptionIndex = 0;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -72,6 +76,12 @@ public class PackageDetailActivity extends AppCompatActivity {
         heroCategoryBadge = findViewById(R.id.detailHeroCategoryBadge);
         container = findViewById(R.id.detailContainer);
         bottomPrice = findViewById(R.id.detailBottomPrice);
+        bottomPriceSublabel = findViewById(R.id.detailBottomPriceSublabel);
+        bottomPriceLabel = findViewById(R.id.detailBottomPriceLabel);
+        bookButton = findViewById(R.id.detailBookButton);
+        if (bookButton != null) {
+            bookButton.setOnClickListener(v -> onBookNowClicked());
+        }
         favoriteButton = findViewById(R.id.detailFavoriteButton);
         shareButton = findViewById(R.id.detailShareButton);
 
@@ -136,8 +146,10 @@ public class PackageDetailActivity extends AppCompatActivity {
         // 3. Top Actions (Favorite & Share)
         setupTopActions();
 
-        // 4. Bottom Price & WhatsApp CTA
-        bottomPrice.setText(detail.price);
+        // 4. Bottom Price & CTA setup
+        selectedPriceOptionIndex = 0;
+        updateBottomPriceDisplay();
+
         View whatsappBtn = findViewById(R.id.detailWhatsappButton);
         if (whatsappBtn != null) {
             whatsappBtn.setOnClickListener(v -> openWhatsAppForPackage());
@@ -155,6 +167,27 @@ public class PackageDetailActivity extends AppCompatActivity {
         addPackingGuideSection();
         addImportantNotesSection();
         addGallerySection();
+    }
+
+    private void updateBottomPriceDisplay() {
+        if (detail == null) return;
+        if (detail.priceOptions != null && !detail.priceOptions.isEmpty() && selectedPriceOptionIndex >= 0 && selectedPriceOptionIndex < detail.priceOptions.size()) {
+            PackageDetail.PriceOption opt = detail.priceOptions.get(selectedPriceOptionIndex);
+            if (bottomPrice != null) bottomPrice.setText(opt.price);
+            if (bottomPriceSublabel != null) {
+                bottomPriceSublabel.setText(getString(R.string.selected_room_label) + ": " + opt.occupancyLabel);
+                bottomPriceSublabel.setVisibility(View.VISIBLE);
+            }
+        } else {
+            if (bottomPrice != null) bottomPrice.setText(detail.price);
+            if (bottomPriceSublabel != null) bottomPriceSublabel.setVisibility(View.GONE);
+        }
+    }
+
+    private void onBookNowClicked() {
+        if (detail == null) return;
+        BookingConfigurationBottomSheet sheet = BookingConfigurationBottomSheet.newInstance(detail, selectedPriceOptionIndex);
+        sheet.show(getSupportFragmentManager(), "BookingConfigSheet");
     }
 
     private void setupTopActions() {
@@ -224,15 +257,15 @@ public class PackageDetailActivity extends AppCompatActivity {
         row.setLayoutParams(rowParams);
 
         if (detail.durationDays > 0) {
-            row.addView(buildSpecChip("⏱️ " + getString(R.string.duration_days_nights, detail.durationDays, detail.nightsCount)));
+            row.addView(buildSpecChip(getString(R.string.duration_days_nights, detail.durationDays, detail.nightsCount)));
         }
 
         if (rawPackage != null && rawPackage.airlineName != null && !rawPackage.airlineName.isEmpty()) {
-            row.addView(buildSpecChip("✈️ " + rawPackage.airlineName));
+            row.addView(buildSpecChip(rawPackage.airlineName));
         }
 
         if (rawPackage != null && rawPackage.hotelMakkahRating != null && !rawPackage.hotelMakkahRating.isEmpty()) {
-            row.addView(buildSpecChip("🏨 " + rawPackage.hotelMakkahRating));
+            row.addView(buildSpecChip(rawPackage.hotelMakkahRating));
         }
 
         if (row.getChildCount() > 0) {
@@ -397,21 +430,52 @@ public class PackageDetailActivity extends AppCompatActivity {
         LinearLayout row = new LinearLayout(this);
         row.setOrientation(LinearLayout.HORIZONTAL);
 
-        for (PackageDetail.PriceOption option : detail.priceOptions) {
+        renderRoomOptionCards(row);
+
+        scroll.addView(row);
+        container.addView(scroll);
+    }
+
+    private void renderRoomOptionCards(LinearLayout row) {
+        row.removeAllViews();
+        for (int i = 0; i < detail.priceOptions.size(); i++) {
+            final int index = i;
+            PackageDetail.PriceOption option = detail.priceOptions.get(i);
+            boolean isSelected = (i == selectedPriceOptionIndex);
+
             LinearLayout card = new LinearLayout(this);
             card.setOrientation(LinearLayout.VERTICAL);
-            card.setBackgroundResource(R.drawable.bg_detail_card);
+            card.setBackgroundResource(isSelected ? R.drawable.bg_room_card_selected : R.drawable.bg_room_card_unselected);
             card.setPadding(dp(14), dp(14), dp(14), dp(14));
+            card.setClickable(true);
+            card.setFocusable(true);
 
             LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(dp(150), ViewGroup.LayoutParams.WRAP_CONTENT);
             cardParams.setMarginEnd(dp(10));
             card.setLayoutParams(cardParams);
 
+            LinearLayout headerRow = new LinearLayout(this);
+            headerRow.setOrientation(LinearLayout.HORIZONTAL);
+            headerRow.setGravity(Gravity.CENTER_VERTICAL);
+
             TextView occupancy = new TextView(this);
             occupancy.setText(option.occupancyLabel);
             occupancy.setTextSize(12);
             occupancy.setTypeface(null, Typeface.BOLD);
-            occupancy.setTextColor(getResources().getColor(R.color.text_dark));
+            occupancy.setTextColor(getResources().getColor(isSelected ? R.color.brand_magenta : R.color.text_dark));
+
+            LinearLayout.LayoutParams occParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+            occupancy.setLayoutParams(occParams);
+            headerRow.addView(occupancy);
+
+            if (isSelected) {
+                TextView check = new TextView(this);
+                check.setText("✓");
+                check.setTextSize(13);
+                check.setTypeface(null, Typeface.BOLD);
+                check.setTextColor(getResources().getColor(R.color.brand_magenta));
+                headerRow.addView(check);
+            }
 
             TextView priceText = new TextView(this);
             priceText.setText(option.price);
@@ -428,14 +492,19 @@ public class PackageDetailActivity extends AppCompatActivity {
             perPax.setTextSize(11);
             perPax.setTextColor(getResources().getColor(R.color.text_gray));
 
-            card.addView(occupancy);
+            card.addView(headerRow);
             card.addView(priceText);
             card.addView(perPax);
+
+            card.setOnClickListener(v -> {
+                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                selectedPriceOptionIndex = index;
+                renderRoomOptionCards(row);
+                updateBottomPriceDisplay();
+            });
+
             row.addView(card);
         }
-
-        scroll.addView(row);
-        container.addView(scroll);
     }
 
     private void addItinerarySection() {
@@ -456,6 +525,17 @@ public class PackageDetailActivity extends AppCompatActivity {
         hint.setLayoutParams(hintParams);
         container.addView(hint);
 
+        LinearLayout itineraryContainer = new LinearLayout(this);
+        itineraryContainer.setOrientation(LinearLayout.VERTICAL);
+        container.addView(itineraryContainer);
+
+        renderItinerary(itineraryContainer);
+    }
+
+    private void renderItinerary(LinearLayout targetContainer) {
+        if (detail.itinerary == null || detail.itinerary.isEmpty() || targetContainer == null) return;
+        targetContainer.removeAllViews();
+
         for (int i = 0; i < detail.itinerary.size(); i++) {
             PackageDetail.ItineraryDay day = detail.itinerary.get(i);
             boolean isFirst = (i == 0);
@@ -465,76 +545,99 @@ public class PackageDetailActivity extends AppCompatActivity {
             card.setBackgroundResource(R.drawable.bg_detail_card);
             card.setClickable(true);
             card.setFocusable(true);
-            int pad = dp(14);
-            card.setPadding(pad, pad, pad, pad);
 
             LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            cardParams.topMargin = dp(8);
+            cardParams.topMargin = dp(10);
             card.setLayoutParams(cardParams);
 
+            // Dual-tone Header Ribbon Banner (Navy Blue Left + Brand Magenta Right)
             LinearLayout headerRow = new LinearLayout(this);
             headerRow.setOrientation(LinearLayout.HORIZONTAL);
             headerRow.setGravity(Gravity.CENTER_VERTICAL);
 
-            TextView badge = new TextView(this);
-            badge.setText(getString(R.string.day_label_format, day.dayNumber)
-                    + " \u2022 " + getString(R.string.itinerary_daily));
-            badge.setTextSize(11);
-            badge.setTypeface(null, Typeface.BOLD);
-            badge.setTextColor(getResources().getColor(R.color.brand_magenta));
+            TextView dayLabel = new TextView(this);
+            dayLabel.setText(getString(R.string.day_label_format, day.dayNumber).toUpperCase());
+            dayLabel.setTextSize(13);
+            dayLabel.setTypeface(null, Typeface.BOLD);
+            dayLabel.setTextColor(Color.WHITE);
+            dayLabel.setBackgroundResource(R.drawable.bg_itinerary_day_pill);
+            dayLabel.setPadding(dp(14), dp(9), dp(14), dp(9));
 
-            View spacer = new View(this);
-            LinearLayout.LayoutParams sp = new LinearLayout.LayoutParams(0, 1, 1f);
-            spacer.setLayoutParams(sp);
+            LinearLayout titleContainer = new LinearLayout(this);
+            titleContainer.setOrientation(LinearLayout.HORIZONTAL);
+            titleContainer.setGravity(Gravity.CENTER_VERTICAL);
+            titleContainer.setBackgroundResource(R.drawable.bg_itinerary_title_pill);
+            titleContainer.setPadding(dp(14), dp(9), dp(14), dp(9));
+
+            LinearLayout.LayoutParams tcParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+            titleContainer.setLayoutParams(tcParams);
+
+            TextView titleText = new TextView(this);
+            String pillTextStr;
+            boolean showBodyTitle = false;
+
+            if (day.dateLabel != null && !day.dateLabel.trim().isEmpty()) {
+                pillTextStr = day.dateLabel.trim().toUpperCase();
+                if (day.title != null && !day.title.trim().isEmpty()) {
+                    showBodyTitle = true;
+                }
+            } else {
+                pillTextStr = (day.title != null && !day.title.trim().isEmpty())
+                        ? day.title.trim().toUpperCase()
+                        : getString(R.string.day_label_format, day.dayNumber).toUpperCase();
+            }
+
+            titleText.setText(pillTextStr);
+            titleText.setTextSize(13);
+            titleText.setTypeface(null, Typeface.BOLD);
+            titleText.setTextColor(Color.WHITE);
+
+            LinearLayout.LayoutParams ttParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+            titleText.setLayoutParams(ttParams);
 
             TextView chevron = new TextView(this);
             chevron.setText(isFirst ? "▲" : "▼");
             chevron.setTextSize(11);
-            chevron.setTextColor(getResources().getColor(R.color.brand_magenta));
+            chevron.setTypeface(null, Typeface.BOLD);
+            chevron.setTextColor(Color.WHITE);
 
-            headerRow.addView(badge);
-            headerRow.addView(spacer);
-            headerRow.addView(chevron);
+            titleContainer.addView(titleText);
+            titleContainer.addView(chevron);
 
-            TextView title = new TextView(this);
-            title.setText(day.title != null && !day.title.trim().isEmpty()
-                    ? day.title.trim()
-                    : getString(R.string.day_label_format, day.dayNumber));
-            title.setTextSize(14);
-            title.setTypeface(null, Typeface.BOLD);
-            title.setTextColor(getResources().getColor(R.color.text_dark));
-            LinearLayout.LayoutParams titleParams = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            titleParams.topMargin = dp(4);
-            title.setLayoutParams(titleParams);
+            headerRow.addView(dayLabel);
+            headerRow.addView(titleContainer);
 
-            TextView route = new TextView(this);
-            route.setText("📍 " + (day.routeText != null && !day.routeText.isEmpty() ? day.routeText : getString(R.string.package_fallback_destination)));
-            route.setTextSize(12);
-            route.setTextColor(getResources().getColor(R.color.text_gray));
-            LinearLayout.LayoutParams routeParams = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            routeParams.topMargin = dp(2);
-            route.setLayoutParams(routeParams);
+            card.addView(headerRow);
 
+            // Card Body Container
             LinearLayout body = new LinearLayout(this);
             body.setOrientation(LinearLayout.VERTICAL);
+            body.setPadding(dp(14), dp(12), dp(14), dp(14));
             body.setVisibility(isFirst ? View.VISIBLE : View.GONE);
-            LinearLayout.LayoutParams bodyParams = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            bodyParams.topMargin = dp(10);
-            body.setLayoutParams(bodyParams);
+
+            if (showBodyTitle) {
+                TextView itemTitle = new TextView(this);
+                itemTitle.setText(day.title.trim());
+                itemTitle.setTextSize(13);
+                itemTitle.setTypeface(null, Typeface.BOLD);
+                itemTitle.setTextColor(getResources().getColor(R.color.text_dark));
+                LinearLayout.LayoutParams itp = new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                itp.bottomMargin = dp(8);
+                itemTitle.setLayoutParams(itp);
+                body.addView(itemTitle);
+            }
 
             for (String activity : day.activities) {
                 TextView bullet = new TextView(this);
                 bullet.setText("• " + activity);
-                bullet.setTextSize(12);
+                bullet.setTextSize(13);
                 bullet.setTextColor(getResources().getColor(R.color.text_dark));
-                bullet.setLineSpacing(dp(1), 1.15f);
+                bullet.setLineSpacing(dp(2), 1.15f);
                 LinearLayout.LayoutParams bp = new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                bp.bottomMargin = dp(5);
+                bp.bottomMargin = dp(6);
                 bullet.setLayoutParams(bp);
                 body.addView(bullet);
             }
@@ -542,10 +645,10 @@ public class PackageDetailActivity extends AppCompatActivity {
             if (!day.hotelNote.isEmpty() || !day.mealNote.isEmpty()) {
                 TextView footer = new TextView(this);
                 StringBuilder sb = new StringBuilder();
-                if (!day.hotelNote.isEmpty()) sb.append("🏨 Hotel: ").append(day.hotelNote);
+                if (!day.hotelNote.isEmpty()) sb.append("Hotel: ").append(day.hotelNote);
                 if (!day.mealNote.isEmpty()) {
                     if (sb.length() > 0) sb.append("\n");
-                    sb.append("🍽️ Makan: ").append(day.mealNote);
+                    sb.append("Makan: ").append(day.mealNote);
                 }
                 footer.setText(sb.toString());
                 footer.setTextSize(11);
@@ -557,9 +660,6 @@ public class PackageDetailActivity extends AppCompatActivity {
                 body.addView(footer);
             }
 
-            card.addView(headerRow);
-            card.addView(title);
-            card.addView(route);
             card.addView(body);
 
             card.setOnClickListener(v -> {
@@ -569,7 +669,7 @@ public class PackageDetailActivity extends AppCompatActivity {
                 chevron.setText(isExpanded ? "▼" : "▲");
             });
 
-            container.addView(card);
+            targetContainer.addView(card);
         }
     }
 
@@ -693,7 +793,7 @@ public class PackageDetailActivity extends AppCompatActivity {
             card.setLayoutParams(cp);
 
             TextView title = new TextView(this);
-            title.setText("ℹ️ " + note.title);
+            title.setText(note.title);
             title.setTextSize(13);
             title.setTypeface(null, Typeface.BOLD);
             title.setTextColor(getResources().getColor(R.color.text_dark));

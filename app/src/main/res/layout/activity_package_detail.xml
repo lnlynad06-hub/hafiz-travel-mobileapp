@@ -138,7 +138,7 @@
         android:elevation="16dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:paddingHorizontal="18dp"
+        android:paddingHorizontal="16dp"
         android:paddingVertical="12dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
@@ -149,6 +149,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/detailBottomPriceLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/package_detail_price_from_label"
@@ -164,32 +165,64 @@
                 android:textStyle="bold"
                 tools:text="RM 11,500" />
 
+            <TextView
+                android:id="@+id/detailBottomPriceSublabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_muted"
+                android:textSize="10sp"
+                android:visibility="gone"
+                tools:text="per pax • Bilik Quad" />
+
         </LinearLayout>
 
-        <!-- WhatsApp CTA Button -->
+        <!-- Secondary Action: WhatsApp / Enquiry -->
         <LinearLayout
             android:id="@+id/detailWhatsappButton"
             android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:background="@drawable/bg_whatsapp_button"
+            android:layout_height="46dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_whatsapp_secondary_button"
             android:clickable="true"
             android:focusable="true"
-            android:gravity="center_vertical"
+            android:gravity="center"
             android:orientation="horizontal"
-            android:paddingHorizontal="20dp">
+            android:paddingHorizontal="12dp">
 
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginEnd="8dp"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginEnd="4dp"
                 android:src="@drawable/ic_whatsapp"
-                app:tint="@color/white"
+                app:tint="@color/brand_magenta"
                 tools:ignore="ContentDescription" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/package_whatsapp_enquiry"
+                android:text="@string/btn_ask_questions"
+                android:textColor="@color/text_dark"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <!-- Primary CTA: Direct Booking -->
+        <LinearLayout
+            android:id="@+id/detailBookButton"
+            android:layout_width="wrap_content"
+            android:layout_height="46dp"
+            android:background="@drawable/bg_booking_primary_button"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingHorizontal="18dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_book_now"
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 android:textStyle="bold" />

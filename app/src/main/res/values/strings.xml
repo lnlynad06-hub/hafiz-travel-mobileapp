@@ -702,11 +702,11 @@
     <string name="hotel_title_tour_extra">Additional Hotel</string>
     <string name="hotel_rating_fallback">Standard</string>
     <string name="share_package_via">Share Package Via</string>
-    <string name="share_price_from">💰 Price From: *%1$s*</string>
-    <string name="share_duration">⏱️ Duration: *%1$d Days %2$d Nights*</string>
-    <string name="share_cta">📲 Book or ask us</string>
-    <string name="package_badge_umrah">✨ UMRAH PACKAGE</string>
-    <string name="package_badge_tour">✈️ TOUR PACKAGE</string>
+    <string name="share_price_from">Price From: *%1$s*</string>
+    <string name="share_duration">Duration: *%1$d Days %2$d Nights*</string>
+    <string name="share_cta">Book or ask us</string>
+    <string name="package_badge_umrah">UMRAH PACKAGE</string>
+    <string name="package_badge_tour">TOUR PACKAGE</string>
     <string name="results_packages_format">%1$d packages</string>
     <string name="filter_slider_min_label">RM0 (Min)</string>
     <string name="filter_slider_max_label">RM20,000+ (Max)</string>
@@ -715,10 +715,10 @@
     <string name="promo_hero_kicker">MAKKAH &amp; MADINAH</string>
     <string name="promo_hero_title">School Holiday &amp; Syawal Umrah Package</string>
     <string name="promo_hero_price">From RM 7,990 • 12 Days 10 Nights</string>
-    <string name="google_review_summary">4.9 ★★★★★ (250+ Google Reviews)</string>
+    <string name="google_review_summary">4.9 (250+ Google Reviews)</string>
 
     <!-- Package detail badges (were hardcoded in layout) -->
-    <string name="package_vip_badge">✨ VIP FEATURED PACKAGE</string>
+    <string name="package_vip_badge">VIP FEATURED PACKAGE</string>
     <string name="package_whatsapp_enquiry">Ask on WhatsApp</string>
 
     <!-- Splash taglines (were hardcoded in layout) -->
@@ -742,5 +742,10 @@
     <string name="battery_now">Set Up Now</string>
     <string name="battery_later">Later</string>
     <string name="hijri_date_fallback">1 Rajab 1448H</string>
+
+    <string name="btn_book_now">BOOK NOW</string>
+    <string name="btn_ask_questions">Ask</string>
+    <string name="selected_room_label">Selected Room</string>
+    <string name="booking_flow_notice">Selected option: %1$s (%2$s). Proceed to enter passenger details.</string>
 
 </resources>

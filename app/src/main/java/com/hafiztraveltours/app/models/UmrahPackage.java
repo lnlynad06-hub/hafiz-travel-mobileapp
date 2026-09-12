@@ -142,12 +142,29 @@ public class UmrahPackage {
     @SerializedName("important_notes")
     public java.util.List<String> importantNotes;
 
+    @SerializedName("departures")
+    public java.util.List<DepartureItem> departures;
+
+    public static class DepartureItem implements java.io.Serializable {
+        @SerializedName("id")
+        public String id;
+
+        @SerializedName("departure_date")
+        public String departureDate;
+
+        @SerializedName("return_date")
+        public String returnDate;
+    }
+
     @SerializedName("itineraries")
     public java.util.List<ItineraryItem> itineraries;
 
     public static class ItineraryItem {
         @SerializedName("day_number")
         public int dayNumber;
+
+        @SerializedName("date_label")
+        public String dateLabel;
 
         @SerializedName("title")
         public String title;

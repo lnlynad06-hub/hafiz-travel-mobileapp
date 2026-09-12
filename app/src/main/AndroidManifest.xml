@@ -52,6 +52,10 @@
         <activity android:name=".ui.ChecklistUmrahActivity" />
         <activity android:name=".ui.AllPackagesActivity" android:exported="false" />
         <activity android:name=".ui.PackageDetailActivity" android:exported="false" />
+        <activity android:name=".ui.PassengerDetailsActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.BookingSummaryActivity" android:exported="false" />
+        <activity android:name=".ui.PaymentSelectionActivity" android:exported="false" />
+        <activity android:name=".ui.BookingSuccessActivity" android:exported="false" />
 
         <receiver android:name=".services.PrayerAlarmReceiver" android:exported="false" />
         <receiver android:name=".services.BootReceiver" android:exported="true">
