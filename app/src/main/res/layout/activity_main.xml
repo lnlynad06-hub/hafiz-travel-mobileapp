@@ -178,7 +178,8 @@
                 app:cardElevation="3dp"
                 app:cardBackgroundColor="@color/card_surface"
                 android:clickable="true"
-                android:focusable="true">
+                android:focusable="true"
+                android:visibility="gone">
 
                 <FrameLayout
                     android:layout_width="match_parent"

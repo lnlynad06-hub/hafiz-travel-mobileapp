@@ -540,18 +540,24 @@ public class MainActivity extends AppCompatActivity {
                         for (UmrahPackage p : homeData.popularUmrah) {
                             p.collectionName = "umrah_packages";
                             allPopularPackages.add(p);
-                            if (heroShowcaseList.size() < 5) heroShowcaseList.add(p);
                         }
                     }
                     if (homeData.popularTour != null) {
                         for (UmrahPackage p : homeData.popularTour) {
                             p.collectionName = "tour_packages";
                             allPopularPackages.add(p);
-                            if (heroShowcaseList.size() < 5) heroShowcaseList.add(p);
                         }
                     }
 
-                    startHeroShowcase();
+                    View heroShowcaseCard = findViewById(R.id.heroShowcaseCard);
+                    if (!heroShowcaseList.isEmpty()) {
+                        if (heroShowcaseCard != null) heroShowcaseCard.setVisibility(View.VISIBLE);
+                        startHeroShowcase();
+                    } else {
+                        if (heroShowcaseCard != null) heroShowcaseCard.setVisibility(View.GONE);
+                        stopHeroShowcase();
+                    }
+
                     recyclerView.setAdapter(new PackagePopularAdapter(MainActivity.this, allPopularPackages));
                 }
             }
@@ -564,7 +570,9 @@ public class MainActivity extends AppCompatActivity {
                     shimmer.setVisibility(View.GONE);
                 }
                 recyclerView.setVisibility(View.VISIBLE);
-                // Tiada sambungan API atau pelayan luar talian
+                View heroShowcaseCard = findViewById(R.id.heroShowcaseCard);
+                if (heroShowcaseCard != null) heroShowcaseCard.setVisibility(View.GONE);
+                stopHeroShowcase();
             }
         });
 
