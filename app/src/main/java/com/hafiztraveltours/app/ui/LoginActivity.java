@@ -249,11 +249,11 @@ public class LoginActivity extends AppCompatActivity {
                                         }
                                         SessionManager.getInstance(LoginActivity.this).saveAuthSession(token, user);
                                         saveRememberMePreference(email);
-                                        Toast.makeText(LoginActivity.this, "Log masuk Google berjaya! " + name, Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(LoginActivity.this, getString(R.string.login_google_success, name), Toast.LENGTH_SHORT).show();
                                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                         finish();
                                     } else {
-                                        String err = "Log masuk Google gagal. Sila cuba lagi.";
+                                        String err = getString(R.string.login_google_failed);
                                         if (response.body() != null && response.body().message != null) {
                                             err = response.body().message;
                                         }
@@ -265,13 +265,13 @@ public class LoginActivity extends AppCompatActivity {
                                 public void onFailure(Call<ApiResponse<AuthResponse>> call, Throwable t) {
                                     if (isFinishing() || isDestroyed()) return;
                                     setLoadingState(false);
-                                    Toast.makeText(LoginActivity.this, "Ralat sambungan: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                                    Toast.makeText(LoginActivity.this, getString(R.string.err_connection_detail, t.getMessage()), Toast.LENGTH_LONG).show();
                                 }
                             });
                 }
             } catch (ApiException e) {
                 setLoadingState(false);
-                Toast.makeText(this, "Google Sign-In: Code " + e.getStatusCode(), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.login_google_signin_failed, e.getStatusCode()), Toast.LENGTH_LONG).show();
             }
         }
     }

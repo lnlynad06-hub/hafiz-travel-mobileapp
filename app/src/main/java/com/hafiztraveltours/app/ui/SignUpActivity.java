@@ -501,11 +501,11 @@ public class SignUpActivity extends AppCompatActivity {
                                             user = new UserDto("1", name, email, "");
                                         }
                                         SessionManager.getInstance(SignUpActivity.this).saveAuthSession(token, user);
-                                        Toast.makeText(SignUpActivity.this, "Log masuk Google berjaya! " + name, Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(SignUpActivity.this, getString(R.string.login_google_success, name), Toast.LENGTH_SHORT).show();
                                         startActivity(new Intent(SignUpActivity.this, MainActivity.class));
                                         finish();
                                     } else {
-                                        String err = "Log masuk Google gagal. Sila cuba lagi.";
+                                        String err = getString(R.string.login_google_failed);
                                         if (response.body() != null && response.body().message != null) {
                                             err = response.body().message;
                                         }
@@ -517,13 +517,13 @@ public class SignUpActivity extends AppCompatActivity {
                                 public void onFailure(Call<ApiResponse<AuthResponse>> call, Throwable t) {
                                     if (isFinishing() || isDestroyed()) return;
                                     setLoadingState(false);
-                                    Toast.makeText(SignUpActivity.this, "Ralat sambungan: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                                    Toast.makeText(SignUpActivity.this, getString(R.string.err_connection_detail, t.getMessage()), Toast.LENGTH_LONG).show();
                                 }
                             });
                 }
             } catch (ApiException e) {
                 setLoadingState(false);
-                Toast.makeText(this, "Google Sign-In failed: Code " + e.getStatusCode(), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.login_google_signin_failed, e.getStatusCode()), Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -540,7 +540,7 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
         // Show quick Terms info
-        Toast.makeText(this, "Hafiz Travel & Tours Sdn Bhd - Privasi & Terma", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.privacy_terms_toast), Toast.LENGTH_SHORT).show();
     }
 
     private void updateActiveLanguageLabel() {

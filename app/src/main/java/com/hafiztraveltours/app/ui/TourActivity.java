@@ -194,7 +194,7 @@ public class TourActivity extends AppCompatActivity {
                 allTourMaster.clear();
                 popularPackages.clear();
                 applyFilterAndSearch();
-                Toast.makeText(TourActivity.this, "Gagal menyambung ke pelayan backend", Toast.LENGTH_SHORT).show();
+                Toast.makeText(TourActivity.this, getString(R.string.err_server_connection), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -243,7 +243,7 @@ public class TourActivity extends AppCompatActivity {
         emptyText.setVisibility(filteredResults.isEmpty() ? View.VISIBLE : View.GONE);
 
         if (tvTourResultsCount != null) {
-            String countText = filteredResults.size() + " " + (filteredResults.size() == 1 ? "Pakej" : "Pakej");
+            String countText = getString(R.string.results_packages_format, filteredResults.size());
             tvTourResultsCount.setText(countText);
         }
 

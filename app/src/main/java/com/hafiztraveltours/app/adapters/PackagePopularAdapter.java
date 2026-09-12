@@ -69,8 +69,11 @@ public class PackagePopularAdapter extends RecyclerView.Adapter<PackagePopularAd
                 R.string.package_duration_price, pkg.durationDays, pkg.nightsCount, cleanPrice));
 
         if (holder.hotelDistance != null) {
-            String hotelDist = pkg.getHotelDistanceDisplay();
+            String hotelDist = pkg.getRawHotelDistance();
             if (hotelDist != null && !hotelDist.trim().isEmpty()) {
+                if (!hotelDist.toLowerCase().contains("masjid")) {
+                    hotelDist = context.getString(R.string.hotel_distance_to, hotelDist);
+                }
                 holder.hotelDistance.setVisibility(View.VISIBLE);
                 holder.hotelDistance.setText(hotelDist);
             } else {

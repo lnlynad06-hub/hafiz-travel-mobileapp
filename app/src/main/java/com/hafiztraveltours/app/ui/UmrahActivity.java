@@ -182,7 +182,7 @@ public class UmrahActivity extends AppCompatActivity {
                 khasPackages.clear();
                 ziarahPackages.clear();
                 applyFilterAndSearch();
-                Toast.makeText(UmrahActivity.this, "Gagal menyambung ke pelayan backend", Toast.LENGTH_SHORT).show();
+                Toast.makeText(UmrahActivity.this, getString(R.string.err_server_connection), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -231,7 +231,7 @@ public class UmrahActivity extends AppCompatActivity {
         emptyText.setVisibility(filteredResults.isEmpty() ? View.VISIBLE : View.GONE);
 
         if (tvUmrahResultsCount != null) {
-            String countText = filteredResults.size() + " " + (filteredResults.size() == 1 ? "Pakej" : "Pakej");
+            String countText = getString(R.string.results_packages_format, filteredResults.size());
             tvUmrahResultsCount.setText(countText);
         }
 

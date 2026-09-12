@@ -189,42 +189,35 @@ public class UmrahPackage {
                 combined.contains("syawal");
     }
 
-    public String getHotelDistanceDisplay() {
-        if (hotelMakkahDistance != null && !hotelMakkahDistance.trim().isEmpty()) {
-            String dist = hotelMakkahDistance.trim();
-            if (!dist.toLowerCase().contains("masjid")) {
-                return dist + " ke Masjidil Haram";
+    /**
+     * Raw hotel distance as sent by the API (e.g. "50m"), or null when absent.
+     * Callers append the localized suffix via R.string.hotel_distance_to,
+     * unless the value already mentions a mosque.
+     */
+    public String getRawHotelDistance() {
+        String[] candidates = {hotelMakkahDistance, makkahHotelDistance, hotelDistance};
+        for (String raw : candidates) {
+            if (raw != null && !raw.trim().isEmpty()) {
+                return raw.trim();
             }
-            return dist;
-        }
-        if (makkahHotelDistance != null && !makkahHotelDistance.trim().isEmpty()) {
-            String dist = makkahHotelDistance.trim();
-            if (!dist.toLowerCase().contains("masjid")) {
-                return dist + " ke Masjidil Haram";
-            }
-            return dist;
-        }
-        if (hotelDistance != null && !hotelDistance.trim().isEmpty()) {
-            String dist = hotelDistance.trim();
-            if (!dist.toLowerCase().contains("masjid")) {
-                return dist + " ke Masjidil Haram";
-            }
-            return dist;
         }
         return null;
+    }
+
+    /**
+     * @deprecated Use {@link #getRawHotelDistance()} plus
+     * R.string.hotel_distance_to at the call site instead.
+     */
+    @Deprecated
+    public String getHotelDistanceDisplay() {
+        return getRawHotelDistance();
     }
 
     public String getDurationFormatted() {
         if (durationFormatted != null && !durationFormatted.trim().isEmpty()) {
             return durationFormatted;
         }
-        if (nightsCount > 0) {
-            return (nightsCount + 2) + " Hari " + nightsCount + " Malam";
-        }
-        if (durationDays > 0) {
-            return durationDays + " Hari";
-        }
-        return "Pakej Penuh";
+        return null;
     }
 
     public UmrahPackage() {}
@@ -324,5 +317,35 @@ public class UmrahPackage {
         return matchesCategory(criteria.category) &&
                 matchesDestination(criteria.destination) &&
                 matchesPriceRange(criteria.minPrice, criteria.maxPrice);
+    }
+    /**
+     * Returns accommodation labels based on package type.
+     * For Umrah packages: "Penginapan Makkah", "Penginapan Madinah", optional "Penginapan Taif".
+     * For Tour packages: "Penginapan Utama", "Penginapan Kedua", optional "Penginapan Tambahan".
+     */
+    public java.util.List<String> getAccommodationLabels() {
+        java.util.List<String> labels = new java.util.ArrayList<>();
+        if (isUmrah()) {
+            if (hotelMakkahName != null && !hotelMakkahName.trim().isEmpty()) {
+                labels.add("Penginapan Makkah");
+            }
+            if (hotelMadinahName != null && !hotelMadinahName.trim().isEmpty()) {
+                labels.add("Penginapan Madinah");
+            }
+            if (nightsTaif != null && nightsTaif > 0) {
+                labels.add("Penginapan Taif");
+            }
+        } else {
+            if (hotelMakkahName != null && !hotelMakkahName.trim().isEmpty()) {
+                labels.add("Penginapan Utama");
+            }
+            if (hotelMadinahName != null && !hotelMadinahName.trim().isEmpty()) {
+                labels.add("Penginapan Kedua");
+            }
+            if (hotelTaifName != null && !hotelTaifName.trim().isEmpty()) {
+                labels.add("Penginapan Tambahan");
+            }
+        }
+        return labels;
     }
 }

@@ -371,7 +371,7 @@
                         android:paddingEnd="8dp"
                         android:paddingTop="3dp"
                         android:paddingBottom="3dp"
-                        android:text="✗ 8+ chars"
+                        android:text="@string/password_tip_length"
                         android:textSize="10sp"
                         android:textColor="#E53935" />
 
@@ -385,7 +385,7 @@
                         android:paddingEnd="8dp"
                         android:paddingTop="3dp"
                         android:paddingBottom="3dp"
-                        android:text="✗ 0–9"
+                        android:text="@string/password_tip_number"
                         android:textSize="10sp"
                         android:textColor="#E53935" />
 
@@ -398,7 +398,7 @@
                         android:paddingEnd="8dp"
                         android:paddingTop="3dp"
                         android:paddingBottom="3dp"
-                        android:text="✗ !@#$"
+                        android:text="@string/password_tip_symbol"
                         android:textSize="10sp"
                         android:textColor="#E53935" />
 

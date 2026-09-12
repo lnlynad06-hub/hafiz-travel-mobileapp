@@ -42,10 +42,13 @@ public class PackageDetail {
     public List<PriceOption> priceOptions = new ArrayList<>();
     public List<String> galleryImageUrls = new ArrayList<>();
     public String whatsappMessage;
+    public boolean isUmrah; // set from UmrahPackage.isUmrah() during parsing
 
     public static class NightBreakdown {
-        public String city;
+        public String city;          // set by Activity from getString() using slot
         public int nights;
+        public int slot;             // 0=Makkah/Hotel1, 1=Madinah/Hotel2, 2=Taif/Hotel3
+        public String destinationHint; // raw first destination word for tour packages
         public NightBreakdown(String city, int nights) {
             this.city = city;
             this.nights = nights;
@@ -53,13 +56,17 @@ public class PackageDetail {
     }
 
     public static class HotelInfo {
-        public String type; // "mekah" | "madinah" | "flight" | "hotel"
-        public String title;
+        public String type; // "hotel" | "flight"
+        public String title;  // built lazily; overridden by Activity with getString()
         public String subtitle;
-        public HotelInfo(String type, String title, String subtitle) {
+        public int slot;       // 0=Hotel1/Makkah, 1=Hotel2/Madinah, 2=Hotel3/Taif, -1=flight
+        public String rawRating; // raw rating/star string from server (e.g. "5 Stars")
+        public HotelInfo(String type, int slot, String rawRating, String subtitle) {
             this.type = type;
-            this.title = title;
+            this.slot = slot;
+            this.rawRating = rawRating != null ? rawRating : "";
             this.subtitle = subtitle;
+            this.title = ""; // set by Activity
         }
     }
 
@@ -104,69 +111,71 @@ public class PackageDetail {
         d.imageUrl = pkg.imageUrl != null && !pkg.imageUrl.trim().isEmpty() ? pkg.imageUrl : "";
         d.posterImageUrl = d.imageUrl;
         d.durationFormatted = pkg.getDurationFormatted();
-        d.whatsappMessage = "Salam, saya berminat untuk mengetahui lebih lanjut mengenai pakej " + d.name + " (" + d.price + "). Boleh kongsikan jadual dan kekosongan terkini?";
+        // WhatsApp text is built by the Activity with localized resources.
+        d.whatsappMessage = null;
 
         boolean isUmrah = pkg.isUmrah();
+        d.isUmrah = isUmrah;
 
-        // 1. Ringkasan Penginapan (Nights Breakdown)
+        // 1. Nights Breakdown — city labels use slot index, translated by Activity
+        // slot 0=Makkah/Hotel1, 1=Madinah/Hotel2, 2=Taif/Hotel3
         if (pkg.nightsMakkah != null && pkg.nightsMakkah > 0) {
-            String city1 = isUmrah ? "Makkah" : (pkg.destination != null && !pkg.destination.isEmpty() ? pkg.destination.split("[,&/-]")[0].trim() : "Bandar Utama");
-            d.nightsBreakdown.add(new NightBreakdown(city1, pkg.nightsMakkah));
+            NightBreakdown nb = new NightBreakdown(null, pkg.nightsMakkah);
+            nb.slot = 0;
+            nb.destinationHint = (pkg.destination != null && !pkg.destination.isEmpty())
+                    ? pkg.destination.split("[,&/-]")[0].trim() : "";
+            d.nightsBreakdown.add(nb);
         }
         if (pkg.nightsTaif != null && pkg.nightsTaif > 0) {
-            d.nightsBreakdown.add(new NightBreakdown("Taif", pkg.nightsTaif));
+            NightBreakdown nb = new NightBreakdown(null, pkg.nightsTaif);
+            nb.slot = 2;
+            d.nightsBreakdown.add(nb);
         }
         if (pkg.nightsMadinah != null && pkg.nightsMadinah > 0) {
-            String city2 = isUmrah ? "Madinah" : "Destinasi Seterusnya";
-            d.nightsBreakdown.add(new NightBreakdown(city2, pkg.nightsMadinah));
+            NightBreakdown nb = new NightBreakdown(null, pkg.nightsMadinah);
+            nb.slot = 1;
+            d.nightsBreakdown.add(nb);
         }
 
-        // 2. Hotel & Penerbangan
+        // 2. Hotel info — title built by Activity using getString() for locale support
         if (pkg.hotelMakkahName != null && !pkg.hotelMakkahName.trim().isEmpty()) {
-            String star = (pkg.hotelMakkahRating != null && !pkg.hotelMakkahRating.trim().isEmpty())
-                    ? pkg.hotelMakkahRating
-                    : "Hotel Pilihan";
-            String title = (isUmrah ? "Hotel Makkah (" : "Penginapan Utama (") + star + ")";
+            String rating = (pkg.hotelMakkahRating != null && !pkg.hotelMakkahRating.trim().isEmpty())
+                    ? pkg.hotelMakkahRating : "";
             String subtitle = pkg.hotelMakkahName.trim() +
                     ((pkg.hotelMakkahDistance != null && !pkg.hotelMakkahDistance.trim().isEmpty())
-                            ? " (" + pkg.hotelMakkahDistance.trim() + ")"
-                            : "");
-            d.hotels.add(new HotelInfo("hotel", title, subtitle));
+                            ? " (" + pkg.hotelMakkahDistance.trim() + ")" : "");
+            d.hotels.add(new HotelInfo("hotel", 0, rating, subtitle));
         }
 
         if (pkg.hotelMadinahName != null && !pkg.hotelMadinahName.trim().isEmpty()) {
-            String star = (pkg.hotelMadinahRating != null && !pkg.hotelMadinahRating.trim().isEmpty())
-                    ? pkg.hotelMadinahRating
-                    : "Hotel Pilihan";
-            String title = (isUmrah ? "Hotel Madinah (" : "Penginapan Tambahan (") + star + ")";
+            String rating = (pkg.hotelMadinahRating != null && !pkg.hotelMadinahRating.trim().isEmpty())
+                    ? pkg.hotelMadinahRating : "";
             String subtitle = pkg.hotelMadinahName.trim() +
                     ((pkg.hotelMadinahDistance != null && !pkg.hotelMadinahDistance.trim().isEmpty())
-                            ? " (" + pkg.hotelMadinahDistance.trim() + ")"
-                            : "");
-            d.hotels.add(new HotelInfo("hotel", title, subtitle));
+                            ? " (" + pkg.hotelMadinahDistance.trim() + ")" : "");
+            d.hotels.add(new HotelInfo("hotel", 1, rating, subtitle));
         }
 
         if (pkg.hotelTaifName != null && !pkg.hotelTaifName.trim().isEmpty()) {
-            String star = (pkg.hotelTaifRating != null && !pkg.hotelTaifRating.trim().isEmpty())
-                    ? pkg.hotelTaifRating
-                    : "Hotel Pilihan";
-            String title = "Penginapan Taif (" + star + ")";
+            String rating = (pkg.hotelTaifRating != null && !pkg.hotelTaifRating.trim().isEmpty())
+                    ? pkg.hotelTaifRating : "";
             String subtitle = pkg.hotelTaifName.trim() +
                     ((pkg.hotelTaifDistance != null && !pkg.hotelTaifDistance.trim().isEmpty())
-                            ? " (" + pkg.hotelTaifDistance.trim() + ")"
-                            : "");
-            d.hotels.add(new HotelInfo("hotel", title, subtitle));
+                            ? " (" + pkg.hotelTaifDistance.trim() + ")" : "");
+            d.hotels.add(new HotelInfo("hotel", 2, rating, subtitle));
         }
 
         if (pkg.airlineName != null && !pkg.airlineName.trim().isEmpty()) {
+            // Flight type & route are raw server data — not translated here
             String flightType = (pkg.flightType != null && !pkg.flightType.trim().isEmpty())
-                    ? pkg.flightType
-                    : "Penerbangan";
-            String title = flightType + " (" + pkg.airlineName.trim() + ")";
-            String subtitle = (pkg.flightRoute != null && !pkg.flightRoute.trim().isEmpty())
-                    ? pkg.flightRoute.trim()
-                    : "Penerbangan pergi dan balik";
-            d.hotels.add(new HotelInfo("flight", title, subtitle));
+                    ? pkg.flightType : null; // null → Activity uses getString(flight_type_fallback)
+            String flightRoute = (pkg.flightRoute != null && !pkg.flightRoute.trim().isEmpty())
+                    ? pkg.flightRoute.trim() : null; // null → Activity uses getString(flight_route_fallback)
+            // Store flightType as rawRating slot, route as subtitle (null handled in Activity)
+            String subtitle = flightRoute != null ? flightRoute : "";
+            HotelInfo fi = new HotelInfo("flight", -1, flightType != null ? flightType : "", subtitle);
+            fi.rawRating = flightType != null ? flightType : ""; // reuse as flightType
+            d.hotels.add(fi);
         }
 
         // 3. Jadual Perjalanan (Itinerary)
@@ -174,9 +183,11 @@ public class PackageDetail {
             for (UmrahPackage.ItineraryItem item : pkg.itineraries) {
                 ItineraryDay day = new ItineraryDay();
                 day.dayNumber = item.dayNumber;
-                day.dayLabel = "Hari " + item.dayNumber;
-                day.tag = "Jadual Harian";
-                day.title = item.title != null && !item.title.trim().isEmpty() ? item.title.trim() : ("Hari " + item.dayNumber);
+                // Localized by the Activity via R.string.day_label_format /
+                // R.string.itinerary_daily (dayNumber is the locale-neutral key).
+                day.dayLabel = null;
+                day.tag = null;
+                day.title = item.title != null && !item.title.trim().isEmpty() ? item.title.trim() : null;
                 day.routeText = pkg.destination != null ? pkg.destination : "";
 
                 if (item.description != null && !item.description.trim().isEmpty()) {

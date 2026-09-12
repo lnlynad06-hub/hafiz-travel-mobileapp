@@ -80,7 +80,7 @@ public class PackageDetailActivity extends AppCompatActivity {
         if (collection == null) collection = "umrah_packages";
 
         if (packageId == null) {
-            Toast.makeText(this, "Pakej tidak dijumpai", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.err_package_not_found), Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -99,7 +99,7 @@ public class PackageDetailActivity extends AppCompatActivity {
                     detail = PackageDetail.fromUmrahPackage(rawPackage);
                     renderAll();
                 } else {
-                    Toast.makeText(PackageDetailActivity.this, "Pakej tidak dijumpai", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PackageDetailActivity.this, getString(R.string.err_package_not_found), Toast.LENGTH_SHORT).show();
                     finish();
                 }
             }
@@ -107,7 +107,7 @@ public class PackageDetailActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<ApiResponse<UmrahPackage>> call, Throwable t) {
                 if (isFinishing() || isDestroyed()) return;
-                Toast.makeText(PackageDetailActivity.this, "Gagal memuatkan data pakej", Toast.LENGTH_SHORT).show();
+                Toast.makeText(PackageDetailActivity.this, getString(R.string.err_package_load_failed), Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
@@ -130,7 +130,7 @@ public class PackageDetailActivity extends AppCompatActivity {
         // 2. Category badge on Hero
         if (heroCategoryBadge != null) {
             boolean isUmrah = rawPackage != null ? rawPackage.isUmrah() : detail.name.toLowerCase().contains("umrah");
-            heroCategoryBadge.setText(isUmrah ? "✨ PAKEJ UMRAH" : "✈️ PAKEJ PELANCONGAN");
+            heroCategoryBadge.setText(getString(isUmrah ? R.string.package_badge_umrah : R.string.package_badge_tour));
         }
 
         // 3. Top Actions (Favorite & Share)
@@ -172,12 +172,12 @@ public class PackageDetailActivity extends AppCompatActivity {
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("text/plain");
                 String shareText = "🕋 *" + detail.name + "*\n" +
-                        "💰 Harga Dari: *" + detail.price + "*\n" +
-                        (detail.durationDays > 0 ? ("⏱️ Tempoh: *" + detail.durationDays + " Hari " + detail.nightsCount + " Malam*\n\n") : "\n") +
+                        getString(R.string.share_price_from, detail.price) + "\n" +
+                        (detail.durationDays > 0 ? (getString(R.string.share_duration, detail.durationDays, detail.nightsCount) + "\n\n") : "\n") +
                         (detail.summaryLine != null && !detail.summaryLine.isEmpty() ? (detail.summaryLine + "\n\n") : "") +
-                        "📲 Tempah atau tanya lanjut: https://wa.me/" + WHATSAPP_PHONE_NUMBER;
+                        getString(R.string.share_cta) + ": https://wa.me/" + WHATSAPP_PHONE_NUMBER;
                 shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
-                startActivity(Intent.createChooser(shareIntent, "Kongsi Pakej Melalui"));
+                startActivity(Intent.createChooser(shareIntent, getString(R.string.share_package_via)));
             });
         }
     }
@@ -224,7 +224,7 @@ public class PackageDetailActivity extends AppCompatActivity {
         row.setLayoutParams(rowParams);
 
         if (detail.durationDays > 0) {
-            row.addView(buildSpecChip("⏱️ " + detail.durationDays + " Hari " + detail.nightsCount + " Malam"));
+            row.addView(buildSpecChip("⏱️ " + getString(R.string.duration_days_nights, detail.durationDays, detail.nightsCount)));
         }
 
         if (rawPackage != null && rawPackage.airlineName != null && !rawPackage.airlineName.isEmpty()) {
@@ -259,7 +259,7 @@ public class PackageDetailActivity extends AppCompatActivity {
     private void addNightsBreakdownSection() {
         if (detail.nightsBreakdown.isEmpty()) return;
 
-        container.addView(sectionHeading("Ringkasan Penginapan"));
+        container.addView(sectionHeading(getString(R.string.detail_section_accommodation_summary)));
 
         LinearLayout row = new LinearLayout(this);
         row.setOrientation(LinearLayout.HORIZONTAL);
@@ -269,6 +269,23 @@ public class PackageDetailActivity extends AppCompatActivity {
         row.setLayoutParams(rowParams);
 
         for (PackageDetail.NightBreakdown nb : detail.nightsBreakdown) {
+            // Build city label from slot
+            String cityLabel;
+            if (detail.isUmrah) {
+                if (nb.slot == 0) cityLabel = getString(R.string.nights_label_makkah);
+                else if (nb.slot == 1) cityLabel = getString(R.string.nights_label_madinah);
+                else cityLabel = getString(R.string.nights_label_taif);
+            } else {
+                if (nb.slot == 0) {
+                    cityLabel = (nb.destinationHint != null && !nb.destinationHint.isEmpty())
+                            ? nb.destinationHint : getString(R.string.nights_label_hotel1);
+                } else if (nb.slot == 1) {
+                    cityLabel = getString(R.string.nights_label_hotel2);
+                } else {
+                    cityLabel = getString(R.string.nights_label_hotel3);
+                }
+            }
+
             LinearLayout card = new LinearLayout(this);
             card.setOrientation(LinearLayout.VERTICAL);
             card.setGravity(Gravity.CENTER);
@@ -281,13 +298,13 @@ public class PackageDetailActivity extends AppCompatActivity {
             card.setLayoutParams(cp);
 
             TextView count = new TextView(this);
-            count.setText(nb.nights + " Malam");
+            count.setText(nb.nights + " " + getString(R.string.nights_unit));
             count.setTextSize(15);
             count.setTypeface(null, Typeface.BOLD);
             count.setTextColor(getResources().getColor(R.color.brand_magenta));
 
             TextView city = new TextView(this);
-            city.setText(nb.city);
+            city.setText(cityLabel);
             city.setTextSize(12);
             city.setTextColor(getResources().getColor(R.color.text_gray));
             city.setTypeface(null, Typeface.NORMAL);
@@ -300,14 +317,37 @@ public class PackageDetailActivity extends AppCompatActivity {
     }
 
     private void addHotelsSection() {
-        container.addView(sectionHeading("Hotel & Penerbangan"));
+        boolean isUmrah = detail.isUmrah;
+        container.addView(sectionHeading(getString(
+                isUmrah ? R.string.detail_section_hotels_umrah : R.string.detail_section_hotels_tour)));
 
         if (detail.hotels.isEmpty()) {
-            container.addView(buildEmptyNoticeCard("Maklumat hotel & penerbangan akan dikemaskini kemudian."));
+            container.addView(buildEmptyNoticeCard(getString(R.string.detail_hotels_empty_notice)));
             return;
         }
 
         for (PackageDetail.HotelInfo hotel : detail.hotels) {
+            // Build translated title from slot
+            String hotelTitle;
+            if (hotel.slot == -1) {
+                // Flight card
+                String flightType = !hotel.rawRating.isEmpty()
+                        ? hotel.rawRating
+                        : getString(R.string.flight_type_fallback);
+                hotelTitle = flightType + " (" + (hotel.subtitle.isEmpty()
+                        ? getString(R.string.flight_route_fallback) : "") + ")";
+                if (hotel.subtitle.isEmpty()) hotel.subtitle = getString(R.string.flight_route_fallback);
+            } else {
+                int[] umrahKeys = {R.string.hotel_title_umrah_makkah, R.string.hotel_title_umrah_madinah, R.string.hotel_title_umrah_taif};
+                int[] tourKeys  = {R.string.hotel_title_tour_hotel1, R.string.hotel_title_tour_hotel2, R.string.hotel_title_tour_extra};
+                int slot = Math.min(hotel.slot, 2);
+                String base = getString(isUmrah ? umrahKeys[slot] : tourKeys[slot]);
+                String star = !hotel.rawRating.isEmpty()
+                        ? hotel.rawRating
+                        : getString(R.string.hotel_rating_fallback);
+                hotelTitle = base + " (" + star + ")";
+            }
+
             LinearLayout card = new LinearLayout(this);
             card.setOrientation(LinearLayout.VERTICAL);
             card.setBackgroundResource(R.drawable.bg_detail_card);
@@ -320,7 +360,7 @@ public class PackageDetailActivity extends AppCompatActivity {
             card.setLayoutParams(p);
 
             TextView title = new TextView(this);
-            title.setText(hotel.title);
+            title.setText(hotelTitle);
             title.setTextSize(14);
             title.setTypeface(null, Typeface.BOLD);
             title.setTextColor(getResources().getColor(R.color.text_dark));
@@ -344,7 +384,7 @@ public class PackageDetailActivity extends AppCompatActivity {
     private void addPriceOptionsSection() {
         if (detail.priceOptions.isEmpty()) return;
 
-        container.addView(sectionHeading("Pilihan Bilik & Harga"));
+        container.addView(sectionHeading(getString(R.string.detail_section_room_pricing)));
 
         HorizontalScrollView scroll = new HorizontalScrollView(this);
         scroll.setScrollBarSize(0);
@@ -384,7 +424,7 @@ public class PackageDetailActivity extends AppCompatActivity {
             priceText.setLayoutParams(pp);
 
             TextView perPax = new TextView(this);
-            perPax.setText("/ seorang");
+            perPax.setText(getString(R.string.detail_per_pax));
             perPax.setTextSize(11);
             perPax.setTextColor(getResources().getColor(R.color.text_gray));
 
@@ -399,15 +439,15 @@ public class PackageDetailActivity extends AppCompatActivity {
     }
 
     private void addItinerarySection() {
-        container.addView(sectionHeading("Jadual Perjalanan (Itinerary)"));
+        container.addView(sectionHeading(getString(R.string.detail_section_itinerary)));
 
         if (detail.itinerary.isEmpty()) {
-            container.addView(buildEmptyNoticeCard("Jadual perjalanan terperinci akan dikemaskini kemudian."));
+            container.addView(buildEmptyNoticeCard(getString(R.string.detail_itinerary_empty_notice)));
             return;
         }
 
         TextView hint = new TextView(this);
-        hint.setText("Tekan mana-mana hari untuk melihat aktiviti terperinci.");
+        hint.setText(getString(R.string.detail_itinerary_hint));
         hint.setTextSize(11);
         hint.setTextColor(getResources().getColor(R.color.text_gray));
         LinearLayout.LayoutParams hintParams = new LinearLayout.LayoutParams(
@@ -438,7 +478,8 @@ public class PackageDetailActivity extends AppCompatActivity {
             headerRow.setGravity(Gravity.CENTER_VERTICAL);
 
             TextView badge = new TextView(this);
-            badge.setText(day.dayLabel + " \u2022 " + day.tag);
+            badge.setText(getString(R.string.day_label_format, day.dayNumber)
+                    + " \u2022 " + getString(R.string.itinerary_daily));
             badge.setTextSize(11);
             badge.setTypeface(null, Typeface.BOLD);
             badge.setTextColor(getResources().getColor(R.color.brand_magenta));
@@ -457,7 +498,9 @@ public class PackageDetailActivity extends AppCompatActivity {
             headerRow.addView(chevron);
 
             TextView title = new TextView(this);
-            title.setText(day.title);
+            title.setText(day.title != null && !day.title.trim().isEmpty()
+                    ? day.title.trim()
+                    : getString(R.string.day_label_format, day.dayNumber));
             title.setTextSize(14);
             title.setTypeface(null, Typeface.BOLD);
             title.setTextColor(getResources().getColor(R.color.text_dark));
@@ -467,7 +510,7 @@ public class PackageDetailActivity extends AppCompatActivity {
             title.setLayoutParams(titleParams);
 
             TextView route = new TextView(this);
-            route.setText("📍 " + (day.routeText != null && !day.routeText.isEmpty() ? day.routeText : "Destinasi Perjalanan"));
+            route.setText("📍 " + (day.routeText != null && !day.routeText.isEmpty() ? day.routeText : getString(R.string.package_fallback_destination)));
             route.setTextSize(12);
             route.setTextColor(getResources().getColor(R.color.text_gray));
             LinearLayout.LayoutParams routeParams = new LinearLayout.LayoutParams(
@@ -535,7 +578,7 @@ public class PackageDetailActivity extends AppCompatActivity {
             return;
         }
 
-        container.addView(sectionHeading("Pakej Termasuk & Tidak Termasuk"));
+        container.addView(sectionHeading(getString(R.string.detail_section_inclusions)));
 
         LinearLayout card = new LinearLayout(this);
         card.setOrientation(LinearLayout.VERTICAL);
@@ -548,7 +591,7 @@ public class PackageDetailActivity extends AppCompatActivity {
 
         if (!detail.included.isEmpty()) {
             TextView incHeading = new TextView(this);
-            incHeading.setText("✅ Termasuk Dalam Pakej:");
+            incHeading.setText(getString(R.string.detail_included_heading));
             incHeading.setTextSize(13);
             incHeading.setTypeface(null, Typeface.BOLD);
             incHeading.setTextColor(Color.parseColor("#2E7D32"));
@@ -570,7 +613,7 @@ public class PackageDetailActivity extends AppCompatActivity {
 
         if (!detail.excluded.isEmpty()) {
             TextView excHeading = new TextView(this);
-            excHeading.setText("❌ Tidak Termasuk:");
+            excHeading.setText(getString(R.string.detail_excluded_heading));
             excHeading.setTextSize(13);
             excHeading.setTypeface(null, Typeface.BOLD);
             excHeading.setTextColor(Color.parseColor("#C62828"));
@@ -600,7 +643,7 @@ public class PackageDetailActivity extends AppCompatActivity {
     private void addPackingGuideSection() {
         if (detail.packingSummer.isEmpty()) return;
 
-        container.addView(sectionHeading("Panduan & Senarai Keperluan"));
+        container.addView(sectionHeading(getString(R.string.detail_section_packing)));
 
         LinearLayout card = new LinearLayout(this);
         card.setOrientation(LinearLayout.VERTICAL);
@@ -612,7 +655,7 @@ public class PackageDetailActivity extends AppCompatActivity {
         card.setLayoutParams(cp);
 
         TextView heading = new TextView(this);
-        heading.setText("🎒 Barang Wajib Dibawa:");
+        heading.setText(getString(R.string.detail_packing_heading));
         heading.setTextSize(13);
         heading.setTypeface(null, Typeface.BOLD);
         heading.setTextColor(getResources().getColor(R.color.brand_magenta));
@@ -637,7 +680,7 @@ public class PackageDetailActivity extends AppCompatActivity {
     private void addImportantNotesSection() {
         if (detail.importantNotes.isEmpty()) return;
 
-        container.addView(sectionHeading("Nota Penting & Syarat"));
+        container.addView(sectionHeading(getString(R.string.detail_section_notes)));
 
         for (PackageDetail.ImportantNote note : detail.importantNotes) {
             LinearLayout card = new LinearLayout(this);
@@ -676,7 +719,7 @@ public class PackageDetailActivity extends AppCompatActivity {
     private void addGallerySection() {
         if (detail.galleryImageUrls.isEmpty()) return;
 
-        container.addView(sectionHeading("Galeri Foto"));
+        container.addView(sectionHeading(getString(R.string.detail_section_gallery)));
 
         HorizontalScrollView scroll = new HorizontalScrollView(this);
         scroll.setScrollBarSize(0);
@@ -762,16 +805,17 @@ public class PackageDetailActivity extends AppCompatActivity {
     }
 
     private void openWhatsAppForPackage() {
-        String message = (detail != null && detail.whatsappMessage != null && !detail.whatsappMessage.isEmpty())
-                ? detail.whatsappMessage
-                : "Salam, saya berminat dengan pakej " + (detail != null ? detail.name : "");
+        String pkgName = (detail != null && detail.name != null && !detail.name.trim().isEmpty())
+                ? detail.name.trim()
+                : getString(R.string.app_name);
+        String message = getString(R.string.package_detail_whatsapp_default_message, pkgName);
 
         try {
             Uri uri = Uri.parse("https://wa.me/" + WHATSAPP_PHONE_NUMBER
                     + "?text=" + Uri.encode(message));
             startActivity(new Intent(Intent.ACTION_VIEW, uri));
         } catch (Exception e) {
-            Toast.makeText(this, "WhatsApp tidak dijumpai", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.error_whatsapp_not_found), Toast.LENGTH_SHORT).show();
         }
     }
 

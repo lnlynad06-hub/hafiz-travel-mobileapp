@@ -48,7 +48,7 @@ public class HubungiKamiActivity extends AppCompatActivity {
                 Uri mapUri = Uri.parse("geo:0,0?q=" + Uri.encode(ADDRESS));
                 startActivity(new Intent(Intent.ACTION_VIEW, mapUri));
             } catch (Exception e) {
-                Toast.makeText(this, "Tidak dapat membuka peta", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.err_open_map), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -56,7 +56,7 @@ public class HubungiKamiActivity extends AppCompatActivity {
             try {
                 startActivity(new Intent(Intent.ACTION_DIAL, Uri.parse(PHONE_DIAL_URI)));
             } catch (Exception e) {
-                Toast.makeText(this, "Tidak dapat membuat panggilan", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.err_open_call), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -66,7 +66,7 @@ public class HubungiKamiActivity extends AppCompatActivity {
                 intent.setData(Uri.parse("mailto:" + EMAIL_ADDRESS));
                 startActivity(intent);
             } catch (Exception e) {
-                Toast.makeText(this, "Tidak dapat membuka emel", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.err_open_email), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -82,7 +82,7 @@ public class HubungiKamiActivity extends AppCompatActivity {
         try {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
         } catch (Exception e) {
-            Toast.makeText(this, "Tidak dapat membuka pautan", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.err_open_link), Toast.LENGTH_SHORT).show();
         }
     }
 }

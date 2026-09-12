@@ -170,7 +170,7 @@ public class AllPackagesActivity extends AppCompatActivity {
                 allUmrah.clear();
                 allTour.clear();
                 popularCombined.clear();
-                Toast.makeText(AllPackagesActivity.this, "Gagal menyambung ke pelayan backend", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AllPackagesActivity.this, getString(R.string.err_server_connection), Toast.LENGTH_SHORT).show();
 
                 if (getIntent().getBooleanExtra(EXTRA_OPEN_FILTER, false)) {
                     openFilterBottomSheet();
@@ -344,4 +344,4 @@ public class AllPackagesActivity extends AppCompatActivity {
         super.finish();
         overridePendingTransition(R.anim.nav_seamless_fade_in, R.anim.nav_seamless_fade_out);
     }
-}
+}

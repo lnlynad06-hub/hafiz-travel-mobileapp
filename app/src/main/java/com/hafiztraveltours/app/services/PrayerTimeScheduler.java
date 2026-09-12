@@ -35,11 +35,11 @@ public class PrayerTimeScheduler {
                 .putLong("isha", ishaEpoch)
                 .apply();
 
-        scheduleOne(context, "Subuh", fajrEpoch, 1);
-        scheduleOne(context, "Zohor", dhuhrEpoch, 2);
-        scheduleOne(context, "Asar", asrEpoch, 3);
-        scheduleOne(context, "Maghrib", maghribEpoch, 4);
-        scheduleOne(context, "Isyak", ishaEpoch, 5);
+        scheduleOne(context, "fajr", fajrEpoch, 1);
+        scheduleOne(context, "dhuhr", dhuhrEpoch, 2);
+        scheduleOne(context, "asr", asrEpoch, 3);
+        scheduleOne(context, "maghrib", maghribEpoch, 4);
+        scheduleOne(context, "isha", ishaEpoch, 5);
     }
 
     // Dipanggil oleh BootReceiver, guna cache tersimpan (tak perlu network call)
@@ -53,11 +53,11 @@ public class PrayerTimeScheduler {
 
         if (fajr == 0) return; // belum ada cache, tunggu app dibuka
 
-        scheduleOne(context, "Subuh", fajr, 1);
-        scheduleOne(context, "Zohor", dhuhr, 2);
-        scheduleOne(context, "Asar", asr, 3);
-        scheduleOne(context, "Maghrib", maghrib, 4);
-        scheduleOne(context, "Isyak", isha, 5);
+        scheduleOne(context, "fajr", fajr, 1);
+        scheduleOne(context, "dhuhr", dhuhr, 2);
+        scheduleOne(context, "asr", asr, 3);
+        scheduleOne(context, "maghrib", maghrib, 4);
+        scheduleOne(context, "isha", isha, 5);
     }
 
     private static void scheduleOne(Context context, String prayerName, long epochSeconds, int requestCode) {
@@ -132,9 +132,9 @@ public class PrayerTimeScheduler {
         }
 
         new android.app.AlertDialog.Builder(context)
-                .setTitle("Pastikan Azan Berfungsi")
-                .setMessage("Untuk pastikan notifikasi & azan berbunyi tepat pada waktunya walaupun app ini ditutup, disyorkan benarkan app ini berjalan tanpa had di latar belakang.\n\nLangkah ini pilihan sahaja, boleh disetkan kemudian melalui Tetapan.")
-                .setPositiveButton("Setkan Sekarang", (dialog, which) -> {
+                .setTitle(context.getString(R.string.battery_title))
+                .setMessage(context.getString(R.string.battery_message))
+                .setPositiveButton(context.getString(R.string.battery_now), (dialog, which) -> {
                     try {
                         Intent intent = new Intent(android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
                         intent.setData(android.net.Uri.parse("package:" + packageName));
@@ -146,7 +146,7 @@ public class PrayerTimeScheduler {
                         }
                     }
                 })
-                .setNegativeButton("Nanti", null)
+                .setNegativeButton(context.getString(R.string.battery_later), null)
                 .show();
     }
 

@@ -224,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
             loggedInUserName = session.getUserName();
         } else {
             isLoggedIn = false;
-            loggedInUserName = "Pengguna";
+            loggedInUserName = getString(R.string.default_user_name);
         }
     }
 
@@ -660,17 +660,12 @@ public class MainActivity extends AppCompatActivity {
      * proper screen/artifact instead of a dialog once content grows.
      */
     private void showGuidelineDialog() {
-        String message = "\u2713 Pasport sah sekurang-kurangnya 6 bulan\n\n"
-                + "\u2713 Suntikan meningitis (jika diperlukan)\n\n"
-                + "\u2713 Pakaian ihram / pakaian sesuai\n\n"
-                + "\u2713 Ubat-ubatan peribadi\n\n"
-                + "\u2713 Salinan dokumen penting (pasport, tiket, visa)\n\n"
-                + "\u2713 Wang tunai secukupnya (Riyal / USD)";
+        String message = getString(R.string.guideline_dialog_message);
 
         new AlertDialog.Builder(this)
-                .setTitle("Guideline Persediaan")
+                .setTitle(getString(R.string.guideline_dialog_title))
                 .setMessage(message)
-                .setPositiveButton("Tutup", null)
+                .setPositiveButton(getString(R.string.dialog_close), null)
                 .show();
     }
 
@@ -909,7 +904,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             startActivity(intent);
         } catch (Exception e) {
-            Toast.makeText(this, "WhatsApp tidak dijumpai", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.error_whatsapp_not_found), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -938,7 +933,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(GOOGLE_REVIEW_URL)));
             } catch (Exception e) {
-                Toast.makeText(this, "Tidak dapat membuka pautan review", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.err_open_review), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -1029,7 +1024,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(YOUTUBE_CHANNEL_URL)));
                 } catch (Exception e) {
-                    Toast.makeText(this, "Tidak dapat membuka YouTube", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.err_open_youtube), Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -1273,19 +1268,40 @@ public class MainActivity extends AppCompatActivity {
                             "赖买丹月", "闪瓦鲁月", "都尔喀尔德月", "都尔黑哲月"
                     };
                     return "回历 " + year + "年 " + (month >= 0 && month < hijriMonths.length ? hijriMonths[month] : "") + " " + day + "日";
-                } else {
+                } else if (LocaleHelper.LANGUAGE_MALAY.equalsIgnoreCase(lang)) {
                     hijriMonths = new String[]{
                             "Muharram", "Safar", "Rabiulawal", "Rabiulakhir",
                             "Jamadilawal", "Jamadilakhir", "Rejab", "Syaaban",
                             "Ramadhan", "Syawal", "Zulkaedah", "Zulhijjah"
                     };
                     return day + " " + (month >= 0 && month < hijriMonths.length ? hijriMonths[month] : "") + " " + year + "H";
+                } else if (LocaleHelper.LANGUAGE_KOREAN.equalsIgnoreCase(lang)) {
+                    hijriMonths = new String[]{
+                            "무하람", "사파르", "라비 알아우왈", "라비 앗사니",
+                            "주마다 알아울라", "주마다 알아키라", "라자브", "샤반",
+                            "라마단", "샤왈", "둘카다", "둘히자"
+                    };
+                    return day + " " + (month >= 0 && month < hijriMonths.length ? hijriMonths[month] : "") + " " + year + "H";
+                } else if (LocaleHelper.LANGUAGE_JAPANESE.equalsIgnoreCase(lang)) {
+                    hijriMonths = new String[]{
+                            "ムハッラム", "サファル", "ラビー・アル＝アウワル", "ラビー・アル＝サーニー",
+                            "ジュマーダー・アル＝ウーラー", "ジュマーダー・アル＝アーヒラ", "ラジャブ", "シャアバーン",
+                            "ラマダーン", "シャウワール", "ズー・アル＝カアダ", "ズー・アル＝ヒッジャ"
+                    };
+                    return day + " " + (month >= 0 && month < hijriMonths.length ? hijriMonths[month] : "") + " " + year + "H";
+                } else {
+                    hijriMonths = new String[]{
+                            "Muharram", "Safar", "Rabi\u2019 al-Awwal", "Rabi\u2019 al-Thani",
+                            "Jumada al-Ula", "Jumada al-Akhirah", "Rajab", "Sha\u2019ban",
+                            "Ramadan", "Shawwal", "Dhu al-Qa\u2019dah", "Dhu al-Hijjah"
+                    };
+                    return day + " " + (month >= 0 && month < hijriMonths.length ? hijriMonths[month] : "") + " " + year + "H";
                 }
             } catch (Exception e) {
-                return "1 Rejab 1448H";
+                return getString(R.string.hijri_date_fallback);
             }
         }
-        return "1 Rejab 1448H";
+        return getString(R.string.hijri_date_fallback);
     }
 
     private Location getBestLastKnownLocation() {

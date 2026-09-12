@@ -212,7 +212,7 @@
                             android:background="@drawable/bg_price_pill"
                             android:paddingHorizontal="10dp"
                             android:paddingVertical="4dp"
-                            android:text="MAKKAH &amp; MADINAH"
+                            android:text="@string/promo_hero_kicker"
                             android:textColor="@color/white"
                             android:textSize="10sp"
                             android:textStyle="bold" />
@@ -222,7 +222,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
-                            android:text="Pakej Umrah Cuti Sekolah &amp; Syawal"
+                            android:text="@string/promo_hero_title"
                             android:textColor="@color/white"
                             android:textSize="17sp"
                             android:textStyle="bold"
@@ -241,7 +241,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="Dari RM 7,990 • 12 Hari 10 Malam"
+                                android:text="@string/promo_hero_price"
                                 android:textColor="#FCE4EC"
                                 android:textSize="12sp" />
 
@@ -936,7 +936,7 @@
                                 android:id="@+id/googleReviewCount"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="4.9 ★★★★★ (250+ Ulasan Google)"
+                                android:text="@string/google_review_summary"
                                 android:textColor="@color/brand_magenta"
                                 android:textSize="11sp"
                                 android:textStyle="bold" />

@@ -52,7 +52,7 @@
                     android:background="@drawable/bg_glass_tag"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="5dp"
-                    android:text="✨ PAKEJ PILIHAN VIP"
+                    android:text="@string/package_vip_badge"
                     android:textColor="@color/white"
                     android:textSize="11sp"
                     android:textStyle="bold" />
@@ -189,7 +189,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tanya WhatsApp"
+                android:text="@string/package_whatsapp_enquiry"
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 android:textStyle="bold" />

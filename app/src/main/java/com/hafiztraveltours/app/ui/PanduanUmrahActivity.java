@@ -84,7 +84,7 @@ public class PanduanUmrahActivity extends AppCompatActivity {
     }
 
     private static class Chapter {
-        String tabLabel;       // "Bab 1" - kept as plain text, matches numbering everywhere
+        String tabLabel;       // Localized via chapter_label_format ("Bab 1" / "Chapter 1")
         int heroTitleResId;
         int heroBlurbResId;
         boolean available;
@@ -147,7 +147,7 @@ public class PanduanUmrahActivity extends AppCompatActivity {
 
     private void buildChapters() {
         // ---- Bab 1: Adab Musafir dan Amalan Sunat ----
-        Chapter bab1 = new Chapter("Bab 1", R.string.bab1_hero_title, R.string.bab1_hero_blurb, true);
+        Chapter bab1 = new Chapter(getString(R.string.chapter_label_format, 1), R.string.bab1_hero_title, R.string.bab1_hero_blurb, true);
         bab1.sections.add(new SectionItem(R.string.bab1_s1_title, R.string.bab1_s1_body));
         bab1.sections.add(new SectionItem(R.string.bab1_s2_title, R.string.bab1_s2_body));
         bab1.sections.add(new SectionItem(R.string.bab1_s3_title, R.string.bab1_s3_body));
@@ -155,12 +155,12 @@ public class PanduanUmrahActivity extends AppCompatActivity {
         chapters.add(bab1);
 
         // ---- Bab 2 ----
-        Chapter bab2 = new Chapter("Bab 2", R.string.bab2_hero_title, R.string.bab2_hero_blurb, true);
+        Chapter bab2 = new Chapter(getString(R.string.chapter_label_format, 2), R.string.bab2_hero_title, R.string.bab2_hero_blurb, true);
         bab2.sections.add(new SectionItem(R.string.bab2_s1_title, R.string.bab2_s1_body));
         chapters.add(bab2);
 
         // ---- Bab 3: Pelaksanaan Ibadah Umrah ----
-        Chapter bab3 = new Chapter("Bab 3", R.string.bab3_hero_title, R.string.bab3_hero_blurb, true);
+        Chapter bab3 = new Chapter(getString(R.string.chapter_label_format, 3), R.string.bab3_hero_title, R.string.bab3_hero_blurb, true);
         bab3.sections.add(new SectionItem(R.string.bab3_s1_title, R.string.bab3_s1_body));
         bab3.sections.add(new SectionItem(R.string.bab3_s2_title, R.string.bab3_s2_body));
         bab3.sections.add(new SectionItem(R.string.bab3_s3_title, R.string.bab3_s3_body));
@@ -168,7 +168,7 @@ public class PanduanUmrahActivity extends AppCompatActivity {
         chapters.add(bab3);
 
         // ---- Bab 4 ----
-        Chapter bab4 = new Chapter("Bab 4", R.string.bab4_hero_title, R.string.bab4_hero_blurb, true);
+        Chapter bab4 = new Chapter(getString(R.string.chapter_label_format, 4), R.string.bab4_hero_title, R.string.bab4_hero_blurb, true);
         bab4.sections.add(new SectionItem(R.string.bab4_s1_title, R.string.bab4_s1_body));
         bab4.sections.add(new SectionItem(R.string.bab4_s2_title, R.string.bab4_s2_body));
         bab4.sections.add(new SectionItem(R.string.bab4_s3_title, R.string.bab4_s3_body));
@@ -176,7 +176,7 @@ public class PanduanUmrahActivity extends AppCompatActivity {
         chapters.add(bab4);
 
         // ---- Bab 5 ----
-        Chapter bab5 = new Chapter("Bab 5", R.string.bab5_hero_title, R.string.bab5_hero_blurb, true);
+        Chapter bab5 = new Chapter(getString(R.string.chapter_label_format, 5), R.string.bab5_hero_title, R.string.bab5_hero_blurb, true);
         bab5.sections.add(new SectionItem(R.string.bab5_s1_title, R.string.bab5_s1_body));
         bab5.sections.add(new SectionItem(R.string.bab5_s2_title, R.string.bab5_s2_body));
         bab5.sections.add(new SectionItem(R.string.bab5_s3_title, R.string.bab5_s3_body));
@@ -185,7 +185,7 @@ public class PanduanUmrahActivity extends AppCompatActivity {
         chapters.add(bab5);
 
         // ---- Bab 6 ----
-        Chapter bab6 = new Chapter("Bab 6", R.string.bab6_hero_title, R.string.bab6_hero_blurb, true);
+        Chapter bab6 = new Chapter(getString(R.string.chapter_label_format, 6), R.string.bab6_hero_title, R.string.bab6_hero_blurb, true);
         bab6.sections.add(new SectionItem(R.string.bab6_s1_title, R.string.bab6_s1_body));
         bab6.sections.add(new SectionItem(R.string.bab6_s2_title, R.string.bab6_s2_body));
         chapters.add(bab6);
@@ -216,7 +216,7 @@ public class PanduanUmrahActivity extends AppCompatActivity {
                 if (chapter.available) {
                     selectChapter(index);
                 } else {
-                    Toast.makeText(this, chapter.tabLabel + " akan datang", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.coming_soon_format, chapter.tabLabel), Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -258,7 +258,7 @@ public class PanduanUmrahActivity extends AppCompatActivity {
         downloadPdfTitle.setText(getString(R.string.guideline_pdf_title));
         downloadPdfSubtitle.setText(chapter.tabLabel + " - " + getString(R.string.guideline_pdf_subtitle));
         downloadPdfButton.setOnClickListener(v ->
-                Toast.makeText(this, "Muat turun PDF " + chapter.tabLabel + " - akan datang", Toast.LENGTH_SHORT).show());
+                Toast.makeText(this, getString(R.string.pdf_coming_soon_format, chapter.tabLabel), Toast.LENGTH_SHORT).show());
     }
 
     private View buildSectionItem(SectionItem section) {

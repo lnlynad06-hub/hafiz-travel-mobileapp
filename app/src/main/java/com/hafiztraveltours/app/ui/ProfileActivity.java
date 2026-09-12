@@ -64,7 +64,7 @@ public class ProfileActivity extends AppCompatActivity {
         findViewById(R.id.editProfileRow).setOnClickListener(v -> showEditProfileDialog());
 
         findViewById(R.id.myBookingsRow).setOnClickListener(v ->
-                Toast.makeText(this, "Tiada tempahan lagi - tempahan anda akan dipaparkan di sini", Toast.LENGTH_LONG).show());
+                Toast.makeText(this, getString(R.string.profile_no_booking), Toast.LENGTH_LONG).show());
 
         findViewById(R.id.lightThemeRow).setOnClickListener(v -> {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
@@ -83,7 +83,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         findViewById(R.id.logoutButton).setOnClickListener(v -> {
             SessionManager.getInstance(this).clearSession();
-            Toast.makeText(this, "Log keluar berjaya", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.profile_logout_success), Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
@@ -97,13 +97,13 @@ public class ProfileActivity extends AppCompatActivity {
             String email = SessionManager.getInstance(this).getUserEmail();
             nameText.setText((name != null && !name.isEmpty()) ? name : email);
         } else {
-            nameText.setText("Pengguna Tetamu");
+            nameText.setText(getString(R.string.profile_guest_name));
         }
     }
 
     private void showEditProfileDialog() {
         if (!SessionManager.getInstance(this).isLoggedIn()) {
-            Toast.makeText(this, "Sila log masuk untuk mengemaskini profil", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.profile_login_to_update), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -116,19 +116,19 @@ public class ProfileActivity extends AppCompatActivity {
         int padH = dp(24);
         form.setPadding(padH, dp(12), padH, dp(4));
 
-        TextInputLayout nameLayout = createStyledInputLayout("Nama Penuh");
+        TextInputLayout nameLayout = createStyledInputLayout(getString(R.string.profile_field_full_name));
         TextInputEditText nameInput = (TextInputEditText) nameLayout.getEditText();
         nameInput.setText(currentName != null ? currentName : "");
         form.addView(nameLayout);
 
-        TextInputLayout phoneLayout = createStyledInputLayout("Nombor Telefon");
+        TextInputLayout phoneLayout = createStyledInputLayout(getString(R.string.profile_field_phone));
         TextInputEditText phoneInput = (TextInputEditText) phoneLayout.getEditText();
         phoneInput.setInputType(InputType.TYPE_CLASS_PHONE);
         phoneInput.setText(currentPhone != null ? currentPhone : "");
         setTopMargin(phoneLayout, 14);
         form.addView(phoneLayout);
 
-        TextInputLayout emailLayout = createStyledInputLayout("E-mel");
+        TextInputLayout emailLayout = createStyledInputLayout(getString(R.string.profile_field_email));
         TextInputEditText emailInput = (TextInputEditText) emailLayout.getEditText();
         emailInput.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
         emailInput.setText(currentEmail != null ? currentEmail : "");
@@ -137,7 +137,7 @@ public class ProfileActivity extends AppCompatActivity {
         form.addView(emailLayout);
 
         TextView changePasswordLink = new TextView(this);
-        changePasswordLink.setText("Tukar Kata Laluan");
+        changePasswordLink.setText(getString(R.string.profile_change_password));
         changePasswordLink.setTextColor(getResources().getColor(R.color.pink_dark));
         changePasswordLink.setTypeface(null, Typeface.BOLD);
         changePasswordLink.setTextSize(14);
@@ -145,9 +145,9 @@ public class ProfileActivity extends AppCompatActivity {
         form.addView(changePasswordLink);
 
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Kemaskini Profil")
+                .setTitle(getString(R.string.profile_edit))
                 .setView(form)
-                .setPositiveButton("Simpan", (d, which) -> {
+                .setPositiveButton(getString(R.string.profile_save), (d, which) -> {
                     String newName = nameInput.getText().toString().trim();
                     String newPhone = phoneInput.getText().toString().trim();
                     if (!newName.isEmpty()) {
@@ -156,10 +156,10 @@ public class ProfileActivity extends AppCompatActivity {
                         UserDto updated = new UserDto(userId, newName, currentEmail, newPhone);
                         SessionManager.getInstance(this).saveAuthSession(token, updated);
                         refreshHeader();
-                        Toast.makeText(this, "Profil berjaya dikemaskini!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.profile_updated), Toast.LENGTH_SHORT).show();
                     }
                 })
-                .setNegativeButton("Batal", null)
+                .setNegativeButton(getString(R.string.cancel), null)
                 .create();
 
         changePasswordLink.setOnClickListener(v -> {
@@ -172,29 +172,29 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void showChangePasswordDialog(String email) {
         if (email == null || email.isEmpty()) {
-            Toast.makeText(this, "Emel tidak sah", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.profile_email_invalid), Toast.LENGTH_SHORT).show();
             return;
         }
 
         new AlertDialog.Builder(this)
-                .setTitle("Tetapan Semula Kata Laluan")
-                .setMessage("Hantar pautan set semula kata laluan ke emel: " + email + "?")
-                .setPositiveButton("Hantar", (d, which) -> {
+                .setTitle(getString(R.string.profile_reset_title))
+                .setMessage(getString(R.string.profile_reset_message, email))
+                .setPositiveButton(getString(R.string.profile_reset_send), (d, which) -> {
                     Map<String, String> body = new HashMap<>();
                     body.put("email", email);
                     ApiClient.getApiService().forgotPassword(body).enqueue(new Callback<ApiResponse<Object>>() {
                         @Override
                         public void onResponse(Call<ApiResponse<Object>> call, Response<ApiResponse<Object>> response) {
-                            Toast.makeText(ProfileActivity.this, "Pautan tetapan semula kata laluan telah dihantar ke emel anda!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(ProfileActivity.this, getString(R.string.profile_reset_sent), Toast.LENGTH_LONG).show();
                         }
 
                         @Override
                         public void onFailure(Call<ApiResponse<Object>> call, Throwable t) {
-                            Toast.makeText(ProfileActivity.this, "Pautan tetapan semula kata laluan telah dihantar ke emel anda!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(ProfileActivity.this, getString(R.string.profile_reset_sent), Toast.LENGTH_LONG).show();
                         }
                     });
                 })
-                .setNegativeButton("Batal", null)
+                .setNegativeButton(getString(R.string.cancel), null)
                 .show();
     }
 
