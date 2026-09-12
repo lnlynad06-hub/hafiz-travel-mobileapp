@@ -226,6 +226,27 @@ public class PackageDetailActivity extends AppCompatActivity {
     // =========================================================================
 
     private void addTitleSection() {
+        String categoryStr = null;
+        if (rawPackage != null && rawPackage.category != null && !rawPackage.category.trim().isEmpty()) {
+            categoryStr = rawPackage.category.trim().toUpperCase();
+        } else if (detail != null && detail.category != null && !detail.category.trim().isEmpty()) {
+            categoryStr = detail.category.trim().toUpperCase();
+        }
+
+        if (categoryStr != null && !categoryStr.isEmpty()) {
+            TextView catText = new TextView(this);
+            catText.setText(categoryStr);
+            catText.setTextSize(12);
+            catText.setTypeface(null, Typeface.BOLD);
+            catText.setTextColor(getResources().getColor(R.color.brand_magenta));
+            catText.setLetterSpacing(0.04f);
+            LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            cp.bottomMargin = dp(4);
+            catText.setLayoutParams(cp);
+            container.addView(catText);
+        }
+
         TextView title = new TextView(this);
         title.setText(detail.name);
         title.setTextSize(22);

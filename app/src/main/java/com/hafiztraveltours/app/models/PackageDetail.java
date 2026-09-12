@@ -18,6 +18,7 @@ public class PackageDetail implements java.io.Serializable {
 
     public String id;
     public String name;
+    public String category;
     public String summaryLine;
     public int durationDays;
     public int nightsCount;
@@ -108,6 +109,7 @@ public class PackageDetail implements java.io.Serializable {
 
         d.id = pkg.id;
         d.name = pkg.getDisplayName();
+        d.category = pkg.category != null && !pkg.category.trim().isEmpty() ? pkg.category.trim() : null;
         d.summaryLine = pkg.summary != null && !pkg.summary.trim().isEmpty() ? pkg.summary.trim() : "";
         d.durationDays = pkg.durationDays > 0 ? pkg.durationDays : 0;
         d.nightsCount = pkg.nightsCount > 0 ? pkg.nightsCount : 0;
