@@ -96,6 +96,15 @@ public class UmrahPackageAdapter extends RecyclerView.Adapter<UmrahPackageAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         UmrahPackage pkg = filteredList.get(position);
 
+        if (holder.category != null) {
+            if (pkg.category != null && !pkg.category.trim().isEmpty()) {
+                holder.category.setVisibility(View.VISIBLE);
+                holder.category.setText(pkg.category.trim());
+            } else {
+                holder.category.setVisibility(View.GONE);
+            }
+        }
+
         holder.name.setText(pkg.getDisplayName());
         String cleanPrice = (pkg.price != null) ? pkg.price.replace("RM", "").replace("rm", "").trim() : "";
         holder.durationPrice.setText(context.getString(
@@ -155,11 +164,12 @@ public class UmrahPackageAdapter extends RecyclerView.Adapter<UmrahPackageAdapte
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView image, favoriteIcon;
-        TextView name, durationPrice, hotelDistance;
+        TextView category, name, durationPrice, hotelDistance;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.packageImage);
+            category = itemView.findViewById(R.id.packageCategory);
             name = itemView.findViewById(R.id.packageName);
             durationPrice = itemView.findViewById(R.id.packageDurationPrice);
             hotelDistance = itemView.findViewById(R.id.packageHotelDistance);

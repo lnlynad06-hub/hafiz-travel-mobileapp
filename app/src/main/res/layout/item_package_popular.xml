@@ -51,6 +51,22 @@
             android:padding="12dp">
 
             <TextView
+                android:id="@+id/packageCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:textColor="@color/brand_magenta"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:letterSpacing="0.04"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:visibility="gone"
+                tools:visibility="visible"
+                tools:text="UMRAH SYAWAL 2027" />
+
+            <TextView
                 android:id="@+id/packageName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
