@@ -367,8 +367,14 @@ public class PackageDetailActivity extends AppCompatActivity {
                 String flightType = !hotel.rawRating.isEmpty()
                         ? hotel.rawRating
                         : getString(R.string.flight_type_fallback);
-                hotelTitle = flightType + " (" + (hotel.subtitle.isEmpty()
-                        ? getString(R.string.flight_route_fallback) : "") + ")";
+                String airline = (hotel.airlineName != null && !hotel.airlineName.trim().isEmpty())
+                        ? hotel.airlineName.trim()
+                        : "";
+                if (!airline.isEmpty()) {
+                    hotelTitle = flightType + " (" + airline + ")";
+                } else {
+                    hotelTitle = flightType;
+                }
                 if (hotel.subtitle.isEmpty()) hotel.subtitle = getString(R.string.flight_route_fallback);
             } else {
                 int[] umrahKeys = {R.string.hotel_title_umrah_makkah, R.string.hotel_title_umrah_madinah, R.string.hotel_title_umrah_taif};

@@ -62,12 +62,14 @@ public class PackageDetail implements java.io.Serializable {
         public String subtitle;
         public int slot;       // 0=Hotel1/Makkah, 1=Hotel2/Madinah, 2=Hotel3/Taif, -1=flight
         public String rawRating; // raw rating/star string from server (e.g. "5 Stars")
+        public String airlineName; // airline name for flight info
         public HotelInfo(String type, int slot, String rawRating, String subtitle) {
             this.type = type;
             this.slot = slot;
             this.rawRating = rawRating != null ? rawRating : "";
             this.subtitle = subtitle;
             this.title = ""; // set by Activity
+            this.airlineName = "";
         }
     }
 
@@ -177,6 +179,7 @@ public class PackageDetail implements java.io.Serializable {
             String subtitle = flightRoute != null ? flightRoute : "";
             HotelInfo fi = new HotelInfo("flight", -1, flightType != null ? flightType : "", subtitle);
             fi.rawRating = flightType != null ? flightType : ""; // reuse as flightType
+            fi.airlineName = pkg.airlineName.trim();
             d.hotels.add(fi);
         }
 
