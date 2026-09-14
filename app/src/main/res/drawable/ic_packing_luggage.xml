@@ -1,0 +1,10 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Luggage / Suitcase Icon -->
+    <path
+        android:fillColor="#0D9488"
+        android:pathData="M9,3h6a1,1 0,0 1,1 1v2h3a2,2 0,0 1,2 2v11a2,2 0,0 1,-2 2h-1v1a1,1 0,0 1,-2 0v-1H8v1a1,1 0,0 1,-2 0v-1H5a2,2 0,0 1,-2 -2V8a2,2 0,0 1,2 -2h3V4a1,1 0,0 1,1 -1zm2,3h2V5h-2v1zM5,8v11h14V8H5zm5,3a1,1 0,0 1,1 1v4a1,1 0,0 1,-2 0v-4a1,1 0,0 1,1 -1zm4,0a1,1 0,0 1,1 1v4a1,1 0,0 1,-2 0v-4a1,1 0,0 1,1 -1z"/>
+</vector>

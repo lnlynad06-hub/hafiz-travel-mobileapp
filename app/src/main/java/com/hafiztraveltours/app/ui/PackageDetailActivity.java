@@ -33,7 +33,10 @@ import com.bumptech.glide.Glide;
 import com.hafiztraveltours.app.network.ApiClient;
 import com.hafiztraveltours.app.network.ApiResponse;
 
+import android.graphics.drawable.GradientDrawable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -505,7 +508,14 @@ public class PackageDetailActivity extends AppCompatActivity {
             headerRow.setGravity(Gravity.CENTER_VERTICAL);
 
             TextView occupancy = new TextView(this);
-            occupancy.setText(option.occupancyLabel);
+            String labelStr = option.occupancyLabel;
+            if ("Bilik Berlima (Quint)".equalsIgnoreCase(labelStr)) labelStr = getString(R.string.room_quint);
+            else if ("Bilik Berempat (Quad)".equalsIgnoreCase(labelStr)) labelStr = getString(R.string.room_quad);
+            else if ("Bilik Bertiga (Triple)".equalsIgnoreCase(labelStr)) labelStr = getString(R.string.room_triple);
+            else if ("Bilik Berdua (Double)".equalsIgnoreCase(labelStr)) labelStr = getString(R.string.room_double);
+            else if ("Bilik Perseorangan (Single)".equalsIgnoreCase(labelStr)) labelStr = getString(R.string.room_single);
+            else if ("Harga Bermula Dari".equalsIgnoreCase(labelStr)) labelStr = getString(R.string.detail_price_from);
+            occupancy.setText(labelStr);
             occupancy.setTextSize(12);
             occupancy.setTypeface(null, Typeface.BOLD);
             occupancy.setTextColor(getResources().getColor(isSelected ? R.color.brand_magenta : R.color.text_dark));
@@ -719,71 +729,288 @@ public class PackageDetailActivity extends AppCompatActivity {
         }
     }
 
+    private static class InscriptionCategory {
+        String key;
+        String title;
+        int iconResId;
+        String[] keywords;
+        List<String> items = new ArrayList<>();
+
+        InscriptionCategory(String key, String title, int iconResId, String[] keywords) {
+            this.key = key;
+            this.title = title;
+            this.iconResId = iconResId;
+            this.keywords = keywords;
+        }
+    }
+
     private void addIncludedExcludedSection() {
         if (detail.included.isEmpty() && detail.excluded.isEmpty()) {
             return;
         }
 
-        container.addView(sectionHeading(getString(R.string.detail_section_inclusions)));
-
-        LinearLayout card = new LinearLayout(this);
-        card.setOrientation(LinearLayout.VERTICAL);
-        card.setBackgroundResource(R.drawable.bg_detail_card);
-        card.setPadding(dp(16), dp(16), dp(16), dp(16));
-        LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        cp.topMargin = dp(10);
-        card.setLayoutParams(cp);
-
+        // 1. INCLUDED SECTION ("What's Covered") - Single Combined Card
         if (!detail.included.isEmpty()) {
-            TextView incHeading = new TextView(this);
-            incHeading.setText(getString(R.string.detail_included_heading));
-            incHeading.setTextSize(13);
-            incHeading.setTypeface(null, Typeface.BOLD);
-            incHeading.setTextColor(Color.parseColor("#2E7D32"));
-            card.addView(incHeading);
+            List<InscriptionCategory> categories = new ArrayList<>();
+            categories.add(new InscriptionCategory("flights", getString(R.string.cat_flights), R.drawable.ic_flight,
+                    new String[]{"flight", "penerbangan", "tiket", "incheon", "klia", "transit", "airasia", "saudi", "malaysia airlines"}));
+            categories.add(new InscriptionCategory("accommodation", getString(R.string.cat_accommodation), R.drawable.ic_hotel,
+                    new String[]{"hotel", "penginapan", "bermalam", "malam", "room", "stay"}));
+            categories.add(new InscriptionCategory("meals", getString(R.string.cat_meals), R.drawable.ic_meals,
+                    new String[]{"meal", "fullboard", "makanan", "sarapan", "lunch", "dinner", "breakfast", "makan", "three_meals", "taif_meal", "sahur_iftar"}));
+            categories.add(new InscriptionCategory("transportation", getString(R.string.cat_transportation), R.drawable.ic_transport,
+                    new String[]{"transport", "pengangkutan", "bas", "coach", "train", "haramain", "feri", "transfer"}));
+            categories.add(new InscriptionCategory("tour_guidance", getString(R.string.cat_tour_guidance), R.drawable.ic_guide,
+                    new String[]{"guide", "mutawwif", "pemandu", "bimbingan", "ziarah", "tipping"}));
+            categories.add(new InscriptionCategory("visa_protection", getString(R.string.cat_visa_protection), R.drawable.ic_visa,
+                    new String[]{"visa", "insurans", "cukai", "k-eta", "permit", "visa_management", "tourist_visa", "protection", "coverage"}));
+            categories.add(new InscriptionCategory("travel_essentials", getString(R.string.cat_travel_essentials), R.drawable.ic_essentials,
+                    new String[]{"bagasi", "baggage", "zamzam", "beg", "cenderamata", "hadiah", "essential"}));
+            categories.add(new InscriptionCategory("preparation", getString(R.string.cat_preparation), R.drawable.ic_prep,
+                    new String[]{"taklimat", "kursus", "persediaan", "buku", "panduan", "briefing"}));
 
-            for (String item : detail.included) {
-                TextView row = new TextView(this);
-                row.setText("• " + item);
-                row.setTextSize(12);
-                row.setTextColor(getResources().getColor(R.color.text_dark));
-                row.setLineSpacing(dp(1), 1.15f);
-                LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                p.topMargin = dp(4);
-                row.setLayoutParams(p);
-                card.addView(row);
+            List<String> orderedItems = new ArrayList<>();
+            for (String rawItem : detail.included) {
+                if (rawItem == null || rawItem.trim().isEmpty()) continue;
+                String lower = rawItem.toLowerCase(Locale.ROOT);
+                boolean matched = false;
+                for (InscriptionCategory cat : categories) {
+                    for (String kw : cat.keywords) {
+                        if (lower.contains(kw)) {
+                            cat.items.add(rawItem);
+                            matched = true;
+                            break;
+                        }
+                    }
+                    if (matched) break;
+                }
+                if (!matched) {
+                    categories.get(6).items.add(rawItem);
+                }
             }
-        }
 
-        if (!detail.excluded.isEmpty()) {
-            TextView excHeading = new TextView(this);
-            excHeading.setText(getString(R.string.detail_excluded_heading));
-            excHeading.setTextSize(13);
-            excHeading.setTypeface(null, Typeface.BOLD);
-            excHeading.setTextColor(Color.parseColor("#C62828"));
-            LinearLayout.LayoutParams ep = new LinearLayout.LayoutParams(
+            for (InscriptionCategory cat : categories) {
+                orderedItems.addAll(cat.items);
+            }
+
+            TextView whatsCoveredHeader = sectionHeading(getString(R.string.detail_whats_covered));
+            container.addView(whatsCoveredHeader);
+
+            LinearLayout coveredCard = new LinearLayout(this);
+            coveredCard.setOrientation(LinearLayout.VERTICAL);
+            coveredCard.setBackgroundResource(R.drawable.bg_inc_cat_card);
+            coveredCard.setPadding(dp(16), dp(16), dp(16), dp(16));
+            LinearLayout.LayoutParams ccp = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            ep.topMargin = dp(14);
-            excHeading.setLayoutParams(ep);
-            card.addView(excHeading);
+            ccp.topMargin = dp(10);
+            coveredCard.setLayoutParams(ccp);
 
-            for (String item : detail.excluded) {
-                TextView row = new TextView(this);
-                row.setText("• " + item);
-                row.setTextSize(12);
-                row.setTextColor(getResources().getColor(R.color.text_gray));
-                row.setLineSpacing(dp(1), 1.15f);
-                LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(
+            LinearLayout headerRow = new LinearLayout(this);
+            headerRow.setOrientation(LinearLayout.HORIZONTAL);
+            headerRow.setGravity(Gravity.CENTER_VERTICAL);
+            LinearLayout.LayoutParams hrp = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            hrp.bottomMargin = dp(12);
+            headerRow.setLayoutParams(hrp);
+
+            LinearLayout iconBox = new LinearLayout(this);
+            iconBox.setGravity(Gravity.CENTER);
+            GradientDrawable iconBoxBg = new GradientDrawable();
+            iconBoxBg.setShape(GradientDrawable.RECTANGLE);
+            iconBoxBg.setCornerRadius(dp(10));
+            iconBoxBg.setColor(Color.parseColor("#F0FDFA"));
+            iconBox.setBackground(iconBoxBg);
+
+            ImageView iconView = new ImageView(this);
+            iconView.setImageResource(R.drawable.ic_check_green);
+            LinearLayout.LayoutParams ivp = new LinearLayout.LayoutParams(dp(22), dp(22));
+            iconView.setLayoutParams(ivp);
+            iconBox.addView(iconView);
+
+            LinearLayout.LayoutParams ibp = new LinearLayout.LayoutParams(dp(40), dp(40));
+            ibp.rightMargin = dp(12);
+            iconBox.setLayoutParams(ibp);
+            headerRow.addView(iconBox);
+
+            LinearLayout titleCol = new LinearLayout(this);
+            titleCol.setOrientation(LinearLayout.VERTICAL);
+            LinearLayout.LayoutParams tcp = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
+            titleCol.setLayoutParams(tcp);
+
+            TextView catTitle = new TextView(this);
+            catTitle.setText(getString(R.string.detail_whats_covered));
+            catTitle.setTextSize(13);
+            catTitle.setTypeface(null, Typeface.BOLD);
+            catTitle.setTextColor(Color.parseColor("#0F766E"));
+
+            TextView catSub = new TextView(this);
+            catSub.setText(getString(R.string.detail_whats_covered_sub));
+            catSub.setTextSize(11);
+            catSub.setTextColor(Color.parseColor("#64748B"));
+
+            titleCol.addView(catTitle);
+            titleCol.addView(catSub);
+            headerRow.addView(titleCol);
+
+            coveredCard.addView(headerRow);
+
+            View divider = new View(this);
+            divider.setBackgroundColor(Color.parseColor("#F1F5F9"));
+            LinearLayout.LayoutParams dpParams = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, dp(1));
+            dpParams.bottomMargin = dp(10);
+            divider.setLayoutParams(dpParams);
+            coveredCard.addView(divider);
+
+            LinearLayout itemsLayout = new LinearLayout(this);
+            itemsLayout.setOrientation(LinearLayout.VERTICAL);
+            LinearLayout.LayoutParams ilp = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            itemsLayout.setLayoutParams(ilp);
+
+            for (String itemText : orderedItems) {
+                LinearLayout row = new LinearLayout(this);
+                row.setOrientation(LinearLayout.HORIZONTAL);
+                row.setGravity(Gravity.TOP);
+                LinearLayout.LayoutParams rp = new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                p.topMargin = dp(4);
-                row.setLayoutParams(p);
-                card.addView(row);
+                rp.topMargin = dp(4);
+                rp.bottomMargin = dp(4);
+                row.setLayoutParams(rp);
+
+                ImageView checkImg = new ImageView(this);
+                checkImg.setImageResource(R.drawable.ic_check_green);
+                LinearLayout.LayoutParams cip = new LinearLayout.LayoutParams(dp(14), dp(14));
+                cip.rightMargin = dp(8);
+                cip.topMargin = dp(2);
+                checkImg.setLayoutParams(cip);
+
+                TextView itemTv = new TextView(this);
+                itemTv.setText(itemText);
+                itemTv.setTextSize(12);
+                itemTv.setTextColor(Color.parseColor("#334155"));
+                itemTv.setLineSpacing(dp(1), 1.15f);
+                LinearLayout.LayoutParams itvp = new LinearLayout.LayoutParams(
+                        0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
+                itemTv.setLayoutParams(itvp);
+
+                row.addView(checkImg);
+                row.addView(itemTv);
+
+                itemsLayout.addView(row);
             }
+
+            coveredCard.addView(itemsLayout);
+            container.addView(coveredCard);
         }
 
-        container.addView(card);
+        // 2. NOT COVERED SECTION ("Not Covered")
+        if (!detail.excluded.isEmpty()) {
+            TextView notCoveredHeader = sectionHeading(getString(R.string.detail_not_covered));
+            container.addView(notCoveredHeader);
+
+            LinearLayout excCard = new LinearLayout(this);
+            excCard.setOrientation(LinearLayout.VERTICAL);
+            excCard.setBackgroundResource(R.drawable.bg_exc_card);
+            excCard.setPadding(dp(16), dp(16), dp(16), dp(16));
+            LinearLayout.LayoutParams ecp = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            ecp.topMargin = dp(10);
+            excCard.setLayoutParams(ecp);
+
+            LinearLayout headerRow = new LinearLayout(this);
+            headerRow.setOrientation(LinearLayout.HORIZONTAL);
+            headerRow.setGravity(Gravity.CENTER_VERTICAL);
+            LinearLayout.LayoutParams hrp = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            hrp.bottomMargin = dp(12);
+            headerRow.setLayoutParams(hrp);
+
+            LinearLayout iconBox = new LinearLayout(this);
+            iconBox.setGravity(Gravity.CENTER);
+            GradientDrawable iconBoxBg = new GradientDrawable();
+            iconBoxBg.setShape(GradientDrawable.RECTANGLE);
+            iconBoxBg.setCornerRadius(dp(10));
+            iconBoxBg.setColor(Color.parseColor("#FEF2F2"));
+            iconBox.setBackground(iconBoxBg);
+
+            ImageView minusIcon = new ImageView(this);
+            minusIcon.setImageResource(R.drawable.ic_minus_gray);
+            LinearLayout.LayoutParams mip = new LinearLayout.LayoutParams(dp(16), dp(16));
+            minusIcon.setLayoutParams(mip);
+            iconBox.addView(minusIcon);
+
+            LinearLayout.LayoutParams ibp = new LinearLayout.LayoutParams(dp(40), dp(40));
+            ibp.rightMargin = dp(12);
+            iconBox.setLayoutParams(ibp);
+            headerRow.addView(iconBox);
+
+            LinearLayout titleCol = new LinearLayout(this);
+            titleCol.setOrientation(LinearLayout.VERTICAL);
+            LinearLayout.LayoutParams tcp = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
+            titleCol.setLayoutParams(tcp);
+
+            TextView heading = new TextView(this);
+            heading.setText(getString(R.string.detail_not_covered));
+            heading.setTextSize(13);
+            heading.setTypeface(null, Typeface.BOLD);
+            heading.setTextColor(Color.parseColor("#991B1B"));
+
+            TextView subHeading = new TextView(this);
+            subHeading.setText(getString(R.string.detail_not_covered_sub));
+            subHeading.setTextSize(11);
+            subHeading.setTextColor(Color.parseColor("#64748B"));
+
+            titleCol.addView(heading);
+            titleCol.addView(subHeading);
+            headerRow.addView(titleCol);
+
+            excCard.addView(headerRow);
+
+            View divider = new View(this);
+            divider.setBackgroundColor(Color.parseColor("#F1F5F9"));
+            LinearLayout.LayoutParams dpParams = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, dp(1));
+            dpParams.bottomMargin = dp(10);
+            divider.setLayoutParams(dpParams);
+            excCard.addView(divider);
+
+            for (String itemText : detail.excluded) {
+                if (itemText == null || itemText.trim().isEmpty()) continue;
+
+                LinearLayout row = new LinearLayout(this);
+                row.setOrientation(LinearLayout.HORIZONTAL);
+                row.setGravity(Gravity.TOP);
+                LinearLayout.LayoutParams rp = new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                rp.topMargin = dp(4);
+                rp.bottomMargin = dp(4);
+                row.setLayoutParams(rp);
+
+                ImageView minusImg = new ImageView(this);
+                minusImg.setImageResource(R.drawable.ic_minus_gray);
+                LinearLayout.LayoutParams cip = new LinearLayout.LayoutParams(dp(14), dp(14));
+                cip.rightMargin = dp(8);
+                cip.topMargin = dp(2);
+                minusImg.setLayoutParams(cip);
+
+                TextView itemTv = new TextView(this);
+                itemTv.setText(itemText);
+                itemTv.setTextSize(12);
+                itemTv.setTextColor(Color.parseColor("#374151"));
+                itemTv.setLineSpacing(dp(1), 1.15f);
+                LinearLayout.LayoutParams itvp = new LinearLayout.LayoutParams(
+                        0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
+                itemTv.setLayoutParams(itvp);
+
+                row.addView(minusImg);
+                row.addView(itemTv);
+
+                excCard.addView(row);
+            }
+
+            container.addView(excCard);
+        }
     }
 
     private void addPackingGuideSection() {
@@ -800,23 +1027,92 @@ public class PackageDetailActivity extends AppCompatActivity {
         cp.topMargin = dp(10);
         card.setLayoutParams(cp);
 
+        LinearLayout headerRow = new LinearLayout(this);
+        headerRow.setOrientation(LinearLayout.HORIZONTAL);
+        headerRow.setGravity(Gravity.CENTER_VERTICAL);
+        LinearLayout.LayoutParams hrp = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        hrp.bottomMargin = dp(12);
+        headerRow.setLayoutParams(hrp);
+
+        LinearLayout iconBox = new LinearLayout(this);
+        iconBox.setGravity(Gravity.CENTER);
+        GradientDrawable iconBoxBg = new GradientDrawable();
+        iconBoxBg.setShape(GradientDrawable.RECTANGLE);
+        iconBoxBg.setCornerRadius(dp(10));
+        iconBoxBg.setColor(Color.parseColor("#F0FDFA"));
+        iconBox.setBackground(iconBoxBg);
+
+        ImageView luggageIcon = new ImageView(this);
+        luggageIcon.setImageResource(R.drawable.ic_packing_luggage);
+        LinearLayout.LayoutParams lip = new LinearLayout.LayoutParams(dp(22), dp(22));
+        luggageIcon.setLayoutParams(lip);
+        iconBox.addView(luggageIcon);
+
+        LinearLayout.LayoutParams ibp = new LinearLayout.LayoutParams(dp(40), dp(40));
+        ibp.rightMargin = dp(12);
+        iconBox.setLayoutParams(ibp);
+        headerRow.addView(iconBox);
+
+        LinearLayout titleCol = new LinearLayout(this);
+        titleCol.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout.LayoutParams tcp = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
+        titleCol.setLayoutParams(tcp);
+
         TextView heading = new TextView(this);
         heading.setText(getString(R.string.detail_packing_heading));
         heading.setTextSize(13);
         heading.setTypeface(null, Typeface.BOLD);
-        heading.setTextColor(getResources().getColor(R.color.brand_magenta));
-        card.addView(heading);
+        heading.setTextColor(Color.parseColor("#0F766E"));
+
+        TextView subHeading = new TextView(this);
+        subHeading.setText(getString(R.string.detail_packing_sub));
+        subHeading.setTextSize(11);
+        subHeading.setTextColor(Color.parseColor("#64748B"));
+
+        titleCol.addView(heading);
+        titleCol.addView(subHeading);
+        headerRow.addView(titleCol);
+
+        card.addView(headerRow);
+
+        View divider = new View(this);
+        divider.setBackgroundColor(Color.parseColor("#F1F5F9"));
+        LinearLayout.LayoutParams dpParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, dp(1));
+        dpParams.bottomMargin = dp(10);
+        divider.setLayoutParams(dpParams);
+        card.addView(divider);
 
         for (String item : detail.packingSummer) {
-            TextView row = new TextView(this);
-            row.setText("• " + item);
-            row.setTextSize(12);
-            row.setTextColor(getResources().getColor(R.color.text_dark));
-            row.setLineSpacing(dp(1), 1.15f);
-            LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(
+            LinearLayout row = new LinearLayout(this);
+            row.setOrientation(LinearLayout.HORIZONTAL);
+            row.setGravity(Gravity.TOP);
+            LinearLayout.LayoutParams rp = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            p.topMargin = dp(4);
-            row.setLayoutParams(p);
+            rp.topMargin = dp(4);
+            rp.bottomMargin = dp(4);
+            row.setLayoutParams(rp);
+
+            ImageView checkImg = new ImageView(this);
+            checkImg.setImageResource(R.drawable.ic_check_green);
+            LinearLayout.LayoutParams cip = new LinearLayout.LayoutParams(dp(14), dp(14));
+            cip.rightMargin = dp(8);
+            cip.topMargin = dp(2);
+            checkImg.setLayoutParams(cip);
+
+            TextView itemTv = new TextView(this);
+            itemTv.setText(item);
+            itemTv.setTextSize(12);
+            itemTv.setTextColor(Color.parseColor("#334155"));
+            itemTv.setLineSpacing(dp(1), 1.15f);
+            LinearLayout.LayoutParams itvp = new LinearLayout.LayoutParams(
+                    0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
+            itemTv.setLayoutParams(itvp);
+
+            row.addView(checkImg);
+            row.addView(itemTv);
+
             card.addView(row);
         }
 
@@ -832,30 +1128,121 @@ public class PackageDetailActivity extends AppCompatActivity {
             LinearLayout card = new LinearLayout(this);
             card.setOrientation(LinearLayout.VERTICAL);
             card.setBackgroundResource(R.drawable.bg_detail_card);
-            card.setPadding(dp(14), dp(14), dp(14), dp(14));
+            card.setPadding(dp(16), dp(16), dp(16), dp(16));
             LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            cp.topMargin = dp(8);
+            cp.topMargin = dp(10);
             card.setLayoutParams(cp);
 
+            boolean isTerms = false;
+            boolean isDocs = false;
+            String displayTitle = note.title;
+            String subTitle = "Important information for travelers";
+
+            if (note.title != null) {
+                String lower = note.title.toLowerCase(Locale.ROOT);
+                if (lower.contains("syarat") || lower.contains("garis panduan") || lower.contains("terms") || lower.contains("guidelines")) {
+                    displayTitle = getString(R.string.detail_terms_guidelines);
+                    subTitle = getString(R.string.detail_terms_sub);
+                    isTerms = true;
+                } else if (lower.contains("dokumen") || lower.contains("document")) {
+                    displayTitle = getString(R.string.detail_required_documents);
+                    subTitle = getString(R.string.detail_docs_sub);
+                    isDocs = true;
+                }
+            }
+
+            LinearLayout headerRow = new LinearLayout(this);
+            headerRow.setOrientation(LinearLayout.HORIZONTAL);
+            headerRow.setGravity(Gravity.CENTER_VERTICAL);
+            LinearLayout.LayoutParams hrp = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            hrp.bottomMargin = dp(12);
+            headerRow.setLayoutParams(hrp);
+
+            int iconRes = isDocs ? R.drawable.ic_doc_passport : (isTerms ? R.drawable.ic_terms_shield : R.drawable.ic_visa);
+            String bgHex = isDocs ? "#E0F2FE" : (isTerms ? "#EEF2FF" : "#FFFBEB");
+            String titleHex = isDocs ? "#0369A1" : (isTerms ? "#4338CA" : "#B45309");
+
+            LinearLayout iconBox = new LinearLayout(this);
+            iconBox.setGravity(Gravity.CENTER);
+            GradientDrawable iconBoxBg = new GradientDrawable();
+            iconBoxBg.setShape(GradientDrawable.RECTANGLE);
+            iconBoxBg.setCornerRadius(dp(10));
+            iconBoxBg.setColor(Color.parseColor(bgHex));
+            iconBox.setBackground(iconBoxBg);
+
+            ImageView noteIcon = new ImageView(this);
+            noteIcon.setImageResource(iconRes);
+            LinearLayout.LayoutParams nip = new LinearLayout.LayoutParams(dp(22), dp(22));
+            noteIcon.setLayoutParams(nip);
+            iconBox.addView(noteIcon);
+
+            LinearLayout.LayoutParams ibp = new LinearLayout.LayoutParams(dp(40), dp(40));
+            ibp.rightMargin = dp(12);
+            iconBox.setLayoutParams(ibp);
+            headerRow.addView(iconBox);
+
+            LinearLayout titleCol = new LinearLayout(this);
+            titleCol.setOrientation(LinearLayout.VERTICAL);
+            LinearLayout.LayoutParams tcp = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
+            titleCol.setLayoutParams(tcp);
+
             TextView title = new TextView(this);
-            title.setText(note.title);
+            title.setText(displayTitle);
             title.setTextSize(13);
             title.setTypeface(null, Typeface.BOLD);
-            title.setTextColor(getResources().getColor(R.color.text_dark));
-            card.addView(title);
+            title.setTextColor(Color.parseColor(titleHex));
+
+            TextView subHeading = new TextView(this);
+            subHeading.setText(subTitle);
+            subHeading.setTextSize(11);
+            subHeading.setTextColor(Color.parseColor("#64748B"));
+
+            titleCol.addView(title);
+            titleCol.addView(subHeading);
+            headerRow.addView(titleCol);
+
+            card.addView(headerRow);
+
+            View divider = new View(this);
+            divider.setBackgroundColor(Color.parseColor("#F1F5F9"));
+            LinearLayout.LayoutParams dpParams = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, dp(1));
+            dpParams.bottomMargin = dp(10);
+            divider.setLayoutParams(dpParams);
+            card.addView(divider);
 
             for (String bullet : note.bullets) {
+                LinearLayout row = new LinearLayout(this);
+                row.setOrientation(LinearLayout.HORIZONTAL);
+                row.setGravity(Gravity.TOP);
+                LinearLayout.LayoutParams rp = new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                rp.topMargin = dp(4);
+                rp.bottomMargin = dp(4);
+                row.setLayoutParams(rp);
+
+                ImageView checkImg = new ImageView(this);
+                checkImg.setImageResource(R.drawable.ic_check_green);
+                LinearLayout.LayoutParams cip = new LinearLayout.LayoutParams(dp(14), dp(14));
+                cip.rightMargin = dp(8);
+                cip.topMargin = dp(2);
+                checkImg.setLayoutParams(cip);
+
                 TextView bulletView = new TextView(this);
-                bulletView.setText("• " + bullet);
+                bulletView.setText(bullet);
                 bulletView.setTextSize(12);
-                bulletView.setTextColor(getResources().getColor(R.color.text_gray));
+                bulletView.setTextColor(Color.parseColor("#374151"));
                 bulletView.setLineSpacing(dp(1), 1.15f);
                 LinearLayout.LayoutParams bp = new LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                bp.topMargin = dp(4);
+                        0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
                 bulletView.setLayoutParams(bp);
-                card.addView(bulletView);
+
+                row.addView(checkImg);
+                row.addView(bulletView);
+
+                card.addView(row);
             }
 
             container.addView(card);
