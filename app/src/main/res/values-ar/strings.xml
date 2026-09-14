@@ -1,59 +1,81 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" ?>
 <resources>
     <string name="app_name">HafizTravel&amp;Tours</string>
-
-    <!-- Welcome / Onboarding screen -->
-    <string name="welcome_trust_text">موثوق به من قبل مئات الحجاج والمعتمرين</string>
-    <string name="welcome_title">رفيقك في العمرة والحج والسفر</string>
-    <string name="welcome_subtitle">احجز بسهولة باقات العمرة والحج والرحلات الداخلية والخارجية مباشرة من هاتفك.</string>
-    <string name="welcome_start_now">ابدأ الآن</string>
-    <string name="welcome_already_have_account">لديك حساب بالفعل؟ تسجيل الدخول</string>
-
-    <!-- Login screen -->
+    <string name="welcome_brand_name">HAFIZ TRAVEL &amp; TOURS</string>
+    <string name="welcome_eyebrow">تنسيق رحلات فاخرة ومميزة</string>
+    <string name="welcome_title">رحلات استثنائية،\nصُممت برقيّ وأناقة.</string>
+    <string name="welcome_subtitle">من الجولات السياحية العالمية عبر آسيا وأوروبا إلى رحلات العمرة المباركة المصممة بأعلى درجات الراحة والسكينة.</string>
+    <string name="welcome_chip_worldwide">جولات عالمية</string>
+    <string name="welcome_chip_umrah">العمرة والزيارة</string>
+    <string name="welcome_chip_custom">رحلات خاصة</string>
+    <string name="welcome_start_now">ابدأ الاستكشاف</string>
+    <string name="welcome_already_have_account_full">لديك حساب بالفعل؟ &lt;font color=\'#D81B60\'&gt;&lt;b&gt;تسجيل الدخول&lt;/b&gt;&lt;/font&gt;</string>
+    <string name="filter_all">الكل</string>
     <string name="login_title">مرحبًا بعودتك</string>
-    <string name="login_subtitle">سجّل الدخول للمتابعة</string>
+    <string name="login_subtitle">سجّل الدخول لتخطيط رحلتك المميزة</string>
     <string name="hint_email">البريد الإلكتروني</string>
     <string name="hint_password">كلمة المرور</string>
+    <string name="remember_me">تذكرني</string>
     <string name="login_button">تسجيل الدخول</string>
-    <string name="login_no_account">ليس لديك حساب؟ سجّل الآن.</string>
-    <string name="login_or_with">أو سجّل الدخول باستخدام</string>
-    <string name="login_guest">الدخول كضيف</string>
-
-    <!-- Sign Up screen -->
+    <string name="login_signing_in">جارٍ تسجيل الدخول…</string>
+    <string name="login_no_account">ليس لديك حساب؟ إنشاء حساب</string>
+    <string name="login_or_with">أو المتابعة عبر</string>
+    <string name="login_guest">المتابعة كضيف</string>
+    <string name="forgot_password_title">إعادة تعيين كلمة المرور</string>
+    <string name="forgot_password_desc">أدخل بريدك الإلكتروني المسجل وسنرسل لك رابط إعادة تعيين كلمة المرور.</string>
+    <string name="btn_send_reset">إرسال الرابط</string>
+    <string name="reset_link_sent_success">تم إرسال رابط إعادة التعيين! يرجى التحقق من صندوق بريدك.</string>
+    <string name="login_failed_user_not_found">لم يتم العثور على حساب بهذا البريد الإلكتروني.</string>
+    <string name="login_failed_wrong_password">كلمة المرور غير صحيحة. يرجى المحاولة مرة أخرى.</string>
+    <string name="login_failed_default">فشل تسجيل الدخول. يرجى التحقق من بياناتك.</string>
     <string name="signup_title">إنشاء حساب</string>
     <string name="signup_subtitle">سجّل للبدء في التخطيط لرحلتك.</string>
     <string name="hint_full_name">الاسم الكامل</string>
     <string name="hint_phone">رقم الهاتف</string>
     <string name="hint_confirm_password">تأكيد كلمة المرور</string>
-    <string name="signup_button">تسجيل</string>
+    <string name="signup_button">إنشاء حساب</string>
+    <string name="signup_signing_up">جاري إنشاء الحساب...</string>
+    <string name="hint_password_min">٦ أحرف على الأقل</string>
+    <string name="signup_terms_disclaimer">بالتسجيل، فإنك توافق على &lt;b&gt;شروط الخدمة&lt;/b&gt; و &lt;b&gt;سياسة الخصوصية&lt;/b&gt;.</string>
+    <string name="dialog_terms_title">الشروط وسياسة الخصوصية</string>
     <string name="signup_have_account">لديك حساب بالفعل؟ تسجيل الدخول</string>
     <string name="signup_or_with">أو سجّل باستخدام</string>
     <string name="signup_guest">الدخول كضيف</string>
-    <string name="social_login_google">تسجيل الدخول عبر Google - قريبًا</string>
-    <string name="social_login_facebook">تسجيل الدخول عبر Facebook - قريبًا</string>
-    <string name="social_login_phone">تسجيل الدخول برقم الهاتف - قريبًا</string>
-
-    <string name="social_signup_google">التسجيل عبر Google - قريبًا</string>
-    <string name="social_signup_facebook">التسجيل عبر Facebook - قريبًا</string>
-    <string name="social_signup_phone">التسجيل برقم الهاتف - قريبًا</string>
-
+    <string name="password_strength_weak">ضعيف</string>
+    <string name="password_strength_medium">متوسط</string>
+    <string name="password_strength_strong">قوي</string>
+    <string name="btn_continue_google">المتابعة باستخدام Google</string>
+    <string name="social_signup_google">التسجيل عبر Google</string>
+    <string name="select_country_code">اختر رمز الدولة</string>
+    <string name="region_southeast_asia">جنوب شرق آسيا</string>
+    <string name="region_international">دول أخرى</string>
+    <string name="err_name_required">يرجى إدخال الاسم الكامل</string>
+    <string name="err_email_invalid">يرجى إدخال بريد إلكتروني صالح</string>
+    <string name="err_phone_invalid">يرجى إدخال رقم هاتف صالح</string>
+    <string name="err_password_short">يجب أن تتكون كلمة المرور من ٦ أحرف على الأقل</string>
+    <string name="err_password_mismatch">كلمتا المرور غير متطابقتين</string>
+    <string name="err_signup_failed">فشل إنشاء الحساب. يرجى المحاولة مرة أخرى.</string>
+    <string name="err_signup_email_exists">البريد الإلكتروني أو رقم الهاتف مسجل بالفعل</string>
+    <string name="err_network">خطأ في الاتصال. يرجى التحقق من اتصال الإنترنت.</string>
+    <string name="signup_success">تم إنشاء الحساب بنجاح!</string>
+    <string name="password_tip_length">٨+ أحرف</string>
+    <string name="password_tip_number">٠-٩</string>
+    <string name="password_tip_symbol">!@#$</string>
     <string name="guest_greeting">السلام عليكم</string>
-    <string name="user_greeting">السلام عليكم، %1$s</string>
-    <string name="hero_subtitle_guest">مرحبًا بكم في\nHafiz Travel &amp; Tours</string>
+    <string name="user_greeting">السلام عليكم</string>
+    <string name="hero_subtitle_guest">ضيف الرحمن</string>
     <string name="hero_subtitle_user">مرحبًا بعودتك</string>
-    <string name="hero_headline_guest">مرحبًا بكم في\nHafiz Travel &amp; Tours</string>
-    <string name="hero_headline_user">إلى أين تودّ\nالذهاب؟</string>
-
+    <string name="hero_headline_guest">إلى أين وجهتك\nالقادمة؟</string>
+    <string name="hero_headline_user">إلى أين وجهتك\nالقادمة؟</string>
     <string name="nav_home">الرئيسية</string>
+    <string name="nav_explore">استكشف</string>
     <string name="nav_umrah">العمرة</string>
     <string name="nav_tour">الجولات</string>
     <string name="nav_favorite">المفضلة</string>
-
     <string name="quick_nusuk">نسك</string>
     <string name="quick_guideline">دليل العمرة</string>
     <string name="quick_checklist">قائمة التحقق</string>
     <string name="quick_whatsapp">واتساب</string>
-
     <string name="prayer_times_title">أوقات الصلاة اليوم (تقريبية)</string>
     <string name="search_placeholder">ابحث عن وجهتك</string>
     <string name="popular_packages">الباقات الشائعة</string>
@@ -63,33 +85,30 @@
     <string name="no_notifications">لا توجد إشعارات جديدة</string>
     <string name="faq_title">الأسئلة الشائعة</string>
     <string name="gallery_title">معرض الصور</string>
-
-    <!-- NEW: previously hardcoded in MainActivity.java / activity_main.xml, now translatable -->
     <string name="search_coming_soon">البحث - قريبًا</string>
     <string name="signup_coming_soon">التسجيل - قريبًا</string>
-
     <string name="google_review_count">استنادًا إلى 102 تقييم على Google</string>
     <string name="review_label">التقييمات</string>
-
     <string name="register_cta_text">سجّل لتصلك أحدث الباقات والعروض</string>
     <string name="register_cta_button">تسجيل</string>
-
     <string name="review_1_name">السيدة أمينة</string>
     <string name="review_1_quote">رحلة عمرة منظمة جدًا، وكان المطوّف متعاونًا للغاية طوال الرحلة.</string>
     <string name="review_2_name">السيد رزاق</string>
     <string name="review_2_quote">إجراءات الحجز سهلة والدفع واضح وفريق العمل متجاوب عبر واتساب.</string>
     <string name="review_3_name">السيدة سيتي</string>
     <string name="review_3_quote">الفندق قريب من المسجد الحرام، وكان مريحًا جدًا للعائلة.</string>
-
     <string name="faq_q1">كيف يمكنني دفع العربون؟</string>
     <string name="faq_a1">يمكن دفع العربون عبر التحويل البنكي أو التواصل مباشرة مع فريقنا عبر واتساب للحصول على تعليمات الدفع.</string>
     <string name="faq_q2">كم يجب أن تكون مدة صلاحية جواز السفر؟</string>
     <string name="faq_a2">يجب أن يكون جواز السفر ساري المفعول لمدة لا تقل عن 6 أشهر من تاريخ المغادرة.</string>
     <string name="faq_q3">هل يمكنني تغيير التاريخ بعد الحجز؟</string>
     <string name="faq_a3">نعم، حسب توفر الأماكن وقد تُطبّق رسوم تغيير. يرجى التواصل مع الإدارة للتأكيد.</string>
-
     <string name="package_duration_price">%1$d أيام %2$d ليالٍ - RM%3$s</string>
-
+    <string name="help_support_title">مركز المساعدة والدعم</string>
+    <string name="help_support_headline">هل تحتاج إلى مساعدة في رحلتك؟</string>
+    <string name="help_support_sub">مستشارو رعاية العملاء لدينا على استعداد لمساعدتك في الباقات والتأشيرات واستفسارات الحجز.</string>
+    <string name="help_support_btn_contact">اتصل بنا</string>
+    <string name="help_support_btn_whatsapp">تواصل عبر واتساب</string>
     <string name="prayer_subuh">الفجر</string>
     <string name="prayer_zohor">الظهر</string>
     <string name="prayer_asar">العصر</string>
@@ -100,7 +119,6 @@
     <string name="menu_language">اللغة</string>
     <string name="menu_about_us">من نحن</string>
     <string name="menu_contact_us">اتصل بنا</string>
-
     <string name="about_us_title">من نحن</string>
     <string name="company_full_name">Hafiz Travel &amp; Tours Sdn Bhd</string>
     <string name="company_short_name">Hafiz Travel &amp; Tours</string>
@@ -122,7 +140,6 @@
     <string name="registration_motac">مسجّلة لدى MOTAC: KPK/LN 10751</string>
     <string name="registration_ssm">رقم تسجيل SSM: 202201043065 (1488762-A)</string>
     <string name="about_established_year">تأسست في عام 2022</string>
-
     <string name="contact_us_title">اتصل بنا</string>
     <string name="contact_hero_blurb">هل لديك سؤال حول باقات العمرة أو الجولات لدينا؟ تواصل معنا عبر أي من القنوات أدناه، ويسعدنا مساعدتك.</string>
     <string name="label_address">العنوان</string>
@@ -130,7 +147,6 @@
     <string name="label_email">البريد الإلكتروني</string>
     <string name="contact_whatsapp_cta">راسلنا عبر واتساب الآن</string>
     <string name="contact_social_title">وسائل التواصل الاجتماعي</string>
-
     <string name="default_user_name">مستخدم</string>
     <string name="profile_member_since">عضو منذ 2026</string>
     <string name="profile_account_section">حسابي</string>
@@ -141,19 +157,15 @@
     <string name="profile_theme_light">المظهر الفاتح</string>
     <string name="profile_theme_dark">المظهر الداكن</string>
     <string name="profile_logout">تسجيل الخروج</string>
-
     <string name="guideline_title">دليل العمرة</string>
     <string name="guideline_hero_title">دليل موجز للعمرة</string>
     <string name="guideline_hero_blurb">مرتب حسب الترتيب الفعلي - من آداب السفر حتى إتمام مناسك العمرة.</string>
     <string name="guideline_pdf_title">تريد الدليل الكامل؟</string>
     <string name="guideline_pdf_subtitle">حمّل ملف PDF الكامل مع شرح تفصيلي</string>
     <string name="guideline_pdf_button">تحميل</string>
-
     <string name="prayer_times_title_jakim">مواقيت الصلاة اليوم (JAKIM)</string>
     <string name="prayer_times_title_jakim_zone">مواقيت الصلاة اليوم (JAKIM - المنطقة %1$s)</string>
-
-    <string name="podcast_section_title">بودكاست</string>
-
+    <string name="podcast_section_title">بودكاست رحلة حافظ</string>
     <string name="bab1_hero_title">آداب السفر والممارسات المستحبة</string>
     <string name="bab1_hero_blurb">آداب السفر وكيفية الصلاة أثناء الرحلة.</string>
     <string name="bab1_s1_title">آداب بدء الرحلة</string>
@@ -206,16 +218,12 @@
     <string name="bab6_s1_body">-طوال الرحلة وعند دخول المدينة: الإكثار من الصلاة على النبي صلى الله عليه وسلم، وقراءة الدعاء: "اللهم اجعل هذه المدينة حرزًا من النار والعذاب."\n\n-عند دخول المسجد: قراءة دعاء الحفظ وطلب الرحمة.\n\n-تحية المسجد: ركعتان (الركعة الأولى: سورة الكافرون، والركعة الثانية: سورة الإخلاص)، في الروضة إن أمكن، دون إزعاج الحجاج الآخرين.</string>
     <string name="bab6_s2_title">أماكن الزيارة في المدينة المنورة</string>
     <string name="bab6_s2_body">البقيع\n\n-المقبرة الرئيسية للمدينة منذ عهد النبي صلى الله عليه وسلم.\n\n-مثوى زوجات النبي وبناته وأحد أبنائه.\n\nدعاء مستحب: السلام على أهل القبور، والاستغفار لمن سبق ومن لحق، وسؤال ألا يُحرَم أجرهم وألا نُفتَن بعدهم.\n\nمسجد قباء\n\n-أول مسجد بناه النبي صلى الله عليه وسلم بعد الهجرة، ويقع على بعد 3 كم جنوب المدينة.\n\n-الفضل: الصلاة في مسجد قباء تعدل أجر عمرة (رواه ابن ماجه).\n\n-كان النبي صلى الله عليه وسلم يزوره بانتظام يوم السبت، وأحيانًا يومي الاثنين والخميس.\n\n-بُني على أساس من التقوى (سورة التوبة: 108).\n\nجبل أحد\n\n-يقع على بعد 5 كم شمال المدينة، معروف بغزوة أحد.\n\n-معنى اسم "أحد" هو المنفرد (غير متصل بجبال أخرى).\n\n-الحديث: "أحد جبل يحبنا ونحبه" (رواه البخاري).\n\n-يضم قبور حمزة بن عبد المطلب، وعبد الله بن جحش، ومصعب بن عمير، وغيرهم من شهداء أحد.\n\n-يُستحب الدعاء عند زيارته.\n\nمسجد القبلتين\n\n-كان سابقًا مسجد بني سلمة، وهو الموضع الذي وقع فيه تحويل القبلة.\n\n-بينما كان النبي صلى الله عليه وسلم يؤم المصلين في صلاة الظهر، نزلت آية سورة البقرة 144 التي أمرت باستقبال المسجد الحرام.\n\n-فتحوّل من استقبال بيت المقدس إلى استقبال الكعبة، ولذلك سُمّي بمسجد القبلتين.</string>
-
-    <!-- Checklist - picker & titles -->
     <string name="checklist_picker_title">اختر القائمة</string>
     <string name="checklist_option_umrah">قائمة العمرة</string>
     <string name="checklist_option_tour">قائمة الجولة</string>
     <string name="checklist_dialog_title_umrah">قائمة التحضير للعمرة</string>
     <string name="checklist_dialog_title_tour">قائمة التحضير للجولة</string>
     <string name="dialog_close">إغلاق</string>
-
-    <!-- Checklist - section headers (shared) -->
     <string name="checklist_section_travel_docs">وثائق السفر</string>
     <string name="checklist_section_men_clothing">الملابس (الحجاج الرجال)</string>
     <string name="checklist_section_women_clothing">الملابس (الحاجّات النساء)</string>
@@ -226,16 +234,12 @@
     <string name="checklist_section_finance">الشؤون المالية</string>
     <string name="checklist_section_general">أغراض عامة</string>
     <string name="checklist_section_clothing">الملابس</string>
-
-    <!-- Checklist Umrah - Dokumen -->
     <string name="checklist_umrah_docs_1">جواز سفر ساري المفعول لمدة 6 أشهر أو أكثر</string>
     <string name="checklist_umrah_docs_2">تأشيرة العمرة / التصريح (إن وجد)</string>
     <string name="checklist_umrah_docs_3">شهادة تطعيم التهاب السحايا (ICV)</string>
     <string name="checklist_umrah_docs_4">إحضار جواز السفر القديم (إذا تم تجديده مؤخرًا)</string>
     <string name="checklist_umrah_docs_5">نسخ من الوثائق المهمة (جواز السفر، التذكرة، التأشيرة)</string>
     <string name="checklist_umrah_docs_6">كتاب العمرة وكتاب الأدعية سهل الحمل</string>
-
-    <!-- Checklist Umrah - Lelaki -->
     <string name="checklist_umrah_men_1">إزار الإحرام</string>
     <string name="checklist_umrah_men_2">حزام العمرة</string>
     <string name="checklist_umrah_men_3">قميص بسحاب</string>
@@ -250,8 +254,6 @@
     <string name="checklist_umrah_men_12">مقص صغير / أداة حلاقة (توضع في الحقيبة المسجلة، ليست حقيبة اليد)</string>
     <string name="checklist_umrah_men_13">سجادة صلاة صغيرة</string>
     <string name="checklist_umrah_men_14">مرشح للأنف (كمامة)</string>
-
-    <!-- Checklist Umrah - Perempuan -->
     <string name="checklist_umrah_women_1">التلكونج (لباس الصلاة)</string>
     <string name="checklist_umrah_women_2">تلكونج صغير</string>
     <string name="checklist_umrah_women_3">غطاء الرأس (طرحة)</string>
@@ -265,8 +267,6 @@
     <string name="checklist_umrah_women_11">زجاجة رذاذ للوضوء</string>
     <string name="checklist_umrah_women_12">مقص / أداة حلاقة</string>
     <string name="checklist_umrah_women_13">مرشح للأنف / نقاب</string>
-
-    <!-- Checklist Umrah - Ubat -->
     <string name="checklist_umrah_med_1">دواء الحمى (بنادول)</string>
     <string name="checklist_umrah_med_2">دواء الزكام</string>
     <string name="checklist_umrah_med_3">دواء السعال</string>
@@ -280,42 +280,28 @@
     <string name="checklist_umrah_med_11">فرشاة أسنان ومعجون أسنان صغير الحجم</string>
     <string name="checklist_umrah_med_12">معقم اليدين</string>
     <string name="checklist_umrah_med_13">أدوية شخصية كافية (أسعار الصيدليات في مكة/المدينة أعلى بمرتين إلى ثلاث مرات)</string>
-
-    <!-- Checklist Umrah - Elektronik -->
     <string name="checklist_umrah_elec_1">شاحن الهاتف</string>
     <string name="checklist_umrah_elec_2">بطارية محمولة</string>
     <string name="checklist_umrah_elec_3">وصلة كهربائية</string>
     <string name="checklist_umrah_elec_4">مروحة صغيرة</string>
     <string name="checklist_umrah_elec_5">سبحة إلكترونية</string>
-
-    <!-- Checklist Umrah - Aksesori Perempuan -->
     <string name="checklist_umrah_acc_1">مظلة</string>
     <string name="checklist_umrah_acc_2">نظارة شمسية</string>
     <string name="checklist_umrah_acc_3">كمامة</string>
-
-    <!-- Checklist Umrah - Makanan -->
     <string name="checklist_umrah_food_1">بسكويت جاف</string>
     <string name="checklist_umrah_food_2">حلوى</string>
     <string name="checklist_umrah_food_3">نودلز سريعة التحضير</string>
     <string name="checklist_umrah_food_4">صلصة سامبال جافة</string>
-
-    <!-- Checklist Umrah - Kewangan -->
     <string name="checklist_umrah_finance_1">تحويل عملة كافية إلى الريال السعودي</string>
     <string name="checklist_umrah_finance_2">الاحتفاظ ببعض الدولار الأمريكي كاحتياط</string>
     <string name="checklist_umrah_finance_3">تفعيل بطاقة الخصم/الائتمان للاستخدام في الخارج</string>
-
-    <!-- Checklist Umrah - Am -->
     <string name="checklist_umrah_general_1">أدوات الاستحمام</string>
     <string name="checklist_umrah_general_2">منشفة إضافية (فنادق المدينة أحيانًا تنقصها المناشف)</string>
     <string name="checklist_umrah_general_3">أغراض أخرى معقولة</string>
-
-    <!-- Checklist Tour - Dokumen -->
     <string name="checklist_tour_docs_1">جواز سفر ساري المفعول لمدة 6 أشهر أو أكثر</string>
     <string name="checklist_tour_docs_2">إحضار جواز السفر معك</string>
     <string name="checklist_tour_docs_3">إحضار جواز السفر القديم (إذا تم تجديده مؤخرًا)</string>
     <string name="checklist_tour_docs_4">التحقق من حالة السفر للخارج (SSPI)</string>
-
-    <!-- Checklist Tour - Ubat -->
     <string name="checklist_tour_med_1">بنادول</string>
     <string name="checklist_tour_med_2">دواء التهاب الحلق</string>
     <string name="checklist_tour_med_3">دواء الإسهال</string>
@@ -324,46 +310,38 @@
     <string name="checklist_tour_med_6">زيت طبي</string>
     <string name="checklist_tour_med_7">زيت الزيتون / مرطب / بلسم الشفاه</string>
     <string name="checklist_tour_med_8">وسادة تدفئة</string>
-
-    <!-- Checklist Tour - Pakaian -->
     <string name="checklist_tour_clothing_1">سترة رقيقة (طبقة متوسطة)</string>
     <string name="checklist_tour_clothing_2">جينز / بنطال طويل رقيق</string>
     <string name="checklist_tour_clothing_3">سترة إضافية (للطقس البارد/العاصف)</string>
     <string name="checklist_tour_clothing_4">حذاء مريح مغلق (أحذية رياضية)</string>
     <string name="checklist_tour_clothing_5">نظارة شمسية وقبعة</string>
-
-    <!-- Checklist Tour - Elektronik -->
     <string name="checklist_tour_elec_1">محول سفر</string>
     <string name="checklist_tour_elec_2">بطارية محمولة (بحد أقصى 20,000 مللي أمبير - توضع في حقيبة اليد)</string>
-
-    <!-- Checklist Tour - Kewangan -->
     <string name="checklist_tour_finance_1">تحويل العملة حسب الوجهة</string>
     <string name="checklist_tour_finance_2">تفعيل بطاقة الخصم/الائتمان للاستخدام في الخارج</string>
-
     <string name="forgot_password">نسيت كلمة المرور؟</string>
     <string name="reset_password_title">إعادة ضبط كلمة المرور</string>
     <string name="reset_password_msg">أدخل بريدك الإلكتروني، وسنرسل لك رابطًا لإعادة ضبط كلمة المرور.</string>
     <string name="hint_enter_email">أدخل بريدك الإلكتروني</string>
     <string name="btn_send">إرسال</string>
     <string name="btn_cancel">إلغاء</string>
-
     <string name="reset_password_invalid_email">يرجى إدخال بريد إلكتروني صحيح</string>
     <string name="reset_password_sent">تم إرسال بريد إعادة تعيين كلمة المرور. يرجى التحقق من بريدك الوارد.</string>
     <string name="reset_password_failed">فشل إرسال البريد الإلكتروني. يرجى المحاولة مرة أخرى.</string>
-
     <string name="login_google_signin_failed">فشل تسجيل الدخول عبر Google: الرمز %1$d</string>
     <string name="login_google_success">تم تسجيل الدخول عبر Google بنجاح! %1$s</string>
     <string name="login_google_failed">فشل تسجيل الدخول عبر Google. يرجى المحاولة مرة أخرى.</string>
     <string name="login_email_invalid">يرجى إدخال بريد إلكتروني صحيح</string>
     <string name="login_password_required">يرجى إدخال كلمة المرور</string>
     <string name="login_success">تم تسجيل الدخول بنجاح!</string>
-    <string name="login_failed_default">فشل تسجيل الدخول، يرجى المحاولة مرة أخرى</string>
-    <string name="language_picker_title">Choose Language / Pilih Bahasa</string>
-
+    <string name="language_picker_title">اختر اللغة</string>
+    <string name="language_picker_subtitle">اختر لغتك المفضلة</string>
     <string name="prayer_times_title_fallback">أوقات العبادة لهذا اليوم (تقديرية – لا يوجد اتصال بالإنترنت)</string>
     <string name="prayer_location_denied_text">فعّل خدمات الموقع لعرض مواقيت الصلاة.</string>
     <string name="prayer_use_my_location">استخدام الموقع الحالي</string>
-
+    <string name="prayer_refresh_location">تحديث الموقع</string>
+    <string name="prayer_updating_location">جارٍ تحديث موقع الصلاة...</string>
+    <string name="prayer_location_updated">تم تحديث الموقع</string>
     <string name="umrah_section_popular">الباقات الشائعة</string>
     <string name="umrah_section_khas">باقات خاصة</string>
     <string name="umrah_section_ziarah">زيارة العمرة</string>
@@ -372,13 +350,10 @@
     <string name="tour_section_available">الباقات المتاحة</string>
     <string name="tour_inbound_coming_soon">باقات السياحة الداخلية لا تزال في مرحلة التخطيط. ترقبوا التحديثات!</string>
     <string name="tour_section_outbound">خارجي</string>
-
     <string name="checklist_umrah_title">إجراءات أداء العمرة</string>
     <string name="checklist_reset">إعادة ضبط</string>
     <string name="checklist_progress_suffix">منتهي</string>
     <string name="all_packages_title">جميع الباقات</string>
-
-    <!-- Section 1 -->
     <string name="checklist_sec1_title">1. قبل السفر</string>
     <string name="checklist_sec1_item1">الاغتسال المسنون للإحرام</string>
     <string name="checklist_sec1_item2">تقليم الأظافر والتنظف قبل الإحرام</string>
@@ -388,8 +363,6 @@
     <string name="checklist_sec1_item4">صلاة ركعتي سنة الإحرام</string>
     <string name="checklist_sec1_item5">التأكد من معرفة الميقات</string>
     <string name="checklist_sec1_item6">تحضير نية الإحرام</string>
-
-    <!-- Section 2 -->
     <string name="checklist_sec2_title">2. في الميقات \u2013 نية الإحرام</string>
     <string name="checklist_sec2_item1">نية العمرة</string>
     <string name="checklist_sec2_heading1">صيغة النية:</string>
@@ -398,24 +371,18 @@
     <string name="checklist_sec2_heading2">التلبية:</string>
     <string name="checklist_sec2_arabic2">لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لَا شَرِيكَ لَكَ لَبَّيْكَ، إِنَّ الْحَمْدَ وَالنِّعْمَةَ لَكَ وَالْمُلْكَ، لَا شَرِيكَ لَكَ</string>
     <string name="checklist_sec2_item3">الالتزام بجميع محظورات الإحرام</string>
-
-    <!-- Section 3 -->
     <string name="checklist_sec3_title">3. الرحلة إلى مكة</string>
     <string name="checklist_sec3_item1">الإكثار من التلبية</string>
     <string name="checklist_sec3_item2">الصلاة على النبي صلى الله عليه وسلم</string>
     <string name="checklist_sec3_item3">الذكر</string>
     <string name="checklist_sec3_item4">الدعاء</string>
     <string name="checklist_sec3_item5">الالتزام بمحظورات الإحرام</string>
-
-    <!-- Section 4 -->
     <string name="checklist_sec4_title">4. الوصول إلى المسجد الحرام</string>
     <string name="checklist_sec4_item1">دخول المسجد الحرام بالرجل اليمنى</string>
     <string name="checklist_sec4_item2">قراءة دعاء دخول المسجد</string>
     <string name="checklist_sec4_item3">النظر إلى الكعبة والدعاء</string>
     <string name="checklist_sec4_item4">الاستعداد للطواف</string>
     <string name="checklist_sec4_item5">التأكد من الوضوء</string>
-
-    <!-- Section 5 -->
     <string name="checklist_sec5_title">5. الطواف \u2013 7 أشواط</string>
     <string name="checklist_sec5_heading1">شروط مهمة:</string>
     <string name="checklist_sec5_item1">الطهارة من الحدث</string>
@@ -437,8 +404,6 @@
     <string name="checklist_sec5_info8">الكافرون</string>
     <string name="checklist_sec5_info9">أي دعاء يسهل حفظه</string>
     <string name="checklist_sec5_note1">لا توجد سورة معينة واجبة في كل شوط.</string>
-
-    <!-- Section 6 -->
     <string name="checklist_sec6_title">6. بعد الطواف</string>
     <string name="checklist_sec6_item1">صلاة ركعتي سنة الطواف</string>
     <string name="checklist_sec6_item2">الصلاة خلف مقام إبراهيم إن أمكن</string>
@@ -446,8 +411,6 @@
     <string name="checklist_sec6_item4">قراءة سورة الإخلاص في الركعة الثانية</string>
     <string name="checklist_sec6_item5">الدعاء بعد الصلاة</string>
     <string name="checklist_sec6_item6">شرب ماء زمزم</string>
-
-    <!-- Section 7 -->
     <string name="checklist_sec7_title">7. السعي \u2013 7 أشواط</string>
     <string name="checklist_sec7_note1">البداية: الصفا \u2022 النهاية: المروة</string>
     <string name="checklist_sec7_item1">التوجه إلى الصفا</string>
@@ -467,16 +430,12 @@
     <string name="checklist_sec7_info5">الرجال: الهرولة بين العلمين الأخضرين</string>
     <string name="checklist_sec7_info6">النساء: المشي العادي</string>
     <string name="checklist_sec7_info7">مراعاة الترتيب من الصفا إلى المروة</string>
-
-    <!-- Section 8 -->
     <string name="checklist_sec8_title">8. التحلل</string>
     <string name="checklist_sec8_note1">بعد إتمام 7 أشواط من السعي:</string>
     <string name="checklist_sec8_item1">الرجال: حلق أو تقصير الشعر</string>
     <string name="checklist_sec8_item2">النساء: تقصير جزء يسير من الشعر</string>
     <string name="checklist_sec8_item3">التحلل يعني إتمام العمرة</string>
     <string name="checklist_sec8_item4">بعد التحلل تنتهي محظورات الإحرام</string>
-
-    <!-- Section 9 -->
     <string name="checklist_sec9_title">9. القائمة النهائية للعمرة</string>
     <string name="checklist_sec9_note1">تأكد من إتمام كل ما يلي:</string>
     <string name="checklist_sec9_item1">الإحرام</string>
@@ -488,23 +447,18 @@
     <string name="checklist_sec9_item7">التحلل</string>
     <string name="checklist_sec9_item8">الترتيب</string>
     <string name="checklist_sec9_item9">اكتملت العمرة</string>
-
     <string name="panduan_banner_title">مستعد للعمرة؟</string>
     <string name="panduan_banner_subtitle">اطلع على إجراءات أداء العمرة.</string>
     <string name="panduan_banner_button">قائمة التحقق</string>
-
     <string name="umrah_hero_title">باقات العمرة</string>
     <string name="umrah_hero_subtitle">اعثر على باقة العمرة المناسبة لك</string>
     <string name="umrah_empty_state">لم يتم العثور على باقات</string>
-
     <string name="tour_hero_title">باقات الجولات</string>
     <string name="tour_hero_subtitle">اكتشف وجهتك المفضلة</string>
     <string name="tour_empty_state">لم يتم العثور على باقات</string>
-
     <string name="favorite_hero_title">المفضلة</string>
     <string name="favorite_hero_subtitle">الباقات التي حفظتها لمشاهدتها لاحقاً</string>
     <string name="favorite_empty_state">لا توجد باقات محفوظة بعد</string>
-
     <string name="package_detail_price_from_label">يبدأ من</string>
     <string name="package_detail_whatsapp_button">واتساب المستشار</string>
     <string name="package_detail_poster_title">ملصق الباقة</string>
@@ -523,6 +477,178 @@
     <string name="package_detail_price_options_title">خيارات السعر/الغرفة</string>
     <string name="package_detail_gallery_title">معرض الصور</string>
     <string name="package_detail_whatsapp_default_message">السلام عليكم، أنا مهتم بباقة %1$s. هل يمكنكم مشاركة المزيد من التفاصيل؟</string>
-
-
+    <string name="removed_from_favorites">تمت الإزالة من المفضلة</string>
+    <string name="added_to_favorites">تم الحفظ في المفضلة</string>
+    <string name="undo">تراجع</string>
+    <string name="remove_favorite_dialog_title">الإزالة من المفضلة؟</string>
+    <string name="remove_favorite_dialog_message">هل أنت متأكد من أنك تريد إزالة هذه الباقة من قائمة المفضلة لديك؟</string>
+    <string name="remove_favorite_dialog_confirm">إزالة</string>
+    <string name="remove_favorite_dialog_cancel">إلغاء</string>
+    <string name="filter_title">فلترة الباقات</string>
+    <string name="filter_reset">إعادة تعيين</string>
+    <string name="filter_category_header">الفئة</string>
+    <string name="filter_cat_umrah">عمرة</string>
+    <string name="filter_cat_tour">سياحة</string>
+    <string name="filter_destination_header">الوجهة / الدولة</string>
+    <string name="filter_all_destinations">جميع الوجهات</string>
+    <string name="filter_price_header">نطاق السعر</string>
+    <string name="filter_price_presets_header">خيارات سريعة</string>
+    <string name="filter_price_below_3k">&lt; RM3,000</string>
+    <string name="filter_price_3k_6k">RM3,000 - RM6,000</string>
+    <string name="filter_price_6k_10k">RM6,000 - RM10,000</string>
+    <string name="filter_price_above_10k">&gt; RM10,000</string>
+    <string name="filter_custom_slider_header">شريط تمرير السعر المخصص</string>
+    <string name="filter_min_label">الأدنى</string>
+    <string name="filter_max_label">الأعلى</string>
+    <string name="filter_apply_button">تطبيق الفلتر (%1$d باقة)</string>
+    <string name="filter_active_tag_category">الفئة: %1$s</string>
+    <string name="filter_active_tag_destination">الوجهة: %1$s</string>
+    <string name="filter_active_tag_price">السعر: RM%1$s - RM%2$s</string>
+    <string name="filter_clear_all">مسح الفلتر</string>
+    <string name="dest_turkey">تركيا</string>
+    <string name="dest_korea">كوريا</string>
+    <string name="dest_japan">اليابان</string>
+    <string name="dest_saudi">المملكة العربية السعودية</string>
+    <string name="dest_europe">أوروبا / البلقان</string>
+    <string name="dest_vietnam">فيتنام</string>
+    <string name="dest_china">الصين</string>
+    <string name="prayer_times_header">مواقيت الصلاة اليوم</string>
+    <string name="prayer_times_today_format">أوقات الصلاة اليوم (%1$s)</string>
+    <string name="explore_package_arrow">استكشف الباقة ←</string>
+    <string name="exclusive_offer_title">عرض حصري للحجاج</string>
+    <string name="exclusive_offer_sub">سجل حساباً لتلقي أحدث العروض الترويجية والخصومات الخاصة.</string>
+    <string name="google_review_write_btn">اكتب تقييماً ←</string>
+    <string name="all_packages_empty">لم يتم العثور على باقات</string>
+    <string name="prayer_name_subuh">الفجر</string>
+    <string name="prayer_name_syuruk">الشروق</string>
+    <string name="prayer_name_zohor">الظهر</string>
+    <string name="prayer_name_asar">العصر</string>
+    <string name="prayer_name_maghrib">المغرب</string>
+    <string name="prayer_name_isyak">العشاء</string>
+    <string name="prayer_countdown_entered">حان وقت الصلاة</string>
+    <string name="prayer_countdown_min">%1$s خلال %2$d دقيقة</string>
+    <string name="prayer_countdown_hour_min">%1$s خلال %2$d ساعة و %3$d دقيقة</string>
+    <string name="err_server_connection">فشل الاتصال بخادم النظام.</string>
+    <string name="err_connection_detail">خطأ في الاتصال: %1$s</string>
+    <string name="error_whatsapp_not_found">واتساب غير مثبت على هذا الجهاز.</string>
+    <string name="err_open_map">تعذر فتح الخريطة.</string>
+    <string name="err_open_call">تعذر إجراء المكالمة.</string>
+    <string name="err_open_email">تعذر فتح تطبيق البريد الإلكتروني.</string>
+    <string name="err_open_link">تعذر فتح الرابط.</string>
+    <string name="err_open_review">تعذر فتح صفحة التقييمات.</string>
+    <string name="err_open_youtube">تعذر فتح يوتيوب.</string>
+    <string name="err_package_not_found">لم يتم العثور على الباقة.</string>
+    <string name="err_package_load_failed">فشل تحميل بيانات الباقة.</string>
+    <string name="guideline_dialog_title">دليل الاستعداد</string>
+    <string name="guideline_dialog_message">✓ جواز سفر ساري لمدة 6 أشهر على الأقل\n\n✓ لقاح الحمى الشوكية (إذا لزم الأمر)\n\n✓ ملابس الإحرام / ملابس مناسبة\n\n✓ الأدوية الشخصية\n\n✓ نسخ من المستندات المهمة (جواز السفر، التذكرة، التأشيرة)\n\n✓ مبلغ نقدي كافٍ (ريال / دولار أمريكي)</string>
+    <string name="coming_soon_format">%1$s قريبًا</string>
+    <string name="pdf_coming_soon_format">تحميل ملف %1$s بصيغة PDF - قريبًا</string>
+    <string name="chapter_label_format">الفصل %1$d</string>
+    <string name="profile_guest_name">مستخدم ضيف</string>
+    <string name="profile_no_booking">لا توجد حجوزات بعد - ستظهر حجوزاتك هنا</string>
+    <string name="profile_logout_success">تم تسجيل الخروج بنجاح</string>
+    <string name="profile_login_to_update">يرجى تسجيل الدخول لتحديث ملفك الشخصي</string>
+    <string name="profile_change_password">تغيير كلمة المرور</string>
+    <string name="profile_save">حفظ</string>
+    <string name="profile_updated">تم تحديث الملف الشخصي بنجاح!</string>
+    <string name="profile_email_invalid">بريد إلكتروني غير صالح</string>
+    <string name="profile_reset_title">إعادة تعيين كلمة المرور</string>
+    <string name="profile_reset_message">إرسال رابط إعادة تعيين كلمة المرور إلى: %1$s؟</string>
+    <string name="profile_reset_send">إرسال</string>
+    <string name="profile_reset_sent">تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني!</string>
+    <string name="profile_field_full_name">الاسم الكامل</string>
+    <string name="profile_field_phone">رقم الهاتف</string>
+    <string name="profile_field_email">البريد الإلكتروني</string>
+    <string name="privacy_terms_toast">Hafiz Travel &amp; Tours Sdn Bhd - الخصوصية &amp; الشروط</string>
+    <string name="package_fallback_destination">وجهة السفر</string>
+    <string name="detail_section_accommodation_summary">ملخص الإقامة</string>
+    <string name="detail_section_hotels_umrah">الفنادق (مكة &amp; المدينة)</string>
+    <string name="detail_section_hotels_tour">الفنادق</string>
+    <string name="detail_hotels_empty_notice">سيتم تحديث معلومات الفنادق قريبًا.</string>
+    <string name="detail_section_room_pricing">خيارات الغرف &amp; الأسعار</string>
+    <string name="detail_section_itinerary">برنامج الرحلة الكامل</string>
+    <string name="detail_itinerary_empty_notice">سيتم تحديث برنامج الرحلة قريبًا.</string>
+    <string name="detail_itinerary_hint">اضغط على اليوم لعرض تفاصيله</string>
+    <string name="detail_section_inclusions">المشمول &amp; غير المشمول</string>
+    <string name="detail_included_heading">مشمول</string>
+    <string name="detail_excluded_heading">غير مشمول</string>
+    <string name="detail_whats_covered">ما يشمله البكج</string>
+    <string name="detail_whats_covered_sub">الخدمات والميزات الرئيسية المشمولة في باقتك</string>
+    <string name="detail_not_covered">ما لا يشمله البكج</string>
+    <string name="detail_not_covered_sub">النفقات والخدمات خارج تغطية الباقة</string>
+    <string name="detail_terms_guidelines">شروط وإرشادات الحزمة</string>
+    <string name="detail_required_documents">الوثائق المطلوبة</string>
+    <string name="room_quint">غرفة لخمسة أشخاص (Quint)</string>
+    <string name="room_quad">غرفة لأربعة أشخاص (Quad)</string>
+    <string name="room_triple">غرفة لثلاثة أشخاص (Triple)</string>
+    <string name="room_double">غرفة لشخصين (Double)</string>
+    <string name="room_single">غرفة لشخص واحد (Single)</string>
+    <string name="detail_price_from">يبدأ السعر من</string>
+    <string name="cat_flights">الطيران</string>
+    <string name="cat_accommodation">الإقامة</string>
+    <string name="cat_visa_protection">التأشيرة والحماية</string>
+    <string name="cat_meals">الوجبات</string>
+    <string name="cat_transportation">المواصلات</string>
+    <string name="cat_tour_guidance">الإرشاد والتوجيه</string>
+    <string name="cat_travel_essentials">مستلزمات السفر</string>
+    <string name="cat_preparation">التحضير والتوجيه</string>
+    <string name="cat_other">مشتملات أخرى</string>
+    <string name="detail_section_packing">دليل التجهيز</string>
+    <string name="detail_packing_heading">قائمة التجهيز الموصى بها</string>
+    <string name="detail_section_notes">ملاحظات مهمة &amp; إرشادات</string>
+    <string name="detail_section_gallery">معرض الصور</string>
+    <string name="detail_per_pax">للشخص الواحد</string>
+    <string name="nights_unit">ليالٍ</string>
+    <string name="nights_label_makkah">مكة</string>
+    <string name="nights_label_madinah">المدينة</string>
+    <string name="nights_label_taif">الطائف</string>
+    <string name="nights_label_hotel1">الفندق 1</string>
+    <string name="nights_label_hotel2">الفندق 2</string>
+    <string name="nights_label_hotel3">الفندق 3</string>
+    <string name="flight_type_fallback">رحلة طيران</string>
+    <string name="flight_route_fallback">سيتم تأكيد المسار</string>
+    <string name="hotel_title_umrah_makkah">فندق مكة</string>
+    <string name="hotel_title_umrah_madinah">فندق المدينة</string>
+    <string name="hotel_title_umrah_taif">فندق الطائف</string>
+    <string name="hotel_title_tour_hotel1">الفندق 1</string>
+    <string name="hotel_title_tour_hotel2">الفندق 2</string>
+    <string name="hotel_title_tour_extra">فندق إضافي</string>
+    <string name="hotel_rating_fallback">قياسي</string>
+    <string name="share_package_via">مشاركة الباقة عبر</string>
+    <string name="share_price_from">💰 السعر يبدأ من: *%1$s*</string>
+    <string name="share_duration">⏱️ المدة: *%1$d أيام %2$d ليالٍ*</string>
+    <string name="share_cta">📲 احجز أو استفسر</string>
+    <string name="package_badge_umrah">✨ باقة العمرة</string>
+    <string name="package_badge_tour">✈️ باقة الجولات</string>
+    <string name="results_packages_format">%1$d باقات</string>
+    <string name="filter_slider_min_label">RM0 (الأدنى)</string>
+    <string name="filter_slider_max_label">RM20,000+ (الأعلى)</string>
+    <string name="promo_hero_kicker">مكة &amp; المدينة</string>
+    <string name="promo_hero_title">باقة العمرة في العطلة المدرسية &amp; شوال</string>
+    <string name="promo_hero_price">من RM 7,990 • 12 أيام 10 ليالٍ</string>
+    <string name="google_review_summary">4.9 ★★★★★ (أكثر من 250 تقييمًا على Google)</string>
+    <string name="package_vip_badge">✨ باقة مميزة VIP</string>
+    <string name="package_whatsapp_enquiry">استفسر عبر واتساب</string>
+    <string name="splash_eyebrow">رحلات حول العالم &amp; العمرة</string>
+    <string name="splash_tagline">اصنع ذكريات صادقة مع Hafiz Travel &amp; Tours</string>
+    <string name="hotel_distance_to">%1$s إلى المسجد الحرام</string>
+    <string name="duration_days_nights">%1$d أيام %2$d ليالٍ</string>
+    <string name="duration_days_only">%1$d أيام</string>
+    <string name="package_full">باقة كاملة</string>
+    <string name="day_label_format">اليوم %1$d</string>
+    <string name="itinerary_daily">البرنامج اليومي</string>
+    <string name="azan_notif_title">حان وقت %1$s</string>
+    <string name="azan_playing">الأذان يُرفع الآن</string>
+    <string name="azan_stop">إيقاف</string>
+    <string name="azan_channel_name">إشعارات الأذان</string>
+    <string name="azan_channel_desc">إشعارات مواقيت الصلاة والأذان</string>
+    <string name="battery_title">إبقاء الأذان يعمل</string>
+    <string name="battery_message">لضمان تشغيل الإشعارات والأذان في وقتها حتى عند إغلاق التطبيق، اسمح لهذا التطبيق بالعمل دون قيود في الخلفية.\n\nهذه الخطوة اختيارية ويمكن ضبطها لاحقًا من الإعدادات.</string>
+    <string name="battery_now">الإعداد الآن</string>
+    <string name="battery_later">لاحقًا</string>
+    <string name="hijri_date_fallback">1 رجب 1448هـ</string>
+    <string name="btn_book_now">احجز الآن</string>
+    <string name="btn_ask_questions">استفسار</string>
+    <string name="selected_room_label">الغرفة المختارة</string>
+    <string name="booking_flow_notice">الخيار المحدد: %1$s (%2$s). المتابعة لإدخال بيانات المسافرين.</string>
 </resources>

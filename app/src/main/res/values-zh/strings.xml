@@ -1,59 +1,81 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" ?>
 <resources>
     <string name="app_name">HafizTravel&amp;Tours</string>
-
-    <!-- Welcome / Onboarding screen -->
-    <string name="welcome_trust_text">深受数百名朝觐者信赖</string>
-    <string name="welcome_title">您的副朝、朝觐与旅行伙伴</string>
-    <string name="welcome_subtitle">通过手机轻松预订副朝、朝觐以及国内外旅游套餐。</string>
-    <string name="welcome_start_now">立即开始</string>
-    <string name="welcome_already_have_account">已有账户？登录</string>
-
-    <!-- Login screen -->
+    <string name="welcome_brand_name">HAFIZ TRAVEL &amp; TOURS</string>
+    <string name="welcome_eyebrow">尊享定制奢华之旅</string>
+    <string name="welcome_title">卓越非凡之旅，\n缔造优雅体验。</string>
+    <string name="welcome_subtitle">无论是遍及亚欧的全球经典游览，还是安心宁谧的朝觐圣旅，皆为您悉心定制。</string>
+    <string name="welcome_chip_worldwide">全球旅游</string>
+    <string name="welcome_chip_umrah">朝觐与朝圣</string>
+    <string name="welcome_chip_custom">定制包团</string>
+    <string name="welcome_start_now">开启探索</string>
+    <string name="welcome_already_have_account_full">已有账号？ &lt;font color=\'#D81B60\'&gt;&lt;b&gt;立即登录&lt;/b&gt;&lt;/font&gt;</string>
+    <string name="filter_all">全部</string>
     <string name="login_title">欢迎回来</string>
-    <string name="login_subtitle">登录以继续</string>
+    <string name="login_subtitle">登录以规划您的梦想假期</string>
     <string name="hint_email">电子邮箱</string>
     <string name="hint_password">密码</string>
+    <string name="remember_me">记住我</string>
     <string name="login_button">登录</string>
-    <string name="login_no_account">还没有账户？立即注册。</string>
-    <string name="login_or_with">或使用以下方式登录</string>
-    <string name="login_guest">以访客身份登录</string>
-
-    <!-- Sign Up screen -->
+    <string name="login_signing_in">正在登录…</string>
+    <string name="login_no_account">还没有账户？立即注册</string>
+    <string name="login_or_with">或使用以下方式继续</string>
+    <string name="login_guest">以访客身份继续</string>
+    <string name="forgot_password_title">重置密码</string>
+    <string name="forgot_password_desc">请输入您的注册电子邮箱，我们将向您发送密码重置链接。</string>
+    <string name="btn_send_reset">发送重置链接</string>
+    <string name="reset_link_sent_success">密码重置邮件已发送！请检查您的收件箱。</string>
+    <string name="login_failed_user_not_found">未找到此电子邮箱对应的账户。</string>
+    <string name="login_failed_wrong_password">密码错误，请重试。</string>
+    <string name="login_failed_default">登录失败，请检查您的凭据。</string>
     <string name="signup_title">创建账户</string>
     <string name="signup_subtitle">注册以开始规划您的旅程。</string>
     <string name="hint_full_name">姓名</string>
     <string name="hint_phone">电话号码</string>
     <string name="hint_confirm_password">确认密码</string>
     <string name="signup_button">注册</string>
+    <string name="signup_signing_up">正在注册...</string>
+    <string name="hint_password_min">至少 6 个字符</string>
+    <string name="signup_terms_disclaimer">注册即表示您同意我们的&lt;b&gt;服务条款&lt;/b&gt;和&lt;b&gt;隐私政策&lt;/b&gt;。</string>
+    <string name="dialog_terms_title">服务条款与隐私政策</string>
     <string name="signup_have_account">已有账户？登录</string>
     <string name="signup_or_with">或使用以下方式注册</string>
     <string name="signup_guest">以访客身份登录</string>
-    <string name="social_login_google">使用 Google 登录 - 即将推出</string>
-    <string name="social_login_facebook">使用 Facebook 登录 - 即将推出</string>
-    <string name="social_login_phone">使用手机号码登录 - 即将推出</string>
-
-    <string name="social_signup_google">使用 Google 注册 - 即将推出</string>
-    <string name="social_signup_facebook">使用 Facebook 注册 - 即将推出</string>
-    <string name="social_signup_phone">使用手机号码注册 - 即将推出</string>
-
+    <string name="password_strength_weak">弱</string>
+    <string name="password_strength_medium">中等</string>
+    <string name="password_strength_strong">强</string>
+    <string name="btn_continue_google">使用 Google 继续</string>
+    <string name="social_signup_google">使用 Google 注册</string>
+    <string name="select_country_code">选择国家区号</string>
+    <string name="region_southeast_asia">东南亚</string>
+    <string name="region_international">其他国际国家</string>
+    <string name="err_name_required">请输入您的全名</string>
+    <string name="err_email_invalid">请输入有效的电子邮件地址</string>
+    <string name="err_phone_invalid">请输入有效的电话号码</string>
+    <string name="err_password_short">密码至少需要 6 个字符</string>
+    <string name="err_password_mismatch">密码不匹配</string>
+    <string name="err_signup_failed">注册失败，请重试。</string>
+    <string name="err_signup_email_exists">该电子邮件或电话号码已被注册</string>
+    <string name="err_network">网络连接错误，请检查您的网络。</string>
+    <string name="signup_success">注册成功！</string>
+    <string name="password_tip_length">8+ 个字符</string>
+    <string name="password_tip_number">数字 0–9</string>
+    <string name="password_tip_symbol">特殊符号 !@#$</string>
     <string name="guest_greeting">愿平安降临于你</string>
-    <string name="user_greeting">愿平安降临于你，%1$s</string>
-    <string name="hero_subtitle_guest">欢迎来到\nHafiz Travel &amp; Tours</string>
+    <string name="user_greeting">愿平安降临于你</string>
+    <string name="hero_subtitle_guest">访客旅行者</string>
     <string name="hero_subtitle_user">欢迎回来</string>
-    <string name="hero_headline_guest">欢迎来到\nHafiz Travel &amp; Tours</string>
-    <string name="hero_headline_user">您想去\n哪里？</string>
-
+    <string name="hero_headline_guest">您今天想去哪里\n旅行？</string>
+    <string name="hero_headline_user">您今天想去哪里\n旅行？</string>
     <string name="nav_home">首页</string>
+    <string name="nav_explore">探索</string>
     <string name="nav_umrah">副朝</string>
     <string name="nav_tour">旅游</string>
     <string name="nav_favorite">收藏</string>
-
     <string name="quick_nusuk">Nusuk</string>
     <string name="quick_guideline">副朝指南</string>
     <string name="quick_checklist">清单</string>
     <string name="quick_whatsapp">WhatsApp</string>
-
     <string name="prayer_times_title">今日礼拜时间（预估）</string>
     <string name="search_placeholder">搜索您的目的地</string>
     <string name="popular_packages">热门套餐</string>
@@ -63,33 +85,30 @@
     <string name="no_notifications">暂无新通知</string>
     <string name="faq_title">常见问题</string>
     <string name="gallery_title">图库</string>
-
-    <!-- NEW: previously hardcoded in MainActivity.java / activity_main.xml, now translatable -->
     <string name="search_coming_soon">搜索 - 即将推出</string>
     <string name="signup_coming_soon">注册 - 即将推出</string>
-
     <string name="google_review_count">基于 102 条 Google 评价</string>
     <string name="review_label">评价</string>
-
     <string name="register_cta_text">立即注册，获取最新套餐与优惠</string>
     <string name="register_cta_button">注册</string>
-
     <string name="review_1_name">Aminah 女士</string>
     <string name="review_1_quote">副朝行程安排井然有序，向导（穆塔维夫）全程给予了很大帮助。</string>
     <string name="review_2_name">Razak 先生</string>
     <string name="review_2_quote">预订流程简单，付款清晰，WhatsApp 客服回应迅速。</string>
     <string name="review_3_name">Siti 女士</string>
     <string name="review_3_quote">酒店靠近禁寺，一家人住得非常舒适。</string>
-
     <string name="faq_q1">如何支付订金？</string>
     <string name="faq_a1">可通过银行转账支付订金，或直接通过 WhatsApp 联系我们的工作人员获取付款说明。</string>
     <string name="faq_q2">护照有效期需要多久？</string>
     <string name="faq_a2">护照有效期须自出发日起至少 6 个月。</string>
     <string name="faq_q3">预订后可以更改日期吗？</string>
     <string name="faq_a3">可以，视名额情况而定，可能需支付更改费用。请联系客服确认。</string>
-
     <string name="package_duration_price">%1$d天%2$d晚 - RM%3$s</string>
-
+    <string name="help_support_title">帮助与客服中心</string>
+    <string name="help_support_headline">需要旅行方面的协助吗？</string>
+    <string name="help_support_sub">哈菲兹旅游专属客服顾问随时为您提供套餐、签证和预订咨询服务。</string>
+    <string name="help_support_btn_contact">联系我们</string>
+    <string name="help_support_btn_whatsapp">WhatsApp 咨询</string>
     <string name="prayer_subuh">晨礼</string>
     <string name="prayer_zohor">晌礼</string>
     <string name="prayer_asar">晡礼</string>
@@ -100,7 +119,6 @@
     <string name="menu_language">语言</string>
     <string name="menu_about_us">关于我们</string>
     <string name="menu_contact_us">联络我们</string>
-
     <string name="about_us_title">关于我们</string>
     <string name="company_full_name">Hafiz Travel &amp; Tours Sdn Bhd</string>
     <string name="company_short_name">Hafiz Travel &amp; Tours</string>
@@ -122,7 +140,6 @@
     <string name="registration_motac">MOTAC注册号：KPK/LN 10751</string>
     <string name="registration_ssm">SSM注册号：202201043065 (1488762-A)</string>
     <string name="about_established_year">成立于2022年</string>
-
     <string name="contact_us_title">联络我们</string>
     <string name="contact_hero_blurb">对我们的副朝或旅游配套有任何疑问？欢迎通过以下任何渠道与我们联系，我们乐意为您提供协助。</string>
     <string name="label_address">地址</string>
@@ -130,7 +147,6 @@
     <string name="label_email">电邮</string>
     <string name="contact_whatsapp_cta">立即WhatsApp联络我们</string>
     <string name="contact_social_title">我们的社交媒体</string>
-
     <string name="default_user_name">用户</string>
     <string name="profile_member_since">2026年起成为会员</string>
     <string name="profile_account_section">我的账户</string>
@@ -141,19 +157,15 @@
     <string name="profile_theme_light">浅色主题</string>
     <string name="profile_theme_dark">深色主题</string>
     <string name="profile_logout">登出</string>
-
     <string name="guideline_title">副朝指南</string>
     <string name="guideline_hero_title">副朝简明指南</string>
     <string name="guideline_hero_blurb">按照实际顺序编排 - 从旅行礼仪到完成副朝仪式。</string>
     <string name="guideline_pdf_title">需要完整指南?</string>
     <string name="guideline_pdf_subtitle">下载包含详细说明的完整PDF</string>
     <string name="guideline_pdf_button">下载</string>
-
     <string name="prayer_times_title_jakim">今日礼拜时间 (JAKIM)</string>
     <string name="prayer_times_title_jakim_zone">今日礼拜时间 (JAKIM - 区域 %1$s)</string>
-
-    <string name="podcast_section_title">播客</string>
-
+    <string name="podcast_section_title">哈菲兹探索播客</string>
     <string name="bab1_hero_title">旅行礼仪与圣行</string>
     <string name="bab1_hero_blurb">旅途礼仪以及在旅途中如何礼拜。</string>
     <string name="bab1_s1_title">启程礼仪</string>
@@ -162,7 +174,6 @@
     <string name="bab1_s2_body">缩短礼拜（盖斯尔）：将四拉卡阿特的主命拜（晌礼、晡礼、宵礼）缩短为两拉卡阿特。\n\n缩短礼拜的条件：\n\n- 行程超过两站路程（约81公里）\n- 明确知道目的地\n- 已离开所在城市/地区的范围\n- 该旅行属于合法（非为犯罪目的）\n- 无意在当地停留四天或以上（不计来去两日）\n\n可选的执行方式：\n\n- 仅缩短\n- 仅合并\n- 缩短与合并同时进行\n缩短礼拜的举意：\n</string>
     <string name="bab1_s3_title">合并礼拜（贾玛尔）</string>
     <string name="bab1_s3_body">合并礼拜：将两项主命拜合并在同一时间内完成。\n可合并的礼拜：晌礼与晡礼合并，昏礼与宵礼合并。晨礼不可合并。\n两种方式：\n\n1. 提前合并（在第一项礼拜的时间内完成）\n- 条件：按顺序（先完成第一项礼拜）、在第一项礼拜开始的تكبير或结束前举意将第二项礼拜合并于其中、连续不间断、且旅程持续至第二项礼拜完成为止。\n\n提前合并的举意（不缩短）：\n\n- 晌礼与晡礼的举意\n\nأُصَلِّي فَرْضَ الظُّهْرِ أَرْبَعَ رَكَعَاتٍ مَجْمُوعًا إِلَيْهِ الْعَصْرُ أَدَاءً لِلَّهِ تَعَالَى\n意思是：我为至高的真主礼晌礼主命拜四拉卡阿特，并将晡礼合并于其中，按时完成。</string>
-    <string name="bab4_hero_title">剃发或剪发（支柱）</string>
     <string name="bab1_s4_title">合并与缩短礼拜</string>
     <string name="bab1_s4_body">3. 同时合并与缩短礼拜：\n可在同一时间内合并两项礼拜，并将晌礼、晡礼与宵礼缩短为两拉卡阿特，须同时符合缩短与合并的条件。\n\n提前合并并缩短的举意：\n\n晌礼 + 晡礼（在晌礼时间内）- 先完成晌礼：\n\n-晌礼的举意（缩短并合并）：\n\nأُصَلِّي فَرْضَ الظَّهْرِ رَكْعَتَيْنِ قَصْرًا مَجْمُوعًا إِلَيْهِ الْعَصْرُ أَدَاءً لِلَّهِ تَعَالَى\n意思是：我为至高的真主礼晌礼主命拜两拉卡阿特并缩短，晡礼合并于其中，按时完成。\n\n道安（سلام）后，晡礼的举意（缩短）：\n\nأُصَلِّي فَرْضَ الْعَصْرِ رَكْعَتَيْنِ قَصْرًا أَدَاءً لِلَّهِ تَعَالَى\n意思是：我为至高的真主礼晡礼主命拜两拉卡阿特并缩短，按时完成。</string>
     <string name="bab2_hero_title">副朝简介</string>
@@ -179,6 +190,7 @@
     <string name="bab3_s3_body">如何进行环游天房\n\n当朝觐者抵达禁寺准备进行环游天房时，应前往黑石所在的角落。\n\n朝觐者朝黑石方向前行，并宜在此时举意环游天房。\n\n副朝环游天房的举意词\n\nاللَّهُمَّ إِنِّي أُرِيدُ طَوَافَ بَيْتِكَ الْحَرَامِ فَيَسِّرْهُ لِي وَتَقَبَّلْهُ مِنِّي سَبْعَةَ أَشْوَاطٍ طَوَافَ الْعُمْرَةِ لِلَّهِ تَعَالَى\n\n随后，以手势示意接触黑石（伊斯提拉姆）。诵念：\n\nبِسْمِ اللهِ وَاللهُ أَكْبَرُ وَلِلَّهِ الْحَمْدُ\n\n若因人潮拥挤而无法靠近，可远远地以手势示意，并诵念以上经文。\n\n受戒者不可直接触摸黑石，因为黑石上涂有香料。</string>
     <string name="bab3_s4_title">奔走（赛尔）</string>
     <string name="bab3_s4_body">如何进行奔走（赛尔）\n\n-抵达萨法山时，面向天房方向，并举意进行赛尔。\n\n副朝赛尔的举意词：\n\nاللَّهُمَّ إِنِّي أُرِيدُ أَنْ أَسْعَى بَيْنَ الصَّفَا وَالْمَرُوَةِ سَبْعَةَ أَشْوَاطٍ سَعْيَ الْعُمْرَةِ لِلَّهِ تَعَالَى\n\n举意后（仍面向天房方向），宜诵念تكبير（真主至大词）：\n\nاللَّهُ أَكْبَرُ ، اللَّهُ أَكْبَرُ ، اللَّهُ أَكْبَرُ ، وَلِلَّهِ الْحَمْدُ\n\n诵念تكبير后，宜开始朝麦尔卧山方向前行，同时诵念祈祷文：\n\nاللَّهُ أَكْبَرُ عَلَى هَدَانَا وَالْحَمْدُ لِلَّهِ عَلَى مَا أَوْلَانَا لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ يُحْيِي وَيُمِيتُ بِيَدِهِ الْخَيْرُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ أَنْجَزَ وَعْدَهُ وَنَصَرَ عَبْدَهُ وَهَزَمَ الْأَحْزَابَ وَحْدَهُ لَا إِلَهَ إِلَّا اللَّهُ\n\n-宜为自己或家人祈祷，无论是今世或后世之事，可用自己所熟悉的言辞祈求。\n\n-然后：开始朝麦尔卧山方向进行赛尔。</string>
+    <string name="bab4_hero_title">剃发或剪发（支柱）</string>
     <string name="bab4_hero_blurb">关于第四章的简要概述。</string>
     <string name="bab4_s1_title">剃发或剪发（支柱）</string>
     <string name="bab4_s1_body">-含义：按规定的条件，剃除或剪去头部的头发：\n\n-须在赛尔之后进行\n-仅限于头发\n-不少于三根头发\n-男性最好剃光头；女性只需剪去约一指节长度即可\n-若无头发，将剃刀轻拂过头部即可</string>
@@ -206,16 +218,12 @@
     <string name="bab6_s1_body">-在整段旅程中及进入麦地那时：应多向先知穆罕默德（愿主福安之）诵念祝安词，并诵念祈祷文：「主啊，求你使这座城市成为免受火狱与刑罚的庇护所。」\n\n-进入清真寺时：诵念求保护及求慈悯的祈祷文。\n\n-进殿致敬礼：两拉卡阿特（第一拉卡阿特：卡菲伦章；第二拉卡阿特：伊赫拉斯章），若可能宜在花园（劳达）内进行，但不可打扰其他朝觐者。</string>
     <string name="bab6_s2_title">麦地那的探访地点</string>
     <string name="bab6_s2_body">拜格墓园\n\n-自先知穆罕默德（愿主福安之）时代起，即为麦地那的主要墓园。\n\n-先知的妻子们、女儿们及一位儿子均安葬于此。\n\n祈祷文（圣行）：向墓中人道安，并为先行者与后来者求恕饶，祈求不被剥夺他们的回赐，也不在他们之后陷入迷误。\n\n古巴清真寺\n\n-先知穆罕默德（愿主福安之）迁徙后所建的第一座清真寺，位于麦地那以南约3公里处。\n\n-德行：在古巴清真寺礼拜相当于一次副朝的回赐（伊本·马哲传述）。\n\n-先知曾定期于每周六前往探访，有时也在周一与周四前往。\n\n-此寺是以敬畏真主为根基而建（讨白章：108节）。\n\n乌胡德山\n\n-位于麦地那以北约5公里处，以乌胡德战役而闻名。\n\n-「乌胡德」意为「独立的」（未与其他山脉相连）。\n\n-圣训：「乌胡德是一座我们喜爱它、它也喜爱我们的山」（布哈里传述）。\n\n-山中安葬着哈姆宰·本·阿卜杜·穆塔利卜、阿卜杜拉·本·扎哈什、穆斯阿卜·本·欧麦尔等乌胡德战役的烈士。\n\n-宜在探访时祈祷。\n\n两朝向清真寺\n\n-此寺原为班尼·萨拉玛部落的清真寺，是朝向被改变的地点。\n\n-当先知穆罕默德（愿主福安之）正带领众人礼晌礼时，黄牛章第144节经文降示，命令穆斯林转向禁寺方向礼拜。\n\n-于是众人从朝向耶路撒冷改为朝向天房，因此此寺得名「两朝向清真寺」。</string>
-
-    <!-- Checklist - picker & titles -->
     <string name="checklist_picker_title">选择清单</string>
     <string name="checklist_option_umrah">副朝（Umrah）清单</string>
     <string name="checklist_option_tour">旅游清单</string>
     <string name="checklist_dialog_title_umrah">副朝准备清单</string>
     <string name="checklist_dialog_title_tour">旅游准备清单</string>
     <string name="dialog_close">关闭</string>
-
-    <!-- Checklist - section headers (shared) -->
     <string name="checklist_section_travel_docs">旅行文件</string>
     <string name="checklist_section_men_clothing">服装（男性朝圣者）</string>
     <string name="checklist_section_women_clothing">服装（女性朝圣者）</string>
@@ -226,16 +234,12 @@
     <string name="checklist_section_finance">财务与卡类</string>
     <string name="checklist_section_general">日常用品</string>
     <string name="checklist_section_clothing">服装</string>
-
-    <!-- Checklist Umrah - Documents -->
     <string name="checklist_umrah_docs_1">护照（有效期6个月或以上）</string>
     <string name="checklist_umrah_docs_2">副朝签证 / 许可证书 (Tasrih)（如适用）</string>
     <string name="checklist_umrah_docs_3">脑膜炎疫苗接种证书 (ICV)</string>
     <string name="checklist_umrah_docs_4">带上旧护照（如近期有更新）</string>
     <string name="checklist_umrah_docs_5">重要文件复印件（护照、机票、签证）</string>
     <string name="checklist_umrah_docs_6">副朝指南与随身祈祷手册</string>
-
-    <!-- Checklist Umrah - Men -->
     <string name="checklist_umrah_men_1">戒衣 (Ihram)</string>
     <string name="checklist_umrah_men_2">副朝专用腰带</string>
     <string name="checklist_umrah_men_3">拉链T恤</string>
@@ -250,8 +254,6 @@
     <string name="checklist_umrah_men_12">小剪刀 / 剃须刀（请放入托运行李，不可随身携带）</string>
     <string name="checklist_umrah_men_13">便携式祈祷垫</string>
     <string name="checklist_umrah_men_14">鼻过滤口罩</string>
-
-    <!-- Checklist Umrah - Women -->
     <string name="checklist_umrah_women_1">祈祷服 (Telekung)</string>
     <string name="checklist_umrah_women_2">迷你祈祷服</string>
     <string name="checklist_umrah_women_3">头巾 / 头巾布</string>
@@ -265,8 +267,6 @@
     <string name="checklist_umrah_women_11">小洗礼 (Wudu\') 喷雾瓶</string>
     <string name="checklist_umrah_women_12">剪刀 / 剃须工具</string>
     <string name="checklist_umrah_women_13">鼻过滤口罩 / 面纱</string>
-
-    <!-- Checklist Umrah - Medicine -->
     <string name="checklist_umrah_med_1">退烧药（如普拿疼/Panadol）</string>
     <string name="checklist_umrah_med_2">感冒药</string>
     <string name="checklist_umrah_med_3">止咳药</string>
@@ -280,42 +280,28 @@
     <string name="checklist_umrah_med_11">便携牙刷与牙膏</string>
     <string name="checklist_umrah_med_12">免洗洗手液</string>
     <string name="checklist_umrah_med_13">足够的个人日常药物（麦加/麦地那药房价格高出2-3倍）</string>
-
-    <!-- Checklist Umrah - Electronics -->
     <string name="checklist_umrah_elec_1">手机充电器</string>
     <string name="checklist_umrah_elec_2">移动电源（充电宝）</string>
     <string name="checklist_umrah_elec_3">电源插座扩展板/排插</string>
     <string name="checklist_umrah_elec_4">迷你小风扇</string>
     <string name="checklist_umrah_elec_5">电子念珠</string>
-
-    <!-- Checklist Umrah - Women's Accessories -->
     <string name="checklist_umrah_acc_1">遮阳伞 / 雨伞</string>
     <string name="checklist_umrah_acc_2">太阳镜</string>
     <string name="checklist_umrah_acc_3">口罩</string>
-
-    <!-- Checklist Umrah - Food -->
     <string name="checklist_umrah_food_1">干饼干</string>
     <string name="checklist_umrah_food_2">糖果</string>
     <string name="checklist_umrah_food_3">方便面</string>
     <string name="checklist_umrah_food_4">辣椒酱 (Sambal)</string>
-
-    <!-- Checklist Umrah - Finance -->
     <string name="checklist_umrah_finance_1">准备足够的沙特里亚尔现金</string>
     <string name="checklist_umrah_finance_2">保留少量美元作为备用资金</string>
     <string name="checklist_umrah_finance_3">开通借记卡/信用卡的境外支付功能</string>
-
-    <!-- Checklist Umrah - General -->
     <string name="checklist_umrah_general_1">洗漱用品</string>
     <string name="checklist_umrah_general_2">备用毛巾（麦地那酒店有时会出现毛巾短缺）</string>
     <string name="checklist_umrah_general_3">其他个人合理物品</string>
-
-    <!-- Checklist Tour - Documents -->
     <string name="checklist_tour_docs_1">护照（有效期6个月或以上）</string>
     <string name="checklist_tour_docs_2">随身携带护照</string>
     <string name="checklist_tour_docs_3">带上旧护照（如近期有更新）</string>
     <string name="checklist_tour_docs_4">核查出境限制状态 (SSPI等)</string>
-
-    <!-- Checklist Tour - Medicine -->
     <string name="checklist_tour_med_1">扑热息痛/退烧药 (Panadol)</string>
     <string name="checklist_tour_med_2">喉咙痛药物</string>
     <string name="checklist_tour_med_3">止泻药</string>
@@ -324,46 +310,38 @@
     <string name="checklist_tour_med_6">药油</string>
     <string name="checklist_tour_med_7">橄榄油 / 保湿霜 / 润唇膏</string>
     <string name="checklist_tour_med_8">暖宝宝 / 发热贴</string>
-
-    <!-- Checklist Tour - Clothing -->
     <string name="checklist_tour_clothing_1">薄外套（中间层）</string>
     <string name="checklist_tour_clothing_2">牛仔裤 / 薄长裤</string>
     <string name="checklist_tour_clothing_3">保暖厚外套（防寒/防风）</string>
     <string name="checklist_tour_clothing_4">舒适的包头鞋（运动鞋）</string>
     <string name="checklist_tour_clothing_5">太阳镜与帽子</string>
-
-    <!-- Checklist Tour - Electronics -->
     <string name="checklist_tour_elec_1">转换插头</string>
     <string name="checklist_tour_elec_2">充电宝（最大20,000mAh - 须随身携带）</string>
-
-    <!-- Checklist Tour - Finance -->
     <string name="checklist_tour_finance_1">根据目的地兑换当地货币</string>
     <string name="checklist_tour_finance_2">开通借记卡/信用卡的境外支付功能</string>
-
     <string name="forgot_password">忘记密码？</string>
     <string name="reset_password_title">重置密码</string>
     <string name="reset_password_msg">请输入您的电子邮箱，我们将向您发送重置密码的链接。</string>
     <string name="hint_enter_email">输入您的电子邮件</string>
     <string name="btn_send">发送</string>
     <string name="btn_cancel">取消</string>
-
     <string name="reset_password_invalid_email">请输入有效的电子邮件</string>
     <string name="reset_password_sent">密码重置邮件已发送。请查看您的收件箱。</string>
     <string name="reset_password_failed">发送邮件失败，请重试。</string>
-
     <string name="login_google_signin_failed">Google 登录失败:代码 %1$d</string>
     <string name="login_google_success">Google 登录成功！%1$s</string>
     <string name="login_google_failed">Google 登录失败，请重试。</string>
     <string name="login_email_invalid">请输入有效的电子邮件</string>
     <string name="login_password_required">请输入密码</string>
     <string name="login_success">登录成功！</string>
-    <string name="login_failed_default">登录失败，请重试</string>
-    <string name="language_picker_title">Choose Language / Pilih Bahasa</string>
-
+    <string name="language_picker_title">选择语言</string>
+    <string name="language_picker_subtitle">选择您的首选语言</string>
     <string name="prayer_times_title_fallback">今日服务时间（估算值 - 无网络连接）</string>
     <string name="prayer_location_denied_text">启用定位服务以显示服务时间。</string>
     <string name="prayer_use_my_location">使用当前位置</string>
-
+    <string name="prayer_refresh_location">更新位置</string>
+    <string name="prayer_updating_location">正在更新礼拜时间位置...</string>
+    <string name="prayer_location_updated">位置已更新</string>
     <string name="umrah_section_popular">热门套餐</string>
     <string name="umrah_section_khas">特别套餐</string>
     <string name="umrah_section_ziarah">副朝朝觐之旅</string>
@@ -372,13 +350,10 @@
     <string name="tour_section_available">现有套餐</string>
     <string name="tour_inbound_coming_soon">国内（入境）套餐目前处于规划阶段，敬请期待更新！</string>
     <string name="tour_section_outbound">出境游</string>
-
     <string name="checklist_umrah_title">副朝（Umrah）的办理程序</string>
     <string name="checklist_reset">重置</string>
     <string name="checklist_progress_suffix">完毕</string>
     <string name="all_packages_title">全部套餐</string>
-
-    <!-- Section 1 -->
     <string name="checklist_sec1_title">1. 出发前</string>
     <string name="checklist_sec1_item1">进行受戒前的圣行沐浴</string>
     <string name="checklist_sec1_item2">剪指甲／受戒前整理仪容</string>
@@ -388,8 +363,6 @@
     <string name="checklist_sec1_item4">礼两拜受戒圣行拜</string>
     <string name="checklist_sec1_item5">确认已了解米卡特（受戒地点）</string>
     <string name="checklist_sec1_item6">准备好受戒的举意</string>
-
-    <!-- Section 2 -->
     <string name="checklist_sec2_title">2. 在米卡特 \u2013 受戒举意</string>
     <string name="checklist_sec2_item1">举意副朝</string>
     <string name="checklist_sec2_heading1">举意词：</string>
@@ -398,24 +371,18 @@
     <string name="checklist_sec2_heading2">应召词（塔勒比亚）：</string>
     <string name="checklist_sec2_arabic2">لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لَا شَرِيكَ لَكَ لَبَّيْكَ، إِنَّ الْحَمْدَ وَالنِّعْمَةَ لَكَ وَالْمُلْكَ، لَا شَرِيكَ لَكَ</string>
     <string name="checklist_sec2_item3">遵守所有受戒禁忌</string>
-
-    <!-- Section 3 -->
     <string name="checklist_sec3_title">3. 前往麦加途中</string>
     <string name="checklist_sec3_item1">多念应召词</string>
     <string name="checklist_sec3_item2">多做赞圣</string>
     <string name="checklist_sec3_item3">多做记主（迪克尔）</string>
     <string name="checklist_sec3_item4">多做祈祷</string>
     <string name="checklist_sec3_item5">遵守受戒禁忌</string>
-
-    <!-- Section 4 -->
     <string name="checklist_sec4_title">4. 抵达禁寺</string>
     <string name="checklist_sec4_item1">用右脚进入禁寺</string>
     <string name="checklist_sec4_item2">念入寺祈祷词</string>
     <string name="checklist_sec4_item3">望见天房 \u2192 祈祷</string>
     <string name="checklist_sec4_item4">准备巡游天房</string>
     <string name="checklist_sec4_item5">确认已有小净</string>
-
-    <!-- Section 5 -->
     <string name="checklist_sec5_title">5. 巡游天房 \u2013 七圈</string>
     <string name="checklist_sec5_heading1">重要条件：</string>
     <string name="checklist_sec5_item1">无大小净的障碍</string>
@@ -437,8 +404,6 @@
     <string name="checklist_sec5_info8">不信道者章</string>
     <string name="checklist_sec5_info9">任何容易记住的祈祷词</string>
     <string name="checklist_sec5_note1">每一圈并没有规定必须诵读的特定经文。</string>
-
-    <!-- Section 6 -->
     <string name="checklist_sec6_title">6. 巡游天房之后</string>
     <string name="checklist_sec6_item1">礼两拜巡游天房圣行拜</string>
     <string name="checklist_sec6_item2">若可能，在易卜拉欣立足处后方礼拜</string>
@@ -446,8 +411,6 @@
     <string name="checklist_sec6_item4">第二拜诵读忠诚章</string>
     <string name="checklist_sec6_item5">礼拜后祈祷</string>
     <string name="checklist_sec6_item6">饮用渗渗泉水</string>
-
-    <!-- Section 7 -->
     <string name="checklist_sec7_title">7. 奔走 \u2013 七趟</string>
     <string name="checklist_sec7_note1">起点：萨法 \u2022 终点：麦尔卧</string>
     <string name="checklist_sec7_item1">前往萨法</string>
@@ -467,16 +430,12 @@
     <string name="checklist_sec7_info5">男性：在两根绿色标志之间小跑</string>
     <string name="checklist_sec7_info6">女性：正常行走</string>
     <string name="checklist_sec7_info7">保持萨法 \u2192 麦尔卧的顺序</string>
-
-    <!-- Section 8 -->
     <string name="checklist_sec8_title">8. 解除戒律</string>
     <string name="checklist_sec8_note1">完成七趟奔走之后：</string>
     <string name="checklist_sec8_item1">男性：剃发或剪发</string>
     <string name="checklist_sec8_item2">女性：剪去少许头发</string>
     <string name="checklist_sec8_item3">解除戒律标志着副朝的完成</string>
     <string name="checklist_sec8_item4">解除戒律后，受戒禁忌解除</string>
-
-    <!-- Section 9 -->
     <string name="checklist_sec9_title">9. 副朝最终清单</string>
     <string name="checklist_sec9_note1">确认以下事项皆已完成：</string>
     <string name="checklist_sec9_item1">受戒</string>
@@ -488,23 +447,18 @@
     <string name="checklist_sec9_item7">解除戒律</string>
     <string name="checklist_sec9_item8">顺序</string>
     <string name="checklist_sec9_item9">副朝完成</string>
-
     <string name="panduan_banner_title">准备好副朝了吗?</string>
     <string name="panduan_banner_subtitle">查看进行副朝（Umrah）的流程。</string>
     <string name="panduan_banner_button">查看清单</string>
-
     <string name="umrah_hero_title">副朝套餐</string>
     <string name="umrah_hero_subtitle">寻找适合您的副朝套餐</string>
     <string name="umrah_empty_state">找不到套餐</string>
-
     <string name="tour_hero_title">旅游套餐</string>
     <string name="tour_hero_subtitle">探索您心仪的目的地</string>
     <string name="tour_empty_state">找不到套餐</string>
-
     <string name="favorite_hero_title">收藏</string>
     <string name="favorite_hero_subtitle">您保存以便稍后查看的套餐</string>
     <string name="favorite_empty_state">尚未保存任何套餐</string>
-
     <string name="package_detail_price_from_label">起价</string>
     <string name="package_detail_whatsapp_button">WhatsApp 咨询顾问</string>
     <string name="package_detail_poster_title">套餐海报</string>
@@ -523,5 +477,178 @@
     <string name="package_detail_price_options_title">价格／房型选择</string>
     <string name="package_detail_gallery_title">旅程相册</string>
     <string name="package_detail_whatsapp_default_message">您好，我对%1$s套餐感兴趣，可以分享更多详情吗?</string>
-
+    <string name="removed_from_favorites">已从收藏中移除</string>
+    <string name="added_to_favorites">已保存到收藏</string>
+    <string name="undo">撤销</string>
+    <string name="remove_favorite_dialog_title">从收藏中移除？</string>
+    <string name="remove_favorite_dialog_message">您确定要从收藏夹中移除此套餐吗？</string>
+    <string name="remove_favorite_dialog_confirm">移除</string>
+    <string name="remove_favorite_dialog_cancel">取消</string>
+    <string name="filter_title">筛选套餐</string>
+    <string name="filter_reset">重置</string>
+    <string name="filter_category_header">类别</string>
+    <string name="filter_cat_umrah">副朝</string>
+    <string name="filter_cat_tour">旅游</string>
+    <string name="filter_destination_header">目的地 / 国家</string>
+    <string name="filter_all_destinations">所有目的地</string>
+    <string name="filter_price_header">价格区间</string>
+    <string name="filter_price_presets_header">快捷价格</string>
+    <string name="filter_price_below_3k">&lt; RM3,000</string>
+    <string name="filter_price_3k_6k">RM3,000 - RM6,000</string>
+    <string name="filter_price_6k_10k">RM6,000 - RM10,000</string>
+    <string name="filter_price_above_10k">&gt; RM10,000</string>
+    <string name="filter_custom_slider_header">自定义价格滑块</string>
+    <string name="filter_min_label">最低</string>
+    <string name="filter_max_label">最高</string>
+    <string name="filter_apply_button">应用筛选 (%1$d 个套餐)</string>
+    <string name="filter_active_tag_category">类别: %1$s</string>
+    <string name="filter_active_tag_destination">目的地: %1$s</string>
+    <string name="filter_active_tag_price">价格: RM%1$s - RM%2$s</string>
+    <string name="filter_clear_all">清除筛选</string>
+    <string name="dest_turkey">土耳其</string>
+    <string name="dest_korea">韩国</string>
+    <string name="dest_japan">日本</string>
+    <string name="dest_saudi">沙特阿拉伯</string>
+    <string name="dest_europe">欧洲 / 巴尔干</string>
+    <string name="dest_vietnam">越南</string>
+    <string name="dest_china">中国</string>
+    <string name="prayer_times_header">今日礼拜时间</string>
+    <string name="prayer_times_today_format">今日礼拜时间 (%1$s)</string>
+    <string name="explore_package_arrow">探索套餐 →</string>
+    <string name="exclusive_offer_title">朝圣者专属特惠</string>
+    <string name="exclusive_offer_sub">注册账号以获取最新促销与独家折扣信息。</string>
+    <string name="google_review_write_btn">撰写评价 →</string>
+    <string name="all_packages_empty">未找到相关套餐</string>
+    <string name="prayer_name_subuh">晨礼</string>
+    <string name="prayer_name_syuruk">日出</string>
+    <string name="prayer_name_zohor">晌礼</string>
+    <string name="prayer_name_asar">晡礼</string>
+    <string name="prayer_name_maghrib">昏礼</string>
+    <string name="prayer_name_isyak">宵礼</string>
+    <string name="prayer_countdown_entered">礼拜时间已到</string>
+    <string name="prayer_countdown_min">距离%1$s还有%2$d分钟</string>
+    <string name="prayer_countdown_hour_min">距离%1$s还有%2$d小时%3$d分钟</string>
+    <string name="err_server_connection">无法连接到后端服务器。</string>
+    <string name="err_connection_detail">连接错误：%1$s</string>
+    <string name="error_whatsapp_not_found">此设备未安装 WhatsApp。</string>
+    <string name="err_open_map">无法打开地图。</string>
+    <string name="err_open_call">无法拨打电话。</string>
+    <string name="err_open_email">无法打开电子邮件应用。</string>
+    <string name="err_open_link">无法打开链接。</string>
+    <string name="err_open_review">无法打开评价页面。</string>
+    <string name="err_open_youtube">无法打开 YouTube。</string>
+    <string name="err_package_not_found">未找到配套。</string>
+    <string name="err_package_load_failed">加载配套信息失败。</string>
+    <string name="guideline_dialog_title">准备指南</string>
+    <string name="guideline_dialog_message">✓ 有效期至少6个月的护照\n\n✓ 脑膜炎疫苗接种（如需要）\n\n✓ 受戒服 / 合适服装\n\n✓ 个人药品\n\n✓ 重要文件复印件（护照、机票、签证）\n\n✓ 足够的现金（里亚尔 / 美元）</string>
+    <string name="coming_soon_format">%1$s即将推出</string>
+    <string name="pdf_coming_soon_format">%1$s PDF 下载 - 即将推出</string>
+    <string name="chapter_label_format">第%1$d章</string>
+    <string name="profile_guest_name">访客用户</string>
+    <string name="profile_no_booking">暂无预订 - 您的预订将显示在这里</string>
+    <string name="profile_logout_success">已成功退出登录</string>
+    <string name="profile_login_to_update">请登录以更新您的个人资料</string>
+    <string name="profile_change_password">更改密码</string>
+    <string name="profile_save">保存</string>
+    <string name="profile_updated">个人资料更新成功！</string>
+    <string name="profile_email_invalid">无效的电子邮件</string>
+    <string name="profile_reset_title">重置密码</string>
+    <string name="profile_reset_message">向以下邮箱发送密码重置链接：%1$s？</string>
+    <string name="profile_reset_send">发送</string>
+    <string name="profile_reset_sent">密码重置链接已发送到您的邮箱！</string>
+    <string name="profile_field_full_name">全名</string>
+    <string name="profile_field_phone">电话号码</string>
+    <string name="profile_field_email">电子邮件</string>
+    <string name="privacy_terms_toast">Hafiz Travel &amp; Tours Sdn Bhd - 隐私&amp;条款</string>
+    <string name="package_fallback_destination">旅行目的地</string>
+    <string name="detail_section_accommodation_summary">住宿概要</string>
+    <string name="detail_section_hotels_umrah">酒店（麦加&amp;麦地那）</string>
+    <string name="detail_section_hotels_tour">酒店</string>
+    <string name="detail_hotels_empty_notice">酒店信息即将更新。</string>
+    <string name="detail_section_room_pricing">客房&amp;价格选项</string>
+    <string name="detail_section_itinerary">完整行程</string>
+    <string name="detail_itinerary_empty_notice">行程即将更新。</string>
+    <string name="detail_itinerary_hint">点击日期以展开详情</string>
+    <string name="detail_section_inclusions">包含 &amp; 不包含</string>
+    <string name="detail_included_heading">包含</string>
+    <string name="detail_excluded_heading">不包含</string>
+    <string name="detail_whats_covered">包含项目</string>
+    <string name="detail_whats_covered_sub">您的套餐中包含的主要服务与项目</string>
+    <string name="detail_not_covered">不包含项目</string>
+    <string name="detail_not_covered_sub">套餐费用以外的自费项目与服务</string>
+    <string name="detail_terms_guidelines">套餐条款与指南</string>
+    <string name="detail_required_documents">所需文件</string>
+    <string name="room_quint">5人房 (Quint)</string>
+    <string name="room_quad">4人房 (Quad)</string>
+    <string name="room_triple">3人房 (Triple)</string>
+    <string name="room_double">2人房 (Double)</string>
+    <string name="room_single">1人房 (Single)</string>
+    <string name="detail_price_from">起价</string>
+    <string name="cat_flights">机票</string>
+    <string name="cat_accommodation">住宿</string>
+    <string name="cat_visa_protection">签证与保障</string>
+    <string name="cat_meals">餐饮</string>
+    <string name="cat_transportation">交通</string>
+    <string name="cat_tour_guidance">导游服务</string>
+    <string name="cat_travel_essentials">出行必需品</string>
+    <string name="cat_preparation">行前准备</string>
+    <string name="cat_other">其他包含项目</string>
+    <string name="detail_section_packing">行李指南</string>
+    <string name="detail_packing_heading">推荐携带物品清单</string>
+    <string name="detail_section_notes">重要须知&amp;指南</string>
+    <string name="detail_section_gallery">照片库</string>
+    <string name="detail_per_pax">每人</string>
+    <string name="nights_unit">晚</string>
+    <string name="nights_label_makkah">麦加</string>
+    <string name="nights_label_madinah">麦地那</string>
+    <string name="nights_label_taif">塔伊夫</string>
+    <string name="nights_label_hotel1">酒店 1</string>
+    <string name="nights_label_hotel2">酒店 2</string>
+    <string name="nights_label_hotel3">酒店 3</string>
+    <string name="flight_type_fallback">航班</string>
+    <string name="flight_route_fallback">路线待确认</string>
+    <string name="hotel_title_umrah_makkah">麦加酒店</string>
+    <string name="hotel_title_umrah_madinah">麦地那酒店</string>
+    <string name="hotel_title_umrah_taif">塔伊夫酒店</string>
+    <string name="hotel_title_tour_hotel1">酒店 1</string>
+    <string name="hotel_title_tour_hotel2">酒店 2</string>
+    <string name="hotel_title_tour_extra">更多酒店</string>
+    <string name="hotel_rating_fallback">标准</string>
+    <string name="share_package_via">分享配套</string>
+    <string name="share_price_from">💰 起价：*%1$s*</string>
+    <string name="share_duration">⏱️ 行程：*%1$d天%2$d晚*</string>
+    <string name="share_cta">📲 预订或咨询</string>
+    <string name="package_badge_umrah">✨ 副朝配套</string>
+    <string name="package_badge_tour">✈️ 旅游配套</string>
+    <string name="results_packages_format">%1$d个配套</string>
+    <string name="filter_slider_min_label">RM0（最低）</string>
+    <string name="filter_slider_max_label">RM20,000+（最高）</string>
+    <string name="promo_hero_kicker">麦加&amp;麦地那</string>
+    <string name="promo_hero_title">学校假期&amp;色瓦尔月副朝配套</string>
+    <string name="promo_hero_price">RM 7,990起 • 12天10晚</string>
+    <string name="google_review_summary">4.9 ★★★★★ （250+ Google 评价）</string>
+    <string name="package_vip_badge">✨ VIP 精选配套</string>
+    <string name="package_whatsapp_enquiry">在 WhatsApp 上咨询</string>
+    <string name="splash_eyebrow">全球探险&amp;副朝</string>
+    <string name="splash_tagline">与 Hafiz Travel &amp; Tours 共创真诚回忆</string>
+    <string name="hotel_distance_to">距圣寺%1$s</string>
+    <string name="duration_days_nights">%1$d天%2$d晚</string>
+    <string name="duration_days_only">%1$d天</string>
+    <string name="package_full">完整配套</string>
+    <string name="day_label_format">第%1$d天</string>
+    <string name="itinerary_daily">每日行程</string>
+    <string name="azan_notif_title">%1$s礼拜时间</string>
+    <string name="azan_playing">正在播放宣礼</string>
+    <string name="azan_stop">停止</string>
+    <string name="azan_channel_name">宣礼通知</string>
+    <string name="azan_channel_desc">礼拜时间和宣礼通知</string>
+    <string name="battery_title">保持宣礼正常工作</string>
+    <string name="battery_message">为确保即使关闭本应用，通知和宣礼也能准时播放，请允许本应用在后台无限制运行。\n\n此步骤为可选项，稍后可在设置中更改。</string>
+    <string name="battery_now">立即设置</string>
+    <string name="battery_later">稍后</string>
+    <string name="hijri_date_fallback">回历1448年赖哲卜月1日</string>
+    <string name="btn_book_now">立即预订</string>
+    <string name="btn_ask_questions">咨询</string>
+    <string name="selected_room_label">已选房型</string>
+    <string name="booking_flow_notice">已选选项：%1$s (%2$s)。继续填写乘客信息。</string>
 </resources>

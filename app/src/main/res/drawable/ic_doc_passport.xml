@@ -1,0 +1,10 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Document / Passport Icon -->
+    <path
+        android:fillColor="#0284C7"
+        android:pathData="M14,2H6A2,2 0,0 0,4 4V20A2,2 0,0 0,6 22H18A2,2 0,0 0,20 20V8L14,2M13,3.5L18.5,9H13V3.5M6,20V4H11V10H18V20H6M8,12V14H16V12H8M8,16V18H13V16H8Z"/>
+</vector>

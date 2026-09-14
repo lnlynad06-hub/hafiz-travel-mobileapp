@@ -7,112 +7,27 @@
     android:layout_height="match_parent"
     android:background="@color/background">
 
-    <!-- Fixed bottom navigation - same as MainActivity, Umrah shown as the active tab -->
-    <LinearLayout
-        android:id="@+id/bottomNav"
+    <!-- Shared Floating Luxury Bottom Navigation Dock -->
+    <include
+        layout="@layout/layout_luxury_bottom_nav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/surface"
-        android:elevation="12dp"
-        android:orientation="horizontal"
-        android:paddingHorizontal="8dp"
-        android:paddingVertical="12dp"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <LinearLayout
-            android:id="@+id/navHome"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:paddingVertical="8dp"
-            android:clickable="true"
-            android:focusable="true">
-
-            <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:src="@drawable/ic_home" app:tint="@color/text_gray" android:padding="1dp" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="@string/nav_home" android:textColor="@color/text_gray" android:textSize="11sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/navUmrah"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/bg_pill_active_nav"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingVertical="8dp"
-            tools:ignore="TouchTargetSizeCheck">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_kiblat"
-                app:tint="@color/pink_dark"
-                android:padding="3dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="6dp"
-                android:text="@string/nav_umrah"
-                android:textColor="@color/pink_dark"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/navTour"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:paddingVertical="8dp"
-            android:clickable="true"
-            android:focusable="true">
-
-            <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:src="@drawable/ic_flight" app:tint="@color/text_gray" android:padding="1dp" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="@string/nav_tour" android:textColor="@color/text_gray" android:textSize="11sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/navFavorite"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:paddingVertical="8dp"
-            android:clickable="true"
-            android:focusable="true">
-
-            <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:src="@drawable/ic_favorite" app:tint="@color/text_gray" android:padding="1dp" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="@string/nav_favorite" android:textColor="@color/text_gray" android:textSize="11sp" />
-        </LinearLayout>
-
-    </LinearLayout>
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <!-- Scrollable content -->
-    <androidx.core.widget.NestedScrollView
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/umrahSwipeRefresh"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:clipToPadding="false"
-        android:overScrollMode="never"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/bottomNav">
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            android:paddingBottom="96dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -150,114 +65,252 @@
 
             </LinearLayout>
 
-            <!-- Search bar - overlaps the hero's bottom edge, same "floating card" style as Home -->
-            <androidx.cardview.widget.CardView
+            <!-- Unified Luxury Search & Filter Bar (Matching All Packages) -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="-34dp"
-                app:cardCornerRadius="14dp"
-                app:cardElevation="6dp"
-                app:cardBackgroundColor="@color/surface">
+                android:layout_marginTop="-24dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/umrahSearchInput"
-                    android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    android:background="@android:color/transparent"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_search_white"
                     android:drawableStart="@drawable/ic_search"
                     android:drawablePadding="10dp"
-                    android:drawableTint="@color/pink_dark"
                     android:hint="@string/search_placeholder"
-                    android:paddingHorizontal="16dp"
+                    android:paddingHorizontal="14dp"
                     android:singleLine="true"
                     android:textColor="@color/text_dark"
                     android:textColorHint="@color/text_gray"
                     android:textSize="14sp" />
 
-            </androidx.cardview.widget.CardView>
+                <FrameLayout
+                    android:id="@+id/btnUmrahFilter"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/bg_search_white"
+                    android:clickable="true"
+                    android:focusable="true">
 
-            <!-- Seksyen: Pakej Popular -->
-            <LinearLayout
-                android:id="@+id/umrahPopularSection"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="24dp">
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_tune"
+                        app:tint="@color/text_dark"
+                        tools:ignore="ContentDescription" />
 
-                <TextView
-                    android:id="@+id/umrahPopularTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/umrah_section_popular"
-                    android:textColor="@color/text_dark"
-                    android:textSize="17sp"
-                    android:textStyle="bold" />
+                    <View
+                        android:id="@+id/filterActiveBadgeUmrah"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_gravity="top|end"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/bg_filter_badge"
+                        android:visibility="gone" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/umrahPopularRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:clipToPadding="false"
-                    android:paddingEnd="4dp" />
-
-            </LinearLayout>
-
-            <!-- Seksyen: Pakej Khas -->
-            <LinearLayout
-                android:id="@+id/umrahKhasSection"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="24dp">
-
-                <TextView
-                    android:id="@+id/umrahKhasTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/umrah_section_khas"
-                    android:textColor="@color/text_dark"
-                    android:textSize="17sp"
-                    android:textStyle="bold" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/umrahKhasRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:clipToPadding="false"
-                    android:paddingEnd="4dp" />
+                </FrameLayout>
 
             </LinearLayout>
 
-            <!-- Seksyen: Umrah Ziarah -->
+            <!-- Active Filters Chip Bar -->
+            <HorizontalScrollView
+                android:id="@+id/activeFiltersScrollViewUmrah"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:paddingHorizontal="20dp"
+                android:scrollbars="none"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:id="@+id/activeFiltersContainerUmrah"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal" />
+
+            </HorizontalScrollView>
+
+            <!-- Skeleton Shimmer Loading Placeholder -->
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/umrahShimmerContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="24dp"
+                app:shimmer_auto_start="true"
+                app:shimmer_base_alpha="0.6"
+                app:shimmer_highlight_alpha="1.0"
+                app:shimmer_duration="1200">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <View
+                        android:layout_width="140dp"
+                        android:layout_height="16dp"
+                        android:background="@drawable/bg_skeleton_rect" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:orientation="horizontal">
+
+                        <include layout="@layout/item_skeleton_horizontal_card" />
+                        <include layout="@layout/item_skeleton_horizontal_card" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="140dp"
+                        android:layout_height="16dp"
+                        android:layout_marginTop="24dp"
+                        android:background="@drawable/bg_skeleton_rect" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:orientation="vertical">
+
+                        <include layout="@layout/item_skeleton_vertical_card" />
+                        <include layout="@layout/item_skeleton_vertical_card" />
+
+                    </LinearLayout>
+                </LinearLayout>
+            </com.facebook.shimmer.ShimmerFrameLayout>
+
+            <!-- MODE BROWSE (Default) -->
             <LinearLayout
-                android:id="@+id/umrahZiarahSection"
+                android:id="@+id/umrahBrowseContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Seksyen: Pakej Popular -->
+                <LinearLayout
+                    android:id="@+id/umrahPopularSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="24dp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/umrahPopularTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/umrah_section_popular"
+                        android:textColor="@color/text_dark"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/umrahPopularRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:clipToPadding="false"
+                        android:paddingEnd="4dp" />
+
+                </LinearLayout>
+
+                <!-- Seksyen: Pakej Khas -->
+                <LinearLayout
+                    android:id="@+id/umrahKhasSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="24dp">
+
+                    <TextView
+                        android:id="@+id/umrahKhasTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/umrah_section_khas"
+                        android:textColor="@color/text_dark"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/umrahKhasRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:clipToPadding="false"
+                        android:paddingEnd="4dp" />
+
+                </LinearLayout>
+
+                <!-- Seksyen: Umrah Ziarah -->
+                <LinearLayout
+                    android:id="@+id/umrahZiarahSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="24dp">
+
+                    <TextView
+                        android:id="@+id/umrahZiarahTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/umrah_section_ziarah"
+                        android:textColor="@color/text_dark"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/umrahZiarahRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:clipToPadding="false"
+                        android:paddingEnd="4dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- MODE SEARCH / FILTER RESULTS -->
+            <LinearLayout
+                android:id="@+id/umrahSearchResultsContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="24dp">
+                android:paddingHorizontal="20dp"
+                android:paddingTop="16dp"
+                android:visibility="gone">
 
                 <TextView
-                    android:id="@+id/umrahZiarahTitle"
+                    android:id="@+id/tvUmrahResultsCount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/umrah_section_ziarah"
-                    android:textColor="@color/text_dark"
-                    android:textSize="17sp"
+                    android:layout_marginBottom="12dp"
+                    android:textColor="@color/text_gray"
+                    android:textSize="13sp"
                     android:textStyle="bold" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/umrahZiarahRecyclerView"
+                    android:id="@+id/umrahSearchResultsRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:clipToPadding="false"
-                    android:paddingEnd="4dp" />
+                    android:nestedScrollingEnabled="false" />
 
             </LinearLayout>
 
@@ -275,5 +328,7 @@
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

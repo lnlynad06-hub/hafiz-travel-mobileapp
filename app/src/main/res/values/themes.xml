@@ -4,14 +4,24 @@
         <item name="colorPrimaryVariant">@color/pink_dark</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorSecondary">@color/pink_accent</item>
-        <item name="android:statusBarColor">@color/pink_primary</item>
+        <item name="android:statusBarColor">@color/background</item>
         <item name="android:windowBackground">@color/background</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="android:windowAnimationStyle">@style/SeamlessFadeAnimation</item>
     </style>
 
-    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/pink_primary</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_logo_square</item>
-        <item name="postSplashScreenTheme">@style/Theme.HafizTravel</item>
+    <!-- Global seamless ultra-fast fade animation for all activity transitions -->
+    <style name="SeamlessFadeAnimation" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/nav_seamless_fade_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/nav_seamless_fade_out</item>
+        <item name="android:activityCloseEnterAnimation">@anim/nav_seamless_fade_in</item>
+        <item name="android:activityCloseExitAnimation">@anim/nav_seamless_fade_out</item>
+    </style>
+
+    <style name="Theme.App.Starting" parent="Theme.HafizTravel">
+        <item name="android:windowBackground">#FAF9F6</item>
+        <item name="android:statusBarColor">#FAF9F6</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
     </style>
 
     <style name="LangPill">
@@ -23,5 +33,16 @@
         <item name="android:textStyle">bold</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
+    </style>
+
+    <style name="LuxuryDialogTheme" parent="Theme.Material3.Light.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowAnimationStyle">@style/LuxuryDialogAnimation</item>
+    </style>
+
+    <style name="LuxuryDialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/dialog_scale_in</item>
+        <item name="android:windowExitAnimation">@anim/dialog_scale_out</item>
     </style>
 </resources>

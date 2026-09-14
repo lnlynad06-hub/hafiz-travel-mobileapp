@@ -1,59 +1,81 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" ?>
 <resources>
     <string name="app_name">HafizTravel&amp;Tours</string>
-
-    <!-- Welcome / Onboarding screen -->
-    <string name="welcome_trust_text">数百人の巡礼者に信頼されています</string>
-    <string name="welcome_title">ウムラ・ハッジ・旅行のパートナー</string>
-    <string name="welcome_subtitle">スマートフォンから簡単にウムラ、ハッジ、国内外の旅行パッケージを予約できます。</string>
-    <string name="welcome_start_now">今すぐ始める</string>
-    <string name="welcome_already_have_account">すでにアカウントをお持ちですか？ログイン</string>
-
-    <!-- Login screen -->
+    <string name="welcome_brand_name">HAFIZ TRAVEL &amp; TOURS</string>
+    <string name="welcome_eyebrow">プレミアム旅行キュレーション</string>
+    <string name="welcome_title">洗練された美しさと、\n心揺さぶる特別な旅へ。</string>
+    <string name="welcome_subtitle">アジアやヨーロッパを巡る贅沢な世界旅行から、心安らぐ聖地ウムラ巡礼まで、最高の安心をお届けします。</string>
+    <string name="welcome_chip_worldwide">世界ツアー</string>
+    <string name="welcome_chip_umrah">ウムラ＆巡礼</string>
+    <string name="welcome_chip_custom">オーダーメイド</string>
+    <string name="welcome_start_now">旅を始める</string>
+    <string name="welcome_already_have_account_full">すでにアカウントをお持ちですか？ &lt;font color=\'#D81B60\'&gt;&lt;b&gt;ログイン&lt;/b&gt;&lt;/font&gt;</string>
+    <string name="filter_all">すべて</string>
     <string name="login_title">おかえりなさい</string>
-    <string name="login_subtitle">続けるにはログインしてください</string>
+    <string name="login_subtitle">ログインして理想の旅を計画しましょう</string>
     <string name="hint_email">メールアドレス</string>
     <string name="hint_password">パスワード</string>
+    <string name="remember_me">ログイン状態を保持</string>
     <string name="login_button">ログイン</string>
-    <string name="login_no_account">アカウントをお持ちでない方は今すぐ登録</string>
-    <string name="login_or_with">または次でログイン</string>
-    <string name="login_guest">ゲストとしてログイン</string>
-
-    <!-- Sign Up screen -->
+    <string name="login_signing_in">ログイン中…</string>
+    <string name="login_no_account">アカウントをお持ちでないですか？ 新規登録</string>
+    <string name="login_or_with">または次で続行</string>
+    <string name="login_guest">ゲストとして続行</string>
+    <string name="forgot_password_title">パスワードの再設定</string>
+    <string name="forgot_password_desc">登録したメールアドレスを入力してください。パスワード再設定リンクをお送りします。</string>
+    <string name="btn_send_reset">再設定リンクを送信</string>
+    <string name="reset_link_sent_success">再設定メールを送信しました！受信トレイをご確認ください。</string>
+    <string name="login_failed_user_not_found">このメールアドレスのアカウントが見つかりません。</string>
+    <string name="login_failed_wrong_password">パスワードが正しくありません。もう一度お試しください。</string>
+    <string name="login_failed_default">ログインに失敗しました。認証情報を確認してください。</string>
     <string name="signup_title">アカウントを作成</string>
     <string name="signup_subtitle">登録して旅行の計画を始めましょう。</string>
     <string name="hint_full_name">氏名</string>
     <string name="hint_phone">電話番号</string>
     <string name="hint_confirm_password">パスワードの確認</string>
     <string name="signup_button">登録する</string>
+    <string name="signup_signing_up">登録中...</string>
+    <string name="hint_password_min">6文字以上</string>
+    <string name="signup_terms_disclaimer">登録することにより、&lt;b&gt;利用規約&lt;/b&gt;および&lt;b&gt;プライバシーポリシー&lt;/b&gt;に同意したものとみなされます。</string>
+    <string name="dialog_terms_title">利用規約とプライバシー</string>
     <string name="signup_have_account">すでにアカウントをお持ちですか？ログイン</string>
     <string name="signup_or_with">または次で登録</string>
     <string name="signup_guest">ゲストとしてログイン</string>
-    <string name="social_login_google">Googleでログイン - 近日公開</string>
-    <string name="social_login_facebook">Facebookでログイン - 近日公開</string>
-    <string name="social_login_phone">電話番号でログイン - 近日公開</string>
-
-    <string name="social_signup_google">Googleで登録 - 近日公開</string>
-    <string name="social_signup_facebook">Facebookで登録 - 近日公開</string>
-    <string name="social_signup_phone">電話番号で登録 - 近日公開</string>
-
+    <string name="password_strength_weak">弱い</string>
+    <string name="password_strength_medium">普通</string>
+    <string name="password_strength_strong">強い</string>
+    <string name="btn_continue_google">Googleで続行</string>
+    <string name="social_signup_google">Googleで登録</string>
+    <string name="select_country_code">国番号を選択</string>
+    <string name="region_southeast_asia">東南アジア</string>
+    <string name="region_international">その他の国</string>
+    <string name="err_name_required">氏名を入力してください</string>
+    <string name="err_email_invalid">有効なメールアドレスを入力してください</string>
+    <string name="err_phone_invalid">有効な電話番号を入力してください</string>
+    <string name="err_password_short">パスワードは6文字以上にする必要があります</string>
+    <string name="err_password_mismatch">パスワードが一致しません</string>
+    <string name="err_signup_failed">登録に失敗しました。もう一度お試しください。</string>
+    <string name="err_signup_email_exists">メールアドレスまたは電話番号は既に登録されています</string>
+    <string name="err_network">接続エラーです。インターネット接続を確認してください。</string>
+    <string name="signup_success">登録が完了しました！</string>
+    <string name="password_tip_length">8文字以上</string>
+    <string name="password_tip_number">数字 0–9</string>
+    <string name="password_tip_symbol">記号 !@#$</string>
     <string name="guest_greeting">アッサラームアライクム</string>
-    <string name="user_greeting">アッサラームアライクム、%1$s さん</string>
-    <string name="hero_subtitle_guest">Hafiz Travel &amp; Toursへ\nようこそ</string>
+    <string name="user_greeting">アッサラームアライクム</string>
+    <string name="hero_subtitle_guest">ゲスト旅行者</string>
     <string name="hero_subtitle_user">おかえりなさい</string>
-    <string name="hero_headline_guest">Hafiz Travel &amp; Toursへ\nようこそ</string>
-    <string name="hero_headline_user">どこへ行き\nたいですか？</string>
-
+    <string name="hero_headline_guest">次はどこへ旅に\n出かけますか？</string>
+    <string name="hero_headline_user">次はどこへ旅に\n出かけますか？</string>
     <string name="nav_home">ホーム</string>
+    <string name="nav_explore">探索</string>
     <string name="nav_umrah">ウムラ</string>
     <string name="nav_tour">ツアー</string>
     <string name="nav_favorite">お気に入り</string>
-
     <string name="quick_nusuk">ヌスク</string>
     <string name="quick_guideline">ウムラガイド</string>
     <string name="quick_checklist">チェックリスト</string>
     <string name="quick_whatsapp">WhatsApp</string>
-
     <string name="prayer_times_title">本日の礼拝時間（目安）</string>
     <string name="search_placeholder">目的地を検索</string>
     <string name="popular_packages">人気パッケージ</string>
@@ -63,33 +85,30 @@
     <string name="no_notifications">新しい通知はありません</string>
     <string name="faq_title">よくある質問</string>
     <string name="gallery_title">ギャラリー</string>
-
-    <!-- NEW: previously hardcoded in MainActivity.java / activity_main.xml, now translatable -->
     <string name="search_coming_soon">検索 - 近日公開</string>
     <string name="signup_coming_soon">登録する - 近日公開</string>
-
     <string name="google_review_count">Googleクチコミ102件に基づく</string>
     <string name="review_label">レビュー</string>
-
     <string name="register_cta_text">最新のパッケージや特典を受け取るには登録してください</string>
     <string name="register_cta_button">登録する</string>
-
     <string name="review_1_name">アミナさん</string>
     <string name="review_1_quote">手配がしっかりしており、ムタウィフが旅行中ずっと親切にサポートしてくれました。</string>
     <string name="review_2_name">ラザクさん</string>
     <string name="review_2_quote">予約手続きが簡単で支払いも明確、WhatsAppでのスタッフ対応も迅速でした。</string>
     <string name="review_3_name">シティさん</string>
     <string name="review_3_quote">ホテルがマスジド・アル・ハラームに近く、家族にとってとても快適でした。</string>
-
     <string name="faq_q1">デポジットはどのように支払えばよいですか？</string>
     <string name="faq_a1">銀行振込でデポジットをお支払いいただくか、WhatsAppで直接スタッフにお問い合わせいただくと、お支払い方法をご案内します。</string>
     <string name="faq_q2">パスポートの有効期限はどのくらい必要ですか？</string>
     <string name="faq_a2">出発日から少なくとも6ヶ月以上有効なパスポートが必要です。</string>
     <string name="faq_q3">予約後に日程を変更できますか？</string>
     <string name="faq_a3">可能です。ただし空き状況によっては変更手数料が発生する場合があります。詳細は管理者にお問い合わせください。</string>
-
     <string name="package_duration_price">%1$d日%2$d泊 - RM%3$s</string>
-
+    <string name="help_support_title">ヘルプ＆サポートセンター</string>
+    <string name="help_support_headline">旅のご相談はお気軽にどうぞ</string>
+    <string name="help_support_sub">ハフィズ・トラベルのコンサルタントが、パッケージ、ビザ、予約に関するお問い合わせをサポートします。</string>
+    <string name="help_support_btn_contact">お問い合わせ</string>
+    <string name="help_support_btn_whatsapp">WhatsAppでお問い合わせ</string>
     <string name="prayer_subuh">ファジュル</string>
     <string name="prayer_zohor">ズフル</string>
     <string name="prayer_asar">アスル</string>
@@ -100,7 +119,6 @@
     <string name="menu_language">言語</string>
     <string name="menu_about_us">私たちについて</string>
     <string name="menu_contact_us">お問い合わせ</string>
-
     <string name="about_us_title">会社概要</string>
     <string name="company_full_name">Hafiz Travel &amp; Tours Sdn Bhd</string>
     <string name="company_short_name">Hafiz Travel &amp; Tours</string>
@@ -122,7 +140,6 @@
     <string name="registration_motac">MOTAC登録番号: KPK/LN 10751</string>
     <string name="registration_ssm">SSM登録番号: 202201043065 (1488762-A)</string>
     <string name="about_established_year">2022年設立</string>
-
     <string name="contact_us_title">お問い合わせ</string>
     <string name="contact_hero_blurb">ウムラやツアーパッケージについてご質問がありますか？以下のいずれかの方法でお気軽にお問い合わせください。</string>
     <string name="label_address">住所</string>
@@ -130,7 +147,6 @@
     <string name="label_email">メール</string>
     <string name="contact_whatsapp_cta">今すぐWhatsAppでお問い合わせ</string>
     <string name="contact_social_title">公式SNS</string>
-
     <string name="default_user_name">ユーザー</string>
     <string name="profile_member_since">2026年からのメンバー</string>
     <string name="profile_account_section">マイアカウント</string>
@@ -141,19 +157,15 @@
     <string name="profile_theme_light">ライトテーマ</string>
     <string name="profile_theme_dark">ダークテーマ</string>
     <string name="profile_logout">ログアウト</string>
-
     <string name="guideline_title">ウムラ・ガイド</string>
     <string name="guideline_hero_title">簡易ウムラ・ガイド</string>
     <string name="guideline_hero_blurb">旅の作法からウムラの儀式完了まで、実際の順序に沿って構成されています。</string>
     <string name="guideline_pdf_title">完全版ガイドが必要ですか?</string>
     <string name="guideline_pdf_subtitle">詳細な説明付きの完全版PDFをダウンロード</string>
     <string name="guideline_pdf_button">ダウンロード</string>
-
     <string name="prayer_times_title_jakim">本日の礼拝時間 (JAKIM)</string>
     <string name="prayer_times_title_jakim_zone">本日の礼拝時間 (JAKIM - ゾーン %1$s)</string>
-
-    <string name="podcast_section_title">ポッドキャスト</string>
-
+    <string name="podcast_section_title">ハフィズ・ジャーニー・ポッドキャスト</string>
     <string name="bab1_hero_title">旅の作法と推奨される行い</string>
     <string name="bab1_hero_blurb">旅の作法と、旅の途中に行う礼拝についての案内です。</string>
     <string name="bab1_s1_title">旅を始める前の作法</string>
@@ -206,16 +218,12 @@
     <string name="bab6_s1_body">-旅の間中、そしてマディーナに入る際:預言者への祝福を多く送り、次の祈りを唱えてください:「アッラーよ、この街を地獄の火と罰からの守りとしてください。」\n\n-モスクに入る際:守護を求め慈悲を願う祈りを唱えてください。\n\n-タヒーヤトゥル・マスジド:2ラクアト(1ラクアト目:アルカーフィルーン、2ラクアト目:アルイフラース)、可能であればラウダで、他の巡礼者を妨げないように。</string>
     <string name="bab6_s2_title">マディーナの訪問地</string>
     <string name="bab6_s2_body">ジャンナトゥル・バキー\n\n-預言者の時代からあるマディーナの主要な墓地。\n\n-預言者の妻たち、娘たち、そして息子の一人の安息の地。\n\n-推奨される祈り:墓地にいる人々への平安の挨拶を伝え、先に逝った人々と後に残る人々のために許しを求め、彼らの報奨が取り上げられないこと、そして彼らの後に私たちが試されないことを願います。\n\nクバー・モスク\n\n-預言者がヒジュラ後に建てた最初のモスクで、マディーナの南3kmに位置します。\n\n-功徳:クバー・モスクでの礼拝は、ウムラの報奨に等しいとされます(イブン・マージャ伝)。\n\n-預言者は主に土曜日に、時には月曜日と木曜日に訪れていました。\n\n-敬虔さの基盤の上に建てられています(スーラ・アッタウバ108節)。\n\nウフド山\n\n-マディーナの北5kmに位置し、ウフドの戦いで有名です。\n\n-「ウフド」という名前は「孤立」を意味します(他の山とつながっていません)。\n\n-ハディース:「ウフドは私たちを愛し、私たちも彼を愛する山である」(ブハーリー伝)。\n\n-ハムザ・ビン・アブドゥル・ムッタリブ、アブドゥッラー・ビン・ジャフシュ、ムスアブ・ビン・ウマイル、その他ウフドの殉教者たちの墓があります。\n\n-訪問時に祈ることが推奨されます。\n\nキブラタイン・モスク\n\n-かつてバヌー・サラマのモスクで、キブラの方向転換の出来事が起こった場所。\n\n-預言者が信徒たちとズフルの礼拝を導いていたとき、スーラ・アルバカラ144節が啓示され、マスジド・アル・ハラームを向くよう命じられました。\n\n-預言者はバイト・アル・マクディス方向からカアバの方向へ体の向きを変え、そのため「二つのキブラのモスク」と呼ばれています。</string>
-
-    <!-- Checklist - picker & titles -->
     <string name="checklist_picker_title">チェックリストを選択</string>
     <string name="checklist_option_umrah">ウンラ チェックリスト</string>
     <string name="checklist_option_tour">ツアー チェックリスト</string>
     <string name="checklist_dialog_title_umrah">ウンラ準備チェックリスト</string>
     <string name="checklist_dialog_title_tour">ツアー準備チェックリスト</string>
     <string name="dialog_close">閉じる</string>
-
-    <!-- Checklist - section headers (shared) -->
     <string name="checklist_section_travel_docs">渡航書類</string>
     <string name="checklist_section_men_clothing">衣類（男性巡礼者）</string>
     <string name="checklist_section_women_clothing">衣類（女性巡礼者）</string>
@@ -226,16 +234,12 @@
     <string name="checklist_section_finance">お金・カード</string>
     <string name="checklist_section_general">一般用品</string>
     <string name="checklist_section_clothing">衣類</string>
-
-    <!-- Checklist Umrah - Documents -->
     <string name="checklist_umrah_docs_1">パスポート（残存有効期間6ヶ月以上）</string>
     <string name="checklist_umrah_docs_2">ウンラビザ / 許可証（Tasrih）（該当する場合）</string>
     <string name="checklist_umrah_docs_3">髄膜炎予防接種証明書（ICV）</string>
     <string name="checklist_umrah_docs_4">旧パスポート（最近更新した場合）</string>
     <string name="checklist_umrah_docs_5">重要書類のコピー（パスポート、航空券、ビザ）</string>
     <string name="checklist_umrah_docs_6">ウンラガイドブック ＆ 持ち歩き用祈祷書</string>
-
-    <!-- Checklist Umrah - Men -->
     <string name="checklist_umrah_men_1">イハラーム（Ihram）の布</string>
     <string name="checklist_umrah_men_2">ウンラ用ベルト</string>
     <string name="checklist_umrah_men_3">ファスナー付きTシャツ</string>
@@ -250,8 +254,6 @@
     <string name="checklist_umrah_men_12">小型ハサミ / カミソリ（手荷物不可、預け入れ荷物へ）</string>
     <string name="checklist_umrah_men_13">携帯用礼拝マット</string>
     <string name="checklist_umrah_men_14">ノーズフィルター（マスク）</string>
-
-    <!-- Checklist Umrah - Women -->
     <string name="checklist_umrah_women_1">テレコン（女性用礼拝着）</string>
     <string name="checklist_umrah_women_2">ミニテレコン</string>
     <string name="checklist_umrah_women_3">ヒジャブ / スカーフ</string>
@@ -265,8 +267,6 @@
     <string name="checklist_umrah_women_11">ウドゥ（小水清浄）用スプレーボトル</string>
     <string name="checklist_umrah_women_12">ハサミ / カミソリ</string>
     <string name="checklist_umrah_women_13">ノーズフィルター / ニカーブ</string>
-
-    <!-- Checklist Umrah - Medicine -->
     <string name="checklist_umrah_med_1">解熱鎮痛剤（パナドール等）</string>
     <string name="checklist_umrah_med_2">風邪薬</string>
     <string name="checklist_umrah_med_3">咳止め薬</string>
@@ -280,42 +280,28 @@
     <string name="checklist_umrah_med_11">携帯用歯ブラシ ＆ 歯磨き粉</string>
     <string name="checklist_umrah_med_12">手指消毒ジェル</string>
     <string name="checklist_umrah_med_13">常備薬（マッカ/マディナの薬局は2〜3倍高価なため十分な量を準備）</string>
-
-    <!-- Checklist Umrah - Electronics -->
     <string name="checklist_umrah_elec_1">スマホ充電器</string>
     <string name="checklist_umrah_elec_2">モバイルバッテリー</string>
     <string name="checklist_umrah_elec_3">電源タップ / 延長コード</string>
     <string name="checklist_umrah_elec_4">ハンディファン（小型扇風機）</string>
     <string name="checklist_umrah_elec_5">デジタル数珠（Tasbih）</string>
-
-    <!-- Checklist Umrah - Women's Accessories -->
     <string name="checklist_umrah_acc_1">日傘 / 傘</string>
     <string name="checklist_umrah_acc_2">サングラス</string>
     <string name="checklist_umrah_acc_3">マスク</string>
-
-    <!-- Checklist Umrah - Food -->
     <string name="checklist_umrah_food_1">ビスケット・乾パン</string>
     <string name="checklist_umrah_food_2">キャンディ・飴</string>
     <string name="checklist_umrah_food_3">インスタント麺</string>
     <string name="checklist_umrah_food_4">チリペースト（サンバル等）</string>
-
-    <!-- Checklist Umrah - Finance -->
     <string name="checklist_umrah_finance_1">十分なサウジ・リヤル現金</string>
     <string name="checklist_umrah_finance_2">予備として米ドル（USD）を用意</string>
     <string name="checklist_umrah_finance_3">デビット / クレジットカードの海外利用設定</string>
-
-    <!-- Checklist Umrah - General -->
     <string name="checklist_umrah_general_1">洗面用具（アメニティ）</string>
     <string name="checklist_umrah_general_2">予備のタオル（マディナのホテルはタオルが不足することがあります）</string>
     <string name="checklist_umrah_general_3">その他必要な身の回り品</string>
-
-    <!-- Checklist Tour - Documents -->
     <string name="checklist_tour_docs_1">パスポート（残存有効期間6ヶ月以上）</string>
     <string name="checklist_tour_docs_2">パスポートを常時携帯する</string>
     <string name="checklist_tour_docs_3">旧パスポート（最近更新した場合）</string>
     <string name="checklist_tour_docs_4">海外渡航規制・渡航可否の確認（SSPI等）</string>
-
-    <!-- Checklist Tour - Medicine -->
     <string name="checklist_tour_med_1">解熱鎮痛剤（パナドール等）</string>
     <string name="checklist_tour_med_2">のどの痛み止め</string>
     <string name="checklist_tour_med_3">下痢止め薬</string>
@@ -324,46 +310,38 @@
     <string name="checklist_tour_med_6">薬用オイル（塗り薬）</string>
     <string name="checklist_tour_med_7">オリーブオイル / 保湿剤 / リップクリーム</string>
     <string name="checklist_tour_med_8">カイロ / 温熱シート</string>
-
-    <!-- Checklist Tour - Clothing -->
     <string name="checklist_tour_clothing_1">薄手のジャケット（ミドルレイヤー）</string>
     <string name="checklist_tour_clothing_2">ジーンズ / 薄手の長ズボン</string>
     <string name="checklist_tour_clothing_3">防寒用アウター（防寒・防風用）</string>
     <string name="checklist_tour_clothing_4">歩きやすい靴（スニーカー）</string>
     <string name="checklist_tour_clothing_5">サングラス ＆ 帽子</string>
-
-    <!-- Checklist Tour - Electronics -->
     <string name="checklist_tour_elec_1">変換プラグ（トラベルアダプター）</string>
     <string name="checklist_tour_elec_2">モバイルバッテリー（最大20,000mAhまで・手荷物に入れること）</string>
-
-    <!-- Checklist Tour - Finance -->
     <string name="checklist_tour_finance_1">渡航先に合わせた現地通貨の両替</string>
     <string name="checklist_tour_finance_2">デビット / クレジットカードの海外利用設定</string>
-
     <string name="forgot_password">パスワードをお忘れですか？</string>
     <string name="reset_password_title">パスワードをリセットする</string>
     <string name="reset_password_msg">メールアドレスを入力してください。パスワードをリセットするためのリンクをお送りします。</string>
     <string name="hint_enter_email">メールアドレスを入力してください</string>
     <string name="btn_send">送信</string>
     <string name="btn_cancel">キャンセル</string>
-
     <string name="reset_password_invalid_email">有効なメールアドレスを入力してください</string>
     <string name="reset_password_sent">パスワードリセットメールを送信しました。受信箱をご確認ください。</string>
     <string name="reset_password_failed">メールの送信に失敗しました。もう一度お試しください。</string>
-
     <string name="login_google_signin_failed">Googleログイン失敗:コード %1$d</string>
     <string name="login_google_success">Googleログインに成功しました! %1$s</string>
     <string name="login_google_failed">Googleログインに失敗しました。もう一度お試しください。</string>
     <string name="login_email_invalid">有効なメールアドレスを入力してください</string>
     <string name="login_password_required">パスワードを入力してください</string>
     <string name="login_success">ログインに成功しました!</string>
-    <string name="login_failed_default">ログインに失敗しました。もう一度お試しください</string>
-    <string name="language_picker_title">Choose Language / Pilih Bahasa</string>
-
+    <string name="language_picker_title">言語を選択</string>
+    <string name="language_picker_subtitle">ご希望の言語を選択してください</string>
     <string name="prayer_times_title_fallback">本日の礼拝時間（推定 - インターネット接続なし）</string>
     <string name="prayer_location_denied_text">位置情報を有効にして礼拝時間を表示</string>
     <string name="prayer_use_my_location">現在地を使用</string>
-
+    <string name="prayer_refresh_location">位置情報を更新</string>
+    <string name="prayer_updating_location">礼拝場所を更新中...</string>
+    <string name="prayer_location_updated">位置情報を更新しました</string>
     <string name="umrah_section_popular">人気パッケージ</string>
     <string name="umrah_section_khas">特別パッケージ</string>
     <string name="umrah_section_ziarah">ウムラ・ジアラ</string>
@@ -372,13 +350,10 @@
     <string name="tour_section_available">利用可能なパッケージ</string>
     <string name="tour_inbound_coming_soon">国内(インバウンド)パッケージは現在計画段階です。今後の更新をお待ちください!</string>
     <string name="tour_section_outbound">アウトバウンド</string>
-
     <string name="checklist_umrah_title">ウムラを行うための手順</string>
     <string name="checklist_reset">リセット</string>
     <string name="checklist_progress_suffix">終了した</string>
     <string name="all_packages_title">すべてのパッケージ</string>
-
-    <!-- Section 1 -->
     <string name="checklist_sec1_title">1. 出発前</string>
     <string name="checklist_sec1_item1">イフラームのスンナの沐浴を行う</string>
     <string name="checklist_sec1_item2">爪を切る／イフラーム前に身だしなみを整える</string>
@@ -388,8 +363,6 @@
     <string name="checklist_sec1_item4">イフラームのスンナ礼拝2ラクアットを行う</string>
     <string name="checklist_sec1_item5">ミーカートを確認しておく</string>
     <string name="checklist_sec1_item6">イフラームのニヤ（意図）を準備する</string>
-
-    <!-- Section 2 -->
     <string name="checklist_sec2_title">2. ミーカートにて \u2013 イフラームのニヤ</string>
     <string name="checklist_sec2_item1">ウムラのニヤを行う</string>
     <string name="checklist_sec2_heading1">ニヤの文言：</string>
@@ -398,24 +371,18 @@
     <string name="checklist_sec2_heading2">タルビア：</string>
     <string name="checklist_sec2_arabic2">لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لَا شَرِيكَ لَكَ لَبَّيْكَ، إِنَّ الْحَمْدَ وَالنِّعْمَةَ لَكَ وَالْمُلْكَ، لَا شَرِيكَ لَكَ</string>
     <string name="checklist_sec2_item3">イフラーム中の禁止事項をすべて守る</string>
-
-    <!-- Section 3 -->
     <string name="checklist_sec3_title">3. マッカへの道中</string>
     <string name="checklist_sec3_item1">タルビアを多く唱える</string>
     <string name="checklist_sec3_item2">預言者への祝福（サラワート）を唱える</string>
     <string name="checklist_sec3_item3">ズィクル（唱念）を行う</string>
     <string name="checklist_sec3_item4">ドゥアー（祈願）を捧げる</string>
     <string name="checklist_sec3_item5">イフラームの禁止事項を守る</string>
-
-    <!-- Section 4 -->
     <string name="checklist_sec4_title">4. マスジド・ハラームに到着</string>
     <string name="checklist_sec4_item1">右足からマスジド・ハラームに入る</string>
     <string name="checklist_sec4_item2">入堂の祈願（ドゥアー）を唱える</string>
     <string name="checklist_sec4_item3">カアバを見て祈願する</string>
     <string name="checklist_sec4_item4">タワーフの準備をする</string>
     <string name="checklist_sec4_item5">ウドゥー（小浄）を確認する</string>
-
-    <!-- Section 5 -->
     <string name="checklist_sec5_title">5. タワーフ \u2013 7周</string>
     <string name="checklist_sec5_heading1">重要な条件：</string>
     <string name="checklist_sec5_item1">ハダス（不浄）がないこと</string>
@@ -437,8 +404,6 @@
     <string name="checklist_sec5_info8">不信仰者章（アル・カーフィルーン）</string>
     <string name="checklist_sec5_info9">覚えやすいドゥアー</string>
     <string name="checklist_sec5_note1">各周に読まなければならない特定のスーラはありません。</string>
-
-    <!-- Section 6 -->
     <string name="checklist_sec6_title">6. タワーフの後</string>
     <string name="checklist_sec6_item1">タワーフのスンナ礼拝2ラクアットを行う</string>
     <string name="checklist_sec6_item2">可能であればマカーム・イブラーヒームの後ろで礼拝する</string>
@@ -446,8 +411,6 @@
     <string name="checklist_sec6_item4">2ラクアット目にアル・イフラースを読む</string>
     <string name="checklist_sec6_item5">礼拝の後にドゥアーを唱える</string>
     <string name="checklist_sec6_item6">ザムザムの水を飲む</string>
-
-    <!-- Section 7 -->
     <string name="checklist_sec7_title">7. サーイ \u2013 7往復</string>
     <string name="checklist_sec7_note1">開始：サファー \u2022 終了：マルワ</string>
     <string name="checklist_sec7_item1">サファーへ向かう</string>
@@ -467,16 +430,12 @@
     <string name="checklist_sec7_info5">男性：緑色の標識の間は小走りする</string>
     <string name="checklist_sec7_info6">女性：通常通り歩く</string>
     <string name="checklist_sec7_info7">サファー\u2192マルワの順序を守る</string>
-
-    <!-- Section 8 -->
     <string name="checklist_sec8_title">8. タハッルル</string>
     <string name="checklist_sec8_note1">サーイの7往復を終えた後：</string>
     <string name="checklist_sec8_item1">男性：頭髪を剃る、または切る</string>
     <string name="checklist_sec8_item2">女性：髪を少し切る</string>
     <string name="checklist_sec8_item3">タハッルルはウムラの完了を意味する</string>
     <string name="checklist_sec8_item4">タハッルルの後、イフラームの禁止事項は終了する</string>
-
-    <!-- Section 9 -->
     <string name="checklist_sec9_title">9. ウムラ最終チェックリスト</string>
     <string name="checklist_sec9_note1">以下すべてが完了しているか確認：</string>
     <string name="checklist_sec9_item1">イフラーム</string>
@@ -488,23 +447,18 @@
     <string name="checklist_sec9_item7">タハッルル</string>
     <string name="checklist_sec9_item8">順序（タルティーブ）</string>
     <string name="checklist_sec9_item9">ウムラ完了</string>
-
     <string name="panduan_banner_title">ウムラの準備はできましたか?</string>
     <string name="panduan_banner_subtitle">ウムラを行う際の手順を確認してください。</string>
     <string name="panduan_banner_button">チェックリストを見る</string>
-
     <string name="umrah_hero_title">ウムラパッケージ</string>
     <string name="umrah_hero_subtitle">あなたに合ったウムラパッケージを探す</string>
     <string name="umrah_empty_state">パッケージが見つかりません</string>
-
     <string name="tour_hero_title">ツアーパッケージ</string>
     <string name="tour_hero_subtitle">お好みの旅先を探す</string>
     <string name="tour_empty_state">パッケージが見つかりません</string>
-
     <string name="favorite_hero_title">お気に入り</string>
     <string name="favorite_hero_subtitle">後で見るために保存したパッケージ</string>
     <string name="favorite_empty_state">まだ保存されたパッケージはありません</string>
-
     <string name="package_detail_price_from_label">価格</string>
     <string name="package_detail_whatsapp_button">WhatsAppで相談</string>
     <string name="package_detail_poster_title">パッケージポスター</string>
@@ -523,6 +477,178 @@
     <string name="package_detail_price_options_title">料金・部屋タイプ</string>
     <string name="package_detail_gallery_title">写真ギャラリー</string>
     <string name="package_detail_whatsapp_default_message">こんにちは、%1$sパッケージに興味があります。詳細を教えていただけますか?</string>
-
-
+    <string name="removed_from_favorites">お気に入りから削除しました</string>
+    <string name="added_to_favorites">お気に入りに追加しました</string>
+    <string name="undo">元に戻す</string>
+    <string name="remove_favorite_dialog_title">お気に入りから削除しますか？</string>
+    <string name="remove_favorite_dialog_message">このパッケージをお気に入りから削除してもよろしいですか？</string>
+    <string name="remove_favorite_dialog_confirm">削除</string>
+    <string name="remove_favorite_dialog_cancel">キャンセル</string>
+    <string name="filter_title">パッケージを絞り込む</string>
+    <string name="filter_reset">リセット</string>
+    <string name="filter_category_header">カテゴリー</string>
+    <string name="filter_cat_umrah">ウムラ</string>
+    <string name="filter_cat_tour">ツアー</string>
+    <string name="filter_destination_header">目的地・国</string>
+    <string name="filter_all_destinations">すべての目的地</string>
+    <string name="filter_price_header">価格帯</string>
+    <string name="filter_price_presets_header">クイック価格</string>
+    <string name="filter_price_below_3k">&lt; RM3,000</string>
+    <string name="filter_price_3k_6k">RM3,000 - RM6,000</string>
+    <string name="filter_price_6k_10k">RM6,000 - RM10,000</string>
+    <string name="filter_price_above_10k">&gt; RM10,000</string>
+    <string name="filter_custom_slider_header">カスタム価格スライダー</string>
+    <string name="filter_min_label">最低</string>
+    <string name="filter_max_label">最高</string>
+    <string name="filter_apply_button">フィルターを適用 (%1$d 件)</string>
+    <string name="filter_active_tag_category">カテゴリー: %1$s</string>
+    <string name="filter_active_tag_destination">目的地: %1$s</string>
+    <string name="filter_active_tag_price">価格: RM%1$s - RM%2$s</string>
+    <string name="filter_clear_all">フィルター解除</string>
+    <string name="dest_turkey">トルコ</string>
+    <string name="dest_korea">韓国</string>
+    <string name="dest_japan">日本</string>
+    <string name="dest_saudi">サウジアラビア</string>
+    <string name="dest_europe">ヨーロッパ・バルカン</string>
+    <string name="dest_vietnam">ベトナム</string>
+    <string name="dest_china">中国</string>
+    <string name="prayer_times_header">本日の礼拝時間</string>
+    <string name="prayer_times_today_format">本日の礼拝時間 (%1$s)</string>
+    <string name="explore_package_arrow">パッケージを見る →</string>
+    <string name="exclusive_offer_title">巡礼者限定オファー</string>
+    <string name="exclusive_offer_sub">最新のプロモーションと特別割引を受け取るためにアカウントを登録してください。</string>
+    <string name="google_review_write_btn">レビューを書く →</string>
+    <string name="all_packages_empty">パッケージが見つかりません</string>
+    <string name="prayer_name_subuh">ファジュル (夜明け)</string>
+    <string name="prayer_name_syuruk">日の出</string>
+    <string name="prayer_name_zohor">ズフル (正午)</string>
+    <string name="prayer_name_asar">アスル (午後)</string>
+    <string name="prayer_name_maghrib">マグリブ (日没)</string>
+    <string name="prayer_name_isyak">イシャー (夜)</string>
+    <string name="prayer_countdown_entered">礼拝時間になりました</string>
+    <string name="prayer_countdown_min">%1$sまであと%2$d分</string>
+    <string name="prayer_countdown_hour_min">%1$sまであと%2$d時間%3$d分</string>
+    <string name="err_server_connection">バックエンドサーバーに接続できませんでした。</string>
+    <string name="err_connection_detail">接続エラー: %1$s</string>
+    <string name="error_whatsapp_not_found">この端末にWhatsAppがインストールされていません。</string>
+    <string name="err_open_map">地図を開けません。</string>
+    <string name="err_open_call">発信できません。</string>
+    <string name="err_open_email">メールアプリを開けません。</string>
+    <string name="err_open_link">リンクを開けません。</string>
+    <string name="err_open_review">レビューページを開けません。</string>
+    <string name="err_open_youtube">YouTubeを開けません。</string>
+    <string name="err_package_not_found">パッケージが見つかりません。</string>
+    <string name="err_package_load_failed">パッケージ情報の読み込みに失敗しました。</string>
+    <string name="guideline_dialog_title">準備ガイド</string>
+    <string name="guideline_dialog_message">✓ 6か月以上有効なパスポート\n\n✓ 髄膜炎ワクチン接種（必要な場合）\n\n✓ イフラーム着／適切な服装\n\n✓ 常備薬\n\n✓ 重要書類のコピー（パスポート、チケット、ビザ）\n\n✓ 十分な現金（リヤル／米ドル）</string>
+    <string name="coming_soon_format">%1$sは近日公開</string>
+    <string name="pdf_coming_soon_format">%1$sのPDFダウンロード - 近日公開</string>
+    <string name="chapter_label_format">第%1$d章</string>
+    <string name="profile_guest_name">ゲストユーザー</string>
+    <string name="profile_no_booking">まだ予約がありません - 予約はここに表示されます</string>
+    <string name="profile_logout_success">ログアウトしました</string>
+    <string name="profile_login_to_update">プロフィールを更新するにはログインしてください</string>
+    <string name="profile_change_password">パスワード変更</string>
+    <string name="profile_save">保存</string>
+    <string name="profile_updated">プロフィールを更新しました！</string>
+    <string name="profile_email_invalid">無効なメールアドレス</string>
+    <string name="profile_reset_title">パスワードのリセット</string>
+    <string name="profile_reset_message">パスワードリセットリンクを送信しますか: %1$s?</string>
+    <string name="profile_reset_send">送信</string>
+    <string name="profile_reset_sent">パスワードリセットリンクをメールに送信しました！</string>
+    <string name="profile_field_full_name">氏名</string>
+    <string name="profile_field_phone">電話番号</string>
+    <string name="profile_field_email">メールアドレス</string>
+    <string name="privacy_terms_toast">Hafiz Travel &amp; Tours Sdn Bhd - プライバシー&amp;利用規約</string>
+    <string name="package_fallback_destination">旅行先</string>
+    <string name="detail_section_accommodation_summary">宿泊概要</string>
+    <string name="detail_section_hotels_umrah">ホテル（マッカ&amp;マディーナ）</string>
+    <string name="detail_section_hotels_tour">ホテル</string>
+    <string name="detail_hotels_empty_notice">ホテル情報は近日更新されます。</string>
+    <string name="detail_section_room_pricing">部屋&amp;料金オプション</string>
+    <string name="detail_section_itinerary">全旅程</string>
+    <string name="detail_itinerary_empty_notice">旅程は近日更新されます。</string>
+    <string name="detail_itinerary_hint">日をタップして詳細を表示</string>
+    <string name="detail_section_inclusions">含まれるもの &amp; 含まれないもの</string>
+    <string name="detail_included_heading">含まれるもの</string>
+    <string name="detail_excluded_heading">含まれないもの</string>
+    <string name="detail_whats_covered">含まれるもの</string>
+    <string name="detail_whats_covered_sub">パッケージに含まれる主なサービスと特典</string>
+    <string name="detail_not_covered">含まれないもの</string>
+    <string name="detail_not_covered_sub">パッケージ料金に含まれない費用・サービス</string>
+    <string name="detail_terms_guidelines">パッケージ利用規約・ガイドライン</string>
+    <string name="detail_required_documents">必要書類</string>
+    <string name="room_quint">5人部屋 (Quint)</string>
+    <string name="room_quad">4人部屋 (Quad)</string>
+    <string name="room_triple">3人部屋 (Triple)</string>
+    <string name="room_double">2人部屋 (Double)</string>
+    <string name="room_single">1人部屋 (Single)</string>
+    <string name="detail_price_from">料金</string>
+    <string name="cat_flights">航空便</string>
+    <string name="cat_accommodation">宿泊</string>
+    <string name="cat_visa_protection">ビザと保険</string>
+    <string name="cat_meals">食事</string>
+    <string name="cat_transportation">交通</string>
+    <string name="cat_tour_guidance">ガイド</string>
+    <string name="cat_travel_essentials">旅行の必需品</string>
+    <string name="cat_preparation">事前準備</string>
+    <string name="cat_other">その他の含まれるもの</string>
+    <string name="detail_section_packing">持ち物ガイド</string>
+    <string name="detail_packing_heading">おすすめ持ち物リスト</string>
+    <string name="detail_section_notes">重要な注意事項&amp;案内</string>
+    <string name="detail_section_gallery">フォトギャラリー</string>
+    <string name="detail_per_pax">1人あたり</string>
+    <string name="nights_unit">泊</string>
+    <string name="nights_label_makkah">マッカ</string>
+    <string name="nights_label_madinah">マディーナ</string>
+    <string name="nights_label_taif">ターイフ</string>
+    <string name="nights_label_hotel1">ホテル1</string>
+    <string name="nights_label_hotel2">ホテル2</string>
+    <string name="nights_label_hotel3">ホテル3</string>
+    <string name="flight_type_fallback">フライト</string>
+    <string name="flight_route_fallback">ルートは確認中</string>
+    <string name="hotel_title_umrah_makkah">マッカホテル</string>
+    <string name="hotel_title_umrah_madinah">マディーナホテル</string>
+    <string name="hotel_title_umrah_taif">ターイフホテル</string>
+    <string name="hotel_title_tour_hotel1">ホテル1</string>
+    <string name="hotel_title_tour_hotel2">ホテル2</string>
+    <string name="hotel_title_tour_extra">追加ホテル</string>
+    <string name="hotel_rating_fallback">スタンダード</string>
+    <string name="share_package_via">パッケージを共有</string>
+    <string name="share_price_from">💰 料金: *%1$s*〜</string>
+    <string name="share_duration">⏱️ 期間: *%1$d日間 %2$d泊*</string>
+    <string name="share_cta">📲 予約・お問い合わせ</string>
+    <string name="package_badge_umrah">✨ ウムラパッケージ</string>
+    <string name="package_badge_tour">✈️ ツアーパッケージ</string>
+    <string name="results_packages_format">%1$d件のパッケージ</string>
+    <string name="filter_slider_min_label">RM0 (最低)</string>
+    <string name="filter_slider_max_label">RM20,000+ (最高)</string>
+    <string name="promo_hero_kicker">マッカ&amp;マディーナ</string>
+    <string name="promo_hero_title">学校休暇&amp;シャワール月ウムラパッケージ</string>
+    <string name="promo_hero_price">RM 7,990〜 • 12日間10泊</string>
+    <string name="google_review_summary">4.9 ★★★★★ (Googleレビュー250件以上)</string>
+    <string name="package_vip_badge">✨ VIPおすすめパッケージ</string>
+    <string name="package_whatsapp_enquiry">WhatsAppで相談</string>
+    <string name="splash_eyebrow">世界中の旅&amp;ウムラ</string>
+    <string name="splash_tagline">Hafiz Travel &amp; Toursと誠実な思い出を作ろう</string>
+    <string name="hotel_distance_to">%1$s（マスジド・ハラームまで）</string>
+    <string name="duration_days_nights">%1$d日間 %2$d泊</string>
+    <string name="duration_days_only">%1$d日間</string>
+    <string name="package_full">フルパッケージ</string>
+    <string name="day_label_format">%1$d日目</string>
+    <string name="itinerary_daily">毎日の旅程</string>
+    <string name="azan_notif_title">%1$sの礼拝時間</string>
+    <string name="azan_playing">アザーン再生中</string>
+    <string name="azan_stop">停止</string>
+    <string name="azan_channel_name">アザーン通知</string>
+    <string name="azan_channel_desc">礼拝時間とアザーンの通知</string>
+    <string name="battery_title">アザーンを確実に動作させる</string>
+    <string name="battery_message">このアプリを閉じていても通知とアザーンが定時に再生されるよう、バックグラウンドでの無制限動作を許可してください。\n\nこの手順は任意で、後から設定で変更できます。</string>
+    <string name="battery_now">今すぐ設定</string>
+    <string name="battery_later">後で</string>
+    <string name="hijri_date_fallback">1448年ラジャブ月1日</string>
+    <string name="btn_book_now">今すぐ予約</string>
+    <string name="btn_ask_questions">質問する</string>
+    <string name="selected_room_label">選択したお部屋</string>
+    <string name="booking_flow_notice">選択したオプション: %1$s (%2$s)。搭乗者情報の入力に進みます。</string>
 </resources>

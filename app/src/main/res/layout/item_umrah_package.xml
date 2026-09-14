@@ -1,29 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
-    android:background="@drawable/bg_search_white"
+    android:layout_marginBottom="12dp"
+    android:background="@drawable/bg_package_card_luxury"
+    android:elevation="2dp"
     android:orientation="horizontal"
     android:padding="12dp"
+    android:gravity="center_vertical"
     android:clickable="true"
     android:focusable="true">
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/packageImage"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:background="@drawable/bg_image_placeholder"
-        android:scaleType="centerCrop" />
+        android:layout_width="92dp"
+        android:layout_height="92dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_image_placeholder"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium"
+        tools:ignore="ContentDescription" />
 
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:layout_marginStart="12dp"
-        android:gravity="center_vertical"
+        android:layout_marginStart="14dp"
+        android:layout_marginEnd="6dp"
         android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/packageCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:textColor="@color/brand_magenta"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:letterSpacing="0.04"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:visibility="gone"
+            tools:visibility="visible"
+            tools:text="UMRAH SYAWAL 2027" />
 
         <TextView
             android:id="@+id/packageName"
@@ -31,16 +52,36 @@
             android:layout_height="wrap_content"
             android:textColor="@color/text_dark"
             android:textSize="15sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:lineSpacingMultiplier="1.1"
+            android:maxLines="2"
+            android:ellipsize="end" />
 
         <TextView
             android:id="@+id/packageDurationPrice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textColor="@color/pink_dark"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/brand_magenta"
             android:textSize="13sp"
             android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/packageHotelDistance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:drawableStart="@drawable/ic_hotel"
+            android:drawablePadding="5dp"
+            android:drawableTint="@color/text_gray"
+            android:textColor="@color/text_gray"
+            android:textSize="12sp"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:visibility="gone"
+            tools:visibility="visible"
+            tools:text="50m ke Masjidil Haram" />
 
     </LinearLayout>
 
@@ -51,6 +92,7 @@
         android:padding="8dp"
         android:src="@drawable/ic_favorite"
         android:clickable="true"
-        android:focusable="true" />
+        android:focusable="true"
+        tools:ignore="ContentDescription,TouchTargetSizeCheck" />
 
 </LinearLayout>

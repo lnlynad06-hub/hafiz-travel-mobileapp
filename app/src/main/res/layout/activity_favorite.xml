@@ -7,103 +7,12 @@
     android:layout_height="match_parent"
     android:background="@color/background">
 
-    <!-- Fixed bottom navigation - same as MainActivity/UmrahActivity/TourActivity, Favorite shown as the active tab -->
-    <LinearLayout
-        android:id="@+id/bottomNav"
+    <!-- Shared Floating Luxury Bottom Navigation Dock -->
+    <include
+        layout="@layout/layout_luxury_bottom_nav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/surface"
-        android:elevation="12dp"
-        android:orientation="horizontal"
-        android:paddingHorizontal="8dp"
-        android:paddingVertical="12dp"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <LinearLayout
-            android:id="@+id/navHome"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:paddingVertical="8dp"
-            android:clickable="true"
-            android:focusable="true">
-
-            <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:src="@drawable/ic_home" app:tint="@color/text_gray" android:padding="1dp" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="@string/nav_home" android:textColor="@color/text_gray" android:textSize="11sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/navUmrah"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:paddingVertical="8dp"
-            android:clickable="true"
-            android:focusable="true">
-
-            <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:src="@drawable/ic_kiblat" app:tint="@color/text_gray" android:padding="1dp" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="@string/nav_umrah" android:textColor="@color/text_gray" android:textSize="11sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/navTour"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:paddingVertical="8dp"
-            android:clickable="true"
-            android:focusable="true">
-
-            <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:src="@drawable/ic_flight" app:tint="@color/text_gray" android:padding="1dp" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="@string/nav_tour" android:textColor="@color/text_gray" android:textSize="11sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/navFavorite"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/bg_pill_active_nav"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingVertical="8dp"
-            tools:ignore="TouchTargetSizeCheck">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_favorite"
-                app:tint="@color/pink_dark"
-                android:padding="3dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="6dp"
-                android:text="@string/nav_favorite"
-                android:textColor="@color/pink_dark"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-    </LinearLayout>
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <!-- Pink hero - replaces the old plain top bar -->
     <LinearLayout
@@ -136,48 +45,92 @@
 
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/favoriteRecyclerView"
+    <!-- SwipeRefresh & Content -->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/favoriteSwipeRefresh"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:clipToPadding="false"
-        android:paddingHorizontal="20dp"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
         app:layout_constraintTop_toBottomOf="@id/favoriteHeroCard"
-        app:layout_constraintBottom_toTopOf="@id/bottomNav" />
+        app:layout_constraintBottom_toBottomOf="parent">
 
-    <!-- Nicer empty state: heart icon + message, centered in the space below the hero -->
-    <LinearLayout
-        android:id="@+id/favoriteEmptyContainer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/favoriteHeroCard"
-        app:layout_constraintBottom_toTopOf="@id/bottomNav"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias="0.35">
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
-        <ImageView
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:src="@drawable/ic_favorite"
-            app:tint="@color/field_border"
-            tools:ignore="ContentDescription" />
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/favoriteEmptyText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:gravity="center"
-            android:text="@string/favorite_empty_state"
-            android:textColor="@color/text_gray"
-            android:textSize="14sp" />
+                <!-- Skeleton Shimmer Loading Placeholder -->
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/favoriteShimmerContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="20dp"
+                    android:paddingTop="20dp"
+                    app:shimmer_auto_start="true"
+                    app:shimmer_base_alpha="0.6"
+                    app:shimmer_highlight_alpha="1.0"
+                    app:shimmer_duration="1200">
 
-    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <include layout="@layout/item_skeleton_vertical_card" />
+                        <include layout="@layout/item_skeleton_vertical_card" />
+                        <include layout="@layout/item_skeleton_vertical_card" />
+
+                    </LinearLayout>
+                </com.facebook.shimmer.ShimmerFrameLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/favoriteRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:paddingHorizontal="20dp"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="96dp"
+                    android:nestedScrollingEnabled="false"
+                    android:visibility="gone" />
+
+                <!-- Nicer empty state: heart icon + message -->
+                <LinearLayout
+                    android:id="@+id/favoriteEmptyContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    android:paddingTop="60dp">
+
+                    <ImageView
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:src="@drawable/ic_favorite"
+                        app:tint="@color/field_border"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/favoriteEmptyText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:gravity="center"
+                        android:text="@string/favorite_empty_state"
+                        android:textColor="@color/text_gray"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="20dp">
+
+    <!-- Handle bar -->
+    <View
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="12dp"
+        android:background="#CCCCCC" />
+
+    <!-- Title -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="12dp"
+        android:text="@string/select_country_code"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#1A1A2E" />
+
+    <!-- Divider -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#F0F0F0"
+        android:layout_marginBottom="4dp" />
+
+    <!-- Section: Southeast Asia -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="4dp"
+        android:text="@string/region_southeast_asia"
+        android:textSize="10sp"
+        android:textColor="#9E9E9E"
+        android:textStyle="bold"
+        android:letterSpacing="0.1" />
+
+    <!-- Malaysia -->
+    <LinearLayout android:id="@+id/itemMalaysia"
+        android:layout_width="match_parent" android:layout_height="52dp"
+        android:gravity="center_vertical" android:orientation="horizontal"
+        android:paddingStart="20dp" android:paddingEnd="20dp"
+        android:background="?attr/selectableItemBackground">
+        <TextView android:layout_width="32dp" android:layout_height="wrap_content"
+            android:text="🇲🇾" android:textSize="22sp" android:gravity="center"/>
+        <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+            android:layout_marginStart="12dp" android:text="Malaysia" android:textSize="14sp" android:textColor="#1A1A2E"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="+60" android:textSize="14sp" android:textColor="#D81B60" android:textStyle="bold"/>
+    </LinearLayout>
+
+    <!-- Singapore -->
+    <LinearLayout android:id="@+id/itemSingapore"
+        android:layout_width="match_parent" android:layout_height="52dp"
+        android:gravity="center_vertical" android:orientation="horizontal"
+        android:paddingStart="20dp" android:paddingEnd="20dp"
+        android:background="?attr/selectableItemBackground">
+        <TextView android:layout_width="32dp" android:layout_height="wrap_content"
+            android:text="🇸🇬" android:textSize="22sp" android:gravity="center"/>
+        <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+            android:layout_marginStart="12dp" android:text="Singapore" android:textSize="14sp" android:textColor="#1A1A2E"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="+65" android:textSize="14sp" android:textColor="#D81B60" android:textStyle="bold"/>
+    </LinearLayout>
+
+    <!-- Indonesia -->
+    <LinearLayout android:id="@+id/itemIndonesia"
+        android:layout_width="match_parent" android:layout_height="52dp"
+        android:gravity="center_vertical" android:orientation="horizontal"
+        android:paddingStart="20dp" android:paddingEnd="20dp"
+        android:background="?attr/selectableItemBackground">
+        <TextView android:layout_width="32dp" android:layout_height="wrap_content"
+            android:text="🇮🇩" android:textSize="22sp" android:gravity="center"/>
+        <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+            android:layout_marginStart="12dp" android:text="Indonesia" android:textSize="14sp" android:textColor="#1A1A2E"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="+62" android:textSize="14sp" android:textColor="#D81B60" android:textStyle="bold"/>
+    </LinearLayout>
+
+    <!-- Brunei -->
+    <LinearLayout android:id="@+id/itemBrunei"
+        android:layout_width="match_parent" android:layout_height="52dp"
+        android:gravity="center_vertical" android:orientation="horizontal"
+        android:paddingStart="20dp" android:paddingEnd="20dp"
+        android:background="?attr/selectableItemBackground">
+        <TextView android:layout_width="32dp" android:layout_height="wrap_content"
+            android:text="🇧🇳" android:textSize="22sp" android:gravity="center"/>
+        <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+            android:layout_marginStart="12dp" android:text="Brunei" android:textSize="14sp" android:textColor="#1A1A2E"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="+673" android:textSize="14sp" android:textColor="#D81B60" android:textStyle="bold"/>
+    </LinearLayout>
+
+    <!-- Thailand -->
+    <LinearLayout android:id="@+id/itemThailand"
+        android:layout_width="match_parent" android:layout_height="52dp"
+        android:gravity="center_vertical" android:orientation="horizontal"
+        android:paddingStart="20dp" android:paddingEnd="20dp"
+        android:background="?attr/selectableItemBackground">
+        <TextView android:layout_width="32dp" android:layout_height="wrap_content"
+            android:text="🇹🇭" android:textSize="22sp" android:gravity="center"/>
+        <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+            android:layout_marginStart="12dp" android:text="Thailand" android:textSize="14sp" android:textColor="#1A1A2E"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="+66" android:textSize="14sp" android:textColor="#D81B60" android:textStyle="bold"/>
+    </LinearLayout>
+
+    <!-- Vietnam -->
+    <LinearLayout android:id="@+id/itemVietnam"
+        android:layout_width="match_parent" android:layout_height="52dp"
+        android:gravity="center_vertical" android:orientation="horizontal"
+        android:paddingStart="20dp" android:paddingEnd="20dp"
+        android:background="?attr/selectableItemBackground">
+        <TextView android:layout_width="32dp" android:layout_height="wrap_content"
+            android:text="🇻🇳" android:textSize="22sp" android:gravity="center"/>
+        <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+            android:layout_marginStart="12dp" android:text="Vietnam" android:textSize="14sp" android:textColor="#1A1A2E"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="+84" android:textSize="14sp" android:textColor="#D81B60" android:textStyle="bold"/>
+    </LinearLayout>
+
+    <!-- Philippines -->
+    <LinearLayout android:id="@+id/itemPhilippines"
+        android:layout_width="match_parent" android:layout_height="52dp"
+        android:gravity="center_vertical" android:orientation="horizontal"
+        android:paddingStart="20dp" android:paddingEnd="20dp"
+        android:background="?attr/selectableItemBackground">
+        <TextView android:layout_width="32dp" android:layout_height="wrap_content"
+            android:text="🇵🇭" android:textSize="22sp" android:gravity="center"/>
+        <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+            android:layout_marginStart="12dp" android:text="Philippines" android:textSize="14sp" android:textColor="#1A1A2E"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="+63" android:textSize="14sp" android:textColor="#D81B60" android:textStyle="bold"/>
+    </LinearLayout>
+
+    <!-- Divider -->
+    <View android:layout_width="match_parent" android:layout_height="1dp"
+        android:background="#F5F5F5" android:layout_marginTop="4dp"/>
+
+    <!-- Section: Lain-lain -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="4dp"
+        android:text="@string/region_international"
+        android:textSize="10sp"
+        android:textColor="#9E9E9E"
+        android:textStyle="bold"
+        android:letterSpacing="0.1" />
+
+    <!-- India -->
+    <LinearLayout android:id="@+id/itemIndia"
+        android:layout_width="match_parent" android:layout_height="52dp"
+        android:gravity="center_vertical" android:orientation="horizontal"
+        android:paddingStart="20dp" android:paddingEnd="20dp"
+        android:background="?attr/selectableItemBackground">
+        <TextView android:layout_width="32dp" android:layout_height="wrap_content"
+            android:text="🇮🇳" android:textSize="22sp" android:gravity="center"/>
+        <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+            android:layout_marginStart="12dp" android:text="India" android:textSize="14sp" android:textColor="#1A1A2E"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="+91" android:textSize="14sp" android:textColor="#D81B60" android:textStyle="bold"/>
+    </LinearLayout>
+
+    <!-- China -->
+    <LinearLayout android:id="@+id/itemChina"
+        android:layout_width="match_parent" android:layout_height="52dp"
+        android:gravity="center_vertical" android:orientation="horizontal"
+        android:paddingStart="20dp" android:paddingEnd="20dp"
+        android:background="?attr/selectableItemBackground">
+        <TextView android:layout_width="32dp" android:layout_height="wrap_content"
+            android:text="🇨🇳" android:textSize="22sp" android:gravity="center"/>
+        <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+            android:layout_marginStart="12dp" android:text="China" android:textSize="14sp" android:textColor="#1A1A2E"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="+86" android:textSize="14sp" android:textColor="#D81B60" android:textStyle="bold"/>
+    </LinearLayout>
+
+    <!-- UK -->
+    <LinearLayout android:id="@+id/itemUk"
+        android:layout_width="match_parent" android:layout_height="52dp"
+        android:gravity="center_vertical" android:orientation="horizontal"
+        android:paddingStart="20dp" android:paddingEnd="20dp"
+        android:background="?attr/selectableItemBackground">
+        <TextView android:layout_width="32dp" android:layout_height="wrap_content"
+            android:text="🇬🇧" android:textSize="22sp" android:gravity="center"/>
+        <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+            android:layout_marginStart="12dp" android:text="United Kingdom" android:textSize="14sp" android:textColor="#1A1A2E"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="+44" android:textSize="14sp" android:textColor="#D81B60" android:textStyle="bold"/>
+    </LinearLayout>
+
+    <!-- USA -->
+    <LinearLayout android:id="@+id/itemUsa"
+        android:layout_width="match_parent" android:layout_height="52dp"
+        android:gravity="center_vertical" android:orientation="horizontal"
+        android:paddingStart="20dp" android:paddingEnd="20dp"
+        android:background="?attr/selectableItemBackground">
+        <TextView android:layout_width="32dp" android:layout_height="wrap_content"
+            android:text="🇺🇸" android:textSize="22sp" android:gravity="center"/>
+        <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+            android:layout_marginStart="12dp" android:text="United States" android:textSize="14sp" android:textColor="#1A1A2E"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="+1" android:textSize="14sp" android:textColor="#D81B60" android:textStyle="bold"/>
+    </LinearLayout>
+
+    <!-- Australia -->
+    <LinearLayout android:id="@+id/itemAustralia"
+        android:layout_width="match_parent" android:layout_height="52dp"
+        android:gravity="center_vertical" android:orientation="horizontal"
+        android:paddingStart="20dp" android:paddingEnd="20dp"
+        android:background="?attr/selectableItemBackground">
+        <TextView android:layout_width="32dp" android:layout_height="wrap_content"
+            android:text="🇦🇺" android:textSize="22sp" android:gravity="center"/>
+        <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+            android:layout_marginStart="12dp" android:text="Australia" android:textSize="14sp" android:textColor="#1A1A2E"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="+61" android:textSize="14sp" android:textColor="#D81B60" android:textStyle="bold"/>
+    </LinearLayout>
+
+</LinearLayout>
+
+</ScrollView>

@@ -8,22 +8,36 @@
          Declaring it in this file too creates a duplicate "string/default_web_client_id"
          resource, which fails the resource-linking step and breaks the whole build. -->
 
-    <!-- Welcome / Onboarding screen -->
-    <string name="welcome_trust_text">Trusted by hundreds of pilgrims</string>
-    <string name="welcome_title">Your Umrah, Hajj &amp; Travel Companion</string>
-    <string name="welcome_subtitle">Easily book Umrah, Hajj, and inbound &amp; outbound travel packages directly from your phone.</string>
-    <string name="welcome_start_now">Start Now</string>
-    <string name="welcome_already_have_account">Already have an account? Log In</string>
+    <!-- Welcome / Onboarding screen (Editorial Luxury) -->
+    <string name="welcome_brand_name">HAFIZ TRAVEL &amp; TOURS</string>
+    <string name="welcome_eyebrow">PREMIER TRAVEL CURATION</string>
+    <string name="welcome_title">Extraordinary Journeys,\nCrafted with Elegance.</string>
+    <string name="welcome_subtitle">From iconic international tours across Asia, Europe and beyond, to sacred Umrah pilgrimages tailored with complete peace of mind.</string>
+    <string name="welcome_chip_worldwide">Worldwide Tours</string>
+    <string name="welcome_chip_umrah">Umrah &amp; Ziarah</string>
+    <string name="welcome_chip_custom">Custom Travel</string>
+    <string name="welcome_start_now">Start Exploring</string>
+    <string name="welcome_already_have_account_full">Already have an account? &lt;font color=\'#D81B60\'&gt;&lt;b&gt;Log In&lt;/b&gt;&lt;/font&gt;</string>
+    <string name="filter_all">All</string>
 
     <!-- Login screen -->
     <string name="login_title">Welcome Back</string>
-    <string name="login_subtitle">Log in to continue</string>
+    <string name="login_subtitle">Sign in to plan your dream vacation</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
+    <string name="remember_me">Remember Me</string>
     <string name="login_button">Log In</string>
-    <string name="login_no_account">No account? Sign up now.</string>
-    <string name="login_or_with">Or Login With</string>
-    <string name="login_guest">Login as Guest</string>
+    <string name="login_signing_in">Signing in…</string>
+    <string name="login_no_account">Don\'t have an account? Sign Up</string>
+    <string name="login_or_with">Or continue with</string>
+    <string name="login_guest">Continue as Guest</string>
+    <string name="forgot_password_title">Reset Password</string>
+    <string name="forgot_password_desc">Enter your registered email address and we will send you a password reset link.</string>
+    <string name="btn_send_reset">Send Reset Link</string>
+    <string name="reset_link_sent_success">Password reset email sent! Please check your inbox.</string>
+    <string name="login_failed_user_not_found">No account found with this email address.</string>
+    <string name="login_failed_wrong_password">Incorrect password. Please try again.</string>
+    <string name="login_failed_default">Login failed. Please check your credentials.</string>
 
     <!-- Sign Up screen -->
     <string name="signup_title">Create an Account</string>
@@ -32,25 +46,43 @@
     <string name="hint_phone">Phone Number</string>
     <string name="hint_confirm_password">Confirm Password</string>
     <string name="signup_button">Sign Up</string>
+    <string name="signup_signing_up">Signing Up...</string>
+    <string name="hint_password_min">Minimum 6 characters</string>
+    <string name="signup_terms_disclaimer">By signing up, you agree to our &lt;b&gt;Terms of Service&lt;/b&gt; and &lt;b&gt;Privacy Policy&lt;/b&gt;.</string>
+    <string name="dialog_terms_title">Terms of Service &amp; Privacy</string>
     <string name="signup_have_account">Already have an account? Log in</string>
     <string name="signup_or_with">Or Sign Up With</string>
     <string name="signup_guest">Login as Guest</string>
-    <string name="social_login_google">Signing in with Google - coming soon</string>
-    <string name="social_login_facebook">Signing in with Facebook - coming soon</string>
-    <string name="social_login_phone">Signing in with phone number - coming soon</string>
-
-    <string name="social_signup_google">Signing up with Google - coming soon</string>
-    <string name="social_signup_facebook">Signing up with Facebook - coming soon</string>
-    <string name="social_signup_phone">Signing up with phone number - coming soon</string>
+    <string name="password_strength_weak">Weak</string>
+    <string name="password_strength_medium">Medium</string>
+    <string name="password_strength_strong">Strong</string>
+    <string name="btn_continue_google">Continue with Google</string>
+    <string name="social_signup_google">Sign up with Google</string>
+    <string name="select_country_code">Select Country Code</string>
+    <string name="region_southeast_asia">SOUTHEAST ASIA</string>
+    <string name="region_international">OTHER INTERNATIONAL</string>
+    <string name="err_name_required">Please enter your full name</string>
+    <string name="err_email_invalid">Please enter a valid email address</string>
+    <string name="err_phone_invalid">Please enter a valid phone number</string>
+    <string name="err_password_short">Password must be at least 6 characters</string>
+    <string name="err_password_mismatch">Passwords do not match</string>
+    <string name="err_signup_failed">Registration failed. Please try again.</string>
+    <string name="err_signup_email_exists">Email or phone number is already registered</string>
+    <string name="err_network">Connection error. Please check your internet.</string>
+    <string name="signup_success">Registration successful!</string>
+    <string name="password_tip_length">8+ chars</string>
+    <string name="password_tip_number">0–9</string>
+    <string name="password_tip_symbol">!@#$</string>
 
     <string name="guest_greeting">Assalamualaikum</string>
-    <string name="user_greeting">Assalamualaikum, %1$s</string>
-    <string name="hero_subtitle_guest">Welcome to\nHafiz Travel &amp; Tours</string>
+    <string name="user_greeting">Assalamualaikum</string>
+    <string name="hero_subtitle_guest">Guest Traveler</string>
     <string name="hero_subtitle_user">Welcome back</string>
-    <string name="hero_headline_guest">Welcome to\nHafiz Travel &amp; Tours</string>
-    <string name="hero_headline_user">Where do you \nwant to go?</string>
+    <string name="hero_headline_guest">Where is your next\ndream journey?</string>
+    <string name="hero_headline_user">Where is your next\ndream journey?</string>
 
     <string name="nav_home">Home</string>
+    <string name="nav_explore">Explore</string>
     <string name="nav_umrah">Umrah</string>
     <string name="nav_tour">Tour</string>
     <string name="nav_favorite">Favorite</string>
@@ -95,6 +127,12 @@
     <string name="faq_a3">Yes, subject to slot availability and a change fee may apply. Contact admin for confirmation.</string>
 
     <string name="package_duration_price">%1$d Days %2$d Nights - RM%3$s</string>
+
+    <string name="help_support_title">Help &amp; Support</string>
+    <string name="help_support_headline">Need Assistance with Your Journey?</string>
+    <string name="help_support_sub">Our customer care consultants are ready to assist you with packages, flights &amp; booking inquiries.</string>
+    <string name="help_support_btn_contact">Contact Us</string>
+    <string name="help_support_btn_whatsapp">WhatsApp Us</string>
 
     <string name="prayer_subuh">Fajr</string>
     <string name="prayer_zohor">Dhuhr</string>
@@ -158,18 +196,18 @@
     <string name="prayer_times_title_jakim">Prayer Times Today (JAKIM)</string>
     <string name="prayer_times_title_jakim_zone">Prayer Times Today (JAKIM - Zone %1$s)</string>
 
-    <string name="podcast_section_title">Podcast</string>
+    <string name="podcast_section_title">Hafiz Journey Podcast</string>
 
     <string name="bab1_hero_title">Etiquette of Travel and Recommended Practices</string>
     <string name="bab1_hero_blurb">Etiquette of traveling and performing prayers while on a journey.</string>
     <string name="bab1_s1_title">Etiquette for Starting a Journey</string>
-    <string name="bab1_s1_body">A) Recommended Ritual Bath for Travelers\n-Performed before setting out on a journey\n\nIntention for the Bath:\n\nنَوْيْتُ الْغُسْلَ لِلسَّفَرِ سُنَّةً لِلَّهِ تَعَالَى\nI only take a circumcision bath to travel because of Allah Ta\'ala.\n\nB) Voluntary Prayer for a Traveler (2 rak\'ahs)\n-1st Rakaat: Surah al-Fatihah + Surah al-Kafirun\n-2nd Rak\'ah: Surah al-Fatihah + Surah al-Ikhlas\n\nIntention for Prayer:\n\nأُصَلِّي سُنَّةَ السَّفَرِ رَكْعَتَيْنِ لِلَّهِ تَعَالَى\nI only prayed two rakaats of the sunnah prayer for travelers because of Allah Ta\'ala.\n\nB) Reading Before Leaving the House\n-Ayat Kursi (1 time)\n-Surah Quraysh (1 kali)\nC) Supplication for Boarding a Vehicle\n\nاللَّهُمَّ أَنْتَ الصَّاحِبُ فِي السَّفَرِ وَالْخَلِيفَةُ فِي الْأَهْلِ وَالْمَالِ وَالْوَلَدِ وَالصَّحَابِ، اللَّهُمَّ احْفَظْنَا وَإِيَّاهُمْ مِنْ آفَاتِ الدُّنْيَا وَعَاهَاتِهَا، اللَّهُمَّ إِنَّا نَسْأَلُكَ فِي سَفَرِنَا هَذَا الْبِرَّ وَالتَّقْوَى وَمِنَ الْعَمَلِ مَا تَرْضَى، اللَّهُمَّ إِنَّا نَسْأَلُكَ أَنْ تَطْوِيَ لَنَا الْأَرْضَ وَتُؤْمِنَ عَلَيْنَا السَّفَرَ وَأَنْ تَرْزُقَنَا فِي سَفَرِنَا هَذَا سَلَامَةً فِي الْبَدَنِ وَالدِّينِ وَالْمَالِ وَتُبْلِغَنَا عُمْرَةَ بَيْتِكَ وَزِيَارَةَ قَبْرِ نَبِيِّكَ مُحَمَّدٍ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ، اللَّهُمَّ إِنَّا نَعُوذُ بِكَ مِنْ وَعْثَاءِ السَّفَرِ وَكَآبَةِ الْمُنْقَلَبِ بِسُوءِ الْمَنْظَرِ فِي الْأَهْلِ وَالْمَالِ وَالْوَلَدِ وَالصَّحَابِ، اللَّهُمَّ اجْعَلْنَا وَإِيَّاهُمْ فِي جِوَارِكَ وَلَا تَسْلُبْنَا وَإِيَّاهُمْ نِعْمَتَكَ وَلَا تُغَيِّرْ مَا بِنَا وَبِهِمْ مِنْ عَافِيَتِكَ يَا أَرْحَمَ الرَّاحِمِينَ.\n</string>
+    <string name="bab1_s1_body">A) Recommended Ritual Bath for Travelers\n-Performed before setting out on a journey\n\nIntention for the Bath:\n\nنَوْيْتُ الْغُسْلَ لِلسَّفَرِ سُنَّةً لِلَّهِ تَعَالَى\nI perform this ritual bath for travel, for the sake of Allah Ta\'ala.\n\nB) Voluntary Prayer for a Traveler (2 rak\'ahs)\n-1st Rakaat: Surah al-Fatihah + Surah al-Kafirun\n-2nd Rak\'ah: Surah al-Fatihah + Surah al-Ikhlas\n\nIntention for Prayer:\n\nأُصَلِّي سُنَّةَ السَّفَرِ رَكْعَتَيْنِ لِلَّهِ تَعَالَى\nI perform the two-rakaat sunnah prayer for travel, for the sake of Allah Ta\'ala.\n\nB) Reading Before Leaving the House\n-Ayat Kursi (1 time)\n-Surah Quraysh (1 kali)\nC) Supplication for Boarding a Vehicle\n\nاللَّهُمَّ أَنْتَ الصَّاحِبُ فِي السَّفَرِ وَالْخَلِيفَةُ فِي الْأَهْلِ وَالْمَالِ وَالْوَلَدِ وَالصَّحَابِ، اللَّهُمَّ احْفَظْنَا وَإِيَّاهُمْ مِنْ آفَاتِ الدُّنْيَا وَعَاهَاتِهَا، اللَّهُمَّ إِنَّا نَسْأَلُكَ فِي سَفَرِنَا هَذَا الْبِرَّ وَالتَّقْوَى وَمِنَ الْعَمَلِ مَا تَرْضَى، اللَّهُمَّ إِنَّا نَسْأَلُكَ أَنْ تَطْوِيَ لَنَا الْأَرْضَ وَتُؤْمِنَ عَلَيْنَا السَّفَرَ وَأَنْ تَرْزُقَنَا فِي سَفَرِنَا هَذَا سَلَامَةً فِي الْبَدَنِ وَالدِّينِ وَالْمَالِ وَتُبْلِغَنَا عُمْرَةَ بَيْتِكَ وَزِيَارَةَ قَبْرِ نَبِيِّكَ مُحَمَّدٍ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ، اللَّهُمَّ إِنَّا نَعُوذُ بِكَ مِنْ وَعْثَاءِ السَّفَرِ وَكَآبَةِ الْمُنْقَلَبِ بِسُوءِ الْمَنْظَرِ فِي الْأَهْلِ وَالْمَالِ وَالْوَلَدِ وَالصَّحَابِ، اللَّهُمَّ اجْعَلْنَا وَإِيَّاهُمْ فِي جِوَارِكَ وَلَا تَسْلُبْنَا وَإِيَّاهُمْ نِعْمَتَكَ وَلَا تُغَيِّرْ مَا بِنَا وَبِهِمْ مِنْ عَافِيَتِكَ يَا أَرْحَمَ الرَّاحِمِينَ.\n</string>
     <string name="bab1_s2_title">Qasar Prayer (Shortened Prayer)</string>
     <string name="bab1_s2_body">Qasar Prayer: Shortening a 4-rakaah obligatory prayer (Dhuhr, Asr, Isha) to 2 rak\'ahs.\n\nConditions for Qasar Prayer:\n\n- A journey exceeding 2 marhalah (81 km)\n- Knowing the destination\n- Carried out after passing the district or city boundary.\n- Travel is a must (not a vice)\n- Does not intend to travel for four days or more (excluding the days of departure and return).\n\nImplementation Options:\n\n- Qasar only\n- Jamak only\n- Combination of Qasar and Jamak\nIntention for Qasar Prayer:\n</string>
     <string name="bab1_s3_title">Combining Prayers (Jamak)</string>
-    <string name="bab1_s3_body">JAMAK PRAYER: Combining two obligatory prayers into one time slot.\nPrayers that can be combined: Zuhur with Asar, and Maghrib with Isyak. Subuh cannot be combined.\nTwo methods:\n\n1. Jamak Taqdim (performed at the first prayer\'s time)\n- Conditions: Order (perform the first prayer first), intend to combine the second prayer with the first at the start of takbir or before the salam of the first prayer, continuity (muwalat), and the journey must continue until the second prayer is completed.\n\nJamak Taqdim Intention (without qasar):\n\n- Intention for Zuhur + Asar\n\nأُصَلِّي فَرْضَ الظُّهْرِ أَرْبَعَ رَكَعَاتٍ مَجْمُوعًا إِلَيْهِ الْعَصْرُ أَدَاءً لِلَّهِ تَعَالَى\nSahaja aku solat fardhu Zuhur empat rakaat dihimpunkan solat Asar kepadanya tunai kerana Allah Ta\'ala</string>
+    <string name="bab1_s3_body">JAMAK PRAYER: Combining two obligatory prayers into one time slot.\nPrayers that can be combined: Zuhur with Asar, and Maghrib with Isyak. Subuh cannot be combined.\nTwo methods:\n\n1. Jamak Taqdim (performed at the first prayer\'s time)\n- Conditions: Order (perform the first prayer first), intend to combine the second prayer with the first at the start of takbir or before the salam of the first prayer, continuity (muwalat), and the journey must continue until the second prayer is completed.\n\nJamak Taqdim Intention (without qasar):\n\n- Intention for Zuhur + Asar\n\nأُصَلِّي فَرْضَ الظُّهْرِ أَرْبَعَ رَكَعَاتٍ مَجْمُوعًا إِلَيْهِ الْعَصْرُ أَدَاءً لِلَّهِ تَعَالَى\nI hereby perform the obligatory Zuhur prayer, four rakaats, combined with the Asar prayer, for the sake of Allah Ta\'ala</string>
     <string name="bab1_s4_title">Combining Prayers with Shortening (Jamak &amp; Qasar)</string>
-    <string name="bab1_s4_body">3. JAMAK COMBINED WITH QASAR:\nYou may combine two prayers at once while shortening Zuhur, Asar, and Isyak to two rakaat, following the conditions of both qasar and jamak.\n\nIntention for Jamak Taqdim &amp; Qasar:\n\nZuhur + Asar (at Zuhur time) - perform Zuhur first:\n\n-Zuhur intention (qasar + jamak):\n\nأُصَلِّي فَرْضَ الظَّهْرِ رَكْعَتَيْنِ قَصْرًا مَجْمُوعًا إِلَيْهِ الْعَصْرُ أَدَاءً لِلَّهِ تَعَالَى\nSahaja aku solat fardhu Zuhur dua rakaat qasar dihimpunkan Asar kepadanya tunai kerana Allah Ta\'ala\n\nAfter the salam, Asar intention (qasar):\n\nأُصَلِّي فَرْضَ الْعَصْرِ رَكْعَتَيْنِ قَصْرًا أَدَاءً لِلَّهِ تَعَالَى\nSahaja aku solat fardhu Asar dua rakaat qasar tunai kerana Allah Ta\'ala</string>
+    <string name="bab1_s4_body">3. JAMAK COMBINED WITH QASAR:\nYou may combine two prayers at once while shortening Zuhur, Asar, and Isyak to two rakaat, following the conditions of both qasar and jamak.\n\nIntention for Jamak Taqdim &amp; Qasar:\n\nZuhur + Asar (at Zuhur time) - perform Zuhur first:\n\n-Zuhur intention (qasar + jamak):\n\nأُصَلِّي فَرْضَ الظَّهْرِ رَكْعَتَيْنِ قَصْرًا مَجْمُوعًا إِلَيْهِ الْعَصْرُ أَدَاءً لِلَّهِ تَعَالَى\nI hereby perform the obligatory Zuhur prayer, two rakaats shortened, combined with the Asar prayer, for the sake of Allah Ta\'ala\n\nAfter the salam, Asar intention (qasar):\n\nأُصَلِّي فَرْضَ الْعَصْرِ رَكْعَتَيْنِ قَصْرًا أَدَاءً لِلَّهِ تَعَالَى\nI hereby perform the obligatory Asar prayer, two rakaats shortened, for the sake of Allah Ta\'ala</string>
     <string name="bab2_hero_title">Introduction to Umrah</string>
     <string name="bab2_hero_blurb">A short overview of Chapter 2.</string>
     <string name="bab2_s1_title">Introduction to Umrah</string>
@@ -363,12 +401,15 @@
     <string name="login_email_invalid">Please enter a valid email</string>
     <string name="login_password_required">Please enter your password</string>
     <string name="login_success">Login successful!</string>
-    <string name="login_failed_default">Login failed, please try again</string>
-    <string name="language_picker_title">Choose Language / Pilih Bahasa</string>
+    <string name="language_picker_title">Select Language</string>
+    <string name="language_picker_subtitle">Choose your preferred language</string>
 
     <string name="prayer_times_title_fallback">Today\'s prayer times (estimated - no internet connection)</string>
     <string name="prayer_location_denied_text">Enable location services to display prayer times.</string>
     <string name="prayer_use_my_location">Use current location</string>
+    <string name="prayer_refresh_location">Update location</string>
+    <string name="prayer_updating_location">Updating prayer location...</string>
+    <string name="prayer_location_updated">Location updated</string>
 
     <string name="umrah_section_popular">Popular Packages</string>
     <string name="umrah_section_khas">Special Packages</string>
@@ -530,5 +571,206 @@
     <string name="package_detail_gallery_title">Photo Gallery</string>
     <string name="package_detail_whatsapp_default_message">Hello, I\'m interested in the %1$s package. Could you share more details?</string>
 
+    <string name="removed_from_favorites">Removed from Favorites</string>
+    <string name="added_to_favorites">Saved to Favorites</string>
+    <string name="undo">UNDO</string>
+    <string name="remove_favorite_dialog_title">Remove from Favorites?</string>
+    <string name="remove_favorite_dialog_message">Are you sure you want to remove this package from your saved favorites?</string>
+    <string name="remove_favorite_dialog_confirm">Remove</string>
+    <string name="remove_favorite_dialog_cancel">Cancel</string>
+
+    <string name="filter_title">Filter Packages</string>
+    <string name="filter_reset">Reset</string>
+    <string name="filter_category_header">Category</string>
+    <string name="filter_cat_umrah">Umrah</string>
+    <string name="filter_cat_tour">Tour</string>
+    <string name="filter_destination_header">Destination / Country</string>
+    <string name="filter_all_destinations">All Destinations</string>
+    <string name="filter_price_header">Price Range</string>
+    <string name="filter_price_presets_header">Quick Price</string>
+    <string name="filter_price_below_3k">&lt; RM3,000</string>
+    <string name="filter_price_3k_6k">RM3,000 - RM6,000</string>
+    <string name="filter_price_6k_10k">RM6,000 - RM10,000</string>
+    <string name="filter_price_above_10k">&gt; RM10,000</string>
+    <string name="filter_custom_slider_header">Custom Price Slider</string>
+    <string name="filter_min_label">Lowest</string>
+    <string name="filter_max_label">Highest</string>
+    <string name="filter_apply_button">Apply Filters (%1$d Packages)</string>
+    <string name="filter_active_tag_category">Category: %1$s</string>
+    <string name="filter_active_tag_destination">Destination: %1$s</string>
+    <string name="filter_active_tag_price">Price: RM%1$s - RM%2$s</string>
+    <string name="filter_clear_all">Clear Filters</string>
+    <string name="dest_turkey">Turkey</string>
+    <string name="dest_korea">Korea</string>
+    <string name="dest_japan">Japan</string>
+    <string name="dest_saudi">Saudi Arabia</string>
+    <string name="dest_europe">Europe / Balkan</string>
+    <string name="dest_vietnam">Vietnam</string>
+    <string name="dest_china">China</string>
+
+    <string name="prayer_times_header">Prayer Times Today</string>
+    <string name="prayer_times_today_format">Prayer Times Today (%1$s)</string>
+    <string name="explore_package_arrow">Explore Package →</string>
+    <string name="exclusive_offer_title">Exclusive Pilgrim Offer</string>
+    <string name="exclusive_offer_sub">Sign up to receive the latest promotions and special discounts.</string>
+    <string name="google_review_write_btn">Write a Review →</string>
+    <string name="all_packages_empty">No packages found</string>
+    <string name="prayer_name_subuh">Fajr</string>
+    <string name="prayer_name_syuruk">Sunrise</string>
+    <string name="prayer_name_zohor">Dhuhr</string>
+    <string name="prayer_name_asar">Asr</string>
+    <string name="prayer_name_maghrib">Maghrib</string>
+    <string name="prayer_name_isyak">Isha</string>
+    <string name="prayer_countdown_entered">Prayer time has arrived</string>
+    <string name="prayer_countdown_min">%1$s in %2$dm</string>
+    <string name="prayer_countdown_hour_min">%1$s in %2$dh %3$dm</string>
+
+    <!-- Shared error / status messages (also used for previously hardcoded Toasts & dialogs) -->
+    <string name="err_server_connection">Failed to connect to the backend server.</string>
+    <string name="err_connection_detail">Connection error: %1$s</string>
+    <string name="error_whatsapp_not_found">WhatsApp is not installed on this device.</string>
+    <string name="err_open_map">Unable to open the map.</string>
+    <string name="err_open_call">Unable to place the call.</string>
+    <string name="err_open_email">Unable to open the email app.</string>
+    <string name="err_open_link">Unable to open the link.</string>
+    <string name="err_open_review">Unable to open the reviews page.</string>
+    <string name="err_open_youtube">Unable to open YouTube.</string>
+    <string name="err_package_not_found">Package not found.</string>
+    <string name="err_package_load_failed">Failed to load package data.</string>
+
+    <!-- Preparation guideline dialog -->
+    <string name="guideline_dialog_title">Preparation Guide</string>
+    <string name="guideline_dialog_message">✓ Passport valid for at least 6 months\n\n✓ Meningitis vaccination (if required)\n\n✓ Ihram garments / suitable clothing\n\n✓ Personal medication\n\n✓ Copies of important documents (passport, ticket, visa)\n\n✓ Sufficient cash (Riyal / USD)</string>
+
+    <!-- Generic coming-soon / download messages -->
+    <string name="coming_soon_format">%1$s is coming soon</string>
+    <string name="pdf_coming_soon_format">%1$s PDF download - coming soon</string>
+    <string name="chapter_label_format">Chapter %1$d</string>
+
+    <!-- Profile screen -->
+    <string name="profile_guest_name">Guest User</string>
+    <string name="profile_no_booking">No bookings yet - your bookings will appear here</string>
+    <string name="profile_logout_success">Logged out successfully</string>
+    <string name="profile_login_to_update">Please log in to update your profile</string>
+    <string name="profile_change_password">Change Password</string>
+    <string name="profile_save">Save</string>
+    <string name="profile_updated">Profile updated successfully!</string>
+    <string name="profile_email_invalid">Invalid email</string>
+    <string name="profile_reset_title">Password Reset</string>
+    <string name="profile_reset_message">Send a password reset link to: %1$s?</string>
+    <string name="profile_reset_send">Send</string>
+    <string name="profile_reset_sent">A password reset link has been sent to your email!</string>
+    <string name="profile_field_full_name">Full Name</string>
+    <string name="profile_field_phone">Phone Number</string>
+    <string name="profile_field_email">Email</string>
+
+    <!-- Misc -->
+    <string name="privacy_terms_toast">Hafiz Travel &amp; Tours Sdn Bhd - Privacy &amp; Terms</string>
+    <string name="package_fallback_destination">Travel Destination</string>
+
+    <!-- Package detail sections (referenced from PackageDetailActivity) -->
+    <string name="detail_section_accommodation_summary">Accommodation Summary</string>
+    <string name="detail_section_hotels_umrah">Hotels (Makkah &amp; Madinah)</string>
+    <string name="detail_section_hotels_tour">Hotels</string>
+    <string name="detail_hotels_empty_notice">Hotel information will be updated soon.</string>
+    <string name="detail_section_room_pricing">Room &amp; Price Options</string>
+    <string name="detail_section_itinerary">Full Itinerary</string>
+    <string name="detail_itinerary_empty_notice">The itinerary will be updated soon.</string>
+    <string name="detail_itinerary_hint">Tap a day to expand its details</string>
+    <string name="detail_section_inclusions">Included &amp; Excluded</string>
+    <string name="detail_included_heading">Included</string>
+    <string name="detail_excluded_heading">Not Included</string>
+    <string name="detail_whats_covered">What\'s Covered</string>
+    <string name="detail_whats_covered_sub">Key features and services included in your package</string>
+    <string name="cat_items_covered_format">%d items included</string>
+    <string name="detail_not_covered">Not Covered</string>
+    <string name="detail_not_covered_sub">Expenses and services outside package coverage</string>
+    <string name="detail_packing_sub">Recommended items and preparation for your trip</string>
+    <string name="detail_terms_guidelines">Package Terms &amp; Guidelines</string>
+    <string name="detail_terms_sub">Important terms, rules, and booking guidelines</string>
+    <string name="detail_required_documents">Required Documents</string>
+    <string name="detail_docs_sub">Required travel documents, visas, and certificates</string>
+    <string name="room_quint">5-Person Room (Quint)</string>
+    <string name="room_quad">4-Person Room (Quad)</string>
+    <string name="room_triple">3-Person Room (Triple)</string>
+    <string name="room_double">2-Person Room (Double)</string>
+    <string name="room_single">1-Person Room (Single)</string>
+    <string name="detail_price_from">Starting From</string>
+    <string name="cat_flights">Flights</string>
+    <string name="cat_accommodation">Accommodation</string>
+    <string name="cat_visa_protection">Visa &amp; Travel Protection</string>
+    <string name="cat_meals">Meals</string>
+    <string name="cat_transportation">Transportation</string>
+    <string name="cat_tour_guidance">Tour Guidance</string>
+    <string name="cat_travel_essentials">Travel Essentials</string>
+    <string name="cat_preparation">Preparation</string>
+    <string name="cat_other">Other Inclusions</string>
+    <string name="detail_section_packing">Packing Guide</string>
+    <string name="detail_packing_heading">Recommended Packing List</string>
+    <string name="detail_section_notes">Important Notes &amp; Guidelines</string>
+    <string name="detail_section_gallery">Photo Gallery</string>
+    <string name="detail_per_pax">per person</string>
+    <string name="nights_unit">Nights</string>
+    <string name="nights_label_makkah">Makkah</string>
+    <string name="nights_label_madinah">Madinah</string>
+    <string name="nights_label_taif">Taif</string>
+    <string name="nights_label_hotel1">Hotel 1</string>
+    <string name="nights_label_hotel2">Hotel 2</string>
+    <string name="nights_label_hotel3">Hotel 3</string>
+    <string name="flight_type_fallback">Flight</string>
+    <string name="flight_route_fallback">Route to be confirmed</string>
+    <string name="hotel_title_umrah_makkah">Makkah Hotel</string>
+    <string name="hotel_title_umrah_madinah">Madinah Hotel</string>
+    <string name="hotel_title_umrah_taif">Taif Hotel</string>
+    <string name="hotel_title_tour_hotel1">Hotel 1</string>
+    <string name="hotel_title_tour_hotel2">Hotel 2</string>
+    <string name="hotel_title_tour_extra">Additional Hotel</string>
+    <string name="hotel_rating_fallback">Standard</string>
+    <string name="share_package_via">Share Package Via</string>
+    <string name="share_price_from">Price From: *%1$s*</string>
+    <string name="share_duration">Duration: *%1$d Days %2$d Nights*</string>
+    <string name="share_cta">Book or ask us</string>
+    <string name="package_badge_umrah">UMRAH PACKAGE</string>
+    <string name="package_badge_tour">TOUR PACKAGE</string>
+    <string name="results_packages_format">%1$d packages</string>
+    <string name="filter_slider_min_label">RM0 (Min)</string>
+    <string name="filter_slider_max_label">RM20,000+ (Max)</string>
+
+    <!-- Home promo hero (was hardcoded in layout) -->
+    <string name="promo_hero_kicker">MAKKAH &amp; MADINAH</string>
+    <string name="promo_hero_title">School Holiday &amp; Syawal Umrah Package</string>
+    <string name="promo_hero_price">From RM 7,990 • 12 Days 10 Nights</string>
+    <string name="google_review_summary">4.9 (250+ Google Reviews)</string>
+
+    <!-- Package detail badges (were hardcoded in layout) -->
+    <string name="package_vip_badge">VIP FEATURED PACKAGE</string>
+    <string name="package_whatsapp_enquiry">Ask on WhatsApp</string>
+
+    <!-- Splash taglines (were hardcoded in layout) -->
+    <string name="splash_eyebrow">WORLDWIDE EXPEDITIONS &amp; UMRAH</string>
+    <string name="splash_tagline">Build honest memories with Hafiz Travel &amp; Tours</string>
+
+    <!-- Localized duration / distance / itinerary labels -->
+    <string name="hotel_distance_to">%1$s to Masjidil Haram</string>
+    <string name="duration_days_nights">%1$d Days %2$d Nights</string>
+    <string name="duration_days_only">%1$d Days</string>
+    <string name="package_full">Full Package</string>
+    <string name="day_label_format">Day %1$d</string>
+    <string name="itinerary_daily">Daily Itinerary</string>
+    <string name="azan_notif_title">Prayer time: %1$s</string>
+    <string name="azan_playing">Azan is playing</string>
+    <string name="azan_stop">Stop</string>
+    <string name="azan_channel_name">Azan Notifications</string>
+    <string name="azan_channel_desc">Notifications for prayer times &amp; azan</string>
+    <string name="battery_title">Keep Azan Working</string>
+    <string name="battery_message">To ensure notifications &amp; azan play on time even when this app is closed, allow this app to run unrestricted in the background.\n\nThis step is optional and can be set later in Settings.</string>
+    <string name="battery_now">Set Up Now</string>
+    <string name="battery_later">Later</string>
+    <string name="hijri_date_fallback">1 Rajab 1448H</string>
+
+    <string name="btn_book_now">BOOK NOW</string>
+    <string name="btn_ask_questions">Ask</string>
+    <string name="selected_room_label">Selected Room</string>
+    <string name="booking_flow_notice">Selected option: %1$s (%2$s). Proceed to enter passenger details.</string>
 
 </resources>

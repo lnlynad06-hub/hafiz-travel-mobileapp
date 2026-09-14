@@ -1,57 +1,81 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" ?>
 <resources>
     <string name="app_name">HafizTravel&amp;Tours</string>
-
-    <!-- Welcome / Onboarding screen -->
-    <string name="welcome_trust_text">Dipercayai oleh ratusan jemaah</string>
-    <string name="welcome_title">Rakan Perjalanan Umrah, Haji &amp; Pelancongan Anda</string>
-    <string name="welcome_subtitle">Tempah pakej Umrah, Haji, dan pelancongan inbound &amp; outbound dengan mudah, terus dari telefon anda.</string>
-    <string name="welcome_start_now">Mula Sekarang</string>
-    <string name="welcome_already_have_account">Sudah ada akaun? Log Masuk</string>
-
+    <string name="welcome_brand_name">HAFIZ TRAVEL &amp; TOURS</string>
+    <string name="welcome_eyebrow">KURASI PERJALANAN PREMIER</string>
+    <string name="welcome_title">Perjalanan Luar Biasa,\nDireka dengan Keanggunan.</string>
+    <string name="welcome_subtitle">Daripada percutian antarabangsa ikonik merentasi Asia, Eropah dan sekitarnya, sehingga ibadah Umrah yang disusun dengan penuh ketenangan.</string>
+    <string name="welcome_chip_worldwide">Pakej Percutian</string>
+    <string name="welcome_chip_umrah">Umrah &amp; Ziarah</string>
+    <string name="welcome_chip_custom">Pakej Khas</string>
+    <string name="welcome_start_now">Mula Meneroka</string>
+    <string name="welcome_already_have_account_full">Sudah mempunyai akaun? &lt;font color=\'#D81B60\'&gt;&lt;b&gt;Log Masuk&lt;/b&gt;&lt;/font&gt;</string>
+    <string name="filter_all">Semua</string>
     <string name="login_title">Selamat Kembali</string>
-    <string name="login_subtitle">Log masuk untuk teruskan</string>
-    <string name="hint_email">Email</string>
+    <string name="login_subtitle">Log masuk untuk rancang percutian impian anda</string>
+    <string name="hint_email">Emel</string>
     <string name="hint_password">Kata Laluan</string>
+    <string name="remember_me">Ingat Saya</string>
     <string name="login_button">Log Masuk</string>
-    <string name="login_no_account">Tiada akaun? Daftar sekarang.</string>
-    <string name="login_or_with">Atau Log Masuk Dengan</string>
-    <string name="login_guest">Log Masuk sebagai Tetamu</string>
-
+    <string name="login_signing_in">Sedang log masuk…</string>
+    <string name="login_no_account">Belum ada akaun? Daftar Sekarang</string>
+    <string name="login_or_with">Atau teruskan dengan</string>
+    <string name="login_guest">Teruskan sebagai Tetamu</string>
+    <string name="forgot_password_title">Tetapkan Semula Kata Laluan</string>
+    <string name="forgot_password_desc">Masukkan alamat emel berdaftar anda dan kami akan menghantar pautan tetapan semula kata laluan.</string>
+    <string name="btn_send_reset">Hantar Pautan</string>
+    <string name="reset_link_sent_success">Pautan tetapan semula telah dihantar! Sila semak peti masuk emel anda.</string>
+    <string name="login_failed_user_not_found">Tiada akaun dijumpai dengan emel ini.</string>
+    <string name="login_failed_wrong_password">Kata laluan tidak tepat. Sila cuba lagi.</string>
+    <string name="login_failed_default">Log masuk gagal. Sila periksa maklumat anda.</string>
     <string name="signup_title">Cipta Akaun</string>
     <string name="signup_subtitle">Daftar untuk mula rancang percutian anda.</string>
     <string name="hint_full_name">Nama Penuh</string>
     <string name="hint_phone">Nombor Telefon</string>
     <string name="hint_confirm_password">Sahkan Kata Laluan</string>
     <string name="signup_button">Daftar</string>
-    <string name="signup_have_account">Dah ada akaun? Log masuk</string>
+    <string name="signup_signing_up">Mendaftar...</string>
+    <string name="hint_password_min">Minimum 6 aksara</string>
+    <string name="signup_terms_disclaimer">Dengan mendaftar, anda bersetuju dengan &lt;b&gt;Terma Perkhidmatan&lt;/b&gt; dan &lt;b&gt;Dasar Privasi&lt;/b&gt;.</string>
+    <string name="dialog_terms_title">Terma &amp; Dasar Privasi</string>
+    <string name="signup_have_account">Sudah ada akaun? Log masuk</string>
     <string name="signup_or_with">Atau Daftar Dengan</string>
     <string name="signup_guest">Daftar sebagai Tetamu</string>
-    <string name="social_login_google">Log masuk Google - akan datang</string>
-    <string name="social_login_facebook">Log masuk Facebook - akan datang</string>
-    <string name="social_login_phone">Log masuk nombor telefon - akan datang</string>
-
-    <string name="social_signup_google">Daftar guna Google - akan datang</string>
-    <string name="social_signup_facebook">Daftar guna Facebook - akan datang</string>
-    <string name="social_signup_phone">Daftar guna nombor telefon - akan datang</string>
-
+    <string name="password_strength_weak">Lemah</string>
+    <string name="password_strength_medium">Sederhana</string>
+    <string name="password_strength_strong">Kuat</string>
+    <string name="btn_continue_google">Teruskan dengan Google</string>
+    <string name="social_signup_google">Daftar dengan Google</string>
+    <string name="select_country_code">Pilih Kod Negara</string>
+    <string name="region_southeast_asia">ASIA TENGGARA</string>
+    <string name="region_international">ANTARABANGSA LAIN</string>
+    <string name="err_name_required">Sila masukkan nama penuh</string>
+    <string name="err_email_invalid">Sila masukkan emel yang sah</string>
+    <string name="err_phone_invalid">Sila masukkan nombor telefon yang sah</string>
+    <string name="err_password_short">Kata laluan sekurang-kurangnya 6 aksara</string>
+    <string name="err_password_mismatch">Kata laluan tidak sepadan</string>
+    <string name="err_signup_failed">Pendaftaran gagal. Sila cuba lagi.</string>
+    <string name="err_signup_email_exists">Emel atau nombor telefon telah didaftarkan</string>
+    <string name="err_network">Ralat sambungan. Sila periksa internet anda.</string>
+    <string name="signup_success">Pendaftaran berjaya!</string>
+    <string name="password_tip_length">8+ aksara</string>
+    <string name="password_tip_number">0–9</string>
+    <string name="password_tip_symbol">!@#$</string>
     <string name="guest_greeting">Assalamualaikum</string>
-    <string name="user_greeting">Assalamualaikum, %1$s</string>
-    <string name="hero_subtitle_guest">Selamat Datang ke\nHafiz Travel &amp; Tours</string>
+    <string name="user_greeting">Assalamualaikum</string>
+    <string name="hero_subtitle_guest">Tetamu Jemaah</string>
     <string name="hero_subtitle_user">Selamat kembali</string>
-    <string name="hero_headline_guest">Selamat Datang ke\nHafiz Travel &amp; Tours</string>
-    <string name="hero_headline_user">Ke Mana Anda\nNak Pergi?</string>
-
-    <string name="nav_home">Home</string>
+    <string name="hero_headline_guest">Ke mana destinasi\nimpian anda?</string>
+    <string name="hero_headline_user">Ke mana destinasi\nimpian anda?</string>
+    <string name="nav_home">Utama</string>
+    <string name="nav_explore">Teroka</string>
     <string name="nav_umrah">Umrah</string>
     <string name="nav_tour">Tour</string>
     <string name="nav_favorite">Kegemaran</string>
-
     <string name="quick_nusuk">Nusuk</string>
     <string name="quick_guideline">Panduan Umrah</string>
     <string name="quick_checklist">Senarai Semak</string>
     <string name="quick_whatsapp">WhatsApp</string>
-
     <string name="prayer_times_title">Waktu Solat Hari Ini (anggaran)</string>
     <string name="search_placeholder">Cari destinasi anda</string>
     <string name="popular_packages">Pakej Popular</string>
@@ -61,33 +85,30 @@
     <string name="no_notifications">Tiada notifikasi baru</string>
     <string name="faq_title">Soalan Lazim</string>
     <string name="gallery_title">Galeri</string>
-
-    <!-- NEW: previously hardcoded in MainActivity.java / activity_main.xml, now translatable -->
     <string name="search_coming_soon">Carian - akan datang</string>
     <string name="signup_coming_soon">Daftar - akan datang</string>
-
-    <string name="google_review_count">Berdasarkan 102 review Google</string>
-    <string name="review_label">Review</string>
-
+    <string name="google_review_count">Berdasarkan 102 ulasan Google</string>
+    <string name="review_label">Ulasan</string>
     <string name="register_cta_text">Daftar untuk terima pakej &amp; tawaran terkini</string>
     <string name="register_cta_button">Daftar</string>
-
     <string name="review_1_name">Puan Aminah</string>
     <string name="review_1_quote">Pengalaman umrah tersusun, mutawwif sangat membantu sepanjang perjalanan.</string>
     <string name="review_2_name">Encik Razak</string>
-    <string name="review_2_quote">Proses tempahan senang, bayaran jelas dan staff responsif di WhatsApp.</string>
+    <string name="review_2_quote">Proses tempahan senang, bayaran jelas dan kakitangan responsif di WhatsApp.</string>
     <string name="review_3_name">Puan Siti</string>
     <string name="review_3_quote">Hotel dekat dengan Masjidil Haram, sangat selesa untuk keluarga.</string>
-
     <string name="faq_q1">Bagaimana cara bayaran deposit?</string>
-    <string name="faq_a1">Deposit boleh dibuat melalui bank transfer atau hubungi terus staff kami di WhatsApp untuk arahan bayaran.</string>
+    <string name="faq_a1">Deposit boleh dibuat melalui pindahan bank atau hubungi terus kakitangan kami di WhatsApp untuk arahan bayaran.</string>
     <string name="faq_q2">Berapa lama pasport perlu sah?</string>
     <string name="faq_a2">Pasport perlu sah sekurang-kurangnya 6 bulan dari tarikh berlepas.</string>
     <string name="faq_q3">Boleh tak tukar tarikh selepas tempah?</string>
     <string name="faq_a3">Boleh, tertakluk kepada slot yang ada dan mungkin dikenakan caj perubahan. Hubungi admin untuk semakan.</string>
-
     <string name="package_duration_price">%1$d Hari %2$d Malam - RM%3$s</string>
-
+    <string name="help_support_title">Pusat Bantuan &amp; Sokongan</string>
+    <string name="help_support_headline">Perlukan Bantuan Perjalanan Anda?</string>
+    <string name="help_support_sub">Pasukan perunding Hafiz Travel sedia membantu anda mengenai pakej, visa &amp; pertanyaan tempahan.</string>
+    <string name="help_support_btn_contact">Hubungi Kami</string>
+    <string name="help_support_btn_whatsapp">WhatsApp Kami</string>
     <string name="prayer_subuh">Subuh</string>
     <string name="prayer_zohor">Zohor</string>
     <string name="prayer_asar">Asar</string>
@@ -95,10 +116,9 @@
     <string name="prayer_isyak">Isyak</string>
     <string name="prayer_default_location">Waktu Solat - %1$s</string>
     <string name="menu_profile">Profil Saya</string>
-    <string name="menu_language">Bahasa / Language</string>
+    <string name="menu_language">Bahasa</string>
     <string name="menu_about_us">Tentang Kami</string>
     <string name="menu_contact_us">Hubungi Kami</string>
-
     <string name="about_us_title">Tentang Kami</string>
     <string name="company_full_name">Hafiz Travel &amp; Tours Sdn Bhd</string>
     <string name="company_short_name">Hafiz Travel &amp; Tours</string>
@@ -120,7 +140,6 @@
     <string name="registration_motac">Berdaftar dengan MOTAC: KPK/LN 10751</string>
     <string name="registration_ssm">No. Pendaftaran SSM: 202201043065 (1488762-A)</string>
     <string name="about_established_year">Ditubuhkan pada tahun 2022</string>
-
     <string name="contact_us_title">Hubungi Kami</string>
     <string name="contact_hero_blurb">Ada soalan tentang pakej Umrah atau Tour? Hubungi kami menggunakan mana-mana saluran di bawah, kami sedia membantu.</string>
     <string name="label_address">Alamat</string>
@@ -128,7 +147,6 @@
     <string name="label_email">E-mel</string>
     <string name="contact_whatsapp_cta">WhatsApp Kami Sekarang</string>
     <string name="contact_social_title">Media Sosial Kami</string>
-
     <string name="default_user_name">Pengguna</string>
     <string name="profile_member_since">Ahli sejak 2026</string>
     <string name="profile_account_section">Akaun Saya</string>
@@ -139,19 +157,15 @@
     <string name="profile_theme_light">Tema Terang</string>
     <string name="profile_theme_dark">Tema Gelap</string>
     <string name="profile_logout">Log Keluar</string>
-
     <string name="guideline_title">Panduan Umrah</string>
     <string name="guideline_hero_title">Panduan Ringkas Umrah</string>
     <string name="guideline_hero_blurb">Susunan mengikut urutan sebenar - dari adab bermusafir sehingga selesai ibadah umrah.</string>
-    <string name="guideline_pdf_title">Nak panduan lengkap?</string>
+    <string name="guideline_pdf_title">Mahukan panduan lengkap?</string>
     <string name="guideline_pdf_subtitle">Muat turun PDF penuh dengan penjelasan terperinci</string>
     <string name="guideline_pdf_button">Muat Turun</string>
-
     <string name="prayer_times_title_jakim">Waktu Solat Hari Ini (JAKIM)</string>
     <string name="prayer_times_title_jakim_zone">Waktu Solat Hari Ini (JAKIM - Zon %1$s)</string>
-
-    <string name="podcast_section_title">Podcast</string>
-
+    <string name="podcast_section_title">Podcast Jelajah Hafiz</string>
     <string name="bab1_hero_title">Adab Musafir dan Amalan Sunat</string>
     <string name="bab1_hero_blurb">Adab bermusafir dan solat semasa dalam perjalanan.</string>
     <string name="bab1_s1_title">Adab-Adab Memulakan Perjalanan</string>
@@ -163,7 +177,7 @@
     <string name="bab1_s4_title">Solat Jamak Beserta Qasar</string>
     <string name="bab1_s4_body">3.SOLAT JAMAK BESERTA QASAR :\nBoleh menghimpunkan dua solat sekaligus dengan memendekkan solat Zuhur, Asar dan Isyak kepada dua rakaat, mengikut syarat qasar dan jamak.\n\nNiat bagi Jamak Taqdim &amp; Qasar:\n\nZuhur + Asar (di waktu Zuhur) - dahulukan Zuhur:\n\n-Niat Zuhur (qasar + jamak):\n\nأُصَلِّي فَرْضَ الظَّهْرِ رَكْعَتَيْنِ قَصْرًا مَجْمُوعًا إِلَيْهِ الْعَصْرُ أَدَاءً لِلَّهِ تَعَالَى\nSahaja aku solat fardhu Zuhur dua rakaat qasar dihimpunkan Asar kepadanya tunai kerana Allah Ta\'ala\n\nSelepas salam, niat Asar (qasar):\n\nأُصَلِّي فَرْضَ الْعَصْرِ رَكْعَتَيْنِ قَصْرًا أَدَاءً لِلَّهِ تَعَالَى\nSahaja aku solat fardhu Asar dua rakaat qasar tunai kerana Allah Ta\'ala</string>
     <string name="bab2_hero_title">Pengenalan Umrah</string>
-    <string name="bab2_hero_blurb">Ringkasan pendek pasal Bab 2 di sini.</string>
+    <string name="bab2_hero_blurb">Ringkasan pendek mengenai Bab 2 di sini.</string>
     <string name="bab2_s1_title">Pengenalan Umrah</string>
     <string name="bab2_s1_body">-Definisi: Ziarah ke Baitullah untuk ibadat dengan syarat tertentu.\n\n-Hukum: Wajib sekali seumur hidup bagi yang mampu.\n\n-Dalil: Hadis (umrah di Ramadhan menyamai haji) &amp; Surah al-Baqarah 196.\n\n-Adab sebelum berangkat (14 perkara): Ikhlas, pelajari ilmu, taubat, bersihkan harta, selesaikan hak, perbaiki diri, jaga qaidah, sumber kewangan halal, bekalan cukup, cari keredhaan, pilih teman sesuai, doa minta umrah mabrur, solat musafir, zikir &amp; tawakal.\n\n-Syarat Wajib: Islam, baligh, berakal, merdeka, perjalanan selamat, berkemampuan. Wanita: izin suami/wali &amp; bersama mahram/wanita dipercayai.</string>
     <string name="bab3_hero_title">Pelaksanaan Ibadah Umrah</string>
@@ -176,8 +190,8 @@
     <string name="bab3_s3_body">Cara Mengerjakan Tawaf\n\nSetibanya jemaah di dalam Masjid Haram untuk melaksanakan ibadah tawaf, mereka hendaklah menuju ke penjuru Hajar Aswad.\n\nJemaah perlu berjalan menuju ke penjuru Hajar Aswad dengan menghadap ke arahnya dan sunat berniat tawaf.\n\nLafaz Niat Tawaf Umrah\n\nاللَّهُمَّ إِنِّي أُرِيدُ طَوَافَ بَيْتِكَ الْحَرَامِ فَيَسِّرْهُ لِي وَتَقَبَّلْهُ مِنِّي سَبْعَةَ أَشْوَاطٍ طَوَافَ الْعُمْرَةِ لِلَّهِ تَعَالَى\n\nSetelah itu, hendaklah beristilam kepada Hajar Aswad dengan isyarat tangan. Ucapkanlah:\n\nبِسْمِ اللهِ وَاللهُ أَكْبَرُ وَلِلَّهِ الْحَمْدُ\n\nJika tidak mampu menghampiri atas sebab orang yang begitu ramai dan sesak, maka beristilamlah kepadanya Hajar Aswad dengan membaca bacaan di atas.\n\nBagi jemaah dalam ihram, jemaah tidak boleh menyentuh Hajar Aswad kerana ada wangian.</string>
     <string name="bab3_s4_title">Sa\'i</string>
     <string name="bab3_s4_body">Cara Mengerjakan Sa\'ie\n\n-Tiba di bukit Safa, Hadap ke arah Kaabah lalu berniat Sa\'ie.\n\nLafaz Niat Sa\'i Umrah:\n\nاللَّهُمَّ إِنِّي أُرِيدُ أَنْ أَسْعَى بَيْنَ الصَّفَا وَالْمَرُوَةِ سَبْعَةَ أَشْوَاطٍ سَعْيَ الْعُمْرَةِ لِلَّهِ تَعَالَى\n\nSelepas berniat (masih menghadap kiblat), disunatkan bertakbir :\n\nاللَّهُ أَكْبَرُ ، اللَّهُ أَكْبَرُ ، اللَّهُ أَكْبَرُ ، وَلِلَّهِ الْحَمْدُ\n\nSelepas takbir, disunatkan memulakan perjalanan ke bukit Marwah sambil membaca doa:\n\nاللَّهُ أَكْبَرُ عَلَى هَدَانَا وَالْحَمْدُ لِلَّهِ عَلَى مَا أَوْلَانَا لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ يُحْيِي وَيُمِيتُ بِيَدِهِ الْخَيْرُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ أَنْجَزَ وَعْدَهُ وَنَصَرَ عَبْدَهُ وَهَزَمَ الْأَحْزَابَ وَحْدَهُ لَا إِلَهَ إِلَّا اللَّهُ\n\n-Disunatkan berdoa untuk diri sendiri atau keluarga, sama ada urusan dunia atau akhirat, dengan doa yang difahami.\n\n-Kemudian : Memulakan perjalanan Sa\'ie ke bukit Marwah.</string>
-    <string name="bab4_hero_title">Rukun Bercukur\'</string>
-    <string name="bab4_hero_blurb">Ringkasan pendek pasal Bab 4 di sini.</string>
+    <string name="bab4_hero_title">Rukun Bercukur</string>
+    <string name="bab4_hero_blurb">Ringkasan pendek mengenai Bab 4 di sini.</string>
     <string name="bab4_s1_title">Rukun Bercukur / Bergunting</string>
     <string name="bab4_s1_body">-makna sa\'ie : menanggalkan / menghilangkan rambut di kepala menurut syarat syarat sahnya :\n\n-Waktu bercukur / bergunting selepas sa\'ie\n-Hanya rambut di kepala sahaja\n-Tidak kurang 3 helai rambut\n-Afdal bercukur bagi lelaki &amp; bagi perempuan memadai hanya bergunting rambut sekadar seruas jari\n-Sekiranya tiada rambut, boleh melalukan pisau cukur sahaja di kepala</string>
     <string name="bab4_s2_title">Rukun umrah</string>
@@ -187,7 +201,7 @@
     <string name="bab4_s4_title">Cara Mengerjakan Umrah</string>
     <string name="bab4_s4_body">-Mandi sunat ihram - dilakukan di mana-mana sebelum berniat (hukum: sunat).\n\n-Memakai pakaian ihram - dilakukan di miqat (hukum: sunat).\n\n-Sembahyang sunat ihram - dilakukan di miqat (hukum: sunat).\n\n-Niat ihram umrah - dilakukan di miqat, selepas niat sehingga bergunting (hukum: rukun).\n\n-Menjaga larangan dalam masa berihram - dilakukan selepas niat sehingga mula tawaf (hukum: wajib).\n\n-Talbiyah - dilakukan di Baitullah (hukum: sunat).\n\n-Tawaf Umrah - dilakukan di Baitullah (hukum: rukun).\n\n-Sa\'ie Umrah - dilakukan di Mas\'a (hukum: rukun).\n\n-Bercukur / Bergunting - dilakukan di Marwah atau di mana-mana (hukum: rukun).\n\n-Tertib melaksanakan semua rukun - dilakukan di mana-mana (hukum: rukun).</string>
     <string name="bab5_hero_title">Tawaf Wada\'</string>
-    <string name="bab5_hero_blurb">Ringkasan pendek pasal Bab 5 di sini.</string>
+    <string name="bab5_hero_blurb">Ringkasan pendek mengenai Bab 5 di sini.</string>
     <string name="bab5_s1_title">Hukum Tawaf Wada\'</string>
     <string name="bab5_s1_body">-Wajib bagi jemaah yang ingin meninggalkan kota Makkah menuju ke destinasi-destinasi yang telah disebutkan.\n\nBeberapa hukum berkaitan :\n\n-Jemaah yang meninggalkan Makkah tanpa tawaf wada\' wajib kembali untuk menyempurnakannya\n\n-Jika kembali sebelum menempuh jarak 2 marhala(81km), tidak dikenakan bayaran dam\n\n-Orang yang meninggalkan tawaf wada\' tanpa uzur yang dibenarkan syarak dikenakan dam tertib dan taqdir\n\n-Jika sudah melakukan tawaf wada\' tidak boleh lagi menetap di Makkah dan jika mereka tinggal tanpa keperluan, tawaf wada\' dianggap putus dan wajib diulang</string>
     <string name="bab5_s2_title">Uzur Syarie Daripada Tawaf Wada\'</string>
@@ -199,21 +213,17 @@
     <string name="bab5_s5_title">Tawaf-Tawaf Lain</string>
     <string name="bab5_s5_body">-Tawaf Sunat: Dianjurkan perbanyakkan. Niat: \"Ya Tuhanku, aku hendak tawaf sunat 7 keliling...\"\n\n-Tawaf Nazar: Niat: \"Ya Tuhanku, aku hendak tawaf nazar 7 keliling...\"\n\n-Tahyatul Bait: Paling afdhal ketika masuk Masjid al-Haram. Niat: \"Ya Tuhanku, aku hendak tawaf tahyatul bait 7 keliling...\"</string>
     <string name="bab6_hero_title">Ziarah Madinah</string>
-    <string name="bab6_hero_blurb">Ringkasan pendek pasal Bab 6 di sini.</string>
+    <string name="bab6_hero_blurb">Ringkasan pendek mengenai Bab 6 di sini.</string>
     <string name="bab6_s1_title">Amalan Sunat</string>
     <string name="bab6_s1_body">-Sepanjang perjalanan &amp; masuk Madinah: Perbanyak selawat &amp; baca doa: \"Ya Allah, jadikan negeri ini pelindung dari neraka &amp; azab.\"\n\n-Masuk masjid: Baca doa perlindungan &amp; mohon rahmat.\n\n-Tahiyatul Masjid: 2 rakaat (rakaat 1: al-Kafirun, rakaat 2: al-Ikhlas) di Raudhah jika mampu, jangan ganggu jemaah lain.</string>
     <string name="bab6_s2_title">Tempat Ziarah Madinah</string>
     <string name="bab6_s2_body">Jannatul Baqi\'\n\n-Perkuburan utama Madinah dari zaman Rasulullah SAW.\n\n-Tempat persemadian isteri-isteri, puteri-puteri, dan putera Baginda.\n\n-Doa sunat: Salam penghormatan kepada penghuni kubur, memohon keampunan untuk mereka yang terdahulu dan terkemudian, serta memohon agar tidak diharamkan pahala dan tidak difitnah selepas mereka.\n\nMasjid Quba\'\n\n-Masjid pertama dibina Rasulullah SAW selepas hijrah, terletak 3 km selatan Madinah.\n\n-Kelebihan: Solat di Masjid Quba\' menyamai pahala umrah (Riwayat Ibnu Majah).\n\n-Rasulullah SAW selalu pergi pada hari Sabtu, kadang-kadang Isnin dan Khamis.\n\n-Dibina atas dasar takwa (Surah at-Taubah: 108).\n\nBukit Uhud\n\n-Terletak 5 km utara Madinah, terkenal dengan Perang Uhud.\n\n-Nama \"Uhud\" bermaksud menyendiri (tidak bersambung dengan bukit lain).\n\n-Hadis: \"Uhud adalah bukit yang mencintai kami dan kami mencintainya\" (Riwayat Bukhari).\n\n-Terdapat perkuburan Hamzah bin Abdul Muttalib, Abdullah bin Jahsy, Mus\'ab bin Umair, dan para syuhada Uhud yang lain.\n\n-Sunat berdoa ketika menziarahi.\n\nMasjid Qiblatain\n\n-Dahulu masjid Bani Salamah, tempat peristiwa pertukaran kiblat.\n\n-Ketika Rasulullah SAW solat Zuhur bersama jemaah, turun ayat Surah al-Baqarah: 144 yang memerintahkan menghadap ke Masjidil Haram.\n\n-Baginda berpusing ke belakang dari arah Baitulmaqdis ke arah Baitullah, maka dinamakan Masjid Dua Kiblat.</string>
-
-    <!-- Checklist - picker & titles -->
-    <string name="checklist_picker_title">Pilih Checklist</string>
-    <string name="checklist_option_umrah">Checklist Umrah</string>
-    <string name="checklist_option_tour">Checklist Tour</string>
-    <string name="checklist_dialog_title_umrah">Checklist Persediaan Umrah</string>
-    <string name="checklist_dialog_title_tour">Checklist Persediaan Tour</string>
+    <string name="checklist_picker_title">Pilih Senarai Semak</string>
+    <string name="checklist_option_umrah">Senarai Semak Umrah</string>
+    <string name="checklist_option_tour">Senarai Semak Tour</string>
+    <string name="checklist_dialog_title_umrah">Senarai Semak Persediaan Umrah</string>
+    <string name="checklist_dialog_title_tour">Senarai Semak Persediaan Tour</string>
     <string name="dialog_close">Tutup</string>
-
-    <!-- Checklist - section headers (shared) -->
     <string name="checklist_section_travel_docs">Dokumen Perjalanan</string>
     <string name="checklist_section_men_clothing">Pakaian (Jemaah Lelaki)</string>
     <string name="checklist_section_women_clothing">Pakaian (Jemaah Perempuan)</string>
@@ -224,16 +234,12 @@
     <string name="checklist_section_finance">Kewangan</string>
     <string name="checklist_section_general">Kelengkapan Am</string>
     <string name="checklist_section_clothing">Pakaian</string>
-
-    <!-- Checklist Umrah - Dokumen -->
     <string name="checklist_umrah_docs_1">Pasport sah 6 bulan ke atas</string>
     <string name="checklist_umrah_docs_2">Visa Umrah / Tasrih (jika berkaitan)</string>
     <string name="checklist_umrah_docs_3">Sijil vaksin meningitis (ICV)</string>
     <string name="checklist_umrah_docs_4">Bawa pasport lama (jika baru perbaharui)</string>
     <string name="checklist_umrah_docs_5">Salinan dokumen penting (pasport, tiket, visa)</string>
     <string name="checklist_umrah_docs_6">Buku umrah &amp; buku doa yang mudah dibawa</string>
-
-    <!-- Checklist Umrah - Lelaki -->
     <string name="checklist_umrah_men_1">Kain Ihram</string>
     <string name="checklist_umrah_men_2">Tali pinggang umrah</string>
     <string name="checklist_umrah_men_3">T-shirt Berzip</string>
@@ -245,17 +251,15 @@
     <string name="checklist_umrah_men_9">Tuala Kecil</string>
     <string name="checklist_umrah_men_10">Uncang / Plastik Kasut</string>
     <string name="checklist_umrah_men_11">Botol Wudu\'</string>
-    <string name="checklist_umrah_men_12">Gunting Kecil / Alat Cukuran (letak dalam bagasi daftar masuk, bukan handcarry)</string>
+    <string name="checklist_umrah_men_12">Gunting Kecil / Alat Cukuran (letak dalam bagasi daftar masuk, bukan bagasi tangan)</string>
     <string name="checklist_umrah_men_13">Sejadah Kecil / Ridak</string>
     <string name="checklist_umrah_men_14">Penapis Hidung (Nosk)</string>
-
-    <!-- Checklist Umrah - Perempuan -->
     <string name="checklist_umrah_women_1">Telekung</string>
     <string name="checklist_umrah_women_2">Mini Telekung</string>
     <string name="checklist_umrah_women_3">Tudung</string>
     <string name="checklist_umrah_women_4">Jubah / Blouse Labuh</string>
     <string name="checklist_umrah_women_5">Stoking</string>
-    <string name="checklist_umrah_women_6">Handsocks</string>
+    <string name="checklist_umrah_women_6">Sarung Tangan</string>
     <string name="checklist_umrah_women_7">Kasut Tawaf/Sa\'ie</string>
     <string name="checklist_umrah_women_8">Seluar Panjang</string>
     <string name="checklist_umrah_women_9">T-shirt Berzip</string>
@@ -263,8 +267,6 @@
     <string name="checklist_umrah_women_11">Botol Spray Wudu\'</string>
     <string name="checklist_umrah_women_12">Gunting / Alat Cukuran</string>
     <string name="checklist_umrah_women_13">Penapis Hidung / Niqab</string>
-
-    <!-- Checklist Umrah - Ubat -->
     <string name="checklist_umrah_med_1">Ubat Demam (Panadol)</string>
     <string name="checklist_umrah_med_2">Ubat Selsema</string>
     <string name="checklist_umrah_med_3">Ubat Batuk</string>
@@ -276,92 +278,70 @@
     <string name="checklist_umrah_med_9">Minyak Angin</string>
     <string name="checklist_umrah_med_10">Krim/Minyak Zaitun (elak ruam &amp; tapak kaki pecah akibat cuaca sejuk)</string>
     <string name="checklist_umrah_med_11">Berus gigi &amp; ubat gigi saiz kecil</string>
-    <string name="checklist_umrah_med_12">Hand sanitizer</string>
+    <string name="checklist_umrah_med_12">Pensanitasi Tangan</string>
     <string name="checklist_umrah_med_13">Ubat-ubatan peribadi secukupnya (farmasi di Mekah/Madinah 2-3x lebih mahal)</string>
-
-    <!-- Checklist Umrah - Elektronik -->
     <string name="checklist_umrah_elec_1">Pengecas Telefon Bimbit</string>
-    <string name="checklist_umrah_elec_2">Powerbank</string>
-    <string name="checklist_umrah_elec_3">Extension Plug</string>
+    <string name="checklist_umrah_elec_2">Bank Kuasa</string>
+    <string name="checklist_umrah_elec_3">Palam Sambungan</string>
     <string name="checklist_umrah_elec_4">Kipas Mini</string>
     <string name="checklist_umrah_elec_5">Tasbih Digital</string>
-
-    <!-- Checklist Umrah - Aksesori Perempuan -->
     <string name="checklist_umrah_acc_1">Payung</string>
     <string name="checklist_umrah_acc_2">Cermin Mata Gelap</string>
-    <string name="checklist_umrah_acc_3">Face Mask</string>
-
-    <!-- Checklist Umrah - Makanan -->
+    <string name="checklist_umrah_acc_3">Pelitup Muka</string>
     <string name="checklist_umrah_food_1">Biskut Kering</string>
     <string name="checklist_umrah_food_2">Gula-gula</string>
     <string name="checklist_umrah_food_3">Mi Segera</string>
     <string name="checklist_umrah_food_4">Sambal Kering</string>
-
-    <!-- Checklist Umrah - Kewangan -->
     <string name="checklist_umrah_finance_1">Tukar mata wang Riyal Saudi secukupnya</string>
     <string name="checklist_umrah_finance_2">Simpan sedikit USD sebagai simpanan</string>
     <string name="checklist_umrah_finance_3">Aktifkan kad debit/kredit untuk kegunaan luar negara</string>
-
-    <!-- Checklist Umrah - Am -->
     <string name="checklist_umrah_general_1">Alatan mandi</string>
     <string name="checklist_umrah_general_2">Tuala tambahan (hotel di Madinah kadang-kadang kekurangan tuala)</string>
     <string name="checklist_umrah_general_3">Lain-lain yang munasabah</string>
-
-    <!-- Checklist Tour - Dokumen -->
     <string name="checklist_tour_docs_1">Pasport sah 6 bulan ke atas</string>
     <string name="checklist_tour_docs_2">Bawa pasport bersama</string>
     <string name="checklist_tour_docs_3">Bawa pasport lama (jika baru perbaharui)</string>
     <string name="checklist_tour_docs_4">Semak status perjalanan luar negara (SSPI)</string>
-
-    <!-- Checklist Tour - Ubat -->
     <string name="checklist_tour_med_1">Panadol</string>
     <string name="checklist_tour_med_2">Ubat sakit tekak</string>
     <string name="checklist_tour_med_3">Ubat cirit-birit</string>
     <string name="checklist_tour_med_4">Ubat tahan muntah</string>
     <string name="checklist_tour_med_5">Salonpas</string>
     <string name="checklist_tour_med_6">Minyak angin</string>
-    <string name="checklist_tour_med_7">Olive oil / moisturizer / lipbalm</string>
-    <string name="checklist_tour_med_8">Heat pad</string>
-
-    <!-- Checklist Tour - Pakaian -->
+    <string name="checklist_tour_med_7">Minyak Zaitun / Pelembap / Pelembap Bibir</string>
+    <string name="checklist_tour_med_8">Pad Pemanas</string>
     <string name="checklist_tour_clothing_1">Jaket nipis (lapisan sederhana)</string>
     <string name="checklist_tour_clothing_2">Jeans / seluar panjang nipis</string>
     <string name="checklist_tour_clothing_3">Jaket tambahan (jika cuaca sejuk/berangin)</string>
     <string name="checklist_tour_clothing_4">Kasut bertutup &amp; selesa (sneakers)</string>
-    <string name="checklist_tour_clothing_5">Sunglasses &amp; cap</string>
-
-    <!-- Checklist Tour - Elektronik -->
-    <string name="checklist_tour_elec_1">Travel adaptor</string>
-    <string name="checklist_tour_elec_2">Powerbank (maks. 20,000mAh - letak handcarry)</string>
-
-    <!-- Checklist Tour - Kewangan -->
+    <string name="checklist_tour_clothing_5">Cermin Mata Hitam &amp; Topi</string>
+    <string name="checklist_tour_elec_1">Penyesuai Plag Perjalanan</string>
+    <string name="checklist_tour_elec_2">Bank Kuasa (maks. 20,000mAh - simpan dalam bagasi tangan)</string>
     <string name="checklist_tour_finance_1">Tukar mata wang mengikut destinasi</string>
-    <string name="checklist_tour_finance_2">Aktifkan kad debit/credit untuk kegunaan luar negara</string>
-
+    <string name="checklist_tour_finance_2">Aktifkan kad debit/kredit untuk kegunaan luar negara</string>
     <string name="forgot_password">Lupa Kata Laluan?</string>
     <string name="reset_password_title">Tetap Semula Kata Laluan</string>
-    <string name="reset_password_msg">Masukkan email anda, kami akan hantar pautan untuk reset kata laluan.</string>
-    <string name="hint_enter_email">Masukkan email anda</string>
+    <string name="reset_password_msg">Masukkan emel anda, kami akan menghantar pautan untuk menetapkan semula kata laluan.</string>
+    <string name="hint_enter_email">Masukkan emel anda</string>
     <string name="btn_send">HANTAR</string>
     <string name="btn_cancel">BATAL</string>
-
-    <string name="reset_password_invalid_email">Sila masukkan email yang sah</string>
-    <string name="reset_password_sent">Email tetapkan semula kata laluan telah dihantar. Sila semak inbox anda.</string>
-    <string name="reset_password_failed">Gagal menghantar email. Sila cuba lagi.</string>
-
+    <string name="reset_password_invalid_email">Sila masukkan emel yang sah</string>
+    <string name="reset_password_sent">Pautan tetapan semula kata laluan telah dihantar. Sila semak peti masuk anda.</string>
+    <string name="reset_password_failed">Gagal menghantar emel. Sila cuba lagi.</string>
     <string name="login_google_signin_failed">Log masuk Google gagal: Kod %1$d</string>
     <string name="login_google_success">Log masuk Google berjaya! %1$s</string>
     <string name="login_google_failed">Log masuk Google gagal. Sila cuba lagi.</string>
-    <string name="login_email_invalid">Sila masukkan email yang sah</string>
+    <string name="login_email_invalid">Sila masukkan emel yang sah</string>
     <string name="login_password_required">Sila masukkan kata laluan</string>
     <string name="login_success">Log masuk berjaya!</string>
-    <string name="login_failed_default">Log masuk gagal, sila cuba lagi</string>
-    <string name="language_picker_title">Choose Language / Pilih Bahasa</string>
-
+    <string name="language_picker_title">Pilih Bahasa</string>
+    <string name="language_picker_subtitle">Pilih bahasa pilihan anda</string>
     <string name="prayer_times_title_fallback">Waktu Solat Hari Ini (anggaran - tiada sambungan internet)</string>
     <string name="prayer_location_denied_text">Aktifkan lokasi untuk lihat waktu solat</string>
     <string name="prayer_use_my_location">Guna Lokasi Saya</string>
-
+    <string name="prayer_refresh_location">Kemas kini lokasi</string>
+    <string name="prayer_updating_location">Mengemas kini lokasi waktu solat...</string>
+    <string name="prayer_location_updated">Lokasi dikemas kini</string>
     <string name="umrah_section_popular">Pakej Popular</string>
     <string name="umrah_section_khas">Pakej Khas</string>
     <string name="umrah_section_ziarah">Umrah Ziarah</string>
@@ -374,8 +354,6 @@
     <string name="checklist_reset">Tetap semula</string>
     <string name="checklist_progress_suffix">Selesai</string>
     <string name="all_packages_title">Semua Pakej</string>
-
-    <!-- Section 1 -->
     <string name="checklist_sec1_title">1. SEBELUM BERANGKAT</string>
     <string name="checklist_sec1_item1">Mandi sunat ihram</string>
     <string name="checklist_sec1_item2">Potong kuku / kemaskan diri sebelum ihram</string>
@@ -385,8 +363,6 @@
     <string name="checklist_sec1_item4">Solat sunat ihram 2 rakaat</string>
     <string name="checklist_sec1_item5">Pastikan sudah tahu Miqat</string>
     <string name="checklist_sec1_item6">Sediakan niat ihram</string>
-
-    <!-- Section 2 -->
     <string name="checklist_sec2_title">2. DI MIQAT \u2013 NIAT IHRAM</string>
     <string name="checklist_sec2_item1">Niat Umrah</string>
     <string name="checklist_sec2_heading1">Lafaz niat:</string>
@@ -395,24 +371,18 @@
     <string name="checklist_sec2_heading2">Talbiah:</string>
     <string name="checklist_sec2_arabic2">لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لَا شَرِيكَ لَكَ لَبَّيْكَ، إِنَّ الْحَمْدَ وَالنِّعْمَةَ لَكَ وَالْمُلْكَ، لَا شَرِيكَ لَكَ</string>
     <string name="checklist_sec2_item3">Jaga semua larangan ihram</string>
-
-    <!-- Section 3 -->
     <string name="checklist_sec3_title">3. PERJALANAN KE MAKKAH</string>
     <string name="checklist_sec3_item1">Banyakkan talbiah</string>
     <string name="checklist_sec3_item2">Selawat</string>
     <string name="checklist_sec3_item3">Zikir</string>
     <string name="checklist_sec3_item4">Doa</string>
     <string name="checklist_sec3_item5">Jaga larangan ihram</string>
-
-    <!-- Section 4 -->
     <string name="checklist_sec4_title">4. SAMPAI DI MASJIDIL HARAM</string>
     <string name="checklist_sec4_item1">Masuk Masjidil Haram dengan kaki kanan</string>
     <string name="checklist_sec4_item2">Baca doa masuk masjid</string>
     <string name="checklist_sec4_item3">Lihat Kaabah \u2192 berdoa</string>
     <string name="checklist_sec4_item4">Bersedia untuk tawaf</string>
     <string name="checklist_sec4_item5">Pastikan wuduk</string>
-
-    <!-- Section 5 -->
     <string name="checklist_sec5_title">5. TAWAF \u2013 7 PUSINGAN</string>
     <string name="checklist_sec5_heading1">Syarat penting:</string>
     <string name="checklist_sec5_item1">Suci daripada hadas</string>
@@ -434,8 +404,6 @@
     <string name="checklist_sec5_info8">Al-Kafirun</string>
     <string name="checklist_sec5_info9">Doa yang mudah dihafal</string>
     <string name="checklist_sec5_note1">Tidak ada surah tertentu yang diwajibkan untuk setiap pusingan.</string>
-
-    <!-- Section 6 -->
     <string name="checklist_sec6_title">6. SELEPAS TAWAF</string>
     <string name="checklist_sec6_item1">Solat sunat tawaf 2 rakaat</string>
     <string name="checklist_sec6_item2">Jika boleh, solat di belakang Maqam Ibrahim</string>
@@ -443,8 +411,6 @@
     <string name="checklist_sec6_item4">Baca Al-Ikhlas pada rakaat kedua</string>
     <string name="checklist_sec6_item5">Berdoa selepas solat</string>
     <string name="checklist_sec6_item6">Minum air Zamzam</string>
-
-    <!-- Section 7 -->
     <string name="checklist_sec7_title">7. SA\'I \u2013 7 PERJALANAN</string>
     <string name="checklist_sec7_note1">Mula: Safa \u2022 Tamat: Marwah</string>
     <string name="checklist_sec7_item1">Pergi ke Safa</string>
@@ -464,17 +430,13 @@
     <string name="checklist_sec7_info5">Lelaki \u2192 berlari anak antara dua lampu hijau</string>
     <string name="checklist_sec7_info6">Perempuan \u2192 berjalan seperti biasa</string>
     <string name="checklist_sec7_info7">Jaga tertib perjalanan Safa \u2192 Marwah</string>
-
-    <!-- Section 8 -->
     <string name="checklist_sec8_title">8. TAHALLUL</string>
     <string name="checklist_sec8_note1">Selepas selesai 7 perjalanan sa\'i:</string>
     <string name="checklist_sec8_item1">Lelaki \u2192 cukur atau gunting rambut</string>
     <string name="checklist_sec8_item2">Perempuan \u2192 gunting sedikit rambut</string>
     <string name="checklist_sec8_item3">Tahallul menandakan selesai ibadah Umrah</string>
     <string name="checklist_sec8_item4">Selepas tahallul \u2192 larangan ihram tamat</string>
-
-    <!-- Section 9 -->
-    <string name="checklist_sec9_title">9. CHECKLIST AKHIR UMRAH</string>
+    <string name="checklist_sec9_title">9. SENARAI SEMAK AKHIR UMRAH</string>
     <string name="checklist_sec9_note1">Pastikan semua ini dah selesai:</string>
     <string name="checklist_sec9_item1">Ihram</string>
     <string name="checklist_sec9_item2">Niat Umrah</string>
@@ -485,23 +447,18 @@
     <string name="checklist_sec9_item7">Tahallul</string>
     <string name="checklist_sec9_item8">Tertib</string>
     <string name="checklist_sec9_item9">Umrah selesai</string>
-
     <string name="panduan_banner_title">Bersedia untuk Umrah?</string>
     <string name="panduan_banner_subtitle">Semak tatacara semasa menunaikan Umrah</string>
     <string name="panduan_banner_button">Lihat senarai tatacara</string>
-
     <string name="umrah_hero_title">Pakej Umrah</string>
     <string name="umrah_hero_subtitle">Cari pakej umrah pilihan anda</string>
     <string name="umrah_empty_state">Tiada pakej dijumpai</string>
-
     <string name="tour_hero_title">Pakej Tour</string>
     <string name="tour_hero_subtitle">Terokai destinasi pilihan anda</string>
     <string name="tour_empty_state">Tiada pakej dijumpai</string>
-
     <string name="favorite_hero_title">Kegemaran</string>
     <string name="favorite_hero_subtitle">Pakej yang anda simpan untuk dilihat kemudian</string>
     <string name="favorite_empty_state">Tiada pakej disimpan lagi</string>
-
     <string name="package_detail_price_from_label">Dari</string>
     <string name="package_detail_whatsapp_button">WhatsApp Perunding</string>
     <string name="package_detail_poster_title">Poster Pakej</string>
@@ -520,6 +477,179 @@
     <string name="package_detail_price_options_title">Pilihan Harga/Bilik</string>
     <string name="package_detail_gallery_title">Galeri Perjalanan</string>
     <string name="package_detail_whatsapp_default_message">Assalamualaikum, saya berminat dengan pakej %1$s. Boleh kongsi maklumat lanjut?</string>
-
-
+    <string name="removed_from_favorites">Dikeluarkan daripada Kegemaran</string>
+    <string name="added_to_favorites">Disimpan ke Kegemaran</string>
+    <string name="undo">BATAL</string>
+    <string name="remove_favorite_dialog_title">Keluarkan dari Kegemaran?</string>
+    <string name="remove_favorite_dialog_message">Adakah anda pasti ingin mengeluarkan pakej ini daripada senarai kegemaran anda?</string>
+    <string name="remove_favorite_dialog_confirm">Keluarkan</string>
+    <string name="remove_favorite_dialog_cancel">Batal</string>
+    <string name="filter_title">Penapis Pakej</string>
+    <string name="filter_reset">Set Semula</string>
+    <string name="filter_category_header">Kategori</string>
+    <string name="filter_cat_umrah">Umrah</string>
+    <string name="filter_cat_tour">Tour</string>
+    <string name="filter_destination_header">Destinasi / Negara</string>
+    <string name="filter_all_destinations">Semua Destinasi</string>
+    <string name="filter_price_header">Julat Harga</string>
+    <string name="filter_price_presets_header">Pilihan Cepat Harga</string>
+    <string name="filter_price_below_3k">&lt; RM3,000</string>
+    <string name="filter_price_3k_6k">RM3,000 - RM6,000</string>
+    <string name="filter_price_6k_10k">RM6,000 - RM10,000</string>
+    <string name="filter_price_above_10k">&gt; RM10,000</string>
+    <string name="filter_custom_slider_header">Gelangsar Harga Tersuai</string>
+    <string name="filter_min_label">Terendah</string>
+    <string name="filter_max_label">Tertinggi</string>
+    <string name="filter_apply_button">Gunakan Penapis (%1$d Pakej)</string>
+    <string name="filter_active_tag_category">Kategori: %1$s</string>
+    <string name="filter_active_tag_destination">Destinasi: %1$s</string>
+    <string name="filter_active_tag_price">Harga: RM%1$s - RM%2$s</string>
+    <string name="filter_clear_all">Padam Penapis</string>
+    <string name="dest_turkey">Turki</string>
+    <string name="dest_korea">Korea</string>
+    <string name="dest_japan">Jepun</string>
+    <string name="dest_saudi">Arab Saudi</string>
+    <string name="dest_europe">Eropah / Balkan</string>
+    <string name="dest_vietnam">Vietnam</string>
+    <string name="dest_china">China</string>
+    <string name="prayer_times_header">Waktu Solat Hari Ini</string>
+    <string name="prayer_times_today_format">Waktu Solat Hari Ini (%1$s)</string>
+    <string name="explore_package_arrow">Teroka Pakej →</string>
+    <string name="exclusive_offer_title">Tawaran Eksklusif Jemaah</string>
+    <string name="exclusive_offer_sub">Daftar akaun untuk terima info promosi dan diskaun terkini.</string>
+    <string name="google_review_write_btn">Tulis Ulasan →</string>
+    <string name="all_packages_empty">Tiada pakej dijumpai</string>
+    <string name="prayer_name_subuh">Subuh</string>
+    <string name="prayer_name_syuruk">Syuruk</string>
+    <string name="prayer_name_zohor">Zohor</string>
+    <string name="prayer_name_asar">Asar</string>
+    <string name="prayer_name_maghrib">Maghrib</string>
+    <string name="prayer_name_isyak">Isyak</string>
+    <string name="prayer_countdown_entered">Waktu telah masuk</string>
+    <string name="prayer_countdown_min">%1$s dalam %2$dm</string>
+    <string name="prayer_countdown_hour_min">%1$s dalam %2$dj %3$dm</string>
+    <string name="err_server_connection">Gagal menyambung ke pelayan backend.</string>
+    <string name="err_connection_detail">Ralat sambungan: %1$s</string>
+    <string name="error_whatsapp_not_found">WhatsApp tidak dijumpai pada peranti ini.</string>
+    <string name="err_open_map">Tidak dapat membuka peta.</string>
+    <string name="err_open_call">Tidak dapat membuat panggilan.</string>
+    <string name="err_open_email">Tidak dapat membuka emel.</string>
+    <string name="err_open_link">Tidak dapat membuka pautan.</string>
+    <string name="err_open_review">Tidak dapat membuka pautan ulasan.</string>
+    <string name="err_open_youtube">Tidak dapat membuka YouTube.</string>
+    <string name="err_package_not_found">Pakej tidak dijumpai.</string>
+    <string name="err_package_load_failed">Gagal memuatkan data pakej.</string>
+    <string name="guideline_dialog_title">Panduan Persediaan</string>
+    <string name="guideline_dialog_message">✓ Pasport sah sekurang-kurangnya 6 bulan\n\n✓ Suntikan meningitis (jika diperlukan)\n\n✓ Pakaian ihram / pakaian sesuai\n\n✓ Ubat-ubatan peribadi\n\n✓ Salinan dokumen penting (pasport, tiket, visa)\n\n✓ Wang tunai secukupnya (Riyal / USD)</string>
+    <string name="coming_soon_format">%1$s akan datang</string>
+    <string name="pdf_coming_soon_format">Muat turun PDF %1$s - akan datang</string>
+    <string name="chapter_label_format">Bab %1$d</string>
+    <string name="profile_guest_name">Pengguna Tetamu</string>
+    <string name="profile_no_booking">Tiada tempahan lagi - tempahan anda akan dipaparkan di sini</string>
+    <string name="profile_logout_success">Log keluar berjaya</string>
+    <string name="profile_login_to_update">Sila log masuk untuk mengemaskini profil</string>
+    <string name="profile_change_password">Tukar Kata Laluan</string>
+    <string name="profile_save">Simpan</string>
+    <string name="profile_updated">Profil berjaya dikemaskini!</string>
+    <string name="profile_email_invalid">Emel tidak sah</string>
+    <string name="profile_reset_title">Tetapan Semula Kata Laluan</string>
+    <string name="profile_reset_message">Hantar pautan set semula kata laluan ke emel: %1$s?</string>
+    <string name="profile_reset_send">Hantar</string>
+    <string name="profile_reset_sent">Pautan tetapan semula kata laluan telah dihantar ke emel anda!</string>
+    <string name="profile_field_full_name">Nama Penuh</string>
+    <string name="profile_field_phone">Nombor Telefon</string>
+    <string name="profile_field_email">E-mel</string>
+    <string name="privacy_terms_toast">Hafiz Travel &amp; Tours Sdn Bhd - Privasi &amp; Terma</string>
+    <string name="package_fallback_destination">Destinasi Perjalanan</string>
+    <string name="detail_section_accommodation_summary">Ringkasan Penginapan</string>
+    <string name="detail_section_hotels_umrah">Hotel (Makkah &amp; Madinah)</string>
+    <string name="detail_section_hotels_tour">Hotel</string>
+    <string name="detail_hotels_empty_notice">Maklumat hotel akan dikemas kini.</string>
+    <string name="detail_section_room_pricing">Pilihan Bilik &amp; Harga</string>
+    <string name="detail_section_itinerary">Itinerary Lengkap</string>
+    <string name="detail_itinerary_empty_notice">Jadual perjalanan akan dikemas kini.</string>
+    <string name="detail_itinerary_hint">Ketik pada hari untuk lihat butirannya</string>
+    <string name="detail_section_inclusions">Termasuk &amp; Tidak Termasuk</string>
+    <string name="detail_included_heading">Termasuk</string>
+    <string name="detail_excluded_heading">Tidak Termasuk</string>
+    <string name="detail_whats_covered">Apa Yang Termasuk</string>
+    <string name="detail_whats_covered_sub">Kemudahan dan perkhidmatan yang disediakan dalam pakej anda</string>
+    <string name="cat_items_covered_format">%d perkara disertakan</string>
+    <string name="detail_not_covered">Not Covered</string>
+    <string name="detail_not_covered_sub">Perkara yang tidak termasuk dalam harga pakej</string>
+    <string name="detail_terms_guidelines">Syarat &amp; Garis Panduan Pakej</string>
+    <string name="detail_required_documents">Dokumen Yang Diperlukan</string>
+    <string name="room_quint">Bilik Berlima (Quint)</string>
+    <string name="room_quad">Bilik Berempat (Quad)</string>
+    <string name="room_triple">Bilik Bertiga (Triple)</string>
+    <string name="room_double">Bilik Berdua (Double)</string>
+    <string name="room_single">Bilik Perseorangan (Single)</string>
+    <string name="detail_price_from">Harga Bermula Dari</string>
+    <string name="cat_flights">Penerbangan</string>
+    <string name="cat_accommodation">Penginapan</string>
+    <string name="cat_visa_protection">Visa &amp; Perlindungan</string>
+    <string name="cat_meals">Makanan &amp; Minuman</string>
+    <string name="cat_transportation">Pengangkutan</string>
+    <string name="cat_tour_guidance">Bimbingan &amp; Panduan</string>
+    <string name="cat_travel_essentials">Keperluan Perjalanan</string>
+    <string name="cat_preparation">Persediaan &amp; Taklimat</string>
+    <string name="cat_other">Lain-lain Ketersediaan</string>
+    <string name="detail_section_packing">Panduan Barang</string>
+    <string name="detail_packing_heading">Senarai Barang Disyorkan</string>
+    <string name="detail_section_notes">Nota Penting &amp; Panduan Jemaah</string>
+    <string name="detail_section_gallery">Galeri Perjalanan</string>
+    <string name="detail_per_pax">seorang</string>
+    <string name="nights_unit">Malam</string>
+    <string name="nights_label_makkah">Makkah</string>
+    <string name="nights_label_madinah">Madinah</string>
+    <string name="nights_label_taif">Taif</string>
+    <string name="nights_label_hotel1">Hotel 1</string>
+    <string name="nights_label_hotel2">Hotel 2</string>
+    <string name="nights_label_hotel3">Hotel 3</string>
+    <string name="flight_type_fallback">Penerbangan</string>
+    <string name="flight_route_fallback">Laluan akan disahkan</string>
+    <string name="hotel_title_umrah_makkah">Hotel Makkah</string>
+    <string name="hotel_title_umrah_madinah">Hotel Madinah</string>
+    <string name="hotel_title_umrah_taif">Hotel Taif</string>
+    <string name="hotel_title_tour_hotel1">Hotel 1</string>
+    <string name="hotel_title_tour_hotel2">Hotel 2</string>
+    <string name="hotel_title_tour_extra">Hotel Tambahan</string>
+    <string name="hotel_rating_fallback">Standard</string>
+    <string name="share_package_via">Kongsi Pakej Melalui</string>
+    <string name="share_price_from">Harga Dari: *%1$s*</string>
+    <string name="share_duration">Tempoh: *%1$d Hari %2$d Malam*</string>
+    <string name="share_cta">Tempah atau tanya lanjut</string>
+    <string name="package_badge_umrah">PAKEJ UMRAH</string>
+    <string name="package_badge_tour">PAKEJ PELANCONGAN</string>
+    <string name="results_packages_format">%1$d pakej</string>
+    <string name="filter_slider_min_label">RM0 (Terendah)</string>
+    <string name="filter_slider_max_label">RM20,000+ (Tertinggi)</string>
+    <string name="promo_hero_kicker">MAKKAH &amp; MADINAH</string>
+    <string name="promo_hero_title">Pakej Umrah Cuti Sekolah &amp; Syawal</string>
+    <string name="promo_hero_price">Dari RM 7,990 • 12 Hari 10 Malam</string>
+    <string name="google_review_summary">4.9 (250+ Ulasan Google)</string>
+    <string name="package_vip_badge">PAKEJ PILIHAN VIP</string>
+    <string name="package_whatsapp_enquiry">Tanya WhatsApp</string>
+    <string name="splash_eyebrow">EKSPEDISI SELURUH DUNIA &amp; UMRAH</string>
+    <string name="splash_tagline">Bina Memori yang Telus bersama Hafiz Travel &amp; Tours</string>
+    <string name="hotel_distance_to">%1$s ke Masjidil Haram</string>
+    <string name="duration_days_nights">%1$d Hari %2$d Malam</string>
+    <string name="duration_days_only">%1$d Hari</string>
+    <string name="package_full">Pakej Penuh</string>
+    <string name="day_label_format">Hari %1$d</string>
+    <string name="itinerary_daily">Jadual Harian</string>
+    <string name="azan_notif_title">Waktu %1$s</string>
+    <string name="azan_playing">Azan sedang berkumandang</string>
+    <string name="azan_stop">Berhenti</string>
+    <string name="azan_channel_name">Notifikasi Azan</string>
+    <string name="azan_channel_desc">Notifikasi untuk waktu solat &amp; azan</string>
+    <string name="battery_title">Pastikan Azan Berfungsi</string>
+    <string name="battery_message">Untuk pastikan notifikasi &amp; azan berbunyi tepat pada waktunya walaupun app ini ditutup, disyorkan benarkan app ini berjalan tanpa had di latar belakang.\n\nLangkah ini pilihan sahaja, boleh disetkan kemudian melalui Tetapan.</string>
+    <string name="battery_now">Setkan Sekarang</string>
+    <string name="battery_later">Nanti</string>
+    <string name="hijri_date_fallback">1 Rejab 1448H</string>
+    <string name="btn_book_now">TEMPAH SEKARANG</string>
+    <string name="btn_ask_questions">Tanya</string>
+    <string name="selected_room_label">Bilik Terpilih</string>
+    <string name="booking_flow_notice">Pilihan terpilih: %1$s (%2$s). Sila teruskan ke borang maklumat jemaah.</string>
 </resources>
