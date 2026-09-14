@@ -317,29 +317,17 @@ public class WelcomeActivity extends AppCompatActivity {
 
         View[] items = {
                 sheetView.findViewById(R.id.itemLangEnglish),
-                sheetView.findViewById(R.id.itemLangMalay),
-                sheetView.findViewById(R.id.itemLangArabic),
-                sheetView.findViewById(R.id.itemLangKorean),
-                sheetView.findViewById(R.id.itemLangJapanese),
-                sheetView.findViewById(R.id.itemLangChinese)
+                sheetView.findViewById(R.id.itemLangMalay)
         };
 
         String[] codes = {
                 LocaleHelper.LANGUAGE_ENGLISH,
-                LocaleHelper.LANGUAGE_MALAY,
-                LocaleHelper.LANGUAGE_ARABIC,
-                LocaleHelper.LANGUAGE_KOREAN,
-                LocaleHelper.LANGUAGE_JAPANESE,
-                LocaleHelper.LANGUAGE_CHINESE
+                LocaleHelper.LANGUAGE_MALAY
         };
 
         int[] radioIds = {
                 R.id.icRadioEnglish,
-                R.id.icRadioMalay,
-                R.id.icRadioArabic,
-                R.id.icRadioKorean,
-                R.id.icRadioJapanese,
-                R.id.icRadioChinese
+                R.id.icRadioMalay
         };
 
         for (int i = 0; i < items.length; i++) {

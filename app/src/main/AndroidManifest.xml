@@ -31,6 +31,7 @@
         <activity android:name=".ui.TentangKamiActivity" />
 
         <activity android:name=".ui.ProfileActivity" />
+        <activity android:name=".ui.MyBookingsActivity" android:exported="false" />
 
         <activity android:name=".ui.MainActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
 

@@ -73,6 +73,16 @@
             android:textSize="12sp"
             tools:text="Bilik Quad • 2 Pax" />
 
+        <TextView
+            android:id="@+id/successBookingNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/text_gray"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            tools:text="BKG-260914-ABC123" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"

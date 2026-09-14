@@ -331,29 +331,17 @@ public class MainActivity extends AppCompatActivity {
 
         View[] items = {
                 sheetView.findViewById(R.id.itemLangEnglish),
-                sheetView.findViewById(R.id.itemLangMalay),
-                sheetView.findViewById(R.id.itemLangArabic),
-                sheetView.findViewById(R.id.itemLangKorean),
-                sheetView.findViewById(R.id.itemLangJapanese),
-                sheetView.findViewById(R.id.itemLangChinese)
+                sheetView.findViewById(R.id.itemLangMalay)
         };
 
         String[] codes = {
                 LocaleHelper.LANGUAGE_ENGLISH,
-                LocaleHelper.LANGUAGE_MALAY,
-                LocaleHelper.LANGUAGE_ARABIC,
-                LocaleHelper.LANGUAGE_KOREAN,
-                LocaleHelper.LANGUAGE_JAPANESE,
-                LocaleHelper.LANGUAGE_CHINESE
+                LocaleHelper.LANGUAGE_MALAY
         };
 
         int[] radioIds = {
                 R.id.icRadioEnglish,
-                R.id.icRadioMalay,
-                R.id.icRadioArabic,
-                R.id.icRadioKorean,
-                R.id.icRadioJapanese,
-                R.id.icRadioChinese
+                R.id.icRadioMalay
         };
 
         for (int i = 0; i < items.length; i++) {
@@ -1303,39 +1291,11 @@ public class MainActivity extends AppCompatActivity {
 
                 String lang = LocaleHelper.getSavedLanguage(this);
                 String[] hijriMonths;
-                if (LocaleHelper.LANGUAGE_ARABIC.equalsIgnoreCase(lang)) {
-                    hijriMonths = new String[]{
-                            "محرم", "صفر", "ربيع الأول", "ربيع الآخر",
-                            "جمادى الأولى", "جمادى الآخرة", "رجب", "شعبان",
-                            "رمضان", "شوال", "ذو القعدة", "ذو الحجة"
-                    };
-                    return day + " " + (month >= 0 && month < hijriMonths.length ? hijriMonths[month] : "") + " " + year + " هـ";
-                } else if (LocaleHelper.LANGUAGE_CHINESE.equalsIgnoreCase(lang)) {
-                    hijriMonths = new String[]{
-                            "穆哈兰姆月", "色法尔月", "赖比尔·奥瓦勒月", "赖比尔·阿色尼月",
-                            "主马达·奥瓦勒月", "主马达·阿色尼月", "赖哲卜月", "舍尔邦月",
-                            "赖买丹月", "闪瓦鲁月", "都尔喀尔德月", "都尔黑哲月"
-                    };
-                    return "回历 " + year + "年 " + (month >= 0 && month < hijriMonths.length ? hijriMonths[month] : "") + " " + day + "日";
-                } else if (LocaleHelper.LANGUAGE_MALAY.equalsIgnoreCase(lang)) {
+                if (LocaleHelper.LANGUAGE_MALAY.equalsIgnoreCase(lang)) {
                     hijriMonths = new String[]{
                             "Muharram", "Safar", "Rabiulawal", "Rabiulakhir",
                             "Jamadilawal", "Jamadilakhir", "Rejab", "Syaaban",
                             "Ramadhan", "Syawal", "Zulkaedah", "Zulhijjah"
-                    };
-                    return day + " " + (month >= 0 && month < hijriMonths.length ? hijriMonths[month] : "") + " " + year + "H";
-                } else if (LocaleHelper.LANGUAGE_KOREAN.equalsIgnoreCase(lang)) {
-                    hijriMonths = new String[]{
-                            "무하람", "사파르", "라비 알아우왈", "라비 앗사니",
-                            "주마다 알아울라", "주마다 알아키라", "라자브", "샤반",
-                            "라마단", "샤왈", "둘카다", "둘히자"
-                    };
-                    return day + " " + (month >= 0 && month < hijriMonths.length ? hijriMonths[month] : "") + " " + year + "H";
-                } else if (LocaleHelper.LANGUAGE_JAPANESE.equalsIgnoreCase(lang)) {
-                    hijriMonths = new String[]{
-                            "ムハッラム", "サファル", "ラビー・アル＝アウワル", "ラビー・アル＝サーニー",
-                            "ジュマーダー・アル＝ウーラー", "ジュマーダー・アル＝アーヒラ", "ラジャブ", "シャアバーン",
-                            "ラマダーン", "シャウワール", "ズー・アル＝カアダ", "ズー・アル＝ヒッジャ"
                     };
                     return day + " " + (month >= 0 && month < hijriMonths.length ? hijriMonths[month] : "") + " " + year + "H";
                 } else {

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_detail_card"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_marginBottom="12dp">
+
+    <TextView
+        android:id="@+id/itemBookingPackageName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text_dark"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        tools:text="Pakej Umrah Cuti Sekolah" />
+
+    <TextView
+        android:id="@+id/itemBookingNo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:textColor="@color/text_gray"
+        android:textSize="12sp"
+        tools:text="BKG-260914-ABC123" />
+
+    <TextView
+        android:id="@+id/itemBookingStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:textColor="@color/brand_magenta"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        tools:text="PENDING CONFIRMATION • 2026-12-01" />
+
+    <TextView
+        android:id="@+id/itemBookingTotal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textColor="@color/text_dark"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        tools:text="RM 15,900" />
+
+</LinearLayout>

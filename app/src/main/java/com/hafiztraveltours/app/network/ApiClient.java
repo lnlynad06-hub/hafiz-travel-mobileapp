@@ -21,6 +21,11 @@ public class ApiClient {
 
     private static Retrofit retrofit = null;
     private static ApiService apiService = null;
+    private static volatile String authToken = null;
+
+    public static synchronized void setAuthToken(String token) {
+        authToken = (token != null && !token.isEmpty()) ? token : null;
+    }
 
     public static synchronized ApiService getApiService() {
         if (apiService == null) {
@@ -29,6 +34,16 @@ public class ApiClient {
 
             OkHttpClient okHttpClient = new OkHttpClient.Builder()
                     .addInterceptor(loggingInterceptor)
+                    .addInterceptor(chain -> {
+                        okhttp3.Request original = chain.request();
+                        if (authToken != null) {
+                            original = original.newBuilder()
+                                    .header("Authorization", "Bearer " + authToken)
+                                    .header("Accept", "application/json")
+                                    .build();
+                        }
+                        return chain.proceed(original);
+                    })
                     .connectTimeout(15, TimeUnit.SECONDS)
                     .readTimeout(15, TimeUnit.SECONDS)
                     .writeTimeout(15, TimeUnit.SECONDS)

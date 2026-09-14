@@ -22,6 +22,7 @@ public class SessionManager {
     private static final String KEY_IS_LOGGED_IN = "is_logged_in";
     private static final String KEY_AUTH_TOKEN = "auth_token";
     private static final String KEY_USER_DATA = "user_data";
+    private static final String KEY_PROFILE_STATS = "profile_stats";
 
     private static SessionManager instance;
     private final SharedPreferences prefs;
@@ -30,6 +31,7 @@ public class SessionManager {
     public SessionManager(Context context) {
         this.prefs = context.getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         this.gson = new Gson();
+        ApiClient.setAuthToken(prefs.getString(KEY_AUTH_TOKEN, ""));
     }
 
     public static synchronized SessionManager getInstance(Context context) {
@@ -47,6 +49,7 @@ public class SessionManager {
             editor.putString(KEY_USER_DATA, gson.toJson(user));
         }
         editor.apply();
+        ApiClient.setAuthToken(token);
     }
 
     public boolean isLoggedIn() {
@@ -104,6 +107,23 @@ public class SessionManager {
                 .putBoolean(KEY_IS_LOGGED_IN, false)
                 .remove(KEY_AUTH_TOKEN)
                 .remove(KEY_USER_DATA)
+                .remove(KEY_PROFILE_STATS)
                 .apply();
+        ApiClient.setAuthToken(null);
+    }
+
+    public void saveProfileStats(com.hafiztraveltours.app.models.ProfileStatsDto stats) {
+        prefs.edit().putString(KEY_PROFILE_STATS,
+                stats != null ? gson.toJson(stats) : null).apply();
+    }
+
+    public com.hafiztraveltours.app.models.ProfileStatsDto getProfileStats() {
+        String json = prefs.getString(KEY_PROFILE_STATS, null);
+        if (json != null && !json.isEmpty()) {
+            try {
+                return gson.fromJson(json, com.hafiztraveltours.app.models.ProfileStatsDto.class);
+            } catch (Exception ignored) {}
+        }
+        return null;
     }
 }

@@ -15,6 +15,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.hafiztraveltours.app.R;
 import com.hafiztraveltours.app.models.BookingRequest;
+import com.hafiztraveltours.app.models.CreateBookingRequest;
+import com.hafiztraveltours.app.network.ApiClient;
+import com.hafiztraveltours.app.network.ApiResponse;
+import com.hafiztraveltours.app.models.BookingDetailDto;
 import com.hafiztraveltours.app.utils.LocaleHelper;
 
 public class PaymentSelectionActivity extends AppCompatActivity {
@@ -74,16 +78,69 @@ public class PaymentSelectionActivity extends AppCompatActivity {
         btnConfirmAndPay.setEnabled(false);
         if (progressBar != null) progressBar.setVisibility(View.VISIBLE);
 
-        // Simulated submission guard until backend endpoint POST /api/v1/bookings is connected
-        btnConfirmAndPay.postDelayed(() -> {
-            if (isFinishing() || isDestroyed()) return;
-            isSubmitting = false;
-            btnConfirmAndPay.setEnabled(true);
-            if (progressBar != null) progressBar.setVisibility(View.GONE);
+        CreateBookingRequest apiRequest = buildApiRequest();
 
-            Intent intent = new Intent(this, BookingSuccessActivity.class);
-            intent.putExtra(BookingSuccessActivity.EXTRA_BOOKING_REQUEST, bookingRequest);
-            startActivity(intent);
-        }, 1200);
+        ApiClient.getApiService().createBooking(apiRequest).enqueue(new retrofit2.Callback<ApiResponse<BookingDetailDto>>() {
+            @Override
+            public void onResponse(retrofit2.Call<ApiResponse<BookingDetailDto>> call,
+                                   retrofit2.Response<ApiResponse<BookingDetailDto>> response) {
+                if (isFinishing() || isDestroyed()) return;
+                isSubmitting = false;
+                btnConfirmAndPay.setEnabled(true);
+                if (progressBar != null) progressBar.setVisibility(View.GONE);
+
+                BookingDetailDto created = (response.isSuccessful() && response.body() != null
+                        && response.body().isSuccess()) ? response.body().data : null;
+                if (created == null) {
+                    Toast.makeText(PaymentSelectionActivity.this,
+                            getString(R.string.booking_failed), Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                Intent intent = new Intent(PaymentSelectionActivity.this, BookingSuccessActivity.class);
+                intent.putExtra(BookingSuccessActivity.EXTRA_BOOKING_REQUEST, bookingRequest);
+                intent.putExtra(BookingSuccessActivity.EXTRA_BOOKING_NO, created.bookingNo);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<ApiResponse<BookingDetailDto>> call, Throwable t) {
+                if (isFinishing() || isDestroyed()) return;
+                isSubmitting = false;
+                btnConfirmAndPay.setEnabled(true);
+                if (progressBar != null) progressBar.setVisibility(View.GONE);
+                Toast.makeText(PaymentSelectionActivity.this,
+                        getString(R.string.booking_failed), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private CreateBookingRequest buildApiRequest() {
+        CreateBookingRequest apiRequest = new CreateBookingRequest();
+        apiRequest.packageId = bookingRequest.packageId;
+        apiRequest.roomLabel = bookingRequest.roomLabel;
+        apiRequest.adultCount = bookingRequest.adultPaxCount;
+        apiRequest.childCount = 0;
+        apiRequest.unitPrice = bookingRequest.unitPriceAmount;
+        apiRequest.discountAmount = bookingRequest.discountAmount;
+        apiRequest.promoCode = bookingRequest.promoCode;
+        apiRequest.paymentType = radioGroupPaymentType.getCheckedRadioButtonId() == R.id.radioDepositPayment
+                ? "deposit" : "full";
+        int methodId = radioGroupPaymentMethod.getCheckedRadioButtonId();
+        if (methodId == R.id.radioCardPayment) {
+            apiRequest.paymentMethod = "card";
+        } else if (methodId == R.id.radioBankTransfer) {
+            apiRequest.paymentMethod = "bank_transfer";
+        } else {
+            apiRequest.paymentMethod = "fpx";
+        }
+        if (bookingRequest.passengers != null) {
+            for (int i = 0; i < bookingRequest.passengers.size(); i++) {
+                BookingRequest.Passenger p = bookingRequest.passengers.get(i);
+                apiRequest.travellers.add(new CreateBookingRequest.TravellerRequest(
+                        p.fullName, p.icPassportNumber, p.phoneNumber, p.email, p.isLead || i == 0));
+            }
+        }
+        return apiRequest;
     }
 }

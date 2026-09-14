@@ -572,11 +572,10 @@ public class SignUpActivity extends AppCompatActivity {
         View itemThailand = sheetView.findViewById(R.id.itemThailand);
         View itemVietnam = sheetView.findViewById(R.id.itemVietnam);
         View itemPhilippines = sheetView.findViewById(R.id.itemPhilippines);
-        View itemChina = sheetView.findViewById(R.id.itemChina);
-        View itemIndia = sheetView.findViewById(R.id.itemIndia);
-        View itemUk = sheetView.findViewById(R.id.itemUk);
-        View itemUsa = sheetView.findViewById(R.id.itemUsa);
-        View itemAustralia = sheetView.findViewById(R.id.itemAustralia);
+        View itemLaos = sheetView.findViewById(R.id.itemLaos);
+        View itemMyanmar = sheetView.findViewById(R.id.itemMyanmar);
+        View itemCambodia = sheetView.findViewById(R.id.itemCambodia);
+        View itemTimorLeste = sheetView.findViewById(R.id.itemTimorLeste);
 
         if (itemMalaysia != null) {
             itemMalaysia.setOnClickListener(v -> {
@@ -634,42 +633,34 @@ public class SignUpActivity extends AppCompatActivity {
                 dialog.dismiss();
             });
         }
-        if (itemChina != null) {
-            itemChina.setOnClickListener(v -> {
-                selectedCountryCode = "+86";
-                selectedCountryFlag = "\uD83C\uDde8\uD83C\uDdf3";
+        if (itemLaos != null) {
+            itemLaos.setOnClickListener(v -> {
+                selectedCountryCode = "+856";
+                selectedCountryFlag = "\uD83C\uDDF1\uD83C\uDDE6";
                 updateCountryUI();
                 dialog.dismiss();
             });
         }
-        if (itemIndia != null) {
-            itemIndia.setOnClickListener(v -> {
-                selectedCountryCode = "+91";
-                selectedCountryFlag = "\uD83C\uDDEE\uD83C\uDDF3";
+        if (itemMyanmar != null) {
+            itemMyanmar.setOnClickListener(v -> {
+                selectedCountryCode = "+95";
+                selectedCountryFlag = "\uD83C\uDDF2\uD83C\uDDF2";
                 updateCountryUI();
                 dialog.dismiss();
             });
         }
-        if (itemUk != null) {
-            itemUk.setOnClickListener(v -> {
-                selectedCountryCode = "+44";
-                selectedCountryFlag = "\uD83C\uDDEC\uD83C\uDde7";
+        if (itemCambodia != null) {
+            itemCambodia.setOnClickListener(v -> {
+                selectedCountryCode = "+855";
+                selectedCountryFlag = "\uD83C\uDDF0\uD83C\uDDED";
                 updateCountryUI();
                 dialog.dismiss();
             });
         }
-        if (itemUsa != null) {
-            itemUsa.setOnClickListener(v -> {
-                selectedCountryCode = "+1";
-                selectedCountryFlag = "\uD83C\uDDFA\uD83C\uDDF8";
-                updateCountryUI();
-                dialog.dismiss();
-            });
-        }
-        if (itemAustralia != null) {
-            itemAustralia.setOnClickListener(v -> {
-                selectedCountryCode = "+61";
-                selectedCountryFlag = "\uD83C\uDDE6\uD83C\uDDFA";
+        if (itemTimorLeste != null) {
+            itemTimorLeste.setOnClickListener(v -> {
+                selectedCountryCode = "+670";
+                selectedCountryFlag = "\uD83C\uDDF9\uD83C\uDDF1";
                 updateCountryUI();
                 dialog.dismiss();
             });
@@ -702,29 +693,17 @@ public class SignUpActivity extends AppCompatActivity {
 
         View[] items = {
                 sheetView.findViewById(R.id.itemLangEnglish),
-                sheetView.findViewById(R.id.itemLangMalay),
-                sheetView.findViewById(R.id.itemLangArabic),
-                sheetView.findViewById(R.id.itemLangKorean),
-                sheetView.findViewById(R.id.itemLangJapanese),
-                sheetView.findViewById(R.id.itemLangChinese)
+                sheetView.findViewById(R.id.itemLangMalay)
         };
 
         String[] codes = {
                 LocaleHelper.LANGUAGE_ENGLISH,
-                LocaleHelper.LANGUAGE_MALAY,
-                LocaleHelper.LANGUAGE_ARABIC,
-                LocaleHelper.LANGUAGE_KOREAN,
-                LocaleHelper.LANGUAGE_JAPANESE,
-                LocaleHelper.LANGUAGE_CHINESE
+                LocaleHelper.LANGUAGE_MALAY
         };
 
         int[] radioIds = {
                 R.id.icRadioEnglish,
-                R.id.icRadioMalay,
-                R.id.icRadioArabic,
-                R.id.icRadioKorean,
-                R.id.icRadioJapanese,
-                R.id.icRadioChinese
+                R.id.icRadioMalay
         };
 
         for (int i = 0; i < items.length; i++) {

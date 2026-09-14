@@ -25,7 +25,7 @@ hafiz-travel-mobileapp/
 │       │   ├── services/                # Background Services & Broadcast Receivers (AzanService, PrayerTimeScheduler, etc.)
 │       │   ├── utils/                   # Shared Utilities (SessionManager, FavoritesManager, LocaleHelper, BottomNavHelper)
 │       │   └── views/                   # Custom Views & Dialogs (PrayerArcView, PackageFilterBottomSheet, RemoveFavoriteDialog)
-│       └── res/                         # Layouts, Drawables, Values & Localized Strings (ms, en, ar, ja, ko, zh)
+│       └── res/                         # Layouts, Drawables, Values & Localized Strings (en, ms)
 ```
 
 ### Communication with Laravel Backend

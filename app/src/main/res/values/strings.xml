@@ -772,5 +772,57 @@
     <string name="btn_ask_questions">Ask</string>
     <string name="selected_room_label">Selected Room</string>
     <string name="booking_flow_notice">Selected option: %1$s (%2$s). Proceed to enter passenger details.</string>
+    <string name="booking_no_format">Booking No.: %1$s</string>
+    <string name="booking_failed">Failed to submit booking. Please check your connection and try again.</string>
+    <string name="my_bookings_title">My Bookings</string>
+    <string name="back">Back</string>
+    <string name="loyalty_points">Loyalty Points</string>
+    <string name="loyalty_tier_progress">RM%1$s more to %2$s</string>
+    <string name="loyalty_top_tier">Highest tier achieved</string>
+    <string name="stat_bookings">Bookings</string>
+    <string name="stat_total_spent">Total Spent</string>
+    <string name="stat_outstanding">Outstanding</string>
+    <string name="member_since_format">Member since %1$s</string>
+    <string name="customer_no_format">Member ID: %1$s</string>
+    <string name="login_cta">Log In / Sign Up</string>
+    <string name="guest_hero_subtitle">Log in to view your bookings &amp; rewards</string>
+    <string name="profile_language">Language</string>
+    <string name="upcoming_trip">Upcoming Trip</string>
+    <string name="profile_theme_current">Light</string>
+    <string name="logout_confirm_message">Are you sure you want to log out?</string>
+    <string name="profile_saving">Saving…</string>
+    <string name="profile_update_failed">Failed to update profile. Please try again.</string>
+
+    <!-- Profile & Document Vault Strings -->
+    <string name="profile_field_ic_no">IC / NRIC Number</string>
+    <string name="profile_field_passport_no">Passport Number</string>
+    <string name="profile_field_passport_expiry">Passport Expiry Date (YYYY-MM-DD)</string>
+    <string name="profile_field_emergency_name">Emergency Contact Name</string>
+    <string name="profile_field_emergency_phone">Emergency Contact Phone</string>
+    <string name="profile_field_mahram_name">Mahram Name (If applicable)</string>
+    <string name="profile_travel_documents">Travel Documents Vault</string>
+    <string name="doc_passport_copy">Passport Copy (Main Page)</string>
+    <string name="doc_vaccine_cert">Meningitis Vaccine Certificate</string>
+    <string name="doc_marriage_cert">Marriage / Mahram Certificate</string>
+    <string name="doc_status_verified">Verified</string>
+    <string name="doc_status_pending">Pending Review</string>
+    <string name="doc_status_not_uploaded">Not Uploaded</string>
+    <string name="doc_upload_btn">Upload / View</string>
+    <string name="doc_vault_info">Manage your official passport, vaccine certificate, and travel clearance documents.</string>
+
+    <string name="profile_section_personal">Personal Details</string>
+    <string name="profile_section_travel_identity">Passport &amp; Travel Identity</string>
+    <string name="profile_section_emergency">Emergency &amp; Pilgrimage Support</string>
+    <string name="doc_subtitle_passport">Required for Flight &amp; Saudi Visa</string>
+    <string name="doc_subtitle_vaccine">Required for Ministry of Hajj Compliance</string>
+    <string name="doc_subtitle_marriage">Required for Mahram Clearance</string>
+    <string name="doc_action_upload">Upload Document</string>
+    <string name="doc_action_view">View Document</string>
+    <string name="doc_action_replace">Replace Document</string>
+    <string name="doc_trip_requirements">Trip Document Requirements</string>
+    <string name="doc_auto_reused_tag">Auto-Reused from Profile</string>
+    <string name="doc_trip_info">Documents automatically reused from your profile alongside required trip-specific clearance.</string>
+    <string name="doc_status_rejected">Rejected</string>
+    <string name="doc_rejection_reason_prefix">Reason: %1$s</string>
 
 </resources>
