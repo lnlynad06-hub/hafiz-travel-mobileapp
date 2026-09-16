@@ -15,13 +15,18 @@
         android:orientation="horizontal"
         android:paddingBottom="12dp">
 
-        <ImageView
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+        <FrameLayout
+            android:layout_width="38dp"
+            android:layout_height="38dp"
             android:background="@drawable/circle_bg_light"
-            android:padding="8dp"
-            android:src="@drawable/ic_profile"
-            app:tint="@color/pink_dark" />
+            android:padding="8dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_profile"
+                app:tint="@color/pink_dark" />
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -33,8 +38,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-medium"
-                android:text="@string/profile_edit"
+                android:text="@string/edit_profile_title"
                 android:textColor="@color/text_dark"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -43,9 +47,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="Update your official pilgrim &amp; travel details"
+                android:text="@string/edit_profile_subtitle"
                 android:textColor="@color/text_gray"
                 android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="@string/legend_required"
+                android:textColor="#DC2626"
+                android:textSize="11sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <ImageView
@@ -62,314 +75,673 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginBottom="14dp"
-        android:background="@color/card_border" />
+        android:layout_marginBottom="12dp"
+        android:background="#E5E9EC" />
 
     <!-- Form Content Scroll -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:maxHeight="460dp"
-        android:overScrollMode="never">
+        android:maxHeight="480dp"
+        android:overScrollMode="never"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Section 1: Personal Details -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="10dp"
-                android:text="@string/profile_section_personal"
-                android:textColor="@color/brand_magenta"
-                android:textSize="13sp"
-                android:textStyle="bold" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/nameLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            <!-- ==================== 1. PERSONAL INFORMATION ==================== -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/profile_field_full_name"
-                app:boxCornerRadiusBottomEnd="14dp"
-                app:boxCornerRadiusBottomStart="14dp"
-                app:boxCornerRadiusTopEnd="14dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="10dp">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_profile"
+                    app:tint="@color/pink_dark" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/section_personal_info"
+                    android:textColor="@color/pink_dark"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Full Name -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/nameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:boxBackgroundMode="outline"
                 app:boxCornerRadiusTopStart="14dp"
-                app:boxStrokeColor="@color/pink_primary"
-                app:hintTextColor="@color/pink_primary">
+                app:boxCornerRadiusTopEnd="14dp"
+                app:boxCornerRadiusBottomStart="14dp"
+                app:boxCornerRadiusBottomEnd="14dp"
+                app:boxStrokeColor="@color/box_stroke_selector"
+                app:boxBackgroundColor="@color/box_bg_selector"
+                app:boxStrokeWidth="1dp"
+                app:boxStrokeWidthFocused="1.5dp"
+                app:boxStrokeErrorColor="@color/error_red"
+                app:hintEnabled="false"
+                app:errorEnabled="true"
+                app:errorIconDrawable="@null"
+                app:startIconDrawable="@drawable/ic_profile"
+                app:startIconTint="@color/pink_dark">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/nameInput"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:paddingVertical="0dp"
+                    android:paddingStart="4dp"
+                    android:paddingEnd="12dp"
+                    android:hint="@string/hint_full_name"
                     android:inputType="textPersonName"
-                    android:textColor="@color/text_dark"
+                    android:textColor="@color/input_text"
+                    android:textColorHint="@color/input_hint"
                     android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Nickname -->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/icLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:id="@+id/nicknameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:hint="@string/profile_field_ic_no"
-                app:boxCornerRadiusBottomEnd="14dp"
-                app:boxCornerRadiusBottomStart="14dp"
-                app:boxCornerRadiusTopEnd="14dp"
+                android:layout_marginTop="2dp"
+                app:boxBackgroundMode="outline"
                 app:boxCornerRadiusTopStart="14dp"
-                app:boxStrokeColor="@color/pink_primary"
-                app:hintTextColor="@color/pink_primary">
+                app:boxCornerRadiusTopEnd="14dp"
+                app:boxCornerRadiusBottomStart="14dp"
+                app:boxCornerRadiusBottomEnd="14dp"
+                app:boxStrokeColor="@color/box_stroke_selector"
+                app:boxBackgroundColor="@color/box_bg_selector"
+                app:boxStrokeWidth="1dp"
+                app:boxStrokeWidthFocused="1.5dp"
+                app:boxStrokeErrorColor="@color/error_red"
+                app:hintEnabled="false"
+                app:errorEnabled="true"
+                app:errorIconDrawable="@null"
+                app:startIconDrawable="@drawable/ic_profile"
+                app:startIconTint="@color/pink_dark">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/nicknameInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:paddingVertical="0dp"
+                    android:paddingStart="4dp"
+                    android:paddingEnd="12dp"
+                    android:hint="@string/hint_nickname"
+                    android:inputType="textPersonName"
+                    android:maxLength="50"
+                    android:textColor="@color/input_text"
+                    android:textColorHint="@color/input_hint"
+                    android:textSize="14sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- IC / Identity Number -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/icLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                app:boxBackgroundMode="outline"
+                app:boxCornerRadiusTopStart="14dp"
+                app:boxCornerRadiusTopEnd="14dp"
+                app:boxCornerRadiusBottomStart="14dp"
+                app:boxCornerRadiusBottomEnd="14dp"
+                app:boxStrokeColor="@color/box_stroke_selector"
+                app:boxBackgroundColor="@color/box_bg_selector"
+                app:boxStrokeWidth="1dp"
+                app:boxStrokeWidthFocused="1.5dp"
+                app:boxStrokeErrorColor="@color/error_red"
+                app:hintEnabled="false"
+                app:errorEnabled="true"
+                app:errorIconDrawable="@null"
+                app:startIconDrawable="@drawable/ic_card"
+                app:startIconTint="@color/pink_dark">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/icInput"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:paddingVertical="0dp"
+                    android:paddingStart="4dp"
+                    android:paddingEnd="12dp"
+                    android:hint="@string/profile_field_ic_no"
                     android:inputType="number"
-                    android:textColor="@color/text_dark"
+                    android:textColor="@color/input_text"
+                    android:textColorHint="@color/input_hint"
                     android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Phone Number -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/phoneLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:hint="@string/profile_field_phone"
-                app:boxCornerRadiusBottomEnd="14dp"
-                app:boxCornerRadiusBottomStart="14dp"
-                app:boxCornerRadiusTopEnd="14dp"
+                android:layout_marginTop="2dp"
+                app:boxBackgroundMode="outline"
                 app:boxCornerRadiusTopStart="14dp"
-                app:boxStrokeColor="@color/pink_primary"
-                app:hintTextColor="@color/pink_primary">
+                app:boxCornerRadiusTopEnd="14dp"
+                app:boxCornerRadiusBottomStart="14dp"
+                app:boxCornerRadiusBottomEnd="14dp"
+                app:boxStrokeColor="@color/box_stroke_selector"
+                app:boxBackgroundColor="@color/box_bg_selector"
+                app:boxStrokeWidth="1dp"
+                app:boxStrokeWidthFocused="1.5dp"
+                app:boxStrokeErrorColor="@color/error_red"
+                app:hintEnabled="false"
+                app:errorEnabled="true"
+                app:errorIconDrawable="@null"
+                app:startIconDrawable="@drawable/ic_phone"
+                app:startIconTint="@color/pink_dark">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/phoneInput"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:paddingVertical="0dp"
+                    android:paddingStart="4dp"
+                    android:paddingEnd="12dp"
+                    android:hint="@string/hint_phone"
                     android:inputType="phone"
-                    android:textColor="@color/text_dark"
+                    android:textColor="@color/input_text"
+                    android:textColorHint="@color/input_hint"
                     android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Email Address (Read-only) -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/emailLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:hint="@string/profile_field_email"
-                app:boxCornerRadiusBottomEnd="14dp"
-                app:boxCornerRadiusBottomStart="14dp"
-                app:boxCornerRadiusTopEnd="14dp"
+                android:layout_marginTop="2dp"
+                app:boxBackgroundMode="outline"
                 app:boxCornerRadiusTopStart="14dp"
-                app:boxStrokeColor="@color/pink_primary"
-                app:hintTextColor="@color/pink_primary">
+                app:boxCornerRadiusTopEnd="14dp"
+                app:boxCornerRadiusBottomStart="14dp"
+                app:boxCornerRadiusBottomEnd="14dp"
+                app:boxStrokeColor="#E5E9EC"
+                app:boxBackgroundColor="#F8FAFC"
+                app:boxStrokeWidth="1dp"
+                app:hintEnabled="false"
+                app:errorEnabled="false"
+                app:helperText="@string/email_readonly_helper"
+                app:helperTextTextColor="@color/text_muted"
+                app:startIconDrawable="@drawable/ic_email"
+                app:startIconTint="@color/text_gray">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/emailInput"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:enabled="false"
-                    android:inputType="textEmailAddress"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:paddingVertical="0dp"
+                    android:paddingStart="4dp"
+                    android:paddingEnd="12dp"
+                    android:focusable="false"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:inputType="none"
+                    android:hint="@string/hint_email"
                     android:textColor="@color/text_gray"
+                    android:textColorHint="@color/input_hint"
                     android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
 
-            <!-- Section 2: Passport & Travel Identity -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="10dp"
-                android:text="@string/profile_section_travel_identity"
-                android:textColor="@color/brand_magenta"
-                android:textSize="13sp"
-                android:textStyle="bold" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/passportLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            <!-- ==================== 2. PASSPORT INFORMATION ==================== -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/profile_field_passport_no"
-                app:boxCornerRadiusBottomEnd="14dp"
-                app:boxCornerRadiusBottomStart="14dp"
-                app:boxCornerRadiusTopEnd="14dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="10dp">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_doc_passport"
+                    app:tint="@color/pink_dark" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/section_passport_info"
+                    android:textColor="@color/pink_dark"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Passport Number -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/passportLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:boxBackgroundMode="outline"
                 app:boxCornerRadiusTopStart="14dp"
-                app:boxStrokeColor="@color/pink_primary"
-                app:hintTextColor="@color/pink_primary">
+                app:boxCornerRadiusTopEnd="14dp"
+                app:boxCornerRadiusBottomStart="14dp"
+                app:boxCornerRadiusBottomEnd="14dp"
+                app:boxStrokeColor="@color/box_stroke_selector"
+                app:boxBackgroundColor="@color/box_bg_selector"
+                app:boxStrokeWidth="1dp"
+                app:boxStrokeWidthFocused="1.5dp"
+                app:boxStrokeErrorColor="@color/error_red"
+                app:hintEnabled="false"
+                app:errorEnabled="true"
+                app:errorIconDrawable="@null"
+                app:startIconDrawable="@drawable/ic_doc_passport"
+                app:startIconTint="@color/pink_dark">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/passportInput"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:paddingVertical="0dp"
+                    android:paddingStart="4dp"
+                    android:paddingEnd="12dp"
+                    android:hint="@string/profile_field_passport_no"
                     android:inputType="textCapCharacters"
-                    android:textColor="@color/text_dark"
+                    android:textColor="@color/input_text"
+                    android:textColorHint="@color/input_hint"
                     android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Passport Expiry Date (Date Picker) -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/expiryLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:hint="@string/profile_field_passport_expiry"
-                app:boxCornerRadiusBottomEnd="14dp"
-                app:boxCornerRadiusBottomStart="14dp"
-                app:boxCornerRadiusTopEnd="14dp"
+                android:layout_marginTop="2dp"
+                app:boxBackgroundMode="outline"
                 app:boxCornerRadiusTopStart="14dp"
-                app:boxStrokeColor="@color/pink_primary"
-                app:hintTextColor="@color/pink_primary">
+                app:boxCornerRadiusTopEnd="14dp"
+                app:boxCornerRadiusBottomStart="14dp"
+                app:boxCornerRadiusBottomEnd="14dp"
+                app:boxStrokeColor="@color/box_stroke_selector"
+                app:boxBackgroundColor="@color/box_bg_selector"
+                app:boxStrokeWidth="1dp"
+                app:boxStrokeWidthFocused="1.5dp"
+                app:boxStrokeErrorColor="@color/error_red"
+                app:hintEnabled="false"
+                app:errorEnabled="true"
+                app:errorIconDrawable="@null"
+                app:startIconDrawable="@drawable/ic_calendar"
+                app:startIconTint="@color/pink_dark">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/expiryInput"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="date"
-                    android:textColor="@color/text_dark"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:paddingVertical="0dp"
+                    android:paddingStart="4dp"
+                    android:paddingEnd="12dp"
+                    android:focusable="false"
+                    android:clickable="true"
+                    android:cursorVisible="false"
+                    android:inputType="none"
+                    android:hint="@string/profile_field_passport_expiry"
+                    android:textColor="@color/input_text"
+                    android:textColorHint="@color/input_hint"
                     android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
-
-            <!-- Section 3: Emergency & Mahram -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="10dp"
-                android:text="@string/profile_section_emergency"
-                android:textColor="@color/brand_magenta"
-                android:textSize="13sp"
-                android:textStyle="bold" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/emergNameLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            <!-- Passport Expiry Warning Banner -->
+            <LinearLayout
+                android:id="@+id/passportWarningContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/profile_field_emergency_name"
-                app:boxCornerRadiusBottomEnd="14dp"
-                app:boxCornerRadiusBottomStart="14dp"
-                app:boxCornerRadiusTopEnd="14dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/bg_warning_light"
+                android:orientation="horizontal"
+                android:padding="12dp"
+                android:gravity="center_vertical"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_warning"
+                    app:tint="#D97706" />
+
+                <TextView
+                    android:id="@+id/passportWarningText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="10dp"
+                    android:textColor="#B45309"
+                    android:textSize="12sp"
+                    android:lineSpacingExtra="2dp" />
+            </LinearLayout>
+
+
+            <!-- ==================== 3. EMERGENCY CONTACT ==================== -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="10dp">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_users"
+                    app:tint="@color/pink_dark" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/section_emergency_contact"
+                    android:textColor="@color/pink_dark"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Emergency Contact Name -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/emergNameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:boxBackgroundMode="outline"
                 app:boxCornerRadiusTopStart="14dp"
-                app:boxStrokeColor="@color/pink_primary"
-                app:hintTextColor="@color/pink_primary">
+                app:boxCornerRadiusTopEnd="14dp"
+                app:boxCornerRadiusBottomStart="14dp"
+                app:boxCornerRadiusBottomEnd="14dp"
+                app:boxStrokeColor="@color/box_stroke_selector"
+                app:boxBackgroundColor="@color/box_bg_selector"
+                app:boxStrokeWidth="1dp"
+                app:boxStrokeWidthFocused="1.5dp"
+                app:boxStrokeErrorColor="@color/error_red"
+                app:hintEnabled="false"
+                app:errorEnabled="true"
+                app:errorIconDrawable="@null"
+                app:startIconDrawable="@drawable/ic_profile"
+                app:startIconTint="@color/pink_dark">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/emergNameInput"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:paddingVertical="0dp"
+                    android:paddingStart="4dp"
+                    android:paddingEnd="12dp"
+                    android:hint="@string/profile_field_emergency_name"
                     android:inputType="textPersonName"
-                    android:textColor="@color/text_dark"
+                    android:textColor="@color/input_text"
+                    android:textColorHint="@color/input_hint"
                     android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Emergency Contact Phone -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/emergPhoneLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:hint="@string/profile_field_emergency_phone"
-                app:boxCornerRadiusBottomEnd="14dp"
-                app:boxCornerRadiusBottomStart="14dp"
-                app:boxCornerRadiusTopEnd="14dp"
+                android:layout_marginTop="2dp"
+                app:boxBackgroundMode="outline"
                 app:boxCornerRadiusTopStart="14dp"
-                app:boxStrokeColor="@color/pink_primary"
-                app:hintTextColor="@color/pink_primary">
+                app:boxCornerRadiusTopEnd="14dp"
+                app:boxCornerRadiusBottomStart="14dp"
+                app:boxCornerRadiusBottomEnd="14dp"
+                app:boxStrokeColor="@color/box_stroke_selector"
+                app:boxBackgroundColor="@color/box_bg_selector"
+                app:boxStrokeWidth="1dp"
+                app:boxStrokeWidthFocused="1.5dp"
+                app:boxStrokeErrorColor="@color/error_red"
+                app:hintEnabled="false"
+                app:errorEnabled="true"
+                app:errorIconDrawable="@null"
+                app:startIconDrawable="@drawable/ic_phone"
+                app:startIconTint="@color/pink_dark">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/emergPhoneInput"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:paddingVertical="0dp"
+                    android:paddingStart="4dp"
+                    android:paddingEnd="12dp"
+                    android:hint="@string/profile_field_emergency_phone"
                     android:inputType="phone"
-                    android:textColor="@color/text_dark"
+                    android:textColor="@color/input_text"
+                    android:textColorHint="@color/input_hint"
                     android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/mahramLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
+            <!-- ==================== 4. MAHRAM INFORMATION (OPTIONAL) ==================== -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:hint="@string/profile_field_mahram_name"
-                app:boxCornerRadiusBottomEnd="14dp"
-                app:boxCornerRadiusBottomStart="14dp"
-                app:boxCornerRadiusTopEnd="14dp"
-                app:boxCornerRadiusTopStart="14dp"
-                app:boxStrokeColor="@color/pink_primary"
-                app:hintTextColor="@color/pink_primary">
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="10dp">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/mahramInput"
-                    android:layout_width="match_parent"
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_users"
+                    app:tint="@color/pink_dark" />
+
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/section_mahram_info"
+                    android:textColor="@color/pink_dark"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:text="(Optional)"
+                    android:textColor="@color/text_gray"
+                    android:textSize="11.5sp" />
+            </LinearLayout>
+
+            <!-- Mahram Applicable Toggle (Yes / No) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingVertical="4dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/label_mahram_applicable"
                     android:textColor="@color/text_dark"
                     android:textSize="14sp" />
-            </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
-                android:id="@+id/changePasswordLink"
-                android:layout_width="wrap_content"
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/mahramToggleGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:singleSelection="true"
+                    app:selectionRequired="true">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnMahramNo"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="60dp"
+                        android:text="@string/no"
+                        android:textSize="12sp"
+                        app:strokeColor="@color/pink_dark" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnMahramYes"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="60dp"
+                        android:text="@string/yes"
+                        android:textSize="12sp"
+                        app:strokeColor="@color/pink_dark" />
+                </com.google.android.material.button.MaterialButtonToggleGroup>
+            </LinearLayout>
+
+            <!-- Conditional Mahram Fields -->
+            <LinearLayout
+                android:id="@+id/mahramFieldsContainer"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:paddingVertical="8dp"
-                android:text="@string/profile_change_password"
-                android:textColor="@color/pink_dark"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+                android:orientation="vertical"
+                android:layout_marginTop="6dp"
+                android:visibility="gone">
+
+                <!-- Mahram Name -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/mahramLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusTopStart="14dp"
+                    app:boxCornerRadiusTopEnd="14dp"
+                    app:boxCornerRadiusBottomStart="14dp"
+                    app:boxCornerRadiusBottomEnd="14dp"
+                    app:boxStrokeColor="@color/box_stroke_selector"
+                    app:boxBackgroundColor="@color/box_bg_selector"
+                    app:boxStrokeWidth="1dp"
+                    app:boxStrokeWidthFocused="1.5dp"
+                    app:boxStrokeErrorColor="@color/error_red"
+                    app:hintEnabled="false"
+                    app:errorEnabled="true"
+                    app:errorIconDrawable="@null"
+                    app:startIconDrawable="@drawable/ic_profile"
+                    app:startIconTint="@color/pink_dark">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/mahramInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:gravity="center_vertical"
+                        android:paddingVertical="0dp"
+                        android:paddingStart="4dp"
+                        android:paddingEnd="12dp"
+                        android:hint="@string/profile_field_mahram_name"
+                        android:inputType="textPersonName"
+                        android:textColor="@color/input_text"
+                        android:textColorHint="@color/input_hint"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Mahram Relationship Dropdown -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/mahramRelLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusTopStart="14dp"
+                    app:boxCornerRadiusTopEnd="14dp"
+                    app:boxCornerRadiusBottomStart="14dp"
+                    app:boxCornerRadiusBottomEnd="14dp"
+                    app:boxStrokeColor="@color/box_stroke_selector"
+                    app:boxBackgroundColor="@color/box_bg_selector"
+                    app:boxStrokeWidth="1dp"
+                    app:boxStrokeWidthFocused="1.5dp"
+                    app:boxStrokeErrorColor="@color/error_red"
+                    app:hintEnabled="false"
+                    app:errorEnabled="true"
+                    app:errorIconDrawable="@null"
+                    app:startIconDrawable="@drawable/ic_users"
+                    app:startIconTint="@color/pink_dark">
+
+                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                        android:id="@+id/mahramRelInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:gravity="center_vertical"
+                        android:paddingVertical="0dp"
+                        android:paddingStart="4dp"
+                        android:paddingEnd="12dp"
+                        android:hint="@string/label_relationship"
+                        android:inputType="none"
+                        android:textColor="@color/input_text"
+                        android:textColorHint="@color/input_hint"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Dialog Action Buttons -->
+    <!-- Save & Cancel Actions -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:gravity="end"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/btnCancelEdit"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_button_white_square"
+            android:layout_height="48dp"
+            android:gravity="center"
+            android:background="@drawable/bg_google_button"
             android:clickable="true"
             android:focusable="true"
             android:paddingHorizontal="20dp"
-            android:paddingVertical="10dp"
             android:text="@string/cancel"
             android:textColor="@color/text_gray"
             android:textSize="14sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/btnSaveEdit"
-            android:layout_width="wrap_content"
+        <FrameLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:background="@drawable/bg_button_pink"
-            android:clickable="true"
-            android:focusable="true"
-            android:paddingHorizontal="24dp"
-            android:paddingVertical="10dp"
-            android:text="@string/profile_save"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            android:textStyle="bold" />
+            android:layout_weight="1"
+            android:layout_marginStart="12dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSaveEdit"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/bg_gradient_primary_button"
+                app:backgroundTint="@null"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="@string/profile_save"
+                android:textColor="@color/white"
+                android:textSize="14.5sp"
+                android:textStyle="bold"
+                android:textAllCaps="false" />
+        </FrameLayout>
     </LinearLayout>
 
 </LinearLayout>

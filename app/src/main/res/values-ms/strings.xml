@@ -30,7 +30,8 @@
     <string name="login_failed_default">Log masuk gagal. Sila periksa maklumat anda.</string>
     <string name="signup_title">Cipta Akaun</string>
     <string name="signup_subtitle">Daftar untuk mula rancang percutian anda.</string>
-    <string name="hint_full_name">Nama Penuh</string>
+    <string name="hint_full_name">Nama Penuh *</string>
+    <string name="hint_nickname">Nama Panggilan *</string>
     <string name="hint_phone">Nombor Telefon</string>
     <string name="hint_confirm_password">Sahkan Kata Laluan</string>
     <string name="signup_button">Daftar</string>
@@ -41,26 +42,34 @@
     <string name="signup_have_account">Sudah ada akaun? Log masuk</string>
     <string name="signup_or_with">Atau Daftar Dengan</string>
     <string name="signup_guest">Daftar sebagai Tetamu</string>
+    <string name="password_strength_too_short">Terlalu Pendek</string>
     <string name="password_strength_weak">Lemah</string>
     <string name="password_strength_medium">Sederhana</string>
     <string name="password_strength_strong">Kuat</string>
+    <string name="passwords_match">Kata laluan sepadan</string>
+    <string name="passwords_mismatch">Kata laluan tidak sepadan</string>
     <string name="btn_continue_google">Teruskan dengan Google</string>
     <string name="social_signup_google">Daftar dengan Google</string>
     <string name="select_country_code">Pilih Kod Negara</string>
     <string name="region_southeast_asia">ASIA TENGGARA</string>
     <string name="region_international">ANTARABANGSA LAIN</string>
     <string name="err_name_required">Sila masukkan nama penuh</string>
+    <string name="err_nickname_required">Sila masukkan nama panggilan anda.</string>
     <string name="err_email_invalid">Sila masukkan emel yang sah</string>
     <string name="err_phone_invalid">Sila masukkan nombor telefon yang sah</string>
-    <string name="err_password_short">Kata laluan sekurang-kurangnya 6 aksara</string>
+    <string name="err_password_short">Kata laluan sekurang-kurangnya 8 aksara</string>
     <string name="err_password_mismatch">Kata laluan tidak sepadan</string>
     <string name="err_signup_failed">Pendaftaran gagal. Sila cuba lagi.</string>
     <string name="err_signup_email_exists">Emel atau nombor telefon telah didaftarkan</string>
     <string name="err_network">Ralat sambungan. Sila periksa internet anda.</string>
     <string name="signup_success">Pendaftaran berjaya!</string>
-    <string name="password_tip_length">8+ aksara</string>
-    <string name="password_tip_number">0–9</string>
-    <string name="password_tip_symbol">!@#$</string>
+    <string name="password_requirements_header">Syarat kata laluan</string>
+    <string name="req_pass_min_length">Sekurang-kurangnya 8 aksara</string>
+    <string name="req_pass_uppercase">Huruf besar</string>
+    <string name="req_pass_lowercase">Huruf kecil</string>
+    <string name="req_pass_number">Nombor</string>
+    <string name="req_pass_special">Aksara khas</string>
+    <string name="password_status_strong">Kata laluan kukuh</string>
     <string name="guest_greeting">Assalamualaikum</string>
     <string name="user_greeting">Assalamualaikum</string>
     <string name="hero_subtitle_guest">Tetamu Jemaah</string>
@@ -68,10 +77,12 @@
     <string name="hero_headline_guest">Ke mana destinasi\nimpian anda?</string>
     <string name="hero_headline_user">Ke mana destinasi\nimpian anda?</string>
     <string name="nav_home">Utama</string>
+    <string name="nav_booking">Tempahan Saya</string>
     <string name="nav_explore">Teroka</string>
+    <string name="nav_favorite">Kegemaran</string>
+    <string name="nav_profile">Profil</string>
     <string name="nav_umrah">Umrah</string>
     <string name="nav_tour">Tour</string>
-    <string name="nav_favorite">Kegemaran</string>
     <string name="quick_nusuk">Nusuk</string>
     <string name="quick_guideline">Panduan Umrah</string>
     <string name="quick_checklist">Senarai Semak</string>
@@ -556,8 +567,9 @@
     <string name="profile_reset_message">Hantar pautan set semula kata laluan ke emel: %1$s?</string>
     <string name="profile_reset_send">Hantar</string>
     <string name="profile_reset_sent">Pautan tetapan semula kata laluan telah dihantar ke emel anda!</string>
-    <string name="profile_field_full_name">Nama Penuh</string>
-    <string name="profile_field_phone">Nombor Telefon</string>
+    <string name="profile_field_full_name">Nama Penuh <font color="#DC2626">*</font></string>
+    <string name="profile_field_nickname">Nama Panggilan <font color="#DC2626">*</font></string>
+    <string name="profile_field_phone">Nombor Telefon <font color="#DC2626">*</font></string>
     <string name="profile_field_email">E-mel</string>
     <string name="privacy_terms_toast">Hafiz Travel &amp; Tours Sdn Bhd - Privasi &amp; Terma</string>
     <string name="package_fallback_destination">Destinasi Perjalanan</string>
@@ -646,6 +658,37 @@
     <string name="azan_stop">Berhenti</string>
     <string name="azan_channel_name">Notifikasi Azan</string>
     <string name="azan_channel_desc">Notifikasi untuk waktu solat &amp; azan</string>
+    <string name="qibla_title">Arah Kiblat</string>
+    <string name="qibla_subtitle">Cari arah Baitullah Kaabah</string>
+    <string name="qibla_screen_title">Kompas Kiblat</string>
+    <string name="qibla_aligned">✓ Menghadap Kiblat</string>
+    <string name="qibla_degree_format">Kiblat: %1$.0f°</string>
+    <string name="qibla_kaaba_dist">Kaabah: Makkah, Arab Saudi</string>
+    <string name="qibla_no_sensor">Sensor peranti tidak tersedia. Tidak dapat memaparkan pergerakan kompas.</string>
+    <string name="qibla_permission_needed">Kebenaran lokasi diperlukan untuk mengira arah kiblat yang tepat.</string>
+    <string name="qibla_grant_permission">Benarkan Kebenaran Lokasi</string>
+    <string name="qibla_accuracy_title">Ketepatan kompas</string>
+    <string name="qibla_accuracy_notice">Untuk arah yang lebih tepat, pegang telefon anda secara mendatar dan jauhkan daripada magnet, objek logam dan peranti elektronik.</string>
+    <string name="qibla_calibrate_action">Kalibrasi Kompas</string>
+    <string name="qibla_calibrate_dialog_title">Kalibrasi Kompas</string>
+    <string name="qibla_calibrate_dialog_msg">Pegang telefon secara mendatar dan gerakkannya perlahan-lahan mengikut bentuk angka 8 (∞) beberapa kali untuk mengimbaskan semula sensor magnetik.</string>
+    <string name="qibla_calibrate_dialog_ok">Selesai</string>
+    <string name="qibla_bearing_label">Arah Kiblat (Bearing)</string>
+    <string name="qibla_distance_label">Jarak ke Kaabah</string>
+    <string name="qibla_angle_label">Sudut anda ke Kiblat</string>
+    <string name="qibla_angle_left">%1$d° ke kiri</string>
+    <string name="qibla_angle_right">%1$d° ke kanan</string>
+    <string name="qibla_angle_behind">Kiblat di belakang anda (%1$d°)</string>
+    <string name="qibla_angle_behind_left">Kiblat di belakang sebelah kiri (%1$d°)</string>
+    <string name="qibla_angle_behind_right">Kiblat di belakang sebelah kanan (%1$d°)</string>
+    <string name="qibla_angle_aligned">Tepat (0°)</string>
+    <string name="qibla_instruction">Halakan jarum merah ke arah Kiblat</string>
+    <string name="qibla_hold_steady">Pegang stabil 2 saat untuk sahkan Kiblat</string>
+    <string name="qibla_hold_steady_timer">Pegang stabil · %1$.1fs</string>
+    <string name="qibla_confirmed_aligned">✓ Kiblat disahkan</string>
+    <string name="qibla_facing_sub">Telefon anda menghadap Kiblat</string>
+    <string name="qibla_kaaba_location">Kaabah · Makkah, Arab Saudi</string>
+    <string name="qibla_interference">Gangguan kompas dikesan. Sila jauhkan daripada magnet atau objek logam.</string>
     <string name="battery_title">Pastikan Azan Berfungsi</string>
     <string name="battery_message">Untuk pastikan notifikasi &amp; azan berbunyi tepat pada waktunya walaupun app ini ditutup, disyorkan benarkan app ini berjalan tanpa had di latar belakang.\n\nLangkah ini pilihan sahaja, boleh disetkan kemudian melalui Tetapan.</string>
     <string name="battery_now">Setkan Sekarang</string>
@@ -677,21 +720,20 @@
     <string name="profile_update_failed">Gagal mengemaskini profil. Sila cuba lagi.</string>
 
     <!-- Profile & Document Vault Strings -->
-    <string name="profile_field_ic_no">Nombor Kad Pengenalan (IC)</string>
-    <string name="profile_field_passport_no">Nombor Pasport</string>
-    <string name="profile_field_passport_expiry">Tarikh Tamat Pasport (YYYY-MM-DD)</string>
+    <string name="profile_field_ic_no">Nombor Kad Pengenalan (IC) <font color="#DC2626">*</font></string>
+    <string name="profile_field_passport_no">Nombor Pasport <font color="#DC2626">*</font></string>
+    <string name="profile_field_passport_expiry">Tarikh Tamat Pasport (YYYY-MM-DD) <font color="#DC2626">*</font></string>
     <string name="profile_field_emergency_name">Nama Kontak Kecemasan</string>
     <string name="profile_field_emergency_phone">No. Tel Kontak Kecemasan</string>
     <string name="profile_field_mahram_name">Nama Mahram (Jika berkenaan)</string>
-    <string name="profile_travel_documents">Vault Dokumen Perjalanan</string>
-    <string name="doc_passport_copy">Salinan Pasport (Muka Utama)</string>
+    <string name="profile_travel_documents">Dokumen Perjalanan</string>
+    <string name="doc_passport_copy">Salinan Pasport (Muka Utama) <font color="#DC2626">*</font></string>
     <string name="doc_vaccine_cert">Sijil Vaksin Meningitis</string>
     <string name="doc_marriage_cert">Sijil Nikah / Surat Mahram</string>
     <string name="doc_status_verified">Disahkan</string>
     <string name="doc_status_pending">Dalam Semakan</string>
     <string name="doc_status_not_uploaded">Belum Dimuat Naik</string>
     <string name="doc_upload_btn">Muat Naik / Lihat</string>
-    <string name="doc_vault_info">Uruskan dokumen rasmi pasport, sijil vaksinasi dan pelepasan umrah/travel anda.</string>
 
     <string name="profile_section_personal">Maklumat Peribadi</string>
     <string name="profile_section_travel_identity">Pasport &amp; Identiti Perjalanan</string>
@@ -707,4 +749,92 @@
     <string name="doc_trip_info">Dokumen digunakan semula secara automatik dari profil anda bersama pelepasan khas trip.</string>
     <string name="doc_status_rejected">Ditolak</string>
     <string name="doc_rejection_reason_prefix">Sebab: %1$s</string>
+
+    <!-- Redesigned Edit Profile Strings -->
+    <string name="edit_profile_title">Kemaskini Profil</string>
+    <string name="edit_profile_subtitle">Kemaskini maklumat peribadi, pasport, kecemasan &amp; mahram anda</string>
+    <string name="section_personal_info">Maklumat Peribadi</string>
+    <string name="section_passport_info">Maklumat Pasport</string>
+    <string name="section_emergency_contact">Kontak Kecemasan</string>
+    <string name="section_mahram_info">Maklumat Mahram</string>
+    <string name="section_security">Keselamatan</string>
+    <string name="label_mahram_applicable">Berkenaan Mahram?</string>
+    <string name="label_relationship">Hubungan</string>
+    <string name="hint_relationship">Contoh: Suami, Bapa, Abang</string>
+    <string name="change_password_dialog_subtitle">Masukkan kata laluan semasa dan baru anda di bawah</string>
+    <string name="hint_current_password_required">Kata Laluan Semasa <font color="#DC2626">*</font></string>
+    <string name="hint_new_password_required">Kata Laluan Baru <font color="#DC2626">*</font></string>
+    <string name="hint_confirm_new_password_required">Sahkan Kata Laluan Baru <font color="#DC2626">*</font></string>
+    <string name="btn_update_password">Kemaskini Kata Laluan</string>
+    <string name="password_updating">Mengemaskini...</string>
+    <string name="password_updated_success">Kata laluan berjaya dikemaskini!</string>
+    <string name="password_update_failed">Gagal mengemaskini kata laluan. Sila semak kata laluan semasa anda.</string>
+    <string name="yes">Ya</string>
+    <string name="no">Tidak</string>
+    <string name="doc_vault_info">Dokumen perjalanan anda, semuanya di satu tempat.</string>
+    <string name="vault_security_banner_title">Simpanan Dokumen Selamat</string>
+    <string name="vault_security_banner_body">Dokumen anda disimpan secara selamat dan dilindungi.</string>
+    <string name="vault_section_identity">Dokumen Identiti</string>
+    <string name="vault_section_photo">Foto Peribadi</string>
+    <string name="vault_section_travel">Dokumen Khusus Perjalanan</string>
+    <string name="doc_ic_title">MyKad / Kad Pengenalan (IC) <font color="#DC2626">*</font></string>
+    <string name="doc_ic_desc">Kad pengenalan diperlukan untuk pendaftaran agensi &amp; visa</string>
+    <string name="doc_passport_photo_title">Foto Pasport <font color="#DC2626">*</font></string>
+    <string name="doc_passport_photo_desc">Foto pasport berlatar belakang putih (JPG/PNG)</string>
+    <string name="doc_travel_visa_title">Visa Perjalanan</string>
+    <string name="doc_travel_visa_desc">Dokumen visa yang diperlukan untuk destinasi antarabangsa tertentu.</string>
+    <string name="doc_status_under_review">Dalam Semakan</string>
+    <string name="doc_updated_at_format">Dimuat naik: %1$s</string>
+    <string name="doc_expires_at_format">Tamat tempoh: %1$s</string>
+    <string name="legend_required"><font color="#DC2626">*</font> Diperlukan</string>
+
+    <!-- Requirements & Upload Dialog Strings -->
+    <string name="doc_view_requirements">Lihat Syarat</string>
+    <string name="req_subtitle">Sila semak spesifikasi standard sebelum memuat naik</string>
+    <string name="req_passport_title">Syarat Dokumen Pasport</string>
+    <string name="req_passport_1">Salinan jelas muka surat biodata pasport</string>
+    <string name="req_passport_2">Nama penuh &amp; nombor pasport mesti boleh dibaca jelas</string>
+    <string name="req_passport_3">Foto pasport mesti kelihatan jelas</string>
+    <string name="req_passport_4">Dokumen tidak boleh kabur atau terpotong</string>
+    <string name="req_ic_title">Syarat MyKad / IC</string>
+    <string name="req_ic_1">Salinan jelas MyKad (depan dan belakang jika perlu)</string>
+    <string name="req_ic_2">Nama penuh &amp; nombor kad pengenalan mesti boleh dibaca</string>
+    <string name="req_ic_3">Dokumen tidak boleh kabur atau terpotong</string>
+    <string name="req_photo_title">Syarat Foto Pasport</string>
+    <string name="req_photo_1">Foto saiz pasport terkini</string>
+    <string name="req_photo_2">Muka kelihatan jelas dengan latar belakang polos</string>
+    <string name="req_photo_3">Tiada kekaburan melampau, bayang, atau pencahayaan gelap</string>
+    <string name="req_visa_title">Syarat Visa Perjalanan</string>
+    <string name="req_visa_1">Dokumen visa perjalanan yang sah dikeluarkan untuk negara tujuan</string>
+    <string name="req_visa_2">Butiran visa, destinasi, dan no. rujukan boleh dibaca</string>
+    <string name="req_visa_3">Tarikh dikeluarkan &amp; tamat tempoh dipaparkan jelas</string>
+    <string name="upload_accepted_formats">Format diterima: JPG, JPEG, PNG, PDF</string>
+    <string name="upload_accepted_formats_photo">Format diterima: JPG, JPEG, PNG</string>
+    <string name="upload_max_size">Saiz maksimum fail: 5 MB</string>
+    <string name="upload_tip">Pastikan dokumen jelas, boleh dibaca, dan tidak terpotong.</string>
+    <string name="btn_choose_file">Pilih Fail dari Peranti</string>
+    <string name="btn_got_it">Faham</string>
+    <string name="upload_privacy_notice">Maklumat peribadi dienkripsi dan diproses secara selamat untuk pengesahan.</string>
+    <string name="err_file_format">Format tidak disokong. Diterima: JPG, JPEG, PNG, PDF.</string>
+    <string name="err_file_format_photo">Format tidak disokong. Diterima: JPG, JPEG, PNG.</string>
+    <string name="err_file_size">Fail terlalu besar. Saiz maksimum dibenarkan ialah 5 MB.</string>
+    <string name="err_file_empty">Fail yang dipilih tidak sah atau kosong. Sila pilih fail lain.</string>
+    <string name="doc_upload_success">Dokumen berjaya dimuat naik untuk semakan!</string>
+
+    <!-- Verification Progress Strings -->
+    <string name="doc_verification_title">Pengesahan Dokumen</string>
+    <string name="doc_progress_count_format">%1$d daripada %2$d disahkan</string>
+    <string name="msg_doc_progress_start">Muat naik dokumen wajib anda untuk bermula.</string>
+    <string name="msg_doc_progress_partial">Sesetengah dokumen masih memerlukan perhatian anda.</string>
+    <string name="msg_doc_progress_under_review">Semua dokumen wajib telah dihantar. Pengesahan sedang dijalankan.</string>
+    <string name="msg_doc_progress_complete">Semua dokumen wajib telah disahkan.</string>
+    <string name="msg_doc_progress_rejected">Sesetengah dokumen memerlukan tindakan. Sila semak dan ganti dokumen yang ditolak.</string>
+
+    <!-- Document Status Guidance Strings -->
+    <string name="doc_guidance_under_review">Dokumen anda telah dihantar dan sedang disemak oleh Hafiz Travel.</string>
+    <string name="doc_guidance_verified">Dokumen anda telah diterima dan disahkan.</string>
+    <string name="doc_verified_at_format">Disahkan: %1$s</string>
+    <string name="doc_status_not_required">Tidak Diperlukan</string>
+    <string name="email_readonly_helper">E-mel akaun berdaftar anda</string>
+
 </resources>

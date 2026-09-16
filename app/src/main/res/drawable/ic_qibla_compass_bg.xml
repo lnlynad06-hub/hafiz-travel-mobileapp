@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="260dp"
+    android:height="260dp"
+    android:viewportWidth="260"
+    android:viewportHeight="260">
+
+    <!-- Subtle Outer Compass Ring -->
+    <path
+        android:pathData="M 130 15 A 115 115 0 1 1 129.9 15 Z"
+        android:strokeColor="#E2E8F0"
+        android:strokeWidth="1.5"
+        android:fillColor="#00000000"/>
+
+    <!-- Subtle Inner Ring -->
+    <path
+        android:pathData="M 130 35 A 95 95 0 1 1 129.9 35 Z"
+        android:strokeColor="#F1F5F9"
+        android:strokeWidth="1.5"
+        android:fillColor="#00000000"/>
+
+    <!-- 4 Major Cardinal Tick Marks (N, E, S, W) -->
+    <path
+        android:pathData="M 130 15 L 130 25 M 245 130 L 235 130 M 130 245 L 130 235 M 15 130 L 25 130"
+        android:strokeColor="#94A3B8"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"/>
+
+    <!-- 4 Sub-Cardinal Ticks (NE, SE, SW, NW) - Subtle Ticks -->
+    <path
+        android:pathData="M 211.3 48.7 L 205.7 54.3 M 211.3 211.3 L 205.7 205.7 M 48.7 211.3 L 54.3 205.7 M 48.7 48.7 L 54.3 54.3"
+        android:strokeColor="#E2E8F0"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"/>
+</vector>

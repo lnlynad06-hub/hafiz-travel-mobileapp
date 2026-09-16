@@ -237,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
         SessionManager session = SessionManager.getInstance(this);
         if (session.isLoggedIn()) {
             isLoggedIn = true;
-            loggedInUserName = session.getUserName();
+            loggedInUserName = session.getUserNickname();
         } else {
             isLoggedIn = false;
             loggedInUserName = getString(R.string.default_user_name);
@@ -1108,6 +1108,12 @@ public class MainActivity extends AppCompatActivity {
         View ivRefresh = findViewById(R.id.ivRefreshPrayerLocation);
         if (ivRefresh != null) {
             ivRefresh.setOnClickListener(v -> refreshPrayerTimesLocation(true));
+        }
+
+        View btnQibla = findViewById(R.id.btnQiblaAction);
+        if (btnQibla != null) {
+            btnQibla.setOnClickListener(v ->
+                    startActivity(new Intent(this, QiblaActivity.class)));
         }
 
         boolean hasFineLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)

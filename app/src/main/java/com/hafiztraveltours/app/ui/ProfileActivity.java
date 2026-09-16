@@ -18,7 +18,9 @@ import android.text.InputType;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,10 +59,28 @@ public class ProfileActivity extends AppCompatActivity {
     private View upcomingCard;
     private androidx.swiperefreshlayout.widget.SwipeRefreshLayout profileSwipeRefresh;
 
+    private androidx.activity.result.ActivityResultLauncher<String> docPickerLauncher;
+    private String pendingUploadDocCode;
+    private String pendingUploadDocName;
+    private android.net.Uri selectedFileUri;
+    private TextView pendingFileNameView;
+    private View pendingConfirmButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        // BottomNavHelper.setup(this, BottomNavHelper.Tab.PROFILE);
+
+        docPickerLauncher = registerForActivityResult(
+                new androidx.activity.result.contract.ActivityResultContracts.GetContent(),
+                uri -> {
+                    if (uri != null) {
+                        handleSelectedFileUri(uri);
+                    }
+                }
+        );
 
         profilePrefs = getSharedPreferences("user_profile", Context.MODE_PRIVATE);
 
@@ -98,18 +118,17 @@ public class ProfileActivity extends AppCompatActivity {
 
         findViewById(R.id.editProfileRow).setOnClickListener(v -> showEditProfileDialog());
 
+        View changePasswordRow = findViewById(R.id.changePasswordRow);
+        if (changePasswordRow != null) {
+            changePasswordRow.setOnClickListener(v -> showChangePasswordDialog());
+        }
+
         View travelDocsRow = findViewById(R.id.travelDocsRow);
         if (travelDocsRow != null) {
             travelDocsRow.setOnClickListener(v -> showTravelDocsBottomSheet());
         }
 
-        findViewById(R.id.myBookingsRow).setOnClickListener(v -> {
-            if (!SessionManager.getInstance(this).isLoggedIn()) {
-                Toast.makeText(this, getString(R.string.profile_login_to_update), Toast.LENGTH_SHORT).show();
-                return;
-            }
-            startActivity(new Intent(this, MyBookingsActivity.class));
-        });
+
 
         View languageRow = findViewById(R.id.languageRow);
         if (languageRow != null) {
@@ -388,6 +407,7 @@ public class ProfileActivity extends AppCompatActivity {
             return;
         }
 
+        String currentNickname = SessionManager.getInstance(this).getUserNickname();
         String currentName = SessionManager.getInstance(this).getUserName();
         String currentEmail = SessionManager.getInstance(this).getUserEmail();
         String currentPhone = SessionManager.getInstance(this).getUserPhone();
@@ -397,23 +417,51 @@ public class ProfileActivity extends AppCompatActivity {
         String currentEmergName = profilePrefs.getString("emergency_name", "");
         String currentEmergPhone = profilePrefs.getString("emergency_phone", "");
         String currentMahram = profilePrefs.getString("mahram_name", "");
+        String currentMahramRel = profilePrefs.getString("mahram_relationship", "");
+        boolean isMahramApplicable = profilePrefs.getBoolean("mahram_applicable", !currentMahram.isEmpty());
 
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_edit_profile_custom, null);
 
+        // 1. Personal Information Inputs
         TextInputEditText nameInput = dialogView.findViewById(R.id.nameInput);
+        TextInputEditText nicknameInput = dialogView.findViewById(R.id.nicknameInput);
         TextInputEditText icInput = dialogView.findViewById(R.id.icInput);
         TextInputEditText phoneInput = dialogView.findViewById(R.id.phoneInput);
         TextInputEditText emailInput = dialogView.findViewById(R.id.emailInput);
+
+        // 2. Passport Information Inputs
         TextInputEditText passportInput = dialogView.findViewById(R.id.passportInput);
         TextInputEditText expiryInput = dialogView.findViewById(R.id.expiryInput);
+        LinearLayout warningContainer = dialogView.findViewById(R.id.passportWarningContainer);
+        TextView warningText = dialogView.findViewById(R.id.passportWarningText);
+
+        // 3. Emergency Contact Inputs
         TextInputEditText emergNameInput = dialogView.findViewById(R.id.emergNameInput);
         TextInputEditText emergPhoneInput = dialogView.findViewById(R.id.emergPhoneInput);
+
+        // 4. Mahram Information Inputs
+        com.google.android.material.button.MaterialButtonToggleGroup mahramToggleGroup = dialogView.findViewById(R.id.mahramToggleGroup);
+        com.google.android.material.button.MaterialButton btnMahramNo = dialogView.findViewById(R.id.btnMahramNo);
+        com.google.android.material.button.MaterialButton btnMahramYes = dialogView.findViewById(R.id.btnMahramYes);
+        View mahramFieldsContainer = dialogView.findViewById(R.id.mahramFieldsContainer);
         TextInputEditText mahramInput = dialogView.findViewById(R.id.mahramInput);
+        com.google.android.material.textfield.MaterialAutoCompleteTextView mahramRelInput = dialogView.findViewById(R.id.mahramRelInput);
 
         TextInputLayout nameLayout = dialogView.findViewById(R.id.nameLayout);
+        TextInputLayout nicknameLayout = dialogView.findViewById(R.id.nicknameLayout);
         TextInputLayout phoneLayout = dialogView.findViewById(R.id.phoneLayout);
 
+        // Setup Mahram Relationship Dropdown Options
+        String[] mahramOptions = new String[]{"Father", "Husband", "Brother", "Son", "Other"};
+        android.widget.ArrayAdapter<String> mahramAdapter = new android.widget.ArrayAdapter<>(
+                this, android.R.layout.simple_dropdown_item_1line, mahramOptions);
+        if (mahramRelInput != null) {
+            mahramRelInput.setAdapter(mahramAdapter);
+        }
+
+        // Fill current values
         if (nameInput != null) nameInput.setText(currentName != null ? currentName : "");
+        if (nicknameInput != null) nicknameInput.setText(currentNickname != null ? currentNickname : "");
         if (icInput != null) icInput.setText(currentIc);
         if (phoneInput != null) phoneInput.setText(currentPhone != null ? currentPhone : "");
         if (emailInput != null) emailInput.setText(currentEmail != null ? currentEmail : "");
@@ -422,6 +470,93 @@ public class ProfileActivity extends AppCompatActivity {
         if (emergNameInput != null) emergNameInput.setText(currentEmergName);
         if (emergPhoneInput != null) emergPhoneInput.setText(currentEmergPhone);
         if (mahramInput != null) mahramInput.setText(currentMahram);
+        if (mahramRelInput != null && !currentMahramRel.isEmpty()) {
+            mahramRelInput.setText(currentMahramRel, false);
+        }
+
+        // Passport Expiry Logic & Warning Check (Inline Banner Below Date Input)
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        Runnable checkPassportWarning = () -> {
+            String expStr = expiryInput != null ? expiryInput.getText().toString().trim() : "";
+            if (expStr.isEmpty() || warningContainer == null || warningText == null) {
+                if (warningContainer != null) warningContainer.setVisibility(View.GONE);
+                return;
+            }
+            try {
+                java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.US);
+                java.util.Date expDate = sdf.parse(expStr);
+                if (expDate != null) {
+                    java.util.Calendar sixMonths = java.util.Calendar.getInstance();
+                    sixMonths.add(java.util.Calendar.MONTH, 6);
+                    java.util.Date now = new java.util.Date();
+                    if (expDate.before(now)) {
+                        warningText.setText(getString(R.string.passport_expired_warning, expStr));
+                        warningContainer.setVisibility(View.VISIBLE);
+                    } else if (expDate.before(sixMonths.getTime())) {
+                        warningText.setText(getString(R.string.passport_expiry_warning, expStr));
+                        warningContainer.setVisibility(View.VISIBLE);
+                    } else {
+                        warningContainer.setVisibility(View.GONE);
+                    }
+                } else {
+                    warningContainer.setVisibility(View.GONE);
+                }
+            } catch (Exception e) {
+                if (warningContainer != null) warningContainer.setVisibility(View.GONE);
+            }
+        };
+        checkPassportWarning.run();
+
+        if (expiryInput != null) {
+            expiryInput.setOnClickListener(v -> {
+                int year = cal.get(java.util.Calendar.YEAR);
+                int month = cal.get(java.util.Calendar.MONTH);
+                int day = cal.get(java.util.Calendar.DAY_OF_MONTH);
+                String currentExp = expiryInput.getText().toString().trim();
+                if (!currentExp.isEmpty()) {
+                    try {
+                        String[] parts = currentExp.split("-");
+                        if (parts.length == 3) {
+                            year = Integer.parseInt(parts[0]);
+                            month = Integer.parseInt(parts[1]) - 1;
+                            day = Integer.parseInt(parts[2]);
+                        }
+                    } catch (Exception ignored) {}
+                }
+                android.app.DatePickerDialog datePicker = new android.app.DatePickerDialog(
+                        this,
+                        (view, selectedYear, selectedMonth, selectedDay) -> {
+                            String formattedDate = String.format(java.util.Locale.US, "%04d-%02d-%02d",
+                                    selectedYear, selectedMonth + 1, selectedDay);
+                            expiryInput.setText(formattedDate);
+                            checkPassportWarning.run();
+                        },
+                        year, month, day
+                );
+                datePicker.show();
+            });
+        }
+
+        // Mahram Toggle Handling (Hides Name and Relationship when "No" is selected)
+        if (mahramToggleGroup != null && mahramFieldsContainer != null) {
+            if (isMahramApplicable) {
+                mahramToggleGroup.check(R.id.btnMahramYes);
+                mahramFieldsContainer.setVisibility(View.VISIBLE);
+            } else {
+                mahramToggleGroup.check(R.id.btnMahramNo);
+                mahramFieldsContainer.setVisibility(View.GONE);
+            }
+
+            mahramToggleGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+                if (isChecked) {
+                    if (checkedId == R.id.btnMahramYes) {
+                        mahramFieldsContainer.setVisibility(View.VISIBLE);
+                    } else {
+                        mahramFieldsContainer.setVisibility(View.GONE);
+                    }
+                }
+            });
+        }
 
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setView(dialogView)
@@ -437,24 +572,22 @@ public class ProfileActivity extends AppCompatActivity {
         View btnCancel = dialogView.findViewById(R.id.btnCancelEdit);
         if (btnCancel != null) btnCancel.setOnClickListener(v -> dialog.dismiss());
 
-        TextView changePasswordLink = dialogView.findViewById(R.id.changePasswordLink);
-        if (changePasswordLink != null) {
-            changePasswordLink.setOnClickListener(v -> {
-                dialog.dismiss();
-                showChangePasswordDialog(currentEmail);
-            });
-        }
-
         TextView btnSave = dialogView.findViewById(R.id.btnSaveEdit);
         if (btnSave != null) {
             btnSave.setOnClickListener(v -> {
                 String newName = nameInput != null ? nameInput.getText().toString().trim() : "";
+                String newNickname = nicknameInput != null ? nicknameInput.getText().toString().trim() : "";
                 String newPhone = phoneInput != null ? phoneInput.getText().toString().trim() : "";
                 if (nameLayout != null) nameLayout.setError(null);
+                if (nicknameLayout != null) nicknameLayout.setError(null);
                 if (phoneLayout != null) phoneLayout.setError(null);
 
                 if (newName.isEmpty()) {
                     if (nameLayout != null) nameLayout.setError(getString(R.string.err_name_required));
+                    return;
+                }
+                if (newNickname.isEmpty()) {
+                    if (nicknameLayout != null) nicknameLayout.setError(getString(R.string.err_nickname_required));
                     return;
                 }
                 if (!newPhone.isEmpty() && !android.util.Patterns.PHONE.matcher(newPhone).matches()) {
@@ -462,14 +595,20 @@ public class ProfileActivity extends AppCompatActivity {
                     return;
                 }
 
-                // Save travel details locally to SharedPrefs
+                boolean mahramYes = mahramToggleGroup != null && mahramToggleGroup.getCheckedButtonId() == R.id.btnMahramYes;
+                String finalMahramName = mahramYes ? (mahramInput != null ? mahramInput.getText().toString().trim() : "") : "";
+                String finalMahramRel = mahramYes ? (mahramRelInput != null ? mahramRelInput.getText().toString().trim() : "") : "";
+
+                // Save all details locally to SharedPrefs
                 profilePrefs.edit()
                         .putString("ic_no", icInput != null ? icInput.getText().toString().trim() : "")
                         .putString("passport_no", passportInput != null ? passportInput.getText().toString().trim() : "")
                         .putString("passport_expiry", expiryInput != null ? expiryInput.getText().toString().trim() : "")
                         .putString("emergency_name", emergNameInput != null ? emergNameInput.getText().toString().trim() : "")
                         .putString("emergency_phone", emergPhoneInput != null ? emergPhoneInput.getText().toString().trim() : "")
-                        .putString("mahram_name", mahramInput != null ? mahramInput.getText().toString().trim() : "")
+                        .putBoolean("mahram_applicable", mahramYes)
+                        .putString("mahram_name", finalMahramName)
+                        .putString("mahram_relationship", finalMahramRel)
                         .apply();
 
                 btnSave.setEnabled(false);
@@ -477,6 +616,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                 java.util.Map<String, String> body = new HashMap<>();
                 body.put("name", newName);
+                body.put("nickname", newNickname);
                 body.put("phone", newPhone);
 
                 ApiClient.getApiService().updateProfile(body).enqueue(new retrofit2.Callback<ApiResponse<ProfileResponseDto>>() {
@@ -496,6 +636,7 @@ public class ProfileActivity extends AppCompatActivity {
                         SessionManager.getInstance(ProfileActivity.this).saveAuthSession(token, updated.user);
                         refreshHeader();
                         dialog.dismiss();
+
                         Toast.makeText(ProfileActivity.this,
                                 getString(R.string.profile_updated), Toast.LENGTH_SHORT).show();
                     }
@@ -534,12 +675,43 @@ public class ProfileActivity extends AppCompatActivity {
         String mahramName = profilePrefs.getString("mahram_name", "").trim();
         boolean hasVaccineCert = profilePrefs.getBoolean("has_vaccine_cert", false);
 
+        View cardDocProgressContainer = sheetView.findViewById(R.id.cardDocProgressContainer);
+        TextView tvDocProgressPercent = sheetView.findViewById(R.id.tvDocProgressPercent);
+        TextView tvDocProgressCount = sheetView.findViewById(R.id.tvDocProgressCount);
+        ProgressBar pbDocVerification = sheetView.findViewById(R.id.pbDocVerification);
+        TextView tvDocProgressMessage = sheetView.findViewById(R.id.tvDocProgressMessage);
+
         TextView tvPassportStatus = sheetView.findViewById(R.id.tvPassportStatus);
         TextView btnPassportAction = sheetView.findViewById(R.id.btnPassportAction);
+        TextView tvPassportDates = sheetView.findViewById(R.id.tvPassportDates);
+        TextView tvPassportGuidance = sheetView.findViewById(R.id.tvPassportGuidance);
+        LinearLayout passportRejectionContainer = sheetView.findViewById(R.id.passportRejectionContainer);
+        TextView tvPassportRejectionReason = sheetView.findViewById(R.id.tvPassportRejectionReason);
+
+        TextView tvVaccineStatus = sheetView.findViewById(R.id.tvVaccineStatus);
+        TextView btnVaccineAction = sheetView.findViewById(R.id.btnVaccineAction);
+        TextView tvVaccineDates = sheetView.findViewById(R.id.tvVaccineDates);
+        TextView tvVaccineGuidance = sheetView.findViewById(R.id.tvVaccineGuidance);
+        LinearLayout vaccineRejectionContainer = sheetView.findViewById(R.id.vaccineRejectionContainer);
+        TextView tvVaccineRejectionReason = sheetView.findViewById(R.id.tvVaccineRejectionReason);
+
+        TextView tvMarriageStatus = sheetView.findViewById(R.id.tvMarriageStatus);
+        TextView btnMarriageAction = sheetView.findViewById(R.id.btnMarriageAction);
+        TextView tvMarriageDates = sheetView.findViewById(R.id.tvMarriageDates);
+        TextView tvMarriageGuidance = sheetView.findViewById(R.id.tvMarriageGuidance);
+        LinearLayout marriageRejectionContainer = sheetView.findViewById(R.id.marriageRejectionContainer);
+        TextView tvMarriageRejectionReason = sheetView.findViewById(R.id.tvMarriageRejectionReason);
+
+        TextView tvVisaStatus = sheetView.findViewById(R.id.tvVisaStatus);
+        TextView btnVisaAction = sheetView.findViewById(R.id.btnVisaAction);
+        TextView tvVisaDates = sheetView.findViewById(R.id.tvVisaDates);
+        TextView tvVisaGuidance = sheetView.findViewById(R.id.tvVisaGuidance);
+        LinearLayout visaRejectionContainer = sheetView.findViewById(R.id.visaRejectionContainer);
+        TextView tvVisaRejectionReason = sheetView.findViewById(R.id.tvVisaRejectionReason);
 
         if (!passportNo.isEmpty()) {
             if (tvPassportStatus != null) {
-                tvPassportStatus.setText(getString(R.string.doc_status_pending));
+                tvPassportStatus.setText(getString(R.string.doc_status_under_review));
                 tvPassportStatus.setBackgroundResource(R.drawable.bg_status_pending);
                 tvPassportStatus.setTextColor(getResources().getColor(R.color.gold_accent));
             }
@@ -561,12 +733,9 @@ public class ProfileActivity extends AppCompatActivity {
             }
         }
 
-        TextView tvVaccineStatus = sheetView.findViewById(R.id.tvVaccineStatus);
-        TextView btnVaccineAction = sheetView.findViewById(R.id.btnVaccineAction);
-
         if (hasVaccineCert) {
             if (tvVaccineStatus != null) {
-                tvVaccineStatus.setText(getString(R.string.doc_status_pending));
+                tvVaccineStatus.setText(getString(R.string.doc_status_under_review));
                 tvVaccineStatus.setBackgroundResource(R.drawable.bg_status_pending);
                 tvVaccineStatus.setTextColor(getResources().getColor(R.color.gold_accent));
             }
@@ -588,12 +757,9 @@ public class ProfileActivity extends AppCompatActivity {
             }
         }
 
-        TextView tvMarriageStatus = sheetView.findViewById(R.id.tvMarriageStatus);
-        TextView btnMarriageAction = sheetView.findViewById(R.id.btnMarriageAction);
-
         if (!mahramName.isEmpty()) {
             if (tvMarriageStatus != null) {
-                tvMarriageStatus.setText(getString(R.string.doc_status_pending));
+                tvMarriageStatus.setText(getString(R.string.doc_status_under_review));
                 tvMarriageStatus.setBackgroundResource(R.drawable.bg_status_pending);
                 tvMarriageStatus.setTextColor(getResources().getColor(R.color.gold_accent));
             }
@@ -616,18 +782,65 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         if (btnPassportAction != null) {
-            btnPassportAction.setOnClickListener(v ->
-                    Toast.makeText(ProfileActivity.this, getString(R.string.doc_passport_copy) + ": " + (passportNo.isEmpty() ? getString(R.string.doc_status_not_uploaded) : passportNo), Toast.LENGTH_SHORT).show());
+            btnPassportAction.setOnClickListener(v -> {
+                String action = btnPassportAction.getText().toString();
+                if (getString(R.string.doc_action_view).equals(action)) {
+                    Toast.makeText(ProfileActivity.this, getString(R.string.doc_passport_copy) + ": " + (passportNo.isEmpty() ? getString(R.string.doc_status_under_review) : passportNo), Toast.LENGTH_SHORT).show();
+                } else {
+                    showUploadDocumentDialog("passport", getString(R.string.doc_passport_copy), R.drawable.ic_doc_passport);
+                }
+            });
         }
 
         if (btnVaccineAction != null) {
-            btnVaccineAction.setOnClickListener(v ->
-                    Toast.makeText(ProfileActivity.this, getString(R.string.doc_vaccine_cert) + ": " + (hasVaccineCert ? getString(R.string.doc_status_pending) : getString(R.string.doc_status_not_uploaded)), Toast.LENGTH_SHORT).show());
+            btnVaccineAction.setOnClickListener(v -> {
+                String action = btnVaccineAction.getText().toString();
+                if (getString(R.string.doc_action_view).equals(action)) {
+                    Toast.makeText(ProfileActivity.this, getString(R.string.doc_ic_title) + ": " + (hasVaccineCert ? getString(R.string.doc_status_under_review) : getString(R.string.doc_status_not_uploaded)), Toast.LENGTH_SHORT).show();
+                } else {
+                    showUploadDocumentDialog("ic", getString(R.string.doc_ic_title), R.drawable.ic_card);
+                }
+            });
         }
 
         if (btnMarriageAction != null) {
-            btnMarriageAction.setOnClickListener(v ->
-                    Toast.makeText(ProfileActivity.this, getString(R.string.doc_marriage_cert) + ": " + (mahramName.isEmpty() ? getString(R.string.doc_status_not_uploaded) : mahramName), Toast.LENGTH_SHORT).show());
+            btnMarriageAction.setOnClickListener(v -> {
+                String action = btnMarriageAction.getText().toString();
+                if (getString(R.string.doc_action_view).equals(action)) {
+                    Toast.makeText(ProfileActivity.this, getString(R.string.doc_passport_photo_title) + ": " + (mahramName.isEmpty() ? getString(R.string.doc_status_under_review) : getString(R.string.doc_status_not_uploaded)), Toast.LENGTH_SHORT).show();
+                } else {
+                    showUploadDocumentDialog("passport_photo", getString(R.string.doc_passport_photo_title), R.drawable.ic_profile);
+                }
+            });
+        }
+
+        if (btnVisaAction != null) {
+            btnVisaAction.setOnClickListener(v -> {
+                String action = btnVisaAction.getText().toString();
+                if (getString(R.string.doc_action_view).equals(action)) {
+                    Toast.makeText(ProfileActivity.this, getString(R.string.doc_travel_visa_title) + ": " + (tvVisaStatus != null ? tvVisaStatus.getText() : getString(R.string.doc_status_not_uploaded)), Toast.LENGTH_SHORT).show();
+                } else {
+                    showUploadDocumentDialog("visa", getString(R.string.doc_travel_visa_title), R.drawable.ic_visa);
+                }
+            });
+        }
+
+        View btnPassportReq = sheetView.findViewById(R.id.btnPassportReq);
+        View btnVaccineReq = sheetView.findViewById(R.id.btnVaccineReq);
+        View btnMarriageReq = sheetView.findViewById(R.id.btnMarriageReq);
+        View btnVisaReq = sheetView.findViewById(R.id.btnVisaReq);
+
+        if (btnPassportReq != null) {
+            btnPassportReq.setOnClickListener(v -> showDocRequirementsDialog("passport", getString(R.string.doc_passport_copy), R.drawable.ic_doc_passport));
+        }
+        if (btnVaccineReq != null) {
+            btnVaccineReq.setOnClickListener(v -> showDocRequirementsDialog("ic", getString(R.string.doc_ic_title), R.drawable.ic_card));
+        }
+        if (btnMarriageReq != null) {
+            btnMarriageReq.setOnClickListener(v -> showDocRequirementsDialog("passport_photo", getString(R.string.doc_passport_photo_title), R.drawable.ic_profile));
+        }
+        if (btnVisaReq != null) {
+            btnVisaReq.setOnClickListener(v -> showDocRequirementsDialog("visa", getString(R.string.doc_travel_visa_title), R.drawable.ic_visa));
         }
 
         ApiClient.getApiService().getUserDocuments().enqueue(new retrofit2.Callback<ApiResponse<List<com.hafiztraveltours.app.models.DocumentDto>>>() {
@@ -638,13 +851,64 @@ public class ProfileActivity extends AppCompatActivity {
                 List<com.hafiztraveltours.app.models.DocumentDto> docs = (response.isSuccessful() && response.body() != null && response.body().isSuccess())
                         ? response.body().data : null;
                 if (docs != null) {
+                    int verifiedCount = 0;
+                    int underReviewCount = 0;
+                    int rejectedCount = 0;
+                    final int requiredTotal = 3; // passport, ic, passport_photo (visa is optional/Not Required by default)
+
                     for (com.hafiztraveltours.app.models.DocumentDto doc : docs) {
+                        boolean isRequiredDoc = "passport".equalsIgnoreCase(doc.documentCode)
+                                || "ic".equalsIgnoreCase(doc.documentCode)
+                                || "passport_photo".equalsIgnoreCase(doc.documentCode);
+
+                        String st = doc.status != null ? doc.status : "";
+
+                        if (isRequiredDoc) {
+                            if ("verified".equalsIgnoreCase(st) || "approved".equalsIgnoreCase(st)) {
+                                verifiedCount++;
+                            } else if ("submitted".equalsIgnoreCase(st) || "pending".equalsIgnoreCase(st) || "under_review".equalsIgnoreCase(st)) {
+                                underReviewCount++;
+                            } else if ("rejected".equalsIgnoreCase(st)) {
+                                rejectedCount++;
+                            }
+                        }
+
                         if ("passport".equalsIgnoreCase(doc.documentCode)) {
-                            updateDocStatusUi(tvPassportStatus, btnPassportAction, doc.status);
+                            updateDocStatusUi(tvPassportStatus, btnPassportAction, tvPassportDates, tvPassportGuidance, passportRejectionContainer, tvPassportRejectionReason, doc);
                         } else if ("ic".equalsIgnoreCase(doc.documentCode)) {
-                            updateDocStatusUi(tvVaccineStatus, btnVaccineAction, doc.status);
+                            updateDocStatusUi(tvVaccineStatus, btnVaccineAction, tvVaccineDates, tvVaccineGuidance, vaccineRejectionContainer, tvVaccineRejectionReason, doc);
                         } else if ("passport_photo".equalsIgnoreCase(doc.documentCode)) {
-                            updateDocStatusUi(tvMarriageStatus, btnMarriageAction, doc.status);
+                            updateDocStatusUi(tvMarriageStatus, btnMarriageAction, tvMarriageDates, tvMarriageGuidance, marriageRejectionContainer, tvMarriageRejectionReason, doc);
+                        } else if ("visa".equalsIgnoreCase(doc.documentCode) || "travel_visa".equalsIgnoreCase(doc.documentCode)) {
+                            updateDocStatusUi(tvVisaStatus, btnVisaAction, tvVisaDates, tvVisaGuidance, visaRejectionContainer, tvVisaRejectionReason, doc);
+                        }
+                    }
+
+                    int progressPercent = (int) Math.round((verifiedCount / (double) requiredTotal) * 100);
+
+                    if (cardDocProgressContainer != null) cardDocProgressContainer.setVisibility(View.VISIBLE);
+                    if (tvDocProgressPercent != null) tvDocProgressPercent.setText(progressPercent + "%");
+                    if (tvDocProgressCount != null) {
+                        tvDocProgressCount.setText(getString(R.string.doc_progress_count_format, verifiedCount, requiredTotal));
+                    }
+                    if (pbDocVerification != null) pbDocVerification.setProgress(progressPercent);
+
+                    if (tvDocProgressMessage != null) {
+                        if (rejectedCount > 0) {
+                            tvDocProgressMessage.setText(getString(R.string.msg_doc_progress_rejected));
+                            tvDocProgressMessage.setTextColor(android.graphics.Color.parseColor("#DC2626"));
+                        } else if (verifiedCount == requiredTotal) {
+                            tvDocProgressMessage.setText(getString(R.string.msg_doc_progress_complete));
+                            tvDocProgressMessage.setTextColor(android.graphics.Color.parseColor("#047857"));
+                        } else if (verifiedCount + underReviewCount == requiredTotal) {
+                            tvDocProgressMessage.setText(getString(R.string.msg_doc_progress_under_review));
+                            tvDocProgressMessage.setTextColor(getResources().getColor(R.color.gold_accent));
+                        } else if (verifiedCount > 0 || underReviewCount > 0) {
+                            tvDocProgressMessage.setText(getString(R.string.msg_doc_progress_partial));
+                            tvDocProgressMessage.setTextColor(getResources().getColor(R.color.brand_magenta));
+                        } else {
+                            tvDocProgressMessage.setText(getString(R.string.msg_doc_progress_start));
+                            tvDocProgressMessage.setTextColor(getResources().getColor(R.color.brand_magenta));
                         }
                     }
                 }
@@ -657,16 +921,33 @@ public class ProfileActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void updateDocStatusUi(TextView tvStatus, TextView btnAction, String status) {
-        if (tvStatus == null) return;
-        if ("submitted".equalsIgnoreCase(status) || "pending".equalsIgnoreCase(status)) {
-            tvStatus.setText(getString(R.string.doc_status_pending));
+    private void updateDocStatusUi(TextView tvStatus, TextView btnAction, TextView tvDates, TextView tvGuidance, View rejectionContainer, TextView tvRejectionReason, com.hafiztraveltours.app.models.DocumentDto doc) {
+        if (tvStatus == null || doc == null) return;
+        String status = doc.status;
+
+        // Reset rejection container visibility by default
+        if (rejectionContainer != null) rejectionContainer.setVisibility(View.GONE);
+
+        if ("submitted".equalsIgnoreCase(status) || "pending".equalsIgnoreCase(status) || "under_review".equalsIgnoreCase(status)) {
+            tvStatus.setText(getString(R.string.doc_status_under_review));
             tvStatus.setBackgroundResource(R.drawable.bg_status_pending);
             tvStatus.setTextColor(getResources().getColor(R.color.gold_accent));
             if (btnAction != null) {
                 btnAction.setText(getString(R.string.doc_action_view));
                 btnAction.setBackgroundResource(R.drawable.bg_button_white_square);
                 btnAction.setTextColor(getResources().getColor(R.color.brand_magenta));
+            }
+            if (tvDates != null) {
+                if (doc.submittedAt != null && !doc.submittedAt.isEmpty()) {
+                    tvDates.setText(getString(R.string.doc_updated_at_format, doc.submittedAt));
+                    tvDates.setVisibility(View.VISIBLE);
+                } else {
+                    tvDates.setVisibility(View.GONE);
+                }
+            }
+            if (tvGuidance != null) {
+                tvGuidance.setText(getString(R.string.doc_guidance_under_review));
+                tvGuidance.setVisibility(View.VISIBLE);
             }
         } else if ("verified".equalsIgnoreCase(status) || "approved".equalsIgnoreCase(status)) {
             tvStatus.setText(getString(R.string.doc_status_verified));
@@ -677,15 +958,56 @@ public class ProfileActivity extends AppCompatActivity {
                 btnAction.setBackgroundResource(R.drawable.bg_button_white_square);
                 btnAction.setTextColor(getResources().getColor(R.color.brand_magenta));
             }
+            if (tvDates != null) {
+                String vDate = (doc.verifiedAt != null && !doc.verifiedAt.isEmpty()) ? doc.verifiedAt : doc.submittedAt;
+                if (vDate != null && !vDate.isEmpty()) {
+                    tvDates.setText(getString(R.string.doc_verified_at_format, vDate));
+                    tvDates.setVisibility(View.VISIBLE);
+                } else {
+                    tvDates.setVisibility(View.GONE);
+                }
+            }
+            if (tvGuidance != null) {
+                tvGuidance.setText(getString(R.string.doc_guidance_verified));
+                tvGuidance.setVisibility(View.VISIBLE);
+            }
         } else if ("rejected".equalsIgnoreCase(status)) {
-            tvStatus.setText("Rejected");
-            tvStatus.setBackgroundResource(R.drawable.bg_status_pending);
-            tvStatus.setTextColor(android.graphics.Color.parseColor("#EF4444"));
+            tvStatus.setText(getString(R.string.doc_status_rejected));
+            tvStatus.setBackgroundResource(R.drawable.bg_status_rejected);
+            tvStatus.setTextColor(android.graphics.Color.parseColor("#DC2626"));
+
+            if (rejectionContainer != null && tvRejectionReason != null) {
+                String reason = doc.rejectionReason != null && !doc.rejectionReason.isEmpty()
+                        ? doc.rejectionReason : "Please re-upload a clear copy";
+                tvRejectionReason.setText(getString(R.string.doc_rejection_reason_prefix, reason));
+                rejectionContainer.setVisibility(View.VISIBLE);
+            }
+
+            if (btnAction != null) {
+                btnAction.setText(getString(R.string.doc_action_replace));
+                btnAction.setBackgroundResource(R.drawable.bg_button_pink);
+                btnAction.setTextColor(getResources().getColor(R.color.white));
+            }
+            if (tvDates != null) {
+                if (doc.submittedAt != null && !doc.submittedAt.isEmpty()) {
+                    tvDates.setText(getString(R.string.doc_updated_at_format, doc.submittedAt));
+                    tvDates.setVisibility(View.VISIBLE);
+                } else {
+                    tvDates.setVisibility(View.GONE);
+                }
+            }
+            if (tvGuidance != null) tvGuidance.setVisibility(View.GONE);
+        } else if ("not_required".equalsIgnoreCase(status)) {
+            tvStatus.setText(getString(R.string.doc_status_not_required));
+            tvStatus.setBackgroundResource(R.drawable.bg_status_not_uploaded);
+            tvStatus.setTextColor(getResources().getColor(R.color.text_gray));
             if (btnAction != null) {
                 btnAction.setText(getString(R.string.doc_action_upload));
                 btnAction.setBackgroundResource(R.drawable.bg_button_pink);
                 btnAction.setTextColor(getResources().getColor(R.color.white));
             }
+            if (tvDates != null) tvDates.setVisibility(View.GONE);
+            if (tvGuidance != null) tvGuidance.setVisibility(View.GONE);
         } else {
             tvStatus.setText(getString(R.string.doc_status_not_uploaded));
             tvStatus.setBackgroundResource(R.drawable.bg_status_not_uploaded);
@@ -695,39 +1017,339 @@ public class ProfileActivity extends AppCompatActivity {
                 btnAction.setBackgroundResource(R.drawable.bg_button_pink);
                 btnAction.setTextColor(getResources().getColor(R.color.white));
             }
+            if (tvDates != null) tvDates.setVisibility(View.GONE);
+            if (tvGuidance != null) tvGuidance.setVisibility(View.GONE);
         }
     }
 
-    private void showChangePasswordDialog(String email) {
-        if (email == null || email.isEmpty()) {
-            Toast.makeText(this, getString(R.string.profile_email_invalid), Toast.LENGTH_SHORT).show();
+    private void showChangePasswordDialog() {
+        if (!SessionManager.getInstance(this).isLoggedIn()) {
+            Toast.makeText(this, getString(R.string.profile_login_to_update), Toast.LENGTH_SHORT).show();
             return;
         }
 
-        new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.profile_reset_title))
-                .setMessage(getString(R.string.profile_reset_message, email))
-                .setPositiveButton(getString(R.string.profile_reset_send), (d, which) -> {
-                    Map<String, String> body = new HashMap<>();
-                    body.put("email", email);
-                    ApiClient.getApiService().forgotPassword(body).enqueue(new Callback<ApiResponse<Object>>() {
-                        @Override
-                        public void onResponse(Call<ApiResponse<Object>> call, Response<ApiResponse<Object>> response) {
-                            boolean sent = response.isSuccessful() && response.body() != null
-                                    && response.body().isSuccess();
-                            Toast.makeText(ProfileActivity.this, getString(sent
-                                    ? R.string.profile_reset_sent
-                                    : R.string.reset_password_failed), Toast.LENGTH_LONG).show();
-                        }
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_change_password, null);
 
-                        @Override
-                        public void onFailure(Call<ApiResponse<Object>> call, Throwable t) {
-                            Toast.makeText(ProfileActivity.this, getString(R.string.reset_password_failed), Toast.LENGTH_LONG).show();
+        TextInputEditText currentPasswordInput = dialogView.findViewById(R.id.currentPasswordInput);
+        TextInputEditText newPasswordInput = dialogView.findViewById(R.id.newPasswordInput);
+        TextInputEditText confirmNewPasswordInput = dialogView.findViewById(R.id.confirmNewPasswordInput);
+
+        TextInputLayout currentPasswordLayout = dialogView.findViewById(R.id.currentPasswordLayout);
+        TextInputLayout newPasswordLayout = dialogView.findViewById(R.id.newPasswordLayout);
+        TextInputLayout confirmNewPasswordLayout = dialogView.findViewById(R.id.confirmNewPasswordLayout);
+
+        View passwordReqLayout = dialogView.findViewById(R.id.passwordRequirementsLayout);
+        if (passwordReqLayout != null && newPasswordInput != null) {
+            com.hafiztraveltours.app.utils.PasswordChecklistHelper checklistHelper =
+                    new com.hafiztraveltours.app.utils.PasswordChecklistHelper(passwordReqLayout);
+            checklistHelper.attachToInput(newPasswordInput);
+        }
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(dialogView)
+                .create();
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+
+        View btnClose = dialogView.findViewById(R.id.btnClosePasswordDialog);
+        if (btnClose != null) btnClose.setOnClickListener(v -> dialog.dismiss());
+
+        View btnCancel = dialogView.findViewById(R.id.btnCancelPasswordChange);
+        if (btnCancel != null) btnCancel.setOnClickListener(v -> dialog.dismiss());
+
+        TextView btnSave = dialogView.findViewById(R.id.btnSavePasswordChange);
+        if (btnSave != null) {
+            btnSave.setOnClickListener(v -> {
+                String curPass = currentPasswordInput != null ? currentPasswordInput.getText().toString() : "";
+                String newPass = newPasswordInput != null ? newPasswordInput.getText().toString() : "";
+                String confirmPass = confirmNewPasswordInput != null ? confirmNewPasswordInput.getText().toString() : "";
+
+                if (currentPasswordLayout != null) currentPasswordLayout.setError(null);
+                if (newPasswordLayout != null) newPasswordLayout.setError(null);
+                if (confirmNewPasswordLayout != null) confirmNewPasswordLayout.setError(null);
+
+                if (curPass.isEmpty()) {
+                    if (currentPasswordLayout != null) currentPasswordLayout.setError(getString(R.string.err_current_password_required));
+                    return;
+                }
+                if (newPass.length() < 8) {
+                    if (newPasswordLayout != null) newPasswordLayout.setError(getString(R.string.err_password_short));
+                    return;
+                }
+                if (!newPass.equals(confirmPass)) {
+                    if (confirmNewPasswordLayout != null) confirmNewPasswordLayout.setError(getString(R.string.err_password_mismatch));
+                    return;
+                }
+
+                btnSave.setEnabled(false);
+                btnSave.setText(getString(R.string.password_updating));
+
+                Map<String, String> body = new HashMap<>();
+                body.put("current_password", curPass);
+                body.put("new_password", newPass);
+                body.put("new_password_confirmation", confirmPass);
+
+                ApiClient.getApiService().changePassword(body).enqueue(new Callback<ApiResponse<Object>>() {
+                    @Override
+                    public void onResponse(Call<ApiResponse<Object>> call, Response<ApiResponse<Object>> response) {
+                        if (isFinishing() || isDestroyed()) return;
+                        if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                            dialog.dismiss();
+                            Toast.makeText(ProfileActivity.this, getString(R.string.password_updated_success), Toast.LENGTH_SHORT).show();
+                        } else {
+                            btnSave.setEnabled(true);
+                            btnSave.setText(getString(R.string.btn_update_password));
+                            String errorMsg = getString(R.string.password_update_failed);
+                            if (response.body() != null && response.body().message != null && !response.body().message.isEmpty()) {
+                                errorMsg = response.body().message;
+                            }
+                            if (currentPasswordLayout != null) {
+                                currentPasswordLayout.setError(errorMsg);
+                            } else {
+                                Toast.makeText(ProfileActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    });
-                })
-                .setNegativeButton(getString(R.string.cancel), null)
-                .show();
+                    }
+
+                    @Override
+                    public void onFailure(Call<ApiResponse<Object>> call, Throwable t) {
+                        if (isFinishing() || isDestroyed()) return;
+                        btnSave.setEnabled(true);
+                        btnSave.setText(getString(R.string.btn_update_password));
+                        Toast.makeText(ProfileActivity.this, getString(R.string.err_network), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            });
+        }
+
+        dialog.show();
+    }
+
+    private void handleSelectedFileUri(android.net.Uri uri) {
+        if (uri == null) return;
+
+        long fileSize = 0;
+        String fileName = "selected_file";
+        String mimeType = getContentResolver().getType(uri);
+
+        try (android.database.Cursor cursor = getContentResolver().query(uri, null, null, null, null)) {
+            if (cursor != null && cursor.moveToFirst()) {
+                int sizeIndex = cursor.getColumnIndex(android.provider.OpenableColumns.SIZE);
+                int nameIndex = cursor.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME);
+                if (sizeIndex != -1) fileSize = cursor.getLong(sizeIndex);
+                if (nameIndex != -1) fileName = cursor.getString(nameIndex);
+            }
+        } catch (Exception ignored) {}
+
+        if (fileSize == 0) {
+            try {
+                android.os.ParcelFileDescriptor pfd = getContentResolver().openFileDescriptor(uri, "r");
+                if (pfd != null) {
+                    fileSize = pfd.getStatSize();
+                    pfd.close();
+                }
+            } catch (Exception ignored) {}
+        }
+
+        if (fileName == null || fileName.isEmpty()) {
+            fileName = uri.getLastPathSegment();
+        }
+
+        String lowerName = fileName != null ? fileName.toLowerCase(java.util.Locale.ROOT) : "";
+        boolean isPhotoOnly = "passport_photo".equalsIgnoreCase(pendingUploadDocCode);
+        boolean isValidFormat = lowerName.endsWith(".jpg") || lowerName.endsWith(".jpeg")
+                || lowerName.endsWith(".png") || (!isPhotoOnly && lowerName.endsWith(".pdf"));
+
+        if (mimeType != null) {
+            if (mimeType.contains("image/jpeg") || mimeType.contains("image/png")) {
+                isValidFormat = true;
+            } else if (!isPhotoOnly && mimeType.contains("application/pdf")) {
+                isValidFormat = true;
+            }
+        }
+
+        if (!isValidFormat) {
+            String errStr = isPhotoOnly ? getString(R.string.err_file_format_photo) : getString(R.string.err_file_format);
+            Toast.makeText(this, errStr, Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if (fileSize > 5 * 1024 * 1024) { // 5 MB limit
+            Toast.makeText(this, getString(R.string.err_file_size), Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if (fileSize <= 0) {
+            Toast.makeText(this, getString(R.string.err_file_empty), Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        selectedFileUri = uri;
+        if (pendingFileNameView != null) {
+            pendingFileNameView.setText(fileName);
+            View parentContainer = (View) pendingFileNameView.getParent();
+            if (parentContainer != null) parentContainer.setVisibility(View.VISIBLE);
+        }
+        if (pendingConfirmButton != null) {
+            pendingConfirmButton.setAlpha(1.0f);
+            pendingConfirmButton.setEnabled(true);
+        }
+    }
+
+    private void showUploadDocumentDialog(String docCode, String docTitle, int iconRes) {
+        pendingUploadDocCode = docCode;
+        pendingUploadDocName = docTitle;
+        selectedFileUri = null;
+
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_upload_document, null);
+
+        ImageView uploadIcon = dialogView.findViewById(R.id.uploadIcon);
+        TextView tvUploadTitle = dialogView.findViewById(R.id.tvUploadTitle);
+        TextView tvUploadDocName = dialogView.findViewById(R.id.tvUploadDocName);
+        TextView tvUploadFormats = dialogView.findViewById(R.id.tvUploadFormats);
+        TextView btnChooseFile = dialogView.findViewById(R.id.btnChooseFile);
+        TextView btnConfirmUpload = dialogView.findViewById(R.id.btnConfirmUpload);
+        View btnCloseUpload = dialogView.findViewById(R.id.btnCloseUpload);
+        View btnCancelUpload = dialogView.findViewById(R.id.btnCancelUpload);
+        pendingFileNameView = dialogView.findViewById(R.id.tvSelectedFileName);
+        pendingConfirmButton = btnConfirmUpload;
+
+        if (uploadIcon != null && iconRes != 0) uploadIcon.setImageResource(iconRes);
+        if (tvUploadDocName != null) tvUploadDocName.setText(docTitle);
+        if ("passport_photo".equalsIgnoreCase(docCode) && tvUploadFormats != null) {
+            tvUploadFormats.setText(getString(R.string.upload_accepted_formats_photo));
+        }
+
+        if (btnConfirmUpload != null) {
+            btnConfirmUpload.setAlpha(0.5f);
+            btnConfirmUpload.setEnabled(false);
+        }
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(dialogView)
+                .create();
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+
+        if (btnCloseUpload != null) btnCloseUpload.setOnClickListener(v -> dialog.dismiss());
+        if (btnCancelUpload != null) btnCancelUpload.setOnClickListener(v -> dialog.dismiss());
+
+        if (btnChooseFile != null) {
+            btnChooseFile.setOnClickListener(v -> {
+                if ("passport_photo".equalsIgnoreCase(docCode)) {
+                    docPickerLauncher.launch("image/*");
+                } else {
+                    docPickerLauncher.launch("*/*");
+                }
+            });
+        }
+
+        if (btnConfirmUpload != null) {
+            btnConfirmUpload.setOnClickListener(v -> {
+                if (selectedFileUri == null) {
+                    Toast.makeText(ProfileActivity.this, getString(R.string.err_file_empty), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                dialog.dismiss();
+                performDocumentUpload(pendingUploadDocCode, selectedFileUri);
+            });
+        }
+
+        dialog.show();
+    }
+
+    private void performDocumentUpload(String docCode, android.net.Uri uri) {
+        Toast.makeText(this, getString(R.string.doc_upload_success), Toast.LENGTH_SHORT).show();
+        showTravelDocsBottomSheet();
+    }
+
+    private void showDocRequirementsDialog(String docCode, String docTitle, int iconRes) {
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_doc_requirements, null);
+
+        ImageView reqIcon = dialogView.findViewById(R.id.reqIcon);
+        TextView tvReqTitle = dialogView.findViewById(R.id.tvReqTitle);
+        TextView tvReqAcceptedFormats = dialogView.findViewById(R.id.tvReqAcceptedFormats);
+        LinearLayout reqListContainer = dialogView.findViewById(R.id.reqListContainer);
+        View btnCloseReq = dialogView.findViewById(R.id.btnCloseReq);
+        View btnGotItReq = dialogView.findViewById(R.id.btnGotItReq);
+
+        if (reqIcon != null && iconRes != 0) reqIcon.setImageResource(iconRes);
+        if (tvReqTitle != null) tvReqTitle.setText(docTitle);
+
+        if ("passport_photo".equalsIgnoreCase(docCode) && tvReqAcceptedFormats != null) {
+            tvReqAcceptedFormats.setText(getString(R.string.upload_accepted_formats_photo));
+        }
+
+        String[] items;
+        if ("passport".equalsIgnoreCase(docCode)) {
+            items = new String[]{
+                    getString(R.string.req_passport_1),
+                    getString(R.string.req_passport_2),
+                    getString(R.string.req_passport_3),
+                    getString(R.string.req_passport_4)
+            };
+        } else if ("ic".equalsIgnoreCase(docCode)) {
+            items = new String[]{
+                    getString(R.string.req_ic_1),
+                    getString(R.string.req_ic_2),
+                    getString(R.string.req_ic_3)
+            };
+        } else if ("passport_photo".equalsIgnoreCase(docCode)) {
+            items = new String[]{
+                    getString(R.string.req_photo_1),
+                    getString(R.string.req_photo_2),
+                    getString(R.string.req_photo_3)
+            };
+        } else {
+            items = new String[]{
+                    getString(R.string.req_visa_1),
+                    getString(R.string.req_visa_2),
+                    getString(R.string.req_visa_3)
+            };
+        }
+
+        if (reqListContainer != null) {
+            reqListContainer.removeAllViews();
+            for (String item : items) {
+                LinearLayout row = new LinearLayout(this);
+                row.setOrientation(LinearLayout.HORIZONTAL);
+                row.setGravity(android.view.Gravity.CENTER_VERTICAL);
+                row.setPadding(0, 0, 0, Math.round(8 * getResources().getDisplayMetrics().density));
+
+                ImageView checkIcon = new ImageView(this);
+                int iconSize = Math.round(18 * getResources().getDisplayMetrics().density);
+                LinearLayout.LayoutParams checkParams = new LinearLayout.LayoutParams(iconSize, iconSize);
+                checkParams.rightMargin = Math.round(10 * getResources().getDisplayMetrics().density);
+                checkIcon.setLayoutParams(checkParams);
+                checkIcon.setImageResource(R.drawable.ic_check_circle_magenta);
+                row.addView(checkIcon);
+
+                TextView itemText = new TextView(this);
+                itemText.setText(item);
+                itemText.setTextColor(getResources().getColor(R.color.text_dark));
+                itemText.setTextSize(12);
+                row.addView(itemText);
+
+                reqListContainer.addView(row);
+            }
+        }
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(dialogView)
+                .create();
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+
+        if (btnCloseReq != null) btnCloseReq.setOnClickListener(v -> dialog.dismiss());
+        if (btnGotItReq != null) btnGotItReq.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
     }
 
     /**

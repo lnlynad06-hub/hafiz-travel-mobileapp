@@ -52,6 +52,9 @@ public interface ApiService {
     @retrofit2.http.PUT("v1/profile")
     Call<ApiResponse<ProfileResponseDto>> updateProfile(@retrofit2.http.Body java.util.Map<String, String> body);
 
+    @retrofit2.http.PUT("v1/profile/change-password")
+    Call<ApiResponse<Object>> changePassword(@retrofit2.http.Body java.util.Map<String, String> body);
+
     @retrofit2.http.GET("v1/profile/stats")
     Call<ApiResponse<com.hafiztraveltours.app.models.ProfileStatsDto>> getProfileStats();
 

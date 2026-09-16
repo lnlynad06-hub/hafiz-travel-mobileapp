@@ -27,6 +27,7 @@
 
         <activity android:name=".ui.HubungiKamiActivity" />
         <activity android:name=".ui.PanduanUmrahActivity" />
+        <activity android:name=".ui.QiblaActivity" android:exported="false" />
 
         <activity android:name=".ui.TentangKamiActivity" />
 

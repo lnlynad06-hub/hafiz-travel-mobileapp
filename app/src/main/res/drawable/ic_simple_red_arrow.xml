@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="260dp"
+    android:height="260dp"
+    android:viewportWidth="260"
+    android:viewportHeight="260">
+
+    <!-- PURE SIMPLE RED TRIANGLE/ARROW AT 0° (Tip physically pointing UP to top center 130, 20) -->
+    <path
+        android:pathData="M 130 20 L 150 130 L 130 115 L 110 130 Z"
+        android:fillColor="#E11D48"/>
+
+    <!-- Small center dot for pivot alignment check -->
+    <path
+        android:pathData="M 130 126 A 4 4 0 1 1 129.9 126 Z"
+        android:fillColor="#FFFFFF"/>
+</vector>

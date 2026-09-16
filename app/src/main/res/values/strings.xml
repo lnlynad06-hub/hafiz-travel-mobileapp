@@ -42,7 +42,8 @@
     <!-- Sign Up screen -->
     <string name="signup_title">Create an Account</string>
     <string name="signup_subtitle">Sign up to start planning your vacation.</string>
-    <string name="hint_full_name">Full name</string>
+    <string name="hint_full_name">Full name *</string>
+    <string name="hint_nickname">Nickname *</string>
     <string name="hint_phone">Phone Number</string>
     <string name="hint_confirm_password">Confirm Password</string>
     <string name="signup_button">Sign Up</string>
@@ -53,26 +54,34 @@
     <string name="signup_have_account">Already have an account? Log in</string>
     <string name="signup_or_with">Or Sign Up With</string>
     <string name="signup_guest">Login as Guest</string>
+    <string name="password_strength_too_short">Too Short</string>
     <string name="password_strength_weak">Weak</string>
     <string name="password_strength_medium">Medium</string>
     <string name="password_strength_strong">Strong</string>
+    <string name="passwords_match">Passwords match</string>
+    <string name="passwords_mismatch">Passwords do not match</string>
     <string name="btn_continue_google">Continue with Google</string>
     <string name="social_signup_google">Sign up with Google</string>
     <string name="select_country_code">Select Country Code</string>
     <string name="region_southeast_asia">SOUTHEAST ASIA</string>
     <string name="region_international">OTHER INTERNATIONAL</string>
     <string name="err_name_required">Please enter your full name</string>
+    <string name="err_nickname_required">Please enter your nickname.</string>
     <string name="err_email_invalid">Please enter a valid email address</string>
     <string name="err_phone_invalid">Please enter a valid phone number</string>
-    <string name="err_password_short">Password must be at least 6 characters</string>
+    <string name="err_password_short">Password must be at least 8 characters</string>
     <string name="err_password_mismatch">Passwords do not match</string>
     <string name="err_signup_failed">Registration failed. Please try again.</string>
     <string name="err_signup_email_exists">Email or phone number is already registered</string>
     <string name="err_network">Connection error. Please check your internet.</string>
     <string name="signup_success">Registration successful!</string>
-    <string name="password_tip_length">8+ chars</string>
-    <string name="password_tip_number">0–9</string>
-    <string name="password_tip_symbol">!@#$</string>
+    <string name="password_requirements_header">Password requirements</string>
+    <string name="req_pass_min_length">At least 8 characters</string>
+    <string name="req_pass_uppercase">Uppercase letter</string>
+    <string name="req_pass_lowercase">Lowercase letter</string>
+    <string name="req_pass_number">Number</string>
+    <string name="req_pass_special">Special character</string>
+    <string name="password_status_strong">Strong password</string>
 
     <string name="guest_greeting">Assalamualaikum</string>
     <string name="user_greeting">Assalamualaikum</string>
@@ -82,10 +91,12 @@
     <string name="hero_headline_user">Where is your next\ndream journey?</string>
 
     <string name="nav_home">Home</string>
+    <string name="nav_booking">My Booking</string>
     <string name="nav_explore">Explore</string>
+    <string name="nav_favorite">Favorite</string>
+    <string name="nav_profile">Profile</string>
     <string name="nav_umrah">Umrah</string>
     <string name="nav_tour">Tour</string>
-    <string name="nav_favorite">Favorite</string>
 
     <string name="quick_nusuk">Nusuk</string>
     <string name="quick_guideline">Umrah Guide</string>
@@ -624,6 +635,37 @@
     <string name="prayer_countdown_entered">Prayer time has arrived</string>
     <string name="prayer_countdown_min">%1$s in %2$dm</string>
     <string name="prayer_countdown_hour_min">%1$s in %2$dh %3$dm</string>
+    <string name="qibla_title">Qibla Direction</string>
+    <string name="qibla_subtitle">Find the direction of Kaaba</string>
+    <string name="qibla_screen_title">Qibla Compass</string>
+    <string name="qibla_aligned">✓ Facing Qibla</string>
+    <string name="qibla_degree_format">Qibla: %1$.0f°</string>
+    <string name="qibla_kaaba_dist">Kaaba: Makkah, Saudi Arabia</string>
+    <string name="qibla_no_sensor">Device sensor not available. Unable to display compass movement.</string>
+    <string name="qibla_permission_needed">Location permission is required to calculate accurate Qibla bearing.</string>
+    <string name="qibla_grant_permission">Grant Location Permission</string>
+    <string name="qibla_accuracy_title">Compass accuracy</string>
+    <string name="qibla_accuracy_notice">For a more reliable direction, hold your phone flat and keep it away from magnets, metal objects and electronic devices.</string>
+    <string name="qibla_calibrate_action">Calibrate Compass</string>
+    <string name="qibla_calibrate_dialog_title">Calibrate Compass</string>
+    <string name="qibla_calibrate_dialog_msg">Hold your phone flat and slowly wave it in a smooth figure-8 (∞) motion a few times to re-center the magnetic sensor.</string>
+    <string name="qibla_calibrate_dialog_ok">Done</string>
+    <string name="qibla_bearing_label">Qibla Bearing</string>
+    <string name="qibla_distance_label">Distance to Kaaba</string>
+    <string name="qibla_angle_label">Your angle to Qibla</string>
+    <string name="qibla_angle_left">%1$d° left</string>
+    <string name="qibla_angle_right">%1$d° right</string>
+    <string name="qibla_angle_behind">Qibla is behind you (%1$d°)</string>
+    <string name="qibla_angle_behind_left">Qibla is behind to the left (%1$d°)</string>
+    <string name="qibla_angle_behind_right">Qibla is behind to the right (%1$d°)</string>
+    <string name="qibla_angle_aligned">Aligned (0°)</string>
+    <string name="qibla_instruction">Point the red needle toward Qibla</string>
+    <string name="qibla_hold_steady">Hold steady for 2 seconds to confirm Qibla</string>
+    <string name="qibla_hold_steady_timer">Hold steady · %1$.1fs</string>
+    <string name="qibla_confirmed_aligned">✓ Qibla confirmed</string>
+    <string name="qibla_facing_sub">Your phone is facing the Qibla</string>
+    <string name="qibla_kaaba_location">Kaaba · Mecca, Saudi Arabia</string>
+    <string name="qibla_interference">Compass interference detected. Please move away from magnets or metal objects.</string>
 
     <!-- Shared error / status messages (also used for previously hardcoded Toasts & dialogs) -->
     <string name="err_server_connection">Failed to connect to the backend server.</string>
@@ -660,8 +702,9 @@
     <string name="profile_reset_message">Send a password reset link to: %1$s?</string>
     <string name="profile_reset_send">Send</string>
     <string name="profile_reset_sent">A password reset link has been sent to your email!</string>
-    <string name="profile_field_full_name">Full Name</string>
-    <string name="profile_field_phone">Phone Number</string>
+    <string name="profile_field_full_name">Full Name <font color="#DC2626">*</font></string>
+    <string name="profile_field_nickname">Nickname <font color="#DC2626">*</font></string>
+    <string name="profile_field_phone">Phone Number <font color="#DC2626">*</font></string>
     <string name="profile_field_email">Email</string>
 
     <!-- Misc -->
@@ -794,21 +837,21 @@
     <string name="profile_update_failed">Failed to update profile. Please try again.</string>
 
     <!-- Profile & Document Vault Strings -->
-    <string name="profile_field_ic_no">IC / NRIC Number</string>
-    <string name="profile_field_passport_no">Passport Number</string>
-    <string name="profile_field_passport_expiry">Passport Expiry Date (YYYY-MM-DD)</string>
+    <string name="profile_field_ic_no">IC / NRIC Number <font color="#DC2626">*</font></string>
+    <string name="profile_field_passport_no">Passport Number <font color="#DC2626">*</font></string>
+    <string name="profile_field_passport_expiry">Passport Expiry Date (YYYY-MM-DD) <font color="#DC2626">*</font></string>
     <string name="profile_field_emergency_name">Emergency Contact Name</string>
     <string name="profile_field_emergency_phone">Emergency Contact Phone</string>
     <string name="profile_field_mahram_name">Mahram Name (If applicable)</string>
-    <string name="profile_travel_documents">Travel Documents Vault</string>
-    <string name="doc_passport_copy">Passport Copy (Main Page)</string>
+    <string name="profile_travel_documents">Travel Documents</string>
+    <string name="doc_passport_copy">Passport Copy (Main Page) <font color="#DC2626">*</font></string>
     <string name="doc_vaccine_cert">Meningitis Vaccine Certificate</string>
     <string name="doc_marriage_cert">Marriage / Mahram Certificate</string>
     <string name="doc_status_verified">Verified</string>
     <string name="doc_status_pending">Pending Review</string>
     <string name="doc_status_not_uploaded">Not Uploaded</string>
     <string name="doc_upload_btn">Upload / View</string>
-    <string name="doc_vault_info">Manage your official passport, vaccine certificate, and travel clearance documents.</string>
+    <string name="doc_vault_info">Your travel documents, all in one place.</string>
 
     <string name="profile_section_personal">Personal Details</string>
     <string name="profile_section_travel_identity">Passport &amp; Travel Identity</string>
@@ -824,5 +867,95 @@
     <string name="doc_trip_info">Documents automatically reused from your profile alongside required trip-specific clearance.</string>
     <string name="doc_status_rejected">Rejected</string>
     <string name="doc_rejection_reason_prefix">Reason: %1$s</string>
+
+    <!-- Redesigned Edit Profile Strings -->
+    <string name="edit_profile_title">Edit Profile</string>
+    <string name="edit_profile_subtitle">Update your personal, passport, emergency &amp; mahram details</string>
+    <string name="section_personal_info">Personal Information</string>
+    <string name="section_passport_info">Passport Information</string>
+    <string name="section_emergency_contact">Emergency Contact</string>
+    <string name="section_mahram_info">Mahram Information</string>
+    <string name="section_security">Security</string>
+    <string name="label_mahram_applicable">Mahram applicable?</string>
+    <string name="label_relationship">Relationship</string>
+    <string name="hint_relationship">e.g. Husband, Father, Brother</string>
+    <string name="change_password_dialog_subtitle">Enter your current and new password below</string>
+    <string name="hint_current_password_required">Current Password <font color="#DC2626">*</font></string>
+    <string name="hint_new_password_required">New Password <font color="#DC2626">*</font></string>
+    <string name="hint_confirm_new_password_required">Confirm New Password <font color="#DC2626">*</font></string>
+    <string name="btn_update_password">Update Password</string>
+    <string name="password_updating">Updating...</string>
+    <string name="password_updated_success">Password updated successfully!</string>
+    <string name="password_update_failed">Failed to update password. Please check your current password.</string>
+    <string name="passport_expiry_warning">Warning: Passport expires in less than 6 months (%1$s)! Renewal recommended for international travel &amp; Umrah visa.</string>
+    <string name="passport_expired_warning">Warning: Passport has expired (%1$s)! Renewal required for travel.</string>
+    <string name="err_current_password_required">Please enter your current password</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="email_readonly_helper">Your registered account email</string>
+    <!-- Redesigned Travel Documents Vault Strings -->
+    <string name="vault_security_banner_title">Secure Document Storage</string>
+    <string name="vault_security_banner_body">Your documents are securely stored and protected.</string>
+    <string name="vault_section_identity">Identity Documents</string>
+    <string name="vault_section_photo">Personal Photo</string>
+    <string name="vault_section_travel">Travel-Specific Documents</string>
+    <string name="doc_ic_title">MyKad / Identity Card (IC) <font color="#DC2626">*</font></string>
+    <string name="doc_ic_desc">National ID required for agency registration &amp; visa clearance</string>
+    <string name="doc_passport_photo_title">Passport Photo <font color="#DC2626">*</font></string>
+    <string name="doc_passport_photo_desc">Standard white background passport photo (JPG/PNG)</string>
+    <string name="doc_travel_visa_title">Travel Visa</string>
+    <string name="doc_travel_visa_desc">Visa document required for certain international destinations.</string>
+    <string name="doc_status_under_review">Under Review</string>
+    <string name="doc_updated_at_format">Uploaded: %1$s</string>
+    <string name="doc_expires_at_format">Expires: %1$s</string>
+    <string name="legend_required"><font color="#DC2626">*</font> Required</string>
+
+    <!-- Requirements & Upload Dialog Strings -->
+    <string name="doc_view_requirements">View Requirements</string>
+    <string name="req_subtitle">Please review standard specifications before uploading</string>
+    <string name="req_passport_title">Passport Requirements</string>
+    <string name="req_passport_1">Clear copy of passport biodata page</string>
+    <string name="req_passport_2">Full name &amp; passport number must be clearly readable</string>
+    <string name="req_passport_3">Passport photo must be clearly visible</string>
+    <string name="req_passport_4">Document must not be blurry or cropped</string>
+    <string name="req_ic_title">MyKad / IC Requirements</string>
+    <string name="req_ic_1">Clear copy of MyKad (front and back where required)</string>
+    <string name="req_ic_2">Full name &amp; identification number must be readable</string>
+    <string name="req_ic_3">Document must not be blurry or cropped</string>
+    <string name="req_photo_title">Passport Photo Requirements</string>
+    <string name="req_photo_1">Recent passport-sized photo</string>
+    <string name="req_photo_2">Face clearly visible with plain background</string>
+    <string name="req_photo_3">No excessive blur, shadows, or dark lighting</string>
+    <string name="req_visa_title">Travel Visa Requirements</string>
+    <string name="req_visa_1">Valid travel visa document issued for target country</string>
+    <string name="req_visa_2">Visa details, destination, and reference number readable</string>
+    <string name="req_visa_3">Issue date &amp; expiry date clearly visible</string>
+    <string name="upload_accepted_formats">Accepted formats: JPG, JPEG, PNG, PDF</string>
+    <string name="upload_accepted_formats_photo">Accepted formats: JPG, JPEG, PNG</string>
+    <string name="upload_max_size">Maximum file size: 5 MB</string>
+    <string name="upload_tip">Make sure the document is clear, readable, and not cropped.</string>
+    <string name="btn_choose_file">Choose File from Device</string>
+    <string name="btn_got_it">Got It</string>
+    <string name="upload_privacy_notice">Personal details are encrypted and securely processed for verification.</string>
+    <string name="err_file_format">Unsupported format. Accepted: JPG, JPEG, PNG, PDF.</string>
+    <string name="err_file_format_photo">Unsupported format. Accepted: JPG, JPEG, PNG.</string>
+    <string name="err_file_size">File is too large. Maximum allowed size is 5 MB.</string>
+    <string name="err_file_empty">Selected file is invalid or empty. Please select another file.</string>
+    <string name="doc_upload_success">Document uploaded successfully for review!</string>
+
+    <!-- Verification Progress Strings -->
+    <string name="doc_verification_title">Document Verification</string>
+    <string name="doc_progress_count_format">%1$d of %2$d verified</string>
+    <string name="msg_doc_progress_start">Upload your required documents to get started.</string>
+    <string name="msg_doc_progress_partial">Some documents still require your attention.</string>
+    <string name="msg_doc_progress_under_review">All required documents have been submitted. Verification is in progress.</string>
+    <string name="msg_doc_progress_complete">All required documents have been verified.</string>
+    <string name="msg_doc_progress_rejected">Some documents require action. Please review and replace the rejected document.</string>
+
+    <!-- Document Status Guidance Strings -->
+    <string name="doc_guidance_under_review">Your document has been submitted and is being reviewed by Hafiz Travel.</string>
+    <string name="doc_guidance_verified">Your document has been received and verified.</string>
+    <string name="doc_verified_at_format">Verified: %1$s</string>
+    <string name="doc_status_not_required">Not Required</string>
 
 </resources>

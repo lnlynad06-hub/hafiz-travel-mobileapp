@@ -83,6 +83,17 @@ public class SessionManager {
         return user != null && user.name != null ? user.name : "Tetamu Jemaah";
     }
 
+    public String getUserNickname() {
+        UserDto user = getUser();
+        if (user != null && user.nickname != null && !user.nickname.trim().isEmpty()) {
+            return user.nickname.trim();
+        }
+        if (user != null && user.name != null && !user.name.trim().isEmpty()) {
+            return user.name.trim().split(" ")[0];
+        }
+        return "Tetamu Jemaah";
+    }
+
     public String getUserEmail() {
         UserDto user = getUser();
         return user != null && user.email != null ? user.email : "";

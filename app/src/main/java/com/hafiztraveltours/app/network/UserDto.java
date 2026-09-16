@@ -13,6 +13,9 @@ public class UserDto {
     @SerializedName("name")
     public String name;
 
+    @SerializedName("nickname")
+    public String nickname;
+
     @SerializedName("email")
     public String email;
 
@@ -30,6 +33,14 @@ public class UserDto {
     public UserDto(String id, String name, String email, String phone) {
         this.id = id;
         this.name = name;
+        this.email = email;
+        this.phone = phone;
+    }
+
+    public UserDto(String id, String name, String nickname, String email, String phone) {
+        this.id = id;
+        this.name = name;
+        this.nickname = nickname;
         this.email = email;
         this.phone = phone;
     }

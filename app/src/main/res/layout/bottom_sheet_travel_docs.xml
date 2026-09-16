@@ -10,7 +10,7 @@
     android:paddingEnd="20dp"
     android:paddingBottom="28dp">
 
-    <!-- Drag Handle -->
+    <!-- 1. Drag Handle -->
     <View
         android:layout_width="40dp"
         android:layout_height="4dp"
@@ -18,11 +18,11 @@
         android:layout_marginBottom="16dp"
         android:background="#DCDCE2" />
 
-    <!-- Header & Close -->
+    <!-- 1. Header & Close -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="14dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -61,7 +61,7 @@
             app:tint="#616161" />
     </RelativeLayout>
 
-    <!-- Progress Card -->
+    <!-- 2. Security / Information Banner -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -73,45 +73,122 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="14dp">
+            android:orientation="horizontal"
+            android:padding="14dp"
+            android:gravity="top">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_marginTop="1dp"
+                android:src="@drawable/ic_shield_check"
+                app:tint="@color/brand_magenta" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="12dp"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Profile Document Readiness"
+                    android:text="@string/vault_security_banner_title"
                     android:textColor="@color/text_dark"
                     android:textSize="13sp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tvVaultProgressText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:text="Reusable &amp; Auto-Linked"
-                    android:textColor="@color/brand_magenta"
+                    android:layout_marginTop="3dp"
+                    android:text="@string/vault_security_banner_body"
+                    android:textColor="@color/text_gray"
                     android:textSize="11sp"
-                    android:textStyle="bold" />
-            </RelativeLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Documents uploaded here are automatically attached to all future Umrah and Tour bookings."
-                android:textColor="@color/text_gray"
-                android:textSize="11sp" />
+                    android:lineSpacingExtra="2dp" />
+            </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <androidx.core.widget.NestedScrollView
+    <!-- 3. Document Verification Progress Card -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardDocProgressContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:cardBackgroundColor="@color/card_surface"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="1dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/doc_verification_title"
+                    android:textColor="@color/text_dark"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvDocProgressPercent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0%"
+                    android:textColor="@color/brand_magenta"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvDocProgressCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="@string/doc_progress_count_format"
+                android:textColor="@color/text_gray"
+                android:textSize="12sp" />
+
+            <ProgressBar
+                android:id="@+id/pbDocVerification"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_marginTop="10dp"
+                android:max="100"
+                android:progress="0"
+                android:progressDrawable="@drawable/bg_loyalty_progress" />
+
+            <TextView
+                android:id="@+id/tvDocProgressMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/msg_doc_progress_start"
+                android:textColor="@color/brand_magenta"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Scrollable Document Cards -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:maxHeight="440dp"
         android:overScrollMode="never">
 
         <LinearLayout
@@ -119,7 +196,17 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- 1. Passport Card -->
+            <!-- ==================== 3. IDENTITY DOCUMENTS SECTION ==================== -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="@string/vault_section_identity"
+                android:textColor="@color/brand_magenta"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <!-- Passport Card -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardDocPassport"
                 android:layout_width="match_parent"
@@ -184,15 +271,81 @@
                             android:textColor="@color/text_gray"
                             android:textSize="11sp"
                             android:textStyle="bold" />
-
                     </LinearLayout>
 
+                    <!-- Dates & Info -->
+                    <TextView
+                        android:id="@+id/tvPassportDates"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textColor="@color/text_gray"
+                        android:textSize="11sp"
+                        android:visibility="gone" />
+
+                    <!-- Status Guidance Message -->
+                    <TextView
+                        android:id="@+id/tvPassportGuidance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:textColor="@color/text_gray"
+                        android:textSize="11sp"
+                        android:visibility="gone" />
+
+                    <!-- Rejection Reason Container -->
+                    <LinearLayout
+                        android:id="@+id/passportRejectionContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/bg_rejection_reason"
+                        android:padding="10dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/ic_warning"
+                            app:tint="#DC2626" />
+
+                        <TextView
+                            android:id="@+id/tvPassportRejectionReason"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="8dp"
+                            android:textColor="#B91C1C"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+
+                    <!-- Action Row -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:gravity="end"
+                        android:gravity="center_vertical"
                         android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/btnPassportReq"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:paddingVertical="4dp"
+                            android:paddingEnd="8dp"
+                            android:text="@string/doc_view_requirements"
+                            android:textColor="@color/brand_magenta"
+                            android:textSize="11sp"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1" />
 
                         <TextView
                             android:id="@+id/btnPassportAction"
@@ -211,12 +364,12 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- 2. IC / NRIC Card -->
+            <!-- MyKad / IC Card -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardDocVaccine"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
+                android:layout_marginBottom="18dp"
                 app:cardBackgroundColor="@color/card_surface"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="1dp">
@@ -238,7 +391,7 @@
                             android:layout_height="38dp"
                             android:background="@drawable/circle_bg_light"
                             android:padding="9dp"
-                            android:src="@drawable/ic_terms_shield"
+                            android:src="@drawable/ic_card"
                             app:tint="@color/pink_dark" />
 
                         <LinearLayout
@@ -251,7 +404,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="MyKad / IC Copy"
+                                android:text="@string/doc_ic_title"
                                 android:textColor="@color/text_dark"
                                 android:textSize="14sp"
                                 android:textStyle="bold" />
@@ -260,7 +413,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
-                                android:text="Required for Malaysian Agency &amp; Visa Verification"
+                                android:text="@string/doc_ic_desc"
                                 android:textColor="@color/text_gray"
                                 android:textSize="11sp" />
                         </LinearLayout>
@@ -276,15 +429,81 @@
                             android:textColor="@color/text_gray"
                             android:textSize="11sp"
                             android:textStyle="bold" />
-
                     </LinearLayout>
 
+                    <!-- Dates & Info -->
+                    <TextView
+                        android:id="@+id/tvVaccineDates"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textColor="@color/text_gray"
+                        android:textSize="11sp"
+                        android:visibility="gone" />
+
+                    <!-- Status Guidance Message -->
+                    <TextView
+                        android:id="@+id/tvVaccineGuidance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:textColor="@color/text_gray"
+                        android:textSize="11sp"
+                        android:visibility="gone" />
+
+                    <!-- Rejection Reason Container -->
+                    <LinearLayout
+                        android:id="@+id/vaccineRejectionContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/bg_rejection_reason"
+                        android:padding="10dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/ic_warning"
+                            app:tint="#DC2626" />
+
+                        <TextView
+                            android:id="@+id/tvVaccineRejectionReason"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="8dp"
+                            android:textColor="#B91C1C"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+
+                    <!-- Action Row -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:gravity="end"
+                        android:gravity="center_vertical"
                         android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/btnVaccineReq"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:paddingVertical="4dp"
+                            android:paddingEnd="8dp"
+                            android:text="@string/doc_view_requirements"
+                            android:textColor="@color/brand_magenta"
+                            android:textSize="11sp"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1" />
 
                         <TextView
                             android:id="@+id/btnVaccineAction"
@@ -303,12 +522,23 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- 3. Passport Photo Card -->
+
+            <!-- ==================== 4. PERSONAL PHOTO SECTION ==================== -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="@string/vault_section_photo"
+                android:textColor="@color/brand_magenta"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <!-- Passport Photo Card -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardDocMarriage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="12dp"
                 app:cardBackgroundColor="@color/card_surface"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="1dp">
@@ -343,7 +573,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Passport Photo"
+                                android:text="@string/doc_passport_photo_title"
                                 android:textColor="@color/text_dark"
                                 android:textSize="14sp"
                                 android:textStyle="bold" />
@@ -352,7 +582,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
-                                android:text="White Background Passport Photo (JPG/PNG)"
+                                android:text="@string/doc_passport_photo_desc"
                                 android:textColor="@color/text_gray"
                                 android:textSize="11sp" />
                         </LinearLayout>
@@ -368,18 +598,254 @@
                             android:textColor="@color/text_gray"
                             android:textSize="11sp"
                             android:textStyle="bold" />
-
                     </LinearLayout>
 
+                    <!-- Dates & Info -->
+                    <TextView
+                        android:id="@+id/tvMarriageDates"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textColor="@color/text_gray"
+                        android:textSize="11sp"
+                        android:visibility="gone" />
+
+                    <!-- Status Guidance Message -->
+                    <TextView
+                        android:id="@+id/tvMarriageGuidance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:textColor="@color/text_gray"
+                        android:textSize="11sp"
+                        android:visibility="gone" />
+
+                    <!-- Rejection Reason Container -->
+                    <LinearLayout
+                        android:id="@+id/marriageRejectionContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/bg_rejection_reason"
+                        android:padding="10dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/ic_warning"
+                            app:tint="#DC2626" />
+
+                        <TextView
+                            android:id="@+id/tvMarriageRejectionReason"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="8dp"
+                            android:textColor="#B91C1C"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+
+                    <!-- Action Row -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:gravity="end"
+                        android:gravity="center_vertical"
                         android:orientation="horizontal">
 
                         <TextView
+                            android:id="@+id/btnMarriageReq"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:paddingVertical="4dp"
+                            android:paddingEnd="8dp"
+                            android:text="@string/doc_view_requirements"
+                            android:textColor="@color/brand_magenta"
+                            android:textSize="11sp"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1" />
+
+                        <TextView
                             android:id="@+id/btnMarriageAction"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_button_pink"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:paddingHorizontal="14dp"
+                            android:paddingVertical="7dp"
+                            android:text="@string/doc_action_upload"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+
+            <!-- ==================== 5. TRAVEL-SPECIFIC DOCUMENTS SECTION ==================== -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="10dp"
+                android:text="@string/vault_section_travel"
+                android:textColor="@color/brand_magenta"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <!-- Travel Visa Card -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardDocVisa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                app:cardBackgroundColor="@color/card_surface"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="38dp"
+                            android:layout_height="38dp"
+                            android:background="@drawable/circle_bg_light"
+                            android:padding="9dp"
+                            android:src="@drawable/ic_visa"
+                            app:tint="@color/pink_dark" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="12dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/doc_travel_visa_title"
+                                android:textColor="@color/text_dark"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="@string/doc_travel_visa_desc"
+                                android:textColor="@color/text_gray"
+                                android:textSize="11sp" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tvVisaStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_status_not_uploaded"
+                            android:paddingHorizontal="10dp"
+                            android:paddingVertical="4dp"
+                            android:text="@string/doc_status_not_uploaded"
+                            android:textColor="@color/text_gray"
+                            android:textSize="11sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <!-- Dates & Info -->
+                    <TextView
+                        android:id="@+id/tvVisaDates"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textColor="@color/text_gray"
+                        android:textSize="11sp"
+                        android:visibility="gone" />
+
+                    <!-- Status Guidance Message -->
+                    <TextView
+                        android:id="@+id/tvVisaGuidance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:textColor="@color/text_gray"
+                        android:textSize="11sp"
+                        android:visibility="gone" />
+
+                    <!-- Rejection Reason Container -->
+                    <LinearLayout
+                        android:id="@+id/visaRejectionContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/bg_rejection_reason"
+                        android:padding="10dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/ic_warning"
+                            app:tint="#DC2626" />
+
+                        <TextView
+                            android:id="@+id/tvVisaRejectionReason"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="8dp"
+                            android:textColor="#B91C1C"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+
+                    <!-- Action Row -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/btnVisaReq"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:paddingVertical="4dp"
+                            android:paddingEnd="8dp"
+                            android:text="@string/doc_view_requirements"
+                            android:textColor="@color/brand_magenta"
+                            android:textSize="11sp"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:id="@+id/btnVisaAction"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="@drawable/bg_button_pink"
@@ -399,4 +865,3 @@
     </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>
-
