@@ -112,7 +112,7 @@ public class UmrahActivity extends AppCompatActivity {
             swipeRefresh.setOnRefreshListener(this::loadPackagesFromApi);
         }
 
-        BottomNavHelper.setup(this, BottomNavHelper.Tab.UMRAH);
+        BottomNavHelper.setup(this, BottomNavHelper.Tab.NONE);
         loadPackagesFromApi();
     }
 

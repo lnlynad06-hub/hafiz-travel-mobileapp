@@ -63,4 +63,14 @@
     <color name="input_background">#F4F4F5</color>
     <color name="input_text">#18181B</color>
     <color name="input_hint">#A1A1AA</color>
+
+    <!-- Kinetic Silk Design Tokens -->
+    <color name="kinetic_primary">#E6007A</color>
+    <color name="kinetic_on_primary">#FFFFFF</color>
+    <color name="kinetic_secondary">#111827</color>
+    <color name="kinetic_tertiary_success">#10B981</color>
+    <color name="kinetic_tertiary_container">#ECFDF5</color>
+    <color name="kinetic_background">#FBFBFA</color>
+    <color name="kinetic_neutral_muted">#6B7280</color>
+    <color name="kinetic_border">#E5E7EB</color>
 </resources>

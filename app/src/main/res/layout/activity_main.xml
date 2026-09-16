@@ -267,24 +267,130 @@
 
             </androidx.cardview.widget.CardView>
 
-            <!-- Premium Travel-App Prayer Times & Qibla Utility -->
-            <androidx.cardview.widget.CardView
+            <!-- Premium Travel-App Prayer Times & Qibla Utility (Redesigned Editorial Experience) -->
+            <LinearLayout
+                android:id="@+id/prayerTimesCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="16dp"
-                app:cardCornerRadius="18dp"
-                app:cardElevation="2dp"
-                app:cardBackgroundColor="@color/card_surface">
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="12dp"
+                android:orientation="vertical">
 
+                <!-- 1. SIMPLE HEADER (Un-carded, spacious, clean typography) -->
                 <LinearLayout
-                    android:id="@+id/prayerTimesCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="18dp">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                    <!-- Header Row: Title & Hijri Date -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/prayerTimesDateText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/prayer_times_header"
+                            android:textColor="@color/text_dark"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:fontFamily="sans-serif-medium"
+                            android:letterSpacing="-0.01" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="1dp"
+                            android:text="@string/prayer_times_subtitle"
+                            android:textColor="@color/text_gray"
+                            android:textSize="12.5sp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/prayerHijriLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1 Rejab 1448H"
+                        android:textColor="@color/pink_dark"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:background="@drawable/bg_hijri_badge"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="5dp" />
+                </LinearLayout>
+
+                <!-- 2. LOCATION (Minimal metadata row below header) -->
+                <LinearLayout
+                    android:id="@+id/btnRefreshPrayerLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:paddingVertical="4dp"
+                    android:background="?attr/selectableItemBackgroundBorderless">
+
+                    <ImageView
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:src="@drawable/ic_location_pin"
+                        app:tint="@color/text_gray"
+                        android:contentDescription="@null" />
+
+                    <TextView
+                        android:id="@+id/prayerLocationLabel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="6dp"
+                        android:text="Johor Bahru"
+                        android:textColor="@color/text_gray"
+                        android:textSize="12.5sp"
+                        android:fontFamily="sans-serif-medium"
+                        android:ellipsize="end"
+                        android:maxLines="1" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/prayer_refresh_action"
+                            android:textColor="@color/pink_dark"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:id="@+id/ivRefreshPrayerLocation"
+                            android:layout_width="13dp"
+                            android:layout_height="13dp"
+                            android:layout_marginStart="4dp"
+                            android:src="@drawable/ic_refresh"
+                            app:tint="@color/pink_dark"
+                            android:contentDescription="@string/prayer_refresh_location" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- 3. NEXT PRAYER — MAIN HERO SECTION -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/bg_prayer_hero_surface"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="18dp">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -292,103 +398,25 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/prayerTimesDateText"
+                            android:id="@+id/prayerNextEyebrow"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="@string/prayer_times_header"
+                            android:text="@string/prayer_label_upcoming"
                             android:textColor="@color/pink_dark"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:letterSpacing="0.08" />
 
-                        <TextView
-                            android:id="@+id/prayerHijriLabel"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="1 Rejab 1448H"
-                            android:textColor="@color/text_gray"
-                            android:textSize="12sp"
-                            android:fontFamily="sans-serif-medium" />
-                    </LinearLayout>
-
-                    <!-- Location Bar with Refresh Trigger -->
-                    <LinearLayout
-                        android:id="@+id/btnRefreshPrayerLocation"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:paddingVertical="2dp"
-                        android:paddingEnd="8dp"
-                        android:background="?attr/selectableItemBackgroundBorderless">
-
-                        <TextView
-                            android:id="@+id/prayerLocationLabel"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Johor Bahru"
-                            android:textColor="@color/text_gray"
-                            android:textSize="12.5sp"
-                            android:ellipsize="end"
-                            android:maxLines="1" />
-
-                        <ImageView
-                            android:id="@+id/ivRefreshPrayerLocation"
-                            android:layout_width="14dp"
-                            android:layout_height="14dp"
-                            android:layout_marginStart="6dp"
-                            android:src="@drawable/ic_refresh"
-                            app:tint="@color/pink_dark"
-                            android:contentDescription="@string/prayer_refresh_location" />
-                    </LinearLayout>
-
-                    <!-- Next Prayer Hero Banner -->
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="14dp"
-                        android:background="@drawable/bg_hero_card_clean"
-                        android:paddingHorizontal="16dp"
-                        android:paddingVertical="14dp">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentStart="true"
-                            android:layout_centerVertical="true"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/prayerNextLabel"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/text_dark"
-                                android:textSize="18sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:id="@+id/prayerCurrentLabel"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="2dp"
-                                android:textColor="@color/text_gray"
-                                android:textSize="12sp" />
-                        </LinearLayout>
-
-                        <!-- Countdown Pill -->
+                        <!-- Countdown Badge -->
                         <LinearLayout
                             android:id="@+id/prayerCountdownContainer"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            android:background="@drawable/bg_prayer_countdown_pill"
+                            android:background="@drawable/bg_prayer_countdown_badge"
                             android:gravity="center"
-                            android:paddingHorizontal="12dp"
-                            android:paddingVertical="6dp">
+                            android:paddingHorizontal="10dp"
+                            android:paddingVertical="5dp">
 
                             <TextView
                                 android:id="@+id/prayerCountdownText"
@@ -399,246 +427,297 @@
                                 android:textSize="12sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/prayerNextLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="ASAR"
+                        android:textColor="@color/text_dark"
+                        android:textSize="28sp"
+                        android:fontFamily="sans-serif-medium"
+                        android:textStyle="bold"
+                        android:letterSpacing="-0.02" />
+
+                    <TextView
+                        android:id="@+id/prayerCurrentLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="04:22 PM"
+                        android:textColor="@color/text_dark"
+                        android:textSize="16sp"
+                        android:fontFamily="sans-serif-medium" />
+                </LinearLayout>
+
+                <!-- 4. PRAYER TIMELINE (Editorial dynamic timeline connected with horizontal line) -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <!-- Custom Dynamic Prayer Progression Timeline View -->
+                        <com.hafiztraveltours.app.views.PrayerProgressTimelineView
+                            android:id="@+id/prayerProgressTimelineView"
+                            android:layout_width="match_parent"
+                            android:layout_height="20dp"
+                            android:layout_centerVertical="true" />
+
+                        <!-- 5 Columns Container for Prayer Labels and Times -->
+                        <LinearLayout
+                            android:id="@+id/prayerPillsContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <!-- Subuh Column -->
+                            <LinearLayout
+                                android:id="@+id/pillSubuh"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:paddingVertical="4dp">
+
+                                <TextView
+                                    android:id="@+id/tvNameSubuh"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/prayer_subuh"
+                                    android:textColor="@color/text_dark"
+                                    android:textSize="11.5sp"
+                                    android:textStyle="bold" />
+
+                                <View
+                                    android:id="@+id/dotSubuh"
+                                    android:layout_width="10dp"
+                                    android:layout_height="10dp"
+                                    android:layout_marginVertical="6dp"
+                                    android:visibility="invisible" />
+
+                                <TextView
+                                    android:id="@+id/tvTimeSubuh"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="--:--"
+                                    android:textColor="@color/text_gray"
+                                    android:textSize="11sp"
+                                    android:fontFamily="sans-serif-medium" />
+                            </LinearLayout>
+
+                            <!-- Zohor Column -->
+                            <LinearLayout
+                                android:id="@+id/pillZohor"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:paddingVertical="4dp">
+
+                                <TextView
+                                    android:id="@+id/tvNameZohor"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/prayer_zohor"
+                                    android:textColor="@color/text_dark"
+                                    android:textSize="11.5sp"
+                                    android:textStyle="bold" />
+
+                                <View
+                                    android:id="@+id/dotZohor"
+                                    android:layout_width="10dp"
+                                    android:layout_height="10dp"
+                                    android:layout_marginVertical="6dp"
+                                    android:visibility="invisible" />
+
+                                <TextView
+                                    android:id="@+id/tvTimeZohor"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="--:--"
+                                    android:textColor="@color/text_gray"
+                                    android:textSize="11sp"
+                                    android:fontFamily="sans-serif-medium" />
+                            </LinearLayout>
+
+                            <!-- Asar Column -->
+                            <LinearLayout
+                                android:id="@+id/pillAsar"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:paddingVertical="4dp">
+
+                                <TextView
+                                    android:id="@+id/tvNameAsar"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/prayer_asar"
+                                    android:textColor="@color/text_dark"
+                                    android:textSize="11.5sp"
+                                    android:textStyle="bold" />
+
+                                <View
+                                    android:id="@+id/dotAsar"
+                                    android:layout_width="10dp"
+                                    android:layout_height="10dp"
+                                    android:layout_marginVertical="6dp"
+                                    android:visibility="invisible" />
+
+                                <TextView
+                                    android:id="@+id/tvTimeAsar"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="--:--"
+                                    android:textColor="@color/text_gray"
+                                    android:textSize="11sp"
+                                    android:fontFamily="sans-serif-medium" />
+                            </LinearLayout>
+
+                            <!-- Maghrib Column -->
+                            <LinearLayout
+                                android:id="@+id/pillMaghrib"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:paddingVertical="4dp">
+
+                                <TextView
+                                    android:id="@+id/tvNameMaghrib"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/prayer_maghrib"
+                                    android:textColor="@color/text_dark"
+                                    android:textSize="11.5sp"
+                                    android:textStyle="bold" />
+
+                                <View
+                                    android:id="@+id/dotMaghrib"
+                                    android:layout_width="10dp"
+                                    android:layout_height="10dp"
+                                    android:layout_marginVertical="6dp"
+                                    android:visibility="invisible" />
+
+                                <TextView
+                                    android:id="@+id/tvTimeMaghrib"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="--:--"
+                                    android:textColor="@color/text_gray"
+                                    android:textSize="11sp"
+                                    android:fontFamily="sans-serif-medium" />
+                            </LinearLayout>
+
+                            <!-- Isyak Column -->
+                            <LinearLayout
+                                android:id="@+id/pillIsyak"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:paddingVertical="4dp">
+
+                                <TextView
+                                    android:id="@+id/tvNameIsyak"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/prayer_isyak"
+                                    android:textColor="@color/text_dark"
+                                    android:textSize="11.5sp"
+                                    android:textStyle="bold" />
+
+                                <View
+                                    android:id="@+id/dotIsyak"
+                                    android:layout_width="10dp"
+                                    android:layout_height="10dp"
+                                    android:layout_marginVertical="6dp"
+                                    android:visibility="invisible" />
+
+                                <TextView
+                                    android:id="@+id/tvTimeIsyak"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="--:--"
+                                    android:textColor="@color/text_gray"
+                                    android:textSize="11sp"
+                                    android:fontFamily="sans-serif-medium" />
+                            </LinearLayout>
+
+                        </LinearLayout>
+
                     </RelativeLayout>
-
-                    <!-- Timeline Arc Indicator -->
-                    <com.hafiztraveltours.app.views.PrayerArcView
-                        android:id="@+id/prayerArcView"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_marginTop="10dp" />
-
-                    <!-- 5 Daily Prayer Pills List (Subuh, Zohor, Asar, Maghrib, Isyak) -->
-                    <LinearLayout
-                        android:id="@+id/prayerPillsContainer"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:orientation="horizontal">
-
-                        <!-- Subuh Pill -->
-                        <LinearLayout
-                            android:id="@+id/pillSubuh"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_marginEnd="3dp"
-                            android:background="@drawable/bg_prayer_pill_inactive"
-                            android:gravity="center"
-                            android:orientation="vertical"
-                            android:paddingVertical="8dp"
-                            android:paddingHorizontal="2dp">
-
-                            <TextView
-                                android:id="@+id/tvNameSubuh"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/prayer_subuh"
-                                android:textColor="@color/text_dark"
-                                android:textSize="11sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:id="@+id/tvTimeSubuh"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="2dp"
-                                android:text="--:--"
-                                android:textColor="@color/text_gray"
-                                android:textSize="10.5sp"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <!-- Zohor Pill -->
-                        <LinearLayout
-                            android:id="@+id/pillZohor"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_marginHorizontal="3dp"
-                            android:background="@drawable/bg_prayer_pill_inactive"
-                            android:gravity="center"
-                            android:orientation="vertical"
-                            android:paddingVertical="8dp"
-                            android:paddingHorizontal="2dp">
-
-                            <TextView
-                                android:id="@+id/tvNameZohor"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/prayer_zohor"
-                                android:textColor="@color/text_dark"
-                                android:textSize="11sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:id="@+id/tvTimeZohor"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="2dp"
-                                android:text="--:--"
-                                android:textColor="@color/text_gray"
-                                android:textSize="10.5sp"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <!-- Asar Pill -->
-                        <LinearLayout
-                            android:id="@+id/pillAsar"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_marginHorizontal="3dp"
-                            android:background="@drawable/bg_prayer_pill_inactive"
-                            android:gravity="center"
-                            android:orientation="vertical"
-                            android:paddingVertical="8dp"
-                            android:paddingHorizontal="2dp">
-
-                            <TextView
-                                android:id="@+id/tvNameAsar"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/prayer_asar"
-                                android:textColor="@color/text_dark"
-                                android:textSize="11sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:id="@+id/tvTimeAsar"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="2dp"
-                                android:text="--:--"
-                                android:textColor="@color/text_gray"
-                                android:textSize="10.5sp"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <!-- Maghrib Pill -->
-                        <LinearLayout
-                            android:id="@+id/pillMaghrib"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_marginHorizontal="3dp"
-                            android:background="@drawable/bg_prayer_pill_inactive"
-                            android:gravity="center"
-                            android:orientation="vertical"
-                            android:paddingVertical="8dp"
-                            android:paddingHorizontal="2dp">
-
-                            <TextView
-                                android:id="@+id/tvNameMaghrib"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/prayer_maghrib"
-                                android:textColor="@color/text_dark"
-                                android:textSize="11sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:id="@+id/tvTimeMaghrib"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="2dp"
-                                android:text="--:--"
-                                android:textColor="@color/text_gray"
-                                android:textSize="10.5sp"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <!-- Isyak Pill -->
-                        <LinearLayout
-                            android:id="@+id/pillIsyak"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_marginStart="3dp"
-                            android:background="@drawable/bg_prayer_pill_inactive"
-                            android:gravity="center"
-                            android:orientation="vertical"
-                            android:paddingVertical="8dp"
-                            android:paddingHorizontal="2dp">
-
-                            <TextView
-                                android:id="@+id/tvNameIsyak"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/prayer_isyak"
-                                android:textColor="@color/text_dark"
-                                android:textSize="11sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:id="@+id/tvTimeIsyak"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="2dp"
-                                android:text="--:--"
-                                android:textColor="@color/text_gray"
-                                android:textSize="10.5sp"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <!-- Divider -->
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="12dp"
-                        android:layout_marginBottom="8dp"
-                        android:background="#F0EFEA" />
-
-                    <!-- Compact Qibla Action Row -->
-                    <LinearLayout
-                        android:id="@+id/btnQiblaAction"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingVertical="4dp">
-
-                        <ImageView
-                            android:layout_width="18dp"
-                            android:layout_height="18dp"
-                            android:src="@drawable/ic_kiblat"
-                            app:tint="@color/pink_dark" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_marginStart="8dp"
-                            android:text="@string/qibla_title"
-                            android:textColor="@color/text_dark"
-                            android:textSize="12.5sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="6dp"
-                            android:text="@string/qibla_subtitle"
-                            android:textColor="@color/text_gray"
-                            android:textSize="11sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="→"
-                            android:textColor="@color/pink_dark"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
 
                 </LinearLayout>
 
-            </androidx.cardview.widget.CardView>
+                <!-- 5. QIBLA CTA (Compact horizontal action button/row) -->
+                <LinearLayout
+                    android:id="@+id/btnQiblaAction"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/bg_qibla_cta_surface"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="14dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_kiblat"
+                        app:tint="@color/pink_dark"
+                        android:contentDescription="@null" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="12dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/qibla_title"
+                            android:textColor="@color/text_dark"
+                            android:textSize="13.5sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="1dp"
+                            android:text="@string/qibla_subtitle"
+                            android:textColor="@color/text_gray"
+                            android:textSize="11.5sp" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_chevron_right"
+                        app:tint="@color/pink_dark"
+                        android:contentDescription="@null" />
+
+                </LinearLayout>
+
+            </LinearLayout>
 
             <!-- Quick Service Badges (Nusuk, Guideline, Checklist, WhatsApp) -->
             <androidx.cardview.widget.CardView

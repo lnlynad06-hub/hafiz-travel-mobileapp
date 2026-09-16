@@ -85,4 +85,10 @@
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+    <!-- Shared Floating Bottom Navigation Dock -->
+    <include
+        layout="@layout/layout_luxury_bottom_nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>

@@ -5,36 +5,35 @@
     android:viewportWidth="260"
     android:viewportHeight="260">
 
-    <!-- BACK / COUNTERWEIGHT END: Decorative Grey Needle (Pointing Downward to 180° / Opposite Qibla) -->
-    <path
-        android:pathData="M 130 230 L 137 138 L 130 144 L 123 138 Z"
-        android:fillColor="#94A3B8"/>
+    <!-- CONTINUOUS SOLID COMPASS NEEDLE (Single connected body from Y=25 to Y=235) -->
 
-    <!-- FRONT / DESTINATION END: Primary Red / Magenta Qibla Needle (Pointing Upward to 0° / Qibla Vector) -->
-    <!-- Large, prominent needle shaft -->
+    <!-- Left Half (Continuous Body from Top Qibla Tip to Bottom Tail Tip) -->
     <path
-        android:pathData="M 130 46 L 139 122 L 130 116 L 121 122 Z"
-        android:fillColor="#E11D48"/>
+        android:pathData="M 130 25 L 116 130 L 130 235 Z"
+        android:fillColor="#B90061"/>
 
-    <!-- Center Pivot Ring Accent -->
+    <!-- Right Half (Continuous Body - Darker Dual-Tone Shading for 3D Bevel) -->
     <path
-        android:pathData="M 130 123 A 7 7 0 1 1 129.9 123 Z"
-        android:fillColor="#BE123C"/>
+        android:pathData="M 130 25 L 144 130 L 130 235 Z"
+        android:fillColor="#880045"/>
 
-    <!-- KAABA ICON ON FRONT RED END (Placed precisely at the tip: Y=18 to Y=40) -->
-    <!-- Kaaba Body -->
+    <!-- Tail Accent Layer (Distinct Slate-Gray Overlay on Bottom Half for Qibla Differentiation) -->
     <path
-        android:pathData="M 119 18 L 141 18 A 2 2 0 0 1 143 20 L 143 38 A 2 2 0 0 1 141 40 L 119 40 A 2 2 0 0 1 117 38 L 117 20 A 2 2 0 0 1 119 18 Z"
-        android:fillColor="#0F172A"/>
+        android:pathData="M 130 130 L 116 130 L 130 235 Z"
+        android:fillColor="#475569"/>
 
-    <!-- Gold Kiswah Band -->
     <path
-        android:pathData="M 117 24 L 143 24"
-        android:strokeColor="#F59E0B"
-        android:strokeWidth="2.5"/>
+        android:pathData="M 130 130 L 144 130 L 130 235 Z"
+        android:fillColor="#334155"/>
 
-    <!-- Gold Door Accent -->
+    <!-- Center Pivot Ring Assembly (Mounted over the continuous needle body) -->
+    <!-- Outer Pivot Base Ring -->
     <path
-        android:pathData="M 132 29 L 138 29 L 138 38 L 132 38 Z"
-        android:fillColor="#F59E0B"/>
+        android:pathData="M 130 130 A 10 10 0 1 1 129.9 130 Z"
+        android:fillColor="#151C27"/>
+
+    <!-- Inner Metallic Cap -->
+    <path
+        android:pathData="M 130 130 A 5 5 0 1 1 129.9 130 Z"
+        android:fillColor="#FFFFFF"/>
 </vector>

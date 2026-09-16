@@ -39,7 +39,6 @@ public class QiblaActivity extends AppCompatActivity implements SensorEventListe
     // State machine enum
     private enum QiblaState {
         SEARCHING,
-        HOLDING,
         CONFIRMED
     }
 
@@ -49,8 +48,7 @@ public class QiblaActivity extends AppCompatActivity implements SensorEventListe
     private static final double KAABA_LATITUDE = 21.422487;
     private static final double KAABA_LONGITUDE = 39.826206;
 
-    private ImageView ivCompassDial; // ONLY the Red Qibla Needle View
-    private ImageView ivQiblaPointer;
+    private ImageView ivCompassDial; // The Qibla Compass Needle View
     private TextView tvQiblaLocation;
     private TextView tvQiblaStatus;
     private TextView tvQiblaStatusSub;
@@ -69,42 +67,12 @@ public class QiblaActivity extends AppCompatActivity implements SensorEventListe
 
     private float[] rotationMatrix = new float[9];
     private float[] orientationValues = new float[3];
-    private float[] gravityValues = new float[3];
-    private float[] geomagneticValues = new float[3];
-    private boolean hasGravity = false;
-    private boolean hasGeomagnetic = false;
 
     private double userLatitude = 1.4927; // default JB fallback
     private double userLongitude = 103.7414;
     private double qiblaBearing = 292.5; // default JB bearing
 
     private static final float ALIGNMENT_TOLERANCE_DEG = 5.0f;
-    private static final long CONFIRMATION_TOTAL_MS = 2000L;
-    private static final long TIMER_INTERVAL_MS = 100L;
-
-    private final Handler handler = new Handler(Looper.getMainLooper());
-    private long alignmentStartTimeMs = 0L;
-
-    private final Runnable timerUpdateRunnable = new Runnable() {
-        @Override
-        public void run() {
-            if (currentState != QiblaState.HOLDING) return;
-
-            long elapsed = System.currentTimeMillis() - alignmentStartTimeMs;
-            long remainingMs = Math.max(0L, CONFIRMATION_TOTAL_MS - elapsed);
-            float remainingSec = remainingMs / 1000.0f;
-
-            if (tvQiblaStatus != null) {
-                tvQiblaStatus.setText(String.format(Locale.getDefault(), getString(R.string.qibla_hold_steady_timer), remainingSec));
-            }
-
-            if (elapsed >= CONFIRMATION_TOTAL_MS) {
-                transitionToState(QiblaState.CONFIRMED);
-            } else {
-                handler.postDelayed(this, TIMER_INTERVAL_MS);
-            }
-        }
-    };
 
     private final ActivityResultLauncher<String> locationPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
@@ -127,7 +95,6 @@ public class QiblaActivity extends AppCompatActivity implements SensorEventListe
         setContentView(R.layout.activity_qibla);
 
         ivCompassDial = findViewById(R.id.ivCompassDial);
-        ivQiblaPointer = findViewById(R.id.ivQiblaPointer);
         tvQiblaLocation = findViewById(R.id.tvQiblaLocation);
         tvQiblaStatus = findViewById(R.id.tvQiblaStatus);
         tvQiblaStatusSub = findViewById(R.id.tvQiblaStatusSub);
@@ -162,28 +129,10 @@ public class QiblaActivity extends AppCompatActivity implements SensorEventListe
                 tvQiblaWarning.setText(R.string.qibla_no_sensor);
                 tvQiblaWarning.setVisibility(View.VISIBLE);
             }
-        } else {
-            TextView btnCalibrate = findViewById(R.id.btnCalibrateCompass);
-            if (btnCalibrate != null) {
-                btnCalibrate.setVisibility(View.VISIBLE);
-                btnCalibrate.setOnClickListener(v -> showCalibrationDialog());
-            }
         }
 
         transitionToState(QiblaState.SEARCHING);
         checkPermissionAndLocate();
-    }
-
-    private void showCalibrationDialog() {
-        new androidx.appcompat.app.AlertDialog.Builder(this)
-                .setTitle(R.string.qibla_calibrate_dialog_title)
-                .setMessage(R.string.qibla_calibrate_dialog_msg)
-                .setPositiveButton(R.string.qibla_calibrate_dialog_ok, (dialog, which) -> {
-                    hasGravity = false;
-                    hasGeomagnetic = false;
-                    dialog.dismiss();
-                })
-                .show();
     }
 
     private void checkPermissionAndLocate() {
@@ -247,9 +196,7 @@ public class QiblaActivity extends AppCompatActivity implements SensorEventListe
     }
 
     private void updateLocationAndDistanceUI() {
-        if (tvQiblaLocation != null) {
-            tvQiblaLocation.setText(String.format(Locale.getDefault(), "Lat: %.2f°, Lon: %.2f°", userLatitude, userLongitude));
-        }
+        resolveLocationName(userLatitude, userLongitude);
 
         if (tvQiblaDegrees != null) {
             tvQiblaDegrees.setText(String.format(Locale.getDefault(), "%.0f°", qiblaBearing));
@@ -259,6 +206,41 @@ public class QiblaActivity extends AppCompatActivity implements SensorEventListe
         if (tvKaabaDistance != null) {
             tvKaabaDistance.setText(String.format(Locale.getDefault(), "%,.0f km", distKm));
         }
+    }
+
+    private void resolveLocationName(double lat, double lon) {
+        new Thread(() -> {
+            try {
+                android.location.Geocoder geocoder = new android.location.Geocoder(QiblaActivity.this, Locale.getDefault());
+                java.util.List<android.location.Address> addresses = geocoder.getFromLocation(lat, lon, 1);
+                if (addresses != null && !addresses.isEmpty()) {
+                    android.location.Address address = addresses.get(0);
+                    String city = address.getLocality();
+                    if (city == null || city.isEmpty()) {
+                        city = address.getSubAdminArea();
+                    }
+                    if (city == null || city.isEmpty()) {
+                        city = address.getAdminArea();
+                    }
+                    String country = address.getCountryName();
+                    final String locationStr;
+                    if (city != null && country != null) {
+                        locationStr = city + ", " + country;
+                    } else if (country != null) {
+                        locationStr = country;
+                    } else {
+                        locationStr = String.format(Locale.getDefault(), "Lat: %.2f°, Lon: %.2f°", lat, lon);
+                    }
+                    runOnUiThread(() -> {
+                        if (tvQiblaLocation != null) {
+                            tvQiblaLocation.setText(locationStr);
+                        }
+                    });
+                }
+            } catch (Exception e) {
+                Log.w(TAG, "Geocoder failed: " + e.getMessage());
+            }
+        }).start();
     }
 
     private double calculateDistanceToKaaba(double lat, double lon) {
@@ -291,21 +273,20 @@ public class QiblaActivity extends AppCompatActivity implements SensorEventListe
 
     private float filteredAzimuth = -1f;
     private float lastDisplayedAngle = -999f;
-    private static final float HEADING_SMOOTH_ALPHA = 0.15f;
-    private static final float MIN_HEADING_CHANGE_THRESHOLD = 0.3f;
+    private static final float MIN_HEADING_CHANGE_THRESHOLD = 0.05f;
 
     @Override
     protected void onResume() {
         super.onResume();
         if (sensorManager != null) {
             if (rotationVectorSensor != null) {
-                sensorManager.registerListener(this, rotationVectorSensor, SensorManager.SENSOR_DELAY_UI);
+                sensorManager.registerListener(this, rotationVectorSensor, SensorManager.SENSOR_DELAY_GAME);
             } else {
                 if (accelerometer != null) {
-                    sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
+                    sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
                 }
                 if (magnetometer != null) {
-                    sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_UI);
+                    sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_GAME);
                 }
             }
         }
@@ -314,20 +295,9 @@ public class QiblaActivity extends AppCompatActivity implements SensorEventListe
     @Override
     protected void onPause() {
         super.onPause();
-        cancelTimer();
         if (sensorManager != null) {
             sensorManager.unregisterListener(this);
         }
-    }
-
-    private static final float ALPHA = 0.25f;
-
-    private float[] lowPassFilter(float[] input, float[] output) {
-        if (output == null) return input;
-        for (int i = 0; i < input.length; i++) {
-            output[i] = output[i] + ALPHA * (input[i] - output[i]);
-        }
-        return output;
     }
 
     @Override
@@ -341,37 +311,6 @@ public class QiblaActivity extends AppCompatActivity implements SensorEventListe
             rawAzimuthInDegrees = (float) Math.toDegrees(orientationValues[0]);
             rawAzimuthInDegrees = (rawAzimuthInDegrees + 360) % 360;
             hasOrientation = true;
-        } else if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            gravityValues = lowPassFilter(event.values, gravityValues);
-            hasGravity = true;
-        } else if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
-            geomagneticValues = lowPassFilter(event.values, geomagneticValues);
-            hasGeomagnetic = true;
-
-            float magStrength = (float) Math.sqrt(
-                    event.values[0] * event.values[0] +
-                    event.values[1] * event.values[1] +
-                    event.values[2] * event.values[2]);
-            if (magStrength < 25f || magStrength > 70f) {
-                if (tvQiblaWarning != null) {
-                    tvQiblaWarning.setText(R.string.qibla_interference);
-                    tvQiblaWarning.setVisibility(View.VISIBLE);
-                }
-            } else if (tvQiblaWarning != null && getString(R.string.qibla_interference).equals(tvQiblaWarning.getText())) {
-                tvQiblaWarning.setVisibility(View.GONE);
-            }
-        }
-
-        if (!hasOrientation && hasGravity && hasGeomagnetic) {
-            float[] R_matrix = new float[9];
-            float[] I_matrix = new float[9];
-            boolean success = SensorManager.getRotationMatrix(R_matrix, I_matrix, gravityValues, geomagneticValues);
-            if (success) {
-                SensorManager.getOrientation(R_matrix, orientationValues);
-                rawAzimuthInDegrees = (float) Math.toDegrees(orientationValues[0]);
-                rawAzimuthInDegrees = (rawAzimuthInDegrees + 360) % 360;
-                hasOrientation = true;
-            }
         }
 
         if (hasOrientation) {
@@ -381,7 +320,9 @@ public class QiblaActivity extends AppCompatActivity implements SensorEventListe
                 float delta = rawAzimuthInDegrees - filteredAzimuth;
                 if (delta > 180f) delta -= 360f;
                 if (delta < -180f) delta += 360f;
-                filteredAzimuth = (filteredAzimuth + HEADING_SMOOTH_ALPHA * delta + 360f) % 360f;
+
+                float alpha = (Math.abs(delta) > 10f) ? 0.70f : 0.40f;
+                filteredAzimuth = (filteredAzimuth + alpha * delta + 360f) % 360f;
             }
 
             float phoneHeading = filteredAzimuth;
@@ -408,19 +349,13 @@ public class QiblaActivity extends AppCompatActivity implements SensorEventListe
                 float absDiff = Math.abs(diffDeg);
 
                 if (tvRelativeAngleOffset != null) {
-                    if (absDiff <= ALIGNMENT_TOLERANCE_DEG) {
-                        tvRelativeAngleOffset.setText(R.string.qibla_angle_aligned);
-                    } else if (diffDeg > 0) {
-                        tvRelativeAngleOffset.setText(String.format(Locale.getDefault(), getString(R.string.qibla_angle_right), Math.round(absDiff)));
-                    } else {
-                        tvRelativeAngleOffset.setText(String.format(Locale.getDefault(), getString(R.string.qibla_angle_left), Math.round(absDiff)));
-                    }
+                    tvRelativeAngleOffset.setText(String.format(Locale.getDefault(), "%d°", Math.round(absDiff)));
                 }
 
-                // STATE MACHINE EVALUATION
+                // INSTANT STATE MACHINE & HAPTIC EVALUATION (±5° tolerance)
                 if (absDiff <= ALIGNMENT_TOLERANCE_DEG) {
-                    if (currentState == QiblaState.SEARCHING) {
-                        transitionToState(QiblaState.HOLDING);
+                    if (currentState != QiblaState.CONFIRMED) {
+                        transitionToState(QiblaState.CONFIRMED);
                     }
                 } else {
                     if (currentState != QiblaState.SEARCHING) {
@@ -432,31 +367,16 @@ public class QiblaActivity extends AppCompatActivity implements SensorEventListe
     }
 
     private void transitionToState(QiblaState newState) {
-        cancelTimer();
         currentState = newState;
 
         switch (newState) {
             case SEARCHING:
                 if (tvQiblaStatus != null) {
                     tvQiblaStatus.setText(R.string.qibla_instruction);
-                    tvQiblaStatus.setTextColor(ContextCompat.getColor(this, R.color.pink_dark));
+                    tvQiblaStatus.setTextColor(ContextCompat.getColor(this, R.color.kinetic_primary));
                     tvQiblaStatus.setBackgroundResource(R.drawable.bg_prayer_countdown_pill);
                 }
                 if (tvQiblaStatusSub != null) tvQiblaStatusSub.setVisibility(View.GONE);
-                if (ivQiblaPointer != null) ivQiblaPointer.setVisibility(View.GONE);
-                break;
-
-            case HOLDING:
-                alignmentStartTimeMs = System.currentTimeMillis();
-                if (tvQiblaStatus != null) {
-                    tvQiblaStatus.setText(String.format(Locale.getDefault(), getString(R.string.qibla_hold_steady_timer), 2.0f));
-                    tvQiblaStatus.setTextColor(ContextCompat.getColor(this, R.color.pink_dark));
-                    tvQiblaStatus.setBackgroundResource(R.drawable.bg_prayer_countdown_pill);
-                }
-                if (tvQiblaStatusSub != null) tvQiblaStatusSub.setVisibility(View.GONE);
-                if (ivQiblaPointer != null) ivQiblaPointer.setVisibility(View.GONE);
-
-                handler.postDelayed(timerUpdateRunnable, TIMER_INTERVAL_MS);
                 break;
 
             case CONFIRMED:
@@ -466,18 +386,12 @@ public class QiblaActivity extends AppCompatActivity implements SensorEventListe
                     tvQiblaStatus.setBackgroundResource(R.drawable.bg_button_pink);
                 }
                 if (tvQiblaStatusSub != null) {
-                    tvQiblaStatusSub.setText(R.string.qibla_facing_sub);
-                    tvQiblaStatusSub.setVisibility(View.VISIBLE);
+                    tvQiblaStatusSub.setVisibility(View.GONE);
                 }
-                if (ivQiblaPointer != null) ivQiblaPointer.setVisibility(View.VISIBLE);
 
                 triggerSubtleVibration();
                 break;
         }
-    }
-
-    private void cancelTimer() {
-        handler.removeCallbacks(timerUpdateRunnable);
     }
 
     private void triggerSubtleVibration() {

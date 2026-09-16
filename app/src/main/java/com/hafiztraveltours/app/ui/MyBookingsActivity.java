@@ -18,6 +18,7 @@ import com.hafiztraveltours.app.models.BookingDto;
 import com.hafiztraveltours.app.models.BookingListPage;
 import com.hafiztraveltours.app.network.ApiClient;
 import com.hafiztraveltours.app.network.ApiResponse;
+import com.hafiztraveltours.app.utils.BottomNavHelper;
 import com.hafiztraveltours.app.utils.LocaleHelper;
 import com.hafiztraveltours.app.utils.SessionManager;
 
@@ -40,6 +41,7 @@ public class MyBookingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_bookings);
+        BottomNavHelper.setup(this, BottomNavHelper.Tab.BOOKING);
 
         findViewById(R.id.bookingsBackButton).setOnClickListener(v -> finish());
 

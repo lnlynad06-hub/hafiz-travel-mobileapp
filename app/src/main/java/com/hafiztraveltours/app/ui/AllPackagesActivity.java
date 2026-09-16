@@ -67,6 +67,7 @@ public class AllPackagesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_packages);
+        BottomNavHelper.setup(this, BottomNavHelper.Tab.EXPLORE);
 
         findViewById(R.id.allPackagesBackButton).setOnClickListener(v -> finish());
 

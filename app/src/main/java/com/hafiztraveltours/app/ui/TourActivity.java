@@ -103,7 +103,7 @@ public class TourActivity extends AppCompatActivity {
             btnFilter.setOnClickListener(v -> openFilterBottomSheet());
         }
 
-        BottomNavHelper.setup(this, BottomNavHelper.Tab.TOUR);
+        BottomNavHelper.setup(this, BottomNavHelper.Tab.NONE);
         androidx.swiperefreshlayout.widget.SwipeRefreshLayout swipeRefresh = findViewById(R.id.tourSwipeRefresh);
         if (swipeRefresh != null) {
             swipeRefresh.setColorSchemeResources(R.color.brand_magenta, R.color.gold_accent, R.color.brand_dark_pink);

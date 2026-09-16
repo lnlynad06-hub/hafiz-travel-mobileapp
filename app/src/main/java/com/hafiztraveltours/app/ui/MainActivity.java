@@ -1508,7 +1508,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void renderPrayerArc(String[] names, long[] epochSeconds) {
-        PrayerArcView arcView = findViewById(R.id.prayerArcView);
         TextView currentLabel = findViewById(R.id.prayerCurrentLabel);
         TextView nextLabel = findViewById(R.id.prayerNextLabel);
         TextView locationLabel = findViewById(R.id.prayerLocationLabel);
@@ -1528,10 +1527,6 @@ public class MainActivity extends AppCompatActivity {
         PrayerProgressCalculator.Result result =
                 PrayerProgressCalculator.calculate(names, epochSeconds, nowEpoch);
 
-        if (arcView != null) {
-            arcView.setProgress(result.progress);
-        }
-
         SimpleDateFormat formatter = new SimpleDateFormat("h:mm a", LocaleHelper.getCurrentLocale(this));
         formatter.setTimeZone(TimeZone.getDefault());
 
@@ -1541,11 +1536,11 @@ public class MainActivity extends AppCompatActivity {
         String localizedCurrentName = getLocalizedPrayerName(result.currentName);
         String localizedNextName = getLocalizedPrayerName(result.nextName);
 
-        if (currentLabel != null) {
-            currentLabel.setText(buildLabelSpanned(localizedCurrentName, currentTime));
-        }
         if (nextLabel != null) {
-            nextLabel.setText(buildLabelSpanned(localizedNextName, nextTime));
+            nextLabel.setText(localizedNextName.toUpperCase(Locale.getDefault()));
+        }
+        if (currentLabel != null) {
+            currentLabel.setText(nextTime);
         }
 
         // Update Live Countdown Timer
@@ -1563,27 +1558,38 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        // Update 5 Daily Prayer Pills
+        // Update Dynamic Prayer Progression Timeline View & Labels
+        PrayerProgressTimelineView timelineView = findViewById(R.id.prayerProgressTimelineView);
+        if (timelineView != null && epochSeconds != null && epochSeconds.length >= 5) {
+            timelineView.setPrayerData(names, epochSeconds, nowEpoch);
+        }
+
+        // Update 5 Daily Prayer Timeline Labels
         if (epochSeconds != null && epochSeconds.length >= 5) {
             LinearLayout pillSubuh = findViewById(R.id.pillSubuh);
             TextView tvNameSubuh = findViewById(R.id.tvNameSubuh);
             TextView tvTimeSubuh = findViewById(R.id.tvTimeSubuh);
+            View dotSubuh = findViewById(R.id.dotSubuh);
 
             LinearLayout pillZohor = findViewById(R.id.pillZohor);
             TextView tvNameZohor = findViewById(R.id.tvNameZohor);
             TextView tvTimeZohor = findViewById(R.id.tvTimeZohor);
+            View dotZohor = findViewById(R.id.dotZohor);
 
             LinearLayout pillAsar = findViewById(R.id.pillAsar);
             TextView tvNameAsar = findViewById(R.id.tvNameAsar);
             TextView tvTimeAsar = findViewById(R.id.tvTimeAsar);
+            View dotAsar = findViewById(R.id.dotAsar);
 
             LinearLayout pillMaghrib = findViewById(R.id.pillMaghrib);
             TextView tvNameMaghrib = findViewById(R.id.tvNameMaghrib);
             TextView tvTimeMaghrib = findViewById(R.id.tvTimeMaghrib);
+            View dotMaghrib = findViewById(R.id.dotMaghrib);
 
             LinearLayout pillIsyak = findViewById(R.id.pillIsyak);
             TextView tvNameIsyak = findViewById(R.id.tvNameIsyak);
             TextView tvTimeIsyak = findViewById(R.id.tvTimeIsyak);
+            View dotIsyak = findViewById(R.id.dotIsyak);
 
             if (tvNameSubuh != null) tvNameSubuh.setText(getString(R.string.prayer_name_subuh));
             if (tvNameZohor != null) tvNameZohor.setText(getString(R.string.prayer_name_zohor));
@@ -1605,24 +1611,33 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-            updatePrayerPill(pillSubuh, tvNameSubuh, tvTimeSubuh, activeIndex == 0);
-            updatePrayerPill(pillZohor, tvNameZohor, tvTimeZohor, activeIndex == 1);
-            updatePrayerPill(pillAsar, tvNameAsar, tvTimeAsar, activeIndex == 2);
-            updatePrayerPill(pillMaghrib, tvNameMaghrib, tvTimeMaghrib, activeIndex == 3);
-            updatePrayerPill(pillIsyak, tvNameIsyak, tvTimeIsyak, activeIndex == 4);
+            updatePrayerPill(pillSubuh, tvNameSubuh, tvTimeSubuh, dotSubuh, activeIndex == 0);
+            updatePrayerPill(pillZohor, tvNameZohor, tvTimeZohor, dotZohor, activeIndex == 1);
+            updatePrayerPill(pillAsar, tvNameAsar, tvTimeAsar, dotAsar, activeIndex == 2);
+            updatePrayerPill(pillMaghrib, tvNameMaghrib, tvTimeMaghrib, dotMaghrib, activeIndex == 3);
+            updatePrayerPill(pillIsyak, tvNameIsyak, tvTimeIsyak, dotIsyak, activeIndex == 4);
         }
     }
 
-    private void updatePrayerPill(LinearLayout pill, TextView tvName, TextView tvTime, boolean isActive) {
+    private void updatePrayerPill(LinearLayout pill, TextView tvName, TextView tvTime, View dotNode, boolean isActive) {
         if (pill == null || tvName == null || tvTime == null) return;
+        pill.setBackgroundColor(Color.TRANSPARENT);
         if (isActive) {
-            pill.setBackgroundResource(R.drawable.bg_prayer_pill_active);
-            tvName.setTextColor(Color.WHITE);
-            tvTime.setTextColor(Color.parseColor("#FCE4EC"));
+            tvName.setTextColor(ContextCompat.getColor(this, R.color.pink_dark));
+            tvName.setTypeface(null, Typeface.BOLD);
+            tvTime.setTextColor(ContextCompat.getColor(this, R.color.pink_dark));
+            tvTime.setTypeface(null, Typeface.BOLD);
+            if (dotNode != null) {
+                dotNode.setBackgroundResource(R.drawable.bg_timeline_dot_active);
+            }
         } else {
-            pill.setBackgroundResource(R.drawable.bg_prayer_pill_inactive);
-            tvName.setTextColor(ContextCompat.getColor(this, R.color.text_dark));
-            tvTime.setTextColor(ContextCompat.getColor(this, R.color.text_gray));
+            tvName.setTextColor(Color.parseColor("#64748B"));
+            tvName.setTypeface(null, Typeface.NORMAL);
+            tvTime.setTextColor(Color.parseColor("#1E293B"));
+            tvTime.setTypeface(null, Typeface.NORMAL);
+            if (dotNode != null) {
+                dotNode.setBackgroundResource(R.drawable.bg_timeline_dot_inactive);
+            }
         }
     }
 
@@ -1673,7 +1688,6 @@ public class MainActivity extends AppCompatActivity {
      */
     private void showPrayerTimesLocationDenied() {
         TextView dateText = findViewById(R.id.prayerTimesDateText);
-        PrayerArcView arcView = findViewById(R.id.prayerArcView);
         TextView currentLabel = findViewById(R.id.prayerCurrentLabel);
         TextView nextLabel = findViewById(R.id.prayerNextLabel);
         TextView countdownText = findViewById(R.id.prayerCountdownText);
@@ -1688,8 +1702,6 @@ public class MainActivity extends AppCompatActivity {
             countdownText.setText("--");
         }
 
-        // Kosongkan arc & label sebab takde data waktu solat
-        if (arcView != null) arcView.setProgress(0f);
         if (currentLabel != null) currentLabel.setText("");
 
         if (nextLabel != null) {

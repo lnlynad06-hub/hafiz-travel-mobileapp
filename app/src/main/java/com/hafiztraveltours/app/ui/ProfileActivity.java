@@ -71,7 +71,7 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        // BottomNavHelper.setup(this, BottomNavHelper.Tab.PROFILE);
+        BottomNavHelper.setup(this, BottomNavHelper.Tab.PROFILE);
 
         docPickerLauncher = registerForActivityResult(
                 new androidx.activity.result.contract.ActivityResultContracts.GetContent(),
