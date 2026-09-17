@@ -59,6 +59,7 @@ public class ProfileActivity extends AppCompatActivity {
     private View upcomingCard;
     private androidx.swiperefreshlayout.widget.SwipeRefreshLayout profileSwipeRefresh;
 
+    private final Map<String, DocumentDto> userDocumentsMap = new HashMap<>();
     private androidx.activity.result.ActivityResultLauncher<String> docPickerLauncher;
     private String pendingUploadDocCode;
     private String pendingUploadDocName;
@@ -230,7 +231,25 @@ public class ProfileActivity extends AppCompatActivity {
                                         && response.body().isSuccess()) ? response.body().data : null;
                         if (stats != null) {
                             SessionManager.getInstance(ProfileActivity.this).saveProfileStats(stats);
-                            renderStats(stats);
+                            // Fetch documents silently to update readiness score on initial load
+                            ApiClient.getApiService().getUserDocuments().enqueue(new retrofit2.Callback<ApiResponse<List<com.hafiztraveltours.app.models.DocumentDto>>>() {
+                                @Override
+                                public void onResponse(retrofit2.Call<ApiResponse<List<com.hafiztraveltours.app.models.DocumentDto>>> call, retrofit2.Response<ApiResponse<List<com.hafiztraveltours.app.models.DocumentDto>>> resp) {
+                                    if (resp.isSuccessful() && resp.body() != null && resp.body().isSuccess() && resp.body().data != null) {
+                                        for (com.hafiztraveltours.app.models.DocumentDto d : resp.body().data) {
+                                            if (d.documentCode != null) {
+                                                userDocumentsMap.put(d.documentCode.toLowerCase(), d);
+                                            }
+                                        }
+                                    }
+                                    renderStats(stats);
+                                }
+
+                                @Override
+                                public void onFailure(retrofit2.Call<ApiResponse<List<com.hafiztraveltours.app.models.DocumentDto>>> call, Throwable t) {
+                                    renderStats(stats);
+                                }
+                            });
                         }
                     }
 
@@ -288,14 +307,49 @@ public class ProfileActivity extends AppCompatActivity {
                 tierName.setText("Account & Travel Readiness");
             }
             
-            // Kira % kelengkapan profil secara dinamik
+            // Kira % kelengkapan profil & dokumen perjalanan secara dinamik (100% Total)
             int compScore = 0;
+            UserDto currentUser = SessionManager.getInstance(this).getUser();
+
+            String fullName = profilePrefs.getString("name", "").trim();
+            if (fullName.isEmpty() && currentUser != null && currentUser.name != null) fullName = currentUser.name.trim();
+
             String passportNo = profilePrefs.getString("passport_no", "").trim();
+            if (passportNo.isEmpty() && currentUser != null && currentUser.passportNumber != null) passportNo = currentUser.passportNumber.trim();
+
             String icNo = profilePrefs.getString("ic_no", "").trim();
+            if (icNo.isEmpty() && currentUser != null && currentUser.icNumber != null) icNo = currentUser.icNumber.trim();
+
             String emergName = profilePrefs.getString("emergency_name", "").trim();
-            if (!passportNo.isEmpty()) compScore += 30;
-            if (!icNo.isEmpty()) compScore += 30;
-            if (!emergName.isEmpty()) compScore += 20;
+
+            String address = profilePrefs.getString("address", "").trim();
+            if (address.isEmpty() && currentUser != null && currentUser.address != null) address = currentUser.address.trim();
+
+            if (!fullName.isEmpty()) compScore += 15;
+            if (!icNo.isEmpty()) compScore += 20;
+            if (!passportNo.isEmpty()) compScore += 20;
+            if (!address.isEmpty()) compScore += 15;
+            if (!emergName.isEmpty()) compScore += 10;
+
+            // Semak status dokumen dimuat naik (Passport, IC/MyKad, Passport Photo)
+            int uploadedDocPoints = 0;
+            if (userDocumentsMap.containsKey("passport") && !"not_uploaded".equalsIgnoreCase(userDocumentsMap.get("passport").status)) {
+                uploadedDocPoints += 7;
+            }
+            if (userDocumentsMap.containsKey("ic") && !"not_uploaded".equalsIgnoreCase(userDocumentsMap.get("ic").status)) {
+                uploadedDocPoints += 7;
+            }
+            if (userDocumentsMap.containsKey("passport_photo") && !"not_uploaded".equalsIgnoreCase(userDocumentsMap.get("passport_photo").status)) {
+                uploadedDocPoints += 6;
+            }
+            compScore += uploadedDocPoints;
+
+            if (compScore >= 100) {
+                compScore = 100;
+                if (loyaltyCard != null) loyaltyCard.setVisibility(View.GONE);
+            } else {
+                if (loyaltyCard != null) loyaltyCard.setVisibility(View.VISIBLE);
+            }
 
             if (pointsBadge != null) {
                 pointsBadge.setText(compScore + "% Complete");
@@ -407,13 +461,27 @@ public class ProfileActivity extends AppCompatActivity {
             return;
         }
 
+        UserDto currentUser = SessionManager.getInstance(this).getUser();
+
         String currentNickname = SessionManager.getInstance(this).getUserNickname();
         String currentName = SessionManager.getInstance(this).getUserName();
         String currentEmail = SessionManager.getInstance(this).getUserEmail();
         String currentPhone = SessionManager.getInstance(this).getUserPhone();
-        String currentIc = profilePrefs.getString("ic_no", "");
-        String currentPassport = profilePrefs.getString("passport_no", "");
-        String currentExpiry = profilePrefs.getString("passport_expiry", "");
+        String currentIc = (currentUser != null && currentUser.icNumber != null && !currentUser.icNumber.isEmpty())
+                ? currentUser.icNumber : profilePrefs.getString("ic_no", "");
+        String currentPassport = (currentUser != null && currentUser.passportNumber != null && !currentUser.passportNumber.isEmpty())
+                ? currentUser.passportNumber : profilePrefs.getString("passport_no", "");
+        String currentExpiry = (currentUser != null && currentUser.passportExpiryDate != null && !currentUser.passportExpiryDate.isEmpty())
+                ? currentUser.passportExpiryDate : profilePrefs.getString("passport_expiry", "");
+        String currentIssuingCountry = (currentUser != null && currentUser.issuingCountry != null && !currentUser.issuingCountry.isEmpty())
+                ? currentUser.issuingCountry : profilePrefs.getString("issuing_country", "Malaysia");
+        String currentDob = (currentUser != null && currentUser.dateOfBirth != null && !currentUser.dateOfBirth.isEmpty())
+                ? currentUser.dateOfBirth : profilePrefs.getString("date_of_birth", "");
+        String currentNationality = (currentUser != null && currentUser.nationality != null && !currentUser.nationality.isEmpty())
+                ? currentUser.nationality : profilePrefs.getString("nationality", "Malaysian");
+        String currentClothesSize = (currentUser != null && currentUser.clothesSize != null && !currentUser.clothesSize.isEmpty())
+                ? currentUser.clothesSize : profilePrefs.getString("clothes_size", "");
+
         String currentEmergName = profilePrefs.getString("emergency_name", "");
         String currentEmergPhone = profilePrefs.getString("emergency_phone", "");
         String currentMahram = profilePrefs.getString("mahram_name", "");
@@ -428,18 +496,30 @@ public class ProfileActivity extends AppCompatActivity {
         TextInputEditText icInput = dialogView.findViewById(R.id.icInput);
         TextInputEditText phoneInput = dialogView.findViewById(R.id.phoneInput);
         TextInputEditText emailInput = dialogView.findViewById(R.id.emailInput);
+        com.google.android.material.textfield.MaterialAutoCompleteTextView genderInput = dialogView.findViewById(R.id.genderInput);
+        TextInputEditText dobInput = dialogView.findViewById(R.id.dobInput);
+        TextInputEditText nationalityInput = dialogView.findViewById(R.id.nationalityInput);
 
-        // 2. Passport Information Inputs
+        // 2. Residential Address Inputs
+        TextInputEditText addressLine1Input = dialogView.findViewById(R.id.addressLine1Input);
+        TextInputEditText addressLine2Input = dialogView.findViewById(R.id.addressLine2Input);
+        TextInputEditText postcodeInput = dialogView.findViewById(R.id.postcodeInput);
+        TextInputEditText cityInput = dialogView.findViewById(R.id.cityInput);
+        TextInputEditText stateInput = dialogView.findViewById(R.id.stateInput);
+        TextInputEditText countryInput = dialogView.findViewById(R.id.countryInput);
+
+        // 3. Passport Information Inputs
         TextInputEditText passportInput = dialogView.findViewById(R.id.passportInput);
+        TextInputEditText issuingCountryInput = dialogView.findViewById(R.id.issuingCountryInput);
         TextInputEditText expiryInput = dialogView.findViewById(R.id.expiryInput);
         LinearLayout warningContainer = dialogView.findViewById(R.id.passportWarningContainer);
         TextView warningText = dialogView.findViewById(R.id.passportWarningText);
 
-        // 3. Emergency Contact Inputs
+        // 4. Emergency Contact Inputs
         TextInputEditText emergNameInput = dialogView.findViewById(R.id.emergNameInput);
         TextInputEditText emergPhoneInput = dialogView.findViewById(R.id.emergPhoneInput);
 
-        // 4. Mahram Information Inputs
+        // 5. Mahram Information Inputs
         com.google.android.material.button.MaterialButtonToggleGroup mahramToggleGroup = dialogView.findViewById(R.id.mahramToggleGroup);
         com.google.android.material.button.MaterialButton btnMahramNo = dialogView.findViewById(R.id.btnMahramNo);
         com.google.android.material.button.MaterialButton btnMahramYes = dialogView.findViewById(R.id.btnMahramYes);
@@ -451,6 +531,17 @@ public class ProfileActivity extends AppCompatActivity {
         TextInputLayout nicknameLayout = dialogView.findViewById(R.id.nicknameLayout);
         TextInputLayout phoneLayout = dialogView.findViewById(R.id.phoneLayout);
 
+        // Setup Gender Options (Localized)
+        boolean isMalay = "ms".equalsIgnoreCase(LocaleHelper.getSavedLanguage(this));
+        String genderMaleStr = isMalay ? "Lelaki" : "Male";
+        String genderFemaleStr = isMalay ? "Perempuan" : "Female";
+        String[] genderOptions = new String[]{genderMaleStr, genderFemaleStr};
+        android.widget.ArrayAdapter<String> genderAdapter = new android.widget.ArrayAdapter<>(
+                this, android.R.layout.simple_dropdown_item_1line, genderOptions);
+        if (genderInput != null) {
+            genderInput.setAdapter(genderAdapter);
+        }
+
         // Setup Mahram Relationship Dropdown Options
         String[] mahramOptions = new String[]{"Father", "Husband", "Brother", "Son", "Other"};
         android.widget.ArrayAdapter<String> mahramAdapter = new android.widget.ArrayAdapter<>(
@@ -459,19 +550,85 @@ public class ProfileActivity extends AppCompatActivity {
             mahramRelInput.setAdapter(mahramAdapter);
         }
 
+        String currentGender = (currentUser != null && currentUser.gender != null && !currentUser.gender.isEmpty())
+                ? currentUser.gender : profilePrefs.getString("gender", "");
+        if (!currentGender.isEmpty()) {
+            if ("male".equalsIgnoreCase(currentGender) || "lelaki".equalsIgnoreCase(currentGender)) {
+                currentGender = genderMaleStr;
+            } else if ("female".equalsIgnoreCase(currentGender) || "perempuan".equalsIgnoreCase(currentGender)) {
+                currentGender = genderFemaleStr;
+            }
+        }
+
+        String currentAddress1 = (currentUser != null && currentUser.addressLine1 != null && !currentUser.addressLine1.isEmpty())
+                ? currentUser.addressLine1 : profilePrefs.getString("address_line_1", "");
+        String currentAddress2 = (currentUser != null && currentUser.addressLine2 != null && !currentUser.addressLine2.isEmpty())
+                ? currentUser.addressLine2 : profilePrefs.getString("address_line_2", "");
+        String currentPostcode = (currentUser != null && currentUser.postcode != null && !currentUser.postcode.isEmpty())
+                ? currentUser.postcode : profilePrefs.getString("postcode", "");
+        String currentCity = (currentUser != null && currentUser.city != null && !currentUser.city.isEmpty())
+                ? currentUser.city : profilePrefs.getString("city", "");
+        String currentState = (currentUser != null && currentUser.state != null && !currentUser.state.isEmpty())
+                ? currentUser.state : profilePrefs.getString("state", "");
+        String currentCountry = (currentUser != null && currentUser.country != null && !currentUser.country.isEmpty())
+                ? currentUser.country : profilePrefs.getString("country", "Malaysia");
+
         // Fill current values
         if (nameInput != null) nameInput.setText(currentName != null ? currentName : "");
         if (nicknameInput != null) nicknameInput.setText(currentNickname != null ? currentNickname : "");
         if (icInput != null) icInput.setText(currentIc);
         if (phoneInput != null) phoneInput.setText(currentPhone != null ? currentPhone : "");
         if (emailInput != null) emailInput.setText(currentEmail != null ? currentEmail : "");
+        if (genderInput != null && !currentGender.isEmpty()) {
+            genderInput.setText(currentGender, false);
+        }
+        if (dobInput != null) dobInput.setText(currentDob);
+        if (nationalityInput != null) nationalityInput.setText(currentNationality);
+
+        if (addressLine1Input != null) addressLine1Input.setText(currentAddress1);
+        if (addressLine2Input != null) addressLine2Input.setText(currentAddress2);
+        if (postcodeInput != null) postcodeInput.setText(currentPostcode);
+        if (cityInput != null) cityInput.setText(currentCity);
+        if (stateInput != null) stateInput.setText(currentState);
+        if (countryInput != null) countryInput.setText(currentCountry);
+
         if (passportInput != null) passportInput.setText(currentPassport);
+        if (issuingCountryInput != null) issuingCountryInput.setText(currentIssuingCountry);
         if (expiryInput != null) expiryInput.setText(currentExpiry);
         if (emergNameInput != null) emergNameInput.setText(currentEmergName);
         if (emergPhoneInput != null) emergPhoneInput.setText(currentEmergPhone);
         if (mahramInput != null) mahramInput.setText(currentMahram);
         if (mahramRelInput != null && !currentMahramRel.isEmpty()) {
             mahramRelInput.setText(currentMahramRel, false);
+        }
+
+        if (dobInput != null) {
+            dobInput.setOnClickListener(v -> {
+                java.util.Calendar calDob = java.util.Calendar.getInstance();
+                int year = calDob.get(java.util.Calendar.YEAR) - 30;
+                int month = calDob.get(java.util.Calendar.MONTH);
+                int day = calDob.get(java.util.Calendar.DAY_OF_MONTH);
+                String cDob = dobInput.getText().toString().trim();
+                if (!cDob.isEmpty()) {
+                    try {
+                        String[] parts = cDob.split("-");
+                        if (parts.length == 3) {
+                            year = Integer.parseInt(parts[0]);
+                            month = Integer.parseInt(parts[1]) - 1;
+                            day = Integer.parseInt(parts[2]);
+                        }
+                    } catch (Exception ignored) {}
+                }
+                new android.app.DatePickerDialog(
+                        this,
+                        (view, selectedYear, selectedMonth, selectedDay) -> {
+                            String formattedDate = String.format(java.util.Locale.US, "%04d-%02d-%02d",
+                                    selectedYear, selectedMonth + 1, selectedDay);
+                            dobInput.setText(formattedDate);
+                        },
+                        year, month, day
+                ).show();
+            });
         }
 
         // Passport Expiry Logic & Warning Check (Inline Banner Below Date Input)
@@ -578,6 +735,52 @@ public class ProfileActivity extends AppCompatActivity {
                 String newName = nameInput != null ? nameInput.getText().toString().trim() : "";
                 String newNickname = nicknameInput != null ? nicknameInput.getText().toString().trim() : "";
                 String newPhone = phoneInput != null ? phoneInput.getText().toString().trim() : "";
+                String newGender = genderInput != null ? genderInput.getText().toString().trim() : "";
+                String newDob = dobInput != null ? dobInput.getText().toString().trim() : "";
+                String newNationality = nationalityInput != null ? nationalityInput.getText().toString().trim() : "";
+
+                String newAddress1 = addressLine1Input != null ? addressLine1Input.getText().toString().trim() : "";
+                String newAddress2 = addressLine2Input != null ? addressLine2Input.getText().toString().trim() : "";
+                String newPostcode = postcodeInput != null ? postcodeInput.getText().toString().trim() : "";
+                String newCity = cityInput != null ? cityInput.getText().toString().trim() : "";
+                String newState = stateInput != null ? stateInput.getText().toString().trim() : "";
+                String newCountry = countryInput != null ? countryInput.getText().toString().trim() : "";
+
+                // Format standard gender value for backend API ("male"/"female")
+                String apiGender = newGender;
+                if (newGender.equalsIgnoreCase("Lelaki") || newGender.equalsIgnoreCase("Male")) {
+                    apiGender = "Male";
+                } else if (newGender.equalsIgnoreCase("Perempuan") || newGender.equalsIgnoreCase("Female")) {
+                    apiGender = "Female";
+                }
+
+                // Construct full address summary string
+                StringBuilder fullAddrBuilder = new StringBuilder();
+                if (!newAddress1.isEmpty()) fullAddrBuilder.append(newAddress1);
+                if (!newAddress2.isEmpty()) {
+                    if (fullAddrBuilder.length() > 0) fullAddrBuilder.append(", ");
+                    fullAddrBuilder.append(newAddress2);
+                }
+                if (!newPostcode.isEmpty() || !newCity.isEmpty()) {
+                    if (fullAddrBuilder.length() > 0) fullAddrBuilder.append(", ");
+                    if (!newPostcode.isEmpty()) fullAddrBuilder.append(newPostcode).append(" ");
+                    if (!newCity.isEmpty()) fullAddrBuilder.append(newCity);
+                }
+                if (!newState.isEmpty()) {
+                    if (fullAddrBuilder.length() > 0) fullAddrBuilder.append(", ");
+                    fullAddrBuilder.append(newState);
+                }
+                if (!newCountry.isEmpty()) {
+                    if (fullAddrBuilder.length() > 0) fullAddrBuilder.append(", ");
+                    fullAddrBuilder.append(newCountry);
+                }
+                String combinedAddress = fullAddrBuilder.toString();
+
+                String newIc = icInput != null ? icInput.getText().toString().trim() : "";
+                String newPassport = passportInput != null ? passportInput.getText().toString().trim() : "";
+                String newIssuingCountry = issuingCountryInput != null ? issuingCountryInput.getText().toString().trim() : "";
+                String newExpiry = expiryInput != null ? expiryInput.getText().toString().trim() : "";
+
                 if (nameLayout != null) nameLayout.setError(null);
                 if (nicknameLayout != null) nicknameLayout.setError(null);
                 if (phoneLayout != null) phoneLayout.setError(null);
@@ -595,15 +798,40 @@ public class ProfileActivity extends AppCompatActivity {
                     return;
                 }
 
+                // Jangan benarkan pengguna memadam (empty) maklumat yang sudah diisi sebelum ini
+                if (!currentIc.isEmpty() && newIc.isEmpty()) {
+                    Toast.makeText(this, "Nombor IC telah diisi dan tidak boleh dipadam.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (!currentPassport.isEmpty() && newPassport.isEmpty()) {
+                    Toast.makeText(this, "Nombor pasport telah diisi dan tidak boleh dipadam.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (!currentAddress1.isEmpty() && newAddress1.isEmpty()) {
+                    Toast.makeText(this, "Alamat telah diisi dan tidak boleh dipadam.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 boolean mahramYes = mahramToggleGroup != null && mahramToggleGroup.getCheckedButtonId() == R.id.btnMahramYes;
                 String finalMahramName = mahramYes ? (mahramInput != null ? mahramInput.getText().toString().trim() : "") : "";
                 String finalMahramRel = mahramYes ? (mahramRelInput != null ? mahramRelInput.getText().toString().trim() : "") : "";
 
                 // Save all details locally to SharedPrefs
                 profilePrefs.edit()
-                        .putString("ic_no", icInput != null ? icInput.getText().toString().trim() : "")
-                        .putString("passport_no", passportInput != null ? passportInput.getText().toString().trim() : "")
-                        .putString("passport_expiry", expiryInput != null ? expiryInput.getText().toString().trim() : "")
+                        .putString("ic_no", newIc)
+                        .putString("gender", apiGender)
+                        .putString("date_of_birth", newDob)
+                        .putString("nationality", newNationality)
+                        .putString("address_line_1", newAddress1)
+                        .putString("address_line_2", newAddress2)
+                        .putString("postcode", newPostcode)
+                        .putString("city", newCity)
+                        .putString("state", newState)
+                        .putString("country", newCountry)
+                        .putString("address", combinedAddress)
+                        .putString("passport_no", newPassport)
+                        .putString("passport_expiry", newExpiry)
+                        .putString("issuing_country", newIssuingCountry)
                         .putString("emergency_name", emergNameInput != null ? emergNameInput.getText().toString().trim() : "")
                         .putString("emergency_phone", emergPhoneInput != null ? emergPhoneInput.getText().toString().trim() : "")
                         .putBoolean("mahram_applicable", mahramYes)
@@ -616,8 +844,27 @@ public class ProfileActivity extends AppCompatActivity {
 
                 java.util.Map<String, String> body = new HashMap<>();
                 body.put("name", newName);
-                body.put("nickname", newNickname);
+                if (!newNickname.isEmpty()) body.put("nickname", newNickname);
                 body.put("phone", newPhone);
+                if (!apiGender.isEmpty()) body.put("gender", apiGender);
+                if (!newIc.isEmpty()) body.put("ic_number", newIc);
+                if (!newPassport.isEmpty()) body.put("passport_number", newPassport);
+                if (!newExpiry.isEmpty()) body.put("passport_expiry_date", newExpiry);
+                if (!newIssuingCountry.isEmpty()) body.put("issuing_country", newIssuingCountry);
+                if (!newDob.isEmpty()) body.put("date_of_birth", newDob);
+                if (!newNationality.isEmpty()) body.put("nationality", newNationality);
+                body.put("address_line_1", newAddress1);
+                body.put("address_line_2", newAddress2);
+                body.put("postcode", newPostcode);
+                body.put("city", newCity);
+                body.put("state", newState);
+                body.put("country", newCountry);
+                body.put("address", combinedAddress);
+
+                String emergNameVal = emergNameInput != null ? emergNameInput.getText().toString().trim() : "";
+                String emergPhoneVal = emergPhoneInput != null ? emergPhoneInput.getText().toString().trim() : "";
+                if (!emergNameVal.isEmpty()) body.put("emergency_name", emergNameVal);
+                if (!emergPhoneVal.isEmpty()) body.put("emergency_phone", emergPhoneVal);
 
                 ApiClient.getApiService().updateProfile(body).enqueue(new retrofit2.Callback<ApiResponse<ProfileResponseDto>>() {
                     @Override
@@ -628,12 +875,28 @@ public class ProfileActivity extends AppCompatActivity {
                         if (updated == null || updated.user == null) {
                             btnSave.setEnabled(true);
                             btnSave.setText(getString(R.string.profile_save));
+                            String errorMsg = getString(R.string.profile_update_failed);
+                            if (response.errorBody() != null) {
+                                try {
+                                    String errStr = response.errorBody().string();
+                                    if (errStr != null && !errStr.isEmpty()) {
+                                        org.json.JSONObject obj = new org.json.JSONObject(errStr);
+                                        if (obj.has("message")) {
+                                            errorMsg = obj.getString("message");
+                                        }
+                                    }
+                                } catch (Exception ignored) {}
+                            }
                             Toast.makeText(ProfileActivity.this,
-                                    getString(R.string.profile_update_failed), Toast.LENGTH_SHORT).show();
+                                    errorMsg, Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        String token = SessionManager.getInstance(ProfileActivity.this).getAuthToken();
-                        SessionManager.getInstance(ProfileActivity.this).saveAuthSession(token, updated.user);
+                        String currentToken = SessionManager.getInstance(ProfileActivity.this).getAuthToken();
+                        if (currentToken != null && !currentToken.trim().isEmpty()) {
+                            SessionManager.getInstance(ProfileActivity.this).saveAuthSession(currentToken, updated.user);
+                        } else {
+                            SessionManager.getInstance(ProfileActivity.this).saveUser(updated.user);
+                        }
                         refreshHeader();
                         dialog.dismiss();
 
@@ -785,7 +1048,7 @@ public class ProfileActivity extends AppCompatActivity {
             btnPassportAction.setOnClickListener(v -> {
                 String action = btnPassportAction.getText().toString();
                 if (getString(R.string.doc_action_view).equals(action)) {
-                    Toast.makeText(ProfileActivity.this, getString(R.string.doc_passport_copy) + ": " + (passportNo.isEmpty() ? getString(R.string.doc_status_under_review) : passportNo), Toast.LENGTH_SHORT).show();
+                    openUploadedDocument("passport");
                 } else {
                     showUploadDocumentDialog("passport", getString(R.string.doc_passport_copy), R.drawable.ic_doc_passport);
                 }
@@ -796,7 +1059,7 @@ public class ProfileActivity extends AppCompatActivity {
             btnVaccineAction.setOnClickListener(v -> {
                 String action = btnVaccineAction.getText().toString();
                 if (getString(R.string.doc_action_view).equals(action)) {
-                    Toast.makeText(ProfileActivity.this, getString(R.string.doc_ic_title) + ": " + (hasVaccineCert ? getString(R.string.doc_status_under_review) : getString(R.string.doc_status_not_uploaded)), Toast.LENGTH_SHORT).show();
+                    openUploadedDocument("ic");
                 } else {
                     showUploadDocumentDialog("ic", getString(R.string.doc_ic_title), R.drawable.ic_card);
                 }
@@ -807,7 +1070,7 @@ public class ProfileActivity extends AppCompatActivity {
             btnMarriageAction.setOnClickListener(v -> {
                 String action = btnMarriageAction.getText().toString();
                 if (getString(R.string.doc_action_view).equals(action)) {
-                    Toast.makeText(ProfileActivity.this, getString(R.string.doc_passport_photo_title) + ": " + (mahramName.isEmpty() ? getString(R.string.doc_status_under_review) : getString(R.string.doc_status_not_uploaded)), Toast.LENGTH_SHORT).show();
+                    openUploadedDocument("passport_photo");
                 } else {
                     showUploadDocumentDialog("passport_photo", getString(R.string.doc_passport_photo_title), R.drawable.ic_profile);
                 }
@@ -818,7 +1081,7 @@ public class ProfileActivity extends AppCompatActivity {
             btnVisaAction.setOnClickListener(v -> {
                 String action = btnVisaAction.getText().toString();
                 if (getString(R.string.doc_action_view).equals(action)) {
-                    Toast.makeText(ProfileActivity.this, getString(R.string.doc_travel_visa_title) + ": " + (tvVisaStatus != null ? tvVisaStatus.getText() : getString(R.string.doc_status_not_uploaded)), Toast.LENGTH_SHORT).show();
+                    openUploadedDocument("visa");
                 } else {
                     showUploadDocumentDialog("visa", getString(R.string.doc_travel_visa_title), R.drawable.ic_visa);
                 }
@@ -857,6 +1120,9 @@ public class ProfileActivity extends AppCompatActivity {
                     final int requiredTotal = 3; // passport, ic, passport_photo (visa is optional/Not Required by default)
 
                     for (com.hafiztraveltours.app.models.DocumentDto doc : docs) {
+                        if (doc.documentCode != null) {
+                            userDocumentsMap.put(doc.documentCode.toLowerCase(), doc);
+                        }
                         boolean isRequiredDoc = "passport".equalsIgnoreCase(doc.documentCode)
                                 || "ic".equalsIgnoreCase(doc.documentCode)
                                 || "passport_photo".equalsIgnoreCase(doc.documentCode);
@@ -1263,8 +1529,101 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void performDocumentUpload(String docCode, android.net.Uri uri) {
-        Toast.makeText(this, getString(R.string.doc_upload_success), Toast.LENGTH_SHORT).show();
-        showTravelDocsBottomSheet();
+        if (uri == null) return;
+        Toast.makeText(this, "Muat naik dokumen sedang diproses...", Toast.LENGTH_SHORT).show();
+
+        try {
+            java.io.InputStream inputStream = getContentResolver().openInputStream(uri);
+            if (inputStream == null) return;
+
+            java.io.ByteArrayOutputStream buffer = new java.io.ByteArrayOutputStream();
+            byte[] data = new byte[8192];
+            int nRead;
+            while ((nRead = inputStream.read(data, 0, data.length)) != -1) {
+                buffer.write(data, 0, nRead);
+            }
+            buffer.flush();
+            byte[] bytes = buffer.toByteArray();
+            inputStream.close();
+
+            String fileName = "document_" + System.currentTimeMillis();
+            try (android.database.Cursor cursor = getContentResolver().query(uri, null, null, null, null)) {
+                if (cursor != null && cursor.moveToFirst()) {
+                    int nameIndex = cursor.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME);
+                    if (nameIndex != -1) fileName = cursor.getString(nameIndex);
+                }
+            } catch (Exception ignored) {}
+
+            String mimeType = getContentResolver().getType(uri);
+            if (mimeType == null) mimeType = "application/octet-stream";
+
+            okhttp3.RequestBody requestFile = okhttp3.RequestBody.create(
+                    okhttp3.MediaType.parse(mimeType),
+                    bytes
+            );
+            okhttp3.MultipartBody.Part body = okhttp3.MultipartBody.Part.createFormData("file", fileName, requestFile);
+            okhttp3.RequestBody codeBody = okhttp3.RequestBody.create(
+                    okhttp3.MediaType.parse("text/plain"),
+                    docCode
+            );
+
+            ApiClient.getApiService().uploadUserDocument(codeBody, body).enqueue(
+                    new retrofit2.Callback<ApiResponse<com.hafiztraveltours.app.models.DocumentDto>>() {
+                        @Override
+                        public void onResponse(
+                                retrofit2.Call<ApiResponse<com.hafiztraveltours.app.models.DocumentDto>> call,
+                                retrofit2.Response<ApiResponse<com.hafiztraveltours.app.models.DocumentDto>> response) {
+                            if (isFinishing() || isDestroyed()) return;
+                            if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                                Toast.makeText(ProfileActivity.this, getString(R.string.doc_upload_success), Toast.LENGTH_SHORT).show();
+                                showTravelDocsBottomSheet();
+                            } else {
+                                Toast.makeText(ProfileActivity.this, "Gagal memuat naik dokumen. Sila cuba lagi.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(
+                                retrofit2.Call<ApiResponse<com.hafiztraveltours.app.models.DocumentDto>> call,
+                                Throwable t) {
+                            if (isFinishing() || isDestroyed()) return;
+                            Toast.makeText(ProfileActivity.this, "Ralat rangkaian semasa muat naik dokumen.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+            );
+        } catch (Exception e) {
+            Toast.makeText(this, "Ralat membaca fail dokumen.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void openUploadedDocument(String docCode) {
+        DocumentDto doc = userDocumentsMap.get(docCode != null ? docCode.toLowerCase() : "");
+        if (doc == null || doc.filePath == null || doc.filePath.isEmpty()) {
+            Toast.makeText(this, "Fail dokumen tidak dijumpai.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String url = doc.filePath;
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+            String baseUrl = ApiClient.BASE_URL;
+            if (baseUrl.endsWith("/api/")) {
+                baseUrl = baseUrl.substring(0, baseUrl.length() - 5);
+            } else if (baseUrl.endsWith("/")) {
+                baseUrl = baseUrl.substring(0, baseUrl.length() - 1);
+            }
+            if (!url.startsWith("/")) {
+                url = "/" + url;
+            }
+            url = baseUrl + url;
+        }
+
+        try {
+            android.net.Uri uri = android.net.Uri.parse(url);
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(this, "Gagal membuka fail dokumen.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void showDocRequirementsDialog(String docCode, String docTitle, int iconRes) {

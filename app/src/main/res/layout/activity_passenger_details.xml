@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:background="@color/surface"
-        android:elevation="4dp"
+        android:elevation="2dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingHorizontal="16dp"
@@ -34,11 +34,20 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="8dp"
             android:layout_weight="1"
-            android:text="Maklumat Jemaah"
+            android:text="@string/passenger_details_title"
             android:textColor="@color/text_dark"
             android:textSize="17sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtStepIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2 / 4"
+            android:textColor="@color/text_gray"
+            android:textSize="13sp"
             android:textStyle="bold" />
 
     </LinearLayout>
@@ -56,97 +65,46 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingHorizontal="18dp"
+            android:paddingHorizontal="16dp"
             android:paddingTop="16dp"
             android:paddingBottom="24dp">
 
-            <!-- Progress Step Indicator -->
+            <!-- 1. BOOKING SUMMARY CARD -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_detail_card"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="12dp">
-
-                <!-- Step 1: Package -->
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="01 Pakej ✓"
-                    android:textColor="@color/text_gray"
-                    android:textSize="11sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="›"
-                    android:textColor="@color/text_gray" />
-
-                <!-- Step 2: Passengers (Active) -->
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="02 Jemaah"
-                    android:textColor="@color/brand_magenta"
-                    android:textSize="11sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="›"
-                    android:textColor="@color/text_gray" />
-
-                <!-- Step 3: Review -->
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="03 Semakan"
-                    android:textColor="@color/text_gray"
-                    android:textSize="11sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="›"
-                    android:textColor="@color/text_gray" />
-
-                <!-- Step 4: Payment -->
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="04 Bayaran"
-                    android:textColor="@color/text_gray"
-                    android:textSize="11sp" />
-
-            </LinearLayout>
-
-            <!-- Booking Overview Mini Card -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
                 android:background="@drawable/bg_detail_card"
                 android:orientation="vertical"
-                android:padding="14dp">
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/passenger_booking_summary"
+                    android:textColor="@color/text_muted"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.08" />
 
                 <TextView
                     android:id="@+id/passengerPackageName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
                     android:textColor="@color/text_dark"
-                    android:textSize="14sp"
+                    android:textSize="15sp"
                     android:textStyle="bold"
                     tools:text="Pakej Umrah VIP Cuti Sekolah" />
+
+                <TextView
+                    android:id="@+id/passengerDepartureDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/text_gray"
+                    android:textSize="12sp"
+                    android:visibility="gone"
+                    tools:text="Pelepasan: 15 Nov 2026" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -160,16 +118,16 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textColor="@color/text_gray"
-                        android:textSize="12sp"
-                        tools:text="Bilik Quad • 2 Pax" />
+                        android:textColor="@color/text_dark"
+                        android:textSize="13sp"
+                        tools:text="Bilik Quad • 2 Jemaah" />
 
                     <TextView
                         android:id="@+id/passengerTotalAmount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/brand_magenta"
-                        android:textSize="15sp"
+                        android:textSize="16sp"
                         android:textStyle="bold"
                         tools:text="RM 17,980" />
 
@@ -177,49 +135,87 @@
 
             </LinearLayout>
 
-            <!-- CRM Document Checklist Card (Feature 6) -->
+            <!-- 2. YOUR DETAILS / LEAD TRAVELLER SECTION -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/passenger_section_your_profile"
+                android:textColor="@color/text_dark"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.05" />
+
             <LinearLayout
+                android:id="@+id/leadProfileCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
+                android:layout_marginTop="8dp"
                 android:background="@drawable/bg_detail_card"
                 android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- Dynamic Content injected programmatically: Complete / Incomplete state -->
+                <LinearLayout
+                    android:id="@+id/leadProfileContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+
+            </LinearLayout>
+
+            <!-- 3. ADDITIONAL TRAVELLERS SECTION -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/passenger_section_additional"
+                android:textColor="@color/text_dark"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.05" />
+
+            <!-- Empty State when no additional travellers added -->
+            <TextView
+                android:id="@+id/txtNoAdditionalTravellers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_detail_card"
+                android:padding="16dp"
+                android:gravity="center"
+                android:text="@string/passenger_no_additional"
+                android:textColor="@color/text_gray"
+                android:textSize="13sp"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/additionalTravellersContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:orientation="vertical" />
+
+            <LinearLayout
+                android:id="@+id/btnAddTravellerCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_detail_card"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
                 android:padding="14dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Senarai Semak Dokumen Wajib"
+                    android:text="@string/passenger_btn_add_another"
                     android:textColor="@color/brand_magenta"
                     android:textSize="13sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="Sila pastikan maklumat IC/Pasport tepat. Dokumen berikut diperlukan:"
-                    android:textColor="@color/text_gray"
-                    android:textSize="11sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:text="• Pasport Antarabangsa (Sah sekurang-kurangnya 6 bulan)\n• Kad Pengenalan / MyKad Salinan Jelas\n• Sijil Vaksinasi (Meningitis ACYW135)\n• Surat/Sijil Mahram (jika berkaitan)"
-                    android:textColor="@color/text_dark"
-                    android:textSize="12sp"
-                    android:lineSpacingExtra="3dp" />
-
             </LinearLayout>
-
-            <!-- Dynamic Passenger Form Cards Container -->
-            <LinearLayout
-                android:id="@+id/passengerFormContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
-                android:orientation="vertical" />
 
         </LinearLayout>
 
@@ -232,9 +228,21 @@
         android:layout_height="wrap_content"
         android:background="@color/card_surface"
         android:elevation="16dp"
+        android:orientation="vertical"
         android:paddingHorizontal="16dp"
         android:paddingVertical="12dp"
         app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/txtPaxCountFooter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="6dp"
+            android:textColor="@color/text_gray"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            tools:text="2 Registered Travellers" />
 
         <LinearLayout
             android:id="@+id/btnProceedToReview"
@@ -248,9 +256,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="SEMAK TEMPAHAN"
+                android:text="@string/passenger_btn_continue"
                 android:textColor="@color/white"
-                android:textSize="14sp"
+                android:textSize="13sp"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -258,3 +266,4 @@
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+

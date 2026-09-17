@@ -31,12 +31,20 @@ public class SessionManager {
     public SessionManager(Context context) {
         this.prefs = context.getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         this.gson = new Gson();
-        ApiClient.setAuthToken(prefs.getString(KEY_AUTH_TOKEN, ""));
+        String savedToken = prefs.getString(KEY_AUTH_TOKEN, "");
+        if (savedToken != null && !savedToken.trim().isEmpty()) {
+            ApiClient.setAuthToken(savedToken.trim());
+        }
     }
 
     public static synchronized SessionManager getInstance(Context context) {
         if (instance == null) {
             instance = new SessionManager(context);
+        } else {
+            String savedToken = instance.prefs.getString(KEY_AUTH_TOKEN, "");
+            if (savedToken != null && !savedToken.trim().isEmpty()) {
+                ApiClient.setAuthToken(savedToken.trim());
+            }
         }
         return instance;
     }
@@ -44,12 +52,20 @@ public class SessionManager {
     public void saveAuthSession(String token, UserDto user) {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putBoolean(KEY_IS_LOGGED_IN, true);
-        editor.putString(KEY_AUTH_TOKEN, token != null ? token : "");
+        if (token != null && !token.trim().isEmpty()) {
+            editor.putString(KEY_AUTH_TOKEN, token.trim());
+            ApiClient.setAuthToken(token.trim());
+        }
         if (user != null) {
             editor.putString(KEY_USER_DATA, gson.toJson(user));
         }
         editor.apply();
-        ApiClient.setAuthToken(token);
+    }
+
+    public void saveUser(UserDto user) {
+        if (user != null) {
+            prefs.edit().putString(KEY_USER_DATA, gson.toJson(user)).apply();
+        }
     }
 
     public boolean isLoggedIn() {
@@ -57,7 +73,11 @@ public class SessionManager {
     }
 
     public String getToken() {
-        return prefs.getString(KEY_AUTH_TOKEN, "");
+        String token = prefs.getString(KEY_AUTH_TOKEN, "");
+        if (token != null && !token.trim().isEmpty()) {
+            ApiClient.setAuthToken(token.trim());
+        }
+        return token;
     }
 
     public String getAuthorizationHeader() {

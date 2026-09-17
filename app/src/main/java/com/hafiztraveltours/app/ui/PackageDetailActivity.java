@@ -204,22 +204,20 @@ public class PackageDetailActivity extends AppCompatActivity {
             whatsappBtn.setOnClickListener(v -> openWhatsAppForPackage());
         }
 
-        // 5. Build Content Sections
+        // 5. Build Content Sections following exact hierarchy
         container.removeAllViews();
-        addTitleSection();
-        addQuickSpecsSection();
-        addNightsBreakdownSection();
-        addHotelsSection();
-        addFlightTransportSection();
-        addPriceOptionsSection();
-        addItinerarySection();
-        addIncludedExcludedSection();
-        addPackingGuideSection();
-        addImportantNotesSection();
-        addRequiredDocumentsSection();
-        addCancellationPolicySection();
-        addGallerySection();
-        addRelatedPackagesSection();
+        addTitleSection();              // 1. Hero Gallery & Package Info Header
+        addQuickSpecsSection();          // 2. Quick Highlights
+        addPriceOptionsSection();        // 3. Room & Pricing
+        addHotelsSection();              // 4. Accommodation
+        addFlightTransportSection();     // 5. Flight
+        addGallerySection();             // 6. Photo Gallery
+        addItinerarySection();           // 7. Full Itinerary
+        addIncludedExcludedSection();    // 8 & 9. What's Included / Not Included
+        addBookingGuideSection();        // 10. Booking Guide
+        addImportantNotesSection();      // 11. Important Notes & Guidelines
+        addCancellationPolicySection();  // 12. Cancellation & Refund Policy
+        addRelatedPackagesSection();     // 13. Related Packages
     }
 
     private void updateBottomPriceDisplay() {
@@ -285,6 +283,38 @@ public class PackageDetailActivity extends AppCompatActivity {
         title.setTextColor(getResources().getColor(R.color.text_dark));
         container.addView(title);
 
+        // Departure Date, Duration, Route Header Bar
+        StringBuilder metaSb = new StringBuilder();
+        if (detail.availableDepartureDates != null && !detail.availableDepartureDates.isEmpty()) {
+            metaSb.append("📅 ").append(detail.availableDepartureDates.get(0));
+        } else if (rawPackage != null && rawPackage.departures != null && !rawPackage.departures.isEmpty()) {
+            UmrahPackage.DepartureItem dep = rawPackage.departures.get(0);
+            if (dep.departureDate != null) {
+                metaSb.append("📅 ").append(dep.departureDate);
+                if (dep.returnDate != null) metaSb.append(" - ").append(dep.returnDate);
+            }
+        }
+        if (rawPackage != null && rawPackage.flightRoute != null && !rawPackage.flightRoute.trim().isEmpty()) {
+            if (metaSb.length() > 0) metaSb.append(" • ");
+            metaSb.append("✈ ").append(rawPackage.flightRoute.trim());
+        } else if (rawPackage != null && rawPackage.destination != null && !rawPackage.destination.trim().isEmpty()) {
+            if (metaSb.length() > 0) metaSb.append(" • ");
+            metaSb.append("📍 ").append(rawPackage.destination.trim());
+        }
+
+        if (metaSb.length() > 0) {
+            TextView metaText = new TextView(this);
+            metaText.setText(metaSb.toString());
+            metaText.setTextSize(12);
+            metaText.setTypeface(null, Typeface.BOLD);
+            metaText.setTextColor(getResources().getColor(R.color.brand_dark_pink));
+            LinearLayout.LayoutParams mp = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            mp.topMargin = dp(4);
+            metaText.setLayoutParams(mp);
+            container.addView(metaText);
+        }
+
         if (detail.summaryLine != null && !detail.summaryLine.isEmpty()) {
             TextView summary = new TextView(this);
             summary.setText(detail.summaryLine);
@@ -311,12 +341,16 @@ public class PackageDetailActivity extends AppCompatActivity {
             row.addView(buildSpecChip(getString(R.string.duration_days_nights, detail.durationDays, detail.nightsCount)));
         }
 
-        if (rawPackage != null && rawPackage.airlineName != null && !rawPackage.airlineName.isEmpty()) {
-            row.addView(buildSpecChip(rawPackage.airlineName));
+        if (rawPackage != null && rawPackage.hotelMakkahRating != null && !rawPackage.hotelMakkahRating.trim().isEmpty()) {
+            row.addView(buildSpecChip("⭐ " + rawPackage.hotelMakkahRating.trim()));
         }
 
-        if (rawPackage != null && rawPackage.hotelMakkahRating != null && !rawPackage.hotelMakkahRating.isEmpty()) {
-            row.addView(buildSpecChip(rawPackage.hotelMakkahRating));
+        if (rawPackage != null && rawPackage.airlineName != null && !rawPackage.airlineName.trim().isEmpty()) {
+            row.addView(buildSpecChip(rawPackage.airlineName.trim()));
+        }
+
+        if (rawPackage != null && rawPackage.flightType != null && !rawPackage.flightType.trim().isEmpty()) {
+            row.addView(buildSpecChip(rawPackage.flightType.trim()));
         }
 
         if (row.getChildCount() > 0) {
@@ -353,7 +387,8 @@ public class PackageDetailActivity extends AppCompatActivity {
         row.setLayoutParams(rowParams);
 
         for (PackageDetail.NightBreakdown nb : detail.nightsBreakdown) {
-            // Build city label from slot
+            if (nb.nights <= 0) continue;
+
             String cityLabel;
             if (detail.isUmrah) {
                 if (nb.slot == 0) cityLabel = getString(R.string.nights_label_makkah);
@@ -397,10 +432,14 @@ public class PackageDetailActivity extends AppCompatActivity {
             card.addView(city);
             row.addView(card);
         }
-        container.addView(row);
+        if (row.getChildCount() > 0) {
+            container.addView(row);
+        }
     }
 
     private void addHotelsSection() {
+        addNightsBreakdownSection();
+
         boolean isUmrah = detail.isUmrah;
         container.addView(sectionHeading(getString(
                 isUmrah ? R.string.detail_section_hotels_umrah : R.string.detail_section_hotels_tour)));
@@ -411,33 +450,13 @@ public class PackageDetailActivity extends AppCompatActivity {
         }
 
         for (PackageDetail.HotelInfo hotel : detail.hotels) {
-            // Build translated title from slot
-            String hotelTitle;
-            if (hotel.slot == -1) {
-                // Flight card
-                String flightType = !hotel.rawRating.isEmpty()
-                        ? hotel.rawRating
-                        : getString(R.string.flight_type_fallback);
-                String airline = (hotel.airlineName != null && !hotel.airlineName.trim().isEmpty())
-                        ? hotel.airlineName.trim()
-                        : "";
-                if (!airline.isEmpty()) {
-                    hotelTitle = flightType + " (" + airline + ")";
-                } else {
-                    hotelTitle = flightType;
-                }
-                if (hotel.subtitle.isEmpty()) hotel.subtitle = getString(R.string.flight_route_fallback);
-            } else {
-                int[] umrahKeys = {R.string.hotel_title_umrah_makkah, R.string.hotel_title_umrah_madinah, R.string.hotel_title_umrah_taif};
-                int[] tourKeys  = {R.string.hotel_title_tour_hotel1, R.string.hotel_title_tour_hotel2, R.string.hotel_title_tour_extra};
-                int slot = Math.min(hotel.slot, 2);
-                String base = getString(isUmrah ? umrahKeys[slot] : tourKeys[slot]);
-                if (!hotel.rawRating.trim().isEmpty()) {
-                    hotelTitle = base + " (" + hotel.rawRating.trim() + ")";
-                } else {
-                    hotelTitle = base;
-                }
-            }
+            if (hotel.slot == -1) continue;
+
+            int[] umrahKeys = {R.string.hotel_title_umrah_makkah, R.string.hotel_title_umrah_madinah, R.string.hotel_title_umrah_taif};
+            int[] tourKeys  = {R.string.hotel_title_tour_hotel1, R.string.hotel_title_tour_hotel2, R.string.hotel_title_tour_extra};
+            int slot = Math.max(0, Math.min(hotel.slot, 2));
+            String base = getString(isUmrah ? umrahKeys[slot] : tourKeys[slot]);
+            String hotelTitle = !hotel.rawRating.trim().isEmpty() ? base + " (" + hotel.rawRating.trim() + ")" : base;
 
             LinearLayout card = new LinearLayout(this);
             card.setOrientation(LinearLayout.VERTICAL);
@@ -1287,6 +1306,222 @@ public class PackageDetailActivity extends AppCompatActivity {
         container.addView(card);
     }
 
+    private void addCancellationPolicySection() {
+        if (detail == null || detail.cancellationPolicy == null || detail.cancellationPolicy.isEmpty()) return;
+
+        LinearLayout card = new LinearLayout(this);
+        card.setOrientation(LinearLayout.VERTICAL);
+        card.setBackgroundResource(R.drawable.bg_detail_card);
+        card.setPadding(dp(16), dp(16), dp(16), dp(16));
+        LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        cp.topMargin = dp(10);
+        card.setLayoutParams(cp);
+
+        LinearLayout headerRow = new LinearLayout(this);
+        headerRow.setOrientation(LinearLayout.HORIZONTAL);
+        headerRow.setGravity(Gravity.CENTER_VERTICAL);
+        LinearLayout.LayoutParams hrp = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        hrp.bottomMargin = dp(12);
+        headerRow.setLayoutParams(hrp);
+
+        LinearLayout iconBox = new LinearLayout(this);
+        iconBox.setGravity(Gravity.CENTER);
+        GradientDrawable iconBoxBg = new GradientDrawable();
+        iconBoxBg.setShape(GradientDrawable.RECTANGLE);
+        iconBoxBg.setCornerRadius(dp(10));
+        iconBoxBg.setColor(Color.parseColor("#FCE7F3"));
+        iconBox.setBackground(iconBoxBg);
+
+        ImageView policyIcon = new ImageView(this);
+        policyIcon.setImageResource(R.drawable.ic_cancellation_policy);
+        LinearLayout.LayoutParams nip = new LinearLayout.LayoutParams(dp(22), dp(22));
+        policyIcon.setLayoutParams(nip);
+        iconBox.addView(policyIcon);
+
+        LinearLayout.LayoutParams ibp = new LinearLayout.LayoutParams(dp(40), dp(40));
+        ibp.rightMargin = dp(12);
+        iconBox.setLayoutParams(ibp);
+        headerRow.addView(iconBox);
+
+        LinearLayout titleCol = new LinearLayout(this);
+        titleCol.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout.LayoutParams tcp = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
+        titleCol.setLayoutParams(tcp);
+
+        TextView title = new TextView(this);
+        title.setText(getString(R.string.detail_section_cancellation_policy));
+        title.setTextSize(13);
+        title.setTypeface(null, Typeface.BOLD);
+        title.setTextColor(Color.parseColor("#BE185D"));
+
+        TextView subHeading = new TextView(this);
+        subHeading.setText(getString(R.string.detail_cancellation_sub));
+        subHeading.setTextSize(11);
+        subHeading.setTextColor(Color.parseColor("#64748B"));
+
+        titleCol.addView(title);
+        titleCol.addView(subHeading);
+        headerRow.addView(titleCol);
+
+        card.addView(headerRow);
+
+        View divider = new View(this);
+        divider.setBackgroundColor(Color.parseColor("#F1F5F9"));
+        LinearLayout.LayoutParams dpParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, dp(1));
+        dpParams.bottomMargin = dp(10);
+        divider.setLayoutParams(dpParams);
+        card.addView(divider);
+
+        for (String bullet : detail.cancellationPolicy) {
+            if (bullet == null || bullet.trim().isEmpty()) continue;
+
+            LinearLayout row = new LinearLayout(this);
+            row.setOrientation(LinearLayout.HORIZONTAL);
+            row.setGravity(Gravity.TOP);
+            LinearLayout.LayoutParams rp = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            rp.topMargin = dp(4);
+            rp.bottomMargin = dp(4);
+            row.setLayoutParams(rp);
+
+            ImageView checkImg = new ImageView(this);
+            checkImg.setImageResource(R.drawable.ic_check_green);
+            LinearLayout.LayoutParams cip = new LinearLayout.LayoutParams(dp(14), dp(14));
+            cip.rightMargin = dp(8);
+            cip.topMargin = dp(2);
+            checkImg.setLayoutParams(cip);
+
+            TextView bulletView = new TextView(this);
+            bulletView.setText(bullet);
+            bulletView.setTextSize(12);
+            bulletView.setTextColor(Color.parseColor("#374151"));
+            bulletView.setLineSpacing(dp(1), 1.15f);
+            LinearLayout.LayoutParams bp = new LinearLayout.LayoutParams(
+                    0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
+            bulletView.setLayoutParams(bp);
+
+            row.addView(checkImg);
+            row.addView(bulletView);
+
+            card.addView(row);
+        }
+
+        container.addView(card);
+    }
+
+    private void addBookingGuideSection() {
+        container.addView(sectionHeading(getString(R.string.detail_booking_guide)));
+
+        LinearLayout card = new LinearLayout(this);
+        card.setOrientation(LinearLayout.VERTICAL);
+        card.setBackgroundResource(R.drawable.bg_detail_card);
+        card.setPadding(dp(16), dp(16), dp(16), dp(16));
+        LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        cp.topMargin = dp(10);
+        card.setLayoutParams(cp);
+
+        LinearLayout headerRow = new LinearLayout(this);
+        headerRow.setOrientation(LinearLayout.HORIZONTAL);
+        headerRow.setGravity(Gravity.CENTER_VERTICAL);
+        LinearLayout.LayoutParams hrp = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        hrp.bottomMargin = dp(12);
+        headerRow.setLayoutParams(hrp);
+
+        LinearLayout iconBox = new LinearLayout(this);
+        iconBox.setGravity(Gravity.CENTER);
+        GradientDrawable iconBoxBg = new GradientDrawable();
+        iconBoxBg.setShape(GradientDrawable.RECTANGLE);
+        iconBoxBg.setCornerRadius(dp(10));
+        iconBoxBg.setColor(Color.parseColor("#FEF3C7"));
+        iconBox.setBackground(iconBoxBg);
+
+        ImageView guideIcon = new ImageView(this);
+        guideIcon.setImageResource(R.drawable.ic_terms_shield);
+        LinearLayout.LayoutParams gip = new LinearLayout.LayoutParams(dp(22), dp(22));
+        guideIcon.setLayoutParams(gip);
+        iconBox.addView(guideIcon);
+
+        LinearLayout.LayoutParams ibp = new LinearLayout.LayoutParams(dp(40), dp(40));
+        ibp.rightMargin = dp(12);
+        iconBox.setLayoutParams(ibp);
+        headerRow.addView(iconBox);
+
+        LinearLayout titleCol = new LinearLayout(this);
+        titleCol.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout.LayoutParams tcp = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
+        titleCol.setLayoutParams(tcp);
+
+        TextView title = new TextView(this);
+        title.setText(getString(R.string.detail_booking_guide));
+        title.setTextSize(13);
+        title.setTypeface(null, Typeface.BOLD);
+        title.setTextColor(Color.parseColor("#B45309"));
+
+        TextView subHeading = new TextView(this);
+        subHeading.setText(getString(R.string.detail_booking_guide_sub));
+        subHeading.setTextSize(11);
+        subHeading.setTextColor(Color.parseColor("#64748B"));
+
+        titleCol.addView(title);
+        titleCol.addView(subHeading);
+        headerRow.addView(titleCol);
+
+        card.addView(headerRow);
+
+        View divider = new View(this);
+        divider.setBackgroundColor(Color.parseColor("#F1F5F9"));
+        LinearLayout.LayoutParams dpParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, dp(1));
+        dpParams.bottomMargin = dp(10);
+        divider.setLayoutParams(dpParams);
+        card.addView(divider);
+
+        String[] steps = {
+            "1. Pilih Pilihan Bilik (Quint, Quad, Triple, Double, Single) & Tarikh Pelepasan yang dikehendaki.",
+            "2. Tekan butang 'Tempah Sekarang' di bahagian bawah untuk membuka tetapan tempahan.",
+            "3. Masukkan bilangan jemaah / pengembara & butiran maklumat peribadi.",
+            "4. Sahkan tempahan & teruskan ke bayaran deposit secara dalam talian atau muat naik resit pindahan bank."
+        };
+
+        for (String stepText : steps) {
+            LinearLayout row = new LinearLayout(this);
+            row.setOrientation(LinearLayout.HORIZONTAL);
+            row.setGravity(Gravity.TOP);
+            LinearLayout.LayoutParams rp = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            rp.topMargin = dp(4);
+            rp.bottomMargin = dp(4);
+            row.setLayoutParams(rp);
+
+            ImageView checkImg = new ImageView(this);
+            checkImg.setImageResource(R.drawable.ic_check_green);
+            LinearLayout.LayoutParams cip = new LinearLayout.LayoutParams(dp(14), dp(14));
+            cip.rightMargin = dp(8);
+            cip.topMargin = dp(2);
+            checkImg.setLayoutParams(cip);
+
+            TextView stepTv = new TextView(this);
+            stepTv.setText(stepText);
+            stepTv.setTextSize(12);
+            stepTv.setTextColor(Color.parseColor("#374151"));
+            stepTv.setLineSpacing(dp(1), 1.15f);
+            LinearLayout.LayoutParams stp = new LinearLayout.LayoutParams(
+                    0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
+            stepTv.setLayoutParams(stp);
+
+            row.addView(checkImg);
+            row.addView(stepTv);
+            card.addView(row);
+        }
+
+        container.addView(card);
+    }
+
     private void addGallerySection() {
         if (detail.galleryImageUrls.isEmpty()) return;
 
@@ -1451,45 +1686,6 @@ public class PackageDetailActivity extends AppCompatActivity {
             rp.topMargin = dp(6);
             routeText.setLayoutParams(rp);
             card.addView(routeText);
-        }
-
-        container.addView(card);
-    }
-
-
-
-    private void addCancellationPolicySection() {
-        if (detail == null || detail.cancellationPolicy == null || detail.cancellationPolicy.isEmpty()) return;
-
-        container.addView(sectionHeading(getString(R.string.detail_section_cancellation_policy)));
-
-        LinearLayout card = new LinearLayout(this);
-        card.setOrientation(LinearLayout.VERTICAL);
-        card.setBackgroundResource(R.drawable.bg_detail_card);
-        card.setPadding(dp(16), dp(16), dp(16), dp(16));
-        LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        cp.topMargin = dp(10);
-        card.setLayoutParams(cp);
-
-        TextView title = new TextView(this);
-        title.setText(getString(R.string.detail_section_cancellation_policy));
-        title.setTextSize(13);
-        title.setTypeface(null, Typeface.BOLD);
-        title.setTextColor(getResources().getColor(R.color.text_dark));
-        card.addView(title);
-
-        for (String bullet : detail.cancellationPolicy) {
-            if (bullet == null || bullet.trim().isEmpty()) continue;
-            TextView bulletView = new TextView(this);
-            bulletView.setText("• " + bullet);
-            bulletView.setTextSize(12);
-            bulletView.setTextColor(getResources().getColor(R.color.text_gray));
-            LinearLayout.LayoutParams bp = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            bp.topMargin = dp(4);
-            bulletView.setLayoutParams(bp);
-            card.addView(bulletView);
         }
 
         container.addView(card);

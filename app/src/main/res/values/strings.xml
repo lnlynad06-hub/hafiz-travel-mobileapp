@@ -43,7 +43,8 @@
     <string name="signup_title">Create an Account</string>
     <string name="signup_subtitle">Sign up to start planning your vacation.</string>
     <string name="hint_full_name">Full name *</string>
-    <string name="hint_nickname">Nickname *</string>
+    <string name="hint_username">Username *</string>
+    <string name="hint_nickname">Username *</string>
     <string name="hint_phone">Phone Number</string>
     <string name="hint_confirm_password">Confirm Password</string>
     <string name="signup_button">Sign Up</string>
@@ -66,7 +67,9 @@
     <string name="region_southeast_asia">SOUTHEAST ASIA</string>
     <string name="region_international">OTHER INTERNATIONAL</string>
     <string name="err_name_required">Please enter your full name</string>
-    <string name="err_nickname_required">Please enter your nickname.</string>
+    <string name="err_username_required">Please enter your username</string>
+    <string name="err_username_taken">Username is already taken</string>
+    <string name="err_nickname_required">Please enter your username.</string>
     <string name="err_email_invalid">Please enter a valid email address</string>
     <string name="err_phone_invalid">Please enter a valid phone number</string>
     <string name="err_password_short">Password must be at least 8 characters</string>
@@ -738,6 +741,9 @@
     <string name="detail_required_documents">Required Documents</string>
     <string name="detail_docs_sub">Required travel documents, visas, and certificates</string>
     <string name="detail_notes_sub_fallback">Important information for travelers</string>
+    <string name="detail_cancellation_sub">Terms, timelines, and refund eligibility rules</string>
+    <string name="detail_booking_guide">Booking Guide</string>
+    <string name="detail_booking_guide_sub">Simple steps to book your travel package with Hafiz Travel &amp; Tours</string>
     <string name="room_quint">5-Person Room (Quint)</string>
     <string name="room_quad">4-Person Room (Quad)</string>
     <string name="room_triple">3-Person Room (Triple)</string>
@@ -877,12 +883,29 @@
 
     <!-- Redesigned Edit Profile Strings -->
     <string name="edit_profile_title">Edit Profile</string>
-    <string name="edit_profile_subtitle">Update your personal, passport, emergency &amp; mahram details</string>
+    <string name="edit_profile_subtitle">Update your personal, identity, passport, address &amp; mahram details</string>
     <string name="section_personal_info">Personal Information</string>
+    <string name="section_identity_info">Identity / MyKad</string>
     <string name="section_passport_info">Passport Information</string>
+    <string name="section_residential_address">Residential Address</string>
     <string name="section_emergency_contact">Emergency Contact</string>
     <string name="section_mahram_info">Mahram Information</string>
     <string name="section_security">Security</string>
+    <string name="profile_field_gender">Gender</string>
+    <string name="profile_field_dob">Date of Birth</string>
+    <string name="profile_field_nationality">Nationality / Country</string>
+    <string name="profile_field_address_line_1">Address Line 1</string>
+    <string name="profile_field_address_line_2">Address Line 2 (Optional)</string>
+    <string name="profile_field_postcode">Postcode</string>
+    <string name="profile_field_city">City / District</string>
+    <string name="profile_field_state">State</string>
+    <string name="profile_field_country">Country</string>
+    <string name="hint_address_line_1">Street address, P.O. Box</string>
+    <string name="hint_address_line_2">Apartment, suite, unit, building, floor</string>
+    <string name="hint_postcode">e.g. 80000</string>
+    <string name="hint_city">e.g. Johor Bahru</string>
+    <string name="hint_state">e.g. Johor</string>
+    <string name="hint_country">e.g. Malaysia</string>
     <string name="label_mahram_applicable">Mahram applicable?</string>
     <string name="label_relationship">Relationship</string>
     <string name="hint_relationship">e.g. Husband, Father, Brother</string>
@@ -894,8 +917,8 @@
     <string name="password_updating">Updating...</string>
     <string name="password_updated_success">Password updated successfully!</string>
     <string name="password_update_failed">Failed to update password. Please check your current password.</string>
-    <string name="passport_expiry_warning">Warning: Passport expires in less than 6 months (%1$s)! Renewal recommended for international travel &amp; Umrah visa.</string>
-    <string name="passport_expired_warning">Warning: Passport has expired (%1$s)! Renewal required for travel.</string>
+    <string name="passport_expiry_warning">Passport expires soon (%1$s). Renewal recommended before travel.</string>
+    <string name="passport_expired_warning">Passport expired (%1$s). Renewal required before travel.</string>
     <string name="err_current_password_required">Please enter your current password</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
@@ -912,7 +935,7 @@
     <string name="doc_passport_photo_desc">Standard white background passport photo (JPG/PNG)</string>
     <string name="doc_travel_visa_title">Travel Visa</string>
     <string name="doc_travel_visa_desc">Visa document required for certain international destinations.</string>
-    <string name="doc_status_under_review">Under Review</string>
+    <string name="doc_status_under_review">Pending</string>
     <string name="doc_updated_at_format">Uploaded: %1$s</string>
     <string name="doc_expires_at_format">Expires: %1$s</string>
     <string name="legend_required"><font color="#DC2626">*</font> Required</string>
@@ -965,4 +988,70 @@
     <string name="doc_verified_at_format">Verified: %1$s</string>
     <string name="doc_status_not_required">Not Required</string>
 
+    <string name="prefilled_from_profile">Filled from your profile</string>
+
+
+    <!-- Travellers & Traveller Selection -->
+    <string name="passenger_details_title">Travellers</string>
+    <string name="passenger_booking_summary">BOOKING SUMMARY</string>
+    <string name="passenger_departure_format">Departure: %1$s</string>
+    <string name="passenger_room_pax_format">%1$s • %2$d Travellers</string>
+    <string name="passenger_section_your_profile">YOUR DETAILS</string>
+    <string name="passenger_section_additional">ADDITIONAL TRAVELLERS</string>
+    <string name="passenger_no_additional">No additional travellers added yet.</string>
+    <string name="passenger_btn_add_another">+ Add Another Traveller</string>
+    <string name="passenger_footer_count_format">%1$d of %2$d Travellers Added</string>
+    <string name="passenger_btn_continue">CONTINUE TO BOOKING SUMMARY</string>
+    <string name="passenger_profile_complete">✓ Profile Complete</string>
+    <string name="passenger_profile_incomplete">⚠ Profile Incomplete</string>
+    <string name="passenger_passport_label">Passport: %1$s</string>
+    <string name="passenger_nationality_label">Nationality: %1$s</string>
+    <string name="passenger_doc_passport_available">✓ Passport Document Available</string>
+    <string name="passenger_doc_ic_available">✓ MyKad / IC Document Available</string>
+    <string name="passenger_btn_edit_profile">Edit Profile</string>
+    <string name="passenger_profile_incomplete_warn">Your account profile does not meet the requirements for this package.\nPlease complete your profile before continuing.</string>
+    <string name="passenger_missing_fields_header">Required Information / Documents:</string>
+    <string name="passenger_btn_complete_profile">COMPLETE PROFILE NOW</string>
+    <string name="passenger_not_logged_in">User not logged in</string>
+    <string name="passenger_profile_not_found">Profile not found</string>
+    <string name="passenger_missing_name">Full Name (as IC / Passport)</string>
+    <string name="passenger_missing_ic">NRIC / MyKad Number</string>
+    <string name="passenger_missing_passport">Passport Number</string>
+    <string name="passenger_missing_passport_expiry">Passport Expiry Date</string>
+    <string name="passenger_missing_passport_validity">Passport expired or less than %1$d months validity</string>
+    <string name="passenger_missing_passport_doc">Passport Copy Document</string>
+    <string name="passenger_missing_ic_doc">MyKad / IC Copy Document</string>
+    <string name="passenger_missing_clothes_size">Clothing / Abaya Size</string>
+    <string name="passenger_traveller_title_format">Traveller %1$d</string>
+    <string name="passenger_delete">Delete</string>
+    <string name="passenger_field_title_hint">Title</string>
+    <string name="passenger_field_name_label">Full Name as Passport / IC *</string>
+    <string name="passenger_field_name_hint">e.g. Jane Doe</string>
+    <string name="passenger_field_dob_label">Date of Birth</string>
+    <string name="passenger_field_gender_label">Gender</string>
+    <string name="passenger_field_gender_hint">Select</string>
+    <string name="passenger_field_nationality_label">Nationality</string>
+    <string name="passenger_field_ic_label">NRIC / MyKad Number *</string>
+    <string name="passenger_field_ic_hint">e.g. 950505-10-5544</string>
+    <string name="passenger_field_passport_label">International Passport Number *</string>
+    <string name="passenger_field_passport_hint">e.g. A98765432</string>
+    <string name="passenger_field_passport_expiry_label">Passport Expiry Date *</string>
+    <string name="passenger_field_issuing_country_label">Issuing Country</string>
+    <string name="passenger_field_clothes_size_label">Clothing / Abaya Size</string>
+    <string name="passenger_field_clothes_size_hint">Select Size</string>
+    <string name="passenger_field_mahram_label">Mahram (Reference Traveller)</string>
+    <string name="passenger_field_mahram_hint">Select Mahram Traveller</string>
+    <string name="passenger_field_mahram_relation_label">Mahram Relationship</string>
+    <string name="passenger_field_mahram_relation_hint">e.g. Husband / Father / Brother</string>
+    <string name="passenger_lead_tag">(Lead Traveller)</string>
+    <string name="passenger_lead_default_name">Lead Traveller</string>
+    <string name="passenger_err_complete_lead_profile">Please complete Lead Traveller Profile first.</string>
+    <string name="passenger_err_pax_count_mismatch">Booking requires %1$d travellers (%2$d added). Please add %3$d more traveller(s).</string>
+    <string name="passenger_err_name_required">Please enter full name as in IC / Passport.</string>
+    <string name="passenger_err_ic_required">Please enter NRIC / MyKad number.</string>
+    <string name="passenger_err_passport_required">Please enter passport number.</string>
+    <string name="passenger_err_passport_expiry_required">Please select passport expiry date.</string>
+    <string name="passenger_err_complete_all_additional">Please complete details for all additional travellers.</string>
+    <string name="gender_male">Male</string>
+    <string name="gender_female">Female</string>
 </resources>

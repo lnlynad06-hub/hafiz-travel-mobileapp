@@ -40,8 +40,41 @@ public class CreateBookingRequest {
     public List<TravellerRequest> travellers = new ArrayList<>();
 
     public static class TravellerRequest {
+        @SerializedName("title")
+        public String title;
+
         @SerializedName("full_name")
         public String fullName;
+
+        @SerializedName("ic_number")
+        public String icNumber;
+
+        @SerializedName("passport_number")
+        public String passportNumber;
+
+        @SerializedName("passport_expiry_date")
+        public String passportExpiryDate;
+
+        @SerializedName("issuing_country")
+        public String issuingCountry;
+
+        @SerializedName("gender")
+        public String gender;
+
+        @SerializedName("date_of_birth")
+        public String dateOfBirth;
+
+        @SerializedName("nationality")
+        public String nationality;
+
+        @SerializedName("clothes_size")
+        public String clothesSize;
+
+        @SerializedName("mahram_index")
+        public Integer mahramIndex;
+
+        @SerializedName("relationship")
+        public String relationship;
 
         @SerializedName("ic_passport")
         public String icPassport;
@@ -55,12 +88,6 @@ public class CreateBookingRequest {
         @SerializedName("is_lead")
         public boolean isLead;
 
-        public TravellerRequest(String fullName, String icPassport, String phone, String email, boolean isLead) {
-            this.fullName = fullName;
-            this.icPassport = icPassport;
-            this.phone = phone;
-            this.email = email;
-            this.isLead = isLead;
-        }
+        public TravellerRequest() {}
     }
 }

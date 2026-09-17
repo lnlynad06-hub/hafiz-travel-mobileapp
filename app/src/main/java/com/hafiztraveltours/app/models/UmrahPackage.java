@@ -12,7 +12,7 @@ import com.hafiztraveltours.app.ui.*;
 
 import com.google.gson.annotations.SerializedName;
 
-public class UmrahPackage {
+public class UmrahPackage implements java.io.Serializable {
     @SerializedName("id")
     public String id;
 
@@ -133,6 +133,24 @@ public class UmrahPackage {
     @SerializedName("exclusions")
     public java.util.List<String> exclusions;
 
+    @SerializedName("package_type")
+    public String packageType;
+
+    @SerializedName("requires_passport")
+    public Boolean requiresPassport;
+
+    @SerializedName("requires_ic")
+    public Boolean requiresIc;
+
+    @SerializedName("requires_mahram")
+    public Boolean requiresMahram;
+
+    @SerializedName("requires_clothes_size")
+    public Boolean requiresClothesSize;
+
+    @SerializedName("passport_validity_months")
+    public Integer passportValidityMonths;
+
     @SerializedName("required_documents")
     public java.util.List<String> requiredDocuments;
 
@@ -179,7 +197,10 @@ public class UmrahPackage {
     @SerializedName("itineraries")
     public java.util.List<ItineraryItem> itineraries;
 
-    public static class ItineraryItem {
+    @SerializedName("related_packages")
+    public java.util.List<UmrahPackage> relatedPackages;
+
+    public static class ItineraryItem implements java.io.Serializable {
         @SerializedName("day_number")
         public int dayNumber;
 

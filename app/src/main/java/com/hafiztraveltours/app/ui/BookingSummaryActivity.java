@@ -148,7 +148,8 @@ public class BookingSummaryActivity extends AppCompatActivity {
             item.addView(nameView);
 
             TextView icView = new TextView(this);
-            icView.setText("   No. IC/Pasport: " + p.icPassportNumber);
+            String maskedId = maskSensitiveDoc(p.icPassportNumber);
+            icView.setText("   No. IC/Pasport: " + maskedId);
             icView.setTextSize(12);
             icView.setTextColor(getResources().getColor(R.color.text_gray));
             item.addView(icView);
@@ -173,6 +174,13 @@ public class BookingSummaryActivity extends AppCompatActivity {
 
             containerPassengers.addView(item);
         }
+    }
+
+    private String maskSensitiveDoc(String docNo) {
+        if (docNo == null || docNo.trim().isEmpty()) return "-";
+        String clean = docNo.trim();
+        if (clean.length() <= 4) return "****";
+        return clean.substring(0, 3) + "****" + clean.substring(clean.length() - 2);
     }
 
     private int dp(int value) {

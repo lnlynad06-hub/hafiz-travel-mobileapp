@@ -699,7 +699,7 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
         if (TextUtils.isEmpty(nickname)) {
-            nicknameLayout.setError(getString(R.string.err_nickname_required));
+            nicknameLayout.setError(getString(R.string.err_username_required));
             valid = false;
         } else {
             nicknameLayout.setError(null);

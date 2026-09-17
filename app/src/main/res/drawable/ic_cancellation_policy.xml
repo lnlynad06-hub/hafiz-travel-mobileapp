@@ -1,0 +1,10 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Cancellation & Refund Policy Vector Icon (Shield with Undo/Return Arrow) -->
+    <path
+        android:fillColor="#BE185D"
+        android:pathData="M12,2L4,5v6c0,5.25 3.4,10.15 8,11.35 4.6,-1.2 8,-6.1 8,-11.35V5l-8,-3zm0,4c2.76,0 5,2.24 5,5h-1.8c0,-1.77 -1.43,-3.2 -3.2,-3.2 -1.77,0 -3.2,1.43 -3.2,3.2 0,1.77 1.43,3.2 3.2,3.2v1.8c-2.76,0 -5,-2.24 -5,-5 0,-2.76 2.24,-5 5,-5zm-1,10.5l-3.5,-3.5 1.41,-1.41L11,13.67l5.09,-5.09 1.41,1.41L11,16.5z"/>
+</vector>

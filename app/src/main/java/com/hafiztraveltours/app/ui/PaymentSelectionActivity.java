@@ -137,8 +137,24 @@ public class PaymentSelectionActivity extends AppCompatActivity {
         if (bookingRequest.passengers != null) {
             for (int i = 0; i < bookingRequest.passengers.size(); i++) {
                 BookingRequest.Passenger p = bookingRequest.passengers.get(i);
-                apiRequest.travellers.add(new CreateBookingRequest.TravellerRequest(
-                        p.fullName, p.icPassportNumber, p.phoneNumber, p.email, p.isLead || i == 0));
+                CreateBookingRequest.TravellerRequest tr = new CreateBookingRequest.TravellerRequest();
+                tr.title = p.title;
+                tr.fullName = p.fullName;
+                tr.icNumber = p.icNumber;
+                tr.passportNumber = p.passportNumber;
+                tr.passportExpiryDate = p.passportExpiryDate;
+                tr.issuingCountry = p.issuingCountry;
+                tr.gender = p.gender;
+                tr.dateOfBirth = p.dateOfBirth;
+                tr.nationality = p.nationality;
+                tr.clothesSize = p.clothesSize;
+                tr.mahramIndex = p.mahramIndex;
+                tr.relationship = p.relationship;
+                tr.icPassport = p.icPassportNumber;
+                tr.phone = p.phoneNumber;
+                tr.email = p.email;
+                tr.isLead = p.isLead || (i == 0);
+                apiRequest.travellers.add(tr);
             }
         }
         return apiRequest;

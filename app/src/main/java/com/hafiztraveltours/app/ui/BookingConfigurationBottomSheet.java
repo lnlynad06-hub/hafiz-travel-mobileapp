@@ -305,6 +305,7 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
         req.roomPriceFormatted = roomPriceStr;
         req.unitPriceAmount = unitAmount;
         req.adultPaxCount = paxCount;
+        req.packageDetail = detail;
 
         List<String> deps = getDepartureList();
         if (selectedDepartureIndex >= 0 && selectedDepartureIndex < deps.size()) {

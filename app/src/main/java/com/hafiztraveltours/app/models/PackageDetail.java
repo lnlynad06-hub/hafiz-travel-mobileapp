@@ -46,7 +46,14 @@ public class PackageDetail implements java.io.Serializable {
     public List<String> packingWinter = new ArrayList<>();
     public List<PriceOption> priceOptions = new ArrayList<>();
     public List<String> galleryImageUrls = new ArrayList<>();
+    public List<UmrahPackage> relatedPackages = new ArrayList<>();
     public String whatsappMessage;
+    public String packageType = "umrah";
+    public boolean requiresPassport = true;
+    public boolean requiresIc = true;
+    public boolean requiresMahram = false;
+    public boolean requiresClothesSize = false;
+    public int passportValidityMonths = 6;
     public boolean isUmrah; // set from UmrahPackage.isUmrah() during parsing
 
     public static class NightBreakdown implements java.io.Serializable {
@@ -174,20 +181,6 @@ public class PackageDetail implements java.io.Serializable {
             d.hotels.add(new HotelInfo("hotel", 2, rating, subtitle));
         }
 
-        if (pkg.airlineName != null && !pkg.airlineName.trim().isEmpty()) {
-            // Flight type & route are raw server data — not translated here
-            String flightType = (pkg.flightType != null && !pkg.flightType.trim().isEmpty())
-                    ? pkg.flightType : null; // null → Activity uses getString(flight_type_fallback)
-            String flightRoute = (pkg.flightRoute != null && !pkg.flightRoute.trim().isEmpty())
-                    ? pkg.flightRoute.trim() : null; // null → Activity uses getString(flight_route_fallback)
-            // Store flightType as rawRating slot, route as subtitle (null handled in Activity)
-            String subtitle = flightRoute != null ? flightRoute : "";
-            HotelInfo fi = new HotelInfo("flight", -1, flightType != null ? flightType : "", subtitle);
-            fi.rawRating = flightType != null ? flightType : ""; // reuse as flightType
-            fi.airlineName = pkg.airlineName.trim();
-            d.hotels.add(fi);
-        }
-
         // 3. Jadual Perjalanan (Itinerary)
         if (pkg.itineraries != null && !pkg.itineraries.isEmpty()) {
             for (UmrahPackage.ItineraryItem item : pkg.itineraries) {
@@ -291,6 +284,10 @@ public class PackageDetail implements java.io.Serializable {
                     d.galleryImageUrls.add(img.url.trim());
                 }
             }
+        }
+
+        if (pkg.relatedPackages != null && !pkg.relatedPackages.isEmpty()) {
+            d.relatedPackages.addAll(pkg.relatedPackages);
         }
 
         return d;

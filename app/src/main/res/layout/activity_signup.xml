@@ -139,6 +139,44 @@
                     android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Username Input -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/nicknameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                app:boxBackgroundMode="outline"
+                app:boxCornerRadiusTopStart="14dp"
+                app:boxCornerRadiusTopEnd="14dp"
+                app:boxCornerRadiusBottomStart="14dp"
+                app:boxCornerRadiusBottomEnd="14dp"
+                app:boxStrokeColor="@color/box_stroke_selector"
+                app:boxBackgroundColor="@color/box_bg_selector"
+                app:boxStrokeWidth="1dp"
+                app:boxStrokeWidthFocused="1.5dp"
+                app:boxStrokeErrorColor="@color/error_red"
+                app:hintEnabled="false"
+                app:errorEnabled="true"
+                app:errorIconDrawable="@null"
+                app:startIconDrawable="@drawable/ic_profile"
+                app:startIconTint="@color/pink_dark">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/nicknameInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:paddingVertical="0dp"
+                    android:paddingStart="4dp"
+                    android:paddingEnd="12dp"
+                    android:hint="@string/hint_username"
+                    android:inputType="text"
+                    android:maxLength="50"
+                    android:textColor="@color/input_text"
+                    android:textColorHint="@color/input_hint"
+                    android:textSize="14sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
             <!-- Email Input -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/emailLayout"

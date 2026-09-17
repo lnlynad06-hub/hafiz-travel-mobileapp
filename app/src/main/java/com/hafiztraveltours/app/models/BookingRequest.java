@@ -20,15 +20,31 @@ public class BookingRequest implements Serializable {
     public String selectedDepartureDate = "";
     public String promoCode = "";
     public double discountAmount = 0.0;
+    public PackageDetail packageDetail;
 
     public List<Passenger> passengers = new ArrayList<>();
 
     public static class Passenger implements Serializable {
         public boolean isLead;
+        public String title = "Mr";
         public String fullName = "";
+        public String icNumber = "";
+        public String passportNumber = "";
+        public String passportExpiryDate = "";
+        public String issuingCountry = "Malaysia";
+        public String gender = "";
+        public String dateOfBirth = "";
+        public String nationality = "Malaysian";
+        public String clothesSize = "";
+        public Integer mahramIndex = null;
+        public String relationship = "";
         public String icPassportNumber = "";
         public String phoneNumber = "";
         public String email = "";
+        public String address = "";
+        public String passportDocumentPath = "";
+        public String icDocumentPath = "";
+        public boolean isComplete = false;
     }
 
     public static double parsePriceAmount(String priceStr) {
