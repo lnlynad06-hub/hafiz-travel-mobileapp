@@ -37,6 +37,9 @@ public class PackageDetail implements java.io.Serializable {
     public List<HotelInfo> hotels = new ArrayList<>();
     public List<ItineraryDay> itinerary = new ArrayList<>();
     public List<ImportantNote> importantNotes = new ArrayList<>();
+    public List<String> requiredDocuments = new ArrayList<>();
+    public List<String> cancellationPolicy = new ArrayList<>();
+    public String companyWhatsapp;
     public List<String> included = new ArrayList<>();
     public List<String> excluded = new ArrayList<>();
     public List<String> packingSummer = new ArrayList<>();
@@ -246,6 +249,8 @@ public class PackageDetail implements java.io.Serializable {
             d.packingSummer.addAll(pkg.packingGuide);
         }
 
+        d.companyWhatsapp = pkg.companyWhatsapp;
+
         // 7. Nota Penting & Syarat-Syarat
         if (pkg.importantNotes != null && !pkg.importantNotes.isEmpty()) {
             ImportantNote note = new ImportantNote();
@@ -256,11 +261,11 @@ public class PackageDetail implements java.io.Serializable {
         }
 
         if (pkg.requiredDocuments != null && !pkg.requiredDocuments.isEmpty()) {
-            ImportantNote docNote = new ImportantNote();
-            docNote.title = "Dokumen Yang Diperlukan";
-            docNote.badge = "Dokumen";
-            docNote.bullets.addAll(pkg.requiredDocuments);
-            d.importantNotes.add(docNote);
+            d.requiredDocuments.addAll(pkg.requiredDocuments);
+        }
+
+        if (pkg.cancellationPolicy != null && !pkg.cancellationPolicy.isEmpty()) {
+            d.cancellationPolicy.addAll(pkg.cancellationPolicy);
         }
 
         // 8. Departures
@@ -279,6 +284,13 @@ public class PackageDetail implements java.io.Serializable {
         // 9. Gallery
         if (d.imageUrl != null && !d.imageUrl.isEmpty()) {
             d.galleryImageUrls.add(d.imageUrl);
+        }
+        if (pkg.images != null && !pkg.images.isEmpty()) {
+            for (UmrahPackage.ImageItem img : pkg.images) {
+                if (img.url != null && !img.url.trim().isEmpty() && !d.galleryImageUrls.contains(img.url.trim())) {
+                    d.galleryImageUrls.add(img.url.trim());
+                }
+            }
         }
 
         return d;

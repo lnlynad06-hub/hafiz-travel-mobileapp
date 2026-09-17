@@ -142,6 +142,26 @@ public class UmrahPackage {
     @SerializedName("important_notes")
     public java.util.List<String> importantNotes;
 
+    @SerializedName("cancellation_policy")
+    public java.util.List<String> cancellationPolicy;
+
+    @SerializedName("company_whatsapp")
+    public String companyWhatsapp;
+
+    @SerializedName("images")
+    public java.util.List<ImageItem> images;
+
+    public static class ImageItem implements java.io.Serializable {
+        @SerializedName("id")
+        public Object id;
+
+        @SerializedName("url")
+        public String url;
+
+        @SerializedName("is_primary")
+        public boolean isPrimary;
+    }
+
     @SerializedName("departures")
     public java.util.List<DepartureItem> departures;
 

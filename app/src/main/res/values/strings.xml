@@ -737,6 +737,7 @@
     <string name="detail_terms_sub">Important terms, rules, and booking guidelines</string>
     <string name="detail_required_documents">Required Documents</string>
     <string name="detail_docs_sub">Required travel documents, visas, and certificates</string>
+    <string name="detail_notes_sub_fallback">Important information for travelers</string>
     <string name="room_quint">5-Person Room (Quint)</string>
     <string name="room_quad">4-Person Room (Quad)</string>
     <string name="room_triple">3-Person Room (Triple)</string>
@@ -756,6 +757,8 @@
     <string name="detail_packing_heading">Recommended Packing List</string>
     <string name="detail_section_notes">Important Notes &amp; Guidelines</string>
     <string name="detail_section_gallery">Photo Gallery</string>
+    <string name="detail_section_related_packages">Related Packages</string>
+    <string name="detail_section_cancellation_policy">Cancellation &amp; Refund Policy</string>
     <string name="detail_per_pax">per person</string>
     <string name="nights_unit">Nights</string>
     <string name="nights_label_makkah">Makkah</string>

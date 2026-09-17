@@ -598,6 +598,7 @@
     <string name="detail_terms_sub">Terma penting, peraturan dan garis panduan tempahan</string>
     <string name="detail_required_documents">Dokumen Yang Diperlukan</string>
     <string name="detail_docs_sub">Dokumen perjalanan, visa dan sijil yang diperlukan</string>
+    <string name="detail_notes_sub_fallback">Maklumat penting untuk jemaah dan pelancong</string>
     <string name="room_quint">Bilik Berlima (Quint)</string>
     <string name="room_quad">Bilik Berempat (Quad)</string>
     <string name="room_triple">Bilik Bertiga (Triple)</string>
@@ -617,6 +618,8 @@
     <string name="detail_packing_heading">Senarai Barang Disyorkan</string>
     <string name="detail_section_notes">Nota Penting &amp; Panduan Jemaah</string>
     <string name="detail_section_gallery">Galeri Perjalanan</string>
+    <string name="detail_section_related_packages">Pakej Berkaitan</string>
+    <string name="detail_section_cancellation_policy">Polisi Pembatalan &amp; Pemulangan</string>
     <string name="detail_per_pax">seorang</string>
     <string name="nights_unit">Malam</string>
     <string name="nights_label_makkah">Makkah</string>
