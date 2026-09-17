@@ -1576,6 +1576,7 @@ public class ProfileActivity extends AppCompatActivity {
                             if (isFinishing() || isDestroyed()) return;
                             if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
                                 Toast.makeText(ProfileActivity.this, getString(R.string.doc_upload_success), Toast.LENGTH_SHORT).show();
+                                loadStats();
                                 showTravelDocsBottomSheet();
                             } else {
                                 Toast.makeText(ProfileActivity.this, "Gagal memuat naik dokumen. Sila cuba lagi.", Toast.LENGTH_SHORT).show();
