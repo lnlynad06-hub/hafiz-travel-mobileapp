@@ -232,10 +232,30 @@ public class PassengerDetailsActivity extends AppCompatActivity {
         int reqValidityMonths = pkg != null && pkg.passportValidityMonths > 0 ? pkg.passportValidityMonths : 6;
 
         if (currentUserProfile == null) {
-            missingProfileFields.add(getString(R.string.passenger_profile_not_found));
-            isLeadProfileComplete = false;
-            renderLeadProfileState();
-            return;
+            currentUserProfile = SessionManager.getInstance(this).getUser();
+        }
+        if (currentUserProfile == null) {
+            currentUserProfile = new UserDto();
+        }
+
+        SharedPreferences pPrefs = getSharedPreferences("user_profile", Context.MODE_PRIVATE);
+        if ((currentUserProfile.name == null || currentUserProfile.name.trim().isEmpty())) {
+            currentUserProfile.name = pPrefs.getString("name", "");
+        }
+        if ((currentUserProfile.icNumber == null || currentUserProfile.icNumber.trim().isEmpty())) {
+            currentUserProfile.icNumber = pPrefs.getString("ic_no", "");
+        }
+        if ((currentUserProfile.passportNumber == null || currentUserProfile.passportNumber.trim().isEmpty())) {
+            currentUserProfile.passportNumber = pPrefs.getString("passport_no", "");
+        }
+        if ((currentUserProfile.passportExpiryDate == null || currentUserProfile.passportExpiryDate.trim().isEmpty())) {
+            currentUserProfile.passportExpiryDate = pPrefs.getString("passport_expiry", "");
+        }
+        if ((currentUserProfile.clothesSize == null || currentUserProfile.clothesSize.trim().isEmpty())) {
+            currentUserProfile.clothesSize = pPrefs.getString("clothes_size", "");
+        }
+        if ((currentUserProfile.nationality == null || currentUserProfile.nationality.trim().isEmpty())) {
+            currentUserProfile.nationality = pPrefs.getString("nationality", "");
         }
 
         if (currentUserProfile.name == null || currentUserProfile.name.trim().isEmpty()) {
