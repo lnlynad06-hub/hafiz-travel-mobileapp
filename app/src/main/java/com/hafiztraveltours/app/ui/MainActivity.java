@@ -81,12 +81,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.inputmethod.InputMethodManager;
 import com.google.android.material.textfield.TextInputEditText;
-import com.hafiztraveltours.app.network.ApiClient;
-import com.hafiztraveltours.app.network.ApiResponse;
-import com.hafiztraveltours.app.network.HomeDataResponse;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends BaseActivity {
 
@@ -113,9 +107,10 @@ public class MainActivity extends BaseActivity {
 
     private String activeLanguage;
 
-    // Now backed by real Firebase Authentication session (see loadSessionState()).
+    // Now backed by real Firebase Authentication session (see refreshSession()).
     private boolean isLoggedIn;
     private String loggedInUserName;
+    private MainViewModel mainViewModel;
 
     // Prayer times location permission flow
     private ActivityResultLauncher<String> locationPermissionLauncher;
@@ -124,9 +119,7 @@ public class MainActivity extends BaseActivity {
     private Runnable arcRefreshRunnable;
     private String currentResolvedLocationName = "Johor Bahru";
 
-    // M8 single-flight handles for identical Laravel requests.
-    private retrofit2.Call<?> homeCall;
-    private retrofit2.Call<?> homeSearchCall;
+    // M8 single-flight Calls are owned by MainViewModel since Phase 9.
 
     
     @Override
@@ -139,7 +132,6 @@ public class MainActivity extends BaseActivity {
         }
         activeLanguage = currentSaved;
         loadSessionState();
-        setupHeroSection();
         startArcAutoRefresh();
         startHeroShowcase();
         updateFavoriteBadge();
@@ -166,6 +158,9 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mainViewModel = new androidx.lifecycle.ViewModelProvider(this).get(MainViewModel.class);
+        observeMainState();
+
         loadSessionState();
 
         locationPermissionLauncher = registerForActivityResult(
@@ -178,9 +173,9 @@ public class MainActivity extends BaseActivity {
                     }
                 });
 
-        setupHeroSection();
         setupHeroShowcase();
         setupPopularPackages();
+        mainViewModel.loadHome();
         setupQuickActions();
         setupBottomNav();
         setupInfoSection();
@@ -204,8 +199,7 @@ public class MainActivity extends BaseActivity {
             swipeRefreshLayout.setColorSchemeResources(R.color.brand_magenta, R.color.gold_accent, R.color.brand_dark_pink);
             swipeRefreshLayout.setOnRefreshListener(() -> {
                 loadSessionState();
-                setupHeroSection();
-                setupPopularPackages();
+                mainViewModel.loadHome();
                 loadPrayerTimesForCurrentLocation();
                 updateFavoriteBadge();
                 swipeRefreshLayout.postDelayed(() -> swipeRefreshLayout.setRefreshing(false), 1000);
@@ -219,8 +213,6 @@ public class MainActivity extends BaseActivity {
     protected void onDestroy() {
         stopHeroShowcase();
         stopArcAutoRefresh();
-        if (homeCall != null) homeCall.cancel();
-        if (homeSearchCall != null) homeSearchCall.cancel();
         showcaseHandler.removeCallbacksAndMessages(null);
         if (arcRefreshHandler != null) {
             arcRefreshHandler.removeCallbacksAndMessages(null);
@@ -230,18 +222,37 @@ public class MainActivity extends BaseActivity {
     }
 
     /**
-     * Checks the MySQL / REST API session from SessionManager.
-     * If a user is signed in, show their real name.
+     * Checks the MySQL / REST API session via MainViewModel.
+     * Posts SessionInfo; the observer below renders the hero greeting.
      */
     private void loadSessionState() {
-        SessionManager session = SessionManager.getInstance(this);
-        if (session.isLoggedIn()) {
-            isLoggedIn = true;
-            loggedInUserName = session.getUserNickname();
-        } else {
-            isLoggedIn = false;
-            loggedInUserName = getString(R.string.default_user_name);
-        }
+        mainViewModel.refreshSession();
+    }
+
+    /** Wires ViewModel state to rendering (H1/Phase 9). */
+    private void observeMainState() {
+        mainViewModel.getSessionInfo().observe(this, info -> {
+            if (info == null) return;
+            isLoggedIn = info.loggedIn;
+            loggedInUserName = info.nickname;
+            setupHeroSection();
+        });
+        mainViewModel.getHomeContent().observe(this, content -> {
+            if (content == null) {
+                renderHomeFailure();
+            } else {
+                renderHomeContent(content);
+            }
+        });
+        mainViewModel.getHomeLoading().observe(this, loading -> {
+            if (loading == null || !loading) {
+                com.facebook.shimmer.ShimmerFrameLayout shimmer = findViewById(R.id.homePopularShimmer);
+                if (shimmer != null) {
+                    shimmer.stopShimmer();
+                    shimmer.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     /**
@@ -290,15 +301,14 @@ public class MainActivity extends BaseActivity {
         View notificationButton = findViewById(R.id.notificationButton);
         View notificationDot = findViewById(R.id.viewNotificationDot);
         if (notificationDot != null) {
-            boolean hasUnread = getSharedPreferences("app_prefs", MODE_PRIVATE).getBoolean("has_unread_notifications", false);
-            notificationDot.setVisibility(hasUnread ? View.VISIBLE : View.GONE);
+            notificationDot.setVisibility(mainViewModel.hasUnreadNotifications() ? View.VISIBLE : View.GONE);
         }
         if (notificationButton != null) {
             notificationButton.setOnClickListener(v -> {
                 com.hafiztraveltours.app.utils.HapticUtil.tap(v);
                 if (notificationDot != null) {
                     notificationDot.setVisibility(View.GONE);
-                    getSharedPreferences("app_prefs", MODE_PRIVATE).edit().putBoolean("has_unread_notifications", false).apply();
+                    mainViewModel.markNotificationsRead();
                 }
                 Toast.makeText(this, getString(R.string.no_notifications), Toast.LENGTH_SHORT).show();
             });
@@ -515,143 +525,52 @@ public class MainActivity extends BaseActivity {
     }
 
     private List<UmrahPackage> allPopularPackages = new ArrayList<>();
-    private final List<UmrahPackage> homeSearchUmrahCache = new ArrayList<>();
-    private final List<UmrahPackage> homeSearchTourCache = new ArrayList<>();
-    private boolean homeSearchPackagesLoaded = false;
-    private String currentCategoryFilter = "all";
 
     /**
-     * Pakej Popular - Muat turun daripada Laravel REST API Backend (Database MySQL).
+     * Pakej Popular - view setup only; data comes from MainViewModel (Laravel REST API).
      */
     private void setupPopularPackages() {
         RecyclerView recyclerView = findViewById(R.id.popularPackagesRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
-        // Panggil Laravel REST API (M8: cancel previous identical request first).
-        if (homeCall != null) homeCall.cancel();
-        Call<ApiResponse<HomeDataResponse>> homeRequest =
-                ApiClient.getApiService().getHomeData();
-        homeCall = homeRequest;
-        homeRequest.enqueue(new Callback<ApiResponse<HomeDataResponse>>() {
-            @Override
-            public void onResponse(Call<ApiResponse<HomeDataResponse>> call, Response<ApiResponse<HomeDataResponse>> response) {
-                com.facebook.shimmer.ShimmerFrameLayout shimmer = findViewById(R.id.homePopularShimmer);
-                if (shimmer != null) {
-                    shimmer.stopShimmer();
-                    shimmer.setVisibility(View.GONE);
-                }
-                recyclerView.setVisibility(View.VISIBLE);
-
-                if (response.isSuccessful() && response.body() != null && response.body().isSuccess() && response.body().data != null) {
-                    allPopularPackages = new ArrayList<>();
-                    heroShowcaseList.clear();
-                    HomeDataResponse homeData = response.body().data;
-
-                    if (homeData.featured != null && !homeData.featured.isEmpty()) {
-                        for (UmrahPackage p : homeData.featured) {
-                            if (p.collectionName == null || p.collectionName.trim().isEmpty()) {
-                                p.collectionName = p.isUmrah() ? "umrah_packages" : "tour_packages";
-                            }
-                            allPopularPackages.add(p);
-                            heroShowcaseList.add(p);
-                        }
-                    }
-                    if (homeData.popularUmrah != null) {
-                        for (UmrahPackage p : homeData.popularUmrah) {
-                            p.collectionName = "umrah_packages";
-                            allPopularPackages.add(p);
-                        }
-                    }
-                    if (homeData.popularTour != null) {
-                        for (UmrahPackage p : homeData.popularTour) {
-                            p.collectionName = "tour_packages";
-                            allPopularPackages.add(p);
-                        }
-                    }
-
-                    View heroShowcaseCard = findViewById(R.id.heroShowcaseCard);
-                    if (!heroShowcaseList.isEmpty()) {
-                        if (heroShowcaseCard != null) heroShowcaseCard.setVisibility(View.VISIBLE);
-                        startHeroShowcase();
-                    } else {
-                        if (heroShowcaseCard != null) heroShowcaseCard.setVisibility(View.GONE);
-                        stopHeroShowcase();
-                    }
-
-                    recyclerView.setAdapter(new PackageCardAdapter(MainActivity.this, allPopularPackages));
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ApiResponse<HomeDataResponse>> call, Throwable t) {
-                com.facebook.shimmer.ShimmerFrameLayout shimmer = findViewById(R.id.homePopularShimmer);
-                if (shimmer != null) {
-                    shimmer.stopShimmer();
-                    shimmer.setVisibility(View.GONE);
-                }
-                recyclerView.setVisibility(View.VISIBLE);
-                View heroShowcaseCard = findViewById(R.id.heroShowcaseCard);
-                if (heroShowcaseCard != null) heroShowcaseCard.setVisibility(View.GONE);
-                stopHeroShowcase();
-            }
-        });
-
         findViewById(R.id.seeAllPopular).setOnClickListener(v ->
                 startActivity(new Intent(this, AllPackagesActivity.class)));
     }
 
-    /**
-     * Search homepage - Tapping search opens the complete All Packages search & filter experience.
-     */
+    /** Renders observed home content (same visuals as the previous inline callback). */
+    private void renderHomeContent(MainViewModel.HomeContent content) {
+        RecyclerView recyclerView = findViewById(R.id.popularPackagesRecyclerView);
+        if (recyclerView != null) recyclerView.setVisibility(View.VISIBLE);
 
+        allPopularPackages = new ArrayList<>(content.popular);
+        heroShowcaseList.clear();
+        heroShowcaseList.addAll(content.showcase);
 
-    private void loadHomeSearchPackages(Runnable onLoaded) {
-        if (homeSearchCall != null) homeSearchCall.cancel();
-        Call<ApiResponse<List<UmrahPackage>>> searchRequest =
-                ApiClient.getApiService().getPackages(null, null, null, null);
-        homeSearchCall = searchRequest;
-        searchRequest.enqueue(new Callback<ApiResponse<List<UmrahPackage>>>() {
-            @Override
-            public void onResponse(Call<ApiResponse<List<UmrahPackage>>> call, Response<ApiResponse<List<UmrahPackage>>> response) {
-                homeSearchUmrahCache.clear();
-                homeSearchTourCache.clear();
+        View heroShowcaseCard = findViewById(R.id.heroShowcaseCard);
+        if (!heroShowcaseList.isEmpty()) {
+            if (heroShowcaseCard != null) heroShowcaseCard.setVisibility(View.VISIBLE);
+            startHeroShowcase();
+        } else {
+            if (heroShowcaseCard != null) heroShowcaseCard.setVisibility(View.GONE);
+            stopHeroShowcase();
+        }
 
-                if (response.isSuccessful() && response.body() != null && response.body().data != null) {
-                    for (UmrahPackage pkg : response.body().data) {
-                        if (pkg.isUmrah()) {
-                            pkg.collectionName = "umrah_packages";
-                            homeSearchUmrahCache.add(pkg);
-                        } else {
-                            pkg.collectionName = "tour_packages";
-                            homeSearchTourCache.add(pkg);
-                        }
-                    }
-                }
-
-                homeSearchPackagesLoaded = true;
-                onLoaded.run();
-            }
-
-            @Override
-            public void onFailure(Call<ApiResponse<List<UmrahPackage>>> call, Throwable t) {
-                homeSearchPackagesLoaded = true;
-                onLoaded.run();
-            }
-        });
+        if (recyclerView != null) {
+            recyclerView.setAdapter(new PackageCardAdapter(MainActivity.this, allPopularPackages));
+        }
     }
 
-    private void filterAndShowHomeSearch(String query, RecyclerView resultsRecyclerView) {
-        String q = query.toLowerCase();
-        List<UmrahPackage> results = new ArrayList<>();
-        for (UmrahPackage pkg : homeSearchUmrahCache) {
-            if (pkg.name != null && pkg.name.toLowerCase().contains(q)) results.add(pkg);
-        }
-        for (UmrahPackage pkg : homeSearchTourCache) {
-            if (pkg.name != null && pkg.name.toLowerCase().contains(q)) results.add(pkg);
-        }
-        resultsRecyclerView.setVisibility(View.VISIBLE);
-            resultsRecyclerView.setAdapter(new PackageCardAdapter(this, results, PackageCardAdapter.CardStyle.LIST, null));
+    /** Failure UI: same silent treatment as before (shimmer handled by loading observer). */
+    private void renderHomeFailure() {
+        RecyclerView recyclerView = findViewById(R.id.popularPackagesRecyclerView);
+        if (recyclerView != null) recyclerView.setVisibility(View.VISIBLE);
+        View heroShowcaseCard = findViewById(R.id.heroShowcaseCard);
+        if (heroShowcaseCard != null) heroShowcaseCard.setVisibility(View.GONE);
+        stopHeroShowcase();
     }
+
+    // Home search preload removed (Phase 9): it had no callers — tapping search opens
+    // AllPackagesActivity instead. Local filtering lives in the package list screens.
 
     private void setupTactileButton(View view, Runnable onClick) {
         if (view == null) return;

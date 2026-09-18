@@ -10,9 +10,7 @@ import com.hafiztraveltours.app.views.*;
 import com.hafiztraveltours.app.ui.*;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.text.InputType;
 import android.os.Bundle;
@@ -25,26 +23,17 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.hafiztraveltours.app.network.ApiClient;
-import com.hafiztraveltours.app.network.ApiResponse;
 import com.hafiztraveltours.app.network.UserDto;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 public class ProfileActivity extends BaseActivity {
 
     
-    private SharedPreferences profilePrefs;
     private TextView nameText;
     private TextView memberIdText;
     private TextView memberSinceText;
@@ -56,15 +45,19 @@ public class ProfileActivity extends BaseActivity {
     private androidx.swiperefreshlayout.widget.SwipeRefreshLayout profileSwipeRefresh;
 
     private final Map<String, DocumentDto> userDocumentsMap = new HashMap<>();
-    private retrofit2.Call<?> statsCall;
-    private retrofit2.Call<?> vaultDocsCall;
+    private ProfileViewModel profileViewModel;
+    private com.google.android.material.bottomsheet.BottomSheetDialog travelDocsDialog;
 
-    @Override
-    protected void onDestroy() {
-        if (statsCall != null) statsCall.cancel();
-        if (vaultDocsCall != null) vaultDocsCall.cancel();
-        super.onDestroy();
+    /** Pending dialog UI for one-shot save/password operation results. */
+    private static class PendingOpUi {
+        AlertDialog dialog;
+        TextView btnSave;
+        com.google.android.material.textfield.TextInputLayout errorLayout;
+        int saveTextRes;
     }
+
+    private PendingOpUi pendingSaveUi;
+    private PendingOpUi pendingPasswordUi;
     private androidx.activity.result.ActivityResultLauncher<String> docPickerLauncher;
     private String pendingUploadDocCode;
     private String pendingUploadDocName;
@@ -88,7 +81,8 @@ public class ProfileActivity extends BaseActivity {
                 }
         );
 
-        profilePrefs = com.hafiztraveltours.app.utils.SecurePrefs.wrap(this, "user_profile");
+        profileViewModel = new androidx.lifecycle.ViewModelProvider(this).get(ProfileViewModel.class);
+        observeProfileState();
 
         findViewById(R.id.profileBackButton).setOnClickListener(v -> finish());
 
@@ -101,7 +95,12 @@ public class ProfileActivity extends BaseActivity {
             );
             profileSwipeRefresh.setOnRefreshListener(() -> {
                 refreshHeader();
-                loadStats();
+                if (!profileViewModel.isLoggedIn()) {
+                    renderStats(null);
+                    if (profileSwipeRefresh != null) profileSwipeRefresh.setRefreshing(false);
+                    return;
+                }
+                profileViewModel.loadStats();
             });
         }
 
@@ -147,12 +146,12 @@ public class ProfileActivity extends BaseActivity {
         }
 
         Switch notificationSwitch = findViewById(R.id.notificationSwitch);
-        notificationSwitch.setChecked(profilePrefs.getBoolean("notifications_enabled", true));
+        notificationSwitch.setChecked(profileViewModel.readProfileFlag("notifications_enabled", true));
         notificationSwitch.setOnCheckedChangeListener((CompoundButton buttonView, boolean isChecked) ->
-                profilePrefs.edit().putBoolean("notifications_enabled", isChecked).apply());
+                profileViewModel.saveNotificationEnabled(isChecked));
 
         findViewById(R.id.logoutButton).setOnClickListener(v -> {
-            if (!SessionManager.getInstance(this).isLoggedIn()) {
+            if (!profileViewModel.isLoggedIn()) {
                 startActivity(new Intent(this, SignUpActivity.class));
                 return;
             }
@@ -170,8 +169,13 @@ public class ProfileActivity extends BaseActivity {
         super.onResume();
         updateLanguageBadge();
         refreshHeader();
-        renderStats(SessionManager.getInstance(this).getProfileStats());
-        loadStats();
+        if (profileViewModel.isLoggedIn()) {
+            renderStats(profileViewModel.cachedStats());
+            profileViewModel.loadStats();
+        } else {
+            renderStats(null);
+            if (profileSwipeRefresh != null) profileSwipeRefresh.setRefreshing(false);
+        }
     }
 
     private void updateLanguageBadge() {
@@ -182,19 +186,7 @@ public class ProfileActivity extends BaseActivity {
     }
 
     private void performLogout() {
-        try {
-            ApiClient.getApiService().logout().enqueue(new retrofit2.Callback<ApiResponse<Object>>() {
-                @Override
-                public void onResponse(retrofit2.Call<ApiResponse<Object>> call,
-                                       retrofit2.Response<ApiResponse<Object>> response) {
-                }
-
-                @Override
-                public void onFailure(retrofit2.Call<ApiResponse<Object>> call, Throwable t) {
-                }
-            });
-        } catch (Exception ignored) {}
-        SessionManager.getInstance(this).clearSession();
+        profileViewModel.logout();
         Toast.makeText(this, getString(R.string.profile_logout_success), Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -203,10 +195,10 @@ public class ProfileActivity extends BaseActivity {
     }
 
     private void refreshHeader() {
-        boolean loggedIn = SessionManager.getInstance(this).isLoggedIn();
+        boolean loggedIn = profileViewModel.isLoggedIn();
         if (loggedIn) {
-            String name = SessionManager.getInstance(this).getUserName();
-            String email = SessionManager.getInstance(this).getUserEmail();
+            String name = profileViewModel.getUserName();
+            String email = profileViewModel.getUserEmail();
             nameText.setText((name != null && !name.isEmpty()) ? name : email);
         } else {
             nameText.setText(getString(R.string.profile_guest_name));
@@ -217,74 +209,50 @@ public class ProfileActivity extends BaseActivity {
         updateLanguageBadge();
     }
 
-    private void loadStats() {
-        if (!SessionManager.getInstance(this).isLoggedIn()) {
-            renderStats(null);
-            if (profileSwipeRefresh != null) profileSwipeRefresh.setRefreshing(false);
-            return;
-        }
-        // M8 single-flight: a new stats load cancels the previous one.
-        if (statsCall != null) statsCall.cancel();
-        retrofit2.Call<ApiResponse<com.hafiztraveltours.app.models.ProfileStatsDto>> statsRequest =
-                ApiClient.getApiService().getProfileStats();
-        statsCall = statsRequest;
-        statsRequest.enqueue(
-                new retrofit2.Callback<ApiResponse<com.hafiztraveltours.app.models.ProfileStatsDto>>() {
-                    @Override
-                    public void onResponse(
-                            retrofit2.Call<ApiResponse<com.hafiztraveltours.app.models.ProfileStatsDto>> call,
-                            retrofit2.Response<ApiResponse<com.hafiztraveltours.app.models.ProfileStatsDto>> response) {
-                        if (isFinishing() || isDestroyed()) return;
-                        if (profileSwipeRefresh != null) profileSwipeRefresh.setRefreshing(false);
-                        com.hafiztraveltours.app.models.ProfileStatsDto stats =
-                                (response.isSuccessful() && response.body() != null
-                                        && response.body().isSuccess()) ? response.body().data : null;
-                        if (stats != null) {
-                            SessionManager.getInstance(ProfileActivity.this).saveProfileStats(stats);
-                            // Fetch documents silently to update readiness score on initial load.
-                            // Shares vaultDocsCall so a sheet-open fetch single-flights with this one.
-                            if (vaultDocsCall != null) vaultDocsCall.cancel();
-                            retrofit2.Call<ApiResponse<List<com.hafiztraveltours.app.models.DocumentDto>>> docsRequest =
-                                    ApiClient.getApiService().getUserDocuments();
-                            vaultDocsCall = docsRequest;
-                            docsRequest.enqueue(new retrofit2.Callback<ApiResponse<List<com.hafiztraveltours.app.models.DocumentDto>>>() {
-                                @Override
-                                public void onResponse(retrofit2.Call<ApiResponse<List<com.hafiztraveltours.app.models.DocumentDto>>> call, retrofit2.Response<ApiResponse<List<com.hafiztraveltours.app.models.DocumentDto>>> resp) {
-                                    if (resp.isSuccessful() && resp.body() != null && resp.body().isSuccess() && resp.body().data != null) {
-                                        for (com.hafiztraveltours.app.models.DocumentDto d : resp.body().data) {
-                                            if (d.documentCode != null) {
-                                                userDocumentsMap.put(d.documentCode.toLowerCase(), d);
-                                            }
-                                        }
-                                    }
-                                    renderStats(stats);
-                                }
-
-                                @Override
-                                public void onFailure(retrofit2.Call<ApiResponse<List<com.hafiztraveltours.app.models.DocumentDto>>> call, Throwable t) {
-                                    renderStats(stats);
-                                }
-                            });
-                        }
+    /** Wires ViewModel state to rendering + one-shot results (H1/Step 5). */
+    private void observeProfileState() {
+        profileViewModel.getStatsData().observe(this, stats -> {
+            if (stats != null) renderStats(stats);
+        });
+        profileViewModel.getStatsLoading().observe(this, loading -> {
+            if (profileSwipeRefresh != null
+                    && (loading == null || !loading)) {
+                profileSwipeRefresh.setRefreshing(false);
+            }
+        });
+        profileViewModel.getUserData().observe(this, user -> refreshHeader());
+        profileViewModel.getDocsData().observe(this, docs -> {
+            userDocumentsMap.clear();
+            if (docs != null) {
+                for (DocumentDto d : docs) {
+                    if (d != null && d.documentCode != null) {
+                        userDocumentsMap.put(d.documentCode.toLowerCase(), d);
                     }
-
-                    @Override
-                    public void onFailure(
-                            retrofit2.Call<ApiResponse<com.hafiztraveltours.app.models.ProfileStatsDto>> call,
-                            Throwable t) {
-                        if (isFinishing() || isDestroyed()) return;
-                        if (profileSwipeRefresh != null) profileSwipeRefresh.setRefreshing(false);
-                    }
-                });
-    }
-
-    private boolean isDocCounted(com.hafiztraveltours.app.models.DocumentDto doc) {
-        // Only uploaded, non-failed docs count (rejected/expired/unknown must be fixed first).
-        return com.hafiztraveltours.app.utils.DocumentStatus.from(doc).countsAsUploaded();
+                }
+            }
+            if (travelDocsDialog != null && travelDocsDialog.isShowing()) {
+                populateTravelDocsSheet();
+            }
+        });
+        profileViewModel.getReadiness().observe(this, readiness -> {
+            if (readiness != null) renderReadiness(readiness);
+        });
+        profileViewModel.getSaveOp().observe(this, event -> {
+            com.hafiztraveltours.app.utils.ApiOpResult result = event != null ? event.consume() : null;
+            if (result != null) handleSaveResult(result);
+        });
+        profileViewModel.getPasswordOp().observe(this, event -> {
+            com.hafiztraveltours.app.utils.ApiOpResult result = event != null ? event.consume() : null;
+            if (result != null) handlePasswordResult(result);
+        });
+        profileViewModel.getUploadOp().observe(this, event -> {
+            com.hafiztraveltours.app.utils.ApiOpResult result = event != null ? event.consume() : null;
+            if (result != null) handleUploadResult(result);
+        });
     }
 
     private void renderStats(com.hafiztraveltours.app.models.ProfileStatsDto stats) {
-        boolean loggedIn = SessionManager.getInstance(this).isLoggedIn();
+        boolean loggedIn = profileViewModel.isLoggedIn();
         if (statsCard != null) statsCard.setVisibility(loggedIn ? View.VISIBLE : View.GONE);
         if (loyaltyCard != null) loyaltyCard.setVisibility(loggedIn ? View.VISIBLE : View.GONE);
         if (!loggedIn) {
@@ -319,76 +287,11 @@ public class ProfileActivity extends BaseActivity {
                 pointsValue.setText(formatPoints(stats.loyalty.pointsBalance));
             }
             TextView tierName = findViewById(R.id.loyaltyTierName);
-            TextView pointsBadge = findViewById(R.id.loyaltyPointsText);
-            android.widget.ProgressBar progressBar = findViewById(R.id.loyaltyProgressBar);
-            TextView progressText = findViewById(R.id.loyaltyProgressText);
-            TextView benefitsText = findViewById(R.id.loyaltyBenefitsText);
             if (tierName != null) {
                 tierName.setText(getString(R.string.readiness_title));
             }
-            
-            // Kira % kelengkapan profil & dokumen perjalanan secara dinamik (100% Total)
-            int compScore = 0;
-            UserDto currentUser = SessionManager.getInstance(this).getUser();
-
-            String fullName = profilePrefs.getString("name", "").trim();
-            if (fullName.isEmpty() && currentUser != null && currentUser.name != null) fullName = currentUser.name.trim();
-
-            String passportNo = profilePrefs.getString("passport_no", "").trim();
-            if (passportNo.isEmpty() && currentUser != null && currentUser.passportNumber != null) passportNo = currentUser.passportNumber.trim();
-
-            String icNo = profilePrefs.getString("ic_no", "").trim();
-            if (icNo.isEmpty() && currentUser != null && currentUser.icNumber != null) icNo = currentUser.icNumber.trim();
-
-            String emergName = profilePrefs.getString("emergency_name", "").trim();
-
-            String address = profilePrefs.getString("address", "").trim();
-            if (address.isEmpty() && currentUser != null && currentUser.address != null) address = currentUser.address.trim();
-
-            if (!fullName.isEmpty()) compScore += 15;
-            if (!icNo.isEmpty()) compScore += 20;
-            if (!passportNo.isEmpty()) compScore += 20;
-            if (!address.isEmpty()) compScore += 15;
-            if (!emergName.isEmpty()) compScore += 10;
-
-            // Semak status dokumen dimuat naik (Passport, IC/MyKad, Passport Photo)
-            // Only verified/pending count toward readiness; rejected/expired must be fixed first
-            int uploadedDocPoints = 0;
-            if (isDocCounted(userDocumentsMap.get("passport"))) {
-                uploadedDocPoints += 7;
-            }
-            if (isDocCounted(userDocumentsMap.get("ic"))) {
-                uploadedDocPoints += 7;
-            }
-            if (isDocCounted(userDocumentsMap.get("passport_photo"))) {
-                uploadedDocPoints += 6;
-            }
-            compScore += uploadedDocPoints;
-
-            if (compScore >= 100) {
-                compScore = 100;
-                if (loyaltyCard != null) loyaltyCard.setVisibility(View.GONE);
-            } else {
-                if (loyaltyCard != null) loyaltyCard.setVisibility(View.VISIBLE);
-            }
-
-            if (pointsBadge != null) {
-                pointsBadge.setText(getString(R.string.readiness_percent_format, compScore));
-            }
-            if (progressBar != null) {
-                progressBar.setProgress(compScore);
-            }
-            if (progressText != null) {
-                if (compScore >= 100) {
-                    progressText.setText(getString(R.string.readiness_complete_msg));
-                } else {
-                    progressText.setText(getString(R.string.readiness_incomplete_msg));
-                }
-            }
-            if (benefitsText != null) {
-                benefitsText.setText(getString(R.string.readiness_autolink_msg));
-                benefitsText.setVisibility(View.VISIBLE);
-            }
+            ProfileViewModel.Readiness latest = profileViewModel.getReadiness().getValue();
+            if (latest != null) renderReadiness(latest);
         }
 
         if (upcomingCard != null) {
@@ -412,18 +315,42 @@ public class ProfileActivity extends BaseActivity {
         }
     }
 
+    /** Renders the readiness score block from ViewModel state (pure view code). */
+    private void renderReadiness(ProfileViewModel.Readiness readiness) {
+        int compScore = readiness.score;
+        TextView pointsBadge = findViewById(R.id.loyaltyPointsText);
+        android.widget.ProgressBar progressBar = findViewById(R.id.loyaltyProgressBar);
+        TextView progressText = findViewById(R.id.loyaltyProgressText);
+        TextView benefitsText = findViewById(R.id.loyaltyBenefitsText);
+
+        if (compScore >= 100) {
+            compScore = 100;
+            if (loyaltyCard != null) loyaltyCard.setVisibility(View.GONE);
+        } else {
+            if (loyaltyCard != null) loyaltyCard.setVisibility(View.VISIBLE);
+        }
+
+        if (pointsBadge != null) {
+            pointsBadge.setText(getString(R.string.readiness_percent_format, compScore));
+        }
+        if (progressBar != null) {
+            progressBar.setProgress(compScore);
+        }
+        if (progressText != null) {
+            if (compScore >= 100) {
+                progressText.setText(getString(R.string.readiness_complete_msg));
+            } else {
+                progressText.setText(getString(R.string.readiness_incomplete_msg));
+            }
+        }
+        if (benefitsText != null) {
+            benefitsText.setText(getString(R.string.readiness_autolink_msg));
+            benefitsText.setVisibility(View.VISIBLE);
+        }
+    }
+
     private String formatPoints(int points) {
         return String.format(java.util.Locale.US, "%,d", points);
-    }
-
-    private String formatMoney(double amount) {
-        return String.format(java.util.Locale.US, "%,.0f", amount);
-    }
-
-    private int computeTierProgress(com.hafiztraveltours.app.models.ProfileStatsDto.LoyaltyInfo loyalty) {
-        if (loyalty.nextTier == null || loyalty.nextTier.minSpend <= 0) return 100;
-        double progress = loyalty.lifetimeSpend / loyalty.nextTier.minSpend * 100.0;
-        return Math.max(0, Math.min(100, (int) Math.round(progress)));
     }
 
     private void showLanguageBottomSheet() {
@@ -476,38 +403,45 @@ public class ProfileActivity extends BaseActivity {
         });
     }
 
+    /** Null-safe extras lookup with default (view plumbing for dialog prefill). */
+    private static String exVal(java.util.Map<String, String> ex, String key, String def) {
+        String v = ex != null ? ex.get(key) : null;
+        return v != null ? v : def;
+    }
+
     private void showEditProfileDialog() {
-        if (!SessionManager.getInstance(this).isLoggedIn()) {
+        if (!profileViewModel.isLoggedIn()) {
             Toast.makeText(this, getString(R.string.profile_login_to_update), Toast.LENGTH_SHORT).show();
             return;
         }
 
-        UserDto currentUser = SessionManager.getInstance(this).getUser();
+        UserDto currentUser = profileViewModel.getSessionUser();
+        java.util.Map<String, String> ex = profileViewModel.readProfileExtras();
 
-        String currentNickname = SessionManager.getInstance(this).getUserNickname();
-        String currentName = SessionManager.getInstance(this).getUserName();
-        String currentEmail = SessionManager.getInstance(this).getUserEmail();
-        String currentPhone = SessionManager.getInstance(this).getUserPhone();
+        String currentNickname = profileViewModel.getUserNickname();
+        String currentName = profileViewModel.getUserName();
+        String currentEmail = profileViewModel.getUserEmail();
+        String currentPhone = profileViewModel.getUserPhone();
         String currentIc = (currentUser != null && currentUser.icNumber != null && !currentUser.icNumber.isEmpty())
-                ? currentUser.icNumber : profilePrefs.getString("ic_no", "");
+                ? currentUser.icNumber : exVal(ex, "ic_no", "");
         String currentPassport = (currentUser != null && currentUser.passportNumber != null && !currentUser.passportNumber.isEmpty())
-                ? currentUser.passportNumber : profilePrefs.getString("passport_no", "");
+                ? currentUser.passportNumber : exVal(ex, "passport_no", "");
         String currentExpiry = (currentUser != null && currentUser.passportExpiryDate != null && !currentUser.passportExpiryDate.isEmpty())
-                ? currentUser.passportExpiryDate : profilePrefs.getString("passport_expiry", "");
+                ? currentUser.passportExpiryDate : exVal(ex, "passport_expiry", "");
         String currentIssuingCountry = (currentUser != null && currentUser.issuingCountry != null && !currentUser.issuingCountry.isEmpty())
-                ? currentUser.issuingCountry : profilePrefs.getString("issuing_country", "Malaysia");
+                ? currentUser.issuingCountry : exVal(ex, "issuing_country", "Malaysia");
         String currentDob = (currentUser != null && currentUser.dateOfBirth != null && !currentUser.dateOfBirth.isEmpty())
-                ? currentUser.dateOfBirth : profilePrefs.getString("date_of_birth", "");
+                ? currentUser.dateOfBirth : exVal(ex, "date_of_birth", "");
         String currentNationality = (currentUser != null && currentUser.nationality != null && !currentUser.nationality.isEmpty())
-                ? currentUser.nationality : profilePrefs.getString("nationality", "Malaysian");
+                ? currentUser.nationality : exVal(ex, "nationality", "Malaysian");
         String currentClothesSize = (currentUser != null && currentUser.clothesSize != null && !currentUser.clothesSize.isEmpty())
-                ? currentUser.clothesSize : profilePrefs.getString("clothes_size", "");
+                ? currentUser.clothesSize : exVal(ex, "clothes_size", "");
 
-        String currentEmergName = profilePrefs.getString("emergency_name", "");
-        String currentEmergPhone = profilePrefs.getString("emergency_phone", "");
-        String currentMahram = profilePrefs.getString("mahram_name", "");
-        String currentMahramRel = profilePrefs.getString("mahram_relationship", "");
-        boolean isMahramApplicable = profilePrefs.getBoolean("mahram_applicable", !currentMahram.isEmpty());
+        String currentEmergName = exVal(ex, "emergency_name", "");
+        String currentEmergPhone = exVal(ex, "emergency_phone", "");
+        String currentMahram = exVal(ex, "mahram_name", "");
+        String currentMahramRel = exVal(ex, "mahram_relationship", "");
+        boolean isMahramApplicable = profileViewModel.readProfileFlag("mahram_applicable", !currentMahram.isEmpty());
 
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_edit_profile_custom, null);
 
@@ -572,7 +506,7 @@ public class ProfileActivity extends BaseActivity {
         }
 
         String currentGender = (currentUser != null && currentUser.gender != null && !currentUser.gender.isEmpty())
-                ? currentUser.gender : profilePrefs.getString("gender", "");
+                ? currentUser.gender : exVal(ex, "gender", "");
         if (!currentGender.isEmpty()) {
             if ("male".equalsIgnoreCase(currentGender) || "lelaki".equalsIgnoreCase(currentGender)) {
                 currentGender = genderMaleStr;
@@ -582,17 +516,17 @@ public class ProfileActivity extends BaseActivity {
         }
 
         String currentAddress1 = (currentUser != null && currentUser.addressLine1 != null && !currentUser.addressLine1.isEmpty())
-                ? currentUser.addressLine1 : profilePrefs.getString("address_line_1", "");
+                ? currentUser.addressLine1 : exVal(ex, "address_line_1", "");
         String currentAddress2 = (currentUser != null && currentUser.addressLine2 != null && !currentUser.addressLine2.isEmpty())
-                ? currentUser.addressLine2 : profilePrefs.getString("address_line_2", "");
+                ? currentUser.addressLine2 : exVal(ex, "address_line_2", "");
         String currentPostcode = (currentUser != null && currentUser.postcode != null && !currentUser.postcode.isEmpty())
-                ? currentUser.postcode : profilePrefs.getString("postcode", "");
+                ? currentUser.postcode : exVal(ex, "postcode", "");
         String currentCity = (currentUser != null && currentUser.city != null && !currentUser.city.isEmpty())
-                ? currentUser.city : profilePrefs.getString("city", "");
+                ? currentUser.city : exVal(ex, "city", "");
         String currentState = (currentUser != null && currentUser.state != null && !currentUser.state.isEmpty())
-                ? currentUser.state : profilePrefs.getString("state", "");
+                ? currentUser.state : exVal(ex, "state", "");
         String currentCountry = (currentUser != null && currentUser.country != null && !currentUser.country.isEmpty())
-                ? currentUser.country : profilePrefs.getString("country", "Malaysia");
+                ? currentUser.country : exVal(ex, "country", "Malaysia");
 
         // Fill current values
         if (nameInput != null) nameInput.setText(currentName != null ? currentName : "");
@@ -767,34 +701,11 @@ public class ProfileActivity extends BaseActivity {
                 String newCountry = countryInput != null ? countryInput.getText().toString().trim() : "";
 
                 // Format standard gender value for backend API ("male"/"female")
-                String apiGender = newGender;
-                if (newGender.equalsIgnoreCase("Lelaki") || newGender.equalsIgnoreCase("Male")) {
-                    apiGender = "Male";
-                } else if (newGender.equalsIgnoreCase("Perempuan") || newGender.equalsIgnoreCase("Female")) {
-                    apiGender = "Female";
-                }
+                String apiGender = ProfileViewModel.normalizeGender(newGender);
 
                 // Construct full address summary string
-                StringBuilder fullAddrBuilder = new StringBuilder();
-                if (!newAddress1.isEmpty()) fullAddrBuilder.append(newAddress1);
-                if (!newAddress2.isEmpty()) {
-                    if (fullAddrBuilder.length() > 0) fullAddrBuilder.append(", ");
-                    fullAddrBuilder.append(newAddress2);
-                }
-                if (!newPostcode.isEmpty() || !newCity.isEmpty()) {
-                    if (fullAddrBuilder.length() > 0) fullAddrBuilder.append(", ");
-                    if (!newPostcode.isEmpty()) fullAddrBuilder.append(newPostcode).append(" ");
-                    if (!newCity.isEmpty()) fullAddrBuilder.append(newCity);
-                }
-                if (!newState.isEmpty()) {
-                    if (fullAddrBuilder.length() > 0) fullAddrBuilder.append(", ");
-                    fullAddrBuilder.append(newState);
-                }
-                if (!newCountry.isEmpty()) {
-                    if (fullAddrBuilder.length() > 0) fullAddrBuilder.append(", ");
-                    fullAddrBuilder.append(newCountry);
-                }
-                String combinedAddress = fullAddrBuilder.toString();
+                String combinedAddress = ProfileViewModel.combineAddress(
+                        newAddress1, newAddress2, newPostcode, newCity, newState, newCountry);
 
                 String newIc = icInput != null ? icInput.getText().toString().trim() : "";
                 String newPassport = passportInput != null ? passportInput.getText().toString().trim() : "";
@@ -805,14 +716,14 @@ public class ProfileActivity extends BaseActivity {
                 if (nicknameLayout != null) nicknameLayout.setError(null);
                 if (phoneLayout != null) phoneLayout.setError(null);
 
-                int nameErr = com.hafiztraveltours.app.utils.Validator.fullName(newName, R.string.err_name_required);
-                if (nameErr != 0) {
-                    if (nameLayout != null) nameLayout.setError(getString(nameErr));
+                ProfileViewModel.FormErrors formErrors =
+                        profileViewModel.validateProfileForm(newName, newNickname);
+                if (formErrors.nameErr != 0) {
+                    if (nameLayout != null) nameLayout.setError(getString(formErrors.nameErr));
                     return;
                 }
-                int nickErr = com.hafiztraveltours.app.utils.Validator.username(newNickname, R.string.err_nickname_required);
-                if (nickErr != 0) {
-                    if (nicknameLayout != null) nicknameLayout.setError(getString(nickErr));
+                if (formErrors.nickErr != 0) {
+                    if (nicknameLayout != null) nicknameLayout.setError(getString(formErrors.nickErr));
                     return;
                 }
                 if (!newPhone.isEmpty() && !android.util.Patterns.PHONE.matcher(newPhone).matches()) {
@@ -838,100 +749,76 @@ public class ProfileActivity extends BaseActivity {
                 String finalMahramName = mahramYes ? (mahramInput != null ? mahramInput.getText().toString().trim() : "") : "";
                 String finalMahramRel = mahramYes ? (mahramRelInput != null ? mahramRelInput.getText().toString().trim() : "") : "";
 
-                // Save all details locally to SharedPrefs
-                profilePrefs.edit()
-                        .putString("ic_no", newIc)
-                        .putString("gender", apiGender)
-                        .putString("date_of_birth", newDob)
-                        .putString("nationality", newNationality)
-                        .putString("address_line_1", newAddress1)
-                        .putString("address_line_2", newAddress2)
-                        .putString("postcode", newPostcode)
-                        .putString("city", newCity)
-                        .putString("state", newState)
-                        .putString("country", newCountry)
-                        .putString("address", combinedAddress)
-                        .putString("passport_no", newPassport)
-                        .putString("passport_expiry", newExpiry)
-                        .putString("issuing_country", newIssuingCountry)
-                        .putString("emergency_name", emergNameInput != null ? emergNameInput.getText().toString().trim() : "")
-                        .putString("emergency_phone", emergPhoneInput != null ? emergPhoneInput.getText().toString().trim() : "")
-                        .putBoolean("mahram_applicable", mahramYes)
-                        .putString("mahram_name", finalMahramName)
-                        .putString("mahram_relationship", finalMahramRel)
-                        .apply();
+                ProfileViewModel.ProfileForm form = new ProfileViewModel.ProfileForm();
+                form.name = newName;
+                form.nickname = newNickname;
+                form.phone = newPhone;
+                form.gender = apiGender;
+                form.ic = newIc;
+                form.passport = newPassport;
+                form.expiry = newExpiry;
+                form.issuingCountry = newIssuingCountry;
+                form.dob = newDob;
+                form.nationality = newNationality;
+                form.addressLine1 = newAddress1;
+                form.addressLine2 = newAddress2;
+                form.postcode = newPostcode;
+                form.city = newCity;
+                form.state = newState;
+                form.country = newCountry;
+                form.combinedAddress = combinedAddress;
+                form.emergencyName = emergNameInput != null ? emergNameInput.getText().toString().trim() : "";
+                form.emergencyPhone = emergPhoneInput != null ? emergPhoneInput.getText().toString().trim() : "";
+                form.mahramYes = mahramYes;
+                form.mahramName = finalMahramName;
+                form.mahramRelationship = finalMahramRel;
+
+                // Local-first persistence (same order as before), then API.
+                profileViewModel.saveProfileExtras(form);
 
                 btnSave.setEnabled(false);
                 btnSave.setText(getString(R.string.profile_saving));
 
-                java.util.Map<String, String> body = new HashMap<>();
-                body.put("name", newName);
-                if (!newNickname.isEmpty()) body.put("nickname", newNickname);
-                body.put("phone", newPhone);
-                if (!apiGender.isEmpty()) body.put("gender", apiGender);
-                if (!newIc.isEmpty()) body.put("ic_number", newIc);
-                if (!newPassport.isEmpty()) body.put("passport_number", newPassport);
-                if (!newExpiry.isEmpty()) body.put("passport_expiry_date", newExpiry);
-                if (!newIssuingCountry.isEmpty()) body.put("issuing_country", newIssuingCountry);
-                if (!newDob.isEmpty()) body.put("date_of_birth", newDob);
-                if (!newNationality.isEmpty()) body.put("nationality", newNationality);
-                body.put("address_line_1", newAddress1);
-                body.put("address_line_2", newAddress2);
-                body.put("postcode", newPostcode);
-                body.put("city", newCity);
-                body.put("state", newState);
-                body.put("country", newCountry);
-                body.put("address", combinedAddress);
+                PendingOpUi pending = new PendingOpUi();
+                pending.dialog = dialog;
+                pending.btnSave = btnSave;
+                pending.saveTextRes = R.string.profile_save;
+                pendingSaveUi = pending;
 
-                String emergNameVal = emergNameInput != null ? emergNameInput.getText().toString().trim() : "";
-                String emergPhoneVal = emergPhoneInput != null ? emergPhoneInput.getText().toString().trim() : "";
-                if (!emergNameVal.isEmpty()) body.put("emergency_name", emergNameVal);
-                if (!emergPhoneVal.isEmpty()) body.put("emergency_phone", emergPhoneVal);
-
-                ApiClient.getApiService().updateProfile(body).enqueue(new retrofit2.Callback<ApiResponse<ProfileResponseDto>>() {
-                    @Override
-                    public void onResponse(retrofit2.Call<ApiResponse<ProfileResponseDto>> call,
-                                           retrofit2.Response<ApiResponse<ProfileResponseDto>> response) {
-                        ProfileResponseDto updated = (response.isSuccessful() && response.body() != null
-                                && response.body().isSuccess()) ? response.body().data : null;
-                        if (updated == null || updated.user == null) {
-                            btnSave.setEnabled(true);
-                            btnSave.setText(getString(R.string.profile_save));
-                            Toast.makeText(ProfileActivity.this,
-                                    com.hafiztraveltours.app.network.ApiErrors.userMessage(ProfileActivity.this, response, R.string.profile_update_failed), Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        String currentToken = SessionManager.getInstance(ProfileActivity.this).getAuthToken();
-                        if (currentToken != null && !currentToken.trim().isEmpty()) {
-                            SessionManager.getInstance(ProfileActivity.this).saveAuthSession(currentToken, updated.user);
-                        } else {
-                            SessionManager.getInstance(ProfileActivity.this).saveUser(updated.user);
-                        }
-                        refreshHeader();
-                        dialog.dismiss();
-
-                        Toast.makeText(ProfileActivity.this,
-                                getString(R.string.profile_updated), Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onFailure(retrofit2.Call<ApiResponse<ProfileResponseDto>> call, Throwable t) {
-                        if (dialog.isShowing()) {
-                            btnSave.setEnabled(true);
-                            btnSave.setText(getString(R.string.profile_save));
-                            Toast.makeText(ProfileActivity.this,
-                                    com.hafiztraveltours.app.network.ApiErrors.userMessage(ProfileActivity.this, t, R.string.profile_update_failed), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                profileViewModel.updateProfile(form);
             });
         }
 
         dialog.show();
     }
 
+    /** Renders the save-profile one-shot result (button + toast + dismiss). */
+    private void handleSaveResult(com.hafiztraveltours.app.utils.ApiOpResult result) {
+        PendingOpUi pending = pendingSaveUi;
+        pendingSaveUi = null;
+        if (pending == null || pending.dialog == null || !pending.dialog.isShowing()) return;
+        if (pending.btnSave != null) {
+            pending.btnSave.setEnabled(true);
+            pending.btnSave.setText(getString(pending.saveTextRes));
+        }
+        if (result.success) {
+            pending.dialog.dismiss();
+            Toast.makeText(this, getString(R.string.profile_updated), Toast.LENGTH_SHORT).show();
+        } else {
+            String message;
+            if (result.errorResponse != null) {
+                message = com.hafiztraveltours.app.network.ApiErrors.userMessage(
+                        this, result.errorResponse, result.fallbackResId);
+            } else {
+                message = com.hafiztraveltours.app.network.ApiErrors.userMessage(
+                        this, result.error, result.fallbackResId);
+            }
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void showTravelDocsBottomSheet() {
-        if (!SessionManager.getInstance(this).isLoggedIn()) {
+        if (!profileViewModel.isLoggedIn()) {
             Toast.makeText(this, getString(R.string.profile_login_to_update), Toast.LENGTH_SHORT).show();
             return;
         }
@@ -944,9 +831,10 @@ public class ProfileActivity extends BaseActivity {
         View btnClose = sheetView.findViewById(R.id.btnCloseSheet);
         if (btnClose != null) btnClose.setOnClickListener(v -> dialog.dismiss());
 
-        String passportNo = profilePrefs.getString("passport_no", "").trim();
-        String mahramName = profilePrefs.getString("mahram_name", "").trim();
-        boolean hasVaccineCert = profilePrefs.getBoolean("has_vaccine_cert", false);
+        java.util.Map<String, String> vaultEx = profileViewModel.readProfileExtras();
+        String passportNo = exVal(vaultEx, "passport_no", "").trim();
+        String mahramName = exVal(vaultEx, "mahram_name", "").trim();
+        boolean hasVaccineCert = profileViewModel.readProfileFlag("has_vaccine_cert", false);
 
         View cardDocProgressContainer = sheetView.findViewById(R.id.cardDocProgressContainer);
         TextView tvDocProgressPercent = sheetView.findViewById(R.id.tvDocProgressPercent);
@@ -1117,18 +1005,57 @@ public class ProfileActivity extends BaseActivity {
         }
 
         // M8 single-flight with the stats-chained docs fetch above.
-        if (vaultDocsCall != null) vaultDocsCall.cancel();
-        retrofit2.Call<ApiResponse<List<com.hafiztraveltours.app.models.DocumentDto>>> vaultRequest =
-                ApiClient.getApiService().getUserDocuments();
-        vaultDocsCall = vaultRequest;
-        vaultRequest.enqueue(new retrofit2.Callback<ApiResponse<List<com.hafiztraveltours.app.models.DocumentDto>>>() {
-            @Override
-            public void onResponse(retrofit2.Call<ApiResponse<List<com.hafiztraveltours.app.models.DocumentDto>>> call,
-                                   retrofit2.Response<ApiResponse<List<com.hafiztraveltours.app.models.DocumentDto>>> response) {
-                if (isFinishing() || isDestroyed()) return;
-                List<com.hafiztraveltours.app.models.DocumentDto> docs = (response.isSuccessful() && response.body() != null && response.body().isSuccess())
-                        ? response.body().data : null;
-                if (docs != null) {
+        travelDocsDialog = dialog;
+        populateTravelDocsSheet();
+        profileViewModel.refreshDocuments();
+
+        dialog.show();
+    }
+
+    /**
+     * Populates the open vault sheet: placeholder inference first, then real document
+     * data when observed. Called on open and on every docs update (H1/Step 5).
+     */
+    private void populateTravelDocsSheet() {
+        if (travelDocsDialog == null || isFinishing() || isDestroyed()) return;
+
+        TextView tvPassportStatus = travelDocsDialog.findViewById(R.id.tvPassportStatus);
+        TextView btnPassportAction = travelDocsDialog.findViewById(R.id.btnPassportAction);
+        TextView tvPassportDates = travelDocsDialog.findViewById(R.id.tvPassportDates);
+        TextView tvPassportGuidance = travelDocsDialog.findViewById(R.id.tvPassportGuidance);
+        LinearLayout passportRejectionContainer = travelDocsDialog.findViewById(R.id.passportRejectionContainer);
+        TextView tvPassportRejectionReason = travelDocsDialog.findViewById(R.id.tvPassportRejectionReason);
+
+        TextView tvVaccineStatus = travelDocsDialog.findViewById(R.id.tvVaccineStatus);
+        TextView btnVaccineAction = travelDocsDialog.findViewById(R.id.btnVaccineAction);
+        TextView tvVaccineDates = travelDocsDialog.findViewById(R.id.tvVaccineDates);
+        TextView tvVaccineGuidance = travelDocsDialog.findViewById(R.id.tvVaccineGuidance);
+        LinearLayout vaccineRejectionContainer = travelDocsDialog.findViewById(R.id.vaccineRejectionContainer);
+        TextView tvVaccineRejectionReason = travelDocsDialog.findViewById(R.id.tvVaccineRejectionReason);
+
+        TextView tvMarriageStatus = travelDocsDialog.findViewById(R.id.tvMarriageStatus);
+        TextView btnMarriageAction = travelDocsDialog.findViewById(R.id.btnMarriageAction);
+        TextView tvMarriageDates = travelDocsDialog.findViewById(R.id.tvMarriageDates);
+        TextView tvMarriageGuidance = travelDocsDialog.findViewById(R.id.tvMarriageGuidance);
+        LinearLayout marriageRejectionContainer = travelDocsDialog.findViewById(R.id.marriageRejectionContainer);
+        TextView tvMarriageRejectionReason = travelDocsDialog.findViewById(R.id.tvMarriageRejectionReason);
+
+        TextView tvVisaStatus = travelDocsDialog.findViewById(R.id.tvVisaStatus);
+        TextView btnVisaAction = travelDocsDialog.findViewById(R.id.btnVisaAction);
+        TextView tvVisaDates = travelDocsDialog.findViewById(R.id.tvVisaDates);
+        TextView tvVisaGuidance = travelDocsDialog.findViewById(R.id.tvVisaGuidance);
+        LinearLayout visaRejectionContainer = travelDocsDialog.findViewById(R.id.visaRejectionContainer);
+        TextView tvVisaRejectionReason = travelDocsDialog.findViewById(R.id.tvVisaRejectionReason);
+
+        View cardDocProgressContainer = travelDocsDialog.findViewById(R.id.cardDocProgressContainer);
+        TextView tvDocProgressPercent = travelDocsDialog.findViewById(R.id.tvDocProgressPercent);
+        TextView tvDocProgressCount = travelDocsDialog.findViewById(R.id.tvDocProgressCount);
+        ProgressBar pbDocVerification = travelDocsDialog.findViewById(R.id.pbDocVerification);
+        TextView tvDocProgressMessage = travelDocsDialog.findViewById(R.id.tvDocProgressMessage);
+
+        java.util.List<com.hafiztraveltours.app.models.DocumentDto> docs =
+                profileViewModel.getDocsData().getValue();
+        if (docs != null) {
                     int verifiedCount = 0;
                     int underReviewCount = 0;
                     int rejectedCount = 0;
@@ -1199,13 +1126,6 @@ public class ProfileActivity extends BaseActivity {
                         }
                     }
                 }
-            }
-
-            @Override
-            public void onFailure(retrofit2.Call<ApiResponse<List<com.hafiztraveltours.app.models.DocumentDto>>> call, Throwable t) {}
-        });
-
-        dialog.show();
     }
 
     private void updateDocStatusUi(TextView tvStatus, TextView btnAction, TextView tvDates, TextView tvGuidance, View rejectionContainer, TextView tvRejectionReason, com.hafiztraveltours.app.models.DocumentDto doc) {
@@ -1322,7 +1242,7 @@ public class ProfileActivity extends BaseActivity {
     }
 
     private void showChangePasswordDialog() {
-        if (!SessionManager.getInstance(this).isLoggedIn()) {
+        if (!profileViewModel.isLoggedIn()) {
             Toast.makeText(this, getString(R.string.profile_login_to_update), Toast.LENGTH_SHORT).show();
             return;
         }
@@ -1369,61 +1289,65 @@ public class ProfileActivity extends BaseActivity {
                 if (newPasswordLayout != null) newPasswordLayout.setError(null);
                 if (confirmNewPasswordLayout != null) confirmNewPasswordLayout.setError(null);
 
-                int curErr = com.hafiztraveltours.app.utils.Validator.required(curPass, R.string.err_current_password_required);
-                if (curErr != 0) {
-                    if (currentPasswordLayout != null) currentPasswordLayout.setError(getString(curErr));
+                ProfileViewModel.PasswordErrors pwdErrors =
+                        profileViewModel.validatePasswordForm(curPass, newPass, confirmPass);
+                if (pwdErrors.currentErr != 0) {
+                    if (currentPasswordLayout != null) currentPasswordLayout.setError(getString(pwdErrors.currentErr));
                     return;
                 }
-                int newPassErr = com.hafiztraveltours.app.utils.Validator.newPassword(newPass, R.string.err_password_short, R.string.err_password_short);
-                if (newPassErr != 0) {
-                    if (newPasswordLayout != null) newPasswordLayout.setError(getString(newPassErr));
+                if (pwdErrors.newErr != 0) {
+                    if (newPasswordLayout != null) newPasswordLayout.setError(getString(pwdErrors.newErr));
                     return;
                 }
-                int confirmErr = com.hafiztraveltours.app.utils.Validator.passwordConfirm(newPass, confirmPass, R.string.err_password_mismatch);
-                if (confirmErr != 0) {
-                    if (confirmNewPasswordLayout != null) confirmNewPasswordLayout.setError(getString(confirmErr));
+                if (pwdErrors.confirmErr != 0) {
+                    if (confirmNewPasswordLayout != null) confirmNewPasswordLayout.setError(getString(pwdErrors.confirmErr));
                     return;
                 }
 
                 btnSave.setEnabled(false);
                 btnSave.setText(getString(R.string.password_updating));
 
-                Map<String, String> body = new HashMap<>();
-                body.put("current_password", curPass);
-                body.put("new_password", newPass);
-                body.put("new_password_confirmation", confirmPass);
+                PendingOpUi pending = new PendingOpUi();
+                pending.dialog = dialog;
+                pending.btnSave = btnSave;
+                pending.errorLayout = currentPasswordLayout;
+                pending.saveTextRes = R.string.btn_update_password;
+                pendingPasswordUi = pending;
 
-                ApiClient.getApiService().changePassword(body).enqueue(new Callback<ApiResponse<Object>>() {
-                    @Override
-                    public void onResponse(Call<ApiResponse<Object>> call, Response<ApiResponse<Object>> response) {
-                        if (isFinishing() || isDestroyed()) return;
-                        if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
-                            dialog.dismiss();
-                            Toast.makeText(ProfileActivity.this, getString(R.string.password_updated_success), Toast.LENGTH_SHORT).show();
-                        } else {
-                            btnSave.setEnabled(true);
-                            btnSave.setText(getString(R.string.btn_update_password));
-                            String errorMsg = com.hafiztraveltours.app.network.ApiErrors.userMessage(ProfileActivity.this, response, R.string.password_update_failed);
-                            if (currentPasswordLayout != null) {
-                                currentPasswordLayout.setError(errorMsg);
-                            } else {
-                                Toast.makeText(ProfileActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ApiResponse<Object>> call, Throwable t) {
-                        if (isFinishing() || isDestroyed()) return;
-                        btnSave.setEnabled(true);
-                        btnSave.setText(getString(R.string.btn_update_password));
-                        Toast.makeText(ProfileActivity.this, com.hafiztraveltours.app.network.ApiErrors.userMessage(ProfileActivity.this, t, R.string.err_network), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                profileViewModel.changePassword(curPass, newPass, confirmPass);
             });
         }
 
         dialog.show();
+    }
+
+    /** Renders the change-password one-shot result (button + error/toast + dismiss). */
+    private void handlePasswordResult(com.hafiztraveltours.app.utils.ApiOpResult result) {
+        PendingOpUi pending = pendingPasswordUi;
+        pendingPasswordUi = null;
+        if (pending == null || pending.dialog == null || !pending.dialog.isShowing()) return;
+        if (pending.btnSave != null) {
+            pending.btnSave.setEnabled(true);
+            pending.btnSave.setText(getString(pending.saveTextRes));
+        }
+        if (result.success) {
+            pending.dialog.dismiss();
+            Toast.makeText(this, getString(R.string.password_updated_success), Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String errorMsg;
+        if (result.errorResponse != null) {
+            errorMsg = com.hafiztraveltours.app.network.ApiErrors.userMessage(
+                    this, result.errorResponse, result.fallbackResId);
+        } else {
+            errorMsg = com.hafiztraveltours.app.network.ApiErrors.userMessage(
+                    this, result.error, result.fallbackResId);
+        }
+        if (pending.errorLayout != null) {
+            pending.errorLayout.setError(errorMsg);
+        } else {
+            Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void handleSelectedFileUri(android.net.Uri uri) {
@@ -1456,32 +1380,10 @@ public class ProfileActivity extends BaseActivity {
             fileName = uri.getLastPathSegment();
         }
 
-        String lowerName = fileName != null ? fileName.toLowerCase(java.util.Locale.ROOT) : "";
         boolean isPhotoOnly = "passport_photo".equalsIgnoreCase(pendingUploadDocCode);
-        boolean isValidFormat = lowerName.endsWith(".jpg") || lowerName.endsWith(".jpeg")
-                || lowerName.endsWith(".png") || (!isPhotoOnly && lowerName.endsWith(".pdf"));
-
-        if (mimeType != null) {
-            if (mimeType.contains("image/jpeg") || mimeType.contains("image/png")) {
-                isValidFormat = true;
-            } else if (!isPhotoOnly && mimeType.contains("application/pdf")) {
-                isValidFormat = true;
-            }
-        }
-
-        if (!isValidFormat) {
-            String errStr = isPhotoOnly ? getString(R.string.err_file_format_photo) : getString(R.string.err_file_format);
-            Toast.makeText(this, errStr, Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if (fileSize > 5 * 1024 * 1024) { // 5 MB limit
-            Toast.makeText(this, getString(R.string.err_file_size), Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if (fileSize <= 0) {
-            Toast.makeText(this, getString(R.string.err_file_empty), Toast.LENGTH_LONG).show();
+        int fileErr = profileViewModel.validateUploadFile(fileName, mimeType, fileSize, isPhotoOnly);
+        if (fileErr != 0) {
+            Toast.makeText(this, getString(fileErr), Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -1565,69 +1467,37 @@ public class ProfileActivity extends BaseActivity {
         if (uri == null) return;
         Toast.makeText(this, getString(R.string.doc_upload_processing), Toast.LENGTH_SHORT).show();
 
-        try {
-            java.io.InputStream inputStream = getContentResolver().openInputStream(uri);
-            if (inputStream == null) return;
-
-            java.io.ByteArrayOutputStream buffer = new java.io.ByteArrayOutputStream();
-            byte[] data = new byte[8192];
-            int nRead;
-            while ((nRead = inputStream.read(data, 0, data.length)) != -1) {
-                buffer.write(data, 0, nRead);
+        String fileName = "document_" + System.currentTimeMillis();
+        try (android.database.Cursor cursor = getContentResolver().query(uri, null, null, null, null)) {
+            if (cursor != null && cursor.moveToFirst()) {
+                int nameIndex = cursor.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME);
+                if (nameIndex != -1) fileName = cursor.getString(nameIndex);
             }
-            buffer.flush();
-            byte[] bytes = buffer.toByteArray();
-            inputStream.close();
+        } catch (Exception ignored) {}
 
-            String fileName = "document_" + System.currentTimeMillis();
-            try (android.database.Cursor cursor = getContentResolver().query(uri, null, null, null, null)) {
-                if (cursor != null && cursor.moveToFirst()) {
-                    int nameIndex = cursor.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME);
-                    if (nameIndex != -1) fileName = cursor.getString(nameIndex);
-                }
-            } catch (Exception ignored) {}
+        String mimeType = getContentResolver().getType(uri);
+        if (mimeType == null) mimeType = "application/octet-stream";
 
-            String mimeType = getContentResolver().getType(uri);
-            if (mimeType == null) mimeType = "application/octet-stream";
+        profileViewModel.uploadDocument(docCode, uri, fileName, mimeType);
+    }
 
-            okhttp3.RequestBody requestFile = okhttp3.RequestBody.create(
-                    okhttp3.MediaType.parse(mimeType),
-                    bytes
-            );
-            okhttp3.MultipartBody.Part body = okhttp3.MultipartBody.Part.createFormData("file", fileName, requestFile);
-            okhttp3.RequestBody codeBody = okhttp3.RequestBody.create(
-                    okhttp3.MediaType.parse("text/plain"),
-                    docCode
-            );
-
-            ApiClient.getApiService().uploadUserDocument(codeBody, body).enqueue(
-                    new retrofit2.Callback<ApiResponse<com.hafiztraveltours.app.models.DocumentDto>>() {
-                        @Override
-                        public void onResponse(
-                                retrofit2.Call<ApiResponse<com.hafiztraveltours.app.models.DocumentDto>> call,
-                                retrofit2.Response<ApiResponse<com.hafiztraveltours.app.models.DocumentDto>> response) {
-                            if (isFinishing() || isDestroyed()) return;
-                            if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
-                                Toast.makeText(ProfileActivity.this, getString(R.string.doc_upload_success), Toast.LENGTH_SHORT).show();
-                                loadStats();
-                                showTravelDocsBottomSheet();
-                            } else {
-                                Toast.makeText(ProfileActivity.this, com.hafiztraveltours.app.network.ApiErrors.userMessage(ProfileActivity.this, response, R.string.doc_upload_failed_retry), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(
-                                retrofit2.Call<ApiResponse<com.hafiztraveltours.app.models.DocumentDto>> call,
-                                Throwable t) {
-                            if (isFinishing() || isDestroyed()) return;
-                            Toast.makeText(ProfileActivity.this, com.hafiztraveltours.app.network.ApiErrors.userMessage(ProfileActivity.this, t, R.string.doc_upload_network_error), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-            );
-        } catch (Exception e) {
-            Toast.makeText(this, getString(R.string.doc_read_error), Toast.LENGTH_SHORT).show();
+    /** Renders the upload one-shot result (toast + refresh, same sequence as before). */
+    private void handleUploadResult(com.hafiztraveltours.app.utils.ApiOpResult result) {
+        if (result.success) {
+            Toast.makeText(this, getString(R.string.doc_upload_success), Toast.LENGTH_SHORT).show();
+            profileViewModel.loadStats();
+            showTravelDocsBottomSheet();
+            return;
         }
+        String message;
+        if (result.errorResponse != null) {
+            message = com.hafiztraveltours.app.network.ApiErrors.userMessage(
+                    this, result.errorResponse, result.fallbackResId);
+        } else {
+            message = com.hafiztraveltours.app.network.ApiErrors.userMessage(
+                    this, result.error, result.fallbackResId);
+        }
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     private void openUploadedDocument(String docCode) {

@@ -30,7 +30,7 @@ public class PodcastAdapter extends RecyclerView.Adapter<PodcastAdapter.PodcastV
     private final List<Podcast> podcasts;
 
     public PodcastAdapter(List<Podcast> podcasts) {
-        this.podcasts = podcasts;
+        this.podcasts = podcasts != null ? podcasts : new java.util.ArrayList<>();
     }
 
     @NonNull
@@ -43,15 +43,25 @@ public class PodcastAdapter extends RecyclerView.Adapter<PodcastAdapter.PodcastV
 
     @Override
     public void onBindViewHolder(@NonNull PodcastViewHolder holder, int position) {
+        if (podcasts == null || position < 0 || position >= podcasts.size()) return;
         Podcast podcast = podcasts.get(position);
+        if (podcast == null) return;
 
-        holder.title.setText(podcast.title);
+        holder.title.setText(podcast.title != null ? podcast.title : "");
 
-        String thumbnailUrl = "https://img.youtube.com/vi/" + podcast.videoId + "/hqdefault.jpg";
         try {
-            Glide.with(holder.itemView)
-                    .load(thumbnailUrl)
-                    .into(holder.thumbnail);
+            if (podcast.videoId != null && !podcast.videoId.trim().isEmpty()) {
+                Glide.with(holder.itemView)
+                        .load("https://img.youtube.com/vi/" + podcast.videoId.trim() + "/hqdefault.jpg")
+                        .placeholder(R.drawable.bg_image_placeholder)
+                        .error(R.drawable.bg_image_placeholder)
+                        .fallback(R.drawable.bg_image_placeholder)
+                        .into(holder.thumbnail);
+            } else {
+                Glide.with(holder.itemView)
+                        .load(R.drawable.bg_image_placeholder)
+                        .into(holder.thumbnail);
+            }
         } catch (Exception ignored) {}
 
         holder.itemView.setOnClickListener(v -> {
@@ -69,7 +79,7 @@ public class PodcastAdapter extends RecyclerView.Adapter<PodcastAdapter.PodcastV
 
     @Override
     public int getItemCount() {
-        return podcasts.size();
+        return podcasts != null ? podcasts.size() : 0;
     }
 
     static class PodcastViewHolder extends RecyclerView.ViewHolder {

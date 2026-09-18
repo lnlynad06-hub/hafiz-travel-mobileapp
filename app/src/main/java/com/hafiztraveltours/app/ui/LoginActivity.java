@@ -11,15 +11,10 @@ import com.hafiztraveltours.app.ui.*;
 
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Patterns;
-import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -32,7 +27,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
@@ -46,19 +40,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
-import com.hafiztraveltours.app.network.ApiClient;
-import com.hafiztraveltours.app.network.ApiResponse;
-import com.hafiztraveltours.app.network.AuthResponse;
-import com.hafiztraveltours.app.network.GoogleLoginRequest;
-import com.hafiztraveltours.app.network.LoginRequest;
-import com.hafiztraveltours.app.network.UserDto;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Enterprise-grade Luxury Login Activity for Hafiz Travel & Tours.
@@ -82,6 +63,11 @@ public class LoginActivity extends BaseActivity {
     private TextView tvActiveLanguage;
 
     private String activeLanguage;
+    private LoginViewModel loginViewModel;
+    private String pendingGoogleName = "";
+    private String pendingGoogleEmail = "";
+    private String pendingLoginEmail = "";
+    private BottomSheetDialog forgotDialog;
 
     
     @Override
@@ -108,6 +94,9 @@ public class LoginActivity extends BaseActivity {
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        loginViewModel = new androidx.lifecycle.ViewModelProvider(this).get(LoginViewModel.class);
+        observeLoginState();
 
         // 2. Bind UI elements
         emailLayout = findViewById(R.id.emailLayout);
@@ -201,7 +190,7 @@ public class LoginActivity extends BaseActivity {
         if (guestText != null) {
             guestText.setOnClickListener(v -> {
                 com.hafiztraveltours.app.utils.HapticUtil.click(v);
-                SessionManager.getInstance(LoginActivity.this).clearSession();
+                loginViewModel.clearSession();
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 finish();
             });
@@ -210,6 +199,53 @@ public class LoginActivity extends BaseActivity {
         // 5. Update language label & play entrance animation
         updateActiveLanguageLabel();
         playEntranceAnimation();
+    }
+
+    /** Wires ViewModel results to loading UI, toasts and navigation (H1/Phase 11). */
+    private void observeLoginState() {
+        loginViewModel.getLoginOp().observe(this, event -> {
+            com.hafiztraveltours.app.utils.ApiOpResult result =
+                    event != null ? event.consume() : null;
+            if (result == null) return;
+            setLoadingState(false);
+            if (result.success) {
+                saveRememberMePreference(pendingLoginEmail);
+                Toast.makeText(this, getString(R.string.login_success), Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, MainActivity.class));
+                finish();
+            } else {
+                Toast.makeText(this, result.resolveMessage(this), Toast.LENGTH_LONG).show();
+            }
+        });
+        loginViewModel.getGoogleOp().observe(this, event -> {
+            com.hafiztraveltours.app.utils.ApiOpResult result =
+                    event != null ? event.consume() : null;
+            if (result == null) return;
+            setLoadingState(false);
+            if (result.success) {
+                saveRememberMePreference(pendingGoogleEmail);
+                Toast.makeText(this, getString(R.string.login_google_success, pendingGoogleName),
+                        Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, MainActivity.class));
+                finish();
+            } else {
+                Toast.makeText(this, result.resolveMessage(this), Toast.LENGTH_LONG).show();
+            }
+        });
+        loginViewModel.getForgotOp().observe(this, event -> {
+            com.hafiztraveltours.app.utils.ApiOpResult result =
+                    event != null ? event.consume() : null;
+            if (result == null) return;
+            if (forgotDialog != null && forgotDialog.isShowing()) {
+                forgotDialog.dismiss();
+            }
+            forgotDialog = null;
+            if (result.success) {
+                Toast.makeText(this, getString(R.string.reset_link_sent_success), Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, result.resolveMessage(this), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override
@@ -228,42 +264,9 @@ public class LoginActivity extends BaseActivity {
                     String avatar = account.getPhotoUrl() != null ? account.getPhotoUrl().toString() : "";
 
                     setLoadingState(true);
-                    GoogleLoginRequest request = new GoogleLoginRequest(email, name, googleId, avatar);
-                    ApiClient.getApiService().googleLogin(request)
-                            .enqueue(new Callback<ApiResponse<AuthResponse>>() {
-                                @Override
-                                public void onResponse(Call<ApiResponse<AuthResponse>> call, Response<ApiResponse<AuthResponse>> response) {
-                                    if (isFinishing() || isDestroyed()) return;
-                                    setLoadingState(false);
-
-                                    if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
-                                        AuthResponse authData = response.body().data;
-                                        String token = authData != null ? authData.token : "";
-                                        UserDto user = authData != null ? authData.user : null;
-                                        if (user == null) {
-                                            user = new UserDto("1", name, email, "");
-                                        }
-                                        if (token != null && !token.trim().isEmpty()) {
-                                            SessionManager.getInstance(LoginActivity.this).saveAuthSession(token, user);
-                                        } else {
-                                            SessionManager.getInstance(LoginActivity.this).saveUser(user);
-                                        }
-                                        saveRememberMePreference(email);
-                                        Toast.makeText(LoginActivity.this, getString(R.string.login_google_success, name), Toast.LENGTH_SHORT).show();
-                                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                                        finish();
-                                    } else {
-                                        Toast.makeText(LoginActivity.this, com.hafiztraveltours.app.network.ApiErrors.userMessage(LoginActivity.this, response, R.string.login_google_failed), Toast.LENGTH_LONG).show();
-                                    }
-                                }
-
-                                @Override
-                                public void onFailure(Call<ApiResponse<AuthResponse>> call, Throwable t) {
-                                    if (isFinishing() || isDestroyed()) return;
-                                    setLoadingState(false);
-                                    Toast.makeText(LoginActivity.this, com.hafiztraveltours.app.network.ApiErrors.userMessage(LoginActivity.this, t, R.string.err_network), Toast.LENGTH_LONG).show();
-                                }
-                            });
+                    pendingGoogleName = name;
+                    pendingGoogleEmail = email;
+                    loginViewModel.googleLogin(email, name, googleId, avatar);
                 }
             } catch (ApiException e) {
                 setLoadingState(false);
@@ -273,25 +276,18 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void loadRememberMePreference() {
-        SharedPreferences prefs = com.hafiztraveltours.app.utils.SecurePrefs.wrap(this, PREF_AUTH);
-        boolean remember = prefs.getBoolean(KEY_REMEMBER_ME, false);
-        String savedEmail = prefs.getString(KEY_SAVED_EMAIL, "");
-
+        LoginViewModel.RememberState state = loginViewModel.rememberState();
         if (rememberMeCheckBox != null) {
-            rememberMeCheckBox.setChecked(remember);
+            rememberMeCheckBox.setChecked(state.remember);
         }
-        if (remember && !savedEmail.isEmpty() && emailInput != null) {
-            emailInput.setText(savedEmail);
+        if (state.remember && !state.savedEmail.isEmpty() && emailInput != null) {
+            emailInput.setText(state.savedEmail);
         }
     }
 
     private void saveRememberMePreference(String email) {
-        SharedPreferences prefs = com.hafiztraveltours.app.utils.SecurePrefs.wrap(this, PREF_AUTH);
         boolean isRemember = rememberMeCheckBox != null && rememberMeCheckBox.isChecked();
-        prefs.edit()
-                .putBoolean(KEY_REMEMBER_ME, isRemember)
-                .putString(KEY_SAVED_EMAIL, isRemember ? email : "")
-                .apply();
+        loginViewModel.saveRememberMe(email, isRemember);
     }
 
     private void setLoadingState(boolean loading) {
@@ -418,67 +414,30 @@ public class LoginActivity extends BaseActivity {
         String email = emailInput != null && emailInput.getText() != null ? emailInput.getText().toString().trim() : "";
         String password = passwordInput != null && passwordInput.getText() != null ? passwordInput.getText().toString().trim() : "";
 
-        boolean valid = true;
+        LoginViewModel.LoginErrors errors = loginViewModel.validateLogin(email, password);
 
-        int emailErr = com.hafiztraveltours.app.utils.Validator.email(email, R.string.login_email_invalid);
-        if (emailErr != 0) {
-            if (emailLayout != null) emailLayout.setError(getString(emailErr));
-            valid = false;
+        if (errors.emailErr != 0) {
+            if (emailLayout != null) emailLayout.setError(getString(errors.emailErr));
         } else {
             if (emailLayout != null) emailLayout.setError(null);
         }
 
-        int passErr = com.hafiztraveltours.app.utils.Validator.loginPassword(password, R.string.login_password_required);
-        if (passErr != 0) {
-            if (passwordLayout != null) passwordLayout.setError(getString(passErr));
-            valid = false;
+        if (errors.passErr != 0) {
+            if (passwordLayout != null) passwordLayout.setError(getString(errors.passErr));
         } else {
             if (passwordLayout != null) passwordLayout.setError(null);
         }
 
-        if (!valid) return;
+        if (errors.hasErrors()) return;
 
         setLoadingState(true);
-
-        ApiClient.getApiService().login(new LoginRequest(email, password))
-                .enqueue(new Callback<ApiResponse<AuthResponse>>() {
-                    @Override
-                    public void onResponse(Call<ApiResponse<AuthResponse>> call, Response<ApiResponse<AuthResponse>> response) {
-                        if (isFinishing() || isDestroyed()) return;
-                        setLoadingState(false);
-
-                        if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
-                            AuthResponse authData = response.body().data;
-                            String token = authData != null ? authData.token : "";
-                            UserDto user = authData != null ? authData.user : null;
-                            if (user == null) {
-                                user = new UserDto("1", email.split("@")[0], email, "");
-                            }
-                            if (token != null && !token.trim().isEmpty()) {
-                                SessionManager.getInstance(LoginActivity.this).saveAuthSession(token, user);
-                            } else {
-                                SessionManager.getInstance(LoginActivity.this).saveUser(user);
-                            }
-                            saveRememberMePreference(email);
-                            Toast.makeText(LoginActivity.this, getString(R.string.login_success), Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                            finish();
-                        } else {
-                            Toast.makeText(LoginActivity.this, com.hafiztraveltours.app.network.ApiErrors.userMessage(LoginActivity.this, response, R.string.login_failed_default), Toast.LENGTH_LONG).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ApiResponse<AuthResponse>> call, Throwable t) {
-                        if (isFinishing() || isDestroyed()) return;
-                        setLoadingState(false);
-                        Toast.makeText(LoginActivity.this, com.hafiztraveltours.app.network.ApiErrors.userMessage(LoginActivity.this, t, R.string.err_network), Toast.LENGTH_LONG).show();
-                    }
-                });
+        pendingLoginEmail = email;
+        loginViewModel.login(email, password);
     }
 
     private void showForgotPasswordBottomSheet() {
         BottomSheetDialog resetDialog = new BottomSheetDialog(this);
+        forgotDialog = resetDialog;
         View sheet = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_forgot_password, null);
         resetDialog.setContentView(sheet);
 
@@ -502,38 +461,17 @@ public class LoginActivity extends BaseActivity {
                 com.hafiztraveltours.app.utils.HapticUtil.click(v);
                 String email = resetInput != null && resetInput.getText() != null ? resetInput.getText().toString().trim() : "";
 
-                if (TextUtils.isEmpty(email) || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                int emailErr = loginViewModel.validateForgotEmail(email);
+                if (emailErr != 0) {
                     if (resetLayout != null) {
-                        resetLayout.setError(getString(R.string.reset_password_invalid_email));
+                        resetLayout.setError(getString(emailErr));
                     }
                     return;
                 }
                 if (resetLayout != null) resetLayout.setError(null);
 
                 btnSend.setEnabled(false);
-                Map<String, String> body = new HashMap<>();
-                body.put("email", email);
-
-                ApiClient.getApiService().forgotPassword(body)
-                        .enqueue(new Callback<ApiResponse<Object>>() {
-                            @Override
-                            public void onResponse(Call<ApiResponse<Object>> call, Response<ApiResponse<Object>> response) {
-                                if (isFinishing() || isDestroyed()) return;
-                                resetDialog.dismiss();
-                                if (response.isSuccessful()) {
-                                    Toast.makeText(LoginActivity.this, getString(R.string.reset_link_sent_success), Toast.LENGTH_LONG).show();
-                                } else {
-                                    Toast.makeText(LoginActivity.this, com.hafiztraveltours.app.network.ApiErrors.userMessage(LoginActivity.this, response, R.string.reset_password_failed), Toast.LENGTH_LONG).show();
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<ApiResponse<Object>> call, Throwable t) {
-                                if (isFinishing() || isDestroyed()) return;
-                                resetDialog.dismiss();
-                                Toast.makeText(LoginActivity.this, com.hafiztraveltours.app.network.ApiErrors.userMessage(LoginActivity.this, t, R.string.err_network), Toast.LENGTH_LONG).show();
-                            }
-                        });
+                loginViewModel.forgotPassword(email);
             });
         }
 

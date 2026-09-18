@@ -47,17 +47,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
-import com.hafiztraveltours.app.network.ApiClient;
-import com.hafiztraveltours.app.network.ApiResponse;
-import com.hafiztraveltours.app.network.AuthResponse;
-import com.hafiztraveltours.app.network.GoogleLoginRequest;
-import com.hafiztraveltours.app.network.RegisterRequest;
-import com.hafiztraveltours.app.network.UserDto;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 public class SignUpActivity extends BaseActivity {
 
     private static final int RC_SIGN_IN = 9001;
@@ -83,6 +72,8 @@ public class SignUpActivity extends BaseActivity {
     private PasswordChecklistHelper passwordChecklistHelper;
 
     private String activeLanguage;
+    private SignUpViewModel signUpViewModel;
+    private String pendingGoogleName = "";
 
     
     @Override
@@ -108,6 +99,9 @@ public class SignUpActivity extends BaseActivity {
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        signUpViewModel = new androidx.lifecycle.ViewModelProvider(this).get(SignUpViewModel.class);
+        observeSignUpState();
 
         nameLayout = findViewById(R.id.nameLayout);
         nicknameLayout = findViewById(R.id.nicknameLayout);
@@ -187,9 +181,9 @@ public class SignUpActivity extends BaseActivity {
 
         View guestSignUpText = findViewById(R.id.guestSignUpText);
         if (guestSignUpText != null) {
-            guestSignUpText.setOnClickListener(v -> {
+                guestSignUpText.setOnClickListener(v -> {
                 com.hafiztraveltours.app.utils.HapticUtil.click(v);
-                SessionManager.getInstance(SignUpActivity.this).clearSession();
+                signUpViewModel.clearSession();
                 startActivity(new Intent(SignUpActivity.this, MainActivity.class));
                 finish();
             });
@@ -204,6 +198,37 @@ public class SignUpActivity extends BaseActivity {
         }
 
         updateActiveLanguageLabel();
+    }
+
+    /** Wires ViewModel results to loading UI, toasts and navigation (H1/Phase 10). */
+    private void observeSignUpState() {
+        signUpViewModel.getRegisterOp().observe(this, event -> {
+            com.hafiztraveltours.app.utils.ApiOpResult result =
+                    event != null ? event.consume() : null;
+            if (result == null) return;
+            setLoadingState(false);
+            if (result.success) {
+                Toast.makeText(this, getString(R.string.signup_success), Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, MainActivity.class));
+                finish();
+            } else {
+                Toast.makeText(this, result.resolveMessage(this), Toast.LENGTH_LONG).show();
+            }
+        });
+        signUpViewModel.getGoogleOp().observe(this, event -> {
+            com.hafiztraveltours.app.utils.ApiOpResult result =
+                    event != null ? event.consume() : null;
+            if (result == null) return;
+            setLoadingState(false);
+            if (result.success) {
+                Toast.makeText(this, getString(R.string.login_google_success, pendingGoogleName),
+                        Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, MainActivity.class));
+                finish();
+            } else {
+                Toast.makeText(this, result.resolveMessage(this), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void setLoadingState(boolean loading) {
@@ -386,41 +411,8 @@ public class SignUpActivity extends BaseActivity {
                     String avatar = account.getPhotoUrl() != null ? account.getPhotoUrl().toString() : "";
 
                     setLoadingState(true);
-                    GoogleLoginRequest request = new GoogleLoginRequest(email, name, googleId, avatar);
-                    ApiClient.getApiService().googleLogin(request)
-                            .enqueue(new Callback<ApiResponse<AuthResponse>>() {
-                                @Override
-                                public void onResponse(Call<ApiResponse<AuthResponse>> call, Response<ApiResponse<AuthResponse>> response) {
-                                    if (isFinishing() || isDestroyed()) return;
-                                    setLoadingState(false);
-
-                                    if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
-                                        AuthResponse authData = response.body().data;
-                                        String token = authData != null ? authData.token : "";
-                                        UserDto user = authData != null ? authData.user : null;
-                                        if (user == null) {
-                                            user = new UserDto("1", name, email, "");
-                                        }
-                                        if (token != null && !token.trim().isEmpty()) {
-                                            SessionManager.getInstance(SignUpActivity.this).saveAuthSession(token, user);
-                                        } else {
-                                            SessionManager.getInstance(SignUpActivity.this).saveUser(user);
-                                        }
-                                        Toast.makeText(SignUpActivity.this, getString(R.string.login_google_success, name), Toast.LENGTH_SHORT).show();
-                                        startActivity(new Intent(SignUpActivity.this, MainActivity.class));
-                                        finish();
-                                    } else {
-                                        Toast.makeText(SignUpActivity.this, com.hafiztraveltours.app.network.ApiErrors.userMessage(SignUpActivity.this, response, R.string.login_google_failed), Toast.LENGTH_LONG).show();
-                                    }
-                                }
-
-                                @Override
-                                public void onFailure(Call<ApiResponse<AuthResponse>> call, Throwable t) {
-                                    if (isFinishing() || isDestroyed()) return;
-                                    setLoadingState(false);
-                                    Toast.makeText(SignUpActivity.this, com.hafiztraveltours.app.network.ApiErrors.userMessage(SignUpActivity.this, t, R.string.err_network), Toast.LENGTH_LONG).show();
-                                }
-                            });
+                    pendingGoogleName = name;
+                    signUpViewModel.googleLogin(email, name, googleId, avatar);
                 }
             } catch (ApiException e) {
                 setLoadingState(false);
@@ -687,49 +679,46 @@ public class SignUpActivity extends BaseActivity {
 
         boolean valid = true;
 
-        int nameErr = com.hafiztraveltours.app.utils.Validator.fullName(name, R.string.err_name_required);
-        if (nameErr != 0) {
-            nameLayout.setError(getString(nameErr));
+        SignUpViewModel.SignUpErrors errors = signUpViewModel.validateSignUp(
+                name, nickname, email, rawPhone, password, confirmPassword);
+
+        if (errors.nameErr != 0) {
+            nameLayout.setError(getString(errors.nameErr));
             valid = false;
         } else {
             nameLayout.setError(null);
         }
 
-        int nickErr = com.hafiztraveltours.app.utils.Validator.username(nickname, R.string.err_username_required);
-        if (nickErr != 0) {
-            nicknameLayout.setError(getString(nickErr));
+        if (errors.nickErr != 0) {
+            nicknameLayout.setError(getString(errors.nickErr));
             valid = false;
         } else {
             nicknameLayout.setError(null);
         }
 
-        int emailErr = com.hafiztraveltours.app.utils.Validator.email(email, R.string.err_email_invalid);
-        if (emailErr != 0) {
-            emailLayout.setError(getString(emailErr));
+        if (errors.emailErr != 0) {
+            emailLayout.setError(getString(errors.emailErr));
             valid = false;
         } else {
             emailLayout.setError(null);
         }
 
-        int phoneErr = com.hafiztraveltours.app.utils.Validator.phone(rawPhone, false, R.string.err_phone_invalid);
-        if (phoneErr != 0) {
-            setPhoneError(getString(phoneErr));
+        if (errors.phoneErr != 0) {
+            setPhoneError(getString(errors.phoneErr));
             valid = false;
         } else {
             setPhoneError(null);
         }
 
-        int passErr = com.hafiztraveltours.app.utils.Validator.newPassword(password, R.string.err_password_short, R.string.err_password_short);
-        if (passErr != 0) {
-            passwordLayout.setError(getString(passErr));
+        if (errors.passErr != 0) {
+            passwordLayout.setError(getString(errors.passErr));
             valid = false;
         } else {
             passwordLayout.setError(null);
         }
 
-        int confirmErr = com.hafiztraveltours.app.utils.Validator.passwordConfirm(password, confirmPassword, R.string.err_password_mismatch);
-        if (confirmErr != 0) {
-            confirmPasswordLayout.setError(getString(confirmErr));
+        if (errors.confirmErr != 0) {
+            confirmPasswordLayout.setError(getString(errors.confirmErr));
             valid = false;
         } else {
             confirmPasswordLayout.setError(null);
@@ -737,55 +726,12 @@ public class SignUpActivity extends BaseActivity {
 
         if (!valid) return;
 
-        // Build normalized phone using selected country code
-        final String normalizedPhone;
-        String digits = rawPhone.replaceAll("[^\\d]", "");
-        if (rawPhone.startsWith("+")) {
-            normalizedPhone = rawPhone; // already has a code
-        } else if (rawPhone.startsWith("0")) {
-            // Strip leading 0, add selected country code
-            normalizedPhone = selectedCountryCode + digits.substring(1);
-        } else {
-            normalizedPhone = selectedCountryCode + digits;
-        }
+        // Normalized phone using selected country code (same rule as before).
+        final String normalizedPhone =
+                SignUpViewModel.normalizePhone(rawPhone, selectedCountryCode);
 
         setLoadingState(true);
-
-        RegisterRequest request = new RegisterRequest(name, nickname, email, normalizedPhone, password, confirmPassword);
-        ApiClient.getApiService().register(request)
-                .enqueue(new Callback<ApiResponse<AuthResponse>>() {
-                    @Override
-                    public void onResponse(Call<ApiResponse<AuthResponse>> call, Response<ApiResponse<AuthResponse>> response) {
-                        if (isFinishing() || isDestroyed()) return;
-                        setLoadingState(false);
-
-                        if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
-                            AuthResponse authData = response.body().data;
-                            String token = authData != null ? authData.token : "";
-                            UserDto user = authData != null ? authData.user : null;
-                            if (user == null) {
-                                user = new UserDto("1", name, nickname, email, normalizedPhone);
-                            }
-                            if (token != null && !token.trim().isEmpty()) {
-                                SessionManager.getInstance(SignUpActivity.this).saveAuthSession(token, user);
-                            } else {
-                                SessionManager.getInstance(SignUpActivity.this).saveUser(user);
-                            }
-                            Toast.makeText(SignUpActivity.this, getString(R.string.signup_success), Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(SignUpActivity.this, MainActivity.class));
-                            finish();
-                        } else {
-                            Toast.makeText(SignUpActivity.this, com.hafiztraveltours.app.network.ApiErrors.userMessage(SignUpActivity.this, response, R.string.err_signup_failed), Toast.LENGTH_LONG).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ApiResponse<AuthResponse>> call, Throwable t) {
-                        if (isFinishing() || isDestroyed()) return;
-                        setLoadingState(false);
-                        Toast.makeText(SignUpActivity.this, com.hafiztraveltours.app.network.ApiErrors.userMessage(SignUpActivity.this, t, R.string.err_network), Toast.LENGTH_LONG).show();
-                    }
-                });
+        signUpViewModel.register(name, nickname, email, normalizedPhone, password, confirmPassword);
     }
 
     private String textOf(TextInputEditText field) {

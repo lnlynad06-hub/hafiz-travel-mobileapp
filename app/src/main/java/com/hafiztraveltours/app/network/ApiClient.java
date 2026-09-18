@@ -21,6 +21,8 @@ public class ApiClient {
 
     private static Retrofit retrofit = null;
     private static ApiService apiService = null;
+    // In-memory Retrofit token (Phase 5): owned by SessionManager, which is the ONLY
+    // caller of setAuthToken() (init/save/clear). Never read or written elsewhere.
     private static volatile String authToken = null;
 
     public static synchronized void setAuthToken(String token) {

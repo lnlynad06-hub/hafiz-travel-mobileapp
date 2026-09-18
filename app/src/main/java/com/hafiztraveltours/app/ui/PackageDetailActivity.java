@@ -27,20 +27,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.bumptech.glide.Glide;
 import com.hafiztraveltours.app.network.ApiClient;
-import com.hafiztraveltours.app.network.ApiResponse;
 
 import android.graphics.drawable.GradientDrawable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class PackageDetailActivity extends BaseActivity {
 
@@ -91,15 +82,7 @@ public class PackageDetailActivity extends BaseActivity {
     private PackageDetail detail;
     private UmrahPackage rawPackage;
     private int selectedPriceOptionIndex = 0;
-    private retrofit2.Call<?> detailCall;
-    private retrofit2.Call<?> relatedCall;
-
-    @Override
-    protected void onDestroy() {
-        if (detailCall != null) detailCall.cancel();
-        if (relatedCall != null) relatedCall.cancel();
-        super.onDestroy();
-    }
+    private PackageDetailViewModel packageViewModel;
 
     
     @Override
@@ -121,6 +104,9 @@ public class PackageDetailActivity extends BaseActivity {
         }
         favoriteButton = findViewById(R.id.detailFavoriteButton);
         shareButton = findViewById(R.id.detailShareButton);
+
+        packageViewModel = new androidx.lifecycle.ViewModelProvider(this).get(PackageDetailViewModel.class);
+        observePackageState();
 
         String packageId = getIntent().getStringExtra(EXTRA_PACKAGE_ID);
         String collection = getIntent().getStringExtra(EXTRA_COLLECTION);
@@ -148,38 +134,31 @@ public class PackageDetailActivity extends BaseActivity {
     }
 
     private void loadPackage(String collection, String packageId) {
-        // M8 single-flight: a new load cancels the previous identical request.
-        if (detailCall != null) detailCall.cancel();
-        Call<ApiResponse<UmrahPackage>> call =
-                ApiClient.getApiService().getPackageDetail(packageId);
-        detailCall = call;
-        call.enqueue(new Callback<ApiResponse<UmrahPackage>>() {
-            @Override
-            public void onResponse(Call<ApiResponse<UmrahPackage>> call, Response<ApiResponse<UmrahPackage>> response) {
-                if (swipeRefreshLayout != null) {
-                    swipeRefreshLayout.setRefreshing(false);
-                }
-                if (isFinishing() || isDestroyed()) return;
-                if (response.isSuccessful() && response.body() != null && response.body().data != null) {
-                    rawPackage = response.body().data;
-                    rawPackage.collectionName = collection;
-                    detail = PackageDetail.fromUmrahPackage(rawPackage);
-                    renderAll();
-                } else {
-                    Toast.makeText(PackageDetailActivity.this, com.hafiztraveltours.app.network.ApiErrors.userMessage(PackageDetailActivity.this, response, R.string.err_package_not_found), Toast.LENGTH_SHORT).show();
-                    finish();
-                }
-            }
+        packageViewModel.loadPackage(collection, packageId);
+    }
 
-            @Override
-            public void onFailure(Call<ApiResponse<UmrahPackage>> call, Throwable t) {
-                if (swipeRefreshLayout != null) {
-                    swipeRefreshLayout.setRefreshing(false);
-                }
-                if (isFinishing() || isDestroyed()) return;
-                Toast.makeText(PackageDetailActivity.this, com.hafiztraveltours.app.network.ApiErrors.userMessage(PackageDetailActivity.this, t, R.string.err_package_load_failed), Toast.LENGTH_SHORT).show();
-                finish();
+    /** Wires ViewModel state to rendering + one-shot error (H1/Step 5). */
+    private void observePackageState() {
+        packageViewModel.getDetailData().observe(this, loaded -> {
+            if (loaded == null) return;
+            rawPackage = loaded.raw;
+            detail = loaded.detail;
+            renderAll();
+        });
+        packageViewModel.getDetailLoading().observe(this, loading -> {
+            if (swipeRefreshLayout != null && (loading == null || !loading)) {
+                swipeRefreshLayout.setRefreshing(false);
             }
+        });
+        packageViewModel.getDetailError().observe(this, event -> {
+            com.hafiztraveltours.app.utils.ApiOpResult result =
+                    event != null ? event.consume() : null;
+            if (result == null) return;
+            Toast.makeText(this, result.resolveMessage(this), Toast.LENGTH_SHORT).show();
+            finish();
+        });
+        packageViewModel.getRelatedData().observe(this, related -> {
+            if (related != null) renderRelatedPackages(related);
         });
     }
 
@@ -1715,52 +1694,30 @@ public class PackageDetailActivity extends BaseActivity {
 
     private void addRelatedPackagesSection() {
         if (rawPackage == null || rawPackage.category == null || rawPackage.category.trim().isEmpty()) return;
-        String category = rawPackage.category.trim();
+        packageViewModel.loadRelated(rawPackage.category.trim(), rawPackage.id);
+    }
 
-        if (relatedCall != null) relatedCall.cancel();
-        Call<ApiResponse<List<UmrahPackage>>> related =
-                ApiClient.getApiService().getPackages(category, null, null, 1);
-        relatedCall = related;
-        related.enqueue(new Callback<ApiResponse<List<UmrahPackage>>>() {
-            @Override
-            public void onResponse(Call<ApiResponse<List<UmrahPackage>>> call, Response<ApiResponse<List<UmrahPackage>>> response) {
-                if (isFinishing() || isDestroyed()) return;
-                if (response.isSuccessful() && response.body() != null && response.body().data != null) {
-                    List<UmrahPackage> list = response.body().data;
-                    List<UmrahPackage> filtered = new ArrayList<>();
-                    for (UmrahPackage p : list) {
-                        if (p.id != null && !p.id.equals(rawPackage.id)) {
-                            filtered.add(p);
-                        }
-                    }
-                    if (!filtered.isEmpty()) {
-                        container.addView(sectionHeading(getString(R.string.detail_section_related_packages)));
+    /** Renders related packages from observed ViewModel state (pure view code). */
+    private void renderRelatedPackages(java.util.List<UmrahPackage> filtered) {
+        if (filtered == null || filtered.isEmpty()) return;
+        container.addView(sectionHeading(getString(R.string.detail_section_related_packages)));
 
-                        androidx.recyclerview.widget.RecyclerView rv = new androidx.recyclerview.widget.RecyclerView(PackageDetailActivity.this);
-                        rv.setLayoutManager(new androidx.recyclerview.widget.LinearLayoutManager(
-                                PackageDetailActivity.this, androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL, false));
-                        rv.setClipToPadding(false);
-                        rv.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        androidx.recyclerview.widget.RecyclerView rv = new androidx.recyclerview.widget.RecyclerView(PackageDetailActivity.this);
+        rv.setLayoutManager(new androidx.recyclerview.widget.LinearLayoutManager(
+                PackageDetailActivity.this, androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL, false));
+        rv.setClipToPadding(false);
+        rv.setOverScrollMode(View.OVER_SCROLL_NEVER);
 
-                        LinearLayout.LayoutParams rvParams = new LinearLayout.LayoutParams(
-                                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        rvParams.topMargin = dp(10);
-                        rvParams.bottomMargin = dp(16);
-                        rv.setLayoutParams(rvParams);
+        LinearLayout.LayoutParams rvParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        rvParams.topMargin = dp(10);
+        rvParams.bottomMargin = dp(16);
+        rv.setLayoutParams(rvParams);
 
-                        PackageCardAdapter adapter = new PackageCardAdapter(PackageDetailActivity.this, filtered, false);
-                        rv.setAdapter(adapter);
+        PackageCardAdapter adapter = new PackageCardAdapter(PackageDetailActivity.this, filtered, false);
+        rv.setAdapter(adapter);
 
-                        container.addView(rv);
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ApiResponse<List<UmrahPackage>>> call, Throwable t) {
-                // Ignore failure gracefully
-            }
-        });
+        container.addView(rv);
     }
 
     private int dp(int value) {

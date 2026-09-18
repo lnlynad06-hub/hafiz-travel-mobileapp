@@ -1,9 +1,7 @@
 package com.hafiztraveltours.app.ui;
 
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
@@ -19,28 +17,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.hafiztraveltours.app.R;
 import com.hafiztraveltours.app.models.BookingRequest;
-import com.hafiztraveltours.app.models.DocumentDto;
 import com.hafiztraveltours.app.models.PackageDetail;
-import com.hafiztraveltours.app.network.ApiClient;
-import com.hafiztraveltours.app.network.ApiResponse;
 import com.hafiztraveltours.app.network.UserDto;
 import com.hafiztraveltours.app.utils.LocaleHelper;
-import com.hafiztraveltours.app.utils.SessionManager;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class PassengerDetailsActivity extends BaseActivity {
 
@@ -59,18 +47,9 @@ public class PassengerDetailsActivity extends BaseActivity {
     private TextView txtNoAdditionalTravellers;
 
     private boolean isLeadProfileComplete = false;
-    private final List<String> missingProfileFields = new ArrayList<>();
+    private List<PassengerDetailsViewModel.MissingField> missingFields = new ArrayList<>();
     private UserDto currentUserProfile = null;
-    private List<DocumentDto> currentUserDocuments = new ArrayList<>();
-    private retrofit2.Call<?> docsCall;
-    private retrofit2.Call<?> profileCall;
-
-    @Override
-    protected void onDestroy() {
-        if (docsCall != null) docsCall.cancel();
-        if (profileCall != null) profileCall.cancel();
-        super.onDestroy();
-    }
+    private PassengerDetailsViewModel passengerViewModel;
 
     // Additional Travellers list
     private final List<AdditionalTravellerHolder> additionalTravellers = new ArrayList<>();
@@ -150,6 +129,10 @@ public class PassengerDetailsActivity extends BaseActivity {
             addAdditionalTraveller();
         });
 
+        passengerViewModel = new androidx.lifecycle.ViewModelProvider(this)
+                .get(PassengerDetailsViewModel.class);
+        observePassengerState();
+
         findViewById(R.id.btnProceedToReview).setOnClickListener(v -> {
             com.hafiztraveltours.app.utils.HapticUtil.click(v);
             validateAndProceed();
@@ -168,168 +151,21 @@ public class PassengerDetailsActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        loadProfileAndCheckRequirements();
+        // Re-check after returning from Edit Profile (rule E).
+        passengerViewModel.loadProfile(bookingRequest != null ? bookingRequest.packageDetail : null);
     }
 
-    private void loadProfileAndCheckRequirements() {
-        SessionManager session = SessionManager.getInstance(this);
-        if (!session.isLoggedIn()) {
-            isLeadProfileComplete = false;
-            missingProfileFields.clear();
-            missingProfileFields.add(getString(R.string.passenger_not_logged_in));
+    /** Wires ViewModel state to rendering (H1/Phase 8). */
+    private void observePassengerState() {
+        passengerViewModel.getProfileData().observe(this, user -> {
+            currentUserProfile = user;
+        });
+        passengerViewModel.getEvaluation().observe(this, eval -> {
+            if (eval == null) return;
+            isLeadProfileComplete = eval.complete;
+            missingFields = eval.missing != null ? eval.missing : new ArrayList<>();
             renderLeadProfileState();
-            return;
-        }
-
-        currentUserProfile = session.getUser();
-
-        // 1. Fetch user documents to check available docs (M8: cancel previous chain first).
-        if (docsCall != null) docsCall.cancel();
-        if (profileCall != null) profileCall.cancel();
-        retrofit2.Call<ApiResponse<List<DocumentDto>>> documentsRequest =
-                ApiClient.getApiService().getUserDocuments();
-        docsCall = documentsRequest;
-        documentsRequest.enqueue(new Callback<ApiResponse<List<DocumentDto>>>() {
-            @Override
-            public void onResponse(Call<ApiResponse<List<DocumentDto>>> call, Response<ApiResponse<List<DocumentDto>>> response) {
-                if (isFinishing() || isDestroyed()) return;
-                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
-                    currentUserDocuments = response.body().data != null ? response.body().data : new ArrayList<>();
-                }
-                // 2. Fetch fresh user profile details
-                fetchFreshProfile();
-            }
-
-            @Override
-            public void onFailure(Call<ApiResponse<List<DocumentDto>>> call, Throwable t) {
-                if (isFinishing() || isDestroyed()) return;
-                fetchFreshProfile();
-            }
         });
-    }
-
-    private void fetchFreshProfile() {
-        if (profileCall != null) profileCall.cancel();
-        retrofit2.Call<ApiResponse<com.hafiztraveltours.app.network.ProfileResponseDto>> profileRequest =
-                ApiClient.getApiService().getMe();
-        profileCall = profileRequest;
-        profileRequest.enqueue(new Callback<ApiResponse<com.hafiztraveltours.app.network.ProfileResponseDto>>() {
-            @Override
-            public void onResponse(Call<ApiResponse<com.hafiztraveltours.app.network.ProfileResponseDto>> call, Response<ApiResponse<com.hafiztraveltours.app.network.ProfileResponseDto>> response) {
-                if (isFinishing() || isDestroyed()) return;
-                if (response.isSuccessful() && response.body() != null && response.body().isSuccess() && response.body().data != null) {
-                    if (response.body().data.user != null) {
-                        currentUserProfile = response.body().data.user;
-                        SessionManager session = SessionManager.getInstance(PassengerDetailsActivity.this);
-                        String tok = session.getToken();
-                        if (tok != null && !tok.trim().isEmpty()) {
-                            session.saveAuthSession(tok, currentUserProfile);
-                        } else {
-                            session.saveUser(currentUserProfile);
-                        }
-                    }
-                }
-                evaluateLeadProfileCompleteness();
-            }
-
-            @Override
-            public void onFailure(Call<ApiResponse<com.hafiztraveltours.app.network.ProfileResponseDto>> call, Throwable t) {
-                if (isFinishing() || isDestroyed()) return;
-                evaluateLeadProfileCompleteness();
-            }
-        });
-    }
-
-    private void evaluateLeadProfileCompleteness() {
-        missingProfileFields.clear();
-        PackageDetail pkg = bookingRequest.packageDetail;
-
-        boolean reqPassport = pkg != null ? pkg.requiresPassport : true;
-        boolean reqIc = pkg != null ? pkg.requiresIc : true;
-        boolean reqClothesSize = pkg != null ? pkg.requiresClothesSize : (pkg != null && pkg.isUmrah);
-        int reqValidityMonths = pkg != null && pkg.passportValidityMonths > 0 ? pkg.passportValidityMonths : 6;
-
-        if (currentUserProfile == null) {
-            currentUserProfile = SessionManager.getInstance(this).getUser();
-        }
-        if (currentUserProfile == null) {
-            currentUserProfile = new UserDto();
-        }
-
-        SharedPreferences pPrefs = com.hafiztraveltours.app.utils.SecurePrefs.wrap(this, "user_profile");
-        if ((currentUserProfile.name == null || currentUserProfile.name.trim().isEmpty())) {
-            currentUserProfile.name = pPrefs.getString("name", "");
-        }
-        if ((currentUserProfile.icNumber == null || currentUserProfile.icNumber.trim().isEmpty())) {
-            currentUserProfile.icNumber = pPrefs.getString("ic_no", "");
-        }
-        if ((currentUserProfile.passportNumber == null || currentUserProfile.passportNumber.trim().isEmpty())) {
-            currentUserProfile.passportNumber = pPrefs.getString("passport_no", "");
-        }
-        if ((currentUserProfile.passportExpiryDate == null || currentUserProfile.passportExpiryDate.trim().isEmpty())) {
-            currentUserProfile.passportExpiryDate = pPrefs.getString("passport_expiry", "");
-        }
-        if ((currentUserProfile.clothesSize == null || currentUserProfile.clothesSize.trim().isEmpty())) {
-            currentUserProfile.clothesSize = pPrefs.getString("clothes_size", "");
-        }
-        if ((currentUserProfile.nationality == null || currentUserProfile.nationality.trim().isEmpty())) {
-            currentUserProfile.nationality = pPrefs.getString("nationality", "");
-        }
-
-        if (currentUserProfile.name == null || currentUserProfile.name.trim().isEmpty()) {
-            missingProfileFields.add(getString(R.string.passenger_missing_name));
-        }
-
-        if (reqIc && (currentUserProfile.icNumber == null || currentUserProfile.icNumber.trim().isEmpty())) {
-            missingProfileFields.add(getString(R.string.passenger_missing_ic));
-        }
-
-        if (reqPassport) {
-            if (currentUserProfile.passportNumber == null || currentUserProfile.passportNumber.trim().isEmpty()) {
-                missingProfileFields.add(getString(R.string.passenger_missing_passport));
-            }
-            if (currentUserProfile.passportExpiryDate == null || currentUserProfile.passportExpiryDate.trim().isEmpty()) {
-                missingProfileFields.add(getString(R.string.passenger_missing_passport_expiry));
-            } else {
-                // Check passport validity (centralized rule; unparseable expiry fails closed)
-                if (!com.hafiztraveltours.app.utils.DateFormats.meetsValidityMonths(
-                        currentUserProfile.passportExpiryDate.trim(), reqValidityMonths)) {
-                    missingProfileFields.add(getString(R.string.passenger_missing_passport_validity, reqValidityMonths));
-                }
-            }
-
-            // Check passport document
-            boolean hasPassportDoc = false;
-            for (DocumentDto d : currentUserDocuments) {
-                if ("passport".equalsIgnoreCase(d.documentCode) && d.filePath != null && !d.filePath.isEmpty()) {
-                    hasPassportDoc = true;
-                    break;
-                }
-            }
-            if (!hasPassportDoc) {
-                missingProfileFields.add(getString(R.string.passenger_missing_passport_doc));
-            }
-        }
-
-        if (reqIc) {
-            boolean hasIcDoc = false;
-            for (DocumentDto d : currentUserDocuments) {
-                if ("ic".equalsIgnoreCase(d.documentCode) && d.filePath != null && !d.filePath.isEmpty()) {
-                    hasIcDoc = true;
-                    break;
-                }
-            }
-            if (!hasIcDoc) {
-                missingProfileFields.add(getString(R.string.passenger_missing_ic_doc));
-            }
-        }
-
-        if (reqClothesSize && (currentUserProfile.clothesSize == null || currentUserProfile.clothesSize.trim().isEmpty())) {
-            missingProfileFields.add(getString(R.string.passenger_missing_clothes_size));
-        }
-
-        isLeadProfileComplete = missingProfileFields.isEmpty();
-        renderLeadProfileState();
     }
 
     private void renderLeadProfileState() {
@@ -454,8 +290,40 @@ public class PassengerDetailsActivity extends BaseActivity {
             leadProfileContainer.addView(txtMissingHeader);
 
             StringBuilder sb = new StringBuilder();
-            for (String field : missingProfileFields) {
-                sb.append("• ").append(field).append("\n");
+            for (PassengerDetailsViewModel.MissingField field : missingFields) {
+                if (field == null || field.kind == null) continue;
+                String label;
+                switch (field.kind) {
+                    case NOT_LOGGED_IN:
+                        label = getString(R.string.passenger_not_logged_in);
+                        break;
+                    case NAME:
+                        label = getString(R.string.passenger_missing_name);
+                        break;
+                    case IC:
+                        label = getString(R.string.passenger_missing_ic);
+                        break;
+                    case PASSPORT:
+                        label = getString(R.string.passenger_missing_passport);
+                        break;
+                    case PASSPORT_EXPIRY:
+                        label = getString(R.string.passenger_missing_passport_expiry);
+                        break;
+                    case PASSPORT_VALIDITY:
+                        label = getString(R.string.passenger_missing_passport_validity, field.validityMonths);
+                        break;
+                    case PASSPORT_DOC:
+                        label = getString(R.string.passenger_missing_passport_doc);
+                        break;
+                    case IC_DOC:
+                        label = getString(R.string.passenger_missing_ic_doc);
+                        break;
+                    case CLOTHES_SIZE:
+                    default:
+                        label = getString(R.string.passenger_missing_clothes_size);
+                        break;
+                }
+                sb.append("• ").append(label).append("\n");
             }
             TextView txtMissingList = new TextView(this);
             txtMissingList.setText(sb.toString().trim());
@@ -849,12 +717,13 @@ public class PassengerDetailsActivity extends BaseActivity {
 
         // 2. Validate Total Pax Count vs Selected Booking Pax (exact match required)
         int totalPax = 1 + additionalTravellers.size();
-        if (totalPax != bookingRequest.adultPaxCount) {
-            if (totalPax < bookingRequest.adultPaxCount) {
-                Toast.makeText(this, getString(R.string.passenger_err_pax_count_mismatch, bookingRequest.adultPaxCount, totalPax, Math.max(0, bookingRequest.adultPaxCount - totalPax)), Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(this, getString(R.string.passenger_err_pax_over, totalPax, bookingRequest.adultPaxCount, totalPax - bookingRequest.adultPaxCount), Toast.LENGTH_LONG).show();
-            }
+        PassengerDetailsViewModel.PaxCheck paxCheck =
+                passengerViewModel.checkPaxCount(totalPax, bookingRequest.adultPaxCount);
+        if (paxCheck == PassengerDetailsViewModel.PaxCheck.UNDER) {
+            Toast.makeText(this, getString(R.string.passenger_err_pax_count_mismatch, bookingRequest.adultPaxCount, totalPax, Math.max(0, bookingRequest.adultPaxCount - totalPax)), Toast.LENGTH_LONG).show();
+            return;
+        } else if (paxCheck == PassengerDetailsViewModel.PaxCheck.OVER) {
+            Toast.makeText(this, getString(R.string.passenger_err_pax_over, totalPax, bookingRequest.adultPaxCount, totalPax - bookingRequest.adultPaxCount), Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -864,6 +733,7 @@ public class PassengerDetailsActivity extends BaseActivity {
         boolean reqIc = pkg != null ? pkg.requiresIc : true;
         View firstErrorView = null;
         boolean allValid = true;
+        java.util.List<PassengerDetailsViewModel.TravellerInput> travellerInputs = new java.util.ArrayList<>();
 
         for (AdditionalTravellerHolder holder : additionalTravellers) {
             if (holder.errorName != null) holder.errorName.setVisibility(View.GONE);
@@ -871,48 +741,45 @@ public class PassengerDetailsActivity extends BaseActivity {
             if (holder.errorPassport != null) holder.errorPassport.setVisibility(View.GONE);
             if (holder.errorPassportExpiry != null) holder.errorPassportExpiry.setVisibility(View.GONE);
 
-            String name = holder.inputName.getText().toString().trim();
-            if (com.hafiztraveltours.app.utils.Validator.fullName(name, R.string.passenger_err_name_required) != 0) {
+            PassengerDetailsViewModel.TravellerInput in = readTravellerInput(holder);
+            travellerInputs.add(in);
+            PassengerDetailsViewModel.TravellerErrors errors =
+                    passengerViewModel.validateTraveller(in, reqPassport, reqIc);
+
+            if (errors.nameErr != 0) {
                 if (holder.errorName != null) {
-                    holder.errorName.setText(getString(R.string.passenger_err_name_required));
+                    holder.errorName.setText(getString(errors.nameErr));
                     holder.errorName.setVisibility(View.VISIBLE);
                 }
                 allValid = false;
                 if (firstErrorView == null) firstErrorView = holder.inputName;
             }
 
-            if (reqIc && holder.inputIc != null) {
-                String ic = holder.inputIc.getText().toString().trim();
-                if (com.hafiztraveltours.app.utils.Validator.travelId(ic, R.string.passenger_err_ic_required) != 0) {
-                    if (holder.errorIc != null) {
-                        holder.errorIc.setText(getString(R.string.passenger_err_ic_required));
-                        holder.errorIc.setVisibility(View.VISIBLE);
-                    }
-                    allValid = false;
-                    if (firstErrorView == null) firstErrorView = holder.inputIc;
+            if (reqIc && holder.inputIc != null && errors.icErr != 0) {
+                if (holder.errorIc != null) {
+                    holder.errorIc.setText(getString(errors.icErr));
+                    holder.errorIc.setVisibility(View.VISIBLE);
                 }
+                allValid = false;
+                if (firstErrorView == null) firstErrorView = holder.inputIc;
             }
 
-            if (reqPassport && holder.inputPassport != null) {
-                String pass = holder.inputPassport.getText().toString().trim();
-                if (com.hafiztraveltours.app.utils.Validator.travelId(pass, R.string.passenger_err_passport_required) != 0) {
-                    if (holder.errorPassport != null) {
-                        holder.errorPassport.setText(getString(R.string.passenger_err_passport_required));
-                        holder.errorPassport.setVisibility(View.VISIBLE);
-                    }
-                    allValid = false;
-                    if (firstErrorView == null) firstErrorView = holder.inputPassport;
+            if (reqPassport && holder.inputPassport != null && errors.passportErr != 0) {
+                if (holder.errorPassport != null) {
+                    holder.errorPassport.setText(getString(errors.passportErr));
+                    holder.errorPassport.setVisibility(View.VISIBLE);
                 }
+                allValid = false;
+                if (firstErrorView == null) firstErrorView = holder.inputPassport;
+            }
 
-                String passExp = holder.inputPassportExpiry != null ? holder.inputPassportExpiry.getText().toString().trim() : "";
-                if (com.hafiztraveltours.app.utils.Validator.apiDate(passExp, R.string.passenger_err_passport_expiry_required, R.string.passenger_err_passport_expiry_required) != 0) {
-                    if (holder.errorPassportExpiry != null) {
-                        holder.errorPassportExpiry.setText(getString(R.string.passenger_err_passport_expiry_required));
-                        holder.errorPassportExpiry.setVisibility(View.VISIBLE);
-                    }
-                    allValid = false;
-                    if (firstErrorView == null) firstErrorView = holder.inputPassportExpiry;
+            if (reqPassport && holder.inputPassportExpiry != null && errors.expiryErr != 0) {
+                if (holder.errorPassportExpiry != null) {
+                    holder.errorPassportExpiry.setText(getString(errors.expiryErr));
+                    holder.errorPassportExpiry.setVisibility(View.VISIBLE);
                 }
+                allValid = false;
+                if (firstErrorView == null) firstErrorView = holder.inputPassportExpiry;
             }
         }
 
@@ -922,58 +789,44 @@ public class PassengerDetailsActivity extends BaseActivity {
             return;
         }
 
-        // 4. Construct BookingRequest.passengers snapshot
+        // 4. Construct BookingRequest.passengers snapshot (frozen; later edits can't mutate it)
         bookingRequest.passengers.clear();
 
-        // Lead passenger (Profile Snapshot — frozen here; later profile edits can't mutate it)
-        BookingRequest.Passenger leadP = com.hafiztraveltours.app.utils.TravellerMapper.leadFromUser(
-                this,
-                currentUserProfile,
-                SessionManager.getInstance(this).getUserPhone(),
-                SessionManager.getInstance(this).getUserEmail(),
-                "");
-
-        bookingRequest.passengers.add(leadP);
+        // Lead passenger (Profile Snapshot)
+        bookingRequest.passengers.add(passengerViewModel.buildLeadPassenger(currentUserProfile));
 
         // Additional passengers (Manual Input Snapshot)
-        for (int i = 0; i < additionalTravellers.size(); i++) {
-            AdditionalTravellerHolder h = additionalTravellers.get(i);
-            BookingRequest.Passenger p = new BookingRequest.Passenger();
-            p.isLead = false;
-            p.title = h.inputTitle != null ? h.inputTitle.getText().toString().trim() : getString(R.string.default_title_mr);
-            p.fullName = h.inputName.getText().toString().trim();
-            p.icNumber = h.inputIc != null ? h.inputIc.getText().toString().trim() : "";
-            p.passportNumber = h.inputPassport != null ? h.inputPassport.getText().toString().trim() : "";
-            p.passportExpiryDate = h.inputPassportExpiry != null ? h.inputPassportExpiry.getText().toString().trim() : "";
-            p.issuingCountry = h.inputIssuingCountry != null ? h.inputIssuingCountry.getText().toString().trim() : getString(R.string.default_country);
-            p.dateOfBirth = h.inputDob != null ? h.inputDob.getText().toString().trim() : "";
-            p.gender = h.inputGender != null ? h.inputGender.getText().toString().trim() : "";
-            p.nationality = h.inputNationality != null ? h.inputNationality.getText().toString().trim() : getString(R.string.default_nationality);
-            p.clothesSize = h.inputClothesSize != null ? h.inputClothesSize.getText().toString().trim() : "";
-            p.icPassportNumber = (!p.passportNumber.isEmpty()) ? p.passportNumber : p.icNumber;
-
-            // Resolve Mahram Selection
-            if (h.inputMahram != null) {
-                String mText = h.inputMahram.getText().toString().trim();
-                if (!mText.isEmpty()) {
-                    try {
-                        String idxStr = mText.split("\\.")[0].trim();
-                        p.mahramIndex = Integer.parseInt(idxStr) - 1; // 0-based index
-                    } catch (Exception ignored) {}
-                }
-            }
-            if (h.inputRelationship != null) {
-                p.relationship = h.inputRelationship.getText().toString().trim();
-            }
-
-            p.isComplete = true;
-            bookingRequest.passengers.add(p);
+        for (PassengerDetailsViewModel.TravellerInput in : travellerInputs) {
+            bookingRequest.passengers.add(passengerViewModel.buildAdditionalPassenger(in));
         }
 
         // Navigate to Booking Summary
         Intent intent = new Intent(this, BookingSummaryActivity.class);
         intent.putExtra(BookingSummaryActivity.EXTRA_BOOKING_REQUEST, bookingRequest);
         startActivity(intent);
+    }
+
+    /** Reads card inputs; null marks fields whose input view doesn't exist (not applicable). */
+    private PassengerDetailsViewModel.TravellerInput readTravellerInput(AdditionalTravellerHolder holder) {
+        PassengerDetailsViewModel.TravellerInput in = new PassengerDetailsViewModel.TravellerInput();
+        in.title = holder.inputTitle != null ? holder.inputTitle.getText().toString().trim() : null;
+        in.fullName = holder.inputName.getText().toString().trim();
+        in.icNumber = holder.inputIc != null ? holder.inputIc.getText().toString().trim() : null;
+        in.passportNumber = holder.inputPassport != null ? holder.inputPassport.getText().toString().trim() : null;
+        in.passportExpiryDate = holder.inputPassportExpiry != null
+                ? holder.inputPassportExpiry.getText().toString().trim() : null;
+        in.issuingCountry = holder.inputIssuingCountry != null
+                ? holder.inputIssuingCountry.getText().toString().trim() : null;
+        in.dateOfBirth = holder.inputDob != null ? holder.inputDob.getText().toString().trim() : null;
+        in.gender = holder.inputGender != null ? holder.inputGender.getText().toString().trim() : null;
+        in.nationality = holder.inputNationality != null
+                ? holder.inputNationality.getText().toString().trim() : null;
+        in.clothesSize = holder.inputClothesSize != null
+                ? holder.inputClothesSize.getText().toString().trim() : null;
+        in.mahramText = holder.inputMahram != null ? holder.inputMahram.getText().toString().trim() : null;
+        in.relationship = holder.inputRelationship != null
+                ? holder.inputRelationship.getText().toString().trim() : null;
+        return in;
     }
 
     private int dp(int value) {

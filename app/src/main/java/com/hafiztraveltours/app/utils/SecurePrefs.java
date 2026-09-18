@@ -132,7 +132,7 @@ public final class SecurePrefs {
             this.alias = alias;
         }
 
-        /** Decrypts a stored payload ("T:<raw>"); falls back to legacy raw plaintext. */
+        /** Decrypts a stored payload ("S:"/"B:"/"I:"/...); falls back to legacy raw plaintext. */
         private String decode(String stored) {
             if (stored == null) return null;
             if (stored.startsWith(ENC_PREFIX)) {

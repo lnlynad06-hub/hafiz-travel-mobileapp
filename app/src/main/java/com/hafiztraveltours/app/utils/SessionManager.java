@@ -16,6 +16,19 @@ import android.content.SharedPreferences;
 import com.google.gson.Gson;
 import com.hafiztraveltours.app.network.UserDto;
 
+/**
+ * Session single source of truth (Phase 5).
+ *
+ * <p>Ownership:
+ * <ul>
+ *   <li>Auth token + user JSON live here, encrypted via SecurePrefs ("hafiz_travel_session").</li>
+ *   <li>{@code ApiClient}'s in-memory token is a write-only copy, synchronized from here
+ *       through {@link #syncApiToken()} — the ONLY place that calls
+ *       {@code ApiClient.setAuthToken()} (save, clear, init). Getters never touch ApiClient.</li>
+ *   <li>Profile updates persist user data only and can never overwrite a stored token
+ *       with null/empty (see {@link #saveAuthSession}).</li>
+ * </ul>
+ */
 public class SessionManager {
 
     private static final String PREF_NAME = "hafiz_travel_session";
@@ -31,22 +44,28 @@ public class SessionManager {
     public SessionManager(Context context) {
         this.prefs = SecurePrefs.wrap(context.getApplicationContext(), PREF_NAME);
         this.gson = new Gson();
-        String savedToken = prefs.getString(KEY_AUTH_TOKEN, "");
-        if (savedToken != null && !savedToken.trim().isEmpty()) {
-            ApiClient.setAuthToken(savedToken.trim());
-        }
+        syncApiToken();
     }
 
     public static synchronized SessionManager getInstance(Context context) {
         if (instance == null) {
             instance = new SessionManager(context);
-        } else {
-            String savedToken = instance.prefs.getString(KEY_AUTH_TOKEN, "");
-            if (savedToken != null && !savedToken.trim().isEmpty()) {
-                ApiClient.setAuthToken(savedToken.trim());
-            }
         }
         return instance;
+    }
+
+    /**
+     * The single synchronization point for the in-memory Retrofit token.
+     * Copies the stored token into ApiClient, or clears ApiClient when no token
+     * is stored (e.g. after logout). Called on init, save and clear only.
+     */
+    private void syncApiToken() {
+        String savedToken = prefs.getString(KEY_AUTH_TOKEN, "");
+        if (savedToken != null && !savedToken.trim().isEmpty()) {
+            ApiClient.setAuthToken(savedToken.trim());
+        } else {
+            ApiClient.setAuthToken(null);
+        }
     }
 
     public void saveAuthSession(String token, UserDto user) {
@@ -55,7 +74,6 @@ public class SessionManager {
         if (hasToken) {
             editor.putBoolean(KEY_IS_LOGGED_IN, true);
             editor.putString(KEY_AUTH_TOKEN, token.trim());
-            ApiClient.setAuthToken(token.trim());
         } else if (isLoggedIn() && getToken() != null && !getToken().trim().isEmpty()) {
             editor.putBoolean(KEY_IS_LOGGED_IN, true);
         } else {
@@ -65,6 +83,7 @@ public class SessionManager {
             editor.putString(KEY_USER_DATA, gson.toJson(user));
         }
         editor.apply();
+        syncApiToken();
     }
 
     public void saveUser(UserDto user) {
@@ -77,20 +96,10 @@ public class SessionManager {
         return prefs.getBoolean(KEY_IS_LOGGED_IN, false);
     }
 
+    /** Pure read — never touches ApiClient (see {@link #syncApiToken()}). */
     public String getToken() {
         String token = prefs.getString(KEY_AUTH_TOKEN, "");
-        if (token != null && !token.trim().isEmpty()) {
-            ApiClient.setAuthToken(token.trim());
-        }
-        return token;
-    }
-
-    public String getAuthorizationHeader() {
-        String token = getToken();
-        if (token != null && !token.isEmpty()) {
-            return "Bearer " + token;
-        }
-        return "";
+        return token != null ? token : "";
     }
 
     public UserDto getUser() {
@@ -129,11 +138,6 @@ public class SessionManager {
         return user != null && user.phone != null ? user.phone : "";
     }
 
-    public String getUserId() {
-        UserDto user = getUser();
-        return user != null && user.id != null ? user.id : "";
-    }
-
     public String getAuthToken() {
         return getToken();
     }
@@ -145,7 +149,7 @@ public class SessionManager {
                 .remove(KEY_USER_DATA)
                 .remove(KEY_PROFILE_STATS)
                 .apply();
-        ApiClient.setAuthToken(null);
+        syncApiToken();
     }
 
     public void saveProfileStats(com.hafiztraveltours.app.models.ProfileStatsDto stats) {
