@@ -10,10 +10,15 @@ import com.hafiztraveltours.app.views.*;
 import com.hafiztraveltours.app.ui.*;
 
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * UI/domain model for the booking flow (H4). Built ONLY by {@link #fromUmrahPackage},
+ * passed between booking Activities via Intent extras. Holds locale-neutral keys and
+ * backend IDs (departures, room keys); all display text is resolved by Activities
+ * through string resources. Flight/route display stays on the source {@link UmrahPackage}.
+ */
 public class PackageDetail implements java.io.Serializable {
 
     public String id;
@@ -34,6 +39,8 @@ public class PackageDetail implements java.io.Serializable {
     public List<NightBreakdown> nightsBreakdown = new ArrayList<>();
     public String departureDatesNote;
     public List<String> availableDepartureDates = new ArrayList<>();
+    /** Departure options carrying the real backend ID (availableDepartureDates holds display labels only). */
+    public List<DepartureOption> availableDepartures = new ArrayList<>();
     public List<HotelInfo> hotels = new ArrayList<>();
     public List<ItineraryDay> itinerary = new ArrayList<>();
     public List<ImportantNote> importantNotes = new ArrayList<>();
@@ -106,10 +113,31 @@ public class PackageDetail implements java.io.Serializable {
 
     public static class PriceOption implements java.io.Serializable {
         public String price;
+        /** Locale-neutral room key ("quint"|"quad"|"triple"|"double"|"single"|"from"|"standard"). */
+        public String labelKey;
+        /** Legacy display label (fallback only; UI resolves labelKey via RoomLabels). */
         public String occupancyLabel;
-        public PriceOption(String price, String occupancyLabel) {
+        public PriceOption(String price, String labelKey, String occupancyLabel) {
             this.price = price;
+            this.labelKey = labelKey;
             this.occupancyLabel = occupancyLabel;
+        }
+    }
+
+    /** A selectable departure: backend ID + raw dates; the UI builds the localized label. */
+    public static class DepartureOption implements java.io.Serializable {
+        /** Raw `departures[].id` from the API (numeric string). May be null for legacy fallbacks. */
+        public String id;
+        /** Raw API dates (may be null). */
+        public String departureDate;
+        public String returnDate;
+        /** Pre-built display label (legacy fallback). */
+        public String label;
+        public DepartureOption(String id, String departureDate, String returnDate, String label) {
+            this.id = id;
+            this.departureDate = departureDate;
+            this.returnDate = returnDate;
+            this.label = label != null ? label : "";
         }
     }
 
@@ -132,6 +160,20 @@ public class PackageDetail implements java.io.Serializable {
 
         boolean isUmrah = pkg.isUmrah();
         d.isUmrah = isUmrah;
+
+        // Package-driven requirements & type (H4): copy backend values when present,
+        // otherwise keep the model defaults. Previously these were never copied, so
+        // PassengerDetails always saw the defaults regardless of the API.
+        if (pkg.packageType != null && !pkg.packageType.trim().isEmpty()) {
+            d.packageType = pkg.packageType.trim();
+        }
+        if (pkg.requiresPassport != null) d.requiresPassport = pkg.requiresPassport;
+        if (pkg.requiresIc != null) d.requiresIc = pkg.requiresIc;
+        if (pkg.requiresMahram != null) d.requiresMahram = pkg.requiresMahram;
+        if (pkg.requiresClothesSize != null) d.requiresClothesSize = pkg.requiresClothesSize;
+        if (pkg.passportValidityMonths != null && pkg.passportValidityMonths > 0) {
+            d.passportValidityMonths = pkg.passportValidityMonths;
+        }
 
         // 1. Nights Breakdown — city labels use slot index, translated by Activity
         // slot 0=Makkah/Hotel1, 1=Madinah/Hotel2, 2=Taif/Hotel3
@@ -209,24 +251,25 @@ public class PackageDetail implements java.io.Serializable {
             }
         }
 
-        // 4. Pecahan Harga Bilik (Room Pricing Tiers)
+        // 4. Pecahan Harga Bilik (Room Pricing Tiers) — store locale-neutral keys;
+        // the UI resolves them via RoomLabels (EN/MS). No hardcoded language here.
         if (pkg.priceQuint != null && !pkg.priceQuint.trim().isEmpty() && !pkg.priceQuint.equals("0.00")) {
-            d.priceOptions.add(new PriceOption(formatCurrency(pkg.priceQuint), "Bilik Berlima (Quint)"));
+            d.priceOptions.add(new PriceOption(formatCurrency(pkg.priceQuint), "quint", "quint"));
         }
         if (pkg.priceQuad != null && !pkg.priceQuad.trim().isEmpty() && !pkg.priceQuad.equals("0.00")) {
-            d.priceOptions.add(new PriceOption(formatCurrency(pkg.priceQuad), "Bilik Berempat (Quad)"));
+            d.priceOptions.add(new PriceOption(formatCurrency(pkg.priceQuad), "quad", "quad"));
         }
         if (pkg.priceTriple != null && !pkg.priceTriple.trim().isEmpty() && !pkg.priceTriple.equals("0.00")) {
-            d.priceOptions.add(new PriceOption(formatCurrency(pkg.priceTriple), "Bilik Bertiga (Triple)"));
+            d.priceOptions.add(new PriceOption(formatCurrency(pkg.priceTriple), "triple", "triple"));
         }
         if (pkg.priceDouble != null && !pkg.priceDouble.trim().isEmpty() && !pkg.priceDouble.equals("0.00")) {
-            d.priceOptions.add(new PriceOption(formatCurrency(pkg.priceDouble), "Bilik Berdua (Double)"));
+            d.priceOptions.add(new PriceOption(formatCurrency(pkg.priceDouble), "double", "double"));
         }
         if (pkg.priceSingle != null && !pkg.priceSingle.trim().isEmpty() && !pkg.priceSingle.equals("0.00")) {
-            d.priceOptions.add(new PriceOption(formatCurrency(pkg.priceSingle), "Bilik Perseorangan (Single)"));
+            d.priceOptions.add(new PriceOption(formatCurrency(pkg.priceSingle), "single", "single"));
         }
         if (d.priceOptions.isEmpty() && d.price != null && !d.price.isEmpty()) {
-            d.priceOptions.add(new PriceOption(d.price, "Harga Bermula Dari"));
+            d.priceOptions.add(new PriceOption(d.price, "from", "from"));
         }
 
         // 5. Termasuk (Inclusions) & Tidak Termasuk (Exclusions)
@@ -247,8 +290,9 @@ public class PackageDetail implements java.io.Serializable {
         // 7. Nota Penting & Syarat-Syarat
         if (pkg.importantNotes != null && !pkg.importantNotes.isEmpty()) {
             ImportantNote note = new ImportantNote();
-            note.title = "Syarat & Garis Panduan Pakej";
-            note.badge = "Penting";
+            // Locale-neutral keys only (never displayed directly; UI uses resources).
+            note.title = "terms_guidelines";
+            note.badge = "important";
             note.bullets.addAll(pkg.importantNotes);
             d.importantNotes.add(note);
         }
@@ -261,7 +305,7 @@ public class PackageDetail implements java.io.Serializable {
             d.cancellationPolicy.addAll(pkg.cancellationPolicy);
         }
 
-        // 8. Departures
+        // 8. Departures — keep the backend ID alongside the display label (C1).
         if (pkg.departures != null && !pkg.departures.isEmpty()) {
             for (UmrahPackage.DepartureItem item : pkg.departures) {
                 if (item.departureDate != null && !item.departureDate.isEmpty()) {
@@ -270,6 +314,7 @@ public class PackageDetail implements java.io.Serializable {
                         label += " hingga " + item.returnDate;
                     }
                     d.availableDepartureDates.add(label);
+                    d.availableDepartures.add(new DepartureOption(item.id, item.departureDate, item.returnDate, label));
                 }
             }
         }
@@ -294,13 +339,6 @@ public class PackageDetail implements java.io.Serializable {
     }
 
     private static String formatCurrency(String raw) {
-        if (raw == null) return "RM -";
-        try {
-            double val = Double.parseDouble(raw.replaceAll("[^0-9.]", ""));
-            DecimalFormat df = new DecimalFormat("#,##0");
-            return "RM " + df.format(val);
-        } catch (Exception e) {
-            return "RM " + raw;
-        }
+        return com.hafiztraveltours.app.utils.MoneyFormat.formatRaw(raw);
     }
 }

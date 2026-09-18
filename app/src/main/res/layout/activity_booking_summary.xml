@@ -29,14 +29,14 @@
             android:padding="10dp"
             android:src="@drawable/ic_back"
             app:tint="@color/text_dark"
-            android:contentDescription="Kembali" />
+            android:contentDescription="@string/content_desc_back" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_weight="1"
-            android:text="Semakan Tempahan"
+            android:text="@string/summary_title"
             android:textColor="@color/text_dark"
             android:textSize="17sp"
             android:textStyle="bold" />
@@ -75,7 +75,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="01 Pakej ✓"
+                    android:text="@string/summary_step_package"
                     android:textColor="@color/text_gray"
                     android:textSize="11sp" />
 
@@ -91,7 +91,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="02 Jemaah ✓"
+                    android:text="@string/summary_step_travellers"
                     android:textColor="@color/text_gray"
                     android:textSize="11sp" />
 
@@ -107,7 +107,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="03 Semakan"
+                    android:text="@string/summary_step_review"
                     android:textColor="@color/brand_magenta"
                     android:textSize="11sp"
                     android:textStyle="bold" />
@@ -124,7 +124,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="04 Bayaran"
+                    android:text="@string/summary_step_payment"
                     android:textColor="@color/text_gray"
                     android:textSize="11sp" />
 
@@ -142,7 +142,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Ringkasan Pakej Terpilih"
+                    android:text="@string/summary_card_package"
                     android:textColor="@color/brand_magenta"
                     android:textSize="12sp"
                     android:textStyle="bold" />
@@ -214,7 +214,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Senarai Jemaah"
+                    android:text="@string/summary_card_travellers"
                     android:textColor="@color/brand_magenta"
                     android:textSize="12sp"
                     android:textStyle="bold" />
@@ -240,7 +240,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Ringkasan Bayaran"
+                    android:text="@string/summary_card_payment"
                     android:textColor="@color/brand_magenta"
                     android:textSize="12sp"
                     android:textStyle="bold" />
@@ -293,7 +293,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Jumlah Keseluruhan"
+                        android:text="@string/summary_grand_total"
                         android:textColor="@color/text_dark"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -323,7 +323,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Pengesahan Fasa 2 Tamat"
+                    android:text="@string/summary_phase2_title"
                     android:textColor="@color/brand_magenta"
                     android:textSize="13sp"
                     android:textStyle="bold" />
@@ -332,7 +332,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="Maklumat tempahan dan jemaah telah berjaya disemak. Integrasi modul pembayaran rasmi &amp; penyerahan backend akan dilaksanakan dalam Fasa 3."
+                    android:text="@string/summary_phase2_body"
                     android:textColor="@color/text_dark"
                     android:textSize="12sp"
                     android:lineSpacingExtra="2dp" />
@@ -366,7 +366,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TERUSKAN KE PEMBAYARAN (FASA 3)"
+                android:text="@string/summary_continue_payment"
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 android:textStyle="bold" />

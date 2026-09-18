@@ -54,7 +54,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Close"
+            android:contentDescription="@string/content_desc_close"
             android:padding="6dp"
             android:rotation="270"
             android:src="@drawable/ic_back"

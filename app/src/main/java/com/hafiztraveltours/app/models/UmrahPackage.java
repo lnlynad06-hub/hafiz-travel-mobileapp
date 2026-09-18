@@ -12,6 +12,13 @@ import com.hafiztraveltours.app.ui.*;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * API response DTO for packages (H4). Mirrors the Laravel JSON 1:1 — field names and
+ * types are contractual, do not rename. Also carries list helpers (filtering, price
+ * parsing). Convert to {@link PackageDetail} via {@code PackageDetail.fromUmrahPackage()}
+ * before showing booking UI; raw flight/route fields are read directly by
+ * PackageDetailActivity from the DTO.
+ */
 public class UmrahPackage implements java.io.Serializable {
     @SerializedName("id")
     public String id;
@@ -170,8 +177,10 @@ public class UmrahPackage implements java.io.Serializable {
     public java.util.List<ImageItem> images;
 
     public static class ImageItem implements java.io.Serializable {
+        // Backend gallery image id (integer PK). String receives both JSON numbers
+        // and numeric strings without crashing (Gson coerces numbers to String).
         @SerializedName("id")
-        public Object id;
+        public String id;
 
         @SerializedName("url")
         public String url;
@@ -184,6 +193,9 @@ public class UmrahPackage implements java.io.Serializable {
     public java.util.List<DepartureItem> departures;
 
     public static class DepartureItem implements java.io.Serializable {
+        // Backend departures PK is an integer, but kept as String on receive:
+        // Gson coerces JSON numbers into String safely, while Integer would crash
+        // on numeric strings. Parsed to Integer at send time (PaymentSelection).
         @SerializedName("id")
         public String id;
 
@@ -292,19 +304,11 @@ public class UmrahPackage implements java.io.Serializable {
     }
 
     public double getNumericPrice() {
+        // Preserved semantics: startingPrice wins when present (even "0.00"), else price.
         if (startingPrice != null && !startingPrice.trim().isEmpty()) {
-            try {
-                String clean = startingPrice.replaceAll("[^0-9.]", "");
-                if (!clean.isEmpty()) return Double.parseDouble(clean);
-            } catch (Exception ignored) {}
+            return com.hafiztraveltours.app.utils.MoneyFormat.parseAmount(startingPrice);
         }
-        if (price != null && !price.trim().isEmpty()) {
-            try {
-                String clean = price.replaceAll("[^0-9.]", "");
-                if (!clean.isEmpty()) return Double.parseDouble(clean);
-            } catch (Exception ignored) {}
-        }
-        return 0.0;
+        return com.hafiztraveltours.app.utils.MoneyFormat.parseAmount(price);
     }
 
     public boolean matchesCategory(String filterCategory) {

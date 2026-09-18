@@ -41,7 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class AllPackagesActivity extends AppCompatActivity {
+public class AllPackagesActivity extends BaseActivity {
 
     public static final String EXTRA_OPEN_FILTER = "extra_open_filter";
 
@@ -57,12 +57,15 @@ public class AllPackagesActivity extends AppCompatActivity {
     private LinearLayout activeFiltersContainer;
     private RecyclerView popularRecyclerView, umrahRecyclerView, tourRecyclerView, searchResultsRecyclerView;
     private TextInputEditText searchInput;
+    private retrofit2.Call<?> packagesCall;
 
     @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(LocaleHelper.applySavedLocale(newBase));
+    protected void onDestroy() {
+        if (packagesCall != null) packagesCall.cancel();
+        super.onDestroy();
     }
 
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,7 +129,12 @@ public class AllPackagesActivity extends AppCompatActivity {
     }
 
     private void loadAllPackages() {
-        ApiClient.getApiService().getPackages(null, null, null, null).enqueue(new Callback<ApiResponse<List<UmrahPackage>>>() {
+        // M8 single-flight: a new load cancels the previous identical request.
+        if (packagesCall != null) packagesCall.cancel();
+        Call<ApiResponse<List<UmrahPackage>>> call =
+                ApiClient.getApiService().getPackages(null, null, null, null);
+        packagesCall = call;
+        call.enqueue(new Callback<ApiResponse<List<UmrahPackage>>>() {
             @Override
             public void onResponse(Call<ApiResponse<List<UmrahPackage>>> call, Response<ApiResponse<List<UmrahPackage>>> response) {
                 androidx.swiperefreshlayout.widget.SwipeRefreshLayout swipeRefresh = findViewById(R.id.allPackagesSwipeRefresh);
@@ -162,13 +170,11 @@ public class AllPackagesActivity extends AppCompatActivity {
                     }
                 }
 
-                popularRecyclerView.setAdapter(new PackagePopularAdapter(AllPackagesActivity.this, popularCombined, true));
-                umrahRecyclerView.setAdapter(new PackagePopularAdapter(AllPackagesActivity.this, allUmrah, false));
-                tourRecyclerView.setAdapter(new PackagePopularAdapter(AllPackagesActivity.this, allTour, false));
-
-                if (getIntent().getBooleanExtra(EXTRA_OPEN_FILTER, false)) {
-                    openFilterBottomSheet();
-                }
+                popularRecyclerView.setAdapter(new PackageCardAdapter(AllPackagesActivity.this, popularCombined, true));
+                umrahRecyclerView.setAdapter(new PackageCardAdapter(AllPackagesActivity.this, allUmrah, false));
+                tourRecyclerView.setAdapter(new PackageCardAdapter(AllPackagesActivity.this, allTour, false));
+                // NOTE: EXTRA_OPEN_FILTER is consumed in onCreate only — opening here too
+                // stacked a second filter sheet on top of the first (M8).
             }
 
             @Override
@@ -187,11 +193,8 @@ public class AllPackagesActivity extends AppCompatActivity {
                 allUmrah.clear();
                 allTour.clear();
                 popularCombined.clear();
-                Toast.makeText(AllPackagesActivity.this, getString(R.string.err_server_connection), Toast.LENGTH_SHORT).show();
-
-                if (getIntent().getBooleanExtra(EXTRA_OPEN_FILTER, false)) {
-                    openFilterBottomSheet();
-                }
+                Toast.makeText(AllPackagesActivity.this, com.hafiztraveltours.app.network.ApiErrors.userMessage(AllPackagesActivity.this, t, R.string.err_server_connection), Toast.LENGTH_SHORT).show();
+                // NOTE: no filter-sheet open here (see onResponse note above).
             }
         });
     }
@@ -231,7 +234,7 @@ public class AllPackagesActivity extends AppCompatActivity {
         searchResultsContainer.setVisibility(filteredResults.isEmpty() ? View.GONE : View.VISIBLE);
         emptyText.setVisibility(filteredResults.isEmpty() ? View.VISIBLE : View.GONE);
 
-        searchResultsRecyclerView.setAdapter(new UmrahPackageAdapter(this, filteredResults, null));
+        searchResultsRecyclerView.setAdapter(new PackageCardAdapter(this, filteredResults, PackageCardAdapter.CardStyle.LIST, null));
     }
 
     private void renderActiveFilterChips() {

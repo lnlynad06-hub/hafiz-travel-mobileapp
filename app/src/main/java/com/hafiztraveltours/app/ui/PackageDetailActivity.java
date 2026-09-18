@@ -42,7 +42,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class PackageDetailActivity extends AppCompatActivity {
+public class PackageDetailActivity extends BaseActivity {
 
     public static final String EXTRA_PACKAGE_ID = "extra_package_id";
     public static final String EXTRA_COLLECTION = "extra_collection";
@@ -53,14 +53,14 @@ public class PackageDetailActivity extends AppCompatActivity {
         if (rawPackage != null && favoriteButton != null) {
             updateFavoriteState();
             favoriteButton.setOnClickListener(v -> {
-                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
                 FavoritesManager.handleFavoriteToggle(this, rawPackage, favoriteButton, isFav -> updateFavoriteState());
             });
         }
 
         if (shareButton != null) {
             shareButton.setOnClickListener(v -> {
-                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
                 String waNum = (detail != null && detail.companyWhatsapp != null && !detail.companyWhatsapp.trim().isEmpty())
                         ? detail.companyWhatsapp.trim()
                         : DEFAULT_WHATSAPP_NUMBER;
@@ -91,12 +91,17 @@ public class PackageDetailActivity extends AppCompatActivity {
     private PackageDetail detail;
     private UmrahPackage rawPackage;
     private int selectedPriceOptionIndex = 0;
+    private retrofit2.Call<?> detailCall;
+    private retrofit2.Call<?> relatedCall;
 
     @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(LocaleHelper.applySavedLocale(newBase));
+    protected void onDestroy() {
+        if (detailCall != null) detailCall.cancel();
+        if (relatedCall != null) relatedCall.cancel();
+        super.onDestroy();
     }
 
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,7 +148,12 @@ public class PackageDetailActivity extends AppCompatActivity {
     }
 
     private void loadPackage(String collection, String packageId) {
-        ApiClient.getApiService().getPackageDetail(packageId).enqueue(new Callback<ApiResponse<UmrahPackage>>() {
+        // M8 single-flight: a new load cancels the previous identical request.
+        if (detailCall != null) detailCall.cancel();
+        Call<ApiResponse<UmrahPackage>> call =
+                ApiClient.getApiService().getPackageDetail(packageId);
+        detailCall = call;
+        call.enqueue(new Callback<ApiResponse<UmrahPackage>>() {
             @Override
             public void onResponse(Call<ApiResponse<UmrahPackage>> call, Response<ApiResponse<UmrahPackage>> response) {
                 if (swipeRefreshLayout != null) {
@@ -156,7 +166,7 @@ public class PackageDetailActivity extends AppCompatActivity {
                     detail = PackageDetail.fromUmrahPackage(rawPackage);
                     renderAll();
                 } else {
-                    Toast.makeText(PackageDetailActivity.this, getString(R.string.err_package_not_found), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PackageDetailActivity.this, com.hafiztraveltours.app.network.ApiErrors.userMessage(PackageDetailActivity.this, response, R.string.err_package_not_found), Toast.LENGTH_SHORT).show();
                     finish();
                 }
             }
@@ -167,7 +177,7 @@ public class PackageDetailActivity extends AppCompatActivity {
                     swipeRefreshLayout.setRefreshing(false);
                 }
                 if (isFinishing() || isDestroyed()) return;
-                Toast.makeText(PackageDetailActivity.this, getString(R.string.err_package_load_failed), Toast.LENGTH_SHORT).show();
+                Toast.makeText(PackageDetailActivity.this, com.hafiztraveltours.app.network.ApiErrors.userMessage(PackageDetailActivity.this, t, R.string.err_package_load_failed), Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
@@ -220,13 +230,24 @@ public class PackageDetailActivity extends AppCompatActivity {
         addRelatedPackagesSection();     // 13. Related Packages
     }
 
+    /** Localized "departure to return" label for a departure option (C1/M7). */
+    private String formatDepartureOption(PackageDetail.DepartureOption opt) {
+        if (opt == null) return "";
+        if (opt.departureDate != null && !opt.departureDate.isEmpty()
+                && opt.returnDate != null && !opt.returnDate.isEmpty()) {
+            return getString(R.string.departure_range_format, opt.departureDate, opt.returnDate);
+        }
+        if (opt.departureDate != null && !opt.departureDate.isEmpty()) return opt.departureDate;
+        return opt.label != null ? opt.label : "";
+    }
+
     private void updateBottomPriceDisplay() {
         if (detail == null) return;
         if (detail.priceOptions != null && !detail.priceOptions.isEmpty() && selectedPriceOptionIndex >= 0 && selectedPriceOptionIndex < detail.priceOptions.size()) {
             PackageDetail.PriceOption opt = detail.priceOptions.get(selectedPriceOptionIndex);
             if (bottomPrice != null) bottomPrice.setText(opt.price);
             if (bottomPriceSublabel != null) {
-                bottomPriceSublabel.setText(getString(R.string.selected_room_label) + ": " + opt.occupancyLabel);
+                bottomPriceSublabel.setText(getString(R.string.selected_room_label) + ": " + com.hafiztraveltours.app.utils.RoomLabels.resolve(this, opt));
                 bottomPriceSublabel.setVisibility(View.VISIBLE);
             }
         } else {
@@ -286,9 +307,13 @@ public class PackageDetailActivity extends AppCompatActivity {
         title.setTextColor(getResources().getColor(R.color.text_dark));
         container.addView(title);
 
-        // Departure Date, Duration, Route Header Bar
+        // Departure Date, Duration, Route Header Bar — localized via availableDepartures (C1/M7).
         StringBuilder metaSb = new StringBuilder();
-        if (detail.availableDepartureDates != null && !detail.availableDepartureDates.isEmpty()) {
+        if (detail.availableDepartures != null && !detail.availableDepartures.isEmpty()) {
+            PackageDetail.DepartureOption first = detail.availableDepartures.get(0);
+            String label = formatDepartureOption(first);
+            if (!label.isEmpty()) metaSb.append("📅 ").append(label);
+        } else if (detail.availableDepartureDates != null && !detail.availableDepartureDates.isEmpty()) {
             metaSb.append("📅 ").append(detail.availableDepartureDates.get(0));
         } else if (rawPackage != null && rawPackage.departures != null && !rawPackage.departures.isEmpty()) {
             UmrahPackage.DepartureItem dep = rawPackage.departures.get(0);
@@ -539,13 +564,7 @@ public class PackageDetailActivity extends AppCompatActivity {
             headerRow.setGravity(Gravity.CENTER_VERTICAL);
 
             TextView occupancy = new TextView(this);
-            String labelStr = option.occupancyLabel;
-            if ("Bilik Berlima (Quint)".equalsIgnoreCase(labelStr)) labelStr = getString(R.string.room_quint);
-            else if ("Bilik Berempat (Quad)".equalsIgnoreCase(labelStr)) labelStr = getString(R.string.room_quad);
-            else if ("Bilik Bertiga (Triple)".equalsIgnoreCase(labelStr)) labelStr = getString(R.string.room_triple);
-            else if ("Bilik Berdua (Double)".equalsIgnoreCase(labelStr)) labelStr = getString(R.string.room_double);
-            else if ("Bilik Perseorangan (Single)".equalsIgnoreCase(labelStr)) labelStr = getString(R.string.room_single);
-            else if ("Harga Bermula Dari".equalsIgnoreCase(labelStr)) labelStr = getString(R.string.detail_price_from);
+            String labelStr = com.hafiztraveltours.app.utils.RoomLabels.resolve(this, option);
             occupancy.setText(labelStr);
             occupancy.setTextSize(12);
             occupancy.setTypeface(null, Typeface.BOLD);
@@ -584,7 +603,7 @@ public class PackageDetailActivity extends AppCompatActivity {
             card.addView(perPax);
 
             card.setOnClickListener(v -> {
-                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
                 selectedPriceOptionIndex = index;
                 renderRoomOptionCards(row);
                 updateBottomPriceDisplay();
@@ -750,7 +769,7 @@ public class PackageDetailActivity extends AppCompatActivity {
             card.addView(body);
 
             card.setOnClickListener(v -> {
-                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
                 boolean isExpanded = (body.getVisibility() == View.VISIBLE);
                 body.setVisibility(isExpanded ? View.GONE : View.VISIBLE);
                 chevron.setText(isExpanded ? "▼" : "▲");
@@ -1698,7 +1717,11 @@ public class PackageDetailActivity extends AppCompatActivity {
         if (rawPackage == null || rawPackage.category == null || rawPackage.category.trim().isEmpty()) return;
         String category = rawPackage.category.trim();
 
-        ApiClient.getApiService().getPackages(category, null, null, 1).enqueue(new Callback<ApiResponse<List<UmrahPackage>>>() {
+        if (relatedCall != null) relatedCall.cancel();
+        Call<ApiResponse<List<UmrahPackage>>> related =
+                ApiClient.getApiService().getPackages(category, null, null, 1);
+        relatedCall = related;
+        related.enqueue(new Callback<ApiResponse<List<UmrahPackage>>>() {
             @Override
             public void onResponse(Call<ApiResponse<List<UmrahPackage>>> call, Response<ApiResponse<List<UmrahPackage>>> response) {
                 if (isFinishing() || isDestroyed()) return;
@@ -1725,7 +1748,7 @@ public class PackageDetailActivity extends AppCompatActivity {
                         rvParams.bottomMargin = dp(16);
                         rv.setLayoutParams(rvParams);
 
-                        PackagePopularAdapter adapter = new PackagePopularAdapter(PackageDetailActivity.this, filtered, false);
+                        PackageCardAdapter adapter = new PackageCardAdapter(PackageDetailActivity.this, filtered, false);
                         rv.setAdapter(adapter);
 
                         container.addView(rv);

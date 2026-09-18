@@ -101,7 +101,7 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
         }
 
         view.findViewById(R.id.btnPaxDecrease).setOnClickListener(v -> {
-            v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+            com.hafiztraveltours.app.utils.HapticUtil.click(v);
             if (paxCount > 1) {
                 paxCount--;
                 updateUi();
@@ -109,7 +109,7 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
         });
 
         view.findViewById(R.id.btnPaxIncrease).setOnClickListener(v -> {
-            v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+            com.hafiztraveltours.app.utils.HapticUtil.click(v);
             if (paxCount < 10) {
                 paxCount++;
                 updateUi();
@@ -118,7 +118,7 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
 
         if (btnApplyPromo != null) {
             btnApplyPromo.setOnClickListener(v -> {
-                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
                 String code = inputPromo.getText().toString().trim().toUpperCase();
                 if (!code.isEmpty()) {
                     appliedPromoCode = code;
@@ -130,7 +130,7 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
         }
 
         view.findViewById(R.id.btnProceedToTravellers).setOnClickListener(v -> {
-            v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+            com.hafiztraveltours.app.utils.HapticUtil.click(v);
             proceedToTravellerDetails();
         });
 
@@ -139,20 +139,37 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
         updateUi();
     }
 
-    private List<String> getDepartureList() {
-        if (detail != null && detail.availableDepartureDates != null && !detail.availableDepartureDates.isEmpty()) {
-            return detail.availableDepartureDates;
+    private List<PackageDetail.DepartureOption> getDepartureOptions() {
+        if (detail != null && detail.availableDepartures != null && !detail.availableDepartures.isEmpty()) {
+            return detail.availableDepartures;
         }
-        List<String> fallback = new java.util.ArrayList<>();
-        fallback.add("15 Nov - 26 Nov 2026");
+        // Legacy fallback: display-only labels without a backend ID (departure_id stays null).
+        List<PackageDetail.DepartureOption> fallback = new java.util.ArrayList<>();
+        if (detail != null && detail.availableDepartureDates != null && !detail.availableDepartureDates.isEmpty()) {
+            for (String label : detail.availableDepartureDates) {
+                fallback.add(new PackageDetail.DepartureOption(null, null, null, label));
+            }
+        } else {
+            fallback.add(new PackageDetail.DepartureOption(null, null, null, "15 Nov - 26 Nov 2026"));
+        }
         return fallback;
+    }
+
+    private String formatDepartureLabel(PackageDetail.DepartureOption opt) {
+        if (opt == null) return "";
+        if (opt.departureDate != null && !opt.departureDate.isEmpty()
+                && opt.returnDate != null && !opt.returnDate.isEmpty()) {
+            return getString(R.string.departure_range_format, opt.departureDate, opt.returnDate);
+        }
+        if (opt.departureDate != null && !opt.departureDate.isEmpty()) return opt.departureDate;
+        return opt.label != null ? opt.label : "";
     }
 
     private void renderDepartureOptions() {
         if (containerDeparture == null) return;
         containerDeparture.removeAllViews();
 
-        List<String> list = getDepartureList();
+        List<PackageDetail.DepartureOption> list = getDepartureOptions();
         if (selectedDepartureIndex >= list.size()) {
             selectedDepartureIndex = 0;
         }
@@ -162,7 +179,7 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
             boolean isSelected = (i == selectedDepartureIndex);
 
             TextView chip = new TextView(requireContext());
-            chip.setText(list.get(i));
+            chip.setText(formatDepartureLabel(list.get(i)));
             chip.setTextSize(11);
             chip.setTypeface(null, Typeface.BOLD);
             chip.setPadding(dp(12), dp(8), dp(12), dp(8));
@@ -183,7 +200,7 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
             chip.setLayoutParams(p);
 
             chip.setOnClickListener(v -> {
-                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
                 selectedDepartureIndex = index;
                 renderDepartureOptions();
             });
@@ -217,7 +234,7 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
             headerRow.setGravity(Gravity.CENTER_VERTICAL);
 
             TextView label = new TextView(requireContext());
-            label.setText(opt.occupancyLabel);
+            label.setText(com.hafiztraveltours.app.utils.RoomLabels.resolve(requireContext(), opt));
             label.setTextSize(12);
             label.setTypeface(null, Typeface.BOLD);
             label.setTextColor(getResources().getColor(isSelected ? R.color.brand_magenta : R.color.text_dark));
@@ -251,7 +268,7 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
             card.addView(perPax);
 
             card.setOnClickListener(v -> {
-                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
                 selectedRoomIndex = index;
                 renderRoomOptions();
                 updateUi();
@@ -264,12 +281,12 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
     private void updateUi() {
         txtPaxCount.setText(getString(R.string.pax_count_format, paxCount));
 
-        String roomLabel = "Bilik Standard";
+        String roomLabel = getString(R.string.room_standard);
         String roomPriceStr = detail.price;
 
         if (detail.priceOptions != null && !detail.priceOptions.isEmpty() && selectedRoomIndex >= 0 && selectedRoomIndex < detail.priceOptions.size()) {
             PackageDetail.PriceOption opt = detail.priceOptions.get(selectedRoomIndex);
-            roomLabel = opt.occupancyLabel;
+            roomLabel = com.hafiztraveltours.app.utils.RoomLabels.resolve(requireContext(), opt);
             roomPriceStr = opt.price;
         }
 
@@ -283,12 +300,12 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
     }
 
     private void proceedToTravellerDetails() {
-        String roomLabel = "Bilik Standard";
+        String roomLabel = getString(R.string.room_standard);
         String roomPriceStr = detail.price;
 
         if (detail.priceOptions != null && !detail.priceOptions.isEmpty() && selectedRoomIndex >= 0 && selectedRoomIndex < detail.priceOptions.size()) {
             PackageDetail.PriceOption opt = detail.priceOptions.get(selectedRoomIndex);
-            roomLabel = opt.occupancyLabel;
+            roomLabel = com.hafiztraveltours.app.utils.RoomLabels.resolve(requireContext(), opt);
             roomPriceStr = opt.price;
         }
 
@@ -307,9 +324,11 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
         req.adultPaxCount = paxCount;
         req.packageDetail = detail;
 
-        List<String> deps = getDepartureList();
+        List<PackageDetail.DepartureOption> deps = getDepartureOptions();
         if (selectedDepartureIndex >= 0 && selectedDepartureIndex < deps.size()) {
-            req.selectedDepartureDate = deps.get(selectedDepartureIndex);
+            PackageDetail.DepartureOption selected = deps.get(selectedDepartureIndex);
+            req.selectedDepartureDate = formatDepartureLabel(selected);
+            req.selectedDepartureId = selected.id != null ? selected.id.trim() : "";
         }
 
         req.promoCode = appliedPromoCode;

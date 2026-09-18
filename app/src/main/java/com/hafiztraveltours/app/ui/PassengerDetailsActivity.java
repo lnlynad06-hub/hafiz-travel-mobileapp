@@ -32,7 +32,6 @@ import com.hafiztraveltours.app.network.UserDto;
 import com.hafiztraveltours.app.utils.LocaleHelper;
 import com.hafiztraveltours.app.utils.SessionManager;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -43,7 +42,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class PassengerDetailsActivity extends AppCompatActivity {
+public class PassengerDetailsActivity extends BaseActivity {
 
     public static final String EXTRA_BOOKING_REQUEST = "extra_booking_request";
 
@@ -63,6 +62,15 @@ public class PassengerDetailsActivity extends AppCompatActivity {
     private final List<String> missingProfileFields = new ArrayList<>();
     private UserDto currentUserProfile = null;
     private List<DocumentDto> currentUserDocuments = new ArrayList<>();
+    private retrofit2.Call<?> docsCall;
+    private retrofit2.Call<?> profileCall;
+
+    @Override
+    protected void onDestroy() {
+        if (docsCall != null) docsCall.cancel();
+        if (profileCall != null) profileCall.cancel();
+        super.onDestroy();
+    }
 
     // Additional Travellers list
     private final List<AdditionalTravellerHolder> additionalTravellers = new ArrayList<>();
@@ -100,11 +108,7 @@ public class PassengerDetailsActivity extends AppCompatActivity {
         EditText inputRelationship;
     }
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(LocaleHelper.applySavedLocale(newBase));
-    }
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,12 +146,12 @@ public class PassengerDetailsActivity extends AppCompatActivity {
         txtTotalAmount.setText(bookingRequest.totalAmountFormatted);
 
         btnAddTravellerCard.setOnClickListener(v -> {
-            v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+            com.hafiztraveltours.app.utils.HapticUtil.click(v);
             addAdditionalTraveller();
         });
 
         findViewById(R.id.btnProceedToReview).setOnClickListener(v -> {
-            v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+            com.hafiztraveltours.app.utils.HapticUtil.click(v);
             validateAndProceed();
         });
 
@@ -179,8 +183,13 @@ public class PassengerDetailsActivity extends AppCompatActivity {
 
         currentUserProfile = session.getUser();
 
-        // 1. Fetch user documents to check available docs
-        ApiClient.getApiService().getUserDocuments().enqueue(new Callback<ApiResponse<List<DocumentDto>>>() {
+        // 1. Fetch user documents to check available docs (M8: cancel previous chain first).
+        if (docsCall != null) docsCall.cancel();
+        if (profileCall != null) profileCall.cancel();
+        retrofit2.Call<ApiResponse<List<DocumentDto>>> documentsRequest =
+                ApiClient.getApiService().getUserDocuments();
+        docsCall = documentsRequest;
+        documentsRequest.enqueue(new Callback<ApiResponse<List<DocumentDto>>>() {
             @Override
             public void onResponse(Call<ApiResponse<List<DocumentDto>>> call, Response<ApiResponse<List<DocumentDto>>> response) {
                 if (isFinishing() || isDestroyed()) return;
@@ -200,7 +209,11 @@ public class PassengerDetailsActivity extends AppCompatActivity {
     }
 
     private void fetchFreshProfile() {
-        ApiClient.getApiService().getMe().enqueue(new Callback<ApiResponse<com.hafiztraveltours.app.network.ProfileResponseDto>>() {
+        if (profileCall != null) profileCall.cancel();
+        retrofit2.Call<ApiResponse<com.hafiztraveltours.app.network.ProfileResponseDto>> profileRequest =
+                ApiClient.getApiService().getMe();
+        profileCall = profileRequest;
+        profileRequest.enqueue(new Callback<ApiResponse<com.hafiztraveltours.app.network.ProfileResponseDto>>() {
             @Override
             public void onResponse(Call<ApiResponse<com.hafiztraveltours.app.network.ProfileResponseDto>> call, Response<ApiResponse<com.hafiztraveltours.app.network.ProfileResponseDto>> response) {
                 if (isFinishing() || isDestroyed()) return;
@@ -243,7 +256,7 @@ public class PassengerDetailsActivity extends AppCompatActivity {
             currentUserProfile = new UserDto();
         }
 
-        SharedPreferences pPrefs = getSharedPreferences("user_profile", Context.MODE_PRIVATE);
+        SharedPreferences pPrefs = com.hafiztraveltours.app.utils.SecurePrefs.wrap(this, "user_profile");
         if ((currentUserProfile.name == null || currentUserProfile.name.trim().isEmpty())) {
             currentUserProfile.name = pPrefs.getString("name", "");
         }
@@ -278,18 +291,11 @@ public class PassengerDetailsActivity extends AppCompatActivity {
             if (currentUserProfile.passportExpiryDate == null || currentUserProfile.passportExpiryDate.trim().isEmpty()) {
                 missingProfileFields.add(getString(R.string.passenger_missing_passport_expiry));
             } else {
-                // Check passport validity
-                try {
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                    Date expDate = sdf.parse(currentUserProfile.passportExpiryDate.trim());
-                    if (expDate != null) {
-                        Calendar calReq = Calendar.getInstance();
-                        calReq.add(Calendar.MONTH, reqValidityMonths);
-                        if (expDate.before(calReq.getTime())) {
-                            missingProfileFields.add(getString(R.string.passenger_missing_passport_validity, reqValidityMonths));
-                        }
-                    }
-                } catch (Exception ignored) {}
+                // Check passport validity (centralized rule; unparseable expiry fails closed)
+                if (!com.hafiztraveltours.app.utils.DateFormats.meetsValidityMonths(
+                        currentUserProfile.passportExpiryDate.trim(), reqValidityMonths)) {
+                    missingProfileFields.add(getString(R.string.passenger_missing_passport_validity, reqValidityMonths));
+                }
             }
 
             // Check passport document
@@ -726,7 +732,7 @@ public class PassengerDetailsActivity extends AppCompatActivity {
         holder.expandableBody = body;
 
         headerRow.setOnClickListener(v -> {
-            v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+            com.hafiztraveltours.app.utils.HapticUtil.click(v);
             holder.isExpanded = !holder.isExpanded;
             body.setVisibility(holder.isExpanded ? View.VISIBLE : View.GONE);
             expandIcon.setRotation(holder.isExpanded ? 90 : 270);
@@ -866,7 +872,7 @@ public class PassengerDetailsActivity extends AppCompatActivity {
             if (holder.errorPassportExpiry != null) holder.errorPassportExpiry.setVisibility(View.GONE);
 
             String name = holder.inputName.getText().toString().trim();
-            if (name.isEmpty()) {
+            if (com.hafiztraveltours.app.utils.Validator.fullName(name, R.string.passenger_err_name_required) != 0) {
                 if (holder.errorName != null) {
                     holder.errorName.setText(getString(R.string.passenger_err_name_required));
                     holder.errorName.setVisibility(View.VISIBLE);
@@ -877,7 +883,7 @@ public class PassengerDetailsActivity extends AppCompatActivity {
 
             if (reqIc && holder.inputIc != null) {
                 String ic = holder.inputIc.getText().toString().trim();
-                if (ic.isEmpty()) {
+                if (com.hafiztraveltours.app.utils.Validator.travelId(ic, R.string.passenger_err_ic_required) != 0) {
                     if (holder.errorIc != null) {
                         holder.errorIc.setText(getString(R.string.passenger_err_ic_required));
                         holder.errorIc.setVisibility(View.VISIBLE);
@@ -889,7 +895,7 @@ public class PassengerDetailsActivity extends AppCompatActivity {
 
             if (reqPassport && holder.inputPassport != null) {
                 String pass = holder.inputPassport.getText().toString().trim();
-                if (pass.isEmpty()) {
+                if (com.hafiztraveltours.app.utils.Validator.travelId(pass, R.string.passenger_err_passport_required) != 0) {
                     if (holder.errorPassport != null) {
                         holder.errorPassport.setText(getString(R.string.passenger_err_passport_required));
                         holder.errorPassport.setVisibility(View.VISIBLE);
@@ -899,7 +905,7 @@ public class PassengerDetailsActivity extends AppCompatActivity {
                 }
 
                 String passExp = holder.inputPassportExpiry != null ? holder.inputPassportExpiry.getText().toString().trim() : "";
-                if (passExp.isEmpty()) {
+                if (com.hafiztraveltours.app.utils.Validator.apiDate(passExp, R.string.passenger_err_passport_expiry_required, R.string.passenger_err_passport_expiry_required) != 0) {
                     if (holder.errorPassportExpiry != null) {
                         holder.errorPassportExpiry.setText(getString(R.string.passenger_err_passport_expiry_required));
                         holder.errorPassportExpiry.setVisibility(View.VISIBLE);
@@ -919,24 +925,13 @@ public class PassengerDetailsActivity extends AppCompatActivity {
         // 4. Construct BookingRequest.passengers snapshot
         bookingRequest.passengers.clear();
 
-        // Lead passenger (Profile Snapshot)
-        BookingRequest.Passenger leadP = new BookingRequest.Passenger();
-        leadP.isLead = true;
-        leadP.title = getString(R.string.default_title_mr);
-        leadP.fullName = currentUserProfile.name;
-        leadP.icNumber = currentUserProfile.icNumber != null ? currentUserProfile.icNumber : "";
-        leadP.passportNumber = currentUserProfile.passportNumber != null ? currentUserProfile.passportNumber : "";
-        leadP.passportExpiryDate = currentUserProfile.passportExpiryDate != null ? currentUserProfile.passportExpiryDate : "";
-        leadP.issuingCountry = currentUserProfile.issuingCountry != null ? currentUserProfile.issuingCountry : getString(R.string.default_country);
-        leadP.gender = currentUserProfile.gender != null ? currentUserProfile.gender : "";
-        leadP.dateOfBirth = currentUserProfile.dateOfBirth != null ? currentUserProfile.dateOfBirth : "";
-        leadP.nationality = currentUserProfile.nationality != null ? currentUserProfile.nationality : getString(R.string.default_nationality);
-        leadP.clothesSize = currentUserProfile.clothesSize != null ? currentUserProfile.clothesSize : "";
-        leadP.icPassportNumber = (leadP.passportNumber != null && !leadP.passportNumber.isEmpty()) ? leadP.passportNumber : leadP.icNumber;
-        leadP.phoneNumber = currentUserProfile.phone != null ? currentUserProfile.phone : SessionManager.getInstance(this).getUserPhone();
-        leadP.email = currentUserProfile.email != null ? currentUserProfile.email : SessionManager.getInstance(this).getUserEmail();
-        leadP.address = currentUserProfile.address != null ? currentUserProfile.address : "";
-        leadP.isComplete = true;
+        // Lead passenger (Profile Snapshot — frozen here; later profile edits can't mutate it)
+        BookingRequest.Passenger leadP = com.hafiztraveltours.app.utils.TravellerMapper.leadFromUser(
+                this,
+                currentUserProfile,
+                SessionManager.getInstance(this).getUserPhone(),
+                SessionManager.getInstance(this).getUserEmail(),
+                "");
 
         bookingRequest.passengers.add(leadP);
 

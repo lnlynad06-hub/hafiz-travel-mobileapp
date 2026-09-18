@@ -22,18 +22,14 @@ import android.widget.TextView;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class WebViewActivity extends AppCompatActivity {
+public class WebViewActivity extends BaseActivity {
 
     public static final String EXTRA_TITLE = "extra_title";
     public static final String EXTRA_URL = "extra_url";
 
     private WebView webView;
 
-    @Override
-    protected void attachBaseContext(android.content.Context newBase) {
-        super.attachBaseContext(LocaleHelper.applySavedLocale(newBase));
-    }
-
+    
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -28,13 +28,9 @@ import androidx.appcompat.app.AppCompatActivity;
  * text in activity_tentang_kami.xml (or better, pull from a backend API
  * once one exists instead of hardcoding it here).
  */
-public class TentangKamiActivity extends AppCompatActivity {
+public class TentangKamiActivity extends BaseActivity {
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(LocaleHelper.applySavedLocale(newBase));
-    }
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

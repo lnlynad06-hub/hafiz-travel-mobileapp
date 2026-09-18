@@ -29,7 +29,7 @@ public class SessionManager {
     private final Gson gson;
 
     public SessionManager(Context context) {
-        this.prefs = context.getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        this.prefs = SecurePrefs.wrap(context.getApplicationContext(), PREF_NAME);
         this.gson = new Gson();
         String savedToken = prefs.getString(KEY_AUTH_TOKEN, "");
         if (savedToken != null && !savedToken.trim().isEmpty()) {

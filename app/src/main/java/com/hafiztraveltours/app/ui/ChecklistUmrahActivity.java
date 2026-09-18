@@ -45,7 +45,7 @@ import java.util.List;
  * so a jemaah's ticked progress stays stable even if they switch app language
  * mid-way.
  */
-public class ChecklistUmrahActivity extends AppCompatActivity {
+public class ChecklistUmrahActivity extends BaseActivity {
 
     private static final String PREFS_NAME = "checklist_umrah_prefs";
     private static final float ARABIC_TEXT_SIZE_SP = 22f;
@@ -78,11 +78,7 @@ public class ChecklistUmrahActivity extends AppCompatActivity {
     private int totalItems = 0;
     private int checkedCount = 0;
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(LocaleHelper.applySavedLocale(newBase));
-    }
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

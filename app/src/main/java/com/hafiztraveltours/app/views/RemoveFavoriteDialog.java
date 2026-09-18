@@ -69,7 +69,7 @@ public class RemoveFavoriteDialog {
 
         if (pkg != null) {
             tvName.setText(pkg.getDisplayName());
-            String cleanPrice = (pkg.price != null) ? pkg.price.replace("RM", "").replace("rm", "").trim() : "";
+            String cleanPrice = com.hafiztraveltours.app.utils.MoneyFormat.numericString(pkg.price);
             tvPriceDuration.setText(context.getString(
                     R.string.package_duration_price, pkg.durationDays, pkg.nightsCount, cleanPrice));
 
@@ -88,7 +88,7 @@ public class RemoveFavoriteDialog {
         }
 
         btnCancel.setOnClickListener(v -> {
-            v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+            com.hafiztraveltours.app.utils.HapticUtil.tap(v);
             dialog.dismiss();
         });
 

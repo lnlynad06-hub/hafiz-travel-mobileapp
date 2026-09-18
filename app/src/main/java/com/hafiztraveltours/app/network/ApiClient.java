@@ -12,12 +12,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
     /**
-     * Base URL konfigurasi:
-     * - Untuk Telefon Sebenar (USB ADB Reverse): "http://127.0.0.1:8000/api/"
-     * - Untuk Telefon Sebenar (Wi-Fi sama): "http://192.168.50.127:8000/api/"
-     * - Untuk Android Studio Emulator: "http://10.0.2.2:8000/api/"
+     * Base URL comes from Gradle per build type (BuildConfig.API_BASE_URL):
+     * - debug: local HTTP for Laravel testing (override via local.properties `apiUrlDebug`,
+     *   e.g. "http://192.168.50.127:8000/api/" for same-WiFi phones or "http://10.0.2.2:8000/api/" for emulator).
+     * - release: HTTPS production (override via `apiUrlRelease`); never loopback/cleartext.
      */
-    public static String BASE_URL = "http://127.0.0.1:8000/api/";
+    public static String BASE_URL = com.hafiztraveltours.app.BuildConfig.API_BASE_URL;
 
     private static Retrofit retrofit = null;
     private static ApiService apiService = null;
@@ -31,8 +31,10 @@ public class ApiClient {
         if (apiService == null) {
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
             // PII-safe default: no BODY logging (would leak Bearer token + passwords).
-            // No BuildConfig in this module, so keep logging off unconditionally.
-            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
+            // Debug builds log headers only; release logs nothing.
+            loggingInterceptor.setLevel(com.hafiztraveltours.app.BuildConfig.DEBUG
+                    ? HttpLoggingInterceptor.Level.HEADERS
+                    : HttpLoggingInterceptor.Level.NONE);
 
             OkHttpClient okHttpClient = new OkHttpClient.Builder()
                     .addInterceptor(loggingInterceptor)
@@ -62,7 +64,8 @@ public class ApiClient {
     }
 
     /**
-     * Tukar Base URL semasa runtime jika menguji di peranti fizikal
+     * Tukar Base URL semasa runtime jika menguji di peranti fizikal.
+     * Kept for on-device Laravel testing (debug); production uses the Gradle-provided HTTPS URL.
      */
     public static synchronized void setBaseUrl(String newBaseUrl) {
         if (newBaseUrl != null && !newBaseUrl.endsWith("/")) {

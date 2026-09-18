@@ -41,13 +41,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends BaseActivity {
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(LocaleHelper.applySavedLocale(newBase));
-    }
-
+    
     private SharedPreferences profilePrefs;
     private TextView nameText;
     private TextView memberIdText;
@@ -60,6 +56,15 @@ public class ProfileActivity extends AppCompatActivity {
     private androidx.swiperefreshlayout.widget.SwipeRefreshLayout profileSwipeRefresh;
 
     private final Map<String, DocumentDto> userDocumentsMap = new HashMap<>();
+    private retrofit2.Call<?> statsCall;
+    private retrofit2.Call<?> vaultDocsCall;
+
+    @Override
+    protected void onDestroy() {
+        if (statsCall != null) statsCall.cancel();
+        if (vaultDocsCall != null) vaultDocsCall.cancel();
+        super.onDestroy();
+    }
     private androidx.activity.result.ActivityResultLauncher<String> docPickerLauncher;
     private String pendingUploadDocCode;
     private String pendingUploadDocName;
@@ -83,7 +88,7 @@ public class ProfileActivity extends AppCompatActivity {
                 }
         );
 
-        profilePrefs = getSharedPreferences("user_profile", Context.MODE_PRIVATE);
+        profilePrefs = com.hafiztraveltours.app.utils.SecurePrefs.wrap(this, "user_profile");
 
         findViewById(R.id.profileBackButton).setOnClickListener(v -> finish());
 
@@ -218,7 +223,12 @@ public class ProfileActivity extends AppCompatActivity {
             if (profileSwipeRefresh != null) profileSwipeRefresh.setRefreshing(false);
             return;
         }
-        ApiClient.getApiService().getProfileStats().enqueue(
+        // M8 single-flight: a new stats load cancels the previous one.
+        if (statsCall != null) statsCall.cancel();
+        retrofit2.Call<ApiResponse<com.hafiztraveltours.app.models.ProfileStatsDto>> statsRequest =
+                ApiClient.getApiService().getProfileStats();
+        statsCall = statsRequest;
+        statsRequest.enqueue(
                 new retrofit2.Callback<ApiResponse<com.hafiztraveltours.app.models.ProfileStatsDto>>() {
                     @Override
                     public void onResponse(
@@ -231,8 +241,13 @@ public class ProfileActivity extends AppCompatActivity {
                                         && response.body().isSuccess()) ? response.body().data : null;
                         if (stats != null) {
                             SessionManager.getInstance(ProfileActivity.this).saveProfileStats(stats);
-                            // Fetch documents silently to update readiness score on initial load
-                            ApiClient.getApiService().getUserDocuments().enqueue(new retrofit2.Callback<ApiResponse<List<com.hafiztraveltours.app.models.DocumentDto>>>() {
+                            // Fetch documents silently to update readiness score on initial load.
+                            // Shares vaultDocsCall so a sheet-open fetch single-flights with this one.
+                            if (vaultDocsCall != null) vaultDocsCall.cancel();
+                            retrofit2.Call<ApiResponse<List<com.hafiztraveltours.app.models.DocumentDto>>> docsRequest =
+                                    ApiClient.getApiService().getUserDocuments();
+                            vaultDocsCall = docsRequest;
+                            docsRequest.enqueue(new retrofit2.Callback<ApiResponse<List<com.hafiztraveltours.app.models.DocumentDto>>>() {
                                 @Override
                                 public void onResponse(retrofit2.Call<ApiResponse<List<com.hafiztraveltours.app.models.DocumentDto>>> call, retrofit2.Response<ApiResponse<List<com.hafiztraveltours.app.models.DocumentDto>>> resp) {
                                     if (resp.isSuccessful() && resp.body() != null && resp.body().isSuccess() && resp.body().data != null) {
@@ -264,10 +279,8 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private boolean isDocCounted(com.hafiztraveltours.app.models.DocumentDto doc) {
-        if (doc == null || doc.status == null) return false;
-        String s = doc.status.trim().toLowerCase();
-        if (s.isEmpty() || s.equals("not_uploaded") || s.equals("rejected") || s.equals("expired")) return false;
-        return true;
+        // Only uploaded, non-failed docs count (rejected/expired/unknown must be fixed first).
+        return com.hafiztraveltours.app.utils.DocumentStatus.from(doc).countsAsUploaded();
     }
 
     private void renderStats(com.hafiztraveltours.app.models.ProfileStatsDto stats) {
@@ -648,8 +661,7 @@ public class ProfileActivity extends AppCompatActivity {
                 return;
             }
             try {
-                java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.US);
-                java.util.Date expDate = sdf.parse(expStr);
+                java.util.Date expDate = com.hafiztraveltours.app.utils.DateFormats.parseApiDate(expStr);
                 if (expDate != null) {
                     java.util.Calendar sixMonths = java.util.Calendar.getInstance();
                     sixMonths.add(java.util.Calendar.MONTH, 6);
@@ -793,12 +805,14 @@ public class ProfileActivity extends AppCompatActivity {
                 if (nicknameLayout != null) nicknameLayout.setError(null);
                 if (phoneLayout != null) phoneLayout.setError(null);
 
-                if (newName.isEmpty()) {
-                    if (nameLayout != null) nameLayout.setError(getString(R.string.err_name_required));
+                int nameErr = com.hafiztraveltours.app.utils.Validator.fullName(newName, R.string.err_name_required);
+                if (nameErr != 0) {
+                    if (nameLayout != null) nameLayout.setError(getString(nameErr));
                     return;
                 }
-                if (newNickname.isEmpty()) {
-                    if (nicknameLayout != null) nicknameLayout.setError(getString(R.string.err_nickname_required));
+                int nickErr = com.hafiztraveltours.app.utils.Validator.username(newNickname, R.string.err_nickname_required);
+                if (nickErr != 0) {
+                    if (nicknameLayout != null) nicknameLayout.setError(getString(nickErr));
                     return;
                 }
                 if (!newPhone.isEmpty() && !android.util.Patterns.PHONE.matcher(newPhone).matches()) {
@@ -883,20 +897,8 @@ public class ProfileActivity extends AppCompatActivity {
                         if (updated == null || updated.user == null) {
                             btnSave.setEnabled(true);
                             btnSave.setText(getString(R.string.profile_save));
-                            String errorMsg = getString(R.string.profile_update_failed);
-                            if (response.errorBody() != null) {
-                                try {
-                                    String errStr = response.errorBody().string();
-                                    if (errStr != null && !errStr.isEmpty()) {
-                                        org.json.JSONObject obj = new org.json.JSONObject(errStr);
-                                        if (obj.has("message")) {
-                                            errorMsg = obj.getString("message");
-                                        }
-                                    }
-                                } catch (Exception ignored) {}
-                            }
                             Toast.makeText(ProfileActivity.this,
-                                    errorMsg, Toast.LENGTH_SHORT).show();
+                                    com.hafiztraveltours.app.network.ApiErrors.userMessage(ProfileActivity.this, response, R.string.profile_update_failed), Toast.LENGTH_SHORT).show();
                             return;
                         }
                         String currentToken = SessionManager.getInstance(ProfileActivity.this).getAuthToken();
@@ -918,7 +920,7 @@ public class ProfileActivity extends AppCompatActivity {
                             btnSave.setEnabled(true);
                             btnSave.setText(getString(R.string.profile_save));
                             Toast.makeText(ProfileActivity.this,
-                                    getString(R.string.profile_update_failed), Toast.LENGTH_SHORT).show();
+                                    com.hafiztraveltours.app.network.ApiErrors.userMessage(ProfileActivity.this, t, R.string.profile_update_failed), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -1114,7 +1116,12 @@ public class ProfileActivity extends AppCompatActivity {
             btnVisaReq.setOnClickListener(v -> showDocRequirementsDialog("visa", getString(R.string.doc_travel_visa_title), R.drawable.ic_visa));
         }
 
-        ApiClient.getApiService().getUserDocuments().enqueue(new retrofit2.Callback<ApiResponse<List<com.hafiztraveltours.app.models.DocumentDto>>>() {
+        // M8 single-flight with the stats-chained docs fetch above.
+        if (vaultDocsCall != null) vaultDocsCall.cancel();
+        retrofit2.Call<ApiResponse<List<com.hafiztraveltours.app.models.DocumentDto>>> vaultRequest =
+                ApiClient.getApiService().getUserDocuments();
+        vaultDocsCall = vaultRequest;
+        vaultRequest.enqueue(new retrofit2.Callback<ApiResponse<List<com.hafiztraveltours.app.models.DocumentDto>>>() {
             @Override
             public void onResponse(retrofit2.Call<ApiResponse<List<com.hafiztraveltours.app.models.DocumentDto>>> call,
                                    retrofit2.Response<ApiResponse<List<com.hafiztraveltours.app.models.DocumentDto>>> response) {
@@ -1138,12 +1145,18 @@ public class ProfileActivity extends AppCompatActivity {
                         String st = doc.status != null ? doc.status : "";
 
                         if (isRequiredDoc) {
-                            if ("verified".equalsIgnoreCase(st) || "approved".equalsIgnoreCase(st)) {
-                                verifiedCount++;
-                            } else if ("submitted".equalsIgnoreCase(st) || "pending".equalsIgnoreCase(st) || "under_review".equalsIgnoreCase(st)) {
-                                underReviewCount++;
-                            } else if ("rejected".equalsIgnoreCase(st)) {
-                                rejectedCount++;
+                            switch (com.hafiztraveltours.app.utils.DocumentStatus.from(st)) {
+                                case VERIFIED:
+                                    verifiedCount++;
+                                    break;
+                                case PENDING:
+                                    underReviewCount++;
+                                    break;
+                                case REJECTED:
+                                    rejectedCount++;
+                                    break;
+                                default:
+                                    break;
                             }
                         }
 
@@ -1197,12 +1210,13 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void updateDocStatusUi(TextView tvStatus, TextView btnAction, TextView tvDates, TextView tvGuidance, View rejectionContainer, TextView tvRejectionReason, com.hafiztraveltours.app.models.DocumentDto doc) {
         if (tvStatus == null || doc == null) return;
-        String status = doc.status;
+        com.hafiztraveltours.app.utils.DocumentStatus status =
+                com.hafiztraveltours.app.utils.DocumentStatus.from(doc.status);
 
         // Reset rejection container visibility by default
         if (rejectionContainer != null) rejectionContainer.setVisibility(View.GONE);
 
-        if ("submitted".equalsIgnoreCase(status) || "pending".equalsIgnoreCase(status) || "under_review".equalsIgnoreCase(status)) {
+        if (status == com.hafiztraveltours.app.utils.DocumentStatus.PENDING) {
             tvStatus.setText(getString(R.string.doc_status_under_review));
             tvStatus.setBackgroundResource(R.drawable.bg_status_pending);
             tvStatus.setTextColor(getResources().getColor(R.color.gold_accent));
@@ -1223,7 +1237,7 @@ public class ProfileActivity extends AppCompatActivity {
                 tvGuidance.setText(getString(R.string.doc_guidance_under_review));
                 tvGuidance.setVisibility(View.VISIBLE);
             }
-        } else if ("verified".equalsIgnoreCase(status) || "approved".equalsIgnoreCase(status)) {
+        } else if (status == com.hafiztraveltours.app.utils.DocumentStatus.VERIFIED) {
             tvStatus.setText(getString(R.string.doc_status_verified));
             tvStatus.setBackgroundResource(R.drawable.bg_status_verified);
             tvStatus.setTextColor(android.graphics.Color.parseColor("#047857"));
@@ -1245,7 +1259,7 @@ public class ProfileActivity extends AppCompatActivity {
                 tvGuidance.setText(getString(R.string.doc_guidance_verified));
                 tvGuidance.setVisibility(View.VISIBLE);
             }
-        } else if ("rejected".equalsIgnoreCase(status)) {
+        } else if (status == com.hafiztraveltours.app.utils.DocumentStatus.REJECTED) {
             tvStatus.setText(getString(R.string.doc_status_rejected));
             tvStatus.setBackgroundResource(R.drawable.bg_status_rejected);
             tvStatus.setTextColor(android.graphics.Color.parseColor("#DC2626"));
@@ -1271,7 +1285,7 @@ public class ProfileActivity extends AppCompatActivity {
                 }
             }
             if (tvGuidance != null) tvGuidance.setVisibility(View.GONE);
-        } else if ("expired".equalsIgnoreCase(status)) {
+        } else if (status == com.hafiztraveltours.app.utils.DocumentStatus.EXPIRED) {
             tvStatus.setText(getString(R.string.doc_status_expired));
             tvStatus.setBackgroundResource(R.drawable.bg_status_rejected);
             tvStatus.setTextColor(android.graphics.Color.parseColor("#DC2626"));
@@ -1282,7 +1296,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
             if (tvDates != null) tvDates.setVisibility(View.GONE);
             if (tvGuidance != null) tvGuidance.setVisibility(View.GONE);
-        } else if ("not_required".equalsIgnoreCase(status)) {
+        } else if (status == com.hafiztraveltours.app.utils.DocumentStatus.NOT_REQUIRED) {
             tvStatus.setText(getString(R.string.doc_status_not_required));
             tvStatus.setBackgroundResource(R.drawable.bg_status_not_uploaded);
             tvStatus.setTextColor(getResources().getColor(R.color.text_gray));
@@ -1355,16 +1369,19 @@ public class ProfileActivity extends AppCompatActivity {
                 if (newPasswordLayout != null) newPasswordLayout.setError(null);
                 if (confirmNewPasswordLayout != null) confirmNewPasswordLayout.setError(null);
 
-                if (curPass.isEmpty()) {
-                    if (currentPasswordLayout != null) currentPasswordLayout.setError(getString(R.string.err_current_password_required));
+                int curErr = com.hafiztraveltours.app.utils.Validator.required(curPass, R.string.err_current_password_required);
+                if (curErr != 0) {
+                    if (currentPasswordLayout != null) currentPasswordLayout.setError(getString(curErr));
                     return;
                 }
-                if (newPass.length() < 8) {
-                    if (newPasswordLayout != null) newPasswordLayout.setError(getString(R.string.err_password_short));
+                int newPassErr = com.hafiztraveltours.app.utils.Validator.newPassword(newPass, R.string.err_password_short, R.string.err_password_short);
+                if (newPassErr != 0) {
+                    if (newPasswordLayout != null) newPasswordLayout.setError(getString(newPassErr));
                     return;
                 }
-                if (!newPass.equals(confirmPass)) {
-                    if (confirmNewPasswordLayout != null) confirmNewPasswordLayout.setError(getString(R.string.err_password_mismatch));
+                int confirmErr = com.hafiztraveltours.app.utils.Validator.passwordConfirm(newPass, confirmPass, R.string.err_password_mismatch);
+                if (confirmErr != 0) {
+                    if (confirmNewPasswordLayout != null) confirmNewPasswordLayout.setError(getString(confirmErr));
                     return;
                 }
 
@@ -1386,10 +1403,7 @@ public class ProfileActivity extends AppCompatActivity {
                         } else {
                             btnSave.setEnabled(true);
                             btnSave.setText(getString(R.string.btn_update_password));
-                            String errorMsg = getString(R.string.password_update_failed);
-                            if (response.body() != null && response.body().message != null && !response.body().message.isEmpty()) {
-                                errorMsg = response.body().message;
-                            }
+                            String errorMsg = com.hafiztraveltours.app.network.ApiErrors.userMessage(ProfileActivity.this, response, R.string.password_update_failed);
                             if (currentPasswordLayout != null) {
                                 currentPasswordLayout.setError(errorMsg);
                             } else {
@@ -1403,7 +1417,7 @@ public class ProfileActivity extends AppCompatActivity {
                         if (isFinishing() || isDestroyed()) return;
                         btnSave.setEnabled(true);
                         btnSave.setText(getString(R.string.btn_update_password));
-                        Toast.makeText(ProfileActivity.this, getString(R.string.err_network), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ProfileActivity.this, com.hafiztraveltours.app.network.ApiErrors.userMessage(ProfileActivity.this, t, R.string.err_network), Toast.LENGTH_SHORT).show();
                     }
                 });
             });
@@ -1598,7 +1612,7 @@ public class ProfileActivity extends AppCompatActivity {
                                 loadStats();
                                 showTravelDocsBottomSheet();
                             } else {
-                                Toast.makeText(ProfileActivity.this, getString(R.string.doc_upload_failed_retry), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ProfileActivity.this, com.hafiztraveltours.app.network.ApiErrors.userMessage(ProfileActivity.this, response, R.string.doc_upload_failed_retry), Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -1607,7 +1621,7 @@ public class ProfileActivity extends AppCompatActivity {
                                 retrofit2.Call<ApiResponse<com.hafiztraveltours.app.models.DocumentDto>> call,
                                 Throwable t) {
                             if (isFinishing() || isDestroyed()) return;
-                            Toast.makeText(ProfileActivity.this, getString(R.string.doc_upload_network_error), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ProfileActivity.this, com.hafiztraveltours.app.network.ApiErrors.userMessage(ProfileActivity.this, t, R.string.doc_upload_network_error), Toast.LENGTH_SHORT).show();
                         }
                     }
             );

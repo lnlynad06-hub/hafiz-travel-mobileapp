@@ -16,7 +16,7 @@ import com.hafiztraveltours.app.R;
 import com.hafiztraveltours.app.models.BookingRequest;
 import com.hafiztraveltours.app.utils.LocaleHelper;
 
-public class BookingSummaryActivity extends AppCompatActivity {
+public class BookingSummaryActivity extends BaseActivity {
 
     public static final String EXTRA_BOOKING_REQUEST = "extra_booking_request";
 
@@ -34,11 +34,7 @@ public class BookingSummaryActivity extends AppCompatActivity {
     private TextView txtDepartureDate;
     private LinearLayout containerBreakdown;
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(LocaleHelper.applySavedLocale(newBase));
-    }
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +63,7 @@ public class BookingSummaryActivity extends AppCompatActivity {
         renderSummary();
 
         findViewById(R.id.btnProceedToPaymentPhase3).setOnClickListener(v -> {
-            v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+            com.hafiztraveltours.app.utils.HapticUtil.click(v);
             Intent intent = new Intent(this, PaymentSelectionActivity.class);
             intent.putExtra(PaymentSelectionActivity.EXTRA_BOOKING_REQUEST, bookingRequest);
             startActivity(intent);

@@ -32,7 +32,7 @@ import com.hafiztraveltours.app.R;
 
 import java.util.Locale;
 
-public class QiblaActivity extends AppCompatActivity implements SensorEventListener {
+public class QiblaActivity extends BaseActivity implements SensorEventListener {
 
     private static final String TAG = "QiblaCompassDebug";
 

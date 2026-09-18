@@ -58,7 +58,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SignUpActivity extends AppCompatActivity {
+public class SignUpActivity extends BaseActivity {
 
     private static final int RC_SIGN_IN = 9001;
 
@@ -84,11 +84,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     private String activeLanguage;
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(LocaleHelper.applySavedLocale(newBase));
-    }
-
+    
     @Override
     protected void onResume() {
         super.onResume();
@@ -131,7 +127,7 @@ public class SignUpActivity extends AppCompatActivity {
         phoneInput = findViewById(R.id.phoneInput);
         if (btnCountryCode != null) {
             btnCountryCode.setOnClickListener(v -> {
-                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
                 showCountryPicker();
             });
         }
@@ -162,18 +158,18 @@ public class SignUpActivity extends AppCompatActivity {
         if (tvTermsDisclaimer != null) {
             tvTermsDisclaimer.setText(Html.fromHtml(getString(R.string.signup_terms_disclaimer)));
             tvTermsDisclaimer.setOnClickListener(v -> {
-                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
                 showTermsBottomSheet();
             });
         }
 
         signUpButton.setOnClickListener(v -> {
-            v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+            com.hafiztraveltours.app.utils.HapticUtil.click(v);
             attemptSignUp();
         });
 
         findViewById(R.id.goToLogin).setOnClickListener(v -> {
-            v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+            com.hafiztraveltours.app.utils.HapticUtil.click(v);
             startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             finish();
@@ -182,7 +178,7 @@ public class SignUpActivity extends AppCompatActivity {
         View googleBtn = findViewById(R.id.googleSignUpButton);
         if (googleBtn != null) {
             googleBtn.setOnClickListener(v -> {
-                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
                 setLoadingState(true);
                 Intent signInIntent = mGoogleSignInClient.getSignInIntent();
                 startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -192,7 +188,7 @@ public class SignUpActivity extends AppCompatActivity {
         View guestSignUpText = findViewById(R.id.guestSignUpText);
         if (guestSignUpText != null) {
             guestSignUpText.setOnClickListener(v -> {
-                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
                 SessionManager.getInstance(SignUpActivity.this).clearSession();
                 startActivity(new Intent(SignUpActivity.this, MainActivity.class));
                 finish();
@@ -202,7 +198,7 @@ public class SignUpActivity extends AppCompatActivity {
         View btnLanguagePicker = findViewById(R.id.btnLanguagePicker);
         if (btnLanguagePicker != null) {
             btnLanguagePicker.setOnClickListener(v -> {
-                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
                 showLanguageBottomSheet();
             });
         }
@@ -414,8 +410,7 @@ public class SignUpActivity extends AppCompatActivity {
                                         startActivity(new Intent(SignUpActivity.this, MainActivity.class));
                                         finish();
                                     } else {
-                                        android.util.Log.w("SignUpActivity", "Google sign-up failed code=" + response.code());
-                                        Toast.makeText(SignUpActivity.this, getString(R.string.login_google_failed), Toast.LENGTH_LONG).show();
+                                        Toast.makeText(SignUpActivity.this, com.hafiztraveltours.app.network.ApiErrors.userMessage(SignUpActivity.this, response, R.string.login_google_failed), Toast.LENGTH_LONG).show();
                                     }
                                 }
 
@@ -423,8 +418,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 public void onFailure(Call<ApiResponse<AuthResponse>> call, Throwable t) {
                                     if (isFinishing() || isDestroyed()) return;
                                     setLoadingState(false);
-                                    android.util.Log.w("SignUpActivity", "Google sign-up network error", t);
-                                    Toast.makeText(SignUpActivity.this, getString(R.string.err_network), Toast.LENGTH_LONG).show();
+                                    Toast.makeText(SignUpActivity.this, com.hafiztraveltours.app.network.ApiErrors.userMessage(SignUpActivity.this, t, R.string.err_network), Toast.LENGTH_LONG).show();
                                 }
                             });
                 }
@@ -660,7 +654,7 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
         item.setOnClickListener(v -> {
-            v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+            com.hafiztraveltours.app.utils.HapticUtil.click(v);
             item.animate()
                     .scaleX(0.95f)
                     .scaleY(0.95f)
@@ -693,43 +687,49 @@ public class SignUpActivity extends AppCompatActivity {
 
         boolean valid = true;
 
-        if (TextUtils.isEmpty(name)) {
-            nameLayout.setError(getString(R.string.err_name_required));
+        int nameErr = com.hafiztraveltours.app.utils.Validator.fullName(name, R.string.err_name_required);
+        if (nameErr != 0) {
+            nameLayout.setError(getString(nameErr));
             valid = false;
         } else {
             nameLayout.setError(null);
         }
 
-        if (TextUtils.isEmpty(nickname)) {
-            nicknameLayout.setError(getString(R.string.err_username_required));
+        int nickErr = com.hafiztraveltours.app.utils.Validator.username(nickname, R.string.err_username_required);
+        if (nickErr != 0) {
+            nicknameLayout.setError(getString(nickErr));
             valid = false;
         } else {
             nicknameLayout.setError(null);
         }
 
-        if (TextUtils.isEmpty(email) || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            emailLayout.setError(getString(R.string.err_email_invalid));
+        int emailErr = com.hafiztraveltours.app.utils.Validator.email(email, R.string.err_email_invalid);
+        if (emailErr != 0) {
+            emailLayout.setError(getString(emailErr));
             valid = false;
         } else {
             emailLayout.setError(null);
         }
 
-        if (TextUtils.isEmpty(rawPhone) || rawPhone.length() < 5) {
-            setPhoneError(getString(R.string.err_phone_invalid));
+        int phoneErr = com.hafiztraveltours.app.utils.Validator.phone(rawPhone, false, R.string.err_phone_invalid);
+        if (phoneErr != 0) {
+            setPhoneError(getString(phoneErr));
             valid = false;
         } else {
             setPhoneError(null);
         }
 
-        if (TextUtils.isEmpty(password) || password.length() < 8) {
-            passwordLayout.setError(getString(R.string.err_password_short));
+        int passErr = com.hafiztraveltours.app.utils.Validator.newPassword(password, R.string.err_password_short, R.string.err_password_short);
+        if (passErr != 0) {
+            passwordLayout.setError(getString(passErr));
             valid = false;
         } else {
             passwordLayout.setError(null);
         }
 
-        if (!password.equals(confirmPassword)) {
-            confirmPasswordLayout.setError(getString(R.string.err_password_mismatch));
+        int confirmErr = com.hafiztraveltours.app.utils.Validator.passwordConfirm(password, confirmPassword, R.string.err_password_mismatch);
+        if (confirmErr != 0) {
+            confirmPasswordLayout.setError(getString(confirmErr));
             valid = false;
         } else {
             confirmPasswordLayout.setError(null);
@@ -775,8 +775,7 @@ public class SignUpActivity extends AppCompatActivity {
                             startActivity(new Intent(SignUpActivity.this, MainActivity.class));
                             finish();
                         } else {
-                            android.util.Log.w("SignUpActivity", "Register failed code=" + response.code());
-                            Toast.makeText(SignUpActivity.this, getString(R.string.err_signup_failed), Toast.LENGTH_LONG).show();
+                            Toast.makeText(SignUpActivity.this, com.hafiztraveltours.app.network.ApiErrors.userMessage(SignUpActivity.this, response, R.string.err_signup_failed), Toast.LENGTH_LONG).show();
                         }
                     }
 
@@ -784,7 +783,7 @@ public class SignUpActivity extends AppCompatActivity {
                     public void onFailure(Call<ApiResponse<AuthResponse>> call, Throwable t) {
                         if (isFinishing() || isDestroyed()) return;
                         setLoadingState(false);
-                        Toast.makeText(SignUpActivity.this, getString(R.string.err_network), Toast.LENGTH_LONG).show();
+                        Toast.makeText(SignUpActivity.this, com.hafiztraveltours.app.network.ApiErrors.userMessage(SignUpActivity.this, t, R.string.err_network), Toast.LENGTH_LONG).show();
                     }
                 });
     }

@@ -58,7 +58,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Close"
+            android:contentDescription="@string/content_desc_close"
             android:padding="6dp"
             android:src="@drawable/ic_back"
             android:rotation="270"
@@ -114,7 +114,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="United Kingdom / Global"
+                    android:text="@string/lang_region_english"
                     android:textColor="#757575"
                     android:textSize="11sp" />
             </LinearLayout>
@@ -169,7 +169,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Malaysia"
+                    android:text="@string/lang_region_malay"
                     android:textColor="#757575"
                     android:textSize="11sp" />
             </LinearLayout>

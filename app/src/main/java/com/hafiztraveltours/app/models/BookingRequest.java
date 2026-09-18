@@ -1,7 +1,6 @@
 package com.hafiztraveltours.app.models;
 
 import java.io.Serializable;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +17,8 @@ public class BookingRequest implements Serializable {
     public String totalAmountFormatted;
 
     public String selectedDepartureDate = "";
+    /** Raw backend departure ID (`departures[].id`) for the selected departure; sent as `departure_id`. */
+    public String selectedDepartureId = "";
     public String promoCode = "";
     public double discountAmount = 0.0;
     public PackageDetail packageDetail;
@@ -48,18 +49,11 @@ public class BookingRequest implements Serializable {
     }
 
     public static double parsePriceAmount(String priceStr) {
-        if (priceStr == null) return 0.0;
-        String clean = priceStr.replaceAll("[^0-9.]", "");
-        try {
-            return Double.parseDouble(clean);
-        } catch (Exception e) {
-            return 0.0;
-        }
+        return com.hafiztraveltours.app.utils.MoneyFormat.parseAmount(priceStr);
     }
 
     public static String formatPrice(double amount) {
-        DecimalFormat formatter = new DecimalFormat("#,###");
-        return "RM " + formatter.format(amount);
+        return com.hafiztraveltours.app.utils.MoneyFormat.formatRM(amount);
     }
 
     public void recalculateTotal() {

@@ -21,7 +21,7 @@ import com.hafiztraveltours.app.network.ApiResponse;
 import com.hafiztraveltours.app.models.BookingDetailDto;
 import com.hafiztraveltours.app.utils.LocaleHelper;
 
-public class PaymentSelectionActivity extends AppCompatActivity {
+public class PaymentSelectionActivity extends BaseActivity {
 
     public static final String EXTRA_BOOKING_REQUEST = "extra_booking_request";
 
@@ -35,12 +35,17 @@ public class PaymentSelectionActivity extends AppCompatActivity {
     private ProgressBar progressBar;
 
     private boolean isSubmitting = false;
+    private retrofit2.Call<?> bookingCall;
 
     @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(LocaleHelper.applySavedLocale(newBase));
+    protected void onDestroy() {
+        // If the user backs out mid-flight, stop waiting on the request.
+        // (Server-side idempotency is a backend item; this only guards the client.)
+        if (isSubmitting && bookingCall != null) bookingCall.cancel();
+        super.onDestroy();
     }
 
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +71,7 @@ public class PaymentSelectionActivity extends AppCompatActivity {
         txtPackageSummary.setText(getString(R.string.payment_summary_format, bookingRequest.packageName, bookingRequest.roomLabel, bookingRequest.adultPaxCount));
 
         btnConfirmAndPay.setOnClickListener(v -> {
-            v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+            com.hafiztraveltours.app.utils.HapticUtil.click(v);
             if (!isSubmitting) {
                 processBookingSubmission();
             }
@@ -80,7 +85,11 @@ public class PaymentSelectionActivity extends AppCompatActivity {
 
         CreateBookingRequest apiRequest = buildApiRequest();
 
-        ApiClient.getApiService().createBooking(apiRequest).enqueue(new retrofit2.Callback<ApiResponse<BookingDetailDto>>() {
+        if (bookingCall != null) bookingCall.cancel();
+        retrofit2.Call<ApiResponse<BookingDetailDto>> createCall =
+                ApiClient.getApiService().createBooking(apiRequest);
+        bookingCall = createCall;
+        createCall.enqueue(new retrofit2.Callback<ApiResponse<BookingDetailDto>>() {
             @Override
             public void onResponse(retrofit2.Call<ApiResponse<BookingDetailDto>> call,
                                    retrofit2.Response<ApiResponse<BookingDetailDto>> response) {
@@ -93,7 +102,7 @@ public class PaymentSelectionActivity extends AppCompatActivity {
                         && response.body().isSuccess()) ? response.body().data : null;
                 if (created == null) {
                     Toast.makeText(PaymentSelectionActivity.this,
-                            getString(R.string.booking_failed), Toast.LENGTH_LONG).show();
+                            com.hafiztraveltours.app.network.ApiErrors.userMessage(PaymentSelectionActivity.this, response, R.string.booking_failed), Toast.LENGTH_LONG).show();
                     return;
                 }
 
@@ -101,6 +110,9 @@ public class PaymentSelectionActivity extends AppCompatActivity {
                 intent.putExtra(BookingSuccessActivity.EXTRA_BOOKING_REQUEST, bookingRequest);
                 intent.putExtra(BookingSuccessActivity.EXTRA_BOOKING_NO, created.bookingNo);
                 startActivity(intent);
+                // Leave the stack: back from Success goes Home, so a stale Payment
+                // screen can never resubmit the same booking.
+                finish();
             }
 
             @Override
@@ -110,15 +122,34 @@ public class PaymentSelectionActivity extends AppCompatActivity {
                 btnConfirmAndPay.setEnabled(true);
                 if (progressBar != null) progressBar.setVisibility(View.GONE);
                 Toast.makeText(PaymentSelectionActivity.this,
-                        getString(R.string.booking_failed), Toast.LENGTH_LONG).show();
+                        com.hafiztraveltours.app.network.ApiErrors.userMessage(PaymentSelectionActivity.this, t, R.string.booking_failed), Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    /**
+     * Parses the raw `departures[].id` carried through the booking flow.
+     * Returns null when missing/non-numeric so Gson omits `departure_id`
+     * instead of sending a wrong value (previous behaviour: always null).
+     */
+    private static Integer parseDepartureId(String rawId) {
+        if (rawId == null) return null;
+        String clean = rawId.trim();
+        if (clean.isEmpty()) return null;
+        try {
+            return Integer.valueOf(clean);
+        } catch (NumberFormatException e) {
+            android.util.Log.w("PaymentSelection", "Non-numeric departure id: " + clean);
+            return null;
+        }
     }
 
     private CreateBookingRequest buildApiRequest() {
         CreateBookingRequest apiRequest = new CreateBookingRequest();
         apiRequest.packageId = bookingRequest.packageId;
         apiRequest.roomLabel = bookingRequest.roomLabel;
+        // C1: send the selected departure's real backend ID (never the display label).
+        apiRequest.departureId = parseDepartureId(bookingRequest.selectedDepartureId);
         int actualTravellers = (bookingRequest.passengers != null && !bookingRequest.passengers.isEmpty())
                 ? bookingRequest.passengers.size() : bookingRequest.adultPaxCount;
         apiRequest.adultCount = actualTravellers;
@@ -139,24 +170,8 @@ public class PaymentSelectionActivity extends AppCompatActivity {
         if (bookingRequest.passengers != null) {
             for (int i = 0; i < bookingRequest.passengers.size(); i++) {
                 BookingRequest.Passenger p = bookingRequest.passengers.get(i);
-                CreateBookingRequest.TravellerRequest tr = new CreateBookingRequest.TravellerRequest();
-                tr.title = p.title;
-                tr.fullName = p.fullName;
-                tr.icNumber = p.icNumber;
-                tr.passportNumber = p.passportNumber;
-                tr.passportExpiryDate = p.passportExpiryDate;
-                tr.issuingCountry = p.issuingCountry;
-                tr.gender = p.gender;
-                tr.dateOfBirth = p.dateOfBirth;
-                tr.nationality = p.nationality;
-                tr.clothesSize = p.clothesSize;
-                tr.mahramIndex = p.mahramIndex;
-                tr.relationship = p.relationship;
-                tr.icPassport = p.icPassportNumber;
-                tr.phone = p.phoneNumber;
-                tr.email = p.email;
-                tr.isLead = p.isLead || (i == 0);
-                apiRequest.travellers.add(tr);
+                apiRequest.travellers.add(
+                        com.hafiztraveltours.app.utils.TravellerMapper.toTravellerRequest(p, i == 0));
             }
         }
         return apiRequest;

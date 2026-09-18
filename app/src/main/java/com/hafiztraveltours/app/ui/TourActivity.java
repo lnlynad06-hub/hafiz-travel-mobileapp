@@ -39,7 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class TourActivity extends AppCompatActivity {
+public class TourActivity extends BaseActivity {
 
     private final List<UmrahPackage> allTourMaster = new ArrayList<>();
     private final List<UmrahPackage> popularPackages = new ArrayList<>();
@@ -53,12 +53,15 @@ public class TourActivity extends AppCompatActivity {
     private LinearLayout activeFiltersContainer;
     private RecyclerView popularRecyclerView, availableRecyclerView, searchResultsRecyclerView;
     private TextInputEditText searchInput;
+    private retrofit2.Call<?> packagesCall;
 
     @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(LocaleHelper.applySavedLocale(newBase));
+    protected void onDestroy() {
+        if (packagesCall != null) packagesCall.cancel();
+        super.onDestroy();
     }
 
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -157,7 +160,12 @@ public class TourActivity extends AppCompatActivity {
     }
 
     private void loadPackagesFromApi() {
-        ApiClient.getApiService().getPackages("tour", null, null, null).enqueue(new Callback<ApiResponse<List<UmrahPackage>>>() {
+        // M8 single-flight: a new load cancels the previous identical request.
+        if (packagesCall != null) packagesCall.cancel();
+        Call<ApiResponse<List<UmrahPackage>>> call =
+                ApiClient.getApiService().getPackages("tour", null, null, null);
+        packagesCall = call;
+        call.enqueue(new Callback<ApiResponse<List<UmrahPackage>>>() {
             @Override
             public void onResponse(Call<ApiResponse<List<UmrahPackage>>> call, Response<ApiResponse<List<UmrahPackage>>> response) {
                 androidx.swiperefreshlayout.widget.SwipeRefreshLayout swipeRefresh = findViewById(R.id.tourSwipeRefresh);
@@ -181,8 +189,8 @@ public class TourActivity extends AppCompatActivity {
                     }
                 }
 
-                popularRecyclerView.setAdapter(new PackagePopularAdapter(TourActivity.this, popularPackages, true));
-                availableRecyclerView.setAdapter(new UmrahPackageAdapter(TourActivity.this, allTourMaster, null));
+                popularRecyclerView.setAdapter(new PackageCardAdapter(TourActivity.this, popularPackages, true));
+                availableRecyclerView.setAdapter(new PackageCardAdapter(TourActivity.this, allTourMaster, PackageCardAdapter.CardStyle.LIST, null));
 
                 popularSection.setVisibility(popularPackages.isEmpty() ? View.GONE : View.VISIBLE);
                 availableSection.setVisibility(allTourMaster.isEmpty() ? View.GONE : View.VISIBLE);
@@ -203,7 +211,7 @@ public class TourActivity extends AppCompatActivity {
                 allTourMaster.clear();
                 popularPackages.clear();
                 applyFilterAndSearch();
-                Toast.makeText(TourActivity.this, getString(R.string.err_server_connection), Toast.LENGTH_SHORT).show();
+                Toast.makeText(TourActivity.this, com.hafiztraveltours.app.network.ApiErrors.userMessage(TourActivity.this, t, R.string.err_server_connection), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -256,7 +264,7 @@ public class TourActivity extends AppCompatActivity {
             tvTourResultsCount.setText(countText);
         }
 
-        searchResultsRecyclerView.setAdapter(new UmrahPackageAdapter(this, filteredResults, null));
+            searchResultsRecyclerView.setAdapter(new PackageCardAdapter(this, filteredResults, PackageCardAdapter.CardStyle.LIST, null));
     }
 
     private void renderActiveFilterChips() {

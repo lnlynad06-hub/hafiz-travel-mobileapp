@@ -12,7 +12,7 @@ import com.hafiztraveltours.app.R;
 import com.hafiztraveltours.app.models.BookingRequest;
 import com.hafiztraveltours.app.utils.LocaleHelper;
 
-public class BookingSuccessActivity extends AppCompatActivity {
+public class BookingSuccessActivity extends BaseActivity {
 
     public static final String EXTRA_BOOKING_REQUEST = "extra_booking_request";
     public static final String EXTRA_BOOKING_NO = "extra_booking_no";
@@ -24,11 +24,7 @@ public class BookingSuccessActivity extends AppCompatActivity {
     private TextView txtTotalAmount;
     private TextView txtBookingNo;
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(LocaleHelper.applySavedLocale(newBase));
-    }
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +52,7 @@ public class BookingSuccessActivity extends AppCompatActivity {
         }
 
         findViewById(R.id.btnViewMyBookings).setOnClickListener(v -> {
-            v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+            com.hafiztraveltours.app.utils.HapticUtil.click(v);
             Intent intent = new Intent(this, MyBookingsActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
@@ -64,7 +60,7 @@ public class BookingSuccessActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.btnBackToHome).setOnClickListener(v -> {
-            v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+            com.hafiztraveltours.app.utils.HapticUtil.click(v);
             Intent intent = new Intent(this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);

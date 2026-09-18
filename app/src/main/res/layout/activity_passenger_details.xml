@@ -29,7 +29,7 @@
             android:padding="10dp"
             android:src="@drawable/ic_back"
             app:tint="@color/text_dark"
-            android:contentDescription="Kembali" />
+            android:contentDescription="@string/content_desc_back" />
 
         <TextView
             android:layout_width="0dp"

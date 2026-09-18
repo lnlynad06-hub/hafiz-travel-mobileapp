@@ -48,16 +48,12 @@ import java.util.List;
  * "Checklist Umrah" button (umrahChecklistFab) pinned bottom-end, on top of
  * the scrolling content. This class now wires that button up.
  */
-public class PanduanUmrahActivity extends AppCompatActivity {
+public class PanduanUmrahActivity extends BaseActivity {
 
     // How much bigger the Arabic du'a lines are vs the surrounding body text (17sp)
     private static final float ARABIC_TEXT_SIZE_SP = 30f;
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(LocaleHelper.applySavedLocale(newBase));
-    }
-
+    
     private static class SectionItem {
         int titleResId;
         int bodyResId;

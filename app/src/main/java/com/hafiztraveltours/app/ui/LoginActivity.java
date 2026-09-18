@@ -65,7 +65,7 @@ import retrofit2.Response;
  * Backed by MySQL REST API (Retrofit), SessionManager, Remember Me,
  * Luxury Language Picker, and smooth micro-animations.
  */
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
 
     private static final int RC_SIGN_IN = 9001;
     private static final String PREF_AUTH = "auth_prefs";
@@ -83,11 +83,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private String activeLanguage;
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(LocaleHelper.applySavedLocale(newBase));
-    }
-
+    
     @Override
     protected void onResume() {
         super.onResume();
@@ -168,17 +164,17 @@ public class LoginActivity extends AppCompatActivity {
 
         // 5. Setup listeners
         loginButton.setOnClickListener(v -> {
-            v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+            com.hafiztraveltours.app.utils.HapticUtil.click(v);
             attemptLogin();
         });
 
         findViewById(R.id.forgotPasswordText).setOnClickListener(v -> {
-            v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+            com.hafiztraveltours.app.utils.HapticUtil.click(v);
             showForgotPasswordBottomSheet();
         });
 
         findViewById(R.id.goToSignUp).setOnClickListener(v -> {
-            v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+            com.hafiztraveltours.app.utils.HapticUtil.click(v);
             startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         });
@@ -186,7 +182,7 @@ public class LoginActivity extends AppCompatActivity {
         View btnLanguagePicker = findViewById(R.id.btnLanguagePicker);
         if (btnLanguagePicker != null) {
             btnLanguagePicker.setOnClickListener(v -> {
-                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
                 showLanguageBottomSheet();
             });
         }
@@ -194,7 +190,7 @@ public class LoginActivity extends AppCompatActivity {
         View googleBtn = findViewById(R.id.googleLoginButton);
         if (googleBtn != null) {
             googleBtn.setOnClickListener(v -> {
-                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
                 setLoadingState(true);
                 Intent signInIntent = mGoogleSignInClient.getSignInIntent();
                 startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -204,7 +200,7 @@ public class LoginActivity extends AppCompatActivity {
         View guestText = findViewById(R.id.guestText);
         if (guestText != null) {
             guestText.setOnClickListener(v -> {
-                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
                 SessionManager.getInstance(LoginActivity.this).clearSession();
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 finish();
@@ -257,8 +253,7 @@ public class LoginActivity extends AppCompatActivity {
                                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                         finish();
                                     } else {
-                                        android.util.Log.w("LoginActivity", "Google login failed code=" + response.code());
-                                        Toast.makeText(LoginActivity.this, getString(R.string.login_google_failed), Toast.LENGTH_LONG).show();
+                                        Toast.makeText(LoginActivity.this, com.hafiztraveltours.app.network.ApiErrors.userMessage(LoginActivity.this, response, R.string.login_google_failed), Toast.LENGTH_LONG).show();
                                     }
                                 }
 
@@ -266,8 +261,7 @@ public class LoginActivity extends AppCompatActivity {
                                 public void onFailure(Call<ApiResponse<AuthResponse>> call, Throwable t) {
                                     if (isFinishing() || isDestroyed()) return;
                                     setLoadingState(false);
-                                    android.util.Log.w("LoginActivity", "Google login network error", t);
-                                    Toast.makeText(LoginActivity.this, getString(R.string.err_network), Toast.LENGTH_LONG).show();
+                                    Toast.makeText(LoginActivity.this, com.hafiztraveltours.app.network.ApiErrors.userMessage(LoginActivity.this, t, R.string.err_network), Toast.LENGTH_LONG).show();
                                 }
                             });
                 }
@@ -279,7 +273,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loadRememberMePreference() {
-        SharedPreferences prefs = getSharedPreferences(PREF_AUTH, MODE_PRIVATE);
+        SharedPreferences prefs = com.hafiztraveltours.app.utils.SecurePrefs.wrap(this, PREF_AUTH);
         boolean remember = prefs.getBoolean(KEY_REMEMBER_ME, false);
         String savedEmail = prefs.getString(KEY_SAVED_EMAIL, "");
 
@@ -292,7 +286,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void saveRememberMePreference(String email) {
-        SharedPreferences prefs = getSharedPreferences(PREF_AUTH, MODE_PRIVATE);
+        SharedPreferences prefs = com.hafiztraveltours.app.utils.SecurePrefs.wrap(this, PREF_AUTH);
         boolean isRemember = rememberMeCheckBox != null && rememberMeCheckBox.isChecked();
         prefs.edit()
                 .putBoolean(KEY_REMEMBER_ME, isRemember)
@@ -397,7 +391,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         item.setOnClickListener(v -> {
-            v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+            com.hafiztraveltours.app.utils.HapticUtil.click(v);
             item.animate()
                     .scaleX(0.95f)
                     .scaleY(0.95f)
@@ -426,15 +420,17 @@ public class LoginActivity extends AppCompatActivity {
 
         boolean valid = true;
 
-        if (TextUtils.isEmpty(email) || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            if (emailLayout != null) emailLayout.setError(getString(R.string.login_email_invalid));
+        int emailErr = com.hafiztraveltours.app.utils.Validator.email(email, R.string.login_email_invalid);
+        if (emailErr != 0) {
+            if (emailLayout != null) emailLayout.setError(getString(emailErr));
             valid = false;
         } else {
             if (emailLayout != null) emailLayout.setError(null);
         }
 
-        if (TextUtils.isEmpty(password)) {
-            if (passwordLayout != null) passwordLayout.setError(getString(R.string.login_password_required));
+        int passErr = com.hafiztraveltours.app.utils.Validator.loginPassword(password, R.string.login_password_required);
+        if (passErr != 0) {
+            if (passwordLayout != null) passwordLayout.setError(getString(passErr));
             valid = false;
         } else {
             if (passwordLayout != null) passwordLayout.setError(null);
@@ -468,14 +464,7 @@ public class LoginActivity extends AppCompatActivity {
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
                             finish();
                         } else {
-                            android.util.Log.w("LoginActivity", "Login failed code=" + response.code());
-                            int code = response.code();
-                            int msgRes = R.string.login_failed_default;
-                            if (code == 401 || code == 403) msgRes = R.string.login_failed_default;
-                            else if (code == 422) msgRes = R.string.login_failed_default;
-                            else if (code == 429) msgRes = R.string.err_network;
-                            else if (code >= 500) msgRes = R.string.err_server_connection;
-                            Toast.makeText(LoginActivity.this, getString(msgRes), Toast.LENGTH_LONG).show();
+                            Toast.makeText(LoginActivity.this, com.hafiztraveltours.app.network.ApiErrors.userMessage(LoginActivity.this, response, R.string.login_failed_default), Toast.LENGTH_LONG).show();
                         }
                     }
 
@@ -483,8 +472,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onFailure(Call<ApiResponse<AuthResponse>> call, Throwable t) {
                         if (isFinishing() || isDestroyed()) return;
                         setLoadingState(false);
-                        android.util.Log.w("LoginActivity", "Login network error", t);
-                        Toast.makeText(LoginActivity.this, getString(R.string.err_network), Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginActivity.this, com.hafiztraveltours.app.network.ApiErrors.userMessage(LoginActivity.this, t, R.string.err_network), Toast.LENGTH_LONG).show();
                     }
                 });
     }
@@ -511,7 +499,7 @@ public class LoginActivity extends AppCompatActivity {
 
         if (btnSend != null) {
             btnSend.setOnClickListener(v -> {
-                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
                 String email = resetInput != null && resetInput.getText() != null ? resetInput.getText().toString().trim() : "";
 
                 if (TextUtils.isEmpty(email) || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
@@ -535,7 +523,7 @@ public class LoginActivity extends AppCompatActivity {
                                 if (response.isSuccessful()) {
                                     Toast.makeText(LoginActivity.this, getString(R.string.reset_link_sent_success), Toast.LENGTH_LONG).show();
                                 } else {
-                                    Toast.makeText(LoginActivity.this, getString(R.string.reset_password_failed), Toast.LENGTH_LONG).show();
+                                    Toast.makeText(LoginActivity.this, com.hafiztraveltours.app.network.ApiErrors.userMessage(LoginActivity.this, response, R.string.reset_password_failed), Toast.LENGTH_LONG).show();
                                 }
                             }
 
@@ -543,8 +531,7 @@ public class LoginActivity extends AppCompatActivity {
                             public void onFailure(Call<ApiResponse<Object>> call, Throwable t) {
                                 if (isFinishing() || isDestroyed()) return;
                                 resetDialog.dismiss();
-                                android.util.Log.w("LoginActivity", "Forgot password network error", t);
-                                Toast.makeText(LoginActivity.this, getString(R.string.err_network), Toast.LENGTH_LONG).show();
+                                Toast.makeText(LoginActivity.this, com.hafiztraveltours.app.network.ApiErrors.userMessage(LoginActivity.this, t, R.string.err_network), Toast.LENGTH_LONG).show();
                             }
                         });
             });

@@ -41,7 +41,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class WelcomeActivity extends AppCompatActivity {
+public class WelcomeActivity extends BaseActivity {
 
     private String activeLanguage;
     private TextView tvActiveLanguage;
@@ -75,11 +75,7 @@ public class WelcomeActivity extends AppCompatActivity {
         }
     };
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(LocaleHelper.applySavedLocale(newBase));
-    }
-
+    
     @Override
     protected void onResume() {
         super.onResume();
@@ -381,7 +377,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
         // 3. Tactile Press-Bounce Micro-Animation on selection
         item.setOnClickListener(v -> {
-            v.performHapticFeedback(android.view.HapticFeedbackConstants.VIRTUAL_KEY);
+            com.hafiztraveltours.app.utils.HapticUtil.click(v);
             item.animate()
                     .scaleX(0.95f)
                     .scaleY(0.95f)

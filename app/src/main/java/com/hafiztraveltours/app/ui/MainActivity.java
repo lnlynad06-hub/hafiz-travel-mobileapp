@@ -61,7 +61,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -69,7 +68,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -90,7 +88,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     // TODO: replace with your actual WhatsApp business number, format: countrycode+number, no + or spaces
     private static final String WHATSAPP_PHONE_NUMBER = "60197859867";
@@ -126,11 +124,11 @@ public class MainActivity extends AppCompatActivity {
     private Runnable arcRefreshRunnable;
     private String currentResolvedLocationName = "Johor Bahru";
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(LocaleHelper.applySavedLocale(newBase));
-    }
+    // M8 single-flight handles for identical Laravel requests.
+    private retrofit2.Call<?> homeCall;
+    private retrofit2.Call<?> homeSearchCall;
 
+    
     @Override
     protected void onResume() {
         super.onResume();
@@ -221,6 +219,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         stopHeroShowcase();
         stopArcAutoRefresh();
+        if (homeCall != null) homeCall.cancel();
+        if (homeSearchCall != null) homeSearchCall.cancel();
         showcaseHandler.removeCallbacksAndMessages(null);
         if (arcRefreshHandler != null) {
             arcRefreshHandler.removeCallbacksAndMessages(null);
@@ -295,7 +295,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if (notificationButton != null) {
             notificationButton.setOnClickListener(v -> {
-                v.performHapticFeedback(android.view.HapticFeedbackConstants.KEYBOARD_TAP);
+                com.hafiztraveltours.app.utils.HapticUtil.tap(v);
                 if (notificationDot != null) {
                     notificationDot.setVisibility(View.GONE);
                     getSharedPreferences("app_prefs", MODE_PRIVATE).edit().putBoolean("has_unread_notifications", false).apply();
@@ -392,7 +392,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         item.setOnClickListener(v -> {
-            v.performHapticFeedback(android.view.HapticFeedbackConstants.VIRTUAL_KEY);
+            com.hafiztraveltours.app.utils.HapticUtil.click(v);
             item.animate()
                     .scaleX(0.95f)
                     .scaleY(0.95f)
@@ -433,13 +433,10 @@ public class MainActivity extends AppCompatActivity {
         setupTactileButton(heroShowcaseCard, () -> {
             if (!heroShowcaseList.isEmpty() && heroShowcaseIndex >= 0 && heroShowcaseIndex < heroShowcaseList.size()) {
                 UmrahPackage pkg = heroShowcaseList.get(heroShowcaseIndex);
-                Intent intent = new Intent(MainActivity.this, PackageDetailActivity.class);
                 String collection = (pkg.collectionName != null && !pkg.collectionName.trim().isEmpty())
                         ? pkg.collectionName
                         : (pkg.isUmrah() ? "umrah_packages" : "tour_packages");
-                intent.putExtra(PackageDetailActivity.EXTRA_COLLECTION, collection);
-                intent.putExtra(PackageDetailActivity.EXTRA_PACKAGE_ID, pkg.id);
-                startActivity(intent);
+                com.hafiztraveltours.app.utils.Navigator.openPackage(MainActivity.this, collection, pkg.id);
             } else {
                 startActivity(new Intent(MainActivity.this, AllPackagesActivity.class));
             }
@@ -506,7 +503,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (price != null) {
             String rawPrice = (pkg.price != null && !pkg.price.isEmpty()) ? pkg.price : "";
-            String cleanPrice = rawPrice.replace("RM", "").replace("rm", "").trim();
+            String cleanPrice = com.hafiztraveltours.app.utils.MoneyFormat.numericString(rawPrice);
             if (!cleanPrice.isEmpty()) {
                 price.setText(getString(R.string.package_duration_price, pkg.durationDays, pkg.nightsCount, cleanPrice));
             } else if (pkg.durationDays > 0) {
@@ -530,8 +527,12 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.popularPackagesRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
-        // Panggil Laravel REST API
-        ApiClient.getApiService().getHomeData().enqueue(new Callback<ApiResponse<HomeDataResponse>>() {
+        // Panggil Laravel REST API (M8: cancel previous identical request first).
+        if (homeCall != null) homeCall.cancel();
+        Call<ApiResponse<HomeDataResponse>> homeRequest =
+                ApiClient.getApiService().getHomeData();
+        homeCall = homeRequest;
+        homeRequest.enqueue(new Callback<ApiResponse<HomeDataResponse>>() {
             @Override
             public void onResponse(Call<ApiResponse<HomeDataResponse>> call, Response<ApiResponse<HomeDataResponse>> response) {
                 com.facebook.shimmer.ShimmerFrameLayout shimmer = findViewById(R.id.homePopularShimmer);
@@ -577,7 +578,7 @@ public class MainActivity extends AppCompatActivity {
                         stopHeroShowcase();
                     }
 
-                    recyclerView.setAdapter(new PackagePopularAdapter(MainActivity.this, allPopularPackages));
+                    recyclerView.setAdapter(new PackageCardAdapter(MainActivity.this, allPopularPackages));
                 }
             }
 
@@ -605,7 +606,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void loadHomeSearchPackages(Runnable onLoaded) {
-        ApiClient.getApiService().getPackages(null, null, null, null).enqueue(new Callback<ApiResponse<List<UmrahPackage>>>() {
+        if (homeSearchCall != null) homeSearchCall.cancel();
+        Call<ApiResponse<List<UmrahPackage>>> searchRequest =
+                ApiClient.getApiService().getPackages(null, null, null, null);
+        homeSearchCall = searchRequest;
+        searchRequest.enqueue(new Callback<ApiResponse<List<UmrahPackage>>>() {
             @Override
             public void onResponse(Call<ApiResponse<List<UmrahPackage>>> call, Response<ApiResponse<List<UmrahPackage>>> response) {
                 homeSearchUmrahCache.clear();
@@ -645,7 +650,7 @@ public class MainActivity extends AppCompatActivity {
             if (pkg.name != null && pkg.name.toLowerCase().contains(q)) results.add(pkg);
         }
         resultsRecyclerView.setVisibility(View.VISIBLE);
-        resultsRecyclerView.setAdapter(new UmrahPackageAdapter(this, results, null));
+            resultsRecyclerView.setAdapter(new PackageCardAdapter(this, results, PackageCardAdapter.CardStyle.LIST, null));
     }
 
     private void setupTactileButton(View view, Runnable onClick) {
@@ -1401,9 +1406,6 @@ public class MainActivity extends AppCompatActivity {
             throw new RuntimeException("No entry for today in API response");
         }
 
-        SimpleDateFormat formatter = new SimpleDateFormat("h:mm a", Locale.getDefault());
-        formatter.setTimeZone(TimeZone.getDefault());
-
         JSONObject finalTodayPrayers = todayPrayers;
         String[] names = {
                 getString(R.string.prayer_subuh), getString(R.string.prayer_zohor),
@@ -1435,10 +1437,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private String formatEpochSeconds(long epochSeconds, SimpleDateFormat formatter) {
-        return formatter.format(new Date(epochSeconds * 1000L));
-    }
-
     /**
      * OFFLINE FALLBACK ONLY - used when the JAKIM-sourced API call fails.
      * These are calculated estimates (Adhan library, SINGAPORE method), NOT
@@ -1462,9 +1460,6 @@ public class MainActivity extends AppCompatActivity {
         params.madhab = Madhab.SHAFI;
 
         PrayerTimes prayerTimes = new PrayerTimes(coordinates, dateComponents, params);
-
-        SimpleDateFormat formatter = new SimpleDateFormat("h:mm a", Locale.getDefault());
-        formatter.setTimeZone(TimeZone.getDefault());
 
         String[] names = {
                 getString(R.string.prayer_subuh), getString(R.string.prayer_zohor),
@@ -1527,11 +1522,11 @@ public class MainActivity extends AppCompatActivity {
         PrayerProgressCalculator.Result result =
                 PrayerProgressCalculator.calculate(names, epochSeconds, nowEpoch);
 
-        SimpleDateFormat formatter = new SimpleDateFormat("h:mm a", LocaleHelper.getCurrentLocale(this));
-        formatter.setTimeZone(TimeZone.getDefault());
-
-        String currentTime = formatter.format(new Date(result.currentEpochSeconds * 1000L));
-        String nextTime = formatter.format(new Date(result.nextEpochSeconds * 1000L));
+        java.util.Locale appLocale = LocaleHelper.getCurrentLocale(this);
+        String currentTime = com.hafiztraveltours.app.utils.DateFormats.formatClockTime(
+                new Date(result.currentEpochSeconds * 1000L), appLocale);
+        String nextTime = com.hafiztraveltours.app.utils.DateFormats.formatClockTime(
+                new Date(result.nextEpochSeconds * 1000L), appLocale);
 
         String localizedCurrentName = getLocalizedPrayerName(result.currentName);
         String localizedNextName = getLocalizedPrayerName(result.nextName);
@@ -1597,11 +1592,11 @@ public class MainActivity extends AppCompatActivity {
             if (tvNameMaghrib != null) tvNameMaghrib.setText(getString(R.string.prayer_name_maghrib));
             if (tvNameIsyak != null) tvNameIsyak.setText(getString(R.string.prayer_name_isyak));
 
-            if (tvTimeSubuh != null) tvTimeSubuh.setText(formatter.format(new Date(epochSeconds[0] * 1000L)));
-            if (tvTimeZohor != null) tvTimeZohor.setText(formatter.format(new Date(epochSeconds[1] * 1000L)));
-            if (tvTimeAsar != null) tvTimeAsar.setText(formatter.format(new Date(epochSeconds[2] * 1000L)));
-            if (tvTimeMaghrib != null) tvTimeMaghrib.setText(formatter.format(new Date(epochSeconds[3] * 1000L)));
-            if (tvTimeIsyak != null) tvTimeIsyak.setText(formatter.format(new Date(epochSeconds[4] * 1000L)));
+            if (tvTimeSubuh != null) tvTimeSubuh.setText(com.hafiztraveltours.app.utils.DateFormats.formatEpochSeconds(epochSeconds[0], appLocale));
+            if (tvTimeZohor != null) tvTimeZohor.setText(com.hafiztraveltours.app.utils.DateFormats.formatEpochSeconds(epochSeconds[1], appLocale));
+            if (tvTimeAsar != null) tvTimeAsar.setText(com.hafiztraveltours.app.utils.DateFormats.formatEpochSeconds(epochSeconds[2], appLocale));
+            if (tvTimeMaghrib != null) tvTimeMaghrib.setText(com.hafiztraveltours.app.utils.DateFormats.formatEpochSeconds(epochSeconds[3], appLocale));
+            if (tvTimeIsyak != null) tvTimeIsyak.setText(com.hafiztraveltours.app.utils.DateFormats.formatEpochSeconds(epochSeconds[4], appLocale));
 
             int activeIndex = -1;
             for (int i = 0; i < names.length; i++) {

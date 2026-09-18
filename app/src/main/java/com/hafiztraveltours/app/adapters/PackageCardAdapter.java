@@ -1,18 +1,8 @@
 package com.hafiztraveltours.app.adapters;
 
-import com.hafiztraveltours.app.R;
-import com.hafiztraveltours.app.models.*;
-import com.hafiztraveltours.app.adapters.*;
-import com.hafiztraveltours.app.network.*;
-import com.hafiztraveltours.app.services.*;
-import com.hafiztraveltours.app.utils.*;
-import com.hafiztraveltours.app.views.*;
-import com.hafiztraveltours.app.ui.*;
-
-
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
+import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,81 +13,91 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.hafiztraveltours.app.R;
+import com.hafiztraveltours.app.models.UmrahPackage;
+import com.hafiztraveltours.app.ui.PackageDetailActivity;
+import com.hafiztraveltours.app.utils.BottomNavHelper;
+import com.hafiztraveltours.app.utils.FavoritesManager;
+import com.hafiztraveltours.app.utils.MoneyFormat;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class UmrahPackageAdapter extends RecyclerView.Adapter<UmrahPackageAdapter.ViewHolder> {
+/**
+ * Single package-card adapter (M1). Replaces the near-duplicate
+ * PackagePopularAdapter + UmrahPackageAdapter with one binding path.
+ *
+ * <p>Visual variants stay as separate layouts (same view IDs) selected by
+ * {@link CardStyle}; per-style differences are preserved exactly:
+ * favorite-off tint (#FFFFFF on popular/featured, #B0B0B0 on list) and
+ * favorite-toggle follow-up (listener when present, else bottom-nav badge refresh).
+ */
+public class PackageCardAdapter extends RecyclerView.Adapter<PackageCardAdapter.ViewHolder> {
 
     public interface OnFavoriteToggleListener {
         void onToggled(UmrahPackage pkg, boolean isFavoriteNow, int position, View itemView);
     }
 
+    public enum CardStyle {
+        POPULAR(R.layout.item_package_popular, "#FFFFFF"),
+        FEATURED(R.layout.item_package_featured, "#FFFFFF"),
+        LIST(R.layout.item_umrah_package, "#B0B0B0");
+
+        final int layoutResId;
+        final String favoriteOffColor;
+
+        CardStyle(int layoutResId, String favoriteOffColor) {
+            this.layoutResId = layoutResId;
+            this.favoriteOffColor = favoriteOffColor;
+        }
+    }
+
     private final Context context;
-    private List<UmrahPackage> fullList;
-    private List<UmrahPackage> filteredList;
+    private final List<UmrahPackage> items = new ArrayList<>();
+    private final CardStyle style;
     private final OnFavoriteToggleListener toggleListener; // nullable
 
-    public UmrahPackageAdapter(Context context, List<UmrahPackage> items, OnFavoriteToggleListener toggleListener) {
+    public PackageCardAdapter(Context context, List<UmrahPackage> items) {
+        this(context, items, CardStyle.POPULAR, null);
+    }
+
+    public PackageCardAdapter(Context context, List<UmrahPackage> items, boolean featured) {
+        this(context, items, featured ? CardStyle.FEATURED : CardStyle.POPULAR, null);
+    }
+
+    public PackageCardAdapter(Context context, List<UmrahPackage> items,
+                              CardStyle style, OnFavoriteToggleListener toggleListener) {
         this.context = context;
-        this.fullList = items != null ? new ArrayList<>(items) : new ArrayList<>();
-        this.filteredList = items != null ? new ArrayList<>(items) : new ArrayList<>();
+        if (items != null) this.items.addAll(items);
+        this.style = style != null ? style : CardStyle.POPULAR;
         this.toggleListener = toggleListener;
     }
 
-    public void setItems(List<UmrahPackage> items) {
-        this.fullList = items != null ? new ArrayList<>(items) : new ArrayList<>();
-        this.filteredList = items != null ? new ArrayList<>(items) : new ArrayList<>();
+    public void setItems(List<UmrahPackage> newItems) {
+        this.items.clear();
+        if (newItems != null) this.items.addAll(newItems);
         notifyDataSetChanged();
     }
 
     public void removeItemAt(int position) {
-        if (position >= 0 && position < filteredList.size()) {
-            UmrahPackage removed = filteredList.remove(position);
-            fullList.remove(removed);
+        if (position >= 0 && position < items.size()) {
+            items.remove(position);
             notifyItemRemoved(position);
-            notifyItemRangeChanged(position, filteredList.size() - position);
+            notifyItemRangeChanged(position, items.size() - position);
         }
-    }
-
-    public void insertItemAt(int position, UmrahPackage pkg) {
-        if (position >= 0 && position <= filteredList.size()) {
-            filteredList.add(position, pkg);
-            fullList.add(pkg);
-            notifyItemInserted(position);
-            notifyItemRangeChanged(position, filteredList.size() - position);
-        }
-    }
-
-    /** Filters by package name, case-insensitive. Pass "" to reset. */
-    public void filter(String query) {
-        if (filteredList == null) filteredList = new ArrayList<>();
-        if (fullList == null) fullList = new ArrayList<>();
-        String q = query != null ? query.trim().toLowerCase() : "";
-        filteredList.clear();
-        if (q.isEmpty()) {
-            filteredList.addAll(fullList);
-        } else {
-            for (UmrahPackage pkg : fullList) {
-                if (pkg != null && pkg.name != null && pkg.name.toLowerCase().contains(q)) {
-                    filteredList.add(pkg);
-                }
-            }
-        }
-        notifyDataSetChanged();
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_umrah_package, parent, false);
+        View view = LayoutInflater.from(context).inflate(style.layoutResId, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        if (filteredList == null || position < 0 || position >= filteredList.size()) return;
-        UmrahPackage pkg = filteredList.get(position);
+        if (position < 0 || position >= items.size()) return;
+        UmrahPackage pkg = items.get(position);
         if (pkg == null) return;
 
         if (holder.category != null) {
@@ -110,9 +110,9 @@ public class UmrahPackageAdapter extends RecyclerView.Adapter<UmrahPackageAdapte
         }
 
         holder.name.setText(pkg.getDisplayName());
-        String cleanPrice = (pkg.price != null) ? pkg.price.replace("RM", "").replace("rm", "").trim() : "";
         holder.durationPrice.setText(context.getString(
-                R.string.package_duration_price, pkg.durationDays, pkg.nightsCount, cleanPrice));
+                R.string.package_duration_price, pkg.durationDays, pkg.nightsCount,
+                MoneyFormat.numericString(pkg.price)));
 
         if (holder.hotelDistance != null) {
             String hotelDist = pkg.getRawHotelDistance();
@@ -144,31 +144,31 @@ public class UmrahPackageAdapter extends RecyclerView.Adapter<UmrahPackageAdapte
         updateFavoriteIcon(holder.favoriteIcon, pkg);
 
         holder.favoriteIcon.setOnClickListener(v -> {
-            v.performHapticFeedback(android.view.HapticFeedbackConstants.KEYBOARD_TAP);
+            com.hafiztraveltours.app.utils.HapticUtil.tap(v);
             FavoritesManager.handleFavoriteToggle(context, pkg, holder.favoriteIcon, isFavoriteNow -> {
                 updateFavoriteIcon(holder.favoriteIcon, pkg);
                 if (toggleListener != null) {
                     toggleListener.onToggled(pkg, isFavoriteNow, holder.getBindingAdapterPosition(), holder.itemView);
+                } else if (context instanceof android.app.Activity) {
+                    BottomNavHelper.updateFavoriteBadge((android.app.Activity) context);
                 }
             });
         });
 
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, PackageDetailActivity.class);
-            intent.putExtra(PackageDetailActivity.EXTRA_COLLECTION, pkg.collectionName);
-            intent.putExtra(PackageDetailActivity.EXTRA_PACKAGE_ID, pkg.id);
-            context.startActivity(intent);
+            com.hafiztraveltours.app.utils.Navigator.openPackage(
+                    context, pkg.collectionName, pkg.id);
         });
     }
 
     private void updateFavoriteIcon(ImageView icon, UmrahPackage pkg) {
         boolean isFav = FavoritesManager.isFavorite(context, pkg);
-        icon.setColorFilter(isFav ? Color.parseColor("#E91E63") : Color.parseColor("#B0B0B0"));
+        icon.setColorFilter(isFav ? Color.parseColor("#E91E63") : Color.parseColor(style.favoriteOffColor));
     }
 
     @Override
     public int getItemCount() {
-        return filteredList.size();
+        return items.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

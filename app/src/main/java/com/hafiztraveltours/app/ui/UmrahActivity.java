@@ -39,7 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class UmrahActivity extends AppCompatActivity {
+public class UmrahActivity extends BaseActivity {
 
     private final List<UmrahPackage> allUmrahMaster = new ArrayList<>();
     private final List<UmrahPackage> popularPackages = new ArrayList<>();
@@ -55,12 +55,15 @@ public class UmrahActivity extends AppCompatActivity {
     private LinearLayout activeFiltersContainer;
     private RecyclerView popularRecyclerView, khasRecyclerView, ziarahRecyclerView, searchResultsRecyclerView;
     private TextInputEditText searchInput;
+    private retrofit2.Call<?> packagesCall;
 
     @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(LocaleHelper.applySavedLocale(newBase));
+    protected void onDestroy() {
+        if (packagesCall != null) packagesCall.cancel();
+        super.onDestroy();
     }
 
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,7 +137,12 @@ public class UmrahActivity extends AppCompatActivity {
     }
 
     private void loadPackagesFromApi() {
-        ApiClient.getApiService().getPackages("umrah", null, null, null).enqueue(new Callback<ApiResponse<List<UmrahPackage>>>() {
+        // M8 single-flight: a new load cancels the previous identical request.
+        if (packagesCall != null) packagesCall.cancel();
+        Call<ApiResponse<List<UmrahPackage>>> call =
+                ApiClient.getApiService().getPackages("umrah", null, null, null);
+        packagesCall = call;
+        call.enqueue(new Callback<ApiResponse<List<UmrahPackage>>>() {
             @Override
             public void onResponse(Call<ApiResponse<List<UmrahPackage>>> call, Response<ApiResponse<List<UmrahPackage>>> response) {
                 androidx.swiperefreshlayout.widget.SwipeRefreshLayout swipeRefresh = findViewById(R.id.umrahSwipeRefresh);
@@ -167,9 +175,9 @@ public class UmrahActivity extends AppCompatActivity {
                     }
                 }
 
-                popularRecyclerView.setAdapter(new PackagePopularAdapter(UmrahActivity.this, popularPackages, true));
-                khasRecyclerView.setAdapter(new PackagePopularAdapter(UmrahActivity.this, khasPackages));
-                ziarahRecyclerView.setAdapter(new PackagePopularAdapter(UmrahActivity.this, ziarahPackages));
+                popularRecyclerView.setAdapter(new PackageCardAdapter(UmrahActivity.this, popularPackages, true));
+                khasRecyclerView.setAdapter(new PackageCardAdapter(UmrahActivity.this, khasPackages));
+                ziarahRecyclerView.setAdapter(new PackageCardAdapter(UmrahActivity.this, ziarahPackages));
 
                 popularSection.setVisibility(popularPackages.isEmpty() ? View.GONE : View.VISIBLE);
                 khasSection.setVisibility(khasPackages.isEmpty() ? View.GONE : View.VISIBLE);
@@ -194,7 +202,7 @@ public class UmrahActivity extends AppCompatActivity {
                 khasPackages.clear();
                 ziarahPackages.clear();
                 applyFilterAndSearch();
-                Toast.makeText(UmrahActivity.this, getString(R.string.err_server_connection), Toast.LENGTH_SHORT).show();
+                Toast.makeText(UmrahActivity.this, com.hafiztraveltours.app.network.ApiErrors.userMessage(UmrahActivity.this, t, R.string.err_server_connection), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -247,7 +255,7 @@ public class UmrahActivity extends AppCompatActivity {
             tvUmrahResultsCount.setText(countText);
         }
 
-        searchResultsRecyclerView.setAdapter(new UmrahPackageAdapter(this, filteredResults, null));
+            searchResultsRecyclerView.setAdapter(new PackageCardAdapter(this, filteredResults, PackageCardAdapter.CardStyle.LIST, null));
     }
 
     private void renderActiveFilterChips() {

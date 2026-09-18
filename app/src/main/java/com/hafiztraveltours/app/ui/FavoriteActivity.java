@@ -23,17 +23,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 
-public class FavoriteActivity extends AppCompatActivity {
+public class FavoriteActivity extends BaseActivity {
 
-    private UmrahPackageAdapter adapter;
+    private com.hafiztraveltours.app.adapters.PackageCardAdapter adapter;
     private RecyclerView recyclerView;
     private View emptyContainer;
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(LocaleHelper.applySavedLocale(newBase));
-    }
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +41,8 @@ public class FavoriteActivity extends AppCompatActivity {
         emptyContainer = findViewById(R.id.favoriteEmptyContainer);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new UmrahPackageAdapter(this, java.util.Collections.emptyList(),
+        adapter = new com.hafiztraveltours.app.adapters.PackageCardAdapter(this, java.util.Collections.emptyList(),
+                com.hafiztraveltours.app.adapters.PackageCardAdapter.CardStyle.LIST,
                 (pkg, isFavoriteNow, position, itemView) -> {
                     if (!isFavoriteNow) {
                         handleUnfavoriteWithAnimation(pkg, position, itemView);

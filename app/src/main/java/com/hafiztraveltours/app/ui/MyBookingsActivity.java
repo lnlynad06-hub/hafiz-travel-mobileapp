@@ -24,19 +24,17 @@ import com.hafiztraveltours.app.utils.SessionManager;
 
 import java.util.ArrayList;
 
-public class MyBookingsActivity extends AppCompatActivity {
+public class MyBookingsActivity extends BaseActivity {
 
     private MyBookingsAdapter adapter;
     private RecyclerView recyclerView;
     private View emptyContainer;
     private ProgressBar progressBar;
     private SwipeRefreshLayout swipeRefresh;
+    private com.hafiztraveltours.app.utils.ViewStateController viewState;
+    private retrofit2.Call<?> bookingsCall;
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(LocaleHelper.applySavedLocale(newBase));
-    }
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +54,8 @@ public class MyBookingsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new MyBookingsAdapter(new ArrayList<>());
         recyclerView.setAdapter(adapter);
+        viewState = new com.hafiztraveltours.app.utils.ViewStateController(
+                progressBar, recyclerView, emptyContainer);
 
         if (swipeRefresh != null) {
             swipeRefresh.setColorSchemeResources(
@@ -72,55 +72,63 @@ public class MyBookingsActivity extends AppCompatActivity {
         loadBookings();
     }
 
+    @Override
+    protected void onDestroy() {
+        if (bookingsCall != null) bookingsCall.cancel();
+        super.onDestroy();
+    }
+
     private void loadBookings() {
         if (!SessionManager.getInstance(this).isLoggedIn()) {
             showEmpty();
             if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
             return;
         }
-        if (progressBar != null && (swipeRefresh == null || !swipeRefresh.isRefreshing())) {
-            progressBar.setVisibility(View.VISIBLE);
+        if (swipeRefresh == null || !swipeRefresh.isRefreshing()) {
+            viewState.showLoading();
         }
 
-        ApiClient.getApiService().getBookings(null, 20).enqueue(new retrofit2.Callback<ApiResponse<BookingListPage>>() {
+        // M8 single-flight: a new load cancels the previous identical request.
+        if (bookingsCall != null) bookingsCall.cancel();
+        retrofit2.Call<ApiResponse<BookingListPage>> call =
+                ApiClient.getApiService().getBookings(null, 20);
+        bookingsCall = call;
+        call.enqueue(new retrofit2.Callback<ApiResponse<BookingListPage>>() {
             @Override
             public void onResponse(retrofit2.Call<ApiResponse<BookingListPage>> call,
                                    retrofit2.Response<ApiResponse<BookingListPage>> response) {
                 if (isFinishing() || isDestroyed()) return;
-                if (progressBar != null) progressBar.setVisibility(View.GONE);
                 if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
 
                 BookingListPage page = (response.isSuccessful() && response.body() != null
                         && response.body().isSuccess()) ? response.body().data : null;
                 if (page != null && page.data != null && !page.data.isEmpty()) {
                     adapter.setItems(page.data);
-                    emptyContainer.setVisibility(View.GONE);
-                    recyclerView.setVisibility(View.VISIBLE);
+                    viewState.showContent();
                 } else if (page != null) {
                     showEmpty();
                 } else {
                     Toast.makeText(MyBookingsActivity.this,
-                            getString(R.string.err_network), Toast.LENGTH_SHORT).show();
+                            com.hafiztraveltours.app.network.ApiErrors.userMessage(MyBookingsActivity.this, response, R.string.err_network), Toast.LENGTH_SHORT).show();
                     if (adapter.getItemCount() == 0) showEmpty();
+                    else viewState.showContent();
                 }
             }
 
             @Override
             public void onFailure(retrofit2.Call<ApiResponse<BookingListPage>> call, Throwable t) {
                 if (isFinishing() || isDestroyed()) return;
-                if (progressBar != null) progressBar.setVisibility(View.GONE);
                 if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
                 Toast.makeText(MyBookingsActivity.this,
-                        getString(R.string.err_network), Toast.LENGTH_SHORT).show();
+                        com.hafiztraveltours.app.network.ApiErrors.userMessage(MyBookingsActivity.this, t, R.string.err_network), Toast.LENGTH_SHORT).show();
                 if (adapter.getItemCount() == 0) showEmpty();
+                else viewState.showContent();
             }
         });
     }
 
     private void showEmpty() {
-        if (progressBar != null) progressBar.setVisibility(View.GONE);
-        emptyContainer.setVisibility(View.VISIBLE);
-        recyclerView.setVisibility(View.GONE);
+        viewState.showEmpty();
     }
 
     public void showBookingDocsSheet(BookingDto booking) {
@@ -171,7 +179,8 @@ public class MyBookingsActivity extends AppCompatActivity {
                                 int verifiedCount = 0;
                                 for (com.hafiztraveltours.app.models.DocumentDto d : docs) {
                                     if (d.isAutoReused) autoReusedCount++;
-                                    if ("verified".equalsIgnoreCase(d.status) || "approved".equalsIgnoreCase(d.status)) verifiedCount++;
+                                    if (com.hafiztraveltours.app.utils.DocumentStatus.from(d != null ? d.status : null)
+                                            == com.hafiztraveltours.app.utils.DocumentStatus.VERIFIED) verifiedCount++;
                                 }
 
                                 TextView summaryHeader = new TextView(MyBookingsActivity.this);
@@ -195,7 +204,7 @@ public class MyBookingsActivity extends AppCompatActivity {
                             Throwable t) {
                         if (isFinishing() || isDestroyed()) return;
                         if (progress != null) progress.setVisibility(View.GONE);
-                        Toast.makeText(MyBookingsActivity.this, getString(R.string.err_network), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MyBookingsActivity.this, com.hafiztraveltours.app.network.ApiErrors.userMessage(MyBookingsActivity.this, t, R.string.err_network), Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -272,19 +281,22 @@ public class MyBookingsActivity extends AppCompatActivity {
         statusBadge.setTextSize(11);
         statusBadge.setTypeface(null, android.graphics.Typeface.BOLD);
 
-        if ("verified".equalsIgnoreCase(doc.status) || "approved".equalsIgnoreCase(doc.status)) {
+        com.hafiztraveltours.app.utils.DocumentStatus docStatus =
+                com.hafiztraveltours.app.utils.DocumentStatus.from(doc != null ? doc.status : null);
+
+        if (docStatus == com.hafiztraveltours.app.utils.DocumentStatus.VERIFIED) {
             statusBadge.setText(getString(R.string.doc_status_verified));
             statusBadge.setBackgroundResource(R.drawable.bg_status_verified);
             statusBadge.setTextColor(android.graphics.Color.parseColor("#047857"));
-        } else if ("submitted".equalsIgnoreCase(doc.status) || "pending".equalsIgnoreCase(doc.status)) {
-            statusBadge.setText(getString(R.string.doc_status_pending));
+        } else if (docStatus == com.hafiztraveltours.app.utils.DocumentStatus.PENDING) {
+            statusBadge.setText(getString(docStatus.labelRes()));
             statusBadge.setBackgroundResource(R.drawable.bg_status_pending);
             statusBadge.setTextColor(getResources().getColor(R.color.gold_accent));
-        } else if ("rejected".equalsIgnoreCase(doc.status)) {
+        } else if (docStatus == com.hafiztraveltours.app.utils.DocumentStatus.REJECTED) {
             statusBadge.setText(getString(R.string.doc_status_rejected));
             statusBadge.setBackgroundResource(R.drawable.bg_status_rejected);
             statusBadge.setTextColor(android.graphics.Color.parseColor("#EF4444"));
-        } else if ("expired".equalsIgnoreCase(doc.status)) {
+        } else if (docStatus == com.hafiztraveltours.app.utils.DocumentStatus.EXPIRED) {
             statusBadge.setText(getString(R.string.doc_status_expired));
             statusBadge.setBackgroundResource(R.drawable.bg_status_rejected);
             statusBadge.setTextColor(android.graphics.Color.parseColor("#EF4444"));
@@ -312,11 +324,12 @@ public class MyBookingsActivity extends AppCompatActivity {
         actionBtn.setClickable(true);
         actionBtn.setFocusable(true);
 
-        if ("verified".equalsIgnoreCase(doc.status) || "submitted".equalsIgnoreCase(doc.status) || "pending".equalsIgnoreCase(doc.status)) {
+        if (docStatus == com.hafiztraveltours.app.utils.DocumentStatus.VERIFIED
+                || docStatus == com.hafiztraveltours.app.utils.DocumentStatus.PENDING) {
             actionBtn.setText(getString(R.string.doc_action_view));
             actionBtn.setBackgroundResource(R.drawable.bg_button_white_square);
             actionBtn.setTextColor(getResources().getColor(R.color.brand_magenta));
-        } else if ("rejected".equalsIgnoreCase(doc.status)) {
+        } else if (docStatus == com.hafiztraveltours.app.utils.DocumentStatus.REJECTED) {
             actionBtn.setText(getString(R.string.doc_action_replace));
             actionBtn.setBackgroundResource(R.drawable.bg_button_pink);
             actionBtn.setTextColor(getResources().getColor(R.color.white));
@@ -327,7 +340,7 @@ public class MyBookingsActivity extends AppCompatActivity {
         }
 
         actionBtn.setOnClickListener(v ->
-                Toast.makeText(MyBookingsActivity.this, getString(R.string.doc_status_fallback_format, doc.title, (doc.status != null ? doc.status : getString(R.string.doc_status_not_uploaded_fallback))), Toast.LENGTH_SHORT).show());
+                Toast.makeText(MyBookingsActivity.this, getString(R.string.doc_status_fallback_format, doc.title, getString(docStatus.labelRes())), Toast.LENGTH_SHORT).show());
 
         actions.addView(actionBtn);
         root.addView(actions);

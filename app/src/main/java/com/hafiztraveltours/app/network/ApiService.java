@@ -46,9 +46,6 @@ public interface ApiService {
     @retrofit2.http.POST("v1/auth/logout")
     Call<ApiResponse<Object>> logout();
 
-    @retrofit2.http.GET("v1/profile")
-    Call<ApiResponse<ProfileResponseDto>> getProfile();
-
     @retrofit2.http.PUT("v1/profile")
     Call<ApiResponse<ProfileResponseDto>> updateProfile(@retrofit2.http.Body java.util.Map<String, String> body);
 

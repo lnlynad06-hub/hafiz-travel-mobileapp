@@ -24,7 +24,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pilihan Pakej &amp; Bilik"
+        android:text="@string/config_title"
         android:textColor="@color/text_dark"
         android:textSize="18sp"
         android:textStyle="bold" />
@@ -33,7 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:text="Sila pilih bilik &amp; bilangan pax sebelum mengisi maklumat jemaah"
+        android:text="@string/config_subtitle"
         android:textColor="@color/text_gray"
         android:textSize="12sp" />
 
@@ -90,7 +90,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
-        android:text="Jenis Bilik"
+        android:text="@string/config_room_type"
         android:textColor="@color/text_dark"
         android:textSize="14sp"
         android:textStyle="bold" />
@@ -129,7 +129,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Bilangan Jemaah (Dewasa)"
+                android:text="@string/config_pax_label"
                 android:textColor="@color/text_dark"
                 android:textSize="13sp"
                 android:textStyle="bold" />
@@ -138,7 +138,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="Min 1 Pax • Harga per pax"
+                android:text="@string/config_pax_hint"
                 android:textColor="@color/text_gray"
                 android:textSize="11sp" />
 
@@ -164,7 +164,7 @@
             android:layout_width="48dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="1 Pax"
+            android:text="@string/config_pax_default"
             android:textColor="@color/text_dark"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -190,7 +190,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Pilihan Tarikh Pelepasan"
+        android:text="@string/config_departure_label"
         android:textColor="@color/text_dark"
         android:textSize="14sp"
         android:textStyle="bold" />
@@ -225,7 +225,7 @@
             android:layout_height="44dp"
             android:layout_weight="1"
             android:background="@drawable/bg_input_box"
-            android:hint="Kod Promo / Kupon CRM"
+            android:hint="@string/config_promo_hint"
             android:textAllCaps="true"
             android:paddingHorizontal="12dp"
             android:textColor="@color/text_dark"
@@ -242,7 +242,7 @@
             android:focusable="true"
             android:gravity="center"
             android:paddingHorizontal="16dp"
-            android:text="GUNA"
+            android:text="@string/config_apply"
             android:textColor="@color/brand_magenta"
             android:textSize="13sp"
             android:textStyle="bold" />
@@ -266,7 +266,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Jumlah Anggaran Kos"
+                android:text="@string/config_total_label"
                 android:textColor="@color/text_gray"
                 android:textSize="11sp" />
 
@@ -305,7 +305,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TERUSKAN KE BUTIRAN JEMAAH"
+            android:text="@string/config_continue"
             android:textColor="@color/white"
             android:textSize="14sp"
             android:textStyle="bold" />

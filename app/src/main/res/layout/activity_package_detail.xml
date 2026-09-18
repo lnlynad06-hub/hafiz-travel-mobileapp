@@ -103,7 +103,7 @@
             android:padding="10dp"
             android:src="@drawable/ic_back"
             app:tint="@color/white"
-            android:contentDescription="Kembali" />
+            android:contentDescription="@string/content_desc_back" />
 
         <View
             android:layout_width="0dp"
@@ -121,7 +121,7 @@
             android:padding="10dp"
             android:src="@drawable/ic_share"
             app:tint="@color/white"
-            android:contentDescription="Kongsi Pakej" />
+            android:contentDescription="@string/content_desc_share" />
 
         <ImageView
             android:id="@+id/detailFavoriteButton"
@@ -133,7 +133,7 @@
             android:padding="10dp"
             android:src="@drawable/ic_favorite"
             app:tint="@color/white"
-            android:contentDescription="Simpan Kegemaran" />
+            android:contentDescription="@string/content_desc_favorite" />
 
     </LinearLayout>
 
