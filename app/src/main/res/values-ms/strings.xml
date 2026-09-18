@@ -761,6 +761,8 @@
     <string name="doc_auto_reused_tag">Digunakan Semula Dari Profil</string>
     <string name="doc_trip_info">Dokumen digunakan semula secara automatik dari profil anda bersama pelepasan khas trip.</string>
     <string name="doc_status_rejected">Ditolak</string>
+    <string name="doc_status_expired">Tamat Tempoh</string>
+    <string name="doc_rejection_default">Sila muat naik semula salinan yang jelas</string>
     <string name="doc_rejection_reason_prefix">Sebab: %1$s</string>
 
     <!-- Redesigned Edit Profile Strings -->
@@ -935,4 +937,55 @@
     <string name="passenger_err_complete_all_additional">Sila lengkapkan maklumat semua jemaah tambahan.</string>
     <string name="gender_male">Lelaki</string>
     <string name="gender_female">Perempuan</string>
+    <!-- Audit fix: hardcoded user-facing strings moved to resources -->
+    <string name="promo_applied_format">Kod promo %1$s berjaya digunakan (-RM 200)</string>
+    <string name="pax_unit">Pax</string>
+    <string name="pax_count_format">%1$d Pax</string>
+    <string name="room_price_x_pax_format">%1$s × %2$d Pax</string>
+    <string name="summary_departure_format">Pelepasan: %1$s</string>
+    <string name="summary_pax_adults_format">%1$d Pax Dewasa</string>
+    <string name="summary_room_subtotal_format">Subtotal Bilik (%1$s × %2$d Pax)</string>
+    <string name="summary_promo_discount_format">Diskaun Kod Promo (%1$s)</string>
+    <string name="summary_lead_suffix">(Ketua Jemaah)</string>
+    <string name="summary_traveller_index_format">%1$d. %2$s%3$s</string>
+    <string name="summary_id_label_format">No. IC/Pasport: %1$s</string>
+    <string name="summary_phone_label_format">No. Telefon: %1$s</string>
+    <string name="summary_email_label_format">E-mel: %1$s</string>
+    <string name="duration_days_nights_format">%1$d Hari %2$d Malam</string>
+    <string name="label_contact_us">Hubungi Kami</string>
+    <string name="bookings_docs_all_linked">Semua dokumen wajib untuk pakej ini telah dipautkan dan lengkap!</string>
+    <string name="bookings_doc_readiness_format">Kesediaan Dokumen Pakej: %1$d/%2$d Disahkan • %3$d Diguna Semula</string>
+    <string name="doc_trip_specific_tag">✈ Dokumen Khusus Trip</string>
+    <string name="doc_status_fallback_format">%1$s: %2$s</string>
+    <string name="doc_status_not_uploaded_fallback">not_uploaded</string>
+    <string name="readiness_title">Akaun &amp; Kesediaan Travel</string>
+    <string name="readiness_percent_format">%1$d%% Lengkap</string>
+    <string name="readiness_complete_msg">Profil travel &amp; dokumen anda 100% lengkap!</string>
+    <string name="readiness_incomplete_msg">Lengkapkan profil &amp; dokumen travel untuk kelulusan tempahan lebih pantas</string>
+    <string name="readiness_autolink_msg">✓ Dipaut automatik ke semua tempahan Umrah &amp; Tour akan datang</string>
+    <string name="profile_ic_locked">Nombor IC telah diisi dan tidak boleh dipadam.</string>
+    <string name="profile_passport_locked">Nombor pasport telah diisi dan tidak boleh dipadam.</string>
+    <string name="profile_address_locked">Alamat telah diisi dan tidak boleh dipadam.</string>
+    <string name="doc_upload_processing">Muat naik dokumen sedang diproses…</string>
+    <string name="doc_upload_failed_retry">Gagal memuat naik dokumen. Sila cuba lagi.</string>
+    <string name="doc_upload_network_error">Ralat rangkaian semasa muat naik dokumen.</string>
+    <string name="doc_read_error">Ralat membaca fail dokumen.</string>
+    <string name="doc_file_not_found">Fail dokumen tidak dijumpai.</string>
+    <string name="doc_open_failed">Gagal membuka fail dokumen.</string>
+    <string name="default_title_mr">Mr</string>
+    <string name="default_nationality">Malaysian</string>
+    <string name="default_country">Malaysia</string>
+    <string name="payment_summary_format">%1$s • %2$s • %3$d Pax</string>
+    <string name="err_current_password_required">Sila masukkan kata laluan semasa anda</string>
+    <string name="passenger_err_pax_over">Terlalu ramai jemaah (%1$d ditambah, tempahan memerlukan %2$d). Sila keluarkan %3$d jemaah.</string>
+    <!-- Audit fix: layout user-facing strings -->
+    <string name="booking_success_title">Tempahan Berjaya Dicipta</string>
+    <string name="booking_success_body">Terima kasih kerana memilih Hafiz Travel &amp; Tours. Butiran tempahan anda telah sedia direkodkan.</string>
+    <string name="booking_success_total_label">Jumlah Pembayaran</string>
+    <string name="booking_success_view">LIHAT TEMPAHAN SAYA</string>
+    <string name="booking_success_home">KEMBALI KE HALAMAN UTAMA</string>
+    <string name="content_desc_back">Kembali</string>
+    <string name="summary_title">Semakan Tempahan</string>
+    <string name="payment_title">Pembayaran &amp; Sahkan</string>
+    <string name="config_title">Pilihan Pakej &amp; Bilik</string>
 </resources>

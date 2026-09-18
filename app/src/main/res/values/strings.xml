@@ -879,6 +879,8 @@
     <string name="doc_auto_reused_tag">Auto-Reused from Profile</string>
     <string name="doc_trip_info">Documents automatically reused from your profile alongside required trip-specific clearance.</string>
     <string name="doc_status_rejected">Rejected</string>
+    <string name="doc_status_expired">Expired</string>
+    <string name="doc_rejection_default">Please re-upload a clear copy</string>
     <string name="doc_rejection_reason_prefix">Reason: %1$s</string>
 
     <!-- Redesigned Edit Profile Strings -->
@@ -1054,4 +1056,54 @@
     <string name="passenger_err_complete_all_additional">Please complete details for all additional travellers.</string>
     <string name="gender_male">Male</string>
     <string name="gender_female">Female</string>
+    <!-- Audit fix: hardcoded user-facing strings moved to resources -->
+    <string name="promo_applied_format">Promo code %1$s applied (-RM 200)</string>
+    <string name="pax_unit">Pax</string>
+    <string name="pax_count_format">%1$d Pax</string>
+    <string name="room_price_x_pax_format">%1$s × %2$d Pax</string>
+    <string name="summary_departure_format">Departure: %1$s</string>
+    <string name="summary_pax_adults_format">%1$d Adult Pax</string>
+    <string name="summary_room_subtotal_format">Room Subtotal (%1$s × %2$d Pax)</string>
+    <string name="summary_promo_discount_format">Promo Code Discount (%1$s)</string>
+    <string name="summary_lead_suffix">(Lead Traveller)</string>
+    <string name="summary_traveller_index_format">%1$d. %2$s%3$s</string>
+    <string name="summary_id_label_format">No. IC/Passport: %1$s</string>
+    <string name="summary_phone_label_format">Phone No.: %1$s</string>
+    <string name="summary_email_label_format">Email: %1$s</string>
+    <string name="duration_days_nights_format">%1$d Days %2$d Nights</string>
+    <string name="label_contact_us">Contact Us</string>
+    <string name="bookings_docs_all_linked">All required documents for this package are already linked and complete!</string>
+    <string name="bookings_doc_readiness_format">Package Document Readiness: %1$d/%2$d Verified • %3$d Auto-Reused</string>
+    <string name="doc_trip_specific_tag">✈ Trip-Specific Document</string>
+    <string name="doc_status_fallback_format">%1$s: %2$s</string>
+    <string name="doc_status_not_uploaded_fallback">not_uploaded</string>
+    <string name="readiness_title">Account &amp; Travel Readiness</string>
+    <string name="readiness_percent_format">%1$d%% Complete</string>
+    <string name="readiness_complete_msg">Your travel profile &amp; documents are 100% complete!</string>
+    <string name="readiness_incomplete_msg">Complete your profile &amp; travel documents for faster booking clearance</string>
+    <string name="readiness_autolink_msg">✓ Auto-linked to all future Umrah &amp; Tour bookings</string>
+    <string name="profile_ic_locked">IC number has been filled and cannot be deleted.</string>
+    <string name="profile_passport_locked">Passport number has been filled and cannot be deleted.</string>
+    <string name="profile_address_locked">Address has been filled and cannot be deleted.</string>
+    <string name="doc_upload_processing">Uploading document…</string>
+    <string name="doc_upload_failed_retry">Failed to upload document. Please try again.</string>
+    <string name="doc_upload_network_error">Network error while uploading document.</string>
+    <string name="doc_read_error">Error reading document file.</string>
+    <string name="doc_file_not_found">Document file not found.</string>
+    <string name="doc_open_failed">Failed to open document file.</string>
+    <string name="default_title_mr">Mr</string>
+    <string name="default_nationality">Malaysian</string>
+    <string name="default_country">Malaysia</string>
+    <string name="payment_summary_format">%1$s • %2$s • %3$d Pax</string>
+    <string name="passenger_err_pax_over">Too many travellers (%1$d added, booking requires %2$d). Please remove %3$d traveller(s).</string>
+    <!-- Audit fix: layout user-facing strings -->
+    <string name="booking_success_title">Booking Successfully Created</string>
+    <string name="booking_success_body">Thank you for choosing Hafiz Travel &amp; Tours. Your booking details have been recorded.</string>
+    <string name="booking_success_total_label">Total Payment</string>
+    <string name="booking_success_view">VIEW MY BOOKINGS</string>
+    <string name="booking_success_home">BACK TO HOME</string>
+    <string name="content_desc_back">Back</string>
+    <string name="summary_title">Booking Review</string>
+    <string name="payment_title">Payment &amp; Confirm</string>
+    <string name="config_title">Package &amp; Room Options</string>
 </resources>

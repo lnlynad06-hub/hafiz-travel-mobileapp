@@ -30,19 +30,20 @@ public class ApiClient {
     public static synchronized ApiService getApiService() {
         if (apiService == null) {
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            // PII-safe default: no BODY logging (would leak Bearer token + passwords).
+            // No BuildConfig in this module, so keep logging off unconditionally.
+            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
 
             OkHttpClient okHttpClient = new OkHttpClient.Builder()
                     .addInterceptor(loggingInterceptor)
                     .addInterceptor(chain -> {
                         okhttp3.Request original = chain.request();
+                        okhttp3.Request.Builder builder = original.newBuilder()
+                                .header("Accept", "application/json");
                         if (authToken != null) {
-                            original = original.newBuilder()
-                                    .header("Authorization", "Bearer " + authToken)
-                                    .header("Accept", "application/json")
-                                    .build();
+                            builder.header("Authorization", "Bearer " + authToken);
                         }
-                        return chain.proceed(original);
+                        return chain.proceed(builder.build());
                     })
                     .connectTimeout(15, TimeUnit.SECONDS)
                     .readTimeout(15, TimeUnit.SECONDS)

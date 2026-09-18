@@ -208,7 +208,12 @@ public class PassengerDetailsActivity extends AppCompatActivity {
                     if (response.body().data.user != null) {
                         currentUserProfile = response.body().data.user;
                         SessionManager session = SessionManager.getInstance(PassengerDetailsActivity.this);
-                        session.saveAuthSession(session.getToken(), currentUserProfile);
+                        String tok = session.getToken();
+                        if (tok != null && !tok.trim().isEmpty()) {
+                            session.saveAuthSession(tok, currentUserProfile);
+                        } else {
+                            session.saveUser(currentUserProfile);
+                        }
                     }
                 }
                 evaluateLeadProfileCompleteness();
@@ -561,7 +566,7 @@ public class PassengerDetailsActivity extends AppCompatActivity {
 
         MaterialAutoCompleteTextView inputTitle = new MaterialAutoCompleteTextView(this);
         inputTitle.setHint(getString(R.string.passenger_field_title_hint));
-        inputTitle.setText("Mr", false);
+        inputTitle.setText(getString(R.string.default_title_mr), false);
         inputTitle.setTextSize(12);
         inputTitle.setTextColor(getResources().getColor(R.color.text_dark));
         inputTitle.setBackgroundResource(R.drawable.bg_input_box);
@@ -628,8 +633,8 @@ public class PassengerDetailsActivity extends AppCompatActivity {
 
         // Nationality
         body.addView(createFieldLabel(getString(R.string.passenger_field_nationality_label)));
-        holder.inputNationality = createEditText("Malaysian", InputType.TYPE_TEXT_FLAG_CAP_WORDS);
-        holder.inputNationality.setText("Malaysian");
+        holder.inputNationality = createEditText(getString(R.string.default_nationality), InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+        holder.inputNationality.setText(getString(R.string.default_nationality));
         body.addView(holder.inputNationality);
 
         // IC if required
@@ -670,8 +675,8 @@ public class PassengerDetailsActivity extends AppCompatActivity {
             LinearLayout.LayoutParams colCtryP = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
             colCtry.setLayoutParams(colCtryP);
             colCtry.addView(createFieldLabel(getString(R.string.passenger_field_issuing_country_label)));
-            holder.inputIssuingCountry = createEditText("Malaysia", InputType.TYPE_TEXT_FLAG_CAP_WORDS);
-            holder.inputIssuingCountry.setText("Malaysia");
+            holder.inputIssuingCountry = createEditText(getString(R.string.default_country), InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+            holder.inputIssuingCountry.setText(getString(R.string.default_country));
             colCtry.addView(holder.inputIssuingCountry);
 
             passRow.addView(colEx);
@@ -836,10 +841,14 @@ public class PassengerDetailsActivity extends AppCompatActivity {
             return;
         }
 
-        // 2. Validate Total Pax Count vs Selected Booking Pax
+        // 2. Validate Total Pax Count vs Selected Booking Pax (exact match required)
         int totalPax = 1 + additionalTravellers.size();
-        if (totalPax < bookingRequest.adultPaxCount) {
-            Toast.makeText(this, getString(R.string.passenger_err_pax_count_mismatch, totalPax, bookingRequest.adultPaxCount), Toast.LENGTH_LONG).show();
+        if (totalPax != bookingRequest.adultPaxCount) {
+            if (totalPax < bookingRequest.adultPaxCount) {
+                Toast.makeText(this, getString(R.string.passenger_err_pax_count_mismatch, bookingRequest.adultPaxCount, totalPax, Math.max(0, bookingRequest.adultPaxCount - totalPax)), Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, getString(R.string.passenger_err_pax_over, totalPax, bookingRequest.adultPaxCount, totalPax - bookingRequest.adultPaxCount), Toast.LENGTH_LONG).show();
+            }
             return;
         }
 
@@ -913,15 +922,15 @@ public class PassengerDetailsActivity extends AppCompatActivity {
         // Lead passenger (Profile Snapshot)
         BookingRequest.Passenger leadP = new BookingRequest.Passenger();
         leadP.isLead = true;
-        leadP.title = "Mr";
+        leadP.title = getString(R.string.default_title_mr);
         leadP.fullName = currentUserProfile.name;
         leadP.icNumber = currentUserProfile.icNumber != null ? currentUserProfile.icNumber : "";
         leadP.passportNumber = currentUserProfile.passportNumber != null ? currentUserProfile.passportNumber : "";
         leadP.passportExpiryDate = currentUserProfile.passportExpiryDate != null ? currentUserProfile.passportExpiryDate : "";
-        leadP.issuingCountry = currentUserProfile.issuingCountry != null ? currentUserProfile.issuingCountry : "Malaysia";
+        leadP.issuingCountry = currentUserProfile.issuingCountry != null ? currentUserProfile.issuingCountry : getString(R.string.default_country);
         leadP.gender = currentUserProfile.gender != null ? currentUserProfile.gender : "";
         leadP.dateOfBirth = currentUserProfile.dateOfBirth != null ? currentUserProfile.dateOfBirth : "";
-        leadP.nationality = currentUserProfile.nationality != null ? currentUserProfile.nationality : "Malaysian";
+        leadP.nationality = currentUserProfile.nationality != null ? currentUserProfile.nationality : getString(R.string.default_nationality);
         leadP.clothesSize = currentUserProfile.clothesSize != null ? currentUserProfile.clothesSize : "";
         leadP.icPassportNumber = (leadP.passportNumber != null && !leadP.passportNumber.isEmpty()) ? leadP.passportNumber : leadP.icNumber;
         leadP.phoneNumber = currentUserProfile.phone != null ? currentUserProfile.phone : SessionManager.getInstance(this).getUserPhone();
@@ -936,15 +945,15 @@ public class PassengerDetailsActivity extends AppCompatActivity {
             AdditionalTravellerHolder h = additionalTravellers.get(i);
             BookingRequest.Passenger p = new BookingRequest.Passenger();
             p.isLead = false;
-            p.title = h.inputTitle != null ? h.inputTitle.getText().toString().trim() : "Mr";
+            p.title = h.inputTitle != null ? h.inputTitle.getText().toString().trim() : getString(R.string.default_title_mr);
             p.fullName = h.inputName.getText().toString().trim();
             p.icNumber = h.inputIc != null ? h.inputIc.getText().toString().trim() : "";
             p.passportNumber = h.inputPassport != null ? h.inputPassport.getText().toString().trim() : "";
             p.passportExpiryDate = h.inputPassportExpiry != null ? h.inputPassportExpiry.getText().toString().trim() : "";
-            p.issuingCountry = h.inputIssuingCountry != null ? h.inputIssuingCountry.getText().toString().trim() : "Malaysia";
+            p.issuingCountry = h.inputIssuingCountry != null ? h.inputIssuingCountry.getText().toString().trim() : getString(R.string.default_country);
             p.dateOfBirth = h.inputDob != null ? h.inputDob.getText().toString().trim() : "";
             p.gender = h.inputGender != null ? h.inputGender.getText().toString().trim() : "";
-            p.nationality = h.inputNationality != null ? h.inputNationality.getText().toString().trim() : "Malaysian";
+            p.nationality = h.inputNationality != null ? h.inputNationality.getText().toString().trim() : getString(R.string.default_nationality);
             p.clothesSize = h.inputClothesSize != null ? h.inputClothesSize.getText().toString().trim() : "";
             p.icPassportNumber = (!p.passportNumber.isEmpty()) ? p.passportNumber : p.icNumber;
 

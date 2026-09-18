@@ -43,7 +43,7 @@ public class BookingSuccessActivity extends AppCompatActivity {
 
         if (bookingRequest != null) {
             txtPackageName.setText(bookingRequest.packageName);
-            txtRoomAndPax.setText(bookingRequest.roomLabel + " • " + bookingRequest.adultPaxCount + " Pax");
+            txtRoomAndPax.setText(getString(R.string.passenger_room_pax_format, bookingRequest.roomLabel, bookingRequest.adultPaxCount));
             txtTotalAmount.setText(bookingRequest.totalAmountFormatted);
         }
 

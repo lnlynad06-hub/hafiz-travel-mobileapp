@@ -38,7 +38,7 @@ public class PackagePopularAdapter extends RecyclerView.Adapter<PackagePopularAd
 
     public PackagePopularAdapter(Context context, List<UmrahPackage> items, boolean featured) {
         this.context = context;
-        this.items = items;
+        this.items = items != null ? items : new java.util.ArrayList<>();
         this.layoutResId = featured ? R.layout.item_package_featured : R.layout.item_package_popular;
     }
 
@@ -51,7 +51,9 @@ public class PackagePopularAdapter extends RecyclerView.Adapter<PackagePopularAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        if (items == null || position < 0 || position >= items.size()) return;
         UmrahPackage pkg = items.get(position);
+        if (pkg == null) return;
 
         if (holder.category != null) {
             if (pkg.category != null && !pkg.category.trim().isEmpty()) {
@@ -90,6 +92,8 @@ public class PackagePopularAdapter extends RecyclerView.Adapter<PackagePopularAd
             Glide.with(holder.itemView)
                     .load(pkg.imageUrl)
                     .placeholder(R.drawable.bg_image_placeholder)
+                    .error(R.drawable.bg_image_placeholder)
+                    .fallback(R.drawable.bg_image_placeholder)
                     .into(holder.image);
         } catch (Exception ignored) {}
 
@@ -122,7 +126,7 @@ public class PackagePopularAdapter extends RecyclerView.Adapter<PackagePopularAd
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return items != null ? items.size() : 0;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

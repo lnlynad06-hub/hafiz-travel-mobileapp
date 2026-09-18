@@ -263,6 +263,13 @@ public class ProfileActivity extends AppCompatActivity {
                 });
     }
 
+    private boolean isDocCounted(com.hafiztraveltours.app.models.DocumentDto doc) {
+        if (doc == null || doc.status == null) return false;
+        String s = doc.status.trim().toLowerCase();
+        if (s.isEmpty() || s.equals("not_uploaded") || s.equals("rejected") || s.equals("expired")) return false;
+        return true;
+    }
+
     private void renderStats(com.hafiztraveltours.app.models.ProfileStatsDto stats) {
         boolean loggedIn = SessionManager.getInstance(this).isLoggedIn();
         if (statsCard != null) statsCard.setVisibility(loggedIn ? View.VISIBLE : View.GONE);
@@ -304,7 +311,7 @@ public class ProfileActivity extends AppCompatActivity {
             TextView progressText = findViewById(R.id.loyaltyProgressText);
             TextView benefitsText = findViewById(R.id.loyaltyBenefitsText);
             if (tierName != null) {
-                tierName.setText("Account & Travel Readiness");
+                tierName.setText(getString(R.string.readiness_title));
             }
             
             // Kira % kelengkapan profil & dokumen perjalanan secara dinamik (100% Total)
@@ -332,14 +339,15 @@ public class ProfileActivity extends AppCompatActivity {
             if (!emergName.isEmpty()) compScore += 10;
 
             // Semak status dokumen dimuat naik (Passport, IC/MyKad, Passport Photo)
+            // Only verified/pending count toward readiness; rejected/expired must be fixed first
             int uploadedDocPoints = 0;
-            if (userDocumentsMap.containsKey("passport") && !"not_uploaded".equalsIgnoreCase(userDocumentsMap.get("passport").status)) {
+            if (isDocCounted(userDocumentsMap.get("passport"))) {
                 uploadedDocPoints += 7;
             }
-            if (userDocumentsMap.containsKey("ic") && !"not_uploaded".equalsIgnoreCase(userDocumentsMap.get("ic").status)) {
+            if (isDocCounted(userDocumentsMap.get("ic"))) {
                 uploadedDocPoints += 7;
             }
-            if (userDocumentsMap.containsKey("passport_photo") && !"not_uploaded".equalsIgnoreCase(userDocumentsMap.get("passport_photo").status)) {
+            if (isDocCounted(userDocumentsMap.get("passport_photo"))) {
                 uploadedDocPoints += 6;
             }
             compScore += uploadedDocPoints;
@@ -352,20 +360,20 @@ public class ProfileActivity extends AppCompatActivity {
             }
 
             if (pointsBadge != null) {
-                pointsBadge.setText(compScore + "% Complete");
+                pointsBadge.setText(getString(R.string.readiness_percent_format, compScore));
             }
             if (progressBar != null) {
                 progressBar.setProgress(compScore);
             }
             if (progressText != null) {
                 if (compScore >= 100) {
-                    progressText.setText("Your travel profile & documents are 100% complete!");
+                    progressText.setText(getString(R.string.readiness_complete_msg));
                 } else {
-                    progressText.setText("Complete your profile & travel documents for faster booking clearance");
+                    progressText.setText(getString(R.string.readiness_incomplete_msg));
                 }
             }
             if (benefitsText != null) {
-                benefitsText.setText("✓ Auto-linked to all future Umrah & Tour bookings");
+                benefitsText.setText(getString(R.string.readiness_autolink_msg));
                 benefitsText.setVisibility(View.VISIBLE);
             }
         }
@@ -800,15 +808,15 @@ public class ProfileActivity extends AppCompatActivity {
 
                 // Jangan benarkan pengguna memadam (empty) maklumat yang sudah diisi sebelum ini
                 if (!currentIc.isEmpty() && newIc.isEmpty()) {
-                    Toast.makeText(this, "Nombor IC telah diisi dan tidak boleh dipadam.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.profile_ic_locked), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (!currentPassport.isEmpty() && newPassport.isEmpty()) {
-                    Toast.makeText(this, "Nombor pasport telah diisi dan tidak boleh dipadam.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.profile_passport_locked), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (!currentAddress1.isEmpty() && newAddress1.isEmpty()) {
-                    Toast.makeText(this, "Alamat telah diisi dan tidak boleh dipadam.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.profile_address_locked), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -1244,7 +1252,7 @@ public class ProfileActivity extends AppCompatActivity {
 
             if (rejectionContainer != null && tvRejectionReason != null) {
                 String reason = doc.rejectionReason != null && !doc.rejectionReason.isEmpty()
-                        ? doc.rejectionReason : "Please re-upload a clear copy";
+                        ? doc.rejectionReason : getString(R.string.doc_rejection_default);
                 tvRejectionReason.setText(getString(R.string.doc_rejection_reason_prefix, reason));
                 rejectionContainer.setVisibility(View.VISIBLE);
             }
@@ -1262,6 +1270,17 @@ public class ProfileActivity extends AppCompatActivity {
                     tvDates.setVisibility(View.GONE);
                 }
             }
+            if (tvGuidance != null) tvGuidance.setVisibility(View.GONE);
+        } else if ("expired".equalsIgnoreCase(status)) {
+            tvStatus.setText(getString(R.string.doc_status_expired));
+            tvStatus.setBackgroundResource(R.drawable.bg_status_rejected);
+            tvStatus.setTextColor(android.graphics.Color.parseColor("#DC2626"));
+            if (btnAction != null) {
+                btnAction.setText(getString(R.string.doc_action_replace));
+                btnAction.setBackgroundResource(R.drawable.bg_button_pink);
+                btnAction.setTextColor(getResources().getColor(R.color.white));
+            }
+            if (tvDates != null) tvDates.setVisibility(View.GONE);
             if (tvGuidance != null) tvGuidance.setVisibility(View.GONE);
         } else if ("not_required".equalsIgnoreCase(status)) {
             tvStatus.setText(getString(R.string.doc_status_not_required));
@@ -1530,7 +1549,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void performDocumentUpload(String docCode, android.net.Uri uri) {
         if (uri == null) return;
-        Toast.makeText(this, "Muat naik dokumen sedang diproses...", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.doc_upload_processing), Toast.LENGTH_SHORT).show();
 
         try {
             java.io.InputStream inputStream = getContentResolver().openInputStream(uri);
@@ -1579,7 +1598,7 @@ public class ProfileActivity extends AppCompatActivity {
                                 loadStats();
                                 showTravelDocsBottomSheet();
                             } else {
-                                Toast.makeText(ProfileActivity.this, "Gagal memuat naik dokumen. Sila cuba lagi.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ProfileActivity.this, getString(R.string.doc_upload_failed_retry), Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -1588,19 +1607,19 @@ public class ProfileActivity extends AppCompatActivity {
                                 retrofit2.Call<ApiResponse<com.hafiztraveltours.app.models.DocumentDto>> call,
                                 Throwable t) {
                             if (isFinishing() || isDestroyed()) return;
-                            Toast.makeText(ProfileActivity.this, "Ralat rangkaian semasa muat naik dokumen.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ProfileActivity.this, getString(R.string.doc_upload_network_error), Toast.LENGTH_SHORT).show();
                         }
                     }
             );
         } catch (Exception e) {
-            Toast.makeText(this, "Ralat membaca fail dokumen.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.doc_read_error), Toast.LENGTH_SHORT).show();
         }
     }
 
     private void openUploadedDocument(String docCode) {
         DocumentDto doc = userDocumentsMap.get(docCode != null ? docCode.toLowerCase() : "");
         if (doc == null || doc.filePath == null || doc.filePath.isEmpty()) {
-            Toast.makeText(this, "Fail dokumen tidak dijumpai.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.doc_file_not_found), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -1623,7 +1642,7 @@ public class ProfileActivity extends AppCompatActivity {
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             startActivity(intent);
         } catch (Exception e) {
-            Toast.makeText(this, "Gagal membuka fail dokumen.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.doc_open_failed), Toast.LENGTH_SHORT).show();
         }
     }
 

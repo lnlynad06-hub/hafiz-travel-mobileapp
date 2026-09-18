@@ -53,6 +53,8 @@ public class WebViewActivity extends AppCompatActivity {
         webView = findViewById(R.id.webView);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setDomStorageEnabled(true);
+        webView.getSettings().setAllowFileAccess(false);
+        webView.getSettings().setAllowContentAccess(false);
         webView.setWebViewClient(new WebViewClient());
         webView.setWebChromeClient(new WebChromeClient() {
             @Override
@@ -62,8 +64,12 @@ public class WebViewActivity extends AppCompatActivity {
             }
         });
 
-        if (url != null) {
+        if (url != null && (url.startsWith("https://") || url.startsWith("http://"))) {
             webView.loadUrl(url);
+        } else {
+            android.util.Log.w("WebViewActivity", "Blocked non-http(s) URL");
+            finish();
+            return;
         }
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
@@ -77,5 +83,14 @@ public class WebViewActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (webView != null) {
+            webView.destroy();
+            webView = null;
+        }
+        super.onDestroy();
     }
 }

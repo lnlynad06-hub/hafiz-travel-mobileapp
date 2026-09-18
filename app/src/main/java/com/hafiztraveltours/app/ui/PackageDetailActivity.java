@@ -230,7 +230,10 @@ public class PackageDetailActivity extends AppCompatActivity {
                 bottomPriceSublabel.setVisibility(View.VISIBLE);
             }
         } else {
-            if (bottomPrice != null) bottomPrice.setText(detail.price);
+            if (bottomPrice != null) {
+                bottomPrice.setText((detail.price != null && !detail.price.trim().isEmpty())
+                        ? detail.price : getString(R.string.label_contact_us));
+            }
             if (bottomPriceSublabel != null) bottomPriceSublabel.setVisibility(View.GONE);
         }
     }

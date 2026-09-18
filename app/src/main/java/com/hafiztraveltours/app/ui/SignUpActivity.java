@@ -405,16 +405,17 @@ public class SignUpActivity extends AppCompatActivity {
                                         if (user == null) {
                                             user = new UserDto("1", name, email, "");
                                         }
-                                        SessionManager.getInstance(SignUpActivity.this).saveAuthSession(token, user);
+                                        if (token != null && !token.trim().isEmpty()) {
+                                            SessionManager.getInstance(SignUpActivity.this).saveAuthSession(token, user);
+                                        } else {
+                                            SessionManager.getInstance(SignUpActivity.this).saveUser(user);
+                                        }
                                         Toast.makeText(SignUpActivity.this, getString(R.string.login_google_success, name), Toast.LENGTH_SHORT).show();
                                         startActivity(new Intent(SignUpActivity.this, MainActivity.class));
                                         finish();
                                     } else {
-                                        String err = getString(R.string.login_google_failed);
-                                        if (response.body() != null && response.body().message != null) {
-                                            err = response.body().message;
-                                        }
-                                        Toast.makeText(SignUpActivity.this, err, Toast.LENGTH_LONG).show();
+                                        android.util.Log.w("SignUpActivity", "Google sign-up failed code=" + response.code());
+                                        Toast.makeText(SignUpActivity.this, getString(R.string.login_google_failed), Toast.LENGTH_LONG).show();
                                     }
                                 }
 
@@ -422,7 +423,8 @@ public class SignUpActivity extends AppCompatActivity {
                                 public void onFailure(Call<ApiResponse<AuthResponse>> call, Throwable t) {
                                     if (isFinishing() || isDestroyed()) return;
                                     setLoadingState(false);
-                                    Toast.makeText(SignUpActivity.this, getString(R.string.err_connection_detail, t.getMessage()), Toast.LENGTH_LONG).show();
+                                    android.util.Log.w("SignUpActivity", "Google sign-up network error", t);
+                                    Toast.makeText(SignUpActivity.this, getString(R.string.err_network), Toast.LENGTH_LONG).show();
                                 }
                             });
                 }
@@ -764,24 +766,17 @@ public class SignUpActivity extends AppCompatActivity {
                             if (user == null) {
                                 user = new UserDto("1", name, nickname, email, normalizedPhone);
                             }
-                            SessionManager.getInstance(SignUpActivity.this).saveAuthSession(token, user);
+                            if (token != null && !token.trim().isEmpty()) {
+                                SessionManager.getInstance(SignUpActivity.this).saveAuthSession(token, user);
+                            } else {
+                                SessionManager.getInstance(SignUpActivity.this).saveUser(user);
+                            }
                             Toast.makeText(SignUpActivity.this, getString(R.string.signup_success), Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(SignUpActivity.this, MainActivity.class));
                             finish();
                         } else {
-                            String errorMsg = getString(R.string.err_signup_failed);
-                            if (response.body() != null && response.body().message != null && !response.body().message.isEmpty()) {
-                                errorMsg = response.body().message;
-                            } else if (response.errorBody() != null) {
-                                try {
-                                    String errJson = response.errorBody().string();
-                                    org.json.JSONObject obj = new org.json.JSONObject(errJson);
-                                    if (obj.has("message")) {
-                                        errorMsg = obj.getString("message");
-                                    }
-                                } catch (Exception ignored) {}
-                            }
-                            Toast.makeText(SignUpActivity.this, errorMsg, Toast.LENGTH_LONG).show();
+                            android.util.Log.w("SignUpActivity", "Register failed code=" + response.code());
+                            Toast.makeText(SignUpActivity.this, getString(R.string.err_signup_failed), Toast.LENGTH_LONG).show();
                         }
                     }
 

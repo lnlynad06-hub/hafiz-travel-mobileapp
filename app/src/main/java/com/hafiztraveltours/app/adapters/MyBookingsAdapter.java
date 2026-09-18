@@ -19,11 +19,11 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
     private List<BookingDto> items;
 
     public MyBookingsAdapter(List<BookingDto> items) {
-        this.items = items;
+        this.items = items != null ? items : new java.util.ArrayList<>();
     }
 
     public void setItems(List<BookingDto> newItems) {
-        this.items = newItems;
+        this.items = newItems != null ? newItems : new java.util.ArrayList<>();
         notifyDataSetChanged();
     }
 
@@ -37,7 +37,9 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        if (items == null || position < 0 || position >= items.size()) return;
         BookingDto booking = items.get(position);
+        if (booking == null) return;
         holder.txtPackageName.setText(booking.packageName != null ? booking.packageName : "");
         holder.txtBookingNo.setText(booking.bookingNo != null ? booking.bookingNo : "");
         String status = booking.status != null ? booking.status.replace('_', ' ').toUpperCase() : "";

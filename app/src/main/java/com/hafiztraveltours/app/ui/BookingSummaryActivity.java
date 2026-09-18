@@ -80,7 +80,7 @@ public class BookingSummaryActivity extends AppCompatActivity {
 
         if (txtDepartureDate != null) {
             if (bookingRequest.selectedDepartureDate != null && !bookingRequest.selectedDepartureDate.isEmpty()) {
-                txtDepartureDate.setText("Pelepasan: " + bookingRequest.selectedDepartureDate);
+                txtDepartureDate.setText(getString(R.string.summary_departure_format, bookingRequest.selectedDepartureDate));
                 txtDepartureDate.setVisibility(android.view.View.VISIBLE);
             } else {
                 txtDepartureDate.setVisibility(android.view.View.GONE);
@@ -88,10 +88,10 @@ public class BookingSummaryActivity extends AppCompatActivity {
         }
 
         txtRoomLabel.setText(bookingRequest.roomLabel);
-        txtPaxCount.setText(bookingRequest.adultPaxCount + " Pax Dewasa");
+        txtPaxCount.setText(getString(R.string.summary_pax_adults_format, bookingRequest.adultPaxCount));
 
         double roomSubtotal = bookingRequest.unitPriceAmount * bookingRequest.adultPaxCount;
-        txtUnitPriceLabel.setText("Subtotal Bilik (" + bookingRequest.roomPriceFormatted + " × " + bookingRequest.adultPaxCount + " Pax)");
+        txtUnitPriceLabel.setText(getString(R.string.summary_room_subtotal_format, bookingRequest.roomPriceFormatted, bookingRequest.adultPaxCount));
         txtUnitPriceAmount.setText(BookingRequest.formatPrice(roomSubtotal));
 
         renderBreakdown();
@@ -110,7 +110,7 @@ public class BookingSummaryActivity extends AppCompatActivity {
             row.setPadding(0, dp(2), 0, dp(4));
 
             TextView label = new TextView(this);
-            label.setText("Diskaun Kod Promo (" + bookingRequest.promoCode + ")");
+            label.setText(getString(R.string.summary_promo_discount_format, bookingRequest.promoCode));
             label.setTextSize(12);
             label.setTextColor(getResources().getColor(R.color.brand_magenta));
             label.setTypeface(null, Typeface.BOLD);
@@ -141,7 +141,7 @@ public class BookingSummaryActivity extends AppCompatActivity {
             item.setPadding(0, dp(4), 0, dp(8));
 
             TextView nameView = new TextView(this);
-            nameView.setText((i + 1) + ". " + p.fullName + (p.isLead ? " (Ketua Jemaah)" : ""));
+            nameView.setText(getString(R.string.summary_traveller_index_format, (i + 1), p.fullName, (p.isLead ? " " + getString(R.string.summary_lead_suffix) : "")));
             nameView.setTextSize(13);
             nameView.setTypeface(null, Typeface.BOLD);
             nameView.setTextColor(getResources().getColor(R.color.text_dark));
@@ -149,7 +149,7 @@ public class BookingSummaryActivity extends AppCompatActivity {
 
             TextView icView = new TextView(this);
             String maskedId = maskSensitiveDoc(p.icPassportNumber);
-            icView.setText("   No. IC/Pasport: " + maskedId);
+            icView.setText(getString(R.string.summary_id_label_format, maskedId));
             icView.setTextSize(12);
             icView.setTextColor(getResources().getColor(R.color.text_gray));
             item.addView(icView);
@@ -157,7 +157,7 @@ public class BookingSummaryActivity extends AppCompatActivity {
             if (p.isLead) {
                 if (p.phoneNumber != null && !p.phoneNumber.isEmpty()) {
                     TextView phoneView = new TextView(this);
-                    phoneView.setText("   No. Telefon: " + p.phoneNumber);
+                    phoneView.setText(getString(R.string.summary_phone_label_format, p.phoneNumber));
                     phoneView.setTextSize(12);
                     phoneView.setTextColor(getResources().getColor(R.color.text_gray));
                     item.addView(phoneView);
@@ -165,7 +165,7 @@ public class BookingSummaryActivity extends AppCompatActivity {
 
                 if (p.email != null && !p.email.isEmpty()) {
                     TextView emailView = new TextView(this);
-                    emailView.setText("   E-mel: " + p.email);
+                    emailView.setText(getString(R.string.summary_email_label_format, p.email));
                     emailView.setTextSize(12);
                     emailView.setTextColor(getResources().getColor(R.color.text_gray));
                     item.addView(emailView);

@@ -24,15 +24,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HafizTravel">
 
-        <activity android:name=".ui.WebViewActivity" />
+        <activity android:name=".ui.WebViewActivity" android:exported="false" />
 
-        <activity android:name=".ui.HubungiKamiActivity" />
+        <activity android:name=".ui.HubungiKamiActivity" android:exported="false" />
         <activity android:name=".ui.PanduanUmrahActivity" />
         <activity android:name=".ui.QiblaActivity" android:exported="false" />
 
         <activity android:name=".ui.TentangKamiActivity" />
 
-        <activity android:name=".ui.ProfileActivity" />
+        <activity android:name=".ui.ProfileActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
         <activity android:name=".ui.MyBookingsActivity" android:exported="false" />
 
         <activity android:name=".ui.MainActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
@@ -47,8 +47,8 @@
         </activity>
 
         <activity android:name=".ui.WelcomeActivity" android:exported="false" />
-        <activity android:name=".ui.LoginActivity" android:exported="false" />
-        <activity android:name=".ui.SignUpActivity" android:exported="false" />
+        <activity android:name=".ui.LoginActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.SignUpActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
         <activity android:name=".ui.UmrahActivity" android:exported="false" />
         <activity android:name=".ui.TourActivity" android:exported="false" />
         <activity android:name=".ui.FavoriteActivity" android:exported="false" />

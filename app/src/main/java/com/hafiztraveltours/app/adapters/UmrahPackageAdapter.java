@@ -40,14 +40,14 @@ public class UmrahPackageAdapter extends RecyclerView.Adapter<UmrahPackageAdapte
 
     public UmrahPackageAdapter(Context context, List<UmrahPackage> items, OnFavoriteToggleListener toggleListener) {
         this.context = context;
-        this.fullList = new ArrayList<>(items);
-        this.filteredList = new ArrayList<>(items);
+        this.fullList = items != null ? new ArrayList<>(items) : new ArrayList<>();
+        this.filteredList = items != null ? new ArrayList<>(items) : new ArrayList<>();
         this.toggleListener = toggleListener;
     }
 
     public void setItems(List<UmrahPackage> items) {
-        this.fullList = new ArrayList<>(items);
-        this.filteredList = new ArrayList<>(items);
+        this.fullList = items != null ? new ArrayList<>(items) : new ArrayList<>();
+        this.filteredList = items != null ? new ArrayList<>(items) : new ArrayList<>();
         notifyDataSetChanged();
     }
 
@@ -71,13 +71,15 @@ public class UmrahPackageAdapter extends RecyclerView.Adapter<UmrahPackageAdapte
 
     /** Filters by package name, case-insensitive. Pass "" to reset. */
     public void filter(String query) {
-        String q = query.trim().toLowerCase();
+        if (filteredList == null) filteredList = new ArrayList<>();
+        if (fullList == null) fullList = new ArrayList<>();
+        String q = query != null ? query.trim().toLowerCase() : "";
         filteredList.clear();
         if (q.isEmpty()) {
             filteredList.addAll(fullList);
         } else {
             for (UmrahPackage pkg : fullList) {
-                if (pkg.name.toLowerCase().contains(q)) {
+                if (pkg != null && pkg.name != null && pkg.name.toLowerCase().contains(q)) {
                     filteredList.add(pkg);
                 }
             }
@@ -94,7 +96,9 @@ public class UmrahPackageAdapter extends RecyclerView.Adapter<UmrahPackageAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        if (filteredList == null || position < 0 || position >= filteredList.size()) return;
         UmrahPackage pkg = filteredList.get(position);
+        if (pkg == null) return;
 
         if (holder.category != null) {
             if (pkg.category != null && !pkg.category.trim().isEmpty()) {
@@ -132,6 +136,8 @@ public class UmrahPackageAdapter extends RecyclerView.Adapter<UmrahPackageAdapte
             Glide.with(holder.itemView)
                     .load(pkg.imageUrl)
                     .placeholder(R.drawable.bg_image_placeholder)
+                    .error(R.drawable.bg_image_placeholder)
+                    .fallback(R.drawable.bg_image_placeholder)
                     .into(holder.image);
         } catch (Exception ignored) {}
 

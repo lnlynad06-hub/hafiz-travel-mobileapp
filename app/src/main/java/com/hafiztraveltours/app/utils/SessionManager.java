@@ -51,10 +51,15 @@ public class SessionManager {
 
     public void saveAuthSession(String token, UserDto user) {
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putBoolean(KEY_IS_LOGGED_IN, true);
-        if (token != null && !token.trim().isEmpty()) {
+        boolean hasToken = token != null && !token.trim().isEmpty();
+        if (hasToken) {
+            editor.putBoolean(KEY_IS_LOGGED_IN, true);
             editor.putString(KEY_AUTH_TOKEN, token.trim());
             ApiClient.setAuthToken(token.trim());
+        } else if (isLoggedIn() && getToken() != null && !getToken().trim().isEmpty()) {
+            editor.putBoolean(KEY_IS_LOGGED_IN, true);
+        } else {
+            editor.putBoolean(KEY_IS_LOGGED_IN, false);
         }
         if (user != null) {
             editor.putString(KEY_USER_DATA, gson.toJson(user));

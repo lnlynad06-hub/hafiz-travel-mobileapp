@@ -123,7 +123,7 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
                 if (!code.isEmpty()) {
                     appliedPromoCode = code;
                     appliedDiscount = 200.0; // RM 200 CRM promo discount
-                    android.widget.Toast.makeText(requireContext(), "Kod promo " + code + " berjaya digunakan (-RM 200)", android.widget.Toast.LENGTH_SHORT).show();
+                    android.widget.Toast.makeText(requireContext(), getString(R.string.promo_applied_format, code), android.widget.Toast.LENGTH_SHORT).show();
                     updateUi();
                 }
             });
@@ -262,7 +262,7 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
     }
 
     private void updateUi() {
-        txtPaxCount.setText(paxCount + " Pax");
+        txtPaxCount.setText(getString(R.string.pax_count_format, paxCount));
 
         String roomLabel = "Bilik Standard";
         String roomPriceStr = detail.price;
@@ -279,7 +279,7 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
         double totalAmount = Math.max(0, subtotal - appliedDiscount);
 
         txtTotalAmount.setText(BookingRequest.formatPrice(totalAmount));
-        txtUnitPriceDetail.setText(roomPriceStr + " × " + paxCount + " Pax");
+        txtUnitPriceDetail.setText(getString(R.string.room_price_x_pax_format, roomPriceStr, paxCount));
     }
 
     private void proceedToTravellerDetails() {

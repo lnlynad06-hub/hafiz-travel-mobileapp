@@ -247,17 +247,18 @@ public class LoginActivity extends AppCompatActivity {
                                         if (user == null) {
                                             user = new UserDto("1", name, email, "");
                                         }
-                                        SessionManager.getInstance(LoginActivity.this).saveAuthSession(token, user);
+                                        if (token != null && !token.trim().isEmpty()) {
+                                            SessionManager.getInstance(LoginActivity.this).saveAuthSession(token, user);
+                                        } else {
+                                            SessionManager.getInstance(LoginActivity.this).saveUser(user);
+                                        }
                                         saveRememberMePreference(email);
                                         Toast.makeText(LoginActivity.this, getString(R.string.login_google_success, name), Toast.LENGTH_SHORT).show();
                                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                         finish();
                                     } else {
-                                        String err = getString(R.string.login_google_failed);
-                                        if (response.body() != null && response.body().message != null) {
-                                            err = response.body().message;
-                                        }
-                                        Toast.makeText(LoginActivity.this, err, Toast.LENGTH_LONG).show();
+                                        android.util.Log.w("LoginActivity", "Google login failed code=" + response.code());
+                                        Toast.makeText(LoginActivity.this, getString(R.string.login_google_failed), Toast.LENGTH_LONG).show();
                                     }
                                 }
 
@@ -265,7 +266,8 @@ public class LoginActivity extends AppCompatActivity {
                                 public void onFailure(Call<ApiResponse<AuthResponse>> call, Throwable t) {
                                     if (isFinishing() || isDestroyed()) return;
                                     setLoadingState(false);
-                                    Toast.makeText(LoginActivity.this, getString(R.string.err_connection_detail, t.getMessage()), Toast.LENGTH_LONG).show();
+                                    android.util.Log.w("LoginActivity", "Google login network error", t);
+                                    Toast.makeText(LoginActivity.this, getString(R.string.err_network), Toast.LENGTH_LONG).show();
                                 }
                             });
                 }
@@ -456,25 +458,24 @@ public class LoginActivity extends AppCompatActivity {
                             if (user == null) {
                                 user = new UserDto("1", email.split("@")[0], email, "");
                             }
-                            SessionManager.getInstance(LoginActivity.this).saveAuthSession(token, user);
+                            if (token != null && !token.trim().isEmpty()) {
+                                SessionManager.getInstance(LoginActivity.this).saveAuthSession(token, user);
+                            } else {
+                                SessionManager.getInstance(LoginActivity.this).saveUser(user);
+                            }
                             saveRememberMePreference(email);
                             Toast.makeText(LoginActivity.this, getString(R.string.login_success), Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
                             finish();
                         } else {
-                            String errorMsg = getString(R.string.login_failed_default);
-                            if (response.body() != null && response.body().message != null && !response.body().message.isEmpty()) {
-                                errorMsg = response.body().message;
-                            } else if (response.errorBody() != null) {
-                                try {
-                                    String errJson = response.errorBody().string();
-                                    org.json.JSONObject obj = new org.json.JSONObject(errJson);
-                                    if (obj.has("message")) {
-                                        errorMsg = obj.getString("message");
-                                    }
-                                } catch (Exception ignored) {}
-                            }
-                            Toast.makeText(LoginActivity.this, errorMsg, Toast.LENGTH_LONG).show();
+                            android.util.Log.w("LoginActivity", "Login failed code=" + response.code());
+                            int code = response.code();
+                            int msgRes = R.string.login_failed_default;
+                            if (code == 401 || code == 403) msgRes = R.string.login_failed_default;
+                            else if (code == 422) msgRes = R.string.login_failed_default;
+                            else if (code == 429) msgRes = R.string.err_network;
+                            else if (code >= 500) msgRes = R.string.err_server_connection;
+                            Toast.makeText(LoginActivity.this, getString(msgRes), Toast.LENGTH_LONG).show();
                         }
                     }
 
@@ -482,8 +483,8 @@ public class LoginActivity extends AppCompatActivity {
                     public void onFailure(Call<ApiResponse<AuthResponse>> call, Throwable t) {
                         if (isFinishing() || isDestroyed()) return;
                         setLoadingState(false);
-                        String errMsg = t.getMessage() != null ? t.getMessage() : getString(R.string.login_failed_default);
-                        Toast.makeText(LoginActivity.this, errMsg, Toast.LENGTH_LONG).show();
+                        android.util.Log.w("LoginActivity", "Login network error", t);
+                        Toast.makeText(LoginActivity.this, getString(R.string.err_network), Toast.LENGTH_LONG).show();
                     }
                 });
     }
@@ -542,7 +543,8 @@ public class LoginActivity extends AppCompatActivity {
                             public void onFailure(Call<ApiResponse<Object>> call, Throwable t) {
                                 if (isFinishing() || isDestroyed()) return;
                                 resetDialog.dismiss();
-                                Toast.makeText(LoginActivity.this, getString(R.string.reset_link_sent_success), Toast.LENGTH_LONG).show();
+                                android.util.Log.w("LoginActivity", "Forgot password network error", t);
+                                Toast.makeText(LoginActivity.this, getString(R.string.err_network), Toast.LENGTH_LONG).show();
                             }
                         });
             });

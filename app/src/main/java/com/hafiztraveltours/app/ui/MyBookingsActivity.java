@@ -161,7 +161,7 @@ public class MyBookingsActivity extends AppCompatActivity {
                             container.removeAllViews();
                             if (docs.isEmpty()) {
                                 TextView emptyTv = new TextView(MyBookingsActivity.this);
-                                emptyTv.setText("All required documents for this package are already linked and complete!");
+                                emptyTv.setText(getString(R.string.bookings_docs_all_linked));
                                 emptyTv.setTextColor(getResources().getColor(R.color.text_gray));
                                 emptyTv.setPadding(0, 32, 0, 32);
                                 emptyTv.setGravity(android.view.Gravity.CENTER);
@@ -175,7 +175,7 @@ public class MyBookingsActivity extends AppCompatActivity {
                                 }
 
                                 TextView summaryHeader = new TextView(MyBookingsActivity.this);
-                                summaryHeader.setText(String.format("Package Document Readiness: %d/%d Verified • %d Auto-Reused", verifiedCount, docs.size(), autoReusedCount));
+                                summaryHeader.setText(getString(R.string.bookings_doc_readiness_format, verifiedCount, docs.size(), autoReusedCount));
                                 summaryHeader.setTextColor(getResources().getColor(R.color.brand_magenta));
                                 summaryHeader.setTextSize(12);
                                 summaryHeader.setTypeface(null, android.graphics.Typeface.BOLD);
@@ -251,7 +251,7 @@ public class MyBookingsActivity extends AppCompatActivity {
             sourceTag.setText("✓ " + getString(R.string.doc_auto_reused_tag));
             sourceTag.setTextColor(getResources().getColor(R.color.brand_magenta));
         } else {
-            sourceTag.setText("✈ Trip-Specific Document");
+            sourceTag.setText(getString(R.string.doc_trip_specific_tag));
             sourceTag.setTextColor(getResources().getColor(R.color.text_gray));
         }
         info.addView(sourceTag);
@@ -282,7 +282,11 @@ public class MyBookingsActivity extends AppCompatActivity {
             statusBadge.setTextColor(getResources().getColor(R.color.gold_accent));
         } else if ("rejected".equalsIgnoreCase(doc.status)) {
             statusBadge.setText(getString(R.string.doc_status_rejected));
-            statusBadge.setBackgroundResource(R.drawable.bg_status_pending);
+            statusBadge.setBackgroundResource(R.drawable.bg_status_rejected);
+            statusBadge.setTextColor(android.graphics.Color.parseColor("#EF4444"));
+        } else if ("expired".equalsIgnoreCase(doc.status)) {
+            statusBadge.setText(getString(R.string.doc_status_expired));
+            statusBadge.setBackgroundResource(R.drawable.bg_status_rejected);
             statusBadge.setTextColor(android.graphics.Color.parseColor("#EF4444"));
         } else {
             statusBadge.setText(getString(R.string.doc_status_not_uploaded));
@@ -323,7 +327,7 @@ public class MyBookingsActivity extends AppCompatActivity {
         }
 
         actionBtn.setOnClickListener(v ->
-                Toast.makeText(MyBookingsActivity.this, doc.title + ": " + (doc.status != null ? doc.status : "not_uploaded"), Toast.LENGTH_SHORT).show());
+                Toast.makeText(MyBookingsActivity.this, getString(R.string.doc_status_fallback_format, doc.title, (doc.status != null ? doc.status : getString(R.string.doc_status_not_uploaded_fallback))), Toast.LENGTH_SHORT).show());
 
         actions.addView(actionBtn);
         root.addView(actions);

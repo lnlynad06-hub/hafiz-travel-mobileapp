@@ -63,7 +63,7 @@ public class PaymentSelectionActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.paymentProgressBar);
 
         txtTotalAmount.setText(bookingRequest.totalAmountFormatted);
-        txtPackageSummary.setText(bookingRequest.packageName + " • " + bookingRequest.roomLabel + " • " + bookingRequest.adultPaxCount + " Pax");
+        txtPackageSummary.setText(getString(R.string.payment_summary_format, bookingRequest.packageName, bookingRequest.roomLabel, bookingRequest.adultPaxCount));
 
         btnConfirmAndPay.setOnClickListener(v -> {
             v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
@@ -119,7 +119,9 @@ public class PaymentSelectionActivity extends AppCompatActivity {
         CreateBookingRequest apiRequest = new CreateBookingRequest();
         apiRequest.packageId = bookingRequest.packageId;
         apiRequest.roomLabel = bookingRequest.roomLabel;
-        apiRequest.adultCount = bookingRequest.adultPaxCount;
+        int actualTravellers = (bookingRequest.passengers != null && !bookingRequest.passengers.isEmpty())
+                ? bookingRequest.passengers.size() : bookingRequest.adultPaxCount;
+        apiRequest.adultCount = actualTravellers;
         apiRequest.childCount = 0;
         apiRequest.unitPrice = bookingRequest.unitPriceAmount;
         apiRequest.discountAmount = bookingRequest.discountAmount;

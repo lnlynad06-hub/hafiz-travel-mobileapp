@@ -123,7 +123,7 @@ public class PackageDetail implements java.io.Serializable {
         d.summaryLine = pkg.summary != null && !pkg.summary.trim().isEmpty() ? pkg.summary.trim() : "";
         d.durationDays = pkg.durationDays > 0 ? pkg.durationDays : 0;
         d.nightsCount = pkg.nightsCount > 0 ? pkg.nightsCount : 0;
-        d.price = pkg.price != null && !pkg.price.trim().isEmpty() ? pkg.price : "Hubungi Kami";
+        d.price = pkg.price != null && !pkg.price.trim().isEmpty() ? pkg.price : "";
         d.imageUrl = pkg.imageUrl != null && !pkg.imageUrl.trim().isEmpty() ? pkg.imageUrl : "";
         d.posterImageUrl = d.imageUrl;
         d.durationFormatted = pkg.getDurationFormatted();

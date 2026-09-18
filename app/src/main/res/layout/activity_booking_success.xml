@@ -32,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Tempahan Berjaya Dicipta"
+        android:text="@string/booking_success_title"
         android:textColor="@color/text_dark"
         android:textSize="20sp"
         android:textStyle="bold" />
@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:gravity="center"
-        android:text="Terima kasih kerana memilih Hafiz Travel &amp; Tours. Butiran tempahan anda telah sedia direkodkan."
+        android:text="@string/booking_success_body"
         android:textColor="@color/text_gray"
         android:textSize="13sp" />
 
@@ -99,7 +99,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Jumlah Pembayaran"
+                android:text="@string/booking_success_total_label"
                 android:textColor="@color/text_dark"
                 android:textSize="13sp" />
 
@@ -130,7 +130,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="LIHAT TEMPAHAN SAYA"
+            android:text="@string/booking_success_view"
             android:textColor="@color/white"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -150,7 +150,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="KEMBALI KE HALAMAN UTAMA"
+            android:text="@string/booking_success_home"
             android:textColor="@color/text_dark"
             android:textSize="14sp"
             android:textStyle="bold" />

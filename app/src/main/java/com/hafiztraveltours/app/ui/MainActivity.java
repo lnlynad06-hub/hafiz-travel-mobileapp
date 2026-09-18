@@ -510,9 +510,9 @@ public class MainActivity extends AppCompatActivity {
             if (!cleanPrice.isEmpty()) {
                 price.setText(getString(R.string.package_duration_price, pkg.durationDays, pkg.nightsCount, cleanPrice));
             } else if (pkg.durationDays > 0) {
-                price.setText(pkg.durationDays + " Hari " + pkg.nightsCount + " Malam");
+                price.setText(getString(R.string.duration_days_nights_format, pkg.durationDays, pkg.nightsCount));
             } else {
-                price.setText("Hubungi Kami");
+                price.setText(getString(R.string.label_contact_us));
             }
         }
     }
