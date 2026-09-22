@@ -240,8 +240,45 @@ public class PackageDetailActivity extends BaseActivity {
 
     private void onBookNowClicked() {
         if (detail == null) return;
+
+        SessionManager session = new SessionManager(this);
+        if (!session.isLoggedIn()) {
+            Intent intent = new Intent(this, SignUpActivity.class);
+            startActivity(intent);
+            return;
+        }
+
         BookingConfigurationBottomSheet sheet = BookingConfigurationBottomSheet.newInstance(detail, selectedPriceOptionIndex);
         sheet.show(getSupportFragmentManager(), "BookingConfigSheet");
+    }
+
+    private void showProfileIncompleteDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.booking_blocked_profile_title)
+                .setMessage(R.string.booking_blocked_profile_msg)
+                .setPositiveButton(R.string.btn_edit_profile_now, (dialog, which) -> {
+                    Intent intent = new Intent(this, ProfileActivity.class);
+                    intent.putExtra(ProfileActivity.EXTRA_ACTION, ProfileActivity.ACTION_EDIT_PROFILE);
+                    startActivity(intent);
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
+    private void showDocumentsIncompleteDialog(java.util.List<String> missingDocCodes) {
+        String formattedList = BookingEligibility.formatMissingDocs(this, missingDocCodes);
+        String message = getString(R.string.booking_blocked_docs_msg, formattedList);
+
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.booking_blocked_docs_title)
+                .setMessage(message)
+                .setPositiveButton(R.string.btn_upload_docs_now, (dialog, which) -> {
+                    Intent intent = new Intent(this, ProfileActivity.class);
+                    intent.putExtra(ProfileActivity.EXTRA_ACTION, ProfileActivity.ACTION_TRAVEL_DOCS);
+                    startActivity(intent);
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
     }
 
 

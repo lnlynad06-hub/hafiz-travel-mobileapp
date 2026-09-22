@@ -78,6 +78,14 @@ public class PassengerRepository {
         }
     }
 
+    public void saveDocuments(List<DocumentDto> docs) {
+        session.saveDocuments(docs);
+    }
+
+    public List<DocumentDto> getDocuments() {
+        return session.getDocuments();
+    }
+
     private SharedPreferences userPrefs() {
         return SecurePrefs.wrap(appContext, "user_profile");
     }

@@ -114,6 +114,14 @@ public class ProfileRepository {
         return session.getProfileStats();
     }
 
+    public void saveDocuments(List<DocumentDto> docs) {
+        session.saveDocuments(docs);
+    }
+
+    public List<DocumentDto> getDocuments() {
+        return session.getDocuments();
+    }
+
     /** Fire-and-forget server logout + immediate local clear (same sequence as before). */
     public void logout() {
         try {

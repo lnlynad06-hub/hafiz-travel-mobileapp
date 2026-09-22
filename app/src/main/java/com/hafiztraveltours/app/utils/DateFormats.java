@@ -91,4 +91,11 @@ public final class DateFormats {
             return "--";
         }
     }
+
+    /** ISO-8601 UTC timestamp for agreement/audit records. */
+    public static String nowIsoDateTime() {
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", java.util.Locale.US);
+        sdf.setTimeZone(java.util.TimeZone.getTimeZone("UTC"));
+        return sdf.format(new Date());
+    }
 }

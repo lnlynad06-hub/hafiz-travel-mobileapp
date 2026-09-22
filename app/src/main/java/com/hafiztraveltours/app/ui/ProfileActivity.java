@@ -33,7 +33,10 @@ import java.util.Map;
 
 public class ProfileActivity extends BaseActivity {
 
-    
+    public static final String EXTRA_ACTION = "extra_action";
+    public static final String ACTION_EDIT_PROFILE = "action_edit_profile";
+    public static final String ACTION_TRAVEL_DOCS = "action_travel_docs";
+
     private TextView nameText;
     private TextView memberIdText;
     private TextView memberSinceText;
@@ -84,6 +87,8 @@ public class ProfileActivity extends BaseActivity {
         profileViewModel = new androidx.lifecycle.ViewModelProvider(this).get(ProfileViewModel.class);
         observeProfileState();
 
+        handleIntentAction(getIntent());
+
         findViewById(R.id.profileBackButton).setOnClickListener(v -> finish());
 
         profileSwipeRefresh = findViewById(R.id.profileSwipeRefresh);
@@ -122,94 +127,59 @@ public class ProfileActivity extends BaseActivity {
         }
 
         findViewById(R.id.editProfileRow).setOnClickListener(v -> showEditProfileDialog());
-
-        View changePasswordRow = findViewById(R.id.changePasswordRow);
-        if (changePasswordRow != null) {
-            changePasswordRow.setOnClickListener(v -> showChangePasswordDialog());
+        findViewById(R.id.languageRow).setOnClickListener(v -> showLanguageBottomSheet());
+        findViewById(R.id.travelDocsRow).setOnClickListener(v -> showTravelDocsBottomSheet());
+        findViewById(R.id.changePasswordRow).setOnClickListener(v -> showChangePasswordDialog());
+        View logoutButton = findViewById(R.id.logoutButton);
+        if (logoutButton != null) {
+            logoutButton.setOnClickListener(v -> showLogoutConfirmationDialog());
         }
-
-        View travelDocsRow = findViewById(R.id.travelDocsRow);
-        if (travelDocsRow != null) {
-            travelDocsRow.setOnClickListener(v -> showTravelDocsBottomSheet());
-        }
-
-
-
-        View languageRow = findViewById(R.id.languageRow);
-        if (languageRow != null) {
-            languageRow.setOnClickListener(v -> showLanguageBottomSheet());
-        }
-        View upcomingSeeAll = findViewById(R.id.upcomingSeeAll);
-        if (upcomingSeeAll != null) {
-            upcomingSeeAll.setOnClickListener(v ->
-                    startActivity(new Intent(this, MyBookingsActivity.class)));
-        }
-
-        Switch notificationSwitch = findViewById(R.id.notificationSwitch);
-        notificationSwitch.setChecked(profileViewModel.readProfileFlag("notifications_enabled", true));
-        notificationSwitch.setOnCheckedChangeListener((CompoundButton buttonView, boolean isChecked) ->
-                profileViewModel.saveNotificationEnabled(isChecked));
-
-        findViewById(R.id.logoutButton).setOnClickListener(v -> {
-            if (!profileViewModel.isLoggedIn()) {
-                startActivity(new Intent(this, SignUpActivity.class));
-                return;
-            }
-            new AlertDialog.Builder(this)
-                    .setTitle(getString(R.string.profile_logout))
-                    .setMessage(getString(R.string.logout_confirm_message))
-                    .setPositiveButton(getString(R.string.profile_logout), (d, which) -> performLogout())
-                    .setNegativeButton(getString(R.string.cancel), null)
-                    .show();
-        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        updateLanguageBadge();
         refreshHeader();
         if (profileViewModel.isLoggedIn()) {
-            renderStats(profileViewModel.cachedStats());
             profileViewModel.loadStats();
-        } else {
-            renderStats(null);
-            if (profileSwipeRefresh != null) profileSwipeRefresh.setRefreshing(false);
         }
     }
 
-    private void updateLanguageBadge() {
-        if (activeLanguageText != null) {
-            activeLanguageText.setText(LocaleHelper.getLanguageBadge(
-                    LocaleHelper.getSavedLanguage(this)));
-        }
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        handleIntentAction(intent);
     }
 
-    private void performLogout() {
-        profileViewModel.logout();
-        Toast.makeText(this, getString(R.string.profile_logout_success), Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-        finish();
+    private void handleIntentAction(Intent intent) {
+        if (intent == null) return;
+        String action = intent.getStringExtra(EXTRA_ACTION);
+        if (ACTION_EDIT_PROFILE.equals(action)) {
+            showEditProfileDialog();
+        } else if (ACTION_TRAVEL_DOCS.equals(action)) {
+            showTravelDocsBottomSheet();
+        }
     }
 
     private void refreshHeader() {
         boolean loggedIn = profileViewModel.isLoggedIn();
-        if (loggedIn) {
-            String name = profileViewModel.getUserName();
-            String email = profileViewModel.getUserEmail();
-            nameText.setText((name != null && !name.isEmpty()) ? name : email);
-        } else {
-            nameText.setText(getString(R.string.profile_guest_name));
-        }
         if (guestLoginButton != null) {
             guestLoginButton.setVisibility(loggedIn ? View.GONE : View.VISIBLE);
         }
-        updateLanguageBadge();
+        if (nameText != null) {
+            nameText.setText(loggedIn ? profileViewModel.getUserName() : getString(R.string.profile_guest_name));
+        }
+        if (activeLanguageText != null) {
+            String currentLang = LocaleHelper.getSavedLanguage(this);
+            if (LocaleHelper.LANGUAGE_MALAY.equalsIgnoreCase(currentLang)) {
+                activeLanguageText.setText(getString(R.string.lang_malay));
+            } else {
+                activeLanguageText.setText(getString(R.string.lang_english));
+            }
+        }
     }
 
-    /** Wires ViewModel state to rendering + one-shot results (H1/Step 5). */
     private void observeProfileState() {
         profileViewModel.getStatsData().observe(this, stats -> {
             if (stats != null) renderStats(stats);
@@ -251,17 +221,37 @@ public class ProfileActivity extends BaseActivity {
         });
     }
 
+    private void showLogoutConfirmationDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.profile_logout)
+                .setMessage(R.string.logout_confirm_message)
+                .setPositiveButton(R.string.profile_logout, (dialog, which) -> {
+                    profileViewModel.logout();
+                    refreshHeader();
+                    renderStats(null);
+                    Toast.makeText(this, getString(R.string.profile_logout_success), Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
     private void renderStats(com.hafiztraveltours.app.models.ProfileStatsDto stats) {
         boolean loggedIn = profileViewModel.isLoggedIn();
         if (statsCard != null) statsCard.setVisibility(loggedIn ? View.VISIBLE : View.GONE);
-        if (loyaltyCard != null) loyaltyCard.setVisibility(loggedIn ? View.VISIBLE : View.GONE);
         if (!loggedIn) {
+            if (loyaltyCard != null) loyaltyCard.setVisibility(View.GONE);
             if (memberIdText != null) memberIdText.setVisibility(View.GONE);
             if (memberSinceText != null) memberSinceText.setText(getString(R.string.guest_hero_subtitle));
             if (upcomingCard != null) upcomingCard.setVisibility(View.GONE);
             return;
         }
         if (memberIdText != null) memberIdText.setVisibility(View.VISIBLE);
+        ProfileViewModel.Readiness currentReadiness = profileViewModel.getReadiness().getValue();
+        if (currentReadiness != null) {
+            renderReadiness(currentReadiness);
+        } else if (loyaltyCard != null) {
+            loyaltyCard.setVisibility(View.GONE);
+        }
         if (stats == null) return;
 
         if (stats.customer != null) {
@@ -327,7 +317,9 @@ public class ProfileActivity extends BaseActivity {
             compScore = 100;
             if (loyaltyCard != null) loyaltyCard.setVisibility(View.GONE);
         } else {
-            if (loyaltyCard != null) loyaltyCard.setVisibility(View.VISIBLE);
+            if (loyaltyCard != null) {
+                loyaltyCard.setVisibility(profileViewModel.isLoggedIn() ? View.VISIBLE : View.GONE);
+            }
         }
 
         if (pointsBadge != null) {

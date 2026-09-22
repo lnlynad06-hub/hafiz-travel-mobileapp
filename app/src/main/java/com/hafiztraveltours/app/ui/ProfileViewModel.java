@@ -139,6 +139,7 @@ public class ProfileViewModel extends AndroidViewModel {
         /** Local extras persistence payload (same keys as before). */
         public Map<String, String> toExtras() {
             Map<String, String> out = new HashMap<>();
+            out.put("name", name);
             out.put("ic_no", ic);
             out.put("gender", gender);
             out.put("date_of_birth", dob);
@@ -187,6 +188,7 @@ public class ProfileViewModel extends AndroidViewModel {
     public ProfileViewModel(@NonNull Application application) {
         super(application);
         repository = new ProfileRepository(application);
+        refreshReadiness();
     }
 
     public LiveData<ProfileStatsDto> getStatsData() {
@@ -261,11 +263,13 @@ public class ProfileViewModel extends AndroidViewModel {
 
     public void refreshLocalUser() {
         userData.setValue(repository.getSessionUser());
+        refreshReadiness();
     }
 
     public void logout() {
         repository.logout();
         userData.setValue(null);
+        refreshReadiness();
     }
 
     // ---------- loads ----------
@@ -320,6 +324,7 @@ public class ProfileViewModel extends AndroidViewModel {
                         (response.isSuccessful() && response.body() != null
                                 && response.body().isSuccess()) ? response.body().data : null;
                 if (docs != null) {
+                    repository.saveDocuments(docs);
                     docsData.setValue(docs);
                     refreshReadiness(docs);
                 }
@@ -334,6 +339,9 @@ public class ProfileViewModel extends AndroidViewModel {
     /** Recomputes readiness from session user + local extras + latest docs. */
     public void refreshReadiness() {
         List<DocumentDto> docs = docsData.getValue();
+        if (docs == null || docs.isEmpty()) {
+            docs = repository.getDocuments();
+        }
         refreshReadiness(docs != null ? docs : new ArrayList<>());
     }
 
@@ -365,8 +373,15 @@ public class ProfileViewModel extends AndroidViewModel {
         String icNo = str(ex, "ic_no");
         if (icNo.isEmpty() && user != null && user.icNumber != null) icNo = user.icNumber.trim();
         String emergName = str(ex, "emergency_name");
+        if (emergName.isEmpty() && user != null && user.emergencyName != null) {
+            emergName = user.emergencyName.trim();
+        }
         String address = str(ex, "address");
         if (address.isEmpty() && user != null && user.address != null) address = user.address.trim();
+        if (address.isEmpty()) address = str(ex, "address_line_1");
+        if (address.isEmpty() && user != null && user.addressLine1 != null) {
+            address = user.addressLine1.trim();
+        }
 
         if (!fullName.isEmpty()) score += 15;
         if (!icNo.isEmpty()) score += 20;
@@ -400,6 +415,7 @@ public class ProfileViewModel extends AndroidViewModel {
     /** Local-first extras write (same order as before: prefs first, then API). */
     public void saveProfileExtras(ProfileForm form) {
         repository.writeProfileExtras(form.toExtras(), form.toFlags());
+        refreshReadiness();
     }
 
     public void saveNotificationEnabled(boolean enabled) {
@@ -488,6 +504,7 @@ public class ProfileViewModel extends AndroidViewModel {
             public void onResponse(Call<ApiResponse<DocumentDto>> call,
                                    Response<ApiResponse<DocumentDto>> response) {
                 if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    fetchDocumentsInternal();
                     uploadOp.setValue(new SingleEvent<>(ApiOpResult.success()));
                 } else {
                     uploadOp.setValue(new SingleEvent<>(

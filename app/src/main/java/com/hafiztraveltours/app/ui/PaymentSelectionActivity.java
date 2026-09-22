@@ -55,7 +55,8 @@ public class PaymentSelectionActivity extends BaseActivity {
 
         bookingRequest = (BookingRequest) getIntent().getSerializableExtra(EXTRA_BOOKING_REQUEST);
 
-        if (bookingRequest == null) {
+        if (bookingRequest == null || !bookingRequest.termsAgreed) {
+            Toast.makeText(this, R.string.terms_required_error, Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -174,6 +175,13 @@ public class PaymentSelectionActivity extends BaseActivity {
                         com.hafiztraveltours.app.utils.TravellerMapper.toTravellerRequest(p, i == 0));
             }
         }
+        apiRequest.termsAgreed = bookingRequest.termsAgreed;
+        apiRequest.termsAgreedAt = (bookingRequest.termsAgreedAt != null && !bookingRequest.termsAgreedAt.isEmpty())
+                ? bookingRequest.termsAgreedAt
+                : com.hafiztraveltours.app.utils.DateFormats.nowIsoDateTime();
+        apiRequest.termsVersion = (bookingRequest.termsVersion != null && !bookingRequest.termsVersion.isEmpty())
+                ? bookingRequest.termsVersion
+                : "1.0";
         return apiRequest;
     }
 }

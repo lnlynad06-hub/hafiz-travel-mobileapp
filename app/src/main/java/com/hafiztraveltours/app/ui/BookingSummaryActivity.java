@@ -64,8 +64,8 @@ public class BookingSummaryActivity extends BaseActivity {
 
         findViewById(R.id.btnProceedToPaymentPhase3).setOnClickListener(v -> {
             com.hafiztraveltours.app.utils.HapticUtil.click(v);
-            Intent intent = new Intent(this, PaymentSelectionActivity.class);
-            intent.putExtra(PaymentSelectionActivity.EXTRA_BOOKING_REQUEST, bookingRequest);
+            Intent intent = new Intent(this, TermsConditionsActivity.class);
+            intent.putExtra(TermsConditionsActivity.EXTRA_BOOKING_REQUEST, bookingRequest);
             startActivity(intent);
         });
     }

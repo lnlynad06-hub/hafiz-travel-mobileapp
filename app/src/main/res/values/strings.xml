@@ -1155,7 +1155,38 @@
     <string name="err_not_found">The requested data was not found.</string>
     <string name="err_validation">Please check the highlighted fields and try again.</string>
     <string name="err_too_many_requests">Too many requests. Please wait a moment and try again.</string>
-    <string name="err_server">Server error. Please try again later.</string>
-    <string name="err_timeout">Request timed out. Please try again.</string>
     <string name="err_no_internet">No internet connection. Please check your connection.</string>
+    <string name="err_server">Server error occurred. Please try again later.</string>
+    <string name="err_timeout">Request timed out. Please try again.</string>
+    <string name="lang_english">English</string>
+    <string name="lang_malay">Bahasa Melayu</string>
+    <!-- Customer Booking Eligibility Gate -->
+    <string name="booking_blocked_profile_title">Profile Incomplete</string>
+    <string name="booking_blocked_profile_msg">Please complete your personal and contact details in Edit Profile before registering or booking a package.</string>
+    <string name="booking_blocked_docs_title">Travel Documents Required</string>
+    <string name="booking_blocked_docs_msg">Please upload all required travel documents before registering or booking a package. Missing documents:\n\n%1$s</string>
+    <string name="btn_edit_profile_now">Edit Profile</string>
+    <string name="btn_upload_docs_now">Upload Documents</string>
+    <string name="doc_name_passport">Passport Copy (Main Page)</string>
+    <string name="doc_name_ic">MyKad / Identity Card (IC)</string>
+    <string name="doc_name_passport_photo">Passport Photo (White Background)</string>
+    <!-- Terms & Conditions Booking Step -->
+    <string name="terms_title">Terms &amp; Conditions</string>
+    <string name="terms_header_subtitle">Please read and agree to the booking terms before proceeding to payment.</string>
+    <string name="terms_checkbox_agree">I have read and agree to the Terms &amp; Conditions</string>
+    <string name="terms_continue_payment">CONTINUE TO PAYMENT</string>
+    <string name="summary_continue_terms">CONTINUE TO TERMS &amp; CONDITIONS</string>
+    <string name="terms_required_error">You must agree to the Terms &amp; Conditions before proceeding to payment.</string>
+    <string name="terms_sec_registration_title">1. Registration &amp; Booking Confirmation</string>
+    <string name="terms_sec_registration_body">Booking is considered confirmed only upon receipt of the deposit/payment and issuance of an official booking confirmation. Hafiz Travel &amp; Tour reserves the right to decline or adjust registrations subject to seat availability and regulatory guidelines.</string>
+    <string name="terms_sec_payment_title">2. Deposit &amp; Payment Schedule</string>
+    <string name="terms_sec_payment_body">A deposit is required at booking time to secure seats and accommodation. The remaining balance must be paid in full at least 45 days prior to the scheduled departure date unless stated otherwise in the package details.</string>
+    <string name="terms_sec_visa_title">3. Visa Processing &amp; Travel Documents</string>
+    <string name="terms_sec_visa_body">Travel visa processing is handled directly by Hafiz Travel &amp; Tour on behalf of the customer. Customers must ensure their international passport is valid for at least 6 months from the departure date and provide accurate personal information.</string>
+    <string name="terms_sec_cancellation_title">4. Cancellation &amp; Refund Policy</string>
+    <string name="terms_sec_cancellation_body">Any cancellation request must be submitted in writing. Deposit payments are non-refundable. Cancellations 45 days or more before departure are subject to administrative fees; cancellations under 45 days are subject to airline, hotel, and supplier cancellation penalties.</string>
+    <string name="terms_sec_responsibilities_title">5. Pilgrim Responsibilities &amp; Code of Conduct</string>
+    <string name="terms_sec_responsibilities_body">Pilgrims and travellers agree to abide by the laws of Malaysia and destination countries, follow tour leader and mutawwif instructions, and maintain appropriate health and travel fitness.</string>
+    <string name="terms_sec_force_majeure_title">6. Force Majeure &amp; Itinerary Adjustments</string>
+    <string name="terms_sec_force_majeure_body">Hafiz Travel &amp; Tour reserves the right to alter flight schedules, hotel arrangements, or itinerary routes when necessary due to unforeseen circumstances, weather, airline schedule changes, or government directives without prior liability.</string>
 </resources>

@@ -36,6 +36,15 @@ public class CreateBookingRequest {
     @SerializedName("payment_method")
     public String paymentMethod;
 
+    @SerializedName("terms_agreed")
+    public Boolean termsAgreed;
+
+    @SerializedName("terms_agreed_at")
+    public String termsAgreedAt;
+
+    @SerializedName("terms_version")
+    public String termsVersion;
+
     @SerializedName("travellers")
     public List<TravellerRequest> travellers = new ArrayList<>();
 

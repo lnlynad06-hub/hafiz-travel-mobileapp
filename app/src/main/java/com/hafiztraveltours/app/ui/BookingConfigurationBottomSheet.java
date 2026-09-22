@@ -15,11 +15,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import android.app.AlertDialog;
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.hafiztraveltours.app.R;
 import com.hafiztraveltours.app.models.BookingRequest;
+import com.hafiztraveltours.app.models.DocumentDto;
 import com.hafiztraveltours.app.models.PackageDetail;
+import com.hafiztraveltours.app.network.UserDto;
+import com.hafiztraveltours.app.utils.BookingEligibility;
+import com.hafiztraveltours.app.utils.SessionManager;
 
 import java.util.List;
 
@@ -300,6 +305,14 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
     }
 
     private void proceedToTravellerDetails() {
+        SessionManager session = new SessionManager(requireContext());
+        if (!session.isLoggedIn()) {
+            dismiss();
+            startActivity(new Intent(requireContext(), SignUpActivity.class));
+            return;
+        }
+
+
         String roomLabel = getString(R.string.room_standard);
         String roomPriceStr = detail.price;
 

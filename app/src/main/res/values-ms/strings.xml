@@ -1037,7 +1037,38 @@
     <string name="err_not_found">Data yang diminta tidak dijumpai.</string>
     <string name="err_validation">Sila semak maklumat yang ditandakan dan cuba lagi.</string>
     <string name="err_too_many_requests">Terlalu banyak permintaan. Sila tunggu sebentar dan cuba lagi.</string>
-    <string name="err_server">Ralat pelayan. Sila cuba lagi kemudian.</string>
-    <string name="err_timeout">Permintaan tamat masa. Sila cuba lagi.</string>
     <string name="err_no_internet">Tiada sambungan internet. Sila semak sambungan anda.</string>
+    <string name="err_server">Ralat pelayan berlaku. Sila cuba sebentar lagi.</string>
+    <string name="err_timeout">Masa permintaan tamat. Sila cuba lagi.</string>
+    <string name="lang_english">English</string>
+    <string name="lang_malay">Bahasa Melayu</string>
+    <!-- Customer Booking Eligibility Gate -->
+    <string name="booking_blocked_profile_title">Profil Belum Lengkap</string>
+    <string name="booking_blocked_profile_msg">Sila lengkapkan maklumat peribadi dan perhubungan anda di Kemaskini Profil sebelum mendaftar atau menempah pakej.</string>
+    <string name="booking_blocked_docs_title">Dokumen Travel Diperlukan</string>
+    <string name="booking_blocked_docs_msg">Sila muat naik semua dokumen travel yang diperlukan sebelum mendaftar atau menempah pakej. Dokumen belum lengkap:\n\n%1$s</string>
+    <string name="btn_edit_profile_now">Kemaskini Profil</string>
+    <string name="btn_upload_docs_now">Muat Naik Dokumen</string>
+    <string name="doc_name_passport">Salinan Pasport (Muka Utama)</string>
+    <string name="doc_name_ic">MyKad / Kad Pengenalan (IC)</string>
+    <string name="doc_name_passport_photo">Foto Pasport (Latar Belakang Putih)</string>
+    <!-- Terms & Conditions Booking Step -->
+    <string name="terms_title">Terma &amp; Syarat</string>
+    <string name="terms_header_subtitle">Sila baca dan bersetuju dengan terma tempahan sebelum meneruskan pembayaran.</string>
+    <string name="terms_checkbox_agree">Saya telah membaca dan bersetuju dengan Terma &amp; Syarat</string>
+    <string name="terms_continue_payment">TERUSKAN KE PEMBAYARAN</string>
+    <string name="summary_continue_terms">TERUSKAN KE TERMA &amp; SYARAT</string>
+    <string name="terms_required_error">Sila baca dan bersetuju dengan Terma &amp; Syarat sebelum meneruskan pembayaran.</string>
+    <string name="terms_sec_registration_title">1. Pendaftaran &amp; Pengesahan Tempahan</string>
+    <string name="terms_sec_registration_body">Tempahan dianggap sah hanya setelah deposit/bayaran diterima dan pengesahan rasmi dikeluarkan. Hafiz Travel &amp; Tour berhak menolak atau menyelaraskan pendaftaran tertakluk kepada kekosongan tempat dan peraturan semasa.</string>
+    <string name="terms_sec_payment_title">2. Deposit &amp; Jadual Bayaran</string>
+    <string name="terms_sec_payment_body">Bayaran deposit diperlukan semasa tempahan bagi mengesahkan tempat dan penginapan. Baki bayaran penuh hendaklah diselesaikan selewat-lewatnya 45 hari sebelum tarikh pelepasan kecuali dinyatakan sebaliknya dalam butiran pakej.</string>
+    <string name="terms_sec_visa_title">3. Pengurusan Visa &amp; Dokumen Perjalanan</string>
+    <string name="terms_sec_visa_body">Pengurusan visa perjalanan diuruskan sepenuhnya oleh Hafiz Travel &amp; Tour bagi pihak pelanggan. Pelanggan bertanggungjawab memastikan pasport antarabangsa mempunyai tempoh sah sekurang-kurangnya 6 bulan dari tarikh pelepasan serta maklumat peribadi yang tepat.</string>
+    <string name="terms_sec_cancellation_title">4. Polisi Pembatalan &amp; Pemulangan Wang</string>
+    <string name="terms_sec_cancellation_body">Sebarang permohonan pembatalan hendaklah dikemukakan secara bertulis. Bayaran deposit tidak dikembalikan. Pembatalan 45 hari atau lebih sebelum pelepasan tertakluk kepada caj pentadbiran; pembatalan kurang 45 hari tertakluk kepada penalti syarikat penerbangan, hotel dan pembekal perkhidmatan.</string>
+    <string name="terms_sec_responsibilities_title">5. Tanggungjawab Jemaah &amp; Tata Tertib</string>
+    <string name="terms_sec_responsibilities_body">Jemaah dan peserta lawatan bersetuju untuk mematuhi undang-undang Malaysia dan negara destinasi, mematuhi arahan ketua rombongan dan mutawwif, serta memastikan kesihatan dan kecergasan perjalanan yang mencukupi.</string>
+    <string name="terms_sec_force_majeure_title">6. Keadaan Luar Jangka &amp; Pindaan Jadual</string>
+    <string name="terms_sec_force_majeure_body">Hafiz Travel &amp; Tour berhak meminda jadual penerbangan, hotel, atau laluan perjalanan sekiranya berlaku keadaan luar jangka, cuaca, perubahan jadual syarikat penerbangan atau arahan kerajaan tanpa liabiliti tambahan.</string>
 </resources>

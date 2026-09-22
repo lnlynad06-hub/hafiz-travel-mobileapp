@@ -38,11 +38,13 @@ public class SessionManager {
     private static final String KEY_PROFILE_STATS = "profile_stats";
 
     private static SessionManager instance;
+    private final Context appContext;
     private final SharedPreferences prefs;
     private final Gson gson;
 
     public SessionManager(Context context) {
-        this.prefs = SecurePrefs.wrap(context.getApplicationContext(), PREF_NAME);
+        this.appContext = context != null ? context.getApplicationContext() : null;
+        this.prefs = SecurePrefs.wrap(this.appContext, PREF_NAME);
         this.gson = new Gson();
         syncApiToken();
     }
@@ -142,12 +144,15 @@ public class SessionManager {
         return getToken();
     }
 
+    private static final String KEY_USER_DOCUMENTS = "user_documents";
+
     public void clearSession() {
         prefs.edit()
                 .putBoolean(KEY_IS_LOGGED_IN, false)
                 .remove(KEY_AUTH_TOKEN)
                 .remove(KEY_USER_DATA)
                 .remove(KEY_PROFILE_STATS)
+                .remove(KEY_USER_DOCUMENTS)
                 .apply();
         syncApiToken();
     }
@@ -165,5 +170,43 @@ public class SessionManager {
             } catch (Exception ignored) {}
         }
         return null;
+    }
+
+    public void saveDocuments(java.util.List<com.hafiztraveltours.app.models.DocumentDto> docs) {
+        if (docs != null) {
+            prefs.edit().putString(KEY_USER_DOCUMENTS, gson.toJson(docs)).apply();
+        } else {
+            prefs.edit().remove(KEY_USER_DOCUMENTS).apply();
+        }
+    }
+
+    public java.util.List<com.hafiztraveltours.app.models.DocumentDto> getDocuments() {
+        String json = prefs.getString(KEY_USER_DOCUMENTS, null);
+        if (json != null && !json.isEmpty()) {
+            try {
+                java.lang.reflect.Type type = new com.google.gson.reflect.TypeToken<java.util.List<com.hafiztraveltours.app.models.DocumentDto>>() {}.getType();
+                java.util.List<com.hafiztraveltours.app.models.DocumentDto> list = gson.fromJson(json, type);
+                if (list != null) return list;
+            } catch (Exception ignored) {}
+        }
+        return new java.util.ArrayList<>();
+    }
+
+    public java.util.Map<String, String> getProfileExtras() {
+        if (appContext == null) return new java.util.HashMap<>();
+        SharedPreferences profilePrefs = SecurePrefs.wrap(appContext, "user_profile");
+        java.util.Map<String, String> out = new java.util.HashMap<>();
+        String[] keys = {
+                "name", "ic_no", "passport_no", "passport_expiry", "issuing_country",
+                "gender", "date_of_birth", "nationality", "clothes_size",
+                "address", "address_line_1", "address_line_2", "postcode", "city",
+                "state", "country", "emergency_name", "emergency_phone",
+                "mahram_name", "mahram_relationship", "has_vaccine_cert"
+        };
+        for (String k : keys) {
+            String v = profilePrefs.getString(k, "");
+            if (v != null && !v.isEmpty()) out.put(k, v);
+        }
+        return out;
     }
 }

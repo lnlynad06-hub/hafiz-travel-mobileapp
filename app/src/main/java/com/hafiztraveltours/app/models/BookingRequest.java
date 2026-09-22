@@ -23,6 +23,10 @@ public class BookingRequest implements Serializable {
     public double discountAmount = 0.0;
     public PackageDetail packageDetail;
 
+    public boolean termsAgreed = false;
+    public String termsAgreedAt = "";
+    public String termsVersion = "1.0";
+
     public List<Passenger> passengers = new ArrayList<>();
 
     public static class Passenger implements Serializable {
