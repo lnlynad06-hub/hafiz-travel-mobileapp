@@ -16,11 +16,19 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Tests for BookingEligibility according to business rules:
- * 1. Profile completion and Travel Documents are NOT booking requirements.
- * 2. Customers may register/book a package even when profile or documents are incomplete.
- * 3. Not logged in users remain blocked from booking.
- * 4. Profile & document completeness are still tracked accurately for status/dashboard reporting.
+ * Tests for BookingEligibility according to the business requirement:
+ * "A customer MUST have their Edit Profile completed before they can book.
+ * However, incomplete Travel Documents must NOT prevent booking."
+ *
+ * Testing Matrix:
+ * 1. Profile incomplete + documents incomplete -> Cannot book.
+ * 2. Profile incomplete + documents complete -> Cannot book.
+ * 3. Profile complete + documents incomplete -> CAN book.
+ * 4. Profile complete + documents complete -> CAN book.
+ * 5. Profile complete + Mahram empty -> CAN book.
+ * 6. Profile complete + Travel Visa unavailable -> CAN book.
+ * 7. Profile complete + expired passport -> CAN book.
+ * 8. Profile complete + passport < 6 months validity -> CAN book.
  */
 public class BookingEligibilityTest {
 
@@ -30,11 +38,23 @@ public class BookingEligibilityTest {
     @Before
     public void setUp() {
         completeExtras = new HashMap<>();
+        // 1. Personal Information
         completeExtras.put("name", "Muhammad Hafiz");
-        completeExtras.put("ic_no", "920101-14-1234");
+        completeExtras.put("nickname", "hafiz");
+        completeExtras.put("date_of_birth", "1990-01-01");
+        completeExtras.put("gender", "Male");
+        completeExtras.put("nationality", "Malaysia");
+        completeExtras.put("phone", "+60123456789");
+        completeExtras.put("email", "hafiz@example.com");
+
+        // 2. Passport Information
         completeExtras.put("passport_no", "A99887766");
-        completeExtras.put("address", "No 10, Jalan Ampang, 50450 Kuala Lumpur");
+        completeExtras.put("passport_expiry", "2030-01-01");
+        completeExtras.put("issuing_country", "Malaysia");
+
+        // 3. Emergency Contact
         completeExtras.put("emergency_name", "Aishah");
+        completeExtras.put("emergency_phone", "+60198765432");
 
         completeDocs = new ArrayList<>();
 
@@ -55,32 +75,52 @@ public class BookingEligibilityTest {
     }
 
     @Test
-    public void testCase1_notLoggedIn_blocksBooking() {
+    public void testCase0_notLoggedIn_blocksBooking() {
         BookingEligibility.Status status = BookingEligibility.check(false, null, completeExtras, completeDocs);
         assertFalse(status.isEligible());
         assertEquals(BookingEligibility.Reason.NOT_LOGGED_IN, status.reason);
     }
 
+    /**
+     * Matrix Case 1: Profile incomplete + documents incomplete -> Cannot book.
+     */
     @Test
-    public void testCase2_profileIncomplete_and_docsIncomplete_allowsBookingWhileReportingIncomplete() {
+    public void testCase1_profileIncomplete_and_docsIncomplete_blocksBooking() {
         Map<String, String> incompleteExtras = new HashMap<>();
-        incompleteExtras.put("name", "Muhammad Hafiz"); // missing IC, Passport, Address, Emergency
+        incompleteExtras.put("name", "Muhammad Hafiz"); // missing nickname, passport, emergency, etc.
 
         List<DocumentDto> emptyDocs = new ArrayList<>();
 
         BookingEligibility.Status status = BookingEligibility.check(true, null, incompleteExtras, emptyDocs);
-        // Booking is NOT blocked based on profile/document completion
-        assertTrue(status.isEligible());
-        assertEquals(BookingEligibility.Reason.ELIGIBLE, status.reason);
-        // Completeness tracking remains accurate for profile / vault status
+        assertFalse(status.isEligible());
+        assertEquals(BookingEligibility.Reason.PROFILE_INCOMPLETE, status.reason);
         assertFalse(status.isProfileComplete);
         assertFalse(status.areDocsComplete);
-        assertTrue(status.missingProfileFields.contains("ic_no"));
+        assertTrue(status.missingProfileFields.contains("nickname"));
         assertTrue(status.missingProfileFields.contains("passport_no"));
     }
 
+    /**
+     * Matrix Case 2: Profile incomplete + documents complete -> Cannot book.
+     */
     @Test
-    public void testCase3_profileComplete_and_docsIncomplete_allowsBookingWhileReportingMissingDocs() {
+    public void testCase2_profileIncomplete_and_docsComplete_blocksBooking() {
+        Map<String, String> incompleteExtras = new HashMap<>(completeExtras);
+        incompleteExtras.remove("emergency_name"); // missing emergency contact
+
+        BookingEligibility.Status status = BookingEligibility.check(true, null, incompleteExtras, completeDocs);
+        assertFalse(status.isEligible());
+        assertEquals(BookingEligibility.Reason.PROFILE_INCOMPLETE, status.reason);
+        assertFalse(status.isProfileComplete);
+        assertTrue(status.areDocsComplete);
+        assertTrue(status.missingProfileFields.contains("emergency_name"));
+    }
+
+    /**
+     * Matrix Case 3: Profile complete + documents incomplete -> CAN book.
+     */
+    @Test
+    public void testCase3_profileComplete_and_docsIncomplete_canBook() {
         List<DocumentDto> partialDocs = new ArrayList<>();
         DocumentDto passport = new DocumentDto();
         passport.documentCode = "passport";
@@ -97,21 +137,11 @@ public class BookingEligibilityTest {
         assertFalse(status.missingDocCodes.contains("passport"));
     }
 
+    /**
+     * Matrix Case 4: Profile complete + documents complete -> CAN book.
+     */
     @Test
-    public void testCase4_profileIncomplete_and_docsComplete_allowsBooking() {
-        Map<String, String> incompleteExtras = new HashMap<>(completeExtras);
-        incompleteExtras.remove("emergency_name");
-
-        BookingEligibility.Status status = BookingEligibility.check(true, null, incompleteExtras, completeDocs);
-        assertTrue(status.isEligible());
-        assertEquals(BookingEligibility.Reason.ELIGIBLE, status.reason);
-        assertFalse(status.isProfileComplete);
-        assertTrue(status.areDocsComplete);
-        assertTrue(status.missingProfileFields.contains("emergency_name"));
-    }
-
-    @Test
-    public void testCase5_profileComplete_and_docsComplete_allowsBooking() {
+    public void testCase4_profileComplete_and_docsComplete_canBook() {
         BookingEligibility.Status status = BookingEligibility.check(true, null, completeExtras, completeDocs);
         assertTrue(status.isEligible());
         assertTrue(status.isProfileComplete);
@@ -121,53 +151,55 @@ public class BookingEligibilityTest {
         assertTrue(status.missingDocCodes.isEmpty());
     }
 
+    /**
+     * Matrix Case 5: Profile complete + Mahram empty -> CAN book.
+     */
     @Test
-    public void testCase6_profileFieldsTracking_updatesAccurately() {
+    public void testCase5_profileComplete_and_mahramEmpty_canBook() {
         Map<String, String> extras = new HashMap<>(completeExtras);
-        extras.remove("address");
+        // Mahram explicitly omitted or blank
+        extras.put("mahram_name", "");
+        extras.put("mahram_relationship", "");
 
-        BookingEligibility.Status before = BookingEligibility.check(true, null, extras, completeDocs);
-        assertTrue(before.isEligible());
-        assertFalse(before.isProfileComplete);
-        assertTrue(before.missingProfileFields.contains("address"));
+        BookingEligibility.Status status = BookingEligibility.check(true, null, extras, new ArrayList<>());
+        assertTrue(status.isEligible());
+        assertEquals(BookingEligibility.Reason.ELIGIBLE, status.reason);
+        assertTrue(status.isProfileComplete);
+        assertFalse(status.missingProfileFields.contains("mahram_name"));
+        assertFalse(status.missingProfileFields.contains("mahram_relationship"));
+    }
 
-        // User fills in address
-        extras.put("address", "123 Jalan Ampang, KL");
-        BookingEligibility.Status after = BookingEligibility.check(true, null, extras, completeDocs);
-        assertTrue(after.isEligible());
-        assertTrue(after.isProfileComplete);
-        assertTrue(after.missingProfileFields.isEmpty());
+    /**
+     * Matrix Case 6: Profile complete + Travel Visa unavailable -> CAN book.
+     */
+    @Test
+    public void testCase6_profileComplete_and_visaUnavailable_canBook() {
+        // Complete profile, 0 documents (no visa, no passport copy)
+        BookingEligibility.Status status = BookingEligibility.check(true, null, completeExtras, new ArrayList<>());
+        assertTrue(status.isEligible());
+        assertEquals(BookingEligibility.Reason.ELIGIBLE, status.reason);
+        assertTrue(status.isProfileComplete);
+        assertFalse(status.missingDocCodes.contains("visa"));
     }
 
     @Test
-    public void testCase7_documentUploadTracking_updatesAccurately() {
-        List<DocumentDto> docs = new ArrayList<>();
-        DocumentDto passport = new DocumentDto();
-        passport.documentCode = "passport";
-        passport.status = "verified";
-        docs.add(passport);
+    public void testCase7_profileFieldsTracking_blocksWhenMissingField_unblocksWhenFilled() {
+        Map<String, String> extras = new HashMap<>(completeExtras);
+        extras.remove("email");
 
-        DocumentDto ic = new DocumentDto();
-        ic.documentCode = "ic";
-        ic.status = "pending";
-        docs.add(ic);
+        BookingEligibility.Status before = BookingEligibility.check(true, null, extras, completeDocs);
+        assertFalse(before.isEligible());
+        assertEquals(BookingEligibility.Reason.PROFILE_INCOMPLETE, before.reason);
+        assertFalse(before.isProfileComplete);
+        assertTrue(before.missingProfileFields.contains("email"));
 
-        BookingEligibility.Status before = BookingEligibility.check(true, null, completeExtras, docs);
-        assertTrue(before.isEligible());
-        assertFalse(before.areDocsComplete);
-        assertEquals(1, before.missingDocCodes.size());
-        assertEquals("passport_photo", before.missingDocCodes.get(0));
-
-        // User uploads passport photo
-        DocumentDto photo = new DocumentDto();
-        photo.documentCode = "passport_photo";
-        photo.status = "pending";
-        docs.add(photo);
-
-        BookingEligibility.Status after = BookingEligibility.check(true, null, completeExtras, docs);
+        // User fills in email
+        extras.put("email", "hafiz@example.com");
+        BookingEligibility.Status after = BookingEligibility.check(true, null, extras, completeDocs);
         assertTrue(after.isEligible());
-        assertTrue(after.areDocsComplete);
-        assertTrue(after.missingDocCodes.isEmpty());
+        assertEquals(BookingEligibility.Reason.ELIGIBLE, after.reason);
+        assertTrue(after.isProfileComplete);
+        assertTrue(after.missingProfileFields.isEmpty());
     }
 
     @Test
@@ -182,44 +214,82 @@ public class BookingEligibilityTest {
 
         BookingEligibility.Status status = BookingEligibility.check(true, null, completeExtras, docs);
         assertTrue(status.isEligible());
+        assertEquals(BookingEligibility.Reason.ELIGIBLE, status.reason);
         assertFalse(status.areDocsComplete);
         assertTrue(status.missingDocCodes.contains("passport"));
     }
 
     @Test
-    public void testCase9_whitespaceFields_countAsIncomplete() {
+    public void testCase9_whitespaceFields_countAsIncomplete_blocksBooking() {
         Map<String, String> whitespaceExtras = new HashMap<>();
         whitespaceExtras.put("name", "   ");
-        whitespaceExtras.put("ic_no", "   ");
+        whitespaceExtras.put("nickname", "   ");
         whitespaceExtras.put("passport_no", "   ");
-        whitespaceExtras.put("address", "   ");
+        whitespaceExtras.put("email", "   ");
         whitespaceExtras.put("emergency_name", "   ");
 
         BookingEligibility.Status status = BookingEligibility.check(true, null, whitespaceExtras, completeDocs);
-        assertTrue(status.isEligible());
+        assertFalse(status.isEligible());
+        assertEquals(BookingEligibility.Reason.PROFILE_INCOMPLETE, status.reason);
         assertFalse(status.isProfileComplete);
-        assertEquals(5, status.missingProfileFields.size());
+        assertTrue(status.missingProfileFields.contains("name"));
+        assertTrue(status.missingProfileFields.contains("nickname"));
+        assertTrue(status.missingProfileFields.contains("passport_no"));
+        assertTrue(status.missingProfileFields.contains("email"));
+        assertTrue(status.missingProfileFields.contains("emergency_name"));
     }
 
     @Test
-    public void testCase10_optionalVisaDoc_isNotCustomerUploadRequirement() {
-        // Company handles visa process; visa is not required from customer
-        BookingEligibility.Status status = BookingEligibility.check(true, null, completeExtras, completeDocs);
-        assertTrue(status.isEligible());
-        assertFalse(status.missingDocCodes.contains("visa"));
-    }
-
-    @Test
-    public void testCase11_userDtoFallback_whenExtrasEmpty() {
+    public void testCase10_userDtoFallback_whenExtrasEmpty() {
         UserDto user = new UserDto();
         user.name = "Muhammad Hafiz";
-        user.icNumber = "920101-14-1234";
+        user.nickname = "hafiz";
+        user.dateOfBirth = "1990-01-01";
+        user.gender = "Male";
+        user.nationality = "Malaysia";
+        user.phone = "+60123456789";
+        user.email = "hafiz@example.com";
         user.passportNumber = "A99887766";
-        user.address = "No 10, Jalan Ampang, KL";
+        user.passportExpiryDate = "2030-01-01";
+        user.issuingCountry = "Malaysia";
         user.emergencyName = "Aishah";
+        user.emergencyPhone = "+60198765432";
 
         BookingEligibility.Status status = BookingEligibility.check(true, user, new HashMap<>(), completeDocs);
         assertTrue(status.isEligible());
+        assertEquals(BookingEligibility.Reason.ELIGIBLE, status.reason);
+        assertTrue(status.isProfileComplete);
+    }
+
+    @Test
+    public void testCase11_accountReadiness100_travelDocsIncomplete_canBook() {
+        // Complete profile (Account Readiness = 100%), 0 travel documents uploaded
+        BookingEligibility.Status status = BookingEligibility.check(true, null, completeExtras, new ArrayList<>());
+        assertTrue("Account readiness 100% with incomplete travel documents CAN book", status.isEligible());
+        assertEquals(BookingEligibility.Reason.ELIGIBLE, status.reason);
+        assertTrue(status.isProfileComplete);
+        assertFalse(status.areDocsComplete);
+    }
+
+    @Test
+    public void testCase12_accountReadiness100_expiredPassport_canBook() {
+        Map<String, String> extras = new HashMap<>(completeExtras);
+        extras.put("passport_expiry", "2020-01-01"); // Expired date in the past
+
+        BookingEligibility.Status status = BookingEligibility.check(true, null, extras, completeDocs);
+        assertTrue("Account readiness 100% with expired passport CAN book", status.isEligible());
+        assertEquals(BookingEligibility.Reason.ELIGIBLE, status.reason);
+        assertTrue(status.isProfileComplete);
+    }
+
+    @Test
+    public void testCase13_accountReadiness100_passportLessThan6MonthsValidity_canBook() {
+        Map<String, String> extras = new HashMap<>(completeExtras);
+        extras.put("passport_expiry", "2026-10-01"); // Less than 6 months remaining
+
+        BookingEligibility.Status status = BookingEligibility.check(true, null, extras, completeDocs);
+        assertTrue("Account readiness 100% with passport < 6 months validity CAN book", status.isEligible());
+        assertEquals(BookingEligibility.Reason.ELIGIBLE, status.reason);
         assertTrue(status.isProfileComplete);
     }
 }

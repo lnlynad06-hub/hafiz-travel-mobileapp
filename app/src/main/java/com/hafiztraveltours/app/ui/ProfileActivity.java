@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.text.InputType;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -307,19 +308,22 @@ public class ProfileActivity extends BaseActivity {
 
     /** Renders the readiness score block from ViewModel state (pure view code). */
     private void renderReadiness(ProfileViewModel.Readiness readiness) {
-        int compScore = readiness.score;
+        int compScore = readiness != null ? readiness.score : 0;
         TextView pointsBadge = findViewById(R.id.loyaltyPointsText);
         android.widget.ProgressBar progressBar = findViewById(R.id.loyaltyProgressBar);
         TextView progressText = findViewById(R.id.loyaltyProgressText);
         TextView benefitsText = findViewById(R.id.loyaltyBenefitsText);
 
-        if (compScore >= 100) {
-            compScore = 100;
-            if (loyaltyCard != null) loyaltyCard.setVisibility(View.GONE);
-        } else {
+        // Hide completely if not logged in or readiness reaches 100%
+        if (!profileViewModel.isLoggedIn() || compScore >= 100) {
             if (loyaltyCard != null) {
-                loyaltyCard.setVisibility(profileViewModel.isLoggedIn() ? View.VISIBLE : View.GONE);
+                loyaltyCard.setVisibility(View.GONE);
             }
+            return;
+        }
+
+        if (loyaltyCard != null) {
+            loyaltyCard.setVisibility(View.VISIBLE);
         }
 
         if (pointsBadge != null) {
@@ -329,11 +333,7 @@ public class ProfileActivity extends BaseActivity {
             progressBar.setProgress(compScore);
         }
         if (progressText != null) {
-            if (compScore >= 100) {
-                progressText.setText(getString(R.string.readiness_complete_msg));
-            } else {
-                progressText.setText(getString(R.string.readiness_incomplete_msg));
-            }
+            progressText.setText(getString(R.string.readiness_incomplete_msg));
         }
         if (benefitsText != null) {
             benefitsText.setText(getString(R.string.readiness_autolink_msg));
@@ -401,6 +401,66 @@ public class ProfileActivity extends BaseActivity {
         return v != null ? v : def;
     }
 
+    private static String matchCountry(String[] countries, String current) {
+        if (current == null || current.trim().isEmpty()) return "";
+        String c = current.trim();
+        for (String country : countries) {
+            if (country.equalsIgnoreCase(c)) return country;
+        }
+        String lower = c.toLowerCase();
+        for (String country : countries) {
+            String cl = country.toLowerCase();
+            if (cl.startsWith(lower) || lower.startsWith(cl)) return country;
+            if (lower.contains("singap") && cl.contains("singap")) return country;
+            if (lower.contains("filipin") && cl.contains("philippin")) return country;
+            if (lower.contains("philippin") && cl.contains("filipin")) return country;
+            if (lower.contains("kemboj") && cl.contains("cambodi")) return country;
+            if (lower.contains("cambodi") && cl.contains("kemboj")) return country;
+        }
+        return countries.length > 0 ? countries[0] : c;
+    }
+
+    private static final String[] ASEAN_PHONE_CODES = new String[]{
+            "+673", "+856", "+855", "+670", "+60", "+65", "+62", "+66", "+84", "+63", "+95"
+    };
+
+    private void showCountryPickerBottomSheet(TextView tvCountryCode, String[] codeHolder) {
+        com.google.android.material.bottomsheet.BottomSheetDialog dialog =
+                new com.google.android.material.bottomsheet.BottomSheetDialog(this);
+        View sheetView = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_country_picker, null);
+        dialog.setContentView(sheetView);
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+            dialog.getWindow().setDimAmount(0.55f);
+        }
+        View btnClose = sheetView.findViewById(R.id.btnCloseSheet);
+        if (btnClose != null) btnClose.setOnClickListener(v -> dialog.dismiss());
+
+        int[] itemIds = new int[]{
+                R.id.itemMalaysia, R.id.itemSingapore, R.id.itemIndonesia, R.id.itemBrunei,
+                R.id.itemThailand, R.id.itemVietnam, R.id.itemPhilippines, R.id.itemLaos,
+                R.id.itemMyanmar, R.id.itemCambodia, R.id.itemTimorLeste
+        };
+        String[] codes = new String[]{
+                "+60", "+65", "+62", "+673",
+                "+66", "+84", "+63", "+856",
+                "+95", "+855", "+670"
+        };
+        for (int i = 0; i < itemIds.length; i++) {
+            View itm = sheetView.findViewById(itemIds[i]);
+            final String code = codes[i];
+            if (itm != null) {
+                itm.setOnClickListener(v -> {
+                    com.hafiztraveltours.app.utils.HapticUtil.click(v);
+                    codeHolder[0] = code;
+                    if (tvCountryCode != null) tvCountryCode.setText(code);
+                    dialog.dismiss();
+                });
+            }
+        }
+        dialog.show();
+    }
+
     private void showEditProfileDialog() {
         if (!profileViewModel.isLoggedIn()) {
             Toast.makeText(this, getString(R.string.profile_login_to_update), Toast.LENGTH_SHORT).show();
@@ -442,10 +502,14 @@ public class ProfileActivity extends BaseActivity {
         TextInputEditText nicknameInput = dialogView.findViewById(R.id.nicknameInput);
         TextInputEditText icInput = dialogView.findViewById(R.id.icInput);
         TextInputEditText phoneInput = dialogView.findViewById(R.id.phoneInput);
+        View btnCountryCode = dialogView.findViewById(R.id.btnCountryCode);
+        TextView tvCountryCode = dialogView.findViewById(R.id.tvCountryCode);
+        TextView phoneErrorText = dialogView.findViewById(R.id.phoneErrorText);
         TextInputEditText emailInput = dialogView.findViewById(R.id.emailInput);
         com.google.android.material.textfield.MaterialAutoCompleteTextView genderInput = dialogView.findViewById(R.id.genderInput);
         TextInputEditText dobInput = dialogView.findViewById(R.id.dobInput);
-        TextInputEditText nationalityInput = dialogView.findViewById(R.id.nationalityInput);
+        TextView tvDobAge = dialogView.findViewById(R.id.tvDobAge);
+        com.google.android.material.textfield.MaterialAutoCompleteTextView nationalityInput = dialogView.findViewById(R.id.nationalityInput);
 
         // 2. Residential Address Inputs
         TextInputEditText addressLine1Input = dialogView.findViewById(R.id.addressLine1Input);
@@ -453,11 +517,11 @@ public class ProfileActivity extends BaseActivity {
         TextInputEditText postcodeInput = dialogView.findViewById(R.id.postcodeInput);
         TextInputEditText cityInput = dialogView.findViewById(R.id.cityInput);
         TextInputEditText stateInput = dialogView.findViewById(R.id.stateInput);
-        TextInputEditText countryInput = dialogView.findViewById(R.id.countryInput);
+        com.google.android.material.textfield.MaterialAutoCompleteTextView countryInput = dialogView.findViewById(R.id.countryInput);
 
         // 3. Passport Information Inputs
         TextInputEditText passportInput = dialogView.findViewById(R.id.passportInput);
-        TextInputEditText issuingCountryInput = dialogView.findViewById(R.id.issuingCountryInput);
+        com.google.android.material.textfield.MaterialAutoCompleteTextView issuingCountryInput = dialogView.findViewById(R.id.issuingCountryInput);
         TextInputEditText expiryInput = dialogView.findViewById(R.id.expiryInput);
         LinearLayout warningContainer = dialogView.findViewById(R.id.passportWarningContainer);
         TextView warningText = dialogView.findViewById(R.id.passportWarningText);
@@ -476,7 +540,6 @@ public class ProfileActivity extends BaseActivity {
 
         TextInputLayout nameLayout = dialogView.findViewById(R.id.nameLayout);
         TextInputLayout nicknameLayout = dialogView.findViewById(R.id.nicknameLayout);
-        TextInputLayout phoneLayout = dialogView.findViewById(R.id.phoneLayout);
 
         // Setup Gender Options (Localized)
         boolean isMalay = "ms".equalsIgnoreCase(LocaleHelper.getSavedLanguage(this));
@@ -487,6 +550,88 @@ public class ProfileActivity extends BaseActivity {
                 this, android.R.layout.simple_dropdown_item_1line, genderOptions);
         if (genderInput != null) {
             genderInput.setAdapter(genderAdapter);
+        }
+
+        // Setup Southeast Asian Countries Dropdowns (Personal, Issuing, Residential)
+        String[] seaCountries = getResources().getStringArray(R.array.sea_countries);
+
+        CountryDropdownAdapter nationalityAdapter = new CountryDropdownAdapter(this, seaCountries);
+        if (nationalityInput != null) {
+            nationalityInput.setAdapter(nationalityAdapter);
+            nationalityInput.setDropDownBackgroundResource(R.drawable.bg_dropdown_popup);
+            nationalityInput.setOnItemClickListener((parent, view, position, id) -> {
+                String selected = (String) parent.getItemAtPosition(position);
+                nationalityAdapter.setSelectedCountry(selected);
+            });
+            nationalityInput.setOnClickListener(v -> {
+                nationalityAdapter.setSelectedCountry(nationalityInput.getText().toString());
+                nationalityInput.showDropDown();
+            });
+        }
+
+        CountryDropdownAdapter issuingCountryAdapter = new CountryDropdownAdapter(this, seaCountries);
+        if (issuingCountryInput != null) {
+            issuingCountryInput.setAdapter(issuingCountryAdapter);
+            issuingCountryInput.setDropDownBackgroundResource(R.drawable.bg_dropdown_popup);
+            issuingCountryInput.setOnItemClickListener((parent, view, position, id) -> {
+                String selected = (String) parent.getItemAtPosition(position);
+                issuingCountryAdapter.setSelectedCountry(selected);
+            });
+            issuingCountryInput.setOnClickListener(v -> {
+                issuingCountryAdapter.setSelectedCountry(issuingCountryInput.getText().toString());
+                issuingCountryInput.showDropDown();
+            });
+        }
+
+        CountryDropdownAdapter countryAdapter = new CountryDropdownAdapter(this, seaCountries);
+        if (countryInput != null) {
+            countryInput.setAdapter(countryAdapter);
+            countryInput.setDropDownBackgroundResource(R.drawable.bg_dropdown_popup);
+            countryInput.setOnItemClickListener((parent, view, position, id) -> {
+                String selected = (String) parent.getItemAtPosition(position);
+                countryAdapter.setSelectedCountry(selected);
+            });
+            countryInput.setOnClickListener(v -> {
+                countryAdapter.setSelectedCountry(countryInput.getText().toString());
+                countryInput.showDropDown();
+            });
+        }
+
+        // Setup Phone Number & Country Code (Shared with Create Account)
+        final String[] selectedCountryCode = new String[]{"+60"};
+        String localPhone = "";
+        if (currentPhone != null && !currentPhone.trim().isEmpty()) {
+            String cleaned = currentPhone.trim();
+            boolean matched = false;
+            for (String code : ASEAN_PHONE_CODES) {
+                if (cleaned.startsWith(code)) {
+                    selectedCountryCode[0] = code;
+                    localPhone = cleaned.substring(code.length()).replaceAll("^0+", "");
+                    matched = true;
+                    break;
+                } else if (cleaned.startsWith(code.substring(1))) {
+                    selectedCountryCode[0] = code;
+                    localPhone = cleaned.substring(code.length() - 1).replaceAll("^0+", "");
+                    matched = true;
+                    break;
+                }
+            }
+            if (!matched) {
+                if (cleaned.startsWith("0")) {
+                    selectedCountryCode[0] = "+60";
+                    localPhone = cleaned.substring(1);
+                } else {
+                    localPhone = cleaned;
+                }
+            }
+        }
+        if (tvCountryCode != null) tvCountryCode.setText(selectedCountryCode[0]);
+        if (phoneInput != null) phoneInput.setText(localPhone);
+        if (btnCountryCode != null) {
+            btnCountryCode.setOnClickListener(v -> {
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
+                showCountryPickerBottomSheet(tvCountryCode, selectedCountryCode);
+            });
         }
 
         // Setup Mahram Relationship Dropdown Options
@@ -524,23 +669,34 @@ public class ProfileActivity extends BaseActivity {
         if (nameInput != null) nameInput.setText(currentName != null ? currentName : "");
         if (nicknameInput != null) nicknameInput.setText(currentNickname != null ? currentNickname : "");
         if (icInput != null) icInput.setText(currentIc);
-        if (phoneInput != null) phoneInput.setText(currentPhone != null ? currentPhone : "");
         if (emailInput != null) emailInput.setText(currentEmail != null ? currentEmail : "");
         if (genderInput != null && !currentGender.isEmpty()) {
             genderInput.setText(currentGender, false);
         }
         if (dobInput != null) dobInput.setText(currentDob);
-        if (nationalityInput != null) nationalityInput.setText(currentNationality);
+        String matchedNationality = matchCountry(seaCountries, currentNationality);
+        if (nationalityInput != null && !matchedNationality.isEmpty()) {
+            nationalityInput.setText(matchedNationality, false);
+            nationalityAdapter.setSelectedCountry(matchedNationality);
+        }
 
         if (addressLine1Input != null) addressLine1Input.setText(currentAddress1);
         if (addressLine2Input != null) addressLine2Input.setText(currentAddress2);
         if (postcodeInput != null) postcodeInput.setText(currentPostcode);
         if (cityInput != null) cityInput.setText(currentCity);
         if (stateInput != null) stateInput.setText(currentState);
-        if (countryInput != null) countryInput.setText(currentCountry);
+        String matchedCountry = matchCountry(seaCountries, currentCountry);
+        if (countryInput != null && !matchedCountry.isEmpty()) {
+            countryInput.setText(matchedCountry, false);
+            countryAdapter.setSelectedCountry(matchedCountry);
+        }
 
         if (passportInput != null) passportInput.setText(currentPassport);
-        if (issuingCountryInput != null) issuingCountryInput.setText(currentIssuingCountry);
+        String matchedIssuingCountry = matchCountry(seaCountries, currentIssuingCountry);
+        if (issuingCountryInput != null && !matchedIssuingCountry.isEmpty()) {
+            issuingCountryInput.setText(matchedIssuingCountry, false);
+            issuingCountryAdapter.setSelectedCountry(matchedIssuingCountry);
+        }
         if (expiryInput != null) expiryInput.setText(currentExpiry);
         if (emergNameInput != null) emergNameInput.setText(currentEmergName);
         if (emergPhoneInput != null) emergPhoneInput.setText(currentEmergPhone);
@@ -548,6 +704,41 @@ public class ProfileActivity extends BaseActivity {
         if (mahramRelInput != null && !currentMahramRel.isEmpty()) {
             mahramRelInput.setText(currentMahramRel, false);
         }
+
+        // Dynamic Age Calculation from DOB
+        Runnable updateAgeBadge = () -> {
+            String dobStr = dobInput != null ? dobInput.getText().toString().trim() : "";
+            if (tvDobAge == null) return;
+            if (dobStr.isEmpty()) {
+                tvDobAge.setVisibility(View.GONE);
+                return;
+            }
+            try {
+                String[] parts = dobStr.split("-");
+                if (parts.length == 3) {
+                    int y = Integer.parseInt(parts[0]);
+                    int m = Integer.parseInt(parts[1]) - 1;
+                    int d = Integer.parseInt(parts[2]);
+                    java.util.Calendar today = java.util.Calendar.getInstance();
+                    int age = today.get(java.util.Calendar.YEAR) - y;
+                    if (today.get(java.util.Calendar.MONTH) < m ||
+                            (today.get(java.util.Calendar.MONTH) == m && today.get(java.util.Calendar.DAY_OF_MONTH) < d)) {
+                        age--;
+                    }
+                    if (age >= 0) {
+                        tvDobAge.setText(getString(R.string.profile_age_format, age));
+                        tvDobAge.setVisibility(View.VISIBLE);
+                    } else {
+                        tvDobAge.setVisibility(View.GONE);
+                    }
+                } else {
+                    tvDobAge.setVisibility(View.GONE);
+                }
+            } catch (Exception e) {
+                tvDobAge.setVisibility(View.GONE);
+            }
+        };
+        updateAgeBadge.run();
 
         if (dobInput != null) {
             dobInput.setOnClickListener(v -> {
@@ -572,6 +763,7 @@ public class ProfileActivity extends BaseActivity {
                             String formattedDate = String.format(java.util.Locale.US, "%04d-%02d-%02d",
                                     selectedYear, selectedMonth + 1, selectedDay);
                             dobInput.setText(formattedDate);
+                            updateAgeBadge.run();
                         },
                         year, month, day
                 ).show();
@@ -680,7 +872,11 @@ public class ProfileActivity extends BaseActivity {
             btnSave.setOnClickListener(v -> {
                 String newName = nameInput != null ? nameInput.getText().toString().trim() : "";
                 String newNickname = nicknameInput != null ? nicknameInput.getText().toString().trim() : "";
-                String newPhone = phoneInput != null ? phoneInput.getText().toString().trim() : "";
+                String rawPhone = phoneInput != null ? phoneInput.getText().toString().trim() : "";
+                String newPhone = "";
+                if (!rawPhone.isEmpty()) {
+                    newPhone = SignUpViewModel.normalizePhone(rawPhone, selectedCountryCode[0]);
+                }
                 String newGender = genderInput != null ? genderInput.getText().toString().trim() : "";
                 String newDob = dobInput != null ? dobInput.getText().toString().trim() : "";
                 String newNationality = nationalityInput != null ? nationalityInput.getText().toString().trim() : "";
@@ -704,23 +900,43 @@ public class ProfileActivity extends BaseActivity {
                 String newIssuingCountry = issuingCountryInput != null ? issuingCountryInput.getText().toString().trim() : "";
                 String newExpiry = expiryInput != null ? expiryInput.getText().toString().trim() : "";
 
-                if (nameLayout != null) nameLayout.setError(null);
-                if (nicknameLayout != null) nicknameLayout.setError(null);
-                if (phoneLayout != null) phoneLayout.setError(null);
+                if (nameLayout != null) {
+                    nameLayout.setError(null);
+                    nameLayout.setErrorEnabled(false);
+                }
+                if (nicknameLayout != null) {
+                    nicknameLayout.setError(null);
+                    nicknameLayout.setErrorEnabled(false);
+                }
+                if (phoneErrorText != null) phoneErrorText.setVisibility(View.GONE);
 
                 ProfileViewModel.FormErrors formErrors =
                         profileViewModel.validateProfileForm(newName, newNickname);
                 if (formErrors.nameErr != 0) {
-                    if (nameLayout != null) nameLayout.setError(getString(formErrors.nameErr));
+                    if (nameLayout != null) {
+                        nameLayout.setErrorEnabled(true);
+                        nameLayout.setError(getString(formErrors.nameErr));
+                    }
                     return;
                 }
                 if (formErrors.nickErr != 0) {
-                    if (nicknameLayout != null) nicknameLayout.setError(getString(formErrors.nickErr));
+                    if (nicknameLayout != null) {
+                        nicknameLayout.setErrorEnabled(true);
+                        nicknameLayout.setError(getString(formErrors.nickErr));
+                    }
                     return;
                 }
-                if (!newPhone.isEmpty() && !android.util.Patterns.PHONE.matcher(newPhone).matches()) {
-                    if (phoneLayout != null) phoneLayout.setError(getString(R.string.err_phone_invalid));
-                    return;
+                if (!rawPhone.isEmpty()) {
+                    int phoneErr = com.hafiztraveltours.app.utils.Validator.phone(rawPhone, false, R.string.err_phone_invalid);
+                    if (phoneErr != 0) {
+                        if (phoneErrorText != null) {
+                            phoneErrorText.setText(getString(phoneErr));
+                            phoneErrorText.setVisibility(View.VISIBLE);
+                        } else {
+                            Toast.makeText(this, getString(phoneErr), Toast.LENGTH_SHORT).show();
+                        }
+                        return;
+                    }
                 }
 
                 // Jangan benarkan pengguna memadam (empty) maklumat yang sudah diisi sebelum ini
@@ -744,6 +960,9 @@ public class ProfileActivity extends BaseActivity {
                 ProfileViewModel.ProfileForm form = new ProfileViewModel.ProfileForm();
                 form.name = newName;
                 form.nickname = newNickname;
+                form.email = (currentUser != null && currentUser.email != null && !currentUser.email.trim().isEmpty())
+                        ? currentUser.email.trim()
+                        : (emailInput != null ? emailInput.getText().toString().trim() : "");
                 form.phone = newPhone;
                 form.gender = apiGender;
                 form.ic = newIc;
@@ -826,7 +1045,6 @@ public class ProfileActivity extends BaseActivity {
         java.util.Map<String, String> vaultEx = profileViewModel.readProfileExtras();
         String passportNo = exVal(vaultEx, "passport_no", "").trim();
         String mahramName = exVal(vaultEx, "mahram_name", "").trim();
-        boolean hasVaccineCert = profileViewModel.readProfileFlag("has_vaccine_cert", false);
 
         View cardDocProgressContainer = sheetView.findViewById(R.id.cardDocProgressContainer);
         TextView tvDocProgressPercent = sheetView.findViewById(R.id.tvDocProgressPercent);
@@ -840,13 +1058,6 @@ public class ProfileActivity extends BaseActivity {
         TextView tvPassportGuidance = sheetView.findViewById(R.id.tvPassportGuidance);
         LinearLayout passportRejectionContainer = sheetView.findViewById(R.id.passportRejectionContainer);
         TextView tvPassportRejectionReason = sheetView.findViewById(R.id.tvPassportRejectionReason);
-
-        TextView tvVaccineStatus = sheetView.findViewById(R.id.tvVaccineStatus);
-        TextView btnVaccineAction = sheetView.findViewById(R.id.btnVaccineAction);
-        TextView tvVaccineDates = sheetView.findViewById(R.id.tvVaccineDates);
-        TextView tvVaccineGuidance = sheetView.findViewById(R.id.tvVaccineGuidance);
-        LinearLayout vaccineRejectionContainer = sheetView.findViewById(R.id.vaccineRejectionContainer);
-        TextView tvVaccineRejectionReason = sheetView.findViewById(R.id.tvVaccineRejectionReason);
 
         TextView tvMarriageStatus = sheetView.findViewById(R.id.tvMarriageStatus);
         TextView btnMarriageAction = sheetView.findViewById(R.id.btnMarriageAction);
@@ -886,30 +1097,6 @@ public class ProfileActivity extends BaseActivity {
             }
         }
 
-        if (hasVaccineCert) {
-            if (tvVaccineStatus != null) {
-                tvVaccineStatus.setText(getString(R.string.doc_status_under_review));
-                tvVaccineStatus.setBackgroundResource(R.drawable.bg_status_pending);
-                tvVaccineStatus.setTextColor(getResources().getColor(R.color.gold_accent));
-            }
-            if (btnVaccineAction != null) {
-                btnVaccineAction.setText(getString(R.string.doc_action_view));
-                btnVaccineAction.setBackgroundResource(R.drawable.bg_button_white_square);
-                btnVaccineAction.setTextColor(getResources().getColor(R.color.brand_magenta));
-            }
-        } else {
-            if (tvVaccineStatus != null) {
-                tvVaccineStatus.setText(getString(R.string.doc_status_not_uploaded));
-                tvVaccineStatus.setBackgroundResource(R.drawable.bg_status_not_uploaded);
-                tvVaccineStatus.setTextColor(getResources().getColor(R.color.text_gray));
-            }
-            if (btnVaccineAction != null) {
-                btnVaccineAction.setText(getString(R.string.doc_action_upload));
-                btnVaccineAction.setBackgroundResource(R.drawable.bg_button_pink);
-                btnVaccineAction.setTextColor(getResources().getColor(R.color.white));
-            }
-        }
-
         if (!mahramName.isEmpty()) {
             if (tvMarriageStatus != null) {
                 tvMarriageStatus.setText(getString(R.string.doc_status_under_review));
@@ -934,6 +1121,24 @@ public class ProfileActivity extends BaseActivity {
             }
         }
 
+        // Travel Visa: Provided & managed by company, view-only for customers
+        if (tvVisaStatus != null) {
+            tvVisaStatus.setText(getString(R.string.doc_visa_managed_by_company));
+            tvVisaStatus.setBackgroundResource(R.drawable.bg_status_pending);
+            tvVisaStatus.setTextColor(getResources().getColor(R.color.gold_accent));
+        }
+        if (btnVisaAction != null) {
+            btnVisaAction.setVisibility(View.GONE);
+            btnVisaAction.setText(getString(R.string.doc_action_view));
+            btnVisaAction.setBackgroundResource(R.drawable.bg_button_white_square);
+            btnVisaAction.setTextColor(getResources().getColor(R.color.brand_magenta));
+            btnVisaAction.setOnClickListener(v -> openUploadedDocument("visa"));
+        }
+        if (tvVisaGuidance != null) {
+            tvVisaGuidance.setText(getString(R.string.doc_visa_company_note));
+            tvVisaGuidance.setVisibility(View.VISIBLE);
+        }
+
         if (btnPassportAction != null) {
             btnPassportAction.setOnClickListener(v -> {
                 String action = btnPassportAction.getText().toString();
@@ -941,17 +1146,6 @@ public class ProfileActivity extends BaseActivity {
                     openUploadedDocument("passport");
                 } else {
                     showUploadDocumentDialog("passport", getString(R.string.doc_passport_copy), R.drawable.ic_doc_passport);
-                }
-            });
-        }
-
-        if (btnVaccineAction != null) {
-            btnVaccineAction.setOnClickListener(v -> {
-                String action = btnVaccineAction.getText().toString();
-                if (getString(R.string.doc_action_view).equals(action)) {
-                    openUploadedDocument("ic");
-                } else {
-                    showUploadDocumentDialog("ic", getString(R.string.doc_ic_title), R.drawable.ic_card);
                 }
             });
         }
@@ -967,27 +1161,12 @@ public class ProfileActivity extends BaseActivity {
             });
         }
 
-        if (btnVisaAction != null) {
-            btnVisaAction.setOnClickListener(v -> {
-                String action = btnVisaAction.getText().toString();
-                if (getString(R.string.doc_action_view).equals(action)) {
-                    openUploadedDocument("visa");
-                } else {
-                    showUploadDocumentDialog("visa", getString(R.string.doc_travel_visa_title), R.drawable.ic_visa);
-                }
-            });
-        }
-
         View btnPassportReq = sheetView.findViewById(R.id.btnPassportReq);
-        View btnVaccineReq = sheetView.findViewById(R.id.btnVaccineReq);
         View btnMarriageReq = sheetView.findViewById(R.id.btnMarriageReq);
         View btnVisaReq = sheetView.findViewById(R.id.btnVisaReq);
 
         if (btnPassportReq != null) {
             btnPassportReq.setOnClickListener(v -> showDocRequirementsDialog("passport", getString(R.string.doc_passport_copy), R.drawable.ic_doc_passport));
-        }
-        if (btnVaccineReq != null) {
-            btnVaccineReq.setOnClickListener(v -> showDocRequirementsDialog("ic", getString(R.string.doc_ic_title), R.drawable.ic_card));
         }
         if (btnMarriageReq != null) {
             btnMarriageReq.setOnClickListener(v -> showDocRequirementsDialog("passport_photo", getString(R.string.doc_passport_photo_title), R.drawable.ic_profile));
@@ -1018,13 +1197,6 @@ public class ProfileActivity extends BaseActivity {
         LinearLayout passportRejectionContainer = travelDocsDialog.findViewById(R.id.passportRejectionContainer);
         TextView tvPassportRejectionReason = travelDocsDialog.findViewById(R.id.tvPassportRejectionReason);
 
-        TextView tvVaccineStatus = travelDocsDialog.findViewById(R.id.tvVaccineStatus);
-        TextView btnVaccineAction = travelDocsDialog.findViewById(R.id.btnVaccineAction);
-        TextView tvVaccineDates = travelDocsDialog.findViewById(R.id.tvVaccineDates);
-        TextView tvVaccineGuidance = travelDocsDialog.findViewById(R.id.tvVaccineGuidance);
-        LinearLayout vaccineRejectionContainer = travelDocsDialog.findViewById(R.id.vaccineRejectionContainer);
-        TextView tvVaccineRejectionReason = travelDocsDialog.findViewById(R.id.tvVaccineRejectionReason);
-
         TextView tvMarriageStatus = travelDocsDialog.findViewById(R.id.tvMarriageStatus);
         TextView btnMarriageAction = travelDocsDialog.findViewById(R.id.btnMarriageAction);
         TextView tvMarriageDates = travelDocsDialog.findViewById(R.id.tvMarriageDates);
@@ -1048,47 +1220,56 @@ public class ProfileActivity extends BaseActivity {
         java.util.List<com.hafiztraveltours.app.models.DocumentDto> docs =
                 profileViewModel.getDocsData().getValue();
         if (docs != null) {
-                    int verifiedCount = 0;
-                    int underReviewCount = 0;
-                    int rejectedCount = 0;
-                    final int requiredTotal = 3; // passport, ic, passport_photo (visa is optional/Not Required by default)
+            int verifiedCount = 0;
+            int underReviewCount = 0;
+            int rejectedCount = 0;
+            final int requiredTotal = 2; // passport, passport_photo (visa managed by company)
 
-                    for (com.hafiztraveltours.app.models.DocumentDto doc : docs) {
-                        if (doc.documentCode != null) {
-                            userDocumentsMap.put(doc.documentCode.toLowerCase(), doc);
-                        }
-                        boolean isRequiredDoc = "passport".equalsIgnoreCase(doc.documentCode)
-                                || "ic".equalsIgnoreCase(doc.documentCode)
-                                || "passport_photo".equalsIgnoreCase(doc.documentCode);
+            for (com.hafiztraveltours.app.models.DocumentDto doc : docs) {
+                if (doc.documentCode != null) {
+                    userDocumentsMap.put(doc.documentCode.toLowerCase(), doc);
+                }
+                boolean isRequiredDoc = "passport".equalsIgnoreCase(doc.documentCode)
+                        || "passport_photo".equalsIgnoreCase(doc.documentCode);
 
-                        String st = doc.status != null ? doc.status : "";
+                String st = doc.status != null ? doc.status : "";
 
-                        if (isRequiredDoc) {
-                            switch (com.hafiztraveltours.app.utils.DocumentStatus.from(st)) {
-                                case VERIFIED:
-                                    verifiedCount++;
-                                    break;
-                                case PENDING:
-                                    underReviewCount++;
-                                    break;
-                                case REJECTED:
-                                    rejectedCount++;
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
+                if (isRequiredDoc) {
+                    switch (com.hafiztraveltours.app.utils.DocumentStatus.from(st)) {
+                        case VERIFIED:
+                            verifiedCount++;
+                            break;
+                        case PENDING:
+                            underReviewCount++;
+                            break;
+                        case REJECTED:
+                            rejectedCount++;
+                            break;
+                        default:
+                            break;
+                    }
+                }
 
-                        if ("passport".equalsIgnoreCase(doc.documentCode)) {
-                            updateDocStatusUi(tvPassportStatus, btnPassportAction, tvPassportDates, tvPassportGuidance, passportRejectionContainer, tvPassportRejectionReason, doc);
-                        } else if ("ic".equalsIgnoreCase(doc.documentCode)) {
-                            updateDocStatusUi(tvVaccineStatus, btnVaccineAction, tvVaccineDates, tvVaccineGuidance, vaccineRejectionContainer, tvVaccineRejectionReason, doc);
-                        } else if ("passport_photo".equalsIgnoreCase(doc.documentCode)) {
-                            updateDocStatusUi(tvMarriageStatus, btnMarriageAction, tvMarriageDates, tvMarriageGuidance, marriageRejectionContainer, tvMarriageRejectionReason, doc);
-                        } else if ("visa".equalsIgnoreCase(doc.documentCode) || "travel_visa".equalsIgnoreCase(doc.documentCode)) {
-                            updateDocStatusUi(tvVisaStatus, btnVisaAction, tvVisaDates, tvVisaGuidance, visaRejectionContainer, tvVisaRejectionReason, doc);
+                if ("passport".equalsIgnoreCase(doc.documentCode)) {
+                    updateDocStatusUi(tvPassportStatus, btnPassportAction, tvPassportDates, tvPassportGuidance, passportRejectionContainer, tvPassportRejectionReason, doc);
+                } else if ("passport_photo".equalsIgnoreCase(doc.documentCode)) {
+                    updateDocStatusUi(tvMarriageStatus, btnMarriageAction, tvMarriageDates, tvMarriageGuidance, marriageRejectionContainer, tvMarriageRejectionReason, doc);
+                } else if ("visa".equalsIgnoreCase(doc.documentCode) || "travel_visa".equalsIgnoreCase(doc.documentCode)) {
+                    updateDocStatusUi(tvVisaStatus, btnVisaAction, tvVisaDates, tvVisaGuidance, visaRejectionContainer, tvVisaRejectionReason, doc);
+                    if (btnVisaAction != null) {
+                        if (doc.filePath != null && !doc.filePath.isEmpty()) {
+                            btnVisaAction.setVisibility(View.VISIBLE);
+                            btnVisaAction.setText(getString(R.string.doc_action_view));
+                        } else {
+                            btnVisaAction.setVisibility(View.GONE);
                         }
                     }
+                    if (tvVisaGuidance != null) {
+                        tvVisaGuidance.setText(getString(R.string.doc_visa_company_note));
+                        tvVisaGuidance.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
 
                     int progressPercent = (int) Math.round((verifiedCount / (double) requiredTotal) * 100);
 
@@ -1546,12 +1727,6 @@ public class ProfileActivity extends BaseActivity {
                     getString(R.string.req_passport_2),
                     getString(R.string.req_passport_3),
                     getString(R.string.req_passport_4)
-            };
-        } else if ("ic".equalsIgnoreCase(docCode)) {
-            items = new String[]{
-                    getString(R.string.req_ic_1),
-                    getString(R.string.req_ic_2),
-                    getString(R.string.req_ic_3)
             };
         } else if ("passport_photo".equalsIgnoreCase(docCode)) {
             items = new String[]{

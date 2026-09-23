@@ -151,6 +151,14 @@ public class LoginActivity extends BaseActivity {
         // 4. Load Remember Me preference
         loadRememberMePreference();
 
+        String prefillEmail = getIntent().getStringExtra("prefill_email");
+        if (prefillEmail != null && !prefillEmail.trim().isEmpty() && emailInput != null) {
+            emailInput.setText(prefillEmail.trim());
+            if (passwordInput != null) {
+                passwordInput.requestFocus();
+            }
+        }
+
         // 5. Setup listeners
         loginButton.setOnClickListener(v -> {
             com.hafiztraveltours.app.utils.HapticUtil.click(v);

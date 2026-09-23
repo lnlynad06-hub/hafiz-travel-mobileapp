@@ -208,8 +208,11 @@ public class SignUpActivity extends BaseActivity {
             if (result == null) return;
             setLoadingState(false);
             if (result.success) {
-                Toast.makeText(this, getString(R.string.signup_success), Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(this, MainActivity.class));
+                Toast.makeText(this, getString(R.string.signup_success), Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+                intent.putExtra("prefill_email", textOf(emailInput));
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                 finish();
             } else {
                 Toast.makeText(this, result.resolveMessage(this), Toast.LENGTH_LONG).show();

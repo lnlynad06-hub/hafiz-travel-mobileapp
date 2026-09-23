@@ -112,11 +112,19 @@ public class PassengerRepository {
         if (user == null) user = new UserDto();
         SharedPreferences prefs = userPrefs();
         if (isBlank(user.name)) user.name = pref(prefs, "name");
+        if (isBlank(user.phone)) user.phone = pref(prefs, "phone");
+        if (isBlank(user.gender)) user.gender = pref(prefs, "gender");
+        if (isBlank(user.dateOfBirth)) user.dateOfBirth = pref(prefs, "date_of_birth");
         if (isBlank(user.icNumber)) user.icNumber = pref(prefs, "ic_no");
         if (isBlank(user.passportNumber)) user.passportNumber = pref(prefs, "passport_no");
         if (isBlank(user.passportExpiryDate)) user.passportExpiryDate = pref(prefs, "passport_expiry");
+        if (isBlank(user.issuingCountry)) user.issuingCountry = pref(prefs, "issuing_country");
+        if (isBlank(user.addressLine1)) user.addressLine1 = pref(prefs, "address_line_1");
+        if (isBlank(user.address)) user.address = pref(prefs, "address");
         if (isBlank(user.clothesSize)) user.clothesSize = pref(prefs, "clothes_size");
         if (isBlank(user.nationality)) user.nationality = pref(prefs, "nationality");
+        if (isBlank(user.emergencyName)) user.emergencyName = pref(prefs, "emergency_name");
+        if (isBlank(user.emergencyPhone)) user.emergencyPhone = pref(prefs, "emergency_phone");
         return user;
     }
 

@@ -75,7 +75,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="10dp"
         android:background="#E5E9EC" />
 
     <!-- Form Content Scroll -->
@@ -98,8 +98,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="10dp">
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="6dp">
 
                 <ImageView
                     android:layout_width="18dp"
@@ -133,7 +133,7 @@
                 app:boxStrokeWidthFocused="1.5dp"
                 app:boxStrokeErrorColor="@color/error_red"
                 app:hintEnabled="false"
-                app:errorEnabled="true"
+                app:errorEnabled="false"
                 app:errorIconDrawable="@null"
                 app:startIconDrawable="@drawable/ic_profile"
                 app:startIconTint="@color/pink_dark">
@@ -146,19 +146,19 @@
                     android:paddingVertical="0dp"
                     android:paddingStart="4dp"
                     android:paddingEnd="12dp"
-                    android:hint="@string/hint_full_name"
+                    android:hint="@string/profile_field_full_name"
                     android:inputType="textPersonName"
                     android:textColor="@color/input_text"
                     android:textColorHint="@color/input_hint"
                     android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Nickname -->
+            <!-- Nickname / Username -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/nicknameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="8dp"
                 app:boxBackgroundMode="outline"
                 app:boxCornerRadiusTopStart="14dp"
                 app:boxCornerRadiusTopEnd="14dp"
@@ -170,7 +170,7 @@
                 app:boxStrokeWidthFocused="1.5dp"
                 app:boxStrokeErrorColor="@color/error_red"
                 app:hintEnabled="false"
-                app:errorEnabled="true"
+                app:errorEnabled="false"
                 app:errorIconDrawable="@null"
                 app:startIconDrawable="@drawable/ic_profile"
                 app:startIconTint="@color/pink_dark">
@@ -183,7 +183,7 @@
                     android:paddingVertical="0dp"
                     android:paddingStart="4dp"
                     android:paddingEnd="12dp"
-                    android:hint="@string/hint_nickname"
+                    android:hint="@string/profile_field_nickname"
                     android:inputType="textPersonName"
                     android:maxLength="50"
                     android:textColor="@color/input_text"
@@ -191,51 +191,74 @@
                     android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Date of Birth (Date Picker) -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/dobLayout"
+            <!-- Date of Birth (Date Picker) & Dynamic Age Display -->
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                app:boxBackgroundMode="outline"
-                app:boxCornerRadiusTopStart="14dp"
-                app:boxCornerRadiusTopEnd="14dp"
-                app:boxCornerRadiusBottomStart="14dp"
-                app:boxCornerRadiusBottomEnd="14dp"
-                app:boxStrokeColor="@color/box_stroke_selector"
-                app:boxBackgroundColor="@color/box_bg_selector"
-                app:boxStrokeWidth="1dp"
-                app:boxStrokeWidthFocused="1.5dp"
-                app:hintEnabled="false"
-                app:errorEnabled="false"
-                app:startIconDrawable="@drawable/ic_calendar"
-                app:startIconTint="@color/pink_dark">
+                android:layout_marginTop="8dp">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/dobInput"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/dobLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:gravity="center_vertical"
-                    android:paddingVertical="0dp"
-                    android:paddingStart="4dp"
-                    android:paddingEnd="12dp"
+                    android:layout_height="wrap_content"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusTopStart="14dp"
+                    app:boxCornerRadiusTopEnd="14dp"
+                    app:boxCornerRadiusBottomStart="14dp"
+                    app:boxCornerRadiusBottomEnd="14dp"
+                    app:boxStrokeColor="@color/box_stroke_selector"
+                    app:boxBackgroundColor="@color/box_bg_selector"
+                    app:boxStrokeWidth="1dp"
+                    app:boxStrokeWidthFocused="1.5dp"
+                    app:hintEnabled="false"
+                    app:errorEnabled="false"
+                    app:startIconDrawable="@drawable/ic_calendar"
+                    app:startIconTint="@color/pink_dark">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/dobInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:gravity="center_vertical"
+                        android:paddingVertical="0dp"
+                        android:paddingStart="4dp"
+                        android:paddingEnd="80dp"
+                        android:focusable="false"
+                        android:clickable="true"
+                        android:cursorVisible="false"
+                        android:inputType="none"
+                        android:hint="@string/profile_field_dob"
+                        android:textColor="@color/input_text"
+                        android:textColorHint="@color/input_hint"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Calculated Age Badge -->
+                <TextView
+                    android:id="@+id/tvDobAge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="12dp"
+                    android:background="@drawable/bg_status_pending"
+                    android:clickable="false"
                     android:focusable="false"
-                    android:clickable="true"
-                    android:cursorVisible="false"
-                    android:inputType="none"
-                    android:hint="@string/profile_field_dob"
-                    android:textColor="@color/input_text"
-                    android:textColorHint="@color/input_hint"
-                    android:textSize="14sp" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="4dp"
+                    android:textColor="@color/pink_dark"
+                    android:textSize="11.5sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+            </RelativeLayout>
 
             <!-- Gender Dropdown -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/genderLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_marginTop="8dp"
                 app:boxBackgroundMode="outline"
                 app:boxCornerRadiusTopStart="14dp"
                 app:boxCornerRadiusTopEnd="14dp"
@@ -265,12 +288,13 @@
                     android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Nationality / Country -->
+            <!-- Nationality / Country Dropdown (Southeast Asian Countries) -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/nationalityLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="8dp"
                 app:boxBackgroundMode="outline"
                 app:boxCornerRadiusTopStart="14dp"
                 app:boxCornerRadiusTopEnd="14dp"
@@ -285,7 +309,7 @@
                 app:startIconDrawable="@drawable/ic_location_pin"
                 app:startIconTint="@color/pink_dark">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/nationalityInput"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
@@ -294,55 +318,101 @@
                     android:paddingStart="4dp"
                     android:paddingEnd="12dp"
                     android:hint="@string/profile_field_nationality"
-                    android:inputType="textCapWords"
+                    android:inputType="none"
+                    android:focusable="false"
+                    android:cursorVisible="false"
                     android:textColor="@color/input_text"
                     android:textColorHint="@color/input_hint"
                     android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Phone Number -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/phoneLayout"
+            <!-- Phone Number with Country Code Picker (Reused from Create Account) -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                app:boxBackgroundMode="outline"
-                app:boxCornerRadiusTopStart="14dp"
-                app:boxCornerRadiusTopEnd="14dp"
-                app:boxCornerRadiusBottomStart="14dp"
-                app:boxCornerRadiusBottomEnd="14dp"
-                app:boxStrokeColor="@color/box_stroke_selector"
-                app:boxBackgroundColor="@color/box_bg_selector"
-                app:boxStrokeWidth="1dp"
-                app:boxStrokeWidthFocused="1.5dp"
-                app:boxStrokeErrorColor="@color/error_red"
-                app:hintEnabled="false"
-                app:errorEnabled="true"
-                app:errorIconDrawable="@null"
-                app:startIconDrawable="@drawable/ic_phone"
-                app:startIconTint="@color/pink_dark">
+                android:layout_marginTop="8dp"
+                android:orientation="vertical">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/phoneInput"
+                <LinearLayout
+                    android:id="@+id/phoneFieldContainer"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
+                    android:background="@drawable/bg_phone_field"
+                    android:clipToPadding="false"
                     android:gravity="center_vertical"
-                    android:paddingVertical="0dp"
-                    android:paddingStart="4dp"
-                    android:paddingEnd="12dp"
-                    android:hint="@string/hint_phone"
-                    android:inputType="phone"
-                    android:textColor="@color/input_text"
-                    android:textColorHint="@color/input_hint"
-                    android:textSize="14sp" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:orientation="horizontal">
+
+                    <!-- Country Code Button -->
+                    <LinearLayout
+                        android:id="@+id/btnCountryCode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="10dp">
+
+                        <TextView
+                            android:id="@+id/tvCountryCode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="+60"
+                            android:textColor="@color/pink_dark"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="3dp"
+                            android:text="▾"
+                            android:textColor="@color/pink_dark"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+
+                    <!-- Divider -->
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="24dp"
+                        android:background="#E0E0E0" />
+
+                    <!-- Phone Input -->
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/phoneInput"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:gravity="center_vertical"
+                        android:hint="@string/profile_field_phone"
+                        android:inputType="phone"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:textColor="@color/input_text"
+                        android:textColorHint="@color/input_hint"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/phoneErrorText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="3dp"
+                    android:textColor="@color/error_red"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+            </LinearLayout>
 
             <!-- Email Address (Read-only) -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/emailLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="8dp"
                 app:boxBackgroundMode="outline"
                 app:boxCornerRadiusTopStart="14dp"
                 app:boxCornerRadiusTopEnd="14dp"
@@ -383,8 +453,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="10dp">
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="6dp">
 
                 <ImageView
                     android:layout_width="18dp"
@@ -418,7 +488,7 @@
                 app:boxStrokeWidthFocused="1.5dp"
                 app:boxStrokeErrorColor="@color/error_red"
                 app:hintEnabled="false"
-                app:errorEnabled="true"
+                app:errorEnabled="false"
                 app:errorIconDrawable="@null"
                 app:startIconDrawable="@drawable/ic_card"
                 app:startIconTint="@color/pink_dark">
@@ -445,8 +515,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="10dp">
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="6dp">
 
                 <ImageView
                     android:layout_width="18dp"
@@ -480,7 +550,7 @@
                 app:boxStrokeWidthFocused="1.5dp"
                 app:boxStrokeErrorColor="@color/error_red"
                 app:hintEnabled="false"
-                app:errorEnabled="true"
+                app:errorEnabled="false"
                 app:errorIconDrawable="@null"
                 app:startIconDrawable="@drawable/ic_doc_passport"
                 app:startIconTint="@color/pink_dark">
@@ -505,7 +575,7 @@
                 android:id="@+id/expiryLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="8dp"
                 app:boxBackgroundMode="outline"
                 app:boxCornerRadiusTopStart="14dp"
                 app:boxCornerRadiusTopEnd="14dp"
@@ -517,7 +587,7 @@
                 app:boxStrokeWidthFocused="1.5dp"
                 app:boxStrokeErrorColor="@color/error_red"
                 app:hintEnabled="false"
-                app:errorEnabled="true"
+                app:errorEnabled="false"
                 app:errorIconDrawable="@null"
                 app:startIconDrawable="@drawable/ic_calendar"
                 app:startIconTint="@color/pink_dark">
@@ -545,7 +615,7 @@
                 android:id="@+id/passportWarningContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="6dp"
                 android:layout_marginBottom="2dp"
                 android:background="@drawable/bg_warning_light"
                 android:orientation="horizontal"
@@ -570,12 +640,13 @@
                     android:lineSpacingExtra="2dp" />
             </LinearLayout>
 
-            <!-- Passport Issuing Country -->
+            <!-- Passport Issuing Country Dropdown (Southeast Asian Countries) -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/issuingCountryLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="8dp"
                 app:boxBackgroundMode="outline"
                 app:boxCornerRadiusTopStart="14dp"
                 app:boxCornerRadiusTopEnd="14dp"
@@ -590,7 +661,7 @@
                 app:startIconDrawable="@drawable/ic_location_pin"
                 app:startIconTint="@color/pink_dark">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/issuingCountryInput"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
@@ -598,8 +669,10 @@
                     android:paddingVertical="0dp"
                     android:paddingStart="4dp"
                     android:paddingEnd="12dp"
-                    android:hint="@string/passenger_field_issuing_country_label"
-                    android:inputType="textCapWords"
+                    android:hint="@string/profile_field_issuing_country"
+                    android:inputType="none"
+                    android:focusable="false"
+                    android:cursorVisible="false"
                     android:textColor="@color/input_text"
                     android:textColorHint="@color/input_hint"
                     android:textSize="14sp" />
@@ -612,8 +685,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="10dp">
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="6dp">
 
                 <ImageView
                     android:layout_width="18dp"
@@ -665,12 +738,12 @@
                     android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Address Line 2 -->
+            <!-- Address Line 2 (Optional) -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/addressLine2Layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="8dp"
                 app:boxBackgroundMode="outline"
                 app:boxCornerRadiusTopStart="14dp"
                 app:boxCornerRadiusTopEnd="14dp"
@@ -704,7 +777,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="8dp"
                 android:orientation="horizontal">
 
                 <!-- Postcode -->
@@ -779,7 +852,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="8dp"
                 android:orientation="horizontal">
 
                 <!-- State -->
@@ -815,9 +888,10 @@
                         android:textSize="14sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Country -->
+                <!-- Country Dropdown (Southeast Asian Countries) -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/countryLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -834,7 +908,7 @@
                     app:hintEnabled="false"
                     app:errorEnabled="false">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
                         android:id="@+id/countryInput"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
@@ -842,7 +916,9 @@
                         android:paddingVertical="0dp"
                         android:paddingHorizontal="12dp"
                         android:hint="@string/profile_field_country"
-                        android:inputType="textCapWords"
+                        android:inputType="none"
+                        android:focusable="false"
+                        android:cursorVisible="false"
                         android:textColor="@color/input_text"
                         android:textColorHint="@color/input_hint"
                         android:textSize="14sp" />
@@ -856,8 +932,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="10dp">
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="6dp">
 
                 <ImageView
                     android:layout_width="18dp"
@@ -891,7 +967,7 @@
                 app:boxStrokeWidthFocused="1.5dp"
                 app:boxStrokeErrorColor="@color/error_red"
                 app:hintEnabled="false"
-                app:errorEnabled="true"
+                app:errorEnabled="false"
                 app:errorIconDrawable="@null"
                 app:startIconDrawable="@drawable/ic_profile"
                 app:startIconTint="@color/pink_dark">
@@ -916,7 +992,7 @@
                 android:id="@+id/emergPhoneLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="8dp"
                 app:boxBackgroundMode="outline"
                 app:boxCornerRadiusTopStart="14dp"
                 app:boxCornerRadiusTopEnd="14dp"
@@ -928,7 +1004,7 @@
                 app:boxStrokeWidthFocused="1.5dp"
                 app:boxStrokeErrorColor="@color/error_red"
                 app:hintEnabled="false"
-                app:errorEnabled="true"
+                app:errorEnabled="false"
                 app:errorIconDrawable="@null"
                 app:startIconDrawable="@drawable/ic_phone"
                 app:startIconTint="@color/pink_dark">
@@ -955,8 +1031,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="10dp">
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="6dp">
 
                 <ImageView
                     android:layout_width="18dp"
@@ -988,7 +1064,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingVertical="4dp">
+                android:paddingVertical="2dp">
 
                 <TextView
                     android:layout_width="0dp"
@@ -996,7 +1072,7 @@
                     android:layout_weight="1"
                     android:text="@string/label_mahram_applicable"
                     android:textColor="@color/text_dark"
-                    android:textSize="14sp" />
+                    android:textSize="13.5sp" />
 
                 <com.google.android.material.button.MaterialButtonToggleGroup
                     android:id="@+id/mahramToggleGroup"
@@ -1027,7 +1103,7 @@
                 </com.google.android.material.button.MaterialButtonToggleGroup>
             </LinearLayout>
 
-            <!-- Conditional Mahram Fields -->
+            <!-- Conditional Mahram Fields (OPTIONAL, no red *) -->
             <LinearLayout
                 android:id="@+id/mahramFieldsContainer"
                 android:layout_width="match_parent"
@@ -1052,8 +1128,7 @@
                     app:boxStrokeWidthFocused="1.5dp"
                     app:boxStrokeErrorColor="@color/error_red"
                     app:hintEnabled="false"
-                    app:errorEnabled="true"
-                    app:errorIconDrawable="@null"
+                    app:errorEnabled="false"
                     app:startIconDrawable="@drawable/ic_profile"
                     app:startIconTint="@color/pink_dark">
 
@@ -1078,7 +1153,7 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="8dp"
                     app:boxBackgroundMode="outline"
                     app:boxCornerRadiusTopStart="14dp"
                     app:boxCornerRadiusTopEnd="14dp"
@@ -1090,8 +1165,7 @@
                     app:boxStrokeWidthFocused="1.5dp"
                     app:boxStrokeErrorColor="@color/error_red"
                     app:hintEnabled="false"
-                    app:errorEnabled="true"
-                    app:errorIconDrawable="@null"
+                    app:errorEnabled="false"
                     app:startIconDrawable="@drawable/ic_users"
                     app:startIconTint="@color/pink_dark">
 
@@ -1118,7 +1192,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="14dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 

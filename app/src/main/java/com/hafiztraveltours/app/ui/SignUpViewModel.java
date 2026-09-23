@@ -133,11 +133,6 @@ public class SignUpViewModel extends AndroidViewModel {
                                    Response<ApiResponse<AuthResponse>> response) {
                 registerBusy = false;
                 if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
-                    AuthResponse authData = response.body().data;
-                    String token = authData != null ? authData.token : "";
-                    UserDto user = authData != null ? authData.user : null;
-                    repository.persistAuthResult(token, user,
-                            new UserDto("1", name, nickname, email, normalizedPhone));
                     registerOp.setValue(new SingleEvent<>(ApiOpResult.success()));
                 } else {
                     registerOp.setValue(new SingleEvent<>(

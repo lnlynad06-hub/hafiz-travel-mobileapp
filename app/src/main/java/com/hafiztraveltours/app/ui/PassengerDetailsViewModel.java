@@ -66,18 +66,40 @@ public class PassengerDetailsViewModel extends AndroidViewModel {
         public final List<MissingField> missing;
         public final boolean hasPassportDoc;
         public final boolean hasIcDoc;
+        public final boolean hasPhotoDoc;
         public final boolean reqPassport;
         public final boolean reqIc;
+        public final boolean hasPassportValidityWarning;
+        public final boolean hasPassportExpiryMissing;
+        public final int reqValidityMonths;
 
         public LeadEvaluation(boolean complete, List<MissingField> missing,
                               boolean hasPassportDoc, boolean hasIcDoc,
                               boolean reqPassport, boolean reqIc) {
+            this(complete, missing, hasPassportDoc, hasIcDoc, false, reqPassport, reqIc, false, false, 6);
+        }
+
+        public LeadEvaluation(boolean complete, List<MissingField> missing,
+                              boolean hasPassportDoc, boolean hasIcDoc, boolean hasPhotoDoc,
+                              boolean reqPassport, boolean reqIc) {
+            this(complete, missing, hasPassportDoc, hasIcDoc, hasPhotoDoc, reqPassport, reqIc, false, false, 6);
+        }
+
+        public LeadEvaluation(boolean complete, List<MissingField> missing,
+                              boolean hasPassportDoc, boolean hasIcDoc, boolean hasPhotoDoc,
+                              boolean reqPassport, boolean reqIc,
+                              boolean hasPassportValidityWarning, boolean hasPassportExpiryMissing,
+                              int reqValidityMonths) {
             this.complete = complete;
             this.missing = missing;
             this.hasPassportDoc = hasPassportDoc;
             this.hasIcDoc = hasIcDoc;
+            this.hasPhotoDoc = hasPhotoDoc;
             this.reqPassport = reqPassport;
             this.reqIc = reqIc;
+            this.hasPassportValidityWarning = hasPassportValidityWarning;
+            this.hasPassportExpiryMissing = hasPassportExpiryMissing;
+            this.reqValidityMonths = reqValidityMonths;
         }
     }
 
@@ -236,6 +258,11 @@ public class PassengerDetailsViewModel extends AndroidViewModel {
 
     /** Evaluates lead completeness against package-driven requirements. */
     public void evaluateLead(PackageDetail pkg, UserDto user, List<DocumentDto> docs) {
+        evaluation.setValue(checkLeadCompleteness(pkg, user, docs));
+    }
+
+    /** Pure evaluator for lead completeness (can book = required edit profile info complete). */
+    public static LeadEvaluation checkLeadCompleteness(PackageDetail pkg, UserDto user, List<DocumentDto> docs) {
         boolean reqPassport = pkg != null ? pkg.requiresPassport : true;
         boolean reqIc = pkg != null ? pkg.requiresIc : true;
         boolean reqClothesSize = pkg != null ? pkg.requiresClothesSize : (pkg != null && pkg.isUmrah);
@@ -255,35 +282,40 @@ public class PassengerDetailsViewModel extends AndroidViewModel {
             if (isBlank(user.passportNumber)) {
                 missing.add(new MissingField(MissingKind.PASSPORT, 0));
             }
-            if (isBlank(user.passportExpiryDate)) {
-                missing.add(new MissingField(MissingKind.PASSPORT_EXPIRY, 0));
-            } else if (!DateFormats.meetsValidityMonths(
-                    user.passportExpiryDate.trim(), reqValidityMonths)) {
-                missing.add(new MissingField(MissingKind.PASSPORT_VALIDITY, reqValidityMonths));
-            }
-            if (!hasDocWithFile(documents, "passport")) {
-                missing.add(new MissingField(MissingKind.PASSPORT_DOC, 0));
-            }
-        }
-        if (reqIc && !hasDocWithFile(documents, "ic")) {
-            missing.add(new MissingField(MissingKind.IC_DOC, 0));
         }
         if (reqClothesSize && isBlank(user.clothesSize)) {
             missing.add(new MissingField(MissingKind.CLOTHES_SIZE, 0));
         }
 
-        evaluation.setValue(new LeadEvaluation(
+        boolean hasPassport = hasDocWithFile(documents, "passport");
+        boolean hasIc = hasDocWithFile(documents, "ic");
+        boolean hasPhoto = hasDocWithFile(documents, "passport_photo");
+
+        boolean hasPassportExpiryMissing = reqPassport && isBlank(user.passportExpiryDate);
+        boolean hasPassportValidityWarning = false;
+        if (reqPassport && !isBlank(user.passportExpiryDate)) {
+            hasPassportValidityWarning = !DateFormats.meetsValidityMonths(
+                    user.passportExpiryDate.trim(), reqValidityMonths);
+        }
+
+        return new LeadEvaluation(
                 missing.isEmpty(), missing,
-                hasDocWithFile(documents, "passport"),
-                hasDocWithFile(documents, "ic"),
-                reqPassport, reqIc));
+                hasPassport,
+                hasIc,
+                hasPhoto,
+                reqPassport, reqIc,
+                hasPassportValidityWarning,
+                hasPassportExpiryMissing,
+                reqValidityMonths);
     }
 
     private static boolean hasDocWithFile(List<DocumentDto> docs, String code) {
         for (DocumentDto d : docs) {
-            if (d != null && code.equalsIgnoreCase(d.documentCode)
-                    && d.filePath != null && !d.filePath.isEmpty()) {
-                return true;
+            if (d != null && code.equalsIgnoreCase(d.documentCode)) {
+                if ((d.filePath != null && !d.filePath.isEmpty())
+                        || com.hafiztraveltours.app.utils.DocumentStatus.from(d).countsAsUploaded()) {
+                    return true;
+                }
             }
         }
         return false;
@@ -303,6 +335,11 @@ public class PassengerDetailsViewModel extends AndroidViewModel {
 
     /** Validates one additional traveller (same rules/messages as before). */
     public TravellerErrors validateTraveller(TravellerInput in, boolean reqPassport, boolean reqIc) {
+        return validateTravellerInput(in, reqPassport, reqIc);
+    }
+
+    /** Pure evaluator for additional traveller input. */
+    public static TravellerErrors validateTravellerInput(TravellerInput in, boolean reqPassport, boolean reqIc) {
         int nameErr = Validator.fullName(in.fullName, R.string.passenger_err_name_required);
         int icErr = 0;
         if (reqIc) {
@@ -312,9 +349,11 @@ public class PassengerDetailsViewModel extends AndroidViewModel {
         int expiryErr = 0;
         if (reqPassport) {
             passportErr = Validator.travelId(in.passportNumber, R.string.passenger_err_passport_required);
-            expiryErr = Validator.apiDate(in.passportExpiryDate,
-                    R.string.passenger_err_passport_expiry_required,
-                    R.string.passenger_err_passport_expiry_required);
+            if (in.passportExpiryDate != null && !in.passportExpiryDate.trim().isEmpty()) {
+                if (!DateFormats.isValidApiDate(in.passportExpiryDate.trim())) {
+                    expiryErr = R.string.passenger_err_passport_expiry_required;
+                }
+            }
         }
         return new TravellerErrors(nameErr, icErr, passportErr, expiryErr);
     }

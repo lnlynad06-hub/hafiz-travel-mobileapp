@@ -49,6 +49,7 @@ public class PassengerDetailsActivity extends BaseActivity {
     private boolean isLeadProfileComplete = false;
     private List<PassengerDetailsViewModel.MissingField> missingFields = new ArrayList<>();
     private UserDto currentUserProfile = null;
+    private PassengerDetailsViewModel.LeadEvaluation currentEvaluation = null;
     private PassengerDetailsViewModel passengerViewModel;
 
     // Additional Travellers list
@@ -162,6 +163,7 @@ public class PassengerDetailsActivity extends BaseActivity {
         });
         passengerViewModel.getEvaluation().observe(this, eval -> {
             if (eval == null) return;
+            currentEvaluation = eval;
             isLeadProfileComplete = eval.complete;
             missingFields = eval.missing != null ? eval.missing : new ArrayList<>();
             renderLeadProfileState();
@@ -225,18 +227,68 @@ public class PassengerDetailsActivity extends BaseActivity {
             boolean reqIc = pkg != null ? pkg.requiresIc : true;
 
             if (reqPassport) {
+                boolean hasPassport = currentEvaluation != null && currentEvaluation.hasPassportDoc;
                 TextView passTag = new TextView(this);
-                passTag.setText(getString(R.string.passenger_doc_passport_available));
+                passTag.setText(hasPassport
+                        ? getString(R.string.passenger_doc_passport_available)
+                        : getString(R.string.passenger_doc_passport_pending));
                 passTag.setTextSize(11);
-                passTag.setTextColor(Color.parseColor("#047857"));
+                passTag.setTextColor(hasPassport ? Color.parseColor("#047857") : Color.parseColor("#D97706"));
                 docStatusRow.addView(passTag);
+
+                boolean hasPhoto = currentEvaluation != null && currentEvaluation.hasPhotoDoc;
+                TextView photoTag = new TextView(this);
+                photoTag.setText(hasPhoto
+                        ? getString(R.string.passenger_doc_photo_available)
+                        : getString(R.string.passenger_doc_photo_pending));
+                photoTag.setTextSize(11);
+                photoTag.setTextColor(hasPhoto ? Color.parseColor("#047857") : Color.parseColor("#D97706"));
+                LinearLayout.LayoutParams photoLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                photoLp.topMargin = dp(2);
+                photoTag.setLayoutParams(photoLp);
+                docStatusRow.addView(photoTag);
+
+                if (currentEvaluation != null && currentEvaluation.hasPassportValidityWarning) {
+                    TextView validityTag = new TextView(this);
+                    validityTag.setText(getString(R.string.passenger_passport_validity_info, currentEvaluation.reqValidityMonths));
+                    validityTag.setTextSize(11);
+                    validityTag.setTextColor(Color.parseColor("#D97706"));
+                    LinearLayout.LayoutParams vLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    vLp.topMargin = dp(2);
+                    validityTag.setLayoutParams(vLp);
+                    docStatusRow.addView(validityTag);
+                } else if (currentEvaluation != null && currentEvaluation.hasPassportExpiryMissing) {
+                    TextView expiryTag = new TextView(this);
+                    expiryTag.setText(getString(R.string.passenger_passport_expiry_pending));
+                    expiryTag.setTextSize(11);
+                    expiryTag.setTextColor(Color.parseColor("#D97706"));
+                    LinearLayout.LayoutParams eLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    eLp.topMargin = dp(2);
+                    expiryTag.setLayoutParams(eLp);
+                    docStatusRow.addView(expiryTag);
+                }
+
+                TextView visaTag = new TextView(this);
+                visaTag.setText(getString(R.string.passenger_doc_visa_info));
+                visaTag.setTextSize(11);
+                visaTag.setTextColor(Color.parseColor("#6B7280"));
+                LinearLayout.LayoutParams visaLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                visaLp.topMargin = dp(2);
+                visaTag.setLayoutParams(visaLp);
+                docStatusRow.addView(visaTag);
             }
             if (reqIc) {
-                TextView icTag = new TextView(this);
-                icTag.setText(getString(R.string.passenger_doc_ic_available));
-                icTag.setTextSize(11);
-                icTag.setTextColor(Color.parseColor("#047857"));
-                docStatusRow.addView(icTag);
+                boolean hasIc = currentEvaluation != null && currentEvaluation.hasIcDoc;
+                if (hasIc) {
+                    TextView icTag = new TextView(this);
+                    icTag.setText(getString(R.string.passenger_doc_ic_available));
+                    icTag.setTextSize(11);
+                    icTag.setTextColor(Color.parseColor("#047857"));
+                    LinearLayout.LayoutParams icLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    icLp.topMargin = dp(2);
+                    icTag.setLayoutParams(icLp);
+                    docStatusRow.addView(icTag);
+                }
             }
             leadProfileContainer.addView(docStatusRow);
 
@@ -358,6 +410,7 @@ public class PassengerDetailsActivity extends BaseActivity {
 
     private void openEditProfileScreen() {
         Intent intent = new Intent(this, ProfileActivity.class);
+        intent.putExtra(ProfileActivity.EXTRA_ACTION, ProfileActivity.ACTION_EDIT_PROFILE);
         startActivity(intent);
     }
 

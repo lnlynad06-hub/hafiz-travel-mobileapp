@@ -90,6 +90,7 @@ public class ProfileViewModel extends AndroidViewModel {
     public static final class ProfileForm {
         public String name = "";
         public String nickname = "";
+        public String email = "";
         public String phone = "";
         public String gender = "";
         public String ic = "";
@@ -116,6 +117,7 @@ public class ProfileViewModel extends AndroidViewModel {
             Map<String, String> body = new HashMap<>();
             body.put("name", name);
             if (!nickname.isEmpty()) body.put("nickname", nickname);
+            if (!email.isEmpty()) body.put("email", email);
             body.put("phone", phone);
             if (!gender.isEmpty()) body.put("gender", gender);
             if (!ic.isEmpty()) body.put("ic_number", ic);
@@ -140,6 +142,9 @@ public class ProfileViewModel extends AndroidViewModel {
         public Map<String, String> toExtras() {
             Map<String, String> out = new HashMap<>();
             out.put("name", name);
+            out.put("nickname", nickname);
+            out.put("email", email);
+            out.put("phone", phone);
             out.put("ic_no", ic);
             out.put("gender", gender);
             out.put("date_of_birth", dob);
@@ -356,7 +361,16 @@ public class ProfileViewModel extends AndroidViewModel {
                 repository.getSessionUser(), repository.readProfileExtras(), byCode));
     }
 
-    /** Pure readiness math — identical weights to the previous inline implementation. */
+    /**
+     * Account Readiness calculation based on ALL required Edit Profile information:
+     * - Personal Information (50%): Full Name (8%), Username (7%), Date of Birth (7%),
+     *   Gender (7%), Country (7%), Phone (7%), Email (7%)
+     * - Passport Information (30%): Passport Number (10%), Passport Expiry Date (10%), Issuing Country (10%)
+     * - Emergency Contact (20%): Emergency Name (10%), Emergency Phone (10%)
+     *
+     * Mahram Information is completely optional (0 points) and excluded from readiness.
+     * Document uploads are tracked for vault counts but do NOT reduce readiness score below 100%.
+     */
     static Readiness computeReadiness(UserDto user, Map<String, String> ex,
                                       Map<String, DocumentDto> docsByCode) {
         int score = 0;
@@ -364,30 +378,79 @@ public class ProfileViewModel extends AndroidViewModel {
         int underReview = 0;
         int rejected = 0;
 
+        // 1. Personal Information
         String fullName = str(ex, "name");
         if (fullName.isEmpty() && user != null && user.name != null) fullName = user.name.trim();
+
+        String username = str(ex, "nickname");
+        if (username.isEmpty()) username = str(ex, "username");
+        if (username.isEmpty() && user != null && user.nickname != null) username = user.nickname.trim();
+
+        String dob = str(ex, "date_of_birth");
+        if (dob.isEmpty()) dob = str(ex, "dob");
+        if (dob.isEmpty() && user != null && user.dateOfBirth != null) dob = user.dateOfBirth.trim();
+
+        String gender = str(ex, "gender");
+        if (gender.isEmpty() && user != null && user.gender != null) gender = user.gender.trim();
+
+        String country = str(ex, "nationality");
+        if (country.isEmpty()) country = str(ex, "country");
+        if (country.isEmpty() && user != null && user.nationality != null) country = user.nationality.trim();
+        if (country.isEmpty() && user != null && user.country != null) country = user.country.trim();
+
+        String phone = str(ex, "phone");
+        if (phone.isEmpty() && user != null && user.phone != null) phone = user.phone.trim();
+
+        String email = str(ex, "email");
+        if (email.isEmpty() && user != null && user.email != null) email = user.email.trim();
+
+        // 2. Passport Information
         String passportNo = str(ex, "passport_no");
+        if (passportNo.isEmpty()) passportNo = str(ex, "passport_number");
         if (passportNo.isEmpty() && user != null && user.passportNumber != null) {
             passportNo = user.passportNumber.trim();
         }
-        String icNo = str(ex, "ic_no");
-        if (icNo.isEmpty() && user != null && user.icNumber != null) icNo = user.icNumber.trim();
+
+        String passportExpiry = str(ex, "passport_expiry");
+        if (passportExpiry.isEmpty()) passportExpiry = str(ex, "passport_expiry_date");
+        if (passportExpiry.isEmpty() && user != null && user.passportExpiryDate != null) {
+            passportExpiry = user.passportExpiryDate.trim();
+        }
+
+        String issuingCountry = str(ex, "issuing_country");
+        if (issuingCountry.isEmpty()) issuingCountry = str(ex, "passport_issuing_country");
+        if (issuingCountry.isEmpty() && user != null && user.issuingCountry != null) {
+            issuingCountry = user.issuingCountry.trim();
+        }
+
+        // 3. Emergency Contact
         String emergName = str(ex, "emergency_name");
         if (emergName.isEmpty() && user != null && user.emergencyName != null) {
             emergName = user.emergencyName.trim();
         }
-        String address = str(ex, "address");
-        if (address.isEmpty() && user != null && user.address != null) address = user.address.trim();
-        if (address.isEmpty()) address = str(ex, "address_line_1");
-        if (address.isEmpty() && user != null && user.addressLine1 != null) {
-            address = user.addressLine1.trim();
+
+        String emergPhone = str(ex, "emergency_phone");
+        if (emergPhone.isEmpty() && user != null && user.emergencyPhone != null) {
+            emergPhone = user.emergencyPhone.trim();
         }
 
-        if (!fullName.isEmpty()) score += 15;
-        if (!icNo.isEmpty()) score += 20;
-        if (!passportNo.isEmpty()) score += 20;
-        if (!address.isEmpty()) score += 15;
+        // Section 1: Personal Information (50%)
+        if (!fullName.isEmpty()) score += 8;
+        if (!username.isEmpty()) score += 7;
+        if (!dob.isEmpty()) score += 7;
+        if (!gender.isEmpty()) score += 7;
+        if (!country.isEmpty()) score += 7;
+        if (!phone.isEmpty()) score += 7;
+        if (!email.isEmpty()) score += 7;
+
+        // Section 2: Passport Information (30%)
+        if (!passportNo.isEmpty()) score += 10;
+        if (!passportExpiry.isEmpty()) score += 10;
+        if (!issuingCountry.isEmpty()) score += 10;
+
+        // Section 3: Emergency Contact (20%)
         if (!emergName.isEmpty()) score += 10;
+        if (!emergPhone.isEmpty()) score += 10;
 
         if (docsByCode != null) {
             for (Map.Entry<String, DocumentDto> e : docsByCode.entrySet()) {
@@ -396,10 +459,8 @@ public class ProfileViewModel extends AndroidViewModel {
                 else if (st == DocumentStatus.PENDING) underReview++;
                 else if (st == DocumentStatus.REJECTED) rejected++;
             }
-            if (DocumentStatus.from(docsByCode.get("passport")).countsAsUploaded()) score += 7;
-            if (DocumentStatus.from(docsByCode.get("ic")).countsAsUploaded()) score += 7;
-            if (DocumentStatus.from(docsByCode.get("passport_photo")).countsAsUploaded()) score += 6;
         }
+
         if (score >= 100) score = 100;
         return new Readiness(score, verified, underReview, rejected);
     }

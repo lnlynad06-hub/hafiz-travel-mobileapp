@@ -196,7 +196,10 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:buttonTint="@color/pink_dark"
+                    android:button="@drawable/selector_checkbox_pink"
+                    android:buttonTint="@null"
+                    app:buttonTint="@null"
+                    android:paddingStart="6dp"
                     android:text="@string/remember_me"
                     android:textColor="@color/text_gray"
                     android:textSize="13sp" />

@@ -65,7 +65,7 @@
     <string name="err_signup_failed">Pendaftaran gagal. Sila cuba lagi.</string>
     <string name="err_signup_email_exists">Emel atau nombor telefon telah didaftarkan</string>
     <string name="err_network">Ralat sambungan. Sila periksa internet anda.</string>
-    <string name="signup_success">Pendaftaran berjaya!</string>
+    <string name="signup_success">Pendaftaran berjaya! Sila log masuk untuk meneruskan.</string>
     <string name="password_requirements_header">Syarat kata laluan</string>
     <string name="req_pass_min_length">Sekurang-kurangnya 8 aksara</string>
     <string name="req_pass_uppercase">Huruf besar</string>
@@ -737,13 +737,14 @@
     <string name="profile_field_ic_no">Nombor Kad Pengenalan (IC) <font color="#DC2626">*</font></string>
     <string name="profile_field_passport_no">Nombor Pasport <font color="#DC2626">*</font></string>
     <string name="profile_field_passport_expiry">Tarikh Tamat Pasport (YYYY-MM-DD) <font color="#DC2626">*</font></string>
-    <string name="profile_field_emergency_name">Nama Kontak Kecemasan</string>
-    <string name="profile_field_emergency_phone">No. Tel Kontak Kecemasan</string>
+    <string name="profile_field_emergency_name">Nama Kontak Kecemasan <font color="#DC2626">*</font></string>
+    <string name="profile_field_emergency_phone">No. Tel Kontak Kecemasan <font color="#DC2626">*</font></string>
     <string name="profile_field_mahram_name">Nama Mahram (Jika berkenaan)</string>
+    <string name="profile_age_format">Umur: %1$d</string>
     <string name="profile_travel_documents">Dokumen Perjalanan</string>
     <string name="doc_passport_copy">Salinan Pasport (Muka Utama) <font color="#DC2626">*</font></string>
-    <string name="doc_vaccine_cert">Sijil Vaksin Meningitis</string>
-    <string name="doc_marriage_cert">Sijil Nikah / Surat Mahram</string>
+    <string name="doc_visa_managed_by_company">Diuruskan Syarikat</string>
+    <string name="doc_visa_company_note">Visa perjalanan anda akan diuruskan dan disediakan secara terus oleh pihak Hafiz Travel &amp; Tours sebelum berlepas. Anda tidak perlu memuat naik dokumen ini.</string>
     <string name="doc_status_verified">Disahkan</string>
     <string name="doc_status_pending">Dalam Semakan</string>
     <string name="doc_status_not_uploaded">Belum Dimuat Naik</string>
@@ -753,8 +754,6 @@
     <string name="profile_section_travel_identity">Pasport &amp; Identiti Perjalanan</string>
     <string name="profile_section_emergency">Kecemasan &amp; Sokongan Rombongan</string>
     <string name="doc_subtitle_passport">Diperlukan untuk Tiket Penerbangan &amp; Visa Saudi</string>
-    <string name="doc_subtitle_vaccine">Diperlukan untuk Syarat Kementerian Haji &amp; Umrah</string>
-    <string name="doc_subtitle_marriage">Diperlukan untuk Kelulusan Mahram</string>
     <string name="doc_action_upload">Muat Naik Dokumen</string>
     <string name="doc_action_view">Lihat Dokumen</string>
     <string name="doc_action_replace">Ganti Dokumen</string>
@@ -776,15 +775,16 @@
     <string name="section_emergency_contact">Kontak Kecemasan</string>
     <string name="section_mahram_info">Maklumat Mahram</string>
     <string name="section_security">Keselamatan</string>
-    <string name="profile_field_gender">Jantina</string>
-    <string name="profile_field_dob">Tarikh Lahir</string>
-    <string name="profile_field_nationality">Kewarganegaraan / Negara</string>
-    <string name="profile_field_address_line_1">Alamat Baris 1</string>
+    <string name="profile_field_gender">Jantina <font color="#DC2626">*</font></string>
+    <string name="profile_field_dob">Tarikh Lahir <font color="#DC2626">*</font></string>
+    <string name="profile_field_nationality">Kewarganegaraan / Negara <font color="#DC2626">*</font></string>
+    <string name="profile_field_issuing_country">Negara Pengeluar Pasport <font color="#DC2626">*</font></string>
+    <string name="profile_field_address_line_1">Alamat Baris 1 <font color="#DC2626">*</font></string>
     <string name="profile_field_address_line_2">Alamat Baris 2 (Pilihan)</string>
-    <string name="profile_field_postcode">Poskod</string>
-    <string name="profile_field_city">Bandar / Daerah</string>
-    <string name="profile_field_state">Negeri</string>
-    <string name="profile_field_country">Negara</string>
+    <string name="profile_field_postcode">Poskod <font color="#DC2626">*</font></string>
+    <string name="profile_field_city">Bandar / Daerah <font color="#DC2626">*</font></string>
+    <string name="profile_field_state">Negeri <font color="#DC2626">*</font></string>
+    <string name="profile_field_country">Negara <font color="#DC2626">*</font></string>
     <string name="hint_address_line_1">Alamat jalan, Peti Surat</string>
     <string name="hint_address_line_2">Pangsapuri, suite, unit, bangunan, tingkat</string>
     <string name="hint_postcode">Contoh: 80000</string>
@@ -891,10 +891,16 @@
     <string name="passenger_passport_label">Pasport: %1$s</string>
     <string name="passenger_nationality_label">Kewarganegaraan: %1$s</string>
     <string name="passenger_doc_passport_available">✓ Dokumen Pasport Tersedia</string>
+    <string name="passenger_doc_passport_pending">• Salinan Pasport: Belum dimuat naik (boleh dihantar selepas tempahan)</string>
+    <string name="passenger_doc_photo_available">✓ Gambar Pasport Tersedia</string>
+    <string name="passenger_doc_photo_pending">• Gambar Pasport: Belum dimuat naik (boleh dihantar selepas tempahan)</string>
+    <string name="passenger_doc_visa_info">• Visa Perjalanan: Diuruskan oleh pihak syarikat</string>
+    <string name="passenger_passport_validity_info">• Tempoh Sah Pasport: Kurang %1$d bulan / perlu diperbaharui sebelum berlepas</string>
+    <string name="passenger_passport_expiry_pending">• Tarikh Luput Pasport: Belum dinyatakan (boleh dikemaskini kemudian)</string>
     <string name="passenger_doc_ic_available">✓ Dokumen MyKad / IC Tersedia</string>
     <string name="passenger_btn_edit_profile">Edit Profile</string>
     <string name="passenger_profile_incomplete_warn">Profil anda belum memenuhi keperluan tempahan pakej ini.\nSila lengkapkan profil anda terlebih dahulu.</string>
-    <string name="passenger_missing_fields_header">Maklumat / Dokumen Diperlukan:</string>
+    <string name="passenger_missing_fields_header">Maklumat Profil Diperlukan:</string>
     <string name="passenger_btn_complete_profile">LENGKAPKAN PROFIL SEKARANG</string>
     <string name="passenger_not_logged_in">Pengguna belum log masuk</string>
     <string name="passenger_profile_not_found">Profil tidak dijumpai</string>

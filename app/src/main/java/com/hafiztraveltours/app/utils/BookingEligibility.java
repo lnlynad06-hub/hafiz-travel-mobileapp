@@ -63,38 +63,84 @@ public final class BookingEligibility {
         List<String> missingDocs = checkMissingDocuments(docs);
         boolean docsComplete = missingDocs.isEmpty();
 
-        // Profile completion and travel documents are not booking blockers.
-        return new Status(Reason.ELIGIBLE, profileComplete, docsComplete, missingProfile, missingDocs);
+        if (!profileComplete) {
+            return new Status(Reason.PROFILE_INCOMPLETE, false, docsComplete, missingProfile, missingDocs);
+        }
+
+        // Required Edit Profile complete: eligible to book even if travel documents are incomplete.
+        return new Status(Reason.ELIGIBLE, true, docsComplete, missingProfile, missingDocs);
     }
 
     public static List<String> checkMissingProfileFields(UserDto user, Map<String, String> ex) {
         List<String> missing = new ArrayList<>();
 
+        // 1. Personal Information
         String fullName = str(ex, "name");
         if (fullName.isEmpty() && user != null && user.name != null) fullName = user.name.trim();
         if (fullName.isEmpty()) missing.add("name");
 
-        String icNo = str(ex, "ic_no");
-        if (icNo.isEmpty() && user != null && user.icNumber != null) icNo = user.icNumber.trim();
-        if (icNo.isEmpty()) missing.add("ic_no");
+        String username = str(ex, "nickname");
+        if (username.isEmpty()) username = str(ex, "username");
+        if (username.isEmpty() && user != null && user.nickname != null) username = user.nickname.trim();
+        if (username.isEmpty()) missing.add("nickname");
 
+        String dob = str(ex, "date_of_birth");
+        if (dob.isEmpty()) dob = str(ex, "dob");
+        if (dob.isEmpty() && user != null && user.dateOfBirth != null) dob = user.dateOfBirth.trim();
+        if (dob.isEmpty()) missing.add("date_of_birth");
+
+        String gender = str(ex, "gender");
+        if (gender.isEmpty() && user != null && user.gender != null) gender = user.gender.trim();
+        if (gender.isEmpty()) missing.add("gender");
+
+        String country = str(ex, "nationality");
+        if (country.isEmpty()) country = str(ex, "country");
+        if (country.isEmpty() && user != null && user.nationality != null) country = user.nationality.trim();
+        if (country.isEmpty() && user != null && user.country != null) country = user.country.trim();
+        if (country.isEmpty()) missing.add("nationality");
+
+        String phone = str(ex, "phone");
+        if (phone.isEmpty() && user != null && user.phone != null) phone = user.phone.trim();
+        if (phone.isEmpty()) missing.add("phone");
+
+        String email = str(ex, "email");
+        if (email.isEmpty() && user != null && user.email != null) email = user.email.trim();
+        if (email.isEmpty()) missing.add("email");
+
+        // 2. Passport Information
         String passportNo = str(ex, "passport_no");
+        if (passportNo.isEmpty()) passportNo = str(ex, "passport_number");
         if (passportNo.isEmpty() && user != null && user.passportNumber != null) {
             passportNo = user.passportNumber.trim();
         }
         if (passportNo.isEmpty()) missing.add("passport_no");
 
-        String address = str(ex, "address");
-        if (address.isEmpty() && user != null && user.address != null) address = user.address.trim();
-        if (address.isEmpty()) address = str(ex, "address_line_1");
-        if (address.isEmpty() && user != null && user.addressLine1 != null) address = user.addressLine1.trim();
-        if (address.isEmpty()) missing.add("address");
+        String passportExpiry = str(ex, "passport_expiry");
+        if (passportExpiry.isEmpty()) passportExpiry = str(ex, "passport_expiry_date");
+        if (passportExpiry.isEmpty() && user != null && user.passportExpiryDate != null) {
+            passportExpiry = user.passportExpiryDate.trim();
+        }
+        if (passportExpiry.isEmpty()) missing.add("passport_expiry");
 
+        String issuingCountry = str(ex, "issuing_country");
+        if (issuingCountry.isEmpty()) issuingCountry = str(ex, "passport_issuing_country");
+        if (issuingCountry.isEmpty() && user != null && user.issuingCountry != null) {
+            issuingCountry = user.issuingCountry.trim();
+        }
+        if (issuingCountry.isEmpty()) missing.add("issuing_country");
+
+        // 3. Emergency Contact
         String emergName = str(ex, "emergency_name");
         if (emergName.isEmpty() && user != null && user.emergencyName != null) {
             emergName = user.emergencyName.trim();
         }
         if (emergName.isEmpty()) missing.add("emergency_name");
+
+        String emergPhone = str(ex, "emergency_phone");
+        if (emergPhone.isEmpty() && user != null && user.emergencyPhone != null) {
+            emergPhone = user.emergencyPhone.trim();
+        }
+        if (emergPhone.isEmpty()) missing.add("emergency_phone");
 
         return missing;
     }

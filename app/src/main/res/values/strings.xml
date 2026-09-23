@@ -77,7 +77,7 @@
     <string name="err_signup_failed">Registration failed. Please try again.</string>
     <string name="err_signup_email_exists">Email or phone number is already registered</string>
     <string name="err_network">Connection error. Please check your internet.</string>
-    <string name="signup_success">Registration successful!</string>
+    <string name="signup_success">Registration successful! Please log in to continue.</string>
     <string name="password_requirements_header">Password requirements</string>
     <string name="req_pass_min_length">At least 8 characters</string>
     <string name="req_pass_uppercase">Uppercase letter</string>
@@ -854,13 +854,14 @@
     <string name="profile_field_ic_no">IC / NRIC Number <font color="#DC2626">*</font></string>
     <string name="profile_field_passport_no">Passport Number <font color="#DC2626">*</font></string>
     <string name="profile_field_passport_expiry">Passport Expiry Date (YYYY-MM-DD) <font color="#DC2626">*</font></string>
-    <string name="profile_field_emergency_name">Emergency Contact Name</string>
-    <string name="profile_field_emergency_phone">Emergency Contact Phone</string>
+    <string name="profile_field_emergency_name">Emergency Contact Name <font color="#DC2626">*</font></string>
+    <string name="profile_field_emergency_phone">Emergency Contact Phone <font color="#DC2626">*</font></string>
     <string name="profile_field_mahram_name">Mahram Name (If applicable)</string>
+    <string name="profile_age_format">Age: %1$d</string>
     <string name="profile_travel_documents">Travel Documents</string>
     <string name="doc_passport_copy">Passport Copy (Main Page) <font color="#DC2626">*</font></string>
-    <string name="doc_vaccine_cert">Meningitis Vaccine Certificate</string>
-    <string name="doc_marriage_cert">Marriage / Mahram Certificate</string>
+    <string name="doc_visa_managed_by_company">Managed by Company</string>
+    <string name="doc_visa_company_note">Your travel visa will be arranged and provided directly by Hafiz Travel &amp; Tours prior to departure. Customer upload is not required.</string>
     <string name="doc_status_verified">Verified</string>
     <string name="doc_status_pending">Pending Review</string>
     <string name="doc_status_not_uploaded">Not Uploaded</string>
@@ -871,8 +872,6 @@
     <string name="profile_section_travel_identity">Passport &amp; Travel Identity</string>
     <string name="profile_section_emergency">Emergency &amp; Pilgrimage Support</string>
     <string name="doc_subtitle_passport">Required for Flight &amp; Saudi Visa</string>
-    <string name="doc_subtitle_vaccine">Required for Ministry of Hajj Compliance</string>
-    <string name="doc_subtitle_marriage">Required for Mahram Clearance</string>
     <string name="doc_action_upload">Upload Document</string>
     <string name="doc_action_view">View Document</string>
     <string name="doc_action_replace">Replace Document</string>
@@ -894,15 +893,16 @@
     <string name="section_emergency_contact">Emergency Contact</string>
     <string name="section_mahram_info">Mahram Information</string>
     <string name="section_security">Security</string>
-    <string name="profile_field_gender">Gender</string>
-    <string name="profile_field_dob">Date of Birth</string>
-    <string name="profile_field_nationality">Nationality / Country</string>
-    <string name="profile_field_address_line_1">Address Line 1</string>
+    <string name="profile_field_gender">Gender <font color="#DC2626">*</font></string>
+    <string name="profile_field_dob">Date of Birth <font color="#DC2626">*</font></string>
+    <string name="profile_field_nationality">Nationality / Country <font color="#DC2626">*</font></string>
+    <string name="profile_field_issuing_country">Passport Issuing Country <font color="#DC2626">*</font></string>
+    <string name="profile_field_address_line_1">Address Line 1 <font color="#DC2626">*</font></string>
     <string name="profile_field_address_line_2">Address Line 2 (Optional)</string>
-    <string name="profile_field_postcode">Postcode</string>
-    <string name="profile_field_city">City / District</string>
-    <string name="profile_field_state">State</string>
-    <string name="profile_field_country">Country</string>
+    <string name="profile_field_postcode">Postcode <font color="#DC2626">*</font></string>
+    <string name="profile_field_city">City / District <font color="#DC2626">*</font></string>
+    <string name="profile_field_state">State <font color="#DC2626">*</font></string>
+    <string name="profile_field_country">Country <font color="#DC2626">*</font></string>
     <string name="hint_address_line_1">Street address, P.O. Box</string>
     <string name="hint_address_line_2">Apartment, suite, unit, building, floor</string>
     <string name="hint_postcode">e.g. 80000</string>
@@ -1010,10 +1010,16 @@
     <string name="passenger_passport_label">Passport: %1$s</string>
     <string name="passenger_nationality_label">Nationality: %1$s</string>
     <string name="passenger_doc_passport_available">✓ Passport Document Available</string>
+    <string name="passenger_doc_passport_pending">• Passport Copy: Not yet uploaded (can be submitted after booking)</string>
+    <string name="passenger_doc_photo_available">✓ Passport Photo Available</string>
+    <string name="passenger_doc_photo_pending">• Passport Photo: Not yet uploaded (can be submitted after booking)</string>
+    <string name="passenger_doc_visa_info">• Travel Visa: Handled by company</string>
+    <string name="passenger_passport_validity_info">• Passport Validity: Less than %1$d months / renew before departure</string>
+    <string name="passenger_passport_expiry_pending">• Passport Expiry: Not yet provided (can be updated later)</string>
     <string name="passenger_doc_ic_available">✓ MyKad / IC Document Available</string>
     <string name="passenger_btn_edit_profile">Edit Profile</string>
     <string name="passenger_profile_incomplete_warn">Your account profile does not meet the requirements for this package.\nPlease complete your profile before continuing.</string>
-    <string name="passenger_missing_fields_header">Required Information / Documents:</string>
+    <string name="passenger_missing_fields_header">Required Profile Information:</string>
     <string name="passenger_btn_complete_profile">COMPLETE PROFILE NOW</string>
     <string name="passenger_not_logged_in">User not logged in</string>
     <string name="passenger_profile_not_found">Profile not found</string>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="sea_countries">
+        <item>Malaysia</item>
+        <item>Singapura</item>
+        <item>Indonesia</item>
+        <item>Thailand</item>
+        <item>Brunei</item>
+        <item>Filipina</item>
+        <item>Vietnam</item>
+        <item>Kemboja</item>
+        <item>Laos</item>
+        <item>Myanmar</item>
+        <item>Timor-Leste</item>
+    </string-array>
+</resources>
