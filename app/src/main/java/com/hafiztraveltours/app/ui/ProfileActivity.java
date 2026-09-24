@@ -17,12 +17,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -424,6 +428,358 @@ public class ProfileActivity extends BaseActivity {
             "+673", "+856", "+855", "+670", "+60", "+65", "+62", "+66", "+84", "+63", "+95"
     };
 
+    /**
+     * Formats an ISO {@code YYYY-MM-DD} string to readable format e.g. "24 September 2000" in active locale.
+     */
+    public static String formatDobDisplay(android.content.Context context, String isoDate) {
+        if (isoDate == null || isoDate.trim().isEmpty()) return "";
+        try {
+            String[] parts = isoDate.trim().split("-");
+            if (parts.length == 3) {
+                int year = Integer.parseInt(parts[0]);
+                int month = Integer.parseInt(parts[1]);
+                int day = Integer.parseInt(parts[2]);
+                boolean isMalay = "ms".equalsIgnoreCase(LocaleHelper.getSavedLanguage(context));
+                String[] monthsEn = new String[]{
+                        "January", "February", "March", "April", "May", "June",
+                        "July", "August", "September", "October", "November", "December"
+                };
+                String[] monthsMs = new String[]{
+                        "Januari", "Februari", "Mac", "April", "Mei", "Jun",
+                        "Julai", "Ogos", "September", "Oktober", "November", "Disember"
+                };
+                String monthName = (month >= 1 && month <= 12)
+                        ? (isMalay ? monthsMs[month - 1] : monthsEn[month - 1])
+                        : String.valueOf(month);
+                return day + " " + monthName + " " + year;
+            }
+        } catch (Exception ignored) {}
+        return isoDate;
+    }
+
+    private void showDobPickerBottomSheet(TextView tvDobValue, TextView tvDobAge, String[] selectedDobHolder) {
+        com.google.android.material.bottomsheet.BottomSheetDialog sheetDialog =
+                new com.google.android.material.bottomsheet.BottomSheetDialog(this);
+        View sheetView = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_dob_picker, null);
+        sheetDialog.setContentView(sheetView);
+
+        if (sheetDialog.getWindow() != null) {
+            sheetDialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+            sheetDialog.getWindow().setDimAmount(0.55f);
+        }
+
+        View btnClose = sheetView.findViewById(R.id.btnCloseDobSheet);
+        if (btnClose != null) btnClose.setOnClickListener(v -> sheetDialog.dismiss());
+
+        TextView tvPreview = sheetView.findViewById(R.id.tvDobPreviewText);
+        TextView tvPreviewAge = sheetView.findViewById(R.id.tvDobPreviewAge);
+        NumberPicker npDay = sheetView.findViewById(R.id.npDobDay);
+        NumberPicker npMonth = sheetView.findViewById(R.id.npDobMonth);
+        NumberPicker npYear = sheetView.findViewById(R.id.npDobYear);
+        View btnDone = sheetView.findViewById(R.id.btnDoneDob);
+
+        java.util.Calendar today = java.util.Calendar.getInstance();
+        int curYear = today.get(java.util.Calendar.YEAR);
+
+        int initYear = curYear - 26;
+        int initMonth = 0;
+        int initDay = 1;
+
+        String currentDob = selectedDobHolder != null && selectedDobHolder.length > 0 ? selectedDobHolder[0] : "";
+        if (currentDob != null && !currentDob.trim().isEmpty()) {
+            try {
+                String[] parts = currentDob.trim().split("-");
+                if (parts.length == 3) {
+                    initYear = Integer.parseInt(parts[0]);
+                    initMonth = Integer.parseInt(parts[1]) - 1;
+                    initDay = Integer.parseInt(parts[2]);
+                }
+            } catch (Exception ignored) {}
+        }
+
+        boolean isMalay = "ms".equalsIgnoreCase(LocaleHelper.getSavedLanguage(this));
+        String[] monthNames = isMalay
+                ? new String[]{"Jan", "Feb", "Mac", "Apr", "Mei", "Jun", "Jul", "Ogo", "Sep", "Okt", "Nov", "Dis"}
+                : new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+
+        if (npMonth != null) {
+            npMonth.setMinValue(0);
+            npMonth.setMaxValue(11);
+            npMonth.setDisplayedValues(monthNames);
+            npMonth.setValue(Math.max(0, Math.min(11, initMonth)));
+            npMonth.setWrapSelectorWheel(true);
+        }
+
+        if (npYear != null) {
+            npYear.setMinValue(1900);
+            npYear.setMaxValue(curYear);
+            npYear.setValue(Math.max(1900, Math.min(curYear, initYear)));
+            npYear.setWrapSelectorWheel(false);
+        }
+
+        Runnable updateDayMax = () -> {
+            int y = npYear != null ? npYear.getValue() : curYear;
+            int m = npMonth != null ? npMonth.getValue() : 0;
+            java.util.Calendar tempCal = java.util.Calendar.getInstance();
+            tempCal.set(java.util.Calendar.YEAR, y);
+            tempCal.set(java.util.Calendar.MONTH, m);
+            tempCal.set(java.util.Calendar.DAY_OF_MONTH, 1);
+            int maxDays = tempCal.getActualMaximum(java.util.Calendar.DAY_OF_MONTH);
+            if (npDay != null) {
+                int oldVal = npDay.getValue();
+                npDay.setMinValue(1);
+                npDay.setMaxValue(maxDays);
+                npDay.setValue(Math.max(1, Math.min(maxDays, oldVal)));
+                npDay.setWrapSelectorWheel(true);
+            }
+        };
+
+        updateDayMax.run();
+        if (npDay != null) {
+            npDay.setValue(Math.max(1, Math.min(31, initDay)));
+        }
+
+        Runnable updatePreview = () -> {
+            int d = npDay != null ? npDay.getValue() : 1;
+            int m = npMonth != null ? npMonth.getValue() : 0;
+            int y = npYear != null ? npYear.getValue() : curYear;
+            String iso = String.format(java.util.Locale.US, "%04d-%02d-%02d", y, m + 1, d);
+            String displayStr = formatDobDisplay(this, iso);
+            if (tvPreview != null) {
+                tvPreview.setText(displayStr);
+            }
+            int age = curYear - y;
+            if (today.get(java.util.Calendar.MONTH) < m ||
+                    (today.get(java.util.Calendar.MONTH) == m && today.get(java.util.Calendar.DAY_OF_MONTH) < d)) {
+                age--;
+            }
+            if (tvPreviewAge != null) {
+                if (age >= 0) {
+                    tvPreviewAge.setText(getString(R.string.profile_age_format, age));
+                    tvPreviewAge.setVisibility(View.VISIBLE);
+                } else {
+                    tvPreviewAge.setVisibility(View.GONE);
+                }
+            }
+        };
+
+        updatePreview.run();
+
+        NumberPicker.OnValueChangeListener changeListener = (picker, oldVal, newVal) -> {
+            if (picker == npMonth || picker == npYear) {
+                updateDayMax.run();
+            }
+            updatePreview.run();
+        };
+
+        if (npDay != null) npDay.setOnValueChangedListener(changeListener);
+        if (npMonth != null) npMonth.setOnValueChangedListener(changeListener);
+        if (npYear != null) npYear.setOnValueChangedListener(changeListener);
+
+        if (btnDone != null) {
+            btnDone.setOnClickListener(v -> {
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
+                int d = npDay != null ? npDay.getValue() : 1;
+                int m = npMonth != null ? npMonth.getValue() : 0;
+                int y = npYear != null ? npYear.getValue() : curYear;
+                String iso = String.format(java.util.Locale.US, "%04d-%02d-%02d", y, m + 1, d);
+                if (selectedDobHolder != null && selectedDobHolder.length > 0) {
+                    selectedDobHolder[0] = iso;
+                }
+                if (tvDobValue != null) {
+                    tvDobValue.setText(formatDobDisplay(this, iso));
+                    tvDobValue.setTextColor(ContextCompat.getColor(this, R.color.text_dark));
+                }
+                int age = curYear - y;
+                if (today.get(java.util.Calendar.MONTH) < m ||
+                        (today.get(java.util.Calendar.MONTH) == m && today.get(java.util.Calendar.DAY_OF_MONTH) < d)) {
+                    age--;
+                }
+                if (tvDobAge != null) {
+                    if (age >= 0) {
+                        tvDobAge.setText(getString(R.string.profile_age_format, age));
+                        tvDobAge.setVisibility(View.VISIBLE);
+                    } else {
+                        tvDobAge.setVisibility(View.GONE);
+                    }
+                }
+                sheetDialog.dismiss();
+            });
+        }
+
+        sheetDialog.show();
+    }
+
+    private void showGenderPickerBottomSheet(TextView tvGenderValue, String[] selectedGenderHolder) {
+        com.google.android.material.bottomsheet.BottomSheetDialog sheetDialog =
+                new com.google.android.material.bottomsheet.BottomSheetDialog(this);
+        View sheetView = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_gender_picker, null);
+        sheetDialog.setContentView(sheetView);
+
+        if (sheetDialog.getWindow() != null) {
+            sheetDialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+            sheetDialog.getWindow().setDimAmount(0.55f);
+        }
+
+        View btnClose = sheetView.findViewById(R.id.btnCloseGenderSheet);
+        if (btnClose != null) btnClose.setOnClickListener(v -> sheetDialog.dismiss());
+
+        View itemMale = sheetView.findViewById(R.id.itemGenderMale);
+        View itemFemale = sheetView.findViewById(R.id.itemGenderFemale);
+        TextView tvMale = sheetView.findViewById(R.id.tvGenderMaleText);
+        TextView tvFemale = sheetView.findViewById(R.id.tvGenderFemaleText);
+        ImageView ivMaleCheck = sheetView.findViewById(R.id.ivGenderMaleCheck);
+        ImageView ivMaleUncheck = sheetView.findViewById(R.id.ivGenderMaleUnchecked);
+        ImageView ivFemaleCheck = sheetView.findViewById(R.id.ivGenderFemaleCheck);
+        ImageView ivFemaleUncheck = sheetView.findViewById(R.id.ivGenderFemaleUnchecked);
+
+        boolean isMalay = "ms".equalsIgnoreCase(LocaleHelper.getSavedLanguage(this));
+        String maleLabel = isMalay ? "Lelaki" : "Male";
+        String femaleLabel = isMalay ? "Perempuan" : "Female";
+
+        Runnable updateCards = () -> {
+            String current = selectedGenderHolder != null && selectedGenderHolder.length > 0 ? selectedGenderHolder[0] : "";
+            boolean male = "male".equalsIgnoreCase(current) || "lelaki".equalsIgnoreCase(current);
+            boolean female = "female".equalsIgnoreCase(current) || "perempuan".equalsIgnoreCase(current);
+
+            if (itemMale != null) {
+                itemMale.setBackgroundResource(male ? R.drawable.bg_selection_card_selected : R.drawable.bg_selection_card_unselected);
+            }
+            if (tvMale != null) {
+                tvMale.setTextColor(ContextCompat.getColor(this, male ? R.color.pink_dark : R.color.text_dark));
+                tvMale.setTypeface(null, male ? Typeface.BOLD : Typeface.NORMAL);
+            }
+            if (ivMaleCheck != null) ivMaleCheck.setVisibility(male ? View.VISIBLE : View.GONE);
+            if (ivMaleUncheck != null) ivMaleUncheck.setVisibility(male ? View.GONE : View.VISIBLE);
+
+            if (itemFemale != null) {
+                itemFemale.setBackgroundResource(female ? R.drawable.bg_selection_card_selected : R.drawable.bg_selection_card_unselected);
+            }
+            if (tvFemale != null) {
+                tvFemale.setTextColor(ContextCompat.getColor(this, female ? R.color.pink_dark : R.color.text_dark));
+                tvFemale.setTypeface(null, female ? Typeface.BOLD : Typeface.NORMAL);
+            }
+            if (ivFemaleCheck != null) ivFemaleCheck.setVisibility(female ? View.VISIBLE : View.GONE);
+            if (ivFemaleUncheck != null) ivFemaleUncheck.setVisibility(female ? View.GONE : View.VISIBLE);
+        };
+
+        updateCards.run();
+
+        if (itemMale != null) {
+            itemMale.setOnClickListener(v -> {
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
+                if (selectedGenderHolder != null && selectedGenderHolder.length > 0) {
+                    selectedGenderHolder[0] = maleLabel;
+                }
+                if (tvGenderValue != null) {
+                    tvGenderValue.setText(maleLabel);
+                    tvGenderValue.setTextColor(ContextCompat.getColor(this, R.color.text_dark));
+                }
+                updateCards.run();
+                itemMale.postDelayed(sheetDialog::dismiss, 120);
+            });
+        }
+
+        if (itemFemale != null) {
+            itemFemale.setOnClickListener(v -> {
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
+                if (selectedGenderHolder != null && selectedGenderHolder.length > 0) {
+                    selectedGenderHolder[0] = femaleLabel;
+                }
+                if (tvGenderValue != null) {
+                    tvGenderValue.setText(femaleLabel);
+                    tvGenderValue.setTextColor(ContextCompat.getColor(this, R.color.text_dark));
+                }
+                updateCards.run();
+                itemFemale.postDelayed(sheetDialog::dismiss, 120);
+            });
+        }
+
+        sheetDialog.show();
+    }
+
+    private void showCountrySearchBottomSheet(String title, TextView tvTargetFlag, TextView tvTargetValue, String[] selectedCountryHolder) {
+        com.google.android.material.bottomsheet.BottomSheetDialog sheetDialog =
+                new com.google.android.material.bottomsheet.BottomSheetDialog(this);
+        View sheetView = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_country_search_picker, null);
+        sheetDialog.setContentView(sheetView);
+
+        if (sheetDialog.getWindow() != null) {
+            sheetDialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+            sheetDialog.getWindow().setDimAmount(0.55f);
+            sheetDialog.getWindow().setSoftInputMode(android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        }
+
+        TextView tvSheetTitle = sheetView.findViewById(R.id.tvCountrySheetTitle);
+        if (tvSheetTitle != null && title != null && !title.isEmpty()) {
+            tvSheetTitle.setText(title);
+        }
+
+        View btnClose = sheetView.findViewById(R.id.btnCloseCountrySheet);
+        if (btnClose != null) btnClose.setOnClickListener(v -> sheetDialog.dismiss());
+
+        EditText etSearch = sheetView.findViewById(R.id.etCountrySearch);
+        ImageView btnClear = sheetView.findViewById(R.id.btnClearCountrySearch);
+        ListView lvCountries = sheetView.findViewById(R.id.lvCountryPicker);
+        TextView tvNoCountries = sheetView.findViewById(R.id.tvNoCountries);
+
+        String[] seaCountries = getResources().getStringArray(R.array.sea_countries);
+        CountryDropdownAdapter adapter = new CountryDropdownAdapter(this, seaCountries);
+        String curCountry = selectedCountryHolder != null && selectedCountryHolder.length > 0 ? selectedCountryHolder[0] : "";
+        adapter.setSelectedCountry(curCountry);
+
+        if (lvCountries != null) {
+            lvCountries.setAdapter(adapter);
+            lvCountries.setOnItemClickListener((parent, view, position, id) -> {
+                com.hafiztraveltours.app.utils.HapticUtil.click(view);
+                String chosen = adapter.getItem(position);
+                if (chosen != null) {
+                    if (selectedCountryHolder != null && selectedCountryHolder.length > 0) {
+                        selectedCountryHolder[0] = chosen;
+                    }
+                    if (tvTargetFlag != null) {
+                        tvTargetFlag.setText(CountryDropdownAdapter.getFlagForCountry(chosen));
+                        tvTargetFlag.setVisibility(View.VISIBLE);
+                    }
+                    if (tvTargetValue != null) {
+                        tvTargetValue.setText(chosen);
+                        tvTargetValue.setTextColor(ContextCompat.getColor(this, R.color.text_dark));
+                    }
+                }
+                sheetDialog.dismiss();
+            });
+        }
+
+        if (etSearch != null) {
+            etSearch.addTextChangedListener(new android.text.TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    String query = s != null ? s.toString() : "";
+                    if (btnClear != null) {
+                        btnClear.setVisibility(query.isEmpty() ? View.GONE : View.VISIBLE);
+                    }
+                    adapter.getFilter().filter(query, countResult -> {
+                        if (tvNoCountries != null) {
+                            tvNoCountries.setVisibility(adapter.getCount() == 0 ? View.VISIBLE : View.GONE);
+                        }
+                    });
+                }
+
+                @Override
+                public void afterTextChanged(android.text.Editable s) {}
+            });
+        }
+
+        if (btnClear != null && etSearch != null) {
+            btnClear.setOnClickListener(v -> etSearch.setText(""));
+        }
+
+        sheetDialog.show();
+    }
+
     private void showCountryPickerBottomSheet(TextView tvCountryCode, String[] codeHolder) {
         com.google.android.material.bottomsheet.BottomSheetDialog dialog =
                 new com.google.android.material.bottomsheet.BottomSheetDialog(this);
@@ -506,10 +862,18 @@ public class ProfileActivity extends BaseActivity {
         TextView tvCountryCode = dialogView.findViewById(R.id.tvCountryCode);
         TextView phoneErrorText = dialogView.findViewById(R.id.phoneErrorText);
         TextInputEditText emailInput = dialogView.findViewById(R.id.emailInput);
-        com.google.android.material.textfield.MaterialAutoCompleteTextView genderInput = dialogView.findViewById(R.id.genderInput);
-        TextInputEditText dobInput = dialogView.findViewById(R.id.dobInput);
+
+        // Redesigned Shared Luxury Fields: Date of Birth, Gender, Nationality
+        View fieldDobContainer = dialogView.findViewById(R.id.fieldDobContainer);
+        TextView tvDobValue = dialogView.findViewById(R.id.tvDobValue);
         TextView tvDobAge = dialogView.findViewById(R.id.tvDobAge);
-        com.google.android.material.textfield.MaterialAutoCompleteTextView nationalityInput = dialogView.findViewById(R.id.nationalityInput);
+
+        View fieldGenderContainer = dialogView.findViewById(R.id.fieldGenderContainer);
+        TextView tvGenderValue = dialogView.findViewById(R.id.tvGenderValue);
+
+        View fieldNationalityContainer = dialogView.findViewById(R.id.fieldNationalityContainer);
+        TextView tvNationalityFlag = dialogView.findViewById(R.id.tvNationalityFlag);
+        TextView tvNationalityValue = dialogView.findViewById(R.id.tvNationalityValue);
 
         // 2. Residential Address Inputs
         TextInputEditText addressLine1Input = dialogView.findViewById(R.id.addressLine1Input);
@@ -541,59 +905,136 @@ public class ProfileActivity extends BaseActivity {
         TextInputLayout nameLayout = dialogView.findViewById(R.id.nameLayout);
         TextInputLayout nicknameLayout = dialogView.findViewById(R.id.nicknameLayout);
 
-        // Setup Gender Options (Localized)
         boolean isMalay = "ms".equalsIgnoreCase(LocaleHelper.getSavedLanguage(this));
         String genderMaleStr = isMalay ? "Lelaki" : "Male";
         String genderFemaleStr = isMalay ? "Perempuan" : "Female";
-        String[] genderOptions = new String[]{genderMaleStr, genderFemaleStr};
-        android.widget.ArrayAdapter<String> genderAdapter = new android.widget.ArrayAdapter<>(
-                this, android.R.layout.simple_dropdown_item_1line, genderOptions);
-        if (genderInput != null) {
-            genderInput.setAdapter(genderAdapter);
-        }
 
-        // Setup Southeast Asian Countries Dropdowns (Personal, Issuing, Residential)
         String[] seaCountries = getResources().getStringArray(R.array.sea_countries);
 
-        CountryDropdownAdapter nationalityAdapter = new CountryDropdownAdapter(this, seaCountries);
-        if (nationalityInput != null) {
-            nationalityInput.setAdapter(nationalityAdapter);
-            nationalityInput.setDropDownBackgroundResource(R.drawable.bg_dropdown_popup);
-            nationalityInput.setOnItemClickListener((parent, view, position, id) -> {
-                String selected = (String) parent.getItemAtPosition(position);
-                nationalityAdapter.setSelectedCountry(selected);
-            });
-            nationalityInput.setOnClickListener(v -> {
-                nationalityAdapter.setSelectedCountry(nationalityInput.getText().toString());
-                nationalityInput.showDropDown();
+        String currentGender = (currentUser != null && currentUser.gender != null && !currentUser.gender.isEmpty())
+                ? currentUser.gender : exVal(ex, "gender", "");
+        if (!currentGender.isEmpty()) {
+            if ("male".equalsIgnoreCase(currentGender) || "lelaki".equalsIgnoreCase(currentGender)) {
+                currentGender = genderMaleStr;
+            } else if ("female".equalsIgnoreCase(currentGender) || "perempuan".equalsIgnoreCase(currentGender)) {
+                currentGender = genderFemaleStr;
+            }
+        }
+
+        String matchedNationality = matchCountry(seaCountries, currentNationality);
+        String matchedIssuingCountry = matchCountry(seaCountries, currentIssuingCountry);
+        String currentAddress1 = (currentUser != null && currentUser.addressLine1 != null && !currentUser.addressLine1.isEmpty())
+                ? currentUser.addressLine1 : exVal(ex, "address_line_1", "");
+        String currentAddress2 = (currentUser != null && currentUser.addressLine2 != null && !currentUser.addressLine2.isEmpty())
+                ? currentUser.addressLine2 : exVal(ex, "address_line_2", "");
+        String currentPostcode = (currentUser != null && currentUser.postcode != null && !currentUser.postcode.isEmpty())
+                ? currentUser.postcode : exVal(ex, "postcode", "");
+        String currentCity = (currentUser != null && currentUser.city != null && !currentUser.city.isEmpty())
+                ? currentUser.city : exVal(ex, "city", "");
+        String currentState = (currentUser != null && currentUser.state != null && !currentUser.state.isEmpty())
+                ? currentUser.state : exVal(ex, "state", "");
+        String currentCountry = (currentUser != null && currentUser.country != null && !currentUser.country.isEmpty())
+                ? currentUser.country : exVal(ex, "country", "Malaysia");
+        String matchedCountry = matchCountry(seaCountries, currentCountry);
+
+        // State holders for redesigned bottom sheets
+        final String[] selectedDob = new String[]{currentDob};
+        final String[] selectedGender = new String[]{currentGender};
+        final String[] selectedNationality = new String[]{matchedNationality};
+        final String[] selectedIssuingCountry = new String[]{matchedIssuingCountry};
+        final String[] selectedCountry = new String[]{matchedCountry};
+
+        // Populate Date of Birth & Dynamic Age
+        if (!currentDob.isEmpty()) {
+            if (tvDobValue != null) {
+                tvDobValue.setText(formatDobDisplay(this, currentDob));
+                tvDobValue.setTextColor(ContextCompat.getColor(this, R.color.text_dark));
+            }
+            try {
+                String[] parts = currentDob.split("-");
+                if (parts.length == 3) {
+                    int y = Integer.parseInt(parts[0]);
+                    int m = Integer.parseInt(parts[1]) - 1;
+                    int d = Integer.parseInt(parts[2]);
+                    java.util.Calendar today = java.util.Calendar.getInstance();
+                    int age = today.get(java.util.Calendar.YEAR) - y;
+                    if (today.get(java.util.Calendar.MONTH) < m ||
+                            (today.get(java.util.Calendar.MONTH) == m && today.get(java.util.Calendar.DAY_OF_MONTH) < d)) {
+                        age--;
+                    }
+                    if (tvDobAge != null && age >= 0) {
+                        tvDobAge.setText(getString(R.string.profile_age_format, age));
+                        tvDobAge.setVisibility(View.VISIBLE);
+                    }
+                }
+            } catch (Exception ignored) {}
+        }
+
+        // Populate Gender
+        if (!currentGender.isEmpty() && tvGenderValue != null) {
+            tvGenderValue.setText(currentGender);
+            tvGenderValue.setTextColor(ContextCompat.getColor(this, R.color.text_dark));
+        }
+
+        // Populate Nationality
+        if (!matchedNationality.isEmpty()) {
+            if (tvNationalityFlag != null) {
+                tvNationalityFlag.setText(CountryDropdownAdapter.getFlagForCountry(matchedNationality));
+                tvNationalityFlag.setVisibility(View.VISIBLE);
+            }
+            if (tvNationalityValue != null) {
+                tvNationalityValue.setText(matchedNationality);
+                tvNationalityValue.setTextColor(ContextCompat.getColor(this, R.color.text_dark));
+            }
+        }
+
+        // Click listeners for Redesigned Bottom Sheets
+        if (fieldDobContainer != null) {
+            fieldDobContainer.setOnClickListener(v -> {
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
+                showDobPickerBottomSheet(tvDobValue, tvDobAge, selectedDob);
             });
         }
 
-        CountryDropdownAdapter issuingCountryAdapter = new CountryDropdownAdapter(this, seaCountries);
+        if (fieldGenderContainer != null) {
+            fieldGenderContainer.setOnClickListener(v -> {
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
+                showGenderPickerBottomSheet(tvGenderValue, selectedGender);
+            });
+        }
+
+        if (fieldNationalityContainer != null) {
+            fieldNationalityContainer.setOnClickListener(v -> {
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
+                showCountrySearchBottomSheet(getString(R.string.profile_nationality_sheet_title),
+                        tvNationalityFlag, tvNationalityValue, selectedNationality);
+            });
+        }
+
+        // Setup Issuing Country and Country Dropdowns (Searchable Bottom Sheet)
         if (issuingCountryInput != null) {
-            issuingCountryInput.setAdapter(issuingCountryAdapter);
-            issuingCountryInput.setDropDownBackgroundResource(R.drawable.bg_dropdown_popup);
-            issuingCountryInput.setOnItemClickListener((parent, view, position, id) -> {
-                String selected = (String) parent.getItemAtPosition(position);
-                issuingCountryAdapter.setSelectedCountry(selected);
-            });
+            issuingCountryInput.setFocusable(false);
+            issuingCountryInput.setClickable(true);
+            if (!matchedIssuingCountry.isEmpty()) {
+                issuingCountryInput.setText(matchedIssuingCountry, false);
+            }
             issuingCountryInput.setOnClickListener(v -> {
-                issuingCountryAdapter.setSelectedCountry(issuingCountryInput.getText().toString());
-                issuingCountryInput.showDropDown();
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
+                showCountrySearchBottomSheet(getString(R.string.profile_field_issuing_country),
+                        null, issuingCountryInput, selectedIssuingCountry);
             });
         }
 
-        CountryDropdownAdapter countryAdapter = new CountryDropdownAdapter(this, seaCountries);
         if (countryInput != null) {
-            countryInput.setAdapter(countryAdapter);
-            countryInput.setDropDownBackgroundResource(R.drawable.bg_dropdown_popup);
-            countryInput.setOnItemClickListener((parent, view, position, id) -> {
-                String selected = (String) parent.getItemAtPosition(position);
-                countryAdapter.setSelectedCountry(selected);
-            });
+            countryInput.setFocusable(false);
+            countryInput.setClickable(true);
+            if (!matchedCountry.isEmpty()) {
+                countryInput.setText(matchedCountry, false);
+            }
             countryInput.setOnClickListener(v -> {
-                countryAdapter.setSelectedCountry(countryInput.getText().toString());
-                countryInput.showDropDown();
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
+                showCountrySearchBottomSheet(getString(R.string.profile_field_country),
+                        null, countryInput, selectedCountry);
             });
         }
 
@@ -642,132 +1083,25 @@ public class ProfileActivity extends BaseActivity {
             mahramRelInput.setAdapter(mahramAdapter);
         }
 
-        String currentGender = (currentUser != null && currentUser.gender != null && !currentUser.gender.isEmpty())
-                ? currentUser.gender : exVal(ex, "gender", "");
-        if (!currentGender.isEmpty()) {
-            if ("male".equalsIgnoreCase(currentGender) || "lelaki".equalsIgnoreCase(currentGender)) {
-                currentGender = genderMaleStr;
-            } else if ("female".equalsIgnoreCase(currentGender) || "perempuan".equalsIgnoreCase(currentGender)) {
-                currentGender = genderFemaleStr;
-            }
-        }
-
-        String currentAddress1 = (currentUser != null && currentUser.addressLine1 != null && !currentUser.addressLine1.isEmpty())
-                ? currentUser.addressLine1 : exVal(ex, "address_line_1", "");
-        String currentAddress2 = (currentUser != null && currentUser.addressLine2 != null && !currentUser.addressLine2.isEmpty())
-                ? currentUser.addressLine2 : exVal(ex, "address_line_2", "");
-        String currentPostcode = (currentUser != null && currentUser.postcode != null && !currentUser.postcode.isEmpty())
-                ? currentUser.postcode : exVal(ex, "postcode", "");
-        String currentCity = (currentUser != null && currentUser.city != null && !currentUser.city.isEmpty())
-                ? currentUser.city : exVal(ex, "city", "");
-        String currentState = (currentUser != null && currentUser.state != null && !currentUser.state.isEmpty())
-                ? currentUser.state : exVal(ex, "state", "");
-        String currentCountry = (currentUser != null && currentUser.country != null && !currentUser.country.isEmpty())
-                ? currentUser.country : exVal(ex, "country", "Malaysia");
-
-        // Fill current values
+        // Fill remaining form values
         if (nameInput != null) nameInput.setText(currentName != null ? currentName : "");
         if (nicknameInput != null) nicknameInput.setText(currentNickname != null ? currentNickname : "");
         if (icInput != null) icInput.setText(currentIc);
         if (emailInput != null) emailInput.setText(currentEmail != null ? currentEmail : "");
-        if (genderInput != null && !currentGender.isEmpty()) {
-            genderInput.setText(currentGender, false);
-        }
-        if (dobInput != null) dobInput.setText(currentDob);
-        String matchedNationality = matchCountry(seaCountries, currentNationality);
-        if (nationalityInput != null && !matchedNationality.isEmpty()) {
-            nationalityInput.setText(matchedNationality, false);
-            nationalityAdapter.setSelectedCountry(matchedNationality);
-        }
 
         if (addressLine1Input != null) addressLine1Input.setText(currentAddress1);
         if (addressLine2Input != null) addressLine2Input.setText(currentAddress2);
         if (postcodeInput != null) postcodeInput.setText(currentPostcode);
         if (cityInput != null) cityInput.setText(currentCity);
         if (stateInput != null) stateInput.setText(currentState);
-        String matchedCountry = matchCountry(seaCountries, currentCountry);
-        if (countryInput != null && !matchedCountry.isEmpty()) {
-            countryInput.setText(matchedCountry, false);
-            countryAdapter.setSelectedCountry(matchedCountry);
-        }
 
         if (passportInput != null) passportInput.setText(currentPassport);
-        String matchedIssuingCountry = matchCountry(seaCountries, currentIssuingCountry);
-        if (issuingCountryInput != null && !matchedIssuingCountry.isEmpty()) {
-            issuingCountryInput.setText(matchedIssuingCountry, false);
-            issuingCountryAdapter.setSelectedCountry(matchedIssuingCountry);
-        }
         if (expiryInput != null) expiryInput.setText(currentExpiry);
         if (emergNameInput != null) emergNameInput.setText(currentEmergName);
         if (emergPhoneInput != null) emergPhoneInput.setText(currentEmergPhone);
         if (mahramInput != null) mahramInput.setText(currentMahram);
         if (mahramRelInput != null && !currentMahramRel.isEmpty()) {
             mahramRelInput.setText(currentMahramRel, false);
-        }
-
-        // Dynamic Age Calculation from DOB
-        Runnable updateAgeBadge = () -> {
-            String dobStr = dobInput != null ? dobInput.getText().toString().trim() : "";
-            if (tvDobAge == null) return;
-            if (dobStr.isEmpty()) {
-                tvDobAge.setVisibility(View.GONE);
-                return;
-            }
-            try {
-                String[] parts = dobStr.split("-");
-                if (parts.length == 3) {
-                    int y = Integer.parseInt(parts[0]);
-                    int m = Integer.parseInt(parts[1]) - 1;
-                    int d = Integer.parseInt(parts[2]);
-                    java.util.Calendar today = java.util.Calendar.getInstance();
-                    int age = today.get(java.util.Calendar.YEAR) - y;
-                    if (today.get(java.util.Calendar.MONTH) < m ||
-                            (today.get(java.util.Calendar.MONTH) == m && today.get(java.util.Calendar.DAY_OF_MONTH) < d)) {
-                        age--;
-                    }
-                    if (age >= 0) {
-                        tvDobAge.setText(getString(R.string.profile_age_format, age));
-                        tvDobAge.setVisibility(View.VISIBLE);
-                    } else {
-                        tvDobAge.setVisibility(View.GONE);
-                    }
-                } else {
-                    tvDobAge.setVisibility(View.GONE);
-                }
-            } catch (Exception e) {
-                tvDobAge.setVisibility(View.GONE);
-            }
-        };
-        updateAgeBadge.run();
-
-        if (dobInput != null) {
-            dobInput.setOnClickListener(v -> {
-                java.util.Calendar calDob = java.util.Calendar.getInstance();
-                int year = calDob.get(java.util.Calendar.YEAR) - 30;
-                int month = calDob.get(java.util.Calendar.MONTH);
-                int day = calDob.get(java.util.Calendar.DAY_OF_MONTH);
-                String cDob = dobInput.getText().toString().trim();
-                if (!cDob.isEmpty()) {
-                    try {
-                        String[] parts = cDob.split("-");
-                        if (parts.length == 3) {
-                            year = Integer.parseInt(parts[0]);
-                            month = Integer.parseInt(parts[1]) - 1;
-                            day = Integer.parseInt(parts[2]);
-                        }
-                    } catch (Exception ignored) {}
-                }
-                new android.app.DatePickerDialog(
-                        this,
-                        (view, selectedYear, selectedMonth, selectedDay) -> {
-                            String formattedDate = String.format(java.util.Locale.US, "%04d-%02d-%02d",
-                                    selectedYear, selectedMonth + 1, selectedDay);
-                            dobInput.setText(formattedDate);
-                            updateAgeBadge.run();
-                        },
-                        year, month, day
-                ).show();
-            });
         }
 
         // Passport Expiry Logic & Warning Check (Inline Banner Below Date Input)
@@ -804,6 +1138,7 @@ public class ProfileActivity extends BaseActivity {
 
         if (expiryInput != null) {
             expiryInput.setOnClickListener(v -> {
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
                 int year = cal.get(java.util.Calendar.YEAR);
                 int month = cal.get(java.util.Calendar.MONTH);
                 int day = cal.get(java.util.Calendar.DAY_OF_MONTH);
@@ -820,6 +1155,7 @@ public class ProfileActivity extends BaseActivity {
                 }
                 android.app.DatePickerDialog datePicker = new android.app.DatePickerDialog(
                         this,
+                        R.style.HafizDatePickerTheme,
                         (view, selectedYear, selectedMonth, selectedDay) -> {
                             String formattedDate = String.format(java.util.Locale.US, "%04d-%02d-%02d",
                                     selectedYear, selectedMonth + 1, selectedDay);
@@ -877,16 +1213,16 @@ public class ProfileActivity extends BaseActivity {
                 if (!rawPhone.isEmpty()) {
                     newPhone = SignUpViewModel.normalizePhone(rawPhone, selectedCountryCode[0]);
                 }
-                String newGender = genderInput != null ? genderInput.getText().toString().trim() : "";
-                String newDob = dobInput != null ? dobInput.getText().toString().trim() : "";
-                String newNationality = nationalityInput != null ? nationalityInput.getText().toString().trim() : "";
+                String newGender = selectedGender[0] != null ? selectedGender[0].trim() : "";
+                String newDob = selectedDob[0] != null ? selectedDob[0].trim() : "";
+                String newNationality = selectedNationality[0] != null ? selectedNationality[0].trim() : "";
 
                 String newAddress1 = addressLine1Input != null ? addressLine1Input.getText().toString().trim() : "";
                 String newAddress2 = addressLine2Input != null ? addressLine2Input.getText().toString().trim() : "";
                 String newPostcode = postcodeInput != null ? postcodeInput.getText().toString().trim() : "";
                 String newCity = cityInput != null ? cityInput.getText().toString().trim() : "";
                 String newState = stateInput != null ? stateInput.getText().toString().trim() : "";
-                String newCountry = countryInput != null ? countryInput.getText().toString().trim() : "";
+                String newCountry = selectedCountry[0] != null ? selectedCountry[0].trim() : (countryInput != null ? countryInput.getText().toString().trim() : "");
 
                 // Format standard gender value for backend API ("male"/"female")
                 String apiGender = ProfileViewModel.normalizeGender(newGender);
@@ -897,7 +1233,7 @@ public class ProfileActivity extends BaseActivity {
 
                 String newIc = icInput != null ? icInput.getText().toString().trim() : "";
                 String newPassport = passportInput != null ? passportInput.getText().toString().trim() : "";
-                String newIssuingCountry = issuingCountryInput != null ? issuingCountryInput.getText().toString().trim() : "";
+                String newIssuingCountry = selectedIssuingCountry[0] != null ? selectedIssuingCountry[0].trim() : (issuingCountryInput != null ? issuingCountryInput.getText().toString().trim() : "");
                 String newExpiry = expiryInput != null ? expiryInput.getText().toString().trim() : "";
 
                 if (nameLayout != null) {

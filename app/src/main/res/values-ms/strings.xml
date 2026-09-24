@@ -1075,6 +1075,22 @@
     <string name="terms_sec_cancellation_body">Sebarang permohonan pembatalan hendaklah dikemukakan secara bertulis. Bayaran deposit tidak dikembalikan. Pembatalan 45 hari atau lebih sebelum pelepasan tertakluk kepada caj pentadbiran; pembatalan kurang 45 hari tertakluk kepada penalti syarikat penerbangan, hotel dan pembekal perkhidmatan.</string>
     <string name="terms_sec_responsibilities_title">5. Tanggungjawab Jemaah &amp; Tata Tertib</string>
     <string name="terms_sec_responsibilities_body">Jemaah dan peserta lawatan bersetuju untuk mematuhi undang-undang Malaysia dan negara destinasi, mematuhi arahan ketua rombongan dan mutawwif, serta memastikan kesihatan dan kecergasan perjalanan yang mencukupi.</string>
-    <string name="terms_sec_force_majeure_title">6. Keadaan Luar Jangka &amp; Pindaan Jadual</string>
-    <string name="terms_sec_force_majeure_body">Hafiz Travel &amp; Tour berhak meminda jadual penerbangan, hotel, atau laluan perjalanan sekiranya berlaku keadaan luar jangka, cuaca, perubahan jadual syarikat penerbangan atau arahan kerajaan tanpa liabiliti tambahan.</string>
+    <string name="terms_sec_force_majeure_title">6. Keadaan Luar Jangka (Force Majeure) &amp; Penyelarasan Jadual</string>
+    <string name="terms_sec_force_majeure_body">Hafiz Travel &amp; Tour tidak bertanggungjawab atas sebarang perubahan atau pembatalan akibat keadaan di luar kawalan munasabah termasuk bencana alam, penjadualan semula penerbangan, perubahan polisi pihak berkuasa visa atau arahan kerajaan. Sebarang penyesuaian jadual akan dibuat demi keselamatan dan kebajikan jemaah.</string>
+    <!-- Profile Redesign: DOB, Gender, Nationality Picker Bottom Sheets -->
+    <string name="profile_dob_sheet_title">Tarikh Lahir</string>
+    <string name="profile_dob_sheet_sub">Pilih tarikh lahir anda</string>
+    <string name="profile_dob_action_done">Selesai</string>
+    <string name="profile_dob_day">Hari</string>
+    <string name="profile_dob_month">Bulan</string>
+    <string name="profile_dob_year">Tahun</string>
+    <string name="profile_gender_sheet_title">Jantina</string>
+    <string name="profile_gender_sheet_sub">Pilih jantina anda</string>
+    <string name="profile_nationality_sheet_title">Pilih Kewarganegaraan</string>
+    <string name="profile_nationality_sheet_sub">Pilih negara kewarganegaraan anda</string>
+    <string name="profile_country_search_hint">Cari negara</string>
+    <string name="profile_country_no_results">Tiada negara dijumpai</string>
+    <string name="profile_field_dob_placeholder">Pilih tarikh lahir</string>
+    <string name="profile_field_gender_placeholder">Pilih jantina</string>
+    <string name="profile_field_nationality_placeholder">Pilih kewarganegaraan</string>
 </resources>

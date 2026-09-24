@@ -194,16 +194,6 @@ public class LoginActivity extends BaseActivity {
             });
         }
 
-        View guestText = findViewById(R.id.guestText);
-        if (guestText != null) {
-            guestText.setOnClickListener(v -> {
-                com.hafiztraveltours.app.utils.HapticUtil.click(v);
-                loginViewModel.clearSession();
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                finish();
-            });
-        }
-
         // 5. Update language label & play entrance animation
         updateActiveLanguageLabel();
         playEntranceAnimation();
@@ -492,9 +482,8 @@ public class LoginActivity extends BaseActivity {
         View signUp = findViewById(R.id.goToSignUp);
         View socialDivider = findViewById(R.id.socialDividerContainer);
         View googleButton = findViewById(R.id.googleLoginButton);
-        View guest = findViewById(R.id.guestText);
 
-        View[] views = {header, form, signUp, socialDivider, googleButton, guest};
+        View[] views = {header, form, signUp, socialDivider, googleButton};
 
         long delay = 60;
         for (View v : views) {

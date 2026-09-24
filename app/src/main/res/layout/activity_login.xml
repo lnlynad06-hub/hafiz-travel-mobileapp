@@ -112,6 +112,7 @@
                 android:id="@+id/emailLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="@string/hint_email"
                 app:boxBackgroundMode="outline"
                 app:boxCornerRadiusTopStart="14dp"
                 app:boxCornerRadiusTopEnd="14dp"
@@ -122,7 +123,7 @@
                 app:boxStrokeWidth="1dp"
                 app:boxStrokeWidthFocused="1.5dp"
                 app:boxStrokeErrorColor="@color/error_red"
-                app:hintEnabled="false"
+                app:hintEnabled="true"
                 app:errorEnabled="true"
                 app:errorIconDrawable="@null"
                 app:startIconDrawable="@drawable/ic_email"
@@ -131,12 +132,10 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/emailInput"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:paddingVertical="0dp"
                     android:paddingStart="4dp"
                     android:paddingEnd="12dp"
-                    android:hint="@string/hint_email"
                     android:inputType="textEmailAddress"
                     android:textColor="@color/input_text"
                     android:textColorHint="@color/input_hint"
@@ -150,6 +149,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
+                android:hint="@string/hint_password"
                 app:boxBackgroundMode="outline"
                 app:boxCornerRadiusTopStart="14dp"
                 app:boxCornerRadiusTopEnd="14dp"
@@ -160,7 +160,7 @@
                 app:boxStrokeWidth="1dp"
                 app:boxStrokeWidthFocused="1.5dp"
                 app:boxStrokeErrorColor="@color/error_red"
-                app:hintEnabled="false"
+                app:hintEnabled="true"
                 app:errorEnabled="true"
                 app:errorIconDrawable="@null"
                 app:startIconDrawable="@drawable/ic_lock"
@@ -171,12 +171,10 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/passwordInput"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:paddingVertical="0dp"
                     android:paddingStart="4dp"
                     android:paddingEnd="12dp"
-                    android:hint="@string/hint_password"
                     android:inputType="textPassword"
                     android:textColor="@color/input_text"
                     android:textColorHint="@color/input_hint"
@@ -323,19 +321,6 @@
                 android:textSize="14.5sp"
                 android:textStyle="bold" />
         </LinearLayout>
-
-        <!-- Guest Entry -->
-        <TextView
-            android:id="@+id/guestText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:padding="6dp"
-            android:text="@string/login_guest"
-            android:textColor="@color/text_gray"
-            android:textSize="13sp"
-            android:clickable="true"
-            android:focusable="true" />
 
     </LinearLayout>
 </ScrollView>

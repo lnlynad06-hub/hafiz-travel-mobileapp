@@ -21,8 +21,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Reusable dropdown adapter for Southeast Asian country selection across Edit Profile.
- * Displays country flag, readable country name, and a clear selected state.
+ * Reusable dropdown and bottom-sheet adapter for Southeast Asian country selection.
+ * Displays country flag, readable country name, and a clear selected state with search filtering.
  */
 public class CountryDropdownAdapter extends ArrayAdapter<String> {
 
@@ -129,13 +129,30 @@ public class CountryDropdownAdapter extends ArrayAdapter<String> {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults results = new FilterResults();
-                results.values = allCountries;
-                results.count = allCountries.size();
+                if (constraint == null || constraint.toString().trim().isEmpty()) {
+                    results.values = new ArrayList<>(allCountries);
+                    results.count = allCountries.size();
+                } else {
+                    String query = constraint.toString().trim().toLowerCase();
+                    List<String> filtered = new ArrayList<>();
+                    for (String c : allCountries) {
+                        if (c.toLowerCase().contains(query)) {
+                            filtered.add(c);
+                        }
+                    }
+                    results.values = filtered;
+                    results.count = filtered.size();
+                }
                 return results;
             }
 
+            @SuppressWarnings("unchecked")
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
+                clear();
+                if (results.values != null) {
+                    addAll((List<String>) results.values);
+                }
                 notifyDataSetChanged();
             }
         };

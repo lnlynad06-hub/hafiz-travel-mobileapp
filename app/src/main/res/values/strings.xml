@@ -1194,5 +1194,21 @@
     <string name="terms_sec_responsibilities_title">5. Pilgrim Responsibilities &amp; Code of Conduct</string>
     <string name="terms_sec_responsibilities_body">Pilgrims and travellers agree to abide by the laws of Malaysia and destination countries, follow tour leader and mutawwif instructions, and maintain appropriate health and travel fitness.</string>
     <string name="terms_sec_force_majeure_title">6. Force Majeure &amp; Itinerary Adjustments</string>
-    <string name="terms_sec_force_majeure_body">Hafiz Travel &amp; Tour reserves the right to alter flight schedules, hotel arrangements, or itinerary routes when necessary due to unforeseen circumstances, weather, airline schedule changes, or government directives without prior liability.</string>
+    <string name="terms_sec_force_majeure_body">Hafiz Travel &amp; Tour is not liable for changes or cancellations due to unforeseen circumstances beyond reasonable control, including natural disasters, flight reschedules, visa authority policy shifts, or government directives. Necessary itinerary adjustments will be made in the best interest of traveller safety and welfare.</string>
+    <!-- Profile Redesign: DOB, Gender, Nationality Picker Bottom Sheets -->
+    <string name="profile_dob_sheet_title">Date of Birth</string>
+    <string name="profile_dob_sheet_sub">Select your birth date</string>
+    <string name="profile_dob_action_done">Done</string>
+    <string name="profile_dob_day">Day</string>
+    <string name="profile_dob_month">Month</string>
+    <string name="profile_dob_year">Year</string>
+    <string name="profile_gender_sheet_title">Gender</string>
+    <string name="profile_gender_sheet_sub">Select your gender</string>
+    <string name="profile_nationality_sheet_title">Select Nationality</string>
+    <string name="profile_nationality_sheet_sub">Choose your country of citizenship</string>
+    <string name="profile_country_search_hint">Search country</string>
+    <string name="profile_country_no_results">No countries found</string>
+    <string name="profile_field_dob_placeholder">Select date of birth</string>
+    <string name="profile_field_gender_placeholder">Select gender</string>
+    <string name="profile_field_nationality_placeholder">Select nationality</string>
 </resources>

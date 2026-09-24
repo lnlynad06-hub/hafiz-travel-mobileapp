@@ -179,16 +179,6 @@ public class SignUpActivity extends BaseActivity {
             });
         }
 
-        View guestSignUpText = findViewById(R.id.guestSignUpText);
-        if (guestSignUpText != null) {
-                guestSignUpText.setOnClickListener(v -> {
-                com.hafiztraveltours.app.utils.HapticUtil.click(v);
-                signUpViewModel.clearSession();
-                startActivity(new Intent(SignUpActivity.this, MainActivity.class));
-                finish();
-            });
-        }
-
         View btnLanguagePicker = findViewById(R.id.btnLanguagePicker);
         if (btnLanguagePicker != null) {
             btnLanguagePicker.setOnClickListener(v -> {

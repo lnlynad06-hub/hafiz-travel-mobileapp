@@ -45,4 +45,22 @@
         <item name="android:windowEnterAnimation">@anim/dialog_scale_in</item>
         <item name="android:windowExitAnimation">@anim/dialog_scale_out</item>
     </style>
+
+    <!-- Refined Hafiz Travel DatePicker Theme -->
+    <style name="HafizDatePickerTheme" parent="Theme.Material3.Light.Dialog">
+        <item name="colorPrimary">@color/pink_primary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSurface">@color/white</item>
+        <item name="colorOnSurface">@color/text_dark</item>
+        <item name="colorSecondary">@color/pink_dark</item>
+        <item name="android:colorBackground">@color/white</item>
+        <item name="buttonBarPositiveButtonStyle">@style/HafizDialogButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/HafizDialogButtonStyle</item>
+    </style>
+
+    <style name="HafizDialogButtonStyle" parent="Widget.Material3.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/pink_dark</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">14sp</item>
+    </style>
 </resources>
