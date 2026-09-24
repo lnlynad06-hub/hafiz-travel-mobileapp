@@ -41,10 +41,18 @@ android {
 
     buildTypes {
         debug {
+            resValue("string", "app_name", "Hafiz Travel (DEV)")
             buildConfigField("String", "API_BASE_URL", "\"$debugApiUrl\"")
             manifestPlaceholders["cleartextTraffic"] = true
         }
+        create("staging") {
+            initWith(getByName("debug"))
+            resValue("string", "app_name", "Hafiz Travel (CLOUD)")
+            buildConfigField("String", "API_BASE_URL", "\"$releaseApiUrl\"")
+            manifestPlaceholders["cleartextTraffic"] = false
+        }
         release {
+            resValue("string", "app_name", "Hafiz Travel")
             buildConfigField("String", "API_BASE_URL", "\"$releaseApiUrl\"")
             manifestPlaceholders["cleartextTraffic"] = false
             optimization {
@@ -54,6 +62,7 @@ android {
     }
     buildFeatures {
         buildConfig = true
+        resValues = true
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
