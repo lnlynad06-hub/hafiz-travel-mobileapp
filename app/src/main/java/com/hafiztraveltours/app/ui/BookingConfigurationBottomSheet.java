@@ -181,36 +181,83 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
 
         for (int i = 0; i < list.size(); i++) {
             final int index = i;
+            PackageDetail.DepartureOption opt = list.get(i);
             boolean isSelected = (i == selectedDepartureIndex);
+            boolean isFull = opt.isFullyBooked();
 
-            TextView chip = new TextView(requireContext());
-            chip.setText(formatDepartureLabel(list.get(i)));
-            chip.setTextSize(11);
-            chip.setTypeface(null, Typeface.BOLD);
-            chip.setPadding(dp(12), dp(8), dp(12), dp(8));
-            chip.setClickable(true);
-            chip.setFocusable(true);
+            LinearLayout card = new LinearLayout(requireContext());
+            card.setOrientation(LinearLayout.VERTICAL);
+            card.setPadding(dp(12), dp(10), dp(12), dp(10));
+            card.setClickable(true);
+            card.setFocusable(true);
 
             if (isSelected) {
-                chip.setTextColor(getResources().getColor(R.color.brand_magenta));
-                chip.setBackgroundResource(R.drawable.bg_room_card_selected);
+                card.setBackgroundResource(R.drawable.bg_room_card_selected);
             } else {
-                chip.setTextColor(getResources().getColor(R.color.text_dark));
-                chip.setBackgroundResource(R.drawable.bg_room_card_unselected);
+                card.setBackgroundResource(R.drawable.bg_room_card_unselected);
             }
 
-            LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            p.setMarginEnd(dp(8));
-            chip.setLayoutParams(p);
+            if (isFull) {
+                card.setAlpha(isSelected ? 0.9f : 0.65f);
+            } else {
+                card.setAlpha(1.0f);
+            }
 
-            chip.setOnClickListener(v -> {
+            LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            cardParams.setMarginEnd(dp(8));
+            card.setLayoutParams(cardParams);
+
+            // Row 1: Departure Date & selection check
+            LinearLayout headerRow = new LinearLayout(requireContext());
+            headerRow.setOrientation(LinearLayout.HORIZONTAL);
+            headerRow.setGravity(Gravity.CENTER_VERTICAL);
+
+            TextView dateText = new TextView(requireContext());
+            dateText.setText(formatDepartureLabel(opt));
+            dateText.setTextSize(12);
+            dateText.setTypeface(null, Typeface.BOLD);
+            dateText.setTextColor(getResources().getColor(isSelected ? R.color.brand_magenta : R.color.text_dark));
+            headerRow.addView(dateText);
+
+            if (isSelected) {
+                TextView check = new TextView(requireContext());
+                check.setText(" ✓");
+                check.setTextSize(12);
+                check.setTypeface(null, Typeface.BOLD);
+                check.setTextColor(getResources().getColor(R.color.brand_magenta));
+                headerRow.addView(check);
+            }
+            card.addView(headerRow);
+
+            // Row 2: Real-time Seat availability counter & label
+            TextView seatStatus = new TextView(requireContext());
+            seatStatus.setTextSize(10);
+            seatStatus.setTypeface(null, Typeface.BOLD);
+            LinearLayout.LayoutParams seatParams = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            seatParams.topMargin = dp(4);
+            seatStatus.setLayoutParams(seatParams);
+
+            if (isFull) {
+                seatStatus.setText(getString(R.string.departure_zero_seats_format, opt.getTotalSeatsCount()) + " • " + getString(R.string.departure_fully_booked));
+                seatStatus.setTextColor(getResources().getColor(R.color.error_red));
+            } else {
+                seatStatus.setText(getString(R.string.seats_left_format, opt.getAvailableSeatsCount(), opt.getTotalSeatsCount()));
+                seatStatus.setTextColor(getResources().getColor(isSelected ? R.color.brand_magenta : R.color.text_gray));
+            }
+            card.addView(seatStatus);
+
+            card.setOnClickListener(v -> {
                 com.hafiztraveltours.app.utils.HapticUtil.click(v);
                 selectedDepartureIndex = index;
                 renderDepartureOptions();
+                if (isFull) {
+                    android.widget.Toast.makeText(requireContext(), getString(R.string.err_departure_fully_booked), android.widget.Toast.LENGTH_SHORT).show();
+                }
             });
 
-            containerDeparture.addView(chip);
+            containerDeparture.addView(card);
         }
     }
 
@@ -340,6 +387,14 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
         List<PackageDetail.DepartureOption> deps = getDepartureOptions();
         if (selectedDepartureIndex >= 0 && selectedDepartureIndex < deps.size()) {
             PackageDetail.DepartureOption selected = deps.get(selectedDepartureIndex);
+            if (selected.isFullyBooked()) {
+                android.widget.Toast.makeText(requireContext(), getString(R.string.err_departure_fully_booked), android.widget.Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (paxCount > selected.getAvailableSeatsCount()) {
+                android.widget.Toast.makeText(requireContext(), getString(R.string.err_departure_not_enough_seats, selected.getAvailableSeatsCount()), android.widget.Toast.LENGTH_SHORT).show();
+                return;
+            }
             req.selectedDepartureDate = formatDepartureLabel(selected);
             req.selectedDepartureId = selected.id != null ? selected.id.trim() : "";
         }

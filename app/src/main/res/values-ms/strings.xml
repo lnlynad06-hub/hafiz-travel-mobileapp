@@ -1093,4 +1093,12 @@
     <string name="profile_field_dob_placeholder">Pilih tarikh lahir</string>
     <string name="profile_field_gender_placeholder">Pilih jantina</string>
     <string name="profile_field_nationality_placeholder">Pilih kewarganegaraan</string>
+
+    <!-- Departure Seat Availability Strings -->
+    <string name="seats_left_format">%1$d / %2$d tempat duduk tersedia</string>
+    <string name="seats_available_label">Tempat duduk tersedia</string>
+    <string name="departure_fully_booked">Telah Penuh</string>
+    <string name="departure_zero_seats_format">0 / %1$d tempat duduk tersedia</string>
+    <string name="err_departure_fully_booked">Tarikh pelepasan yang dipilih telah penuh. Sila pilih tarikh lain.</string>
+    <string name="err_departure_not_enough_seats">Hanya %1$d tempat duduk tersedia untuk tarikh ini. Sila kurangkan bilangan jemaah atau pilih tarikh lain.</string>
 </resources>

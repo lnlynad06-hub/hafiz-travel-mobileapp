@@ -89,6 +89,9 @@ public class PackageDetailViewModel extends ViewModel {
 
             @Override
             public void onFailure(Call<ApiResponse<UmrahPackage>> call, Throwable t) {
+                if (call.isCanceled()) {
+                    return;
+                }
                 detailLoading.setValue(false);
                 detailError.setValue(new SingleEvent<>(
                         ApiOpResult.failure(t, R.string.err_package_load_failed)));

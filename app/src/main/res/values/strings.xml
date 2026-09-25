@@ -1211,4 +1211,12 @@
     <string name="profile_field_dob_placeholder">Select date of birth</string>
     <string name="profile_field_gender_placeholder">Select gender</string>
     <string name="profile_field_nationality_placeholder">Select nationality</string>
+
+    <!-- Departure Seat Availability Strings -->
+    <string name="seats_left_format">%1$d / %2$d seats left</string>
+    <string name="seats_available_label">Seats available</string>
+    <string name="departure_fully_booked">Fully Booked</string>
+    <string name="departure_zero_seats_format">0 / %1$d seats left</string>
+    <string name="err_departure_fully_booked">Selected departure is fully booked. Please select another date.</string>
+    <string name="err_departure_not_enough_seats">Only %1$d seats left on this departure. Please reduce passenger count or choose another date.</string>
 </resources>

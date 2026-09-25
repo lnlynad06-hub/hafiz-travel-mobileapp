@@ -137,6 +137,19 @@ public class PackageDetailActivity extends BaseActivity {
         packageViewModel.loadPackage(collection, packageId);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (detail != null) {
+            String packageId = getIntent().getStringExtra(EXTRA_PACKAGE_ID);
+            String collection = getIntent().getStringExtra(EXTRA_COLLECTION);
+            if (collection == null) collection = "umrah_packages";
+            if (packageId != null) {
+                loadPackage(collection, packageId);
+            }
+        }
+    }
+
     /** Wires ViewModel state to rendering + one-shot error (H1/Step 5). */
     private void observePackageState() {
         packageViewModel.getDetailData().observe(this, loaded -> {

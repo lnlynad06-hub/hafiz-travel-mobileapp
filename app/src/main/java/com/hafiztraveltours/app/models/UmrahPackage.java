@@ -204,6 +204,21 @@ public class UmrahPackage implements java.io.Serializable {
 
         @SerializedName("return_date")
         public String returnDate;
+
+        @SerializedName("capacity")
+        public Integer capacity;
+
+        @SerializedName("total_seats")
+        public Integer totalSeats;
+
+        @SerializedName("seats_booked")
+        public Integer seatsBooked;
+
+        @SerializedName("seats_available")
+        public Integer seatsAvailable;
+
+        @SerializedName("is_full")
+        public Boolean isFull;
     }
 
     @SerializedName("itineraries")

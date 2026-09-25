@@ -133,11 +133,46 @@ public class PackageDetail implements java.io.Serializable {
         public String returnDate;
         /** Pre-built display label (legacy fallback). */
         public String label;
+        public Integer totalSeats;
+        public Integer seatsBooked;
+        public Integer seatsAvailable;
+        public boolean isFull;
+
         public DepartureOption(String id, String departureDate, String returnDate, String label) {
+            this(id, departureDate, returnDate, label, null, null, null, false);
+        }
+
+        public DepartureOption(String id, String departureDate, String returnDate, String label,
+                               Integer totalSeats, Integer seatsBooked, Integer seatsAvailable, boolean isFull) {
             this.id = id;
             this.departureDate = departureDate;
             this.returnDate = returnDate;
             this.label = label != null ? label : "";
+            this.totalSeats = totalSeats;
+            this.seatsBooked = seatsBooked;
+            this.seatsAvailable = seatsAvailable;
+            this.isFull = isFull;
+        }
+
+        public int getAvailableSeatsCount() {
+            if (seatsAvailable != null) {
+                return Math.max(0, seatsAvailable);
+            }
+            if (totalSeats != null && seatsBooked != null) {
+                return Math.max(0, totalSeats - seatsBooked);
+            }
+            return 40; // Default fallback if capacity was unpopulated
+        }
+
+        public int getTotalSeatsCount() {
+            if (totalSeats != null && totalSeats > 0) {
+                return totalSeats;
+            }
+            return 40;
+        }
+
+        public boolean isFullyBooked() {
+            return isFull || getAvailableSeatsCount() <= 0;
         }
     }
 
@@ -305,7 +340,7 @@ public class PackageDetail implements java.io.Serializable {
             d.cancellationPolicy.addAll(pkg.cancellationPolicy);
         }
 
-        // 8. Departures — keep the backend ID alongside the display label (C1).
+        // 8. Departures — keep backend ID and real-time seat availability.
         if (pkg.departures != null && !pkg.departures.isEmpty()) {
             for (UmrahPackage.DepartureItem item : pkg.departures) {
                 if (item.departureDate != null && !item.departureDate.isEmpty()) {
@@ -313,8 +348,22 @@ public class PackageDetail implements java.io.Serializable {
                     if (item.returnDate != null && !item.returnDate.isEmpty()) {
                         label += " hingga " + item.returnDate;
                     }
+                    int totalSeats = item.totalSeats != null ? item.totalSeats : (item.capacity != null ? item.capacity : 40);
+                    int booked = item.seatsBooked != null ? item.seatsBooked : 0;
+                    int available = item.seatsAvailable != null ? item.seatsAvailable : Math.max(0, totalSeats - booked);
+                    boolean full = Boolean.TRUE.equals(item.isFull) || available <= 0;
+
                     d.availableDepartureDates.add(label);
-                    d.availableDepartures.add(new DepartureOption(item.id, item.departureDate, item.returnDate, label));
+                    d.availableDepartures.add(new DepartureOption(
+                            item.id,
+                            item.departureDate,
+                            item.returnDate,
+                            label,
+                            totalSeats,
+                            booked,
+                            available,
+                            full
+                    ));
                 }
             }
         }
