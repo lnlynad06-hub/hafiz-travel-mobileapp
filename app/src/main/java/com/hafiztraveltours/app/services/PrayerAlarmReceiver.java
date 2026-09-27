@@ -9,7 +9,6 @@ import com.hafiztraveltours.app.utils.*;
 import com.hafiztraveltours.app.views.*;
 import com.hafiztraveltours.app.ui.*;
 
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -18,7 +17,12 @@ import android.os.Build;
 public class PrayerAlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        String prayerName = intent.getStringExtra("prayer_name");
+        if (context == null) return;
+        if (!OnboardingManager.isPrayerFeatureEnabled(context) || !OnboardingManager.isAzanFeatureEnabled(context)) {
+            return;
+        }
+
+        String prayerName = intent != null ? intent.getStringExtra("prayer_name") : null;
 
         Intent serviceIntent = new Intent(context, AzanService.class);
         serviceIntent.putExtra("prayer_name", prayerName);

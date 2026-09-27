@@ -9,7 +9,6 @@ import com.hafiztraveltours.app.utils.*;
 import com.hafiztraveltours.app.views.*;
 import com.hafiztraveltours.app.ui.*;
 
-
 import android.app.*;
 import android.content.Intent;
 import android.media.AudioAttributes;
@@ -33,6 +32,12 @@ public class AzanService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        if (!OnboardingManager.isPrayerFeatureEnabled(this) || !OnboardingManager.isAzanFeatureEnabled(this)) {
+            stopForeground(true);
+            stopSelf();
+            return START_NOT_STICKY;
+        }
+
         String prayerKey = intent != null ? intent.getStringExtra("prayer_name") : null;
 
         startForeground(NOTIFICATION_ID, buildNotification(prayerKey));

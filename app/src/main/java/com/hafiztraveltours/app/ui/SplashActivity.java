@@ -82,9 +82,12 @@ public class SplashActivity extends BaseActivity {
                     .start();
         }
 
-        // Seamless transition into WelcomeActivity
+        // Seamless transition into MainActivity if onboarding completed, otherwise WelcomeActivity
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            Intent intent = new Intent(SplashActivity.this, WelcomeActivity.class);
+            Class<?> targetClass = OnboardingManager.isOnboardingCompleted(SplashActivity.this)
+                    ? MainActivity.class
+                    : WelcomeActivity.class;
+            Intent intent = new Intent(SplashActivity.this, targetClass);
             startActivity(intent);
             overridePendingTransition(R.anim.nav_seamless_fade_in, R.anim.nav_seamless_fade_out);
             finish();

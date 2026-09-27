@@ -73,6 +73,13 @@ public class ProfileActivity extends BaseActivity {
     private TextView pendingFileNameView;
     private View pendingConfirmButton;
 
+    private Switch switchPrayerTimes;
+    private Switch switchAzanNotif;
+    private Switch switchAppNotif;
+    private TextView tvBackgroundOpStatus;
+    private androidx.activity.result.ActivityResultLauncher<String[]> profileLocationPermissionLauncher;
+    private androidx.activity.result.ActivityResultLauncher<String> profileNotifPermissionLauncher;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +93,38 @@ public class ProfileActivity extends BaseActivity {
                     if (uri != null) {
                         handleSelectedFileUri(uri);
                     }
+                }
+        );
+
+        profileLocationPermissionLauncher = registerForActivityResult(
+                new androidx.activity.result.contract.ActivityResultContracts.RequestMultiplePermissions(),
+                result -> {
+                    boolean fine = Boolean.TRUE.equals(result.get(android.Manifest.permission.ACCESS_FINE_LOCATION));
+                    boolean coarse = Boolean.TRUE.equals(result.get(android.Manifest.permission.ACCESS_COARSE_LOCATION));
+                    if (fine || coarse) {
+                        OnboardingManager.setPrayerFeatureEnabled(this, true);
+                        OnboardingManager.setQiblaFeatureEnabled(this, true);
+                        if (OnboardingManager.isAzanFeatureEnabled(this)) {
+                            PrayerTimeScheduler.rescheduleFromCache(this);
+                        }
+                    } else {
+                        OnboardingManager.setPrayerFeatureEnabled(this, false);
+                        OnboardingManager.setQiblaFeatureEnabled(this, false);
+                        PrayerTimeScheduler.cancelAllAlarms(this);
+                        Toast.makeText(this, getString(R.string.prayer_permission_required_toast), Toast.LENGTH_SHORT).show();
+                    }
+                    updatePrayerAndAzanSettingsUI();
+                }
+        );
+
+        profileNotifPermissionLauncher = registerForActivityResult(
+                new androidx.activity.result.contract.ActivityResultContracts.RequestPermission(),
+                isGranted -> {
+                    OnboardingManager.setNotificationFeatureEnabled(this, isGranted);
+                    if (!isGranted) {
+                        Toast.makeText(this, getString(R.string.notif_permission_required_toast), Toast.LENGTH_SHORT).show();
+                    }
+                    updatePrayerAndAzanSettingsUI();
                 }
         );
 
@@ -123,6 +162,7 @@ public class ProfileActivity extends BaseActivity {
         loyaltyCard = findViewById(R.id.loyaltyCard);
         upcomingCard = findViewById(R.id.upcomingCard);
         refreshHeader();
+        renderStats(profileViewModel.getStatsData().getValue());
 
         if (guestLoginButton != null) {
             guestLoginButton.setOnClickListener(v -> {
@@ -139,12 +179,16 @@ public class ProfileActivity extends BaseActivity {
         if (logoutButton != null) {
             logoutButton.setOnClickListener(v -> showLogoutConfirmationDialog());
         }
+
+        setupPrayerAndAzanSettings();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         refreshHeader();
+        renderStats(profileViewModel.getStatsData().getValue());
+        updatePrayerAndAzanSettingsUI();
         if (profileViewModel.isLoggedIn()) {
             profileViewModel.loadStats();
         }
@@ -175,6 +219,9 @@ public class ProfileActivity extends BaseActivity {
         if (nameText != null) {
             nameText.setText(loggedIn ? profileViewModel.getUserName() : getString(R.string.profile_guest_name));
         }
+        if (!loggedIn && memberSinceText != null) {
+            memberSinceText.setText(getString(R.string.guest_hero_subtitle));
+        }
         if (activeLanguageText != null) {
             String currentLang = LocaleHelper.getSavedLanguage(this);
             if (LocaleHelper.LANGUAGE_MALAY.equalsIgnoreCase(currentLang)) {
@@ -186,16 +233,17 @@ public class ProfileActivity extends BaseActivity {
     }
 
     private void observeProfileState() {
-        profileViewModel.getStatsData().observe(this, stats -> {
-            if (stats != null) renderStats(stats);
-        });
+        profileViewModel.getStatsData().observe(this, this::renderStats);
         profileViewModel.getStatsLoading().observe(this, loading -> {
             if (profileSwipeRefresh != null
                     && (loading == null || !loading)) {
                 profileSwipeRefresh.setRefreshing(false);
             }
         });
-        profileViewModel.getUserData().observe(this, user -> refreshHeader());
+        profileViewModel.getUserData().observe(this, user -> {
+            refreshHeader();
+            renderStats(profileViewModel.getStatsData().getValue());
+        });
         profileViewModel.getDocsData().observe(this, docs -> {
             userDocumentsMap.clear();
             if (docs != null) {
@@ -242,30 +290,44 @@ public class ProfileActivity extends BaseActivity {
 
     private void renderStats(com.hafiztraveltours.app.models.ProfileStatsDto stats) {
         boolean loggedIn = profileViewModel.isLoggedIn();
-        if (statsCard != null) statsCard.setVisibility(loggedIn ? View.VISIBLE : View.GONE);
         if (!loggedIn) {
+            if (statsCard != null) statsCard.setVisibility(View.GONE);
             if (loyaltyCard != null) loyaltyCard.setVisibility(View.GONE);
             if (memberIdText != null) memberIdText.setVisibility(View.GONE);
             if (memberSinceText != null) memberSinceText.setText(getString(R.string.guest_hero_subtitle));
             if (upcomingCard != null) upcomingCard.setVisibility(View.GONE);
             return;
         }
-        if (memberIdText != null) memberIdText.setVisibility(View.VISIBLE);
-        ProfileViewModel.Readiness currentReadiness = profileViewModel.getReadiness().getValue();
-        if (currentReadiness != null) {
-            renderReadiness(currentReadiness);
-        } else if (loyaltyCard != null) {
-            loyaltyCard.setVisibility(View.GONE);
+
+        if (stats == null) {
+            if (statsCard != null) statsCard.setVisibility(View.GONE);
+            if (memberIdText != null) memberIdText.setVisibility(View.GONE);
+            if (upcomingCard != null) upcomingCard.setVisibility(View.GONE);
+            ProfileViewModel.Readiness currentReadiness = profileViewModel.getReadiness().getValue();
+            if (currentReadiness != null) {
+                renderReadiness(currentReadiness);
+            } else if (loyaltyCard != null) {
+                loyaltyCard.setVisibility(View.GONE);
+            }
+            return;
         }
-        if (stats == null) return;
+
+        if (statsCard != null) statsCard.setVisibility(View.VISIBLE);
 
         if (stats.customer != null) {
-            if (memberIdText != null && stats.customer.customerNo != null) {
-                memberIdText.setText(getString(R.string.customer_no_format, stats.customer.customerNo));
+            if (memberIdText != null) {
+                if (stats.customer.customerNo != null && !stats.customer.customerNo.isEmpty()) {
+                    memberIdText.setText(getString(R.string.customer_no_format, stats.customer.customerNo));
+                    memberIdText.setVisibility(View.VISIBLE);
+                } else {
+                    memberIdText.setVisibility(View.GONE);
+                }
             }
             if (memberSinceText != null && stats.customer.memberSince != null) {
                 memberSinceText.setText(getString(R.string.member_since_format, stats.customer.memberSince));
             }
+        } else if (memberIdText != null) {
+            memberIdText.setVisibility(View.GONE);
         }
 
         TextView bookingsValue = findViewById(R.id.statBookingsValue);
@@ -285,9 +347,9 @@ public class ProfileActivity extends BaseActivity {
             if (tierName != null) {
                 tierName.setText(getString(R.string.readiness_title));
             }
-            ProfileViewModel.Readiness latest = profileViewModel.getReadiness().getValue();
-            if (latest != null) renderReadiness(latest);
         }
+        ProfileViewModel.Readiness latest = profileViewModel.getReadiness().getValue();
+        if (latest != null) renderReadiness(latest);
 
         if (upcomingCard != null) {
             if (stats.stats != null && stats.stats.upcoming != null && !stats.stats.upcoming.isEmpty()) {
@@ -2255,4 +2317,115 @@ public class ProfileActivity extends BaseActivity {
         float density = getResources().getDisplayMetrics().density;
         return Math.round(value * density);
     }
+
+    private void setupPrayerAndAzanSettings() {
+        switchPrayerTimes = findViewById(R.id.switchPrayerTimes);
+        switchAzanNotif = findViewById(R.id.switchAzanNotif);
+        switchAppNotif = findViewById(R.id.switchAppNotif);
+        tvBackgroundOpStatus = findViewById(R.id.tvBackgroundOpStatus);
+
+        if (switchPrayerTimes != null) {
+            switchPrayerTimes.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (!buttonView.isPressed()) return;
+                HapticUtil.click(buttonView);
+                if (isChecked) {
+                    boolean hasFine = ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == android.content.pm.PackageManager.PERMISSION_GRANTED;
+                    boolean hasCoarse = ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == android.content.pm.PackageManager.PERMISSION_GRANTED;
+                    if (hasFine || hasCoarse) {
+                        OnboardingManager.setPrayerFeatureEnabled(this, true);
+                        OnboardingManager.setQiblaFeatureEnabled(this, true);
+                        if (OnboardingManager.isAzanFeatureEnabled(this)) {
+                            PrayerTimeScheduler.rescheduleFromCache(this);
+                        }
+                        updatePrayerAndAzanSettingsUI();
+                    } else {
+                        profileLocationPermissionLauncher.launch(new String[]{
+                                android.Manifest.permission.ACCESS_FINE_LOCATION,
+                                android.Manifest.permission.ACCESS_COARSE_LOCATION
+                        });
+                    }
+                } else {
+                    OnboardingManager.setPrayerFeatureEnabled(this, false);
+                    OnboardingManager.setQiblaFeatureEnabled(this, false);
+                    PrayerTimeScheduler.cancelAllAlarms(this);
+                    updatePrayerAndAzanSettingsUI();
+                }
+            });
+        }
+
+        if (switchAzanNotif != null) {
+            switchAzanNotif.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (!buttonView.isPressed()) return;
+                HapticUtil.click(buttonView);
+                if (isChecked) {
+                    OnboardingManager.setAzanFeatureEnabled(this, true);
+                    if (OnboardingManager.isPrayerFeatureEnabled(this)) {
+                        PrayerTimeScheduler.rescheduleFromCache(this);
+                        PrayerTimeScheduler.requestExactAlarmPermissionIfNeeded(this);
+                        PrayerTimeScheduler.requestBatteryOptimizationExemption(this);
+                    }
+                    updatePrayerAndAzanSettingsUI();
+                } else {
+                    OnboardingManager.setAzanFeatureEnabled(this, false);
+                    PrayerTimeScheduler.cancelAllAlarms(this);
+                    updatePrayerAndAzanSettingsUI();
+                }
+            });
+        }
+
+        if (switchAppNotif != null) {
+            switchAppNotif.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (!buttonView.isPressed()) return;
+                HapticUtil.click(buttonView);
+                if (isChecked) {
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+                        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                            OnboardingManager.setNotificationFeatureEnabled(this, true);
+                            updatePrayerAndAzanSettingsUI();
+                        } else {
+                            profileNotifPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS);
+                        }
+                    } else {
+                        OnboardingManager.setNotificationFeatureEnabled(this, true);
+                        updatePrayerAndAzanSettingsUI();
+                    }
+                } else {
+                    OnboardingManager.setNotificationFeatureEnabled(this, false);
+                    updatePrayerAndAzanSettingsUI();
+                }
+            });
+        }
+
+        View backgroundOpRow = findViewById(R.id.backgroundOpSettingRow);
+        if (backgroundOpRow != null) {
+            backgroundOpRow.setOnClickListener(v -> {
+                HapticUtil.click(v);
+                PrayerTimeScheduler.showBatteryOptimizationDialog(this, true);
+            });
+        }
+
+        updatePrayerAndAzanSettingsUI();
+    }
+
+    private void updatePrayerAndAzanSettingsUI() {
+        if (switchPrayerTimes != null) {
+            switchPrayerTimes.setChecked(OnboardingManager.isPrayerFeatureEnabled(this));
+        }
+        if (switchAzanNotif != null) {
+            switchAzanNotif.setChecked(OnboardingManager.isAzanFeatureEnabled(this));
+        }
+        if (switchAppNotif != null) {
+            switchAppNotif.setChecked(OnboardingManager.isNotificationFeatureEnabled(this));
+        }
+        if (tvBackgroundOpStatus != null) {
+            boolean isIgnored = PrayerTimeScheduler.isBatteryOptimizationIgnored(this);
+            tvBackgroundOpStatus.setText(isIgnored
+                    ? getString(R.string.settings_background_op_enabled)
+                    : getString(R.string.settings_background_op_configure));
+            tvBackgroundOpStatus.setTextColor(isIgnored
+                    ? ContextCompat.getColor(this, R.color.text_dark)
+                    : ContextCompat.getColor(this, R.color.brand_magenta));
+        }
+    }
+
 }

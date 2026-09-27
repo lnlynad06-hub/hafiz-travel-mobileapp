@@ -216,7 +216,13 @@ public class SignUpActivity extends BaseActivity {
             if (result.success) {
                 Toast.makeText(this, getString(R.string.login_google_success, pendingGoogleName),
                         Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(this, MainActivity.class));
+                if (!OnboardingManager.isOnboardingCompleted(this)) {
+                    Intent intent = new Intent(this, WelcomeActivity.class);
+                    intent.putExtra("start_at_step", WelcomeActivity.STEP_PRAYER);
+                    startActivity(intent);
+                } else {
+                    startActivity(new Intent(this, MainActivity.class));
+                }
                 finish();
             } else {
                 Toast.makeText(this, result.resolveMessage(this), Toast.LENGTH_LONG).show();

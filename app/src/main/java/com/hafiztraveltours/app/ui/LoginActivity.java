@@ -209,7 +209,13 @@ public class LoginActivity extends BaseActivity {
             if (result.success) {
                 saveRememberMePreference(pendingLoginEmail);
                 Toast.makeText(this, getString(R.string.login_success), Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(this, MainActivity.class));
+                if (!OnboardingManager.isOnboardingCompleted(this)) {
+                    Intent intent = new Intent(this, WelcomeActivity.class);
+                    intent.putExtra("start_at_step", WelcomeActivity.STEP_PRAYER);
+                    startActivity(intent);
+                } else {
+                    startActivity(new Intent(this, MainActivity.class));
+                }
                 finish();
             } else {
                 Toast.makeText(this, result.resolveMessage(this), Toast.LENGTH_LONG).show();
@@ -224,7 +230,13 @@ public class LoginActivity extends BaseActivity {
                 saveRememberMePreference(pendingGoogleEmail);
                 Toast.makeText(this, getString(R.string.login_google_success, pendingGoogleName),
                         Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(this, MainActivity.class));
+                if (!OnboardingManager.isOnboardingCompleted(this)) {
+                    Intent intent = new Intent(this, WelcomeActivity.class);
+                    intent.putExtra("start_at_step", WelcomeActivity.STEP_PRAYER);
+                    startActivity(intent);
+                } else {
+                    startActivity(new Intent(this, MainActivity.class));
+                }
                 finish();
             } else {
                 Toast.makeText(this, result.resolveMessage(this), Toast.LENGTH_LONG).show();

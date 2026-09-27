@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@drawable/bg_dialog_luxury"
+    android:elevation="12dp"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingStart="24dp"
+    android:paddingTop="28dp"
+    android:paddingEnd="24dp"
+    android:paddingBottom="22dp">
+
+    <!-- Subtle Icon Badge in Brand Colors -->
+    <FrameLayout
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:background="@drawable/bg_onboarding_icon_circle">
+
+        <ImageView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_sun"
+            app:tint="#D81B60"
+            tools:ignore="ContentDescription" />
+    </FrameLayout>
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/tvBatteryTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:gravity="center"
+        android:text="@string/battery_title"
+        android:textColor="#141414"
+        android:textSize="21sp"
+        android:textStyle="bold" />
+
+    <!-- Description -->
+    <TextView
+        android:id="@+id/tvBatteryMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:lineSpacingMultiplier="1.25"
+        android:paddingHorizontal="4dp"
+        android:text="@string/battery_message"
+        android:textColor="#595959"
+        android:textSize="14sp" />
+
+    <!-- Supporting Text (Optional hint) -->
+    <TextView
+        android:id="@+id/tvBatterySupportingText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="24dp"
+        android:gravity="center"
+        android:text="@string/battery_supporting_text"
+        android:textColor="#8C8C8C"
+        android:textSize="12sp" />
+
+    <!-- Primary Action: Set Up Now -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnBatterySetupNow"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/bg_luxury_button"
+        android:letterSpacing="0.03"
+        android:text="@string/battery_now"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+    <!-- Secondary Action: Later -->
+    <TextView
+        android:id="@+id/btnBatteryLater"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginTop="6dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:text="@string/battery_later"
+        android:textColor="#757575"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+</LinearLayout>

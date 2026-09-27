@@ -3,13 +3,42 @@
     <string name="app_name">HafizTravel&amp;Tours</string>
     <string name="welcome_brand_name">HAFIZ TRAVEL &amp; TOURS</string>
     <string name="welcome_eyebrow">KURASI PERJALANAN PREMIER</string>
-    <string name="welcome_title">Perjalanan Luar Biasa,\nDireka dengan Keanggunan.</string>
-    <string name="welcome_subtitle">Daripada percutian antarabangsa ikonik merentasi Asia, Eropah dan sekitarnya, sehingga ibadah Umrah yang disusun dengan penuh ketenangan.</string>
+    <string name="welcome_title">Selamat Datang ke Hafiz Travel</string>
+    <string name="welcome_subtitle">Temui destinasi menarik, terokai pakej percutian dan urus perjalanan anda di satu tempat.</string>
     <string name="welcome_chip_worldwide">Pakej Percutian</string>
     <string name="welcome_chip_umrah">Umrah &amp; Ziarah</string>
     <string name="welcome_chip_custom">Pakej Khas</string>
     <string name="welcome_start_now">Mula Meneroka</string>
     <string name="welcome_already_have_account_full">Sudah mempunyai akaun? &lt;font color=\'#D81B60\'&gt;&lt;b&gt;Log Masuk&lt;/b&gt;&lt;/font&gt;</string>
+    <string name="welcome_no_account_full">Belum mempunyai akaun? &lt;font color=\'#D81B60\'&gt;&lt;b&gt;Daftar Akaun&lt;/b&gt;&lt;/font&gt;</string>
+
+    <!-- Onboarding Step 1: Prayer Times & Qibla -->
+    <string name="onboarding_step_1_of_2">LANGKAH 1 DARIPADA 2</string>
+    <string name="onboarding_prayer_title">Waktu Solat &amp; Kiblat</string>
+    <string name="onboarding_prayer_desc">Kekal terhubung dengan waktu solat anda sepanjang perjalanan.</string>
+    <string name="onboarding_action_enable">Aktifkan</string>
+    <string name="onboarding_action_maybe_later">Mungkin Nanti</string>
+
+    <!-- Onboarding Step 2: Notification Setup -->
+    <string name="onboarding_step_2_of_2">LANGKAH 2 DARIPADA 2</string>
+    <string name="onboarding_notif_title">Kekal Maklum</string>
+    <string name="onboarding_notif_desc">Dapatkan kemas kini penting mengenai tempahan, pembayaran dan perjalanan anda.</string>
+    <string name="onboarding_action_allow_notif">Benarkan Pemberitahuan</string>
+
+    <!-- Prayer & Azan Settings in Profile -->
+    <string name="profile_prayer_azan_section">Tetapan Waktu Solat &amp; Azan</string>
+    <string name="settings_prayer_times_title">Waktu Solat &amp; Kiblat</string>
+    <string name="settings_prayer_times_desc">Pengiraan solat berasaskan lokasi dan arah kiblat</string>
+    <string name="settings_azan_notif_title">Peringatan &amp; Azan</string>
+    <string name="settings_azan_notif_desc">Terima peringatan dan audio azan pada waktu solat</string>
+    <string name="settings_app_notif_title">Pemberitahuan Aplikasi</string>
+    <string name="settings_app_notif_desc">Kemas kini perjalanan, peringatan tempahan dan promosi</string>
+    <string name="settings_background_op_title">Operasi Latar Belakang</string>
+    <string name="settings_background_op_desc">Benarkan operasi latar belakang untuk azan tepat pada masanya</string>
+    <string name="settings_background_op_enabled">Aktif</string>
+    <string name="settings_background_op_configure">Konfigurasi</string>
+    <string name="prayer_permission_required_toast">Kebenaran lokasi diperlukan untuk waktu solat yang tepat.</string>
+    <string name="notif_permission_required_toast">Kebenaran pemberitahuan diperlukan untuk peringatan aplikasi.</string>
     <string name="filter_all">Semua</string>
     <string name="login_title">Selamat Kembali</string>
     <string name="login_subtitle">Log masuk untuk rancang percutian impian anda</string>
@@ -704,8 +733,9 @@
     <string name="qibla_kaaba_location">Kaabah · Makkah, Arab Saudi</string>
     <string name="qibla_interference">⚠ Gangguan magnet dikesan\nJauhkan telefon daripada objek logam dan kalibrasikan telefon.</string>
     <string name="battery_title">Pastikan Azan Berfungsi</string>
-    <string name="battery_message">Untuk pastikan notifikasi &amp; azan berbunyi tepat pada waktunya walaupun app ini ditutup, disyorkan benarkan app ini berjalan tanpa had di latar belakang.\n\nLangkah ini pilihan sahaja, boleh disetkan kemudian melalui Tetapan.</string>
-    <string name="battery_now">Setkan Sekarang</string>
+    <string name="battery_message">Benarkan Hafiz Travel berjalan di latar belakang supaya notifikasi solat dan Azan dapat dimainkan tepat pada masanya, walaupun aplikasi ditutup.</string>
+    <string name="battery_supporting_text">Langkah ini adalah pilihan dan boleh dikonfigurasi kemudian di Tetapan.</string>
+    <string name="battery_now">Tetapkan Sekarang</string>
     <string name="battery_later">Nanti</string>
     <string name="hijri_date_fallback">1 Rejab 1448H</string>
     <string name="btn_book_now">TEMPAH SEKARANG</string>

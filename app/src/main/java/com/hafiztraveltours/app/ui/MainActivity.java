@@ -132,16 +132,37 @@ public class MainActivity extends BaseActivity {
         }
         activeLanguage = currentSaved;
         loadSessionState();
-        startArcAutoRefresh();
         startHeroShowcase();
         updateFavoriteBadge();
 
-        boolean hasFineLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED;
-        boolean hasCoarseLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED;
-        if (hasFineLocation || hasCoarseLocation) {
-            loadPrayerTimesForCurrentLocation();
+        if (OnboardingManager.isPrayerFeatureEnabled(this)) {
+            View prayerCard = findViewById(R.id.prayerTimesCard);
+            if (prayerCard != null) prayerCard.setVisibility(View.VISIBLE);
+
+            View btnQibla = findViewById(R.id.btnQiblaAction);
+            if (btnQibla != null) {
+                btnQibla.setVisibility(OnboardingManager.isQiblaFeatureEnabled(this) ? View.VISIBLE : View.GONE);
+            }
+
+            startArcAutoRefresh();
+
+            boolean hasFineLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED;
+            boolean hasCoarseLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED;
+            if (hasFineLocation || hasCoarseLocation) {
+                loadPrayerTimesForCurrentLocation();
+            }
+
+            if (OnboardingManager.isAzanFeatureEnabled(this)) {
+                PrayerTimeScheduler.requestExactAlarmPermissionIfNeeded(this);
+                PrayerTimeScheduler.requestBatteryOptimizationExemption(this);
+            }
+        } else {
+            View prayerCard = findViewById(R.id.prayerTimesCard);
+            if (prayerCard != null) prayerCard.setVisibility(View.GONE);
+            stopArcAutoRefresh();
+            PrayerTimeScheduler.cancelAllAlarms(this);
         }
     }
 
@@ -182,15 +203,10 @@ public class MainActivity extends BaseActivity {
         setupPodcastSection();
         setupPrayerTimesWidget();
         setupSwipeRefresh();
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
-                    != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.POST_NOTIFICATIONS}, 100);
-            }
+        if (OnboardingManager.isPrayerFeatureEnabled(this) && OnboardingManager.isAzanFeatureEnabled(this)) {
+            PrayerTimeScheduler.requestExactAlarmPermissionIfNeeded(this);
+            PrayerTimeScheduler.requestBatteryOptimizationExemption(this);
         }
-        PrayerTimeScheduler.requestExactAlarmPermissionIfNeeded(this);
-        PrayerTimeScheduler.requestBatteryOptimizationExemption(this);
     }
 
     private void setupSwipeRefresh() {
@@ -200,7 +216,9 @@ public class MainActivity extends BaseActivity {
             swipeRefreshLayout.setOnRefreshListener(() -> {
                 loadSessionState();
                 mainViewModel.loadHome();
-                loadPrayerTimesForCurrentLocation();
+                if (OnboardingManager.isPrayerFeatureEnabled(this)) {
+                    loadPrayerTimesForCurrentLocation();
+                }
                 updateFavoriteBadge();
                 swipeRefreshLayout.postDelayed(() -> swipeRefreshLayout.setRefreshing(false), 1000);
             });
@@ -1025,6 +1043,14 @@ public class MainActivity extends BaseActivity {
      *    and every request will fall back to the Adhan estimate.)
      */
     private void setupPrayerTimesWidget() {
+        View prayerCard = findViewById(R.id.prayerTimesCard);
+        if (!OnboardingManager.isPrayerFeatureEnabled(this)) {
+            if (prayerCard != null) prayerCard.setVisibility(View.GONE);
+            return;
+        }
+
+        if (prayerCard != null) prayerCard.setVisibility(View.VISIBLE);
+
         View btnRefresh = findViewById(R.id.btnRefreshPrayerLocation);
         if (btnRefresh != null) {
             btnRefresh.setOnClickListener(v -> refreshPrayerTimesLocation(true));
@@ -1036,6 +1062,7 @@ public class MainActivity extends BaseActivity {
 
         View btnQibla = findViewById(R.id.btnQiblaAction);
         if (btnQibla != null) {
+            btnQibla.setVisibility(OnboardingManager.isQiblaFeatureEnabled(this) ? View.VISIBLE : View.GONE);
             btnQibla.setOnClickListener(v ->
                     startActivity(new Intent(this, QiblaActivity.class)));
         }
@@ -1047,12 +1074,16 @@ public class MainActivity extends BaseActivity {
 
         if (hasFineLocation || hasCoarseLocation) {
             loadPrayerTimesForCurrentLocation();
-        } else {
+        } else if (!OnboardingManager.isOnboardingCompleted(this)) {
             locationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
+        } else {
+            loadPrayerTimesForCurrentLocation();
         }
     }
 
     private void refreshPrayerTimesLocation(boolean userInitiated) {
+        if (!OnboardingManager.isPrayerFeatureEnabled(this)) return;
+
         ImageView ivRefresh = findViewById(R.id.ivRefreshPrayerLocation);
         if (ivRefresh != null) {
             ivRefresh.clearAnimation();
@@ -1082,6 +1113,8 @@ public class MainActivity extends BaseActivity {
     }
 
     private void loadPrayerTimesForCurrentLocation() {
+        if (!OnboardingManager.isPrayerFeatureEnabled(this)) return;
+
         Location location = getBestLastKnownLocation();
         double lat = 1.4927;   // fallback: Johor Bahru (company's own city)
         double lon = 103.7414;
@@ -1097,6 +1130,8 @@ public class MainActivity extends BaseActivity {
     }
 
     private void requestFreshLocation() {
+        if (!OnboardingManager.isPrayerFeatureEnabled(this)) return;
+
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (locationManager == null) return;
 

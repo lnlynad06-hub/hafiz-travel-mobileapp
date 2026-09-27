@@ -193,6 +193,12 @@ public class ProfileViewModel extends AndroidViewModel {
     public ProfileViewModel(@NonNull Application application) {
         super(application);
         repository = new ProfileRepository(application);
+        if (repository.isLoggedIn()) {
+            ProfileStatsDto cached = repository.cachedStats();
+            if (cached != null) {
+                statsData.setValue(cached);
+            }
+        }
         refreshReadiness();
     }
 
@@ -274,6 +280,8 @@ public class ProfileViewModel extends AndroidViewModel {
     public void logout() {
         repository.logout();
         userData.setValue(null);
+        statsData.setValue(null);
+        docsData.setValue(null);
         refreshReadiness();
     }
 
@@ -283,6 +291,7 @@ public class ProfileViewModel extends AndroidViewModel {
     public void loadStats() {
         if (!repository.isLoggedIn()) {
             statsLoading.setValue(false);
+            statsData.setValue(null);
             return;
         }
         cancel(statsCall);
