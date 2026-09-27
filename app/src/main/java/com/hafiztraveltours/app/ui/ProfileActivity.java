@@ -656,7 +656,47 @@ public class ProfileActivity extends BaseActivity {
         );
     }
 
-    private void showGenderPickerBottomSheet(TextView tvGenderValue, String[] selectedGenderHolder) {
+    private void updateGenderFieldDisplay(ImageView ivGenderBadge, TextView tvGenderValue, String gender) {
+        if (tvGenderValue == null) return;
+        String maleStr = getString(R.string.gender_male);
+        String femaleStr = getString(R.string.gender_female);
+        boolean isMale = "male".equalsIgnoreCase(gender) || "lelaki".equalsIgnoreCase(gender)
+                || maleStr.equalsIgnoreCase(gender);
+        boolean isFemale = "female".equalsIgnoreCase(gender) || "perempuan".equalsIgnoreCase(gender)
+                || femaleStr.equalsIgnoreCase(gender);
+
+        if (isMale) {
+            tvGenderValue.setText(maleStr);
+            tvGenderValue.setTextColor(ContextCompat.getColor(this, R.color.text_dark));
+            if (ivGenderBadge != null) {
+                ivGenderBadge.setImageResource(R.drawable.ic_gender_male);
+                ivGenderBadge.setBackgroundResource(R.drawable.bg_gender_badge_male);
+                ivGenderBadge.setColorFilter(ContextCompat.getColor(this, R.color.gender_male_icon));
+                int pad = dp(2);
+                ivGenderBadge.setPadding(pad, pad, pad, pad);
+                ivGenderBadge.setVisibility(View.VISIBLE);
+            }
+        } else if (isFemale) {
+            tvGenderValue.setText(femaleStr);
+            tvGenderValue.setTextColor(ContextCompat.getColor(this, R.color.text_dark));
+            if (ivGenderBadge != null) {
+                ivGenderBadge.setImageResource(R.drawable.ic_gender_female);
+                ivGenderBadge.setBackgroundResource(R.drawable.bg_gender_badge_female);
+                ivGenderBadge.setColorFilter(ContextCompat.getColor(this, R.color.gender_female_icon));
+                int pad = dp(2);
+                ivGenderBadge.setPadding(pad, pad, pad, pad);
+                ivGenderBadge.setVisibility(View.VISIBLE);
+            }
+        } else {
+            tvGenderValue.setText(getString(R.string.profile_field_gender_placeholder));
+            tvGenderValue.setTextColor(ContextCompat.getColor(this, R.color.input_hint));
+            if (ivGenderBadge != null) {
+                ivGenderBadge.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    private void showGenderPickerBottomSheet(ImageView ivGenderBadge, TextView tvGenderValue, String[] selectedGenderHolder) {
         com.google.android.material.bottomsheet.BottomSheetDialog sheetDialog =
                 new com.google.android.material.bottomsheet.BottomSheetDialog(this);
         View sheetView = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_gender_picker, null);
@@ -679,14 +719,13 @@ public class ProfileActivity extends BaseActivity {
         ImageView ivFemaleCheck = sheetView.findViewById(R.id.ivGenderFemaleCheck);
         ImageView ivFemaleUncheck = sheetView.findViewById(R.id.ivGenderFemaleUnchecked);
 
-        boolean isMalay = "ms".equalsIgnoreCase(LocaleHelper.getSavedLanguage(this));
-        String maleLabel = isMalay ? "Lelaki" : "Male";
-        String femaleLabel = isMalay ? "Perempuan" : "Female";
+        String maleLabel = getString(R.string.gender_male);
+        String femaleLabel = getString(R.string.gender_female);
 
         Runnable updateCards = () -> {
             String current = selectedGenderHolder != null && selectedGenderHolder.length > 0 ? selectedGenderHolder[0] : "";
-            boolean male = "male".equalsIgnoreCase(current) || "lelaki".equalsIgnoreCase(current);
-            boolean female = "female".equalsIgnoreCase(current) || "perempuan".equalsIgnoreCase(current);
+            boolean male = "male".equalsIgnoreCase(current) || "lelaki".equalsIgnoreCase(current) || maleLabel.equalsIgnoreCase(current);
+            boolean female = "female".equalsIgnoreCase(current) || "perempuan".equalsIgnoreCase(current) || femaleLabel.equalsIgnoreCase(current);
 
             if (itemMale != null) {
                 itemMale.setBackgroundResource(male ? R.drawable.bg_selection_card_selected : R.drawable.bg_selection_card_unselected);
@@ -717,10 +756,7 @@ public class ProfileActivity extends BaseActivity {
                 if (selectedGenderHolder != null && selectedGenderHolder.length > 0) {
                     selectedGenderHolder[0] = maleLabel;
                 }
-                if (tvGenderValue != null) {
-                    tvGenderValue.setText(maleLabel);
-                    tvGenderValue.setTextColor(ContextCompat.getColor(this, R.color.text_dark));
-                }
+                updateGenderFieldDisplay(ivGenderBadge, tvGenderValue, maleLabel);
                 updateCards.run();
                 itemMale.postDelayed(sheetDialog::dismiss, 120);
             });
@@ -732,10 +768,7 @@ public class ProfileActivity extends BaseActivity {
                 if (selectedGenderHolder != null && selectedGenderHolder.length > 0) {
                     selectedGenderHolder[0] = femaleLabel;
                 }
-                if (tvGenderValue != null) {
-                    tvGenderValue.setText(femaleLabel);
-                    tvGenderValue.setTextColor(ContextCompat.getColor(this, R.color.text_dark));
-                }
+                updateGenderFieldDisplay(ivGenderBadge, tvGenderValue, femaleLabel);
                 updateCards.run();
                 itemFemale.postDelayed(sheetDialog::dismiss, 120);
             });
@@ -939,6 +972,7 @@ public class ProfileActivity extends BaseActivity {
         TextView tvDobAge = dialogView.findViewById(R.id.tvDobAge);
 
         View fieldGenderContainer = dialogView.findViewById(R.id.fieldGenderContainer);
+        ImageView ivGenderBadge = dialogView.findViewById(R.id.ivGenderBadge);
         TextView tvGenderValue = dialogView.findViewById(R.id.tvGenderValue);
 
         View fieldNationalityContainer = dialogView.findViewById(R.id.fieldNationalityContainer);
@@ -1045,10 +1079,7 @@ public class ProfileActivity extends BaseActivity {
         }
 
         // Populate Gender
-        if (!currentGender.isEmpty() && tvGenderValue != null) {
-            tvGenderValue.setText(currentGender);
-            tvGenderValue.setTextColor(ContextCompat.getColor(this, R.color.text_dark));
-        }
+        updateGenderFieldDisplay(ivGenderBadge, tvGenderValue, currentGender);
 
         // Populate Nationality
         if (!matchedNationality.isEmpty()) {
@@ -1138,7 +1169,7 @@ public class ProfileActivity extends BaseActivity {
         if (fieldGenderContainer != null) {
             fieldGenderContainer.setOnClickListener(v -> {
                 com.hafiztraveltours.app.utils.HapticUtil.click(v);
-                showGenderPickerBottomSheet(tvGenderValue, selectedGender);
+                showGenderPickerBottomSheet(ivGenderBadge, tvGenderValue, selectedGender);
             });
         }
 

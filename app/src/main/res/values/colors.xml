@@ -73,4 +73,12 @@
     <color name="kinetic_background">#FBFBFA</color>
     <color name="kinetic_neutral_muted">#6B7280</color>
     <color name="kinetic_border">#E5E7EB</color>
+
+    <!-- Gender Selection Badges -->
+    <color name="gender_male_bg">#EFF6FF</color>
+    <color name="gender_male_border">#DBEAFE</color>
+    <color name="gender_male_icon">#2563EB</color>
+    <color name="gender_female_bg">#FDF2F8</color>
+    <color name="gender_female_border">#FCE7F3</color>
+    <color name="gender_female_icon">#D81B60</color>
 </resources>
