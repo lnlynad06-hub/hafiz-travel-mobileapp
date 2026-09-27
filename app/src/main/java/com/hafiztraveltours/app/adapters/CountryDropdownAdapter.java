@@ -36,6 +36,16 @@ public class CountryDropdownAdapter extends ArrayAdapter<String> {
         this.allCountries = new ArrayList<>(Arrays.asList(countries));
     }
 
+    public interface OnCountrySelectedListener {
+        void onCountrySelected(String country, int position);
+    }
+
+    private OnCountrySelectedListener listener;
+
+    public void setOnCountrySelectedListener(OnCountrySelectedListener listener) {
+        this.listener = listener;
+    }
+
     public void setSelectedCountry(String country) {
         this.selectedCountry = country != null ? country.trim() : "";
         notifyDataSetChanged();
@@ -43,6 +53,36 @@ public class CountryDropdownAdapter extends ArrayAdapter<String> {
 
     public String getSelectedCountry() {
         return selectedCountry;
+    }
+
+    /**
+     * Case-insensitive, locale-aware equivalence test between two country names.
+     */
+    public static boolean isSameCountry(String a, String b) {
+        if (a == null || b == null) return false;
+        String s1 = a.trim().toLowerCase();
+        String s2 = b.trim().toLowerCase();
+        if (s1.isEmpty() || s2.isEmpty()) return false;
+        if (s1.equals(s2)) return true;
+        if (s1.startsWith(s2) || s2.startsWith(s1)) return true;
+        if (s1.contains(s2) || s2.contains(s1)) return true;
+        if (s1.contains("singap") && s2.contains("singap")) return true;
+        if (s1.contains("filipin") && s2.contains("philippin")) return true;
+        if (s1.contains("philippin") && s2.contains("filipin")) return true;
+        if (s1.contains("kemboj") && s2.contains("cambodi")) return true;
+        if (s1.contains("cambodi") && s2.contains("kemboj")) return true;
+        return false;
+    }
+
+    public int getPositionForCountry(String target) {
+        if (target == null || target.trim().isEmpty()) return -1;
+        for (int i = 0; i < getCount(); i++) {
+            String item = getItem(i);
+            if (isSameCountry(item, target)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     /**
@@ -93,10 +133,7 @@ public class CountryDropdownAdapter extends ArrayAdapter<String> {
             tvFlag.setText(getFlagForCountry(country));
         }
 
-        boolean isSelected = !selectedCountry.isEmpty() &&
-                (country.equalsIgnoreCase(selectedCountry) ||
-                 selectedCountry.toLowerCase().contains(country.toLowerCase()) ||
-                 country.toLowerCase().contains(selectedCountry.toLowerCase()));
+        boolean isSelected = isSameCountry(country, selectedCountry);
 
         if (tvName != null) {
             tvName.setText(country);
@@ -118,6 +155,16 @@ public class CountryDropdownAdapter extends ArrayAdapter<String> {
         } else {
             row.setBackgroundResource(android.R.color.transparent);
         }
+
+        final int itemPos = position;
+        final String itemCountry = country;
+        row.setOnClickListener(v -> {
+            com.hafiztraveltours.app.utils.HapticUtil.click(v);
+            setSelectedCountry(itemCountry);
+            if (listener != null) {
+                listener.onCountrySelected(itemCountry, itemPos);
+            }
+        });
 
         return row;
     }

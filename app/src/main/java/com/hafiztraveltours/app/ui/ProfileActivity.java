@@ -429,9 +429,9 @@ public class ProfileActivity extends BaseActivity {
     };
 
     /**
-     * Formats an ISO {@code YYYY-MM-DD} string to readable format e.g. "24 September 2000" in active locale.
+     * Formats an ISO {@code YYYY-MM-DD} string to readable format e.g. "27 September 2027" in active locale.
      */
-    public static String formatDobDisplay(android.content.Context context, String isoDate) {
+    public static String formatDateDisplay(android.content.Context context, String isoDate) {
         if (isoDate == null || isoDate.trim().isEmpty()) return "";
         try {
             String[] parts = isoDate.trim().split("-");
@@ -451,13 +451,25 @@ public class ProfileActivity extends BaseActivity {
                 String monthName = (month >= 1 && month <= 12)
                         ? (isMalay ? monthsMs[month - 1] : monthsEn[month - 1])
                         : String.valueOf(month);
-                return day + " " + monthName + " " + year;
+                return String.format(java.util.Locale.US, "%02d %s %04d", day, monthName, year);
             }
         } catch (Exception ignored) {}
         return isoDate;
     }
 
-    private void showDobPickerBottomSheet(TextView tvDobValue, TextView tvDobAge, String[] selectedDobHolder) {
+    public static String formatDobDisplay(android.content.Context context, String isoDate) {
+        return formatDateDisplay(context, isoDate);
+    }
+
+    private void showDatePickerBottomSheet(
+            String title,
+            String subtitle,
+            boolean isExpiryPicker,
+            TextView tvTargetValue,
+            TextView tvTargetAge,
+            String[] selectedDateHolder,
+            Runnable onDateSelected) {
+
         com.google.android.material.bottomsheet.BottomSheetDialog sheetDialog =
                 new com.google.android.material.bottomsheet.BottomSheetDialog(this);
         View sheetView = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_dob_picker, null);
@@ -471,6 +483,16 @@ public class ProfileActivity extends BaseActivity {
         View btnClose = sheetView.findViewById(R.id.btnCloseDobSheet);
         if (btnClose != null) btnClose.setOnClickListener(v -> sheetDialog.dismiss());
 
+        TextView tvSheetTitle = sheetView.findViewById(R.id.tvDobSheetTitle);
+        if (tvSheetTitle != null && title != null && !title.isEmpty()) {
+            tvSheetTitle.setText(title);
+        }
+
+        TextView tvSheetSub = sheetView.findViewById(R.id.tvDobSheetSub);
+        if (tvSheetSub != null && subtitle != null && !subtitle.isEmpty()) {
+            tvSheetSub.setText(subtitle);
+        }
+
         TextView tvPreview = sheetView.findViewById(R.id.tvDobPreviewText);
         TextView tvPreviewAge = sheetView.findViewById(R.id.tvDobPreviewAge);
         NumberPicker npDay = sheetView.findViewById(R.id.npDobDay);
@@ -481,14 +503,17 @@ public class ProfileActivity extends BaseActivity {
         java.util.Calendar today = java.util.Calendar.getInstance();
         int curYear = today.get(java.util.Calendar.YEAR);
 
-        int initYear = curYear - 26;
-        int initMonth = 0;
-        int initDay = 1;
+        int minYear = isExpiryPicker ? (curYear - 10) : 1900;
+        int maxYear = isExpiryPicker ? (curYear + 25) : curYear;
 
-        String currentDob = selectedDobHolder != null && selectedDobHolder.length > 0 ? selectedDobHolder[0] : "";
-        if (currentDob != null && !currentDob.trim().isEmpty()) {
+        int initYear = isExpiryPicker ? (curYear + 5) : (curYear - 26);
+        int initMonth = isExpiryPicker ? today.get(java.util.Calendar.MONTH) : 0;
+        int initDay = isExpiryPicker ? today.get(java.util.Calendar.DAY_OF_MONTH) : 1;
+
+        String currentDateStr = selectedDateHolder != null && selectedDateHolder.length > 0 ? selectedDateHolder[0] : "";
+        if (currentDateStr != null && !currentDateStr.trim().isEmpty()) {
             try {
-                String[] parts = currentDob.trim().split("-");
+                String[] parts = currentDateStr.trim().split("-");
                 if (parts.length == 3) {
                     initYear = Integer.parseInt(parts[0]);
                     initMonth = Integer.parseInt(parts[1]) - 1;
@@ -511,9 +536,9 @@ public class ProfileActivity extends BaseActivity {
         }
 
         if (npYear != null) {
-            npYear.setMinValue(1900);
-            npYear.setMaxValue(curYear);
-            npYear.setValue(Math.max(1900, Math.min(curYear, initYear)));
+            npYear.setMinValue(minYear);
+            npYear.setMaxValue(maxYear);
+            npYear.setValue(Math.max(minYear, Math.min(maxYear, initYear)));
             npYear.setWrapSelectorWheel(false);
         }
 
@@ -544,21 +569,27 @@ public class ProfileActivity extends BaseActivity {
             int m = npMonth != null ? npMonth.getValue() : 0;
             int y = npYear != null ? npYear.getValue() : curYear;
             String iso = String.format(java.util.Locale.US, "%04d-%02d-%02d", y, m + 1, d);
-            String displayStr = formatDobDisplay(this, iso);
+            String displayStr = formatDateDisplay(this, iso);
             if (tvPreview != null) {
                 tvPreview.setText(displayStr);
             }
-            int age = curYear - y;
-            if (today.get(java.util.Calendar.MONTH) < m ||
-                    (today.get(java.util.Calendar.MONTH) == m && today.get(java.util.Calendar.DAY_OF_MONTH) < d)) {
-                age--;
-            }
-            if (tvPreviewAge != null) {
-                if (age >= 0) {
-                    tvPreviewAge.setText(getString(R.string.profile_age_format, age));
-                    tvPreviewAge.setVisibility(View.VISIBLE);
-                } else {
+            if (isExpiryPicker) {
+                if (tvPreviewAge != null) {
                     tvPreviewAge.setVisibility(View.GONE);
+                }
+            } else {
+                int age = curYear - y;
+                if (today.get(java.util.Calendar.MONTH) < m ||
+                        (today.get(java.util.Calendar.MONTH) == m && today.get(java.util.Calendar.DAY_OF_MONTH) < d)) {
+                    age--;
+                }
+                if (tvPreviewAge != null) {
+                    if (age >= 0) {
+                        tvPreviewAge.setText(getString(R.string.profile_age_format, age));
+                        tvPreviewAge.setVisibility(View.VISIBLE);
+                    } else {
+                        tvPreviewAge.setVisibility(View.GONE);
+                    }
                 }
             }
         };
@@ -583,31 +614,46 @@ public class ProfileActivity extends BaseActivity {
                 int m = npMonth != null ? npMonth.getValue() : 0;
                 int y = npYear != null ? npYear.getValue() : curYear;
                 String iso = String.format(java.util.Locale.US, "%04d-%02d-%02d", y, m + 1, d);
-                if (selectedDobHolder != null && selectedDobHolder.length > 0) {
-                    selectedDobHolder[0] = iso;
+                if (selectedDateHolder != null && selectedDateHolder.length > 0) {
+                    selectedDateHolder[0] = iso;
                 }
-                if (tvDobValue != null) {
-                    tvDobValue.setText(formatDobDisplay(this, iso));
-                    tvDobValue.setTextColor(ContextCompat.getColor(this, R.color.text_dark));
+                if (tvTargetValue != null) {
+                    tvTargetValue.setText(formatDateDisplay(this, iso));
+                    tvTargetValue.setTextColor(ContextCompat.getColor(this, R.color.text_dark));
                 }
-                int age = curYear - y;
-                if (today.get(java.util.Calendar.MONTH) < m ||
-                        (today.get(java.util.Calendar.MONTH) == m && today.get(java.util.Calendar.DAY_OF_MONTH) < d)) {
-                    age--;
-                }
-                if (tvDobAge != null) {
-                    if (age >= 0) {
-                        tvDobAge.setText(getString(R.string.profile_age_format, age));
-                        tvDobAge.setVisibility(View.VISIBLE);
-                    } else {
-                        tvDobAge.setVisibility(View.GONE);
+                if (!isExpiryPicker && tvTargetAge != null) {
+                    int age = curYear - y;
+                    if (today.get(java.util.Calendar.MONTH) < m ||
+                            (today.get(java.util.Calendar.MONTH) == m && today.get(java.util.Calendar.DAY_OF_MONTH) < d)) {
+                        age--;
                     }
+                    if (age >= 0) {
+                        tvTargetAge.setText(getString(R.string.profile_age_format, age));
+                        tvTargetAge.setVisibility(View.VISIBLE);
+                    } else {
+                        tvTargetAge.setVisibility(View.GONE);
+                    }
+                }
+                if (onDateSelected != null) {
+                    onDateSelected.run();
                 }
                 sheetDialog.dismiss();
             });
         }
 
         sheetDialog.show();
+    }
+
+    private void showDobPickerBottomSheet(TextView tvDobValue, TextView tvDobAge, String[] selectedDobHolder) {
+        showDatePickerBottomSheet(
+                getString(R.string.profile_dob_sheet_title),
+                getString(R.string.profile_dob_sheet_sub),
+                false,
+                tvDobValue,
+                tvDobAge,
+                selectedDobHolder,
+                null
+        );
     }
 
     private void showGenderPickerBottomSheet(TextView tvGenderValue, String[] selectedGenderHolder) {
@@ -699,6 +745,10 @@ public class ProfileActivity extends BaseActivity {
     }
 
     private void showCountrySearchBottomSheet(String title, TextView tvTargetFlag, TextView tvTargetValue, String[] selectedCountryHolder) {
+        showCountrySearchBottomSheet(title, null, tvTargetFlag, tvTargetValue, selectedCountryHolder);
+    }
+
+    private void showCountrySearchBottomSheet(String title, String subtitle, TextView tvTargetFlag, TextView tvTargetValue, String[] selectedCountryHolder) {
         com.google.android.material.bottomsheet.BottomSheetDialog sheetDialog =
                 new com.google.android.material.bottomsheet.BottomSheetDialog(this);
         View sheetView = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_country_search_picker, null);
@@ -715,6 +765,11 @@ public class ProfileActivity extends BaseActivity {
             tvSheetTitle.setText(title);
         }
 
+        TextView tvSheetSub = sheetView.findViewById(R.id.tvCountrySheetSub);
+        if (tvSheetSub != null && subtitle != null && !subtitle.isEmpty()) {
+            tvSheetSub.setText(subtitle);
+        }
+
         View btnClose = sheetView.findViewById(R.id.btnCloseCountrySheet);
         if (btnClose != null) btnClose.setOnClickListener(v -> sheetDialog.dismiss());
 
@@ -728,26 +783,41 @@ public class ProfileActivity extends BaseActivity {
         String curCountry = selectedCountryHolder != null && selectedCountryHolder.length > 0 ? selectedCountryHolder[0] : "";
         adapter.setSelectedCountry(curCountry);
 
+        CountryDropdownAdapter.OnCountrySelectedListener onSelected = (chosen, pos) -> {
+            if (chosen != null && !chosen.trim().isEmpty()) {
+                if (selectedCountryHolder != null && selectedCountryHolder.length > 0) {
+                    selectedCountryHolder[0] = chosen;
+                }
+                if (tvTargetFlag != null) {
+                    tvTargetFlag.setText(CountryDropdownAdapter.getFlagForCountry(chosen));
+                    tvTargetFlag.setVisibility(View.VISIBLE);
+                }
+                if (tvTargetValue != null) {
+                    if (tvTargetValue instanceof android.widget.AutoCompleteTextView) {
+                        ((android.widget.AutoCompleteTextView) tvTargetValue).setText(chosen, false);
+                    } else {
+                        tvTargetValue.setText(chosen);
+                    }
+                    tvTargetValue.setTextColor(ContextCompat.getColor(this, R.color.text_dark));
+                }
+            }
+            sheetDialog.dismiss();
+        };
+
+        adapter.setOnCountrySelectedListener(onSelected);
+
         if (lvCountries != null) {
             lvCountries.setAdapter(adapter);
             lvCountries.setOnItemClickListener((parent, view, position, id) -> {
                 com.hafiztraveltours.app.utils.HapticUtil.click(view);
                 String chosen = adapter.getItem(position);
-                if (chosen != null) {
-                    if (selectedCountryHolder != null && selectedCountryHolder.length > 0) {
-                        selectedCountryHolder[0] = chosen;
-                    }
-                    if (tvTargetFlag != null) {
-                        tvTargetFlag.setText(CountryDropdownAdapter.getFlagForCountry(chosen));
-                        tvTargetFlag.setVisibility(View.VISIBLE);
-                    }
-                    if (tvTargetValue != null) {
-                        tvTargetValue.setText(chosen);
-                        tvTargetValue.setTextColor(ContextCompat.getColor(this, R.color.text_dark));
-                    }
-                }
-                sheetDialog.dismiss();
+                onSelected.onCountrySelected(chosen, position);
             });
+
+            int selectedPos = adapter.getPositionForCountry(curCountry);
+            if (selectedPos >= 0) {
+                lvCountries.setSelection(selectedPos);
+            }
         }
 
         if (etSearch != null) {
@@ -885,10 +955,13 @@ public class ProfileActivity extends BaseActivity {
 
         // 3. Passport Information Inputs
         TextInputEditText passportInput = dialogView.findViewById(R.id.passportInput);
-        com.google.android.material.textfield.MaterialAutoCompleteTextView issuingCountryInput = dialogView.findViewById(R.id.issuingCountryInput);
-        TextInputEditText expiryInput = dialogView.findViewById(R.id.expiryInput);
+        View fieldPassportExpiryContainer = dialogView.findViewById(R.id.fieldPassportExpiryContainer);
+        TextView tvPassportExpiryValue = dialogView.findViewById(R.id.tvPassportExpiryValue);
         LinearLayout warningContainer = dialogView.findViewById(R.id.passportWarningContainer);
         TextView warningText = dialogView.findViewById(R.id.passportWarningText);
+        View fieldIssuingCountryContainer = dialogView.findViewById(R.id.fieldIssuingCountryContainer);
+        TextView tvIssuingCountryFlag = dialogView.findViewById(R.id.tvIssuingCountryFlag);
+        TextView tvIssuingCountryValue = dialogView.findViewById(R.id.tvIssuingCountryValue);
 
         // 4. Emergency Contact Inputs
         TextInputEditText emergNameInput = dialogView.findViewById(R.id.emergNameInput);
@@ -943,6 +1016,7 @@ public class ProfileActivity extends BaseActivity {
         final String[] selectedNationality = new String[]{matchedNationality};
         final String[] selectedIssuingCountry = new String[]{matchedIssuingCountry};
         final String[] selectedCountry = new String[]{matchedCountry};
+        final String[] selectedExpiry = new String[]{currentExpiry};
 
         // Populate Date of Birth & Dynamic Age
         if (!currentDob.isEmpty()) {
@@ -988,11 +1062,76 @@ public class ProfileActivity extends BaseActivity {
             }
         }
 
+        // Populate Passport Expiry
+        if (!currentExpiry.isEmpty() && tvPassportExpiryValue != null) {
+            tvPassportExpiryValue.setText(formatDateDisplay(this, currentExpiry));
+            tvPassportExpiryValue.setTextColor(ContextCompat.getColor(this, R.color.text_dark));
+        }
+
+        // Populate Passport Issuing Country
+        if (!matchedIssuingCountry.isEmpty()) {
+            if (tvIssuingCountryFlag != null) {
+                tvIssuingCountryFlag.setText(CountryDropdownAdapter.getFlagForCountry(matchedIssuingCountry));
+                tvIssuingCountryFlag.setVisibility(View.VISIBLE);
+            }
+            if (tvIssuingCountryValue != null) {
+                tvIssuingCountryValue.setText(matchedIssuingCountry);
+                tvIssuingCountryValue.setTextColor(ContextCompat.getColor(this, R.color.text_dark));
+            }
+        }
+
+        // Passport Expiry Warning Check (Inline Banner Below Date Field)
+        Runnable checkPassportWarning = () -> {
+            String expStr = selectedExpiry[0] != null ? selectedExpiry[0].trim() : "";
+            if (expStr.isEmpty() || warningContainer == null || warningText == null) {
+                if (warningContainer != null) warningContainer.setVisibility(View.GONE);
+                return;
+            }
+            try {
+                java.util.Date expDate = com.hafiztraveltours.app.utils.DateFormats.parseApiDate(expStr);
+                if (expDate != null) {
+                    java.util.Calendar sixMonths = java.util.Calendar.getInstance();
+                    sixMonths.add(java.util.Calendar.MONTH, 6);
+                    java.util.Date now = new java.util.Date();
+                    String displayDate = formatDateDisplay(this, expStr);
+                    if (expDate.before(now)) {
+                        warningText.setText(getString(R.string.passport_expired_warning, displayDate));
+                        warningContainer.setVisibility(View.VISIBLE);
+                    } else if (expDate.before(sixMonths.getTime())) {
+                        warningText.setText(getString(R.string.passport_expiry_warning, displayDate));
+                        warningContainer.setVisibility(View.VISIBLE);
+                    } else {
+                        warningContainer.setVisibility(View.GONE);
+                    }
+                } else {
+                    warningContainer.setVisibility(View.GONE);
+                }
+            } catch (Exception e) {
+                if (warningContainer != null) warningContainer.setVisibility(View.GONE);
+            }
+        };
+        checkPassportWarning.run();
+
         // Click listeners for Redesigned Bottom Sheets
         if (fieldDobContainer != null) {
             fieldDobContainer.setOnClickListener(v -> {
                 com.hafiztraveltours.app.utils.HapticUtil.click(v);
                 showDobPickerBottomSheet(tvDobValue, tvDobAge, selectedDob);
+            });
+        }
+
+        if (fieldPassportExpiryContainer != null) {
+            fieldPassportExpiryContainer.setOnClickListener(v -> {
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
+                showDatePickerBottomSheet(
+                        getString(R.string.profile_passport_expiry_sheet_title),
+                        getString(R.string.profile_passport_expiry_sheet_sub),
+                        true,
+                        tvPassportExpiryValue,
+                        null,
+                        selectedExpiry,
+                        checkPassportWarning
+                );
             });
         }
 
@@ -1011,17 +1150,16 @@ public class ProfileActivity extends BaseActivity {
             });
         }
 
-        // Setup Issuing Country and Country Dropdowns (Searchable Bottom Sheet)
-        if (issuingCountryInput != null) {
-            issuingCountryInput.setFocusable(false);
-            issuingCountryInput.setClickable(true);
-            if (!matchedIssuingCountry.isEmpty()) {
-                issuingCountryInput.setText(matchedIssuingCountry, false);
-            }
-            issuingCountryInput.setOnClickListener(v -> {
+        if (fieldIssuingCountryContainer != null) {
+            fieldIssuingCountryContainer.setOnClickListener(v -> {
                 com.hafiztraveltours.app.utils.HapticUtil.click(v);
-                showCountrySearchBottomSheet(getString(R.string.profile_field_issuing_country),
-                        null, issuingCountryInput, selectedIssuingCountry);
+                showCountrySearchBottomSheet(
+                        getString(R.string.profile_issuing_country_sheet_title),
+                        getString(R.string.profile_issuing_country_sheet_sub),
+                        tvIssuingCountryFlag,
+                        tvIssuingCountryValue,
+                        selectedIssuingCountry
+                );
             });
         }
 
@@ -1096,76 +1234,11 @@ public class ProfileActivity extends BaseActivity {
         if (stateInput != null) stateInput.setText(currentState);
 
         if (passportInput != null) passportInput.setText(currentPassport);
-        if (expiryInput != null) expiryInput.setText(currentExpiry);
         if (emergNameInput != null) emergNameInput.setText(currentEmergName);
         if (emergPhoneInput != null) emergPhoneInput.setText(currentEmergPhone);
         if (mahramInput != null) mahramInput.setText(currentMahram);
         if (mahramRelInput != null && !currentMahramRel.isEmpty()) {
             mahramRelInput.setText(currentMahramRel, false);
-        }
-
-        // Passport Expiry Logic & Warning Check (Inline Banner Below Date Input)
-        java.util.Calendar cal = java.util.Calendar.getInstance();
-        Runnable checkPassportWarning = () -> {
-            String expStr = expiryInput != null ? expiryInput.getText().toString().trim() : "";
-            if (expStr.isEmpty() || warningContainer == null || warningText == null) {
-                if (warningContainer != null) warningContainer.setVisibility(View.GONE);
-                return;
-            }
-            try {
-                java.util.Date expDate = com.hafiztraveltours.app.utils.DateFormats.parseApiDate(expStr);
-                if (expDate != null) {
-                    java.util.Calendar sixMonths = java.util.Calendar.getInstance();
-                    sixMonths.add(java.util.Calendar.MONTH, 6);
-                    java.util.Date now = new java.util.Date();
-                    if (expDate.before(now)) {
-                        warningText.setText(getString(R.string.passport_expired_warning, expStr));
-                        warningContainer.setVisibility(View.VISIBLE);
-                    } else if (expDate.before(sixMonths.getTime())) {
-                        warningText.setText(getString(R.string.passport_expiry_warning, expStr));
-                        warningContainer.setVisibility(View.VISIBLE);
-                    } else {
-                        warningContainer.setVisibility(View.GONE);
-                    }
-                } else {
-                    warningContainer.setVisibility(View.GONE);
-                }
-            } catch (Exception e) {
-                if (warningContainer != null) warningContainer.setVisibility(View.GONE);
-            }
-        };
-        checkPassportWarning.run();
-
-        if (expiryInput != null) {
-            expiryInput.setOnClickListener(v -> {
-                com.hafiztraveltours.app.utils.HapticUtil.click(v);
-                int year = cal.get(java.util.Calendar.YEAR);
-                int month = cal.get(java.util.Calendar.MONTH);
-                int day = cal.get(java.util.Calendar.DAY_OF_MONTH);
-                String currentExp = expiryInput.getText().toString().trim();
-                if (!currentExp.isEmpty()) {
-                    try {
-                        String[] parts = currentExp.split("-");
-                        if (parts.length == 3) {
-                            year = Integer.parseInt(parts[0]);
-                            month = Integer.parseInt(parts[1]) - 1;
-                            day = Integer.parseInt(parts[2]);
-                        }
-                    } catch (Exception ignored) {}
-                }
-                android.app.DatePickerDialog datePicker = new android.app.DatePickerDialog(
-                        this,
-                        R.style.HafizDatePickerTheme,
-                        (view, selectedYear, selectedMonth, selectedDay) -> {
-                            String formattedDate = String.format(java.util.Locale.US, "%04d-%02d-%02d",
-                                    selectedYear, selectedMonth + 1, selectedDay);
-                            expiryInput.setText(formattedDate);
-                            checkPassportWarning.run();
-                        },
-                        year, month, day
-                );
-                datePicker.show();
-            });
         }
 
         // Mahram Toggle Handling (Hides Name and Relationship when "No" is selected)
@@ -1233,8 +1306,8 @@ public class ProfileActivity extends BaseActivity {
 
                 String newIc = icInput != null ? icInput.getText().toString().trim() : "";
                 String newPassport = passportInput != null ? passportInput.getText().toString().trim() : "";
-                String newIssuingCountry = selectedIssuingCountry[0] != null ? selectedIssuingCountry[0].trim() : (issuingCountryInput != null ? issuingCountryInput.getText().toString().trim() : "");
-                String newExpiry = expiryInput != null ? expiryInput.getText().toString().trim() : "";
+                String newIssuingCountry = selectedIssuingCountry[0] != null ? selectedIssuingCountry[0].trim() : "";
+                String newExpiry = selectedExpiry[0] != null ? selectedExpiry[0].trim() : "";
 
                 if (nameLayout != null) {
                     nameLayout.setError(null);

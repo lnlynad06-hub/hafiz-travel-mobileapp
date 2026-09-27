@@ -1211,6 +1211,13 @@
     <string name="profile_field_dob_placeholder">Select date of birth</string>
     <string name="profile_field_gender_placeholder">Select gender</string>
     <string name="profile_field_nationality_placeholder">Select nationality</string>
+    <string name="profile_field_passport_expiry_label">Passport Expiry Date <font color="#DC2626">*</font></string>
+    <string name="profile_field_passport_expiry_placeholder">Select passport expiry date</string>
+    <string name="profile_passport_expiry_sheet_title">Passport Expiry Date</string>
+    <string name="profile_passport_expiry_sheet_sub">Select the expiry date stated on your passport</string>
+    <string name="profile_field_issuing_country_placeholder">Select issuing country</string>
+    <string name="profile_issuing_country_sheet_title">Select Issuing Country</string>
+    <string name="profile_issuing_country_sheet_sub">Choose the country that issued your passport</string>
 
     <!-- Departure Seat Availability Strings -->
     <string name="seats_left_format">%1$d / %2$d seats left</string>

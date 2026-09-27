@@ -1093,6 +1093,13 @@
     <string name="profile_field_dob_placeholder">Pilih tarikh lahir</string>
     <string name="profile_field_gender_placeholder">Pilih jantina</string>
     <string name="profile_field_nationality_placeholder">Pilih kewarganegaraan</string>
+    <string name="profile_field_passport_expiry_label">Tarikh Tamat Pasport <font color="#DC2626">*</font></string>
+    <string name="profile_field_passport_expiry_placeholder">Pilih tarikh tamat pasport</string>
+    <string name="profile_passport_expiry_sheet_title">Tarikh Tamat Pasport</string>
+    <string name="profile_passport_expiry_sheet_sub">Pilih tarikh tamat tempoh pada pasport anda</string>
+    <string name="profile_field_issuing_country_placeholder">Pilih negara pengeluar</string>
+    <string name="profile_issuing_country_sheet_title">Pilih Negara Pengeluar</string>
+    <string name="profile_issuing_country_sheet_sub">Pilih negara yang mengeluarkan pasport anda</string>
 
     <!-- Departure Seat Availability Strings -->
     <string name="seats_left_format">%1$d / %2$d tempat duduk tersedia</string>
