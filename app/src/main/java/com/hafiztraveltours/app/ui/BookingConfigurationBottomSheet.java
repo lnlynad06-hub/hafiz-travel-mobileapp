@@ -397,6 +397,48 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
             }
             req.selectedDepartureDate = formatDepartureLabel(selected);
             req.selectedDepartureId = selected.id != null ? selected.id.trim() : "";
+
+            if (selected.pricing != null && !selected.pricing.isEmpty()) {
+                Integer matchedPricingId = null;
+                String selectedKey = (detail.priceOptions != null && selectedRoomIndex >= 0 && selectedRoomIndex < detail.priceOptions.size())
+                        ? detail.priceOptions.get(selectedRoomIndex).labelKey : null;
+
+                if (selectedKey != null) {
+                    for (com.hafiztraveltours.app.models.UmrahPackage.DepartureItem.PricingTier tier : selected.pricing) {
+                        if (tier != null && tier.id != null && tier.label != null && tier.label.trim().equalsIgnoreCase(selectedKey.trim())) {
+                            matchedPricingId = tier.id;
+                            break;
+                        }
+                    }
+                }
+                if (matchedPricingId == null) {
+                    for (com.hafiztraveltours.app.models.UmrahPackage.DepartureItem.PricingTier tier : selected.pricing) {
+                        if (tier != null && tier.id != null && tier.amount != null) {
+                            double tierAmount = BookingRequest.parsePriceAmount(tier.amount);
+                            if (Math.abs(tierAmount - unitAmount) < 0.01) {
+                                matchedPricingId = tier.id;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (matchedPricingId == null) {
+                    for (com.hafiztraveltours.app.models.UmrahPackage.DepartureItem.PricingTier tier : selected.pricing) {
+                        if (tier != null && tier.id != null && tier.label != null && roomLabel != null && tier.label.trim().equalsIgnoreCase(roomLabel.trim())) {
+                            matchedPricingId = tier.id;
+                            break;
+                        }
+                    }
+                }
+                if (matchedPricingId == null && !selected.pricing.isEmpty()) {
+                    if (selectedRoomIndex >= 0 && selectedRoomIndex < selected.pricing.size() && selected.pricing.get(selectedRoomIndex) != null && selected.pricing.get(selectedRoomIndex).id != null) {
+                        matchedPricingId = selected.pricing.get(selectedRoomIndex).id;
+                    } else if (selected.pricing.get(0) != null) {
+                        matchedPricingId = selected.pricing.get(0).id;
+                    }
+                }
+                req.selectedPricingId = matchedPricingId;
+            }
         }
 
         req.promoCode = appliedPromoCode;

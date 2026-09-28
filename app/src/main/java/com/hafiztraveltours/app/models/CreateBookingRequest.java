@@ -12,6 +12,9 @@ public class CreateBookingRequest {
     @SerializedName("departure_id")
     public Integer departureId;
 
+    @SerializedName("pricing_id")
+    public Integer pricingId;
+
     @SerializedName("room_label")
     public String roomLabel;
 

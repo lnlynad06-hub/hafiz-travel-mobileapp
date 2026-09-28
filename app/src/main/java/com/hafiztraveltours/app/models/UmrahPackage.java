@@ -195,7 +195,7 @@ public class UmrahPackage implements java.io.Serializable {
     public static class DepartureItem implements java.io.Serializable {
         // Backend departures PK is an integer, but kept as String on receive:
         // Gson coerces JSON numbers into String safely, while Integer would crash
-        // on numeric strings. Parsed to Integer at send time (PaymentSelection).
+        // on numeric strings. Parsed to Integer at booking creation time.
         @SerializedName("id")
         public String id;
 
@@ -219,6 +219,20 @@ public class UmrahPackage implements java.io.Serializable {
 
         @SerializedName("is_full")
         public Boolean isFull;
+
+        @SerializedName("pricing")
+        public java.util.List<PricingTier> pricing;
+
+        public static class PricingTier implements java.io.Serializable {
+            @SerializedName("id")
+            public Integer id;
+            @SerializedName("label")
+            public String label;
+            @SerializedName("amount")
+            public String amount;
+            @SerializedName("currency")
+            public String currency;
+        }
     }
 
     @SerializedName("itineraries")

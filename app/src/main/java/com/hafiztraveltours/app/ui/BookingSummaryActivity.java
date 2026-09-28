@@ -7,15 +7,24 @@ import android.os.Bundle;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.hafiztraveltours.app.R;
+import com.hafiztraveltours.app.models.BookingDetailDto;
 import com.hafiztraveltours.app.models.BookingRequest;
+import com.hafiztraveltours.app.models.CreateBookingRequest;
+import com.hafiztraveltours.app.network.ApiClient;
+import com.hafiztraveltours.app.network.ApiResponse;
+import com.hafiztraveltours.app.utils.DateFormats;
+import com.hafiztraveltours.app.utils.HapticUtil;
 import com.hafiztraveltours.app.utils.LocaleHelper;
+import com.hafiztraveltours.app.utils.TravellerMapper;
 
 public class BookingSummaryActivity extends BaseActivity {
 
@@ -35,7 +44,20 @@ public class BookingSummaryActivity extends BaseActivity {
     private TextView txtDepartureDate;
     private LinearLayout containerBreakdown;
 
-    
+    private CheckBox summaryAgreementCheckbox;
+    private View btnConfirmBooking;
+    private ProgressBar confirmProgressBar;
+    private TextView txtConfirmBookingLabel;
+
+    private boolean isSubmitting = false;
+    private retrofit2.Call<?> bookingCall;
+
+    @Override
+    protected void onDestroy() {
+        if (isSubmitting && bookingCall != null) bookingCall.cancel();
+        super.onDestroy();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,14 +83,40 @@ public class BookingSummaryActivity extends BaseActivity {
         txtUnitPriceAmount = findViewById(R.id.summaryUnitPriceAmount);
         txtTotalAmount = findViewById(R.id.summaryTotalAmount);
 
+        summaryAgreementCheckbox = findViewById(R.id.summaryAgreementCheckbox);
+        btnConfirmBooking = findViewById(R.id.btnConfirmBooking);
+        confirmProgressBar = findViewById(R.id.confirmProgressBar);
+        txtConfirmBookingLabel = findViewById(R.id.txtConfirmBookingLabel);
+
+        View btnViewTermsDetail = findViewById(R.id.btnViewTermsDetail);
+        if (btnViewTermsDetail != null) {
+            btnViewTermsDetail.setOnClickListener(v -> {
+                HapticUtil.click(v);
+                Intent intent = new Intent(this, TermsConditionsActivity.class);
+                intent.putExtra(TermsConditionsActivity.EXTRA_BOOKING_REQUEST, bookingRequest);
+                startActivity(intent);
+            });
+        }
+
+        if (summaryAgreementCheckbox != null) {
+            androidx.core.widget.CompoundButtonCompat.setButtonTintList(summaryAgreementCheckbox, null);
+            summaryAgreementCheckbox.setOnCheckedChangeListener((bv, checked) -> HapticUtil.click(bv));
+        }
+
         renderSummary();
 
-        findViewById(R.id.btnProceedToPaymentPhase3).setOnClickListener(v -> {
-            com.hafiztraveltours.app.utils.HapticUtil.click(v);
-            Intent intent = new Intent(this, TermsConditionsActivity.class);
-            intent.putExtra(TermsConditionsActivity.EXTRA_BOOKING_REQUEST, bookingRequest);
-            startActivity(intent);
-        });
+        if (btnConfirmBooking != null) {
+            btnConfirmBooking.setOnClickListener(v -> {
+                HapticUtil.click(v);
+                if (summaryAgreementCheckbox != null && !summaryAgreementCheckbox.isChecked()) {
+                    Toast.makeText(this, R.string.terms_required_error, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (!isSubmitting) {
+                    processBookingConfirmation();
+                }
+            });
+        }
     }
 
     private void renderSummary() {
@@ -200,5 +248,98 @@ public class BookingSummaryActivity extends BaseActivity {
 
     private int dp(int value) {
         return Math.round(value * getResources().getDisplayMetrics().density);
+    }
+
+    private void processBookingConfirmation() {
+        isSubmitting = true;
+        btnConfirmBooking.setEnabled(false);
+        if (confirmProgressBar != null) confirmProgressBar.setVisibility(View.VISIBLE);
+
+        CreateBookingRequest apiRequest = buildApiRequest();
+
+        if (bookingCall != null) bookingCall.cancel();
+        retrofit2.Call<ApiResponse<BookingDetailDto>> createCall =
+                ApiClient.getApiService().createBooking(apiRequest);
+        bookingCall = createCall;
+        createCall.enqueue(new retrofit2.Callback<ApiResponse<BookingDetailDto>>() {
+            @Override
+            public void onResponse(retrofit2.Call<ApiResponse<BookingDetailDto>> call,
+                                   retrofit2.Response<ApiResponse<BookingDetailDto>> response) {
+                if (isFinishing() || isDestroyed()) return;
+                isSubmitting = false;
+                btnConfirmBooking.setEnabled(true);
+                if (confirmProgressBar != null) confirmProgressBar.setVisibility(View.GONE);
+
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    Toast.makeText(BookingSummaryActivity.this, R.string.booking_confirmed_success, Toast.LENGTH_LONG).show();
+
+                    Intent intent = new Intent(BookingSummaryActivity.this, MyBookingsActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    String errorMsg = com.hafiztraveltours.app.network.ApiErrors.userMessage(BookingSummaryActivity.this, response, R.string.booking_failed);
+                    Toast.makeText(BookingSummaryActivity.this, errorMsg, Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<ApiResponse<BookingDetailDto>> call, Throwable t) {
+                if (isFinishing() || isDestroyed()) return;
+                isSubmitting = false;
+                btnConfirmBooking.setEnabled(true);
+                if (confirmProgressBar != null) confirmProgressBar.setVisibility(View.GONE);
+
+                String errorMsg = com.hafiztraveltours.app.network.ApiErrors.userMessage(BookingSummaryActivity.this, t, R.string.booking_failed);
+                Toast.makeText(BookingSummaryActivity.this, errorMsg, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private static Integer parseDepartureId(String rawId) {
+        if (rawId == null) return null;
+        String clean = rawId.trim();
+        if (clean.isEmpty()) return null;
+        try {
+            return Integer.valueOf(clean);
+        } catch (NumberFormatException e) {
+            android.util.Log.w("BookingSummary", "Non-numeric departure id: " + clean);
+            return null;
+        }
+    }
+
+    private CreateBookingRequest buildApiRequest() {
+        CreateBookingRequest apiRequest = new CreateBookingRequest();
+        apiRequest.packageId = bookingRequest.packageId;
+        apiRequest.roomLabel = bookingRequest.roomLabel;
+        apiRequest.departureId = parseDepartureId(bookingRequest.selectedDepartureId);
+        apiRequest.pricingId = bookingRequest.selectedPricingId;
+
+        if (bookingRequest.passengers != null && !bookingRequest.passengers.isEmpty()) {
+            for (int i = 0; i < bookingRequest.passengers.size(); i++) {
+                BookingRequest.Passenger p = bookingRequest.passengers.get(i);
+                apiRequest.travellers.add(
+                        com.hafiztraveltours.app.utils.TravellerMapper.toTravellerRequest(p, i == 0));
+            }
+        } else {
+            CreateBookingRequest.TravellerRequest t = new CreateBookingRequest.TravellerRequest();
+            t.fullName = "Jemaah Utama";
+            t.isLead = true;
+            t.relationship = "self";
+            t.nationality = "Malaysian";
+            apiRequest.travellers.add(t);
+        }
+
+        apiRequest.adultCount = apiRequest.travellers.size();
+        apiRequest.childCount = 0;
+        apiRequest.unitPrice = bookingRequest.unitPriceAmount;
+        apiRequest.discountAmount = bookingRequest.discountAmount;
+        apiRequest.promoCode = bookingRequest.promoCode;
+        apiRequest.paymentType = "deposit";
+        apiRequest.paymentMethod = "fpx";
+        apiRequest.termsAgreed = true;
+        apiRequest.termsAgreedAt = com.hafiztraveltours.app.utils.DateFormats.nowIsoDateTime();
+        apiRequest.termsVersion = TermsConditionsActivity.TERMS_VERSION;
+        return apiRequest;
     }
 }

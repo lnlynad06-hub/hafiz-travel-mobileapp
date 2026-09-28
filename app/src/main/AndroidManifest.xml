@@ -58,8 +58,6 @@
         <activity android:name=".ui.PassengerDetailsActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
         <activity android:name=".ui.BookingSummaryActivity" android:exported="false" />
         <activity android:name=".ui.TermsConditionsActivity" android:exported="false" />
-        <activity android:name=".ui.PaymentSelectionActivity" android:exported="false" />
-        <activity android:name=".ui.BookingSuccessActivity" android:exported="false" />
         <activity android:name=".ui.InvoiceViewerActivity" android:exported="false" />
         <activity android:name=".ui.ReceiptViewerActivity" android:exported="false" />
 

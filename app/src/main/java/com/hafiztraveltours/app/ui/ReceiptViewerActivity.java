@@ -165,8 +165,8 @@ public class ReceiptViewerActivity extends BaseActivity {
             tvReceiptPaymentMethod.setText(getString(R.string.receipt_label_method, "FPX / Online Banking"));
         }
 
-        double deposit = (req.totalAmount > 0) ? (req.totalAmount >= 2000 ? 1000.0 * req.adultPaxCount : req.totalAmount) : 1000.0 * req.adultPaxCount;
-        double balance = Math.max(0, req.totalAmount - deposit);
+        double deposit = req.totalAmount;
+        double balance = 0.0;
 
         if (tvReceiptAmount != null) tvReceiptAmount.setText(BookingRequest.formatPrice(deposit));
         if (tvReceiptTotalAmount != null) tvReceiptTotalAmount.setText(BookingRequest.formatPrice(req.totalAmount));
@@ -233,27 +233,30 @@ public class ReceiptViewerActivity extends BaseActivity {
             tvReceiptPaymentMethod.setText(getString(R.string.receipt_label_method, pMethod));
         }
 
-        double paidAmt = detail.paidAmount > 0 ? detail.paidAmount : (detail.totalAmount >= 2000 ? 1000.0 : detail.totalAmount);
+        double paidAmt = detail.paidAmount;
         if (tvReceiptAmount != null) tvReceiptAmount.setText(BookingRequest.formatPrice(paidAmt));
         if (tvReceiptTotalAmount != null) tvReceiptTotalAmount.setText(BookingRequest.formatPrice(detail.totalAmount));
         if (tvReceiptBalanceDue != null) tvReceiptBalanceDue.setText(BookingRequest.formatPrice(detail.balanceAmount));
 
-        // If multiple receipts or payments exist, show them
+        // Payment History: each successful / traceable installment
         if (layoutInstallmentsContainer != null && layoutInstallmentsList != null) {
             layoutInstallmentsList.removeAllViews();
-            if (detail.receipts != null && detail.receipts.size() > 1) {
-                layoutInstallmentsContainer.setVisibility(View.VISIBLE);
-                for (int i = 0; i < detail.receipts.size(); i++) {
-                    BookingDetailDto.ReceiptInfo rec = detail.receipts.get(i);
-                    String itemTitle = (i == 0) ? getString(R.string.receipt_deposit_title) : getString(R.string.receipt_installment_title, i);
-                    addInstallmentRow(itemTitle, rec.receiptNo, rec.receiptDate, rec.amount);
-                }
-            } else if (detail.payments != null && detail.payments.size() > 1) {
+            if (detail.payments != null && !detail.payments.isEmpty()) {
                 layoutInstallmentsContainer.setVisibility(View.VISIBLE);
                 for (int i = 0; i < detail.payments.size(); i++) {
                     BookingDetailDto.PaymentInfo pay = detail.payments.get(i);
-                    String itemTitle = (i == 0) ? getString(R.string.receipt_deposit_title) : getString(R.string.receipt_installment_title, i);
-                    addInstallmentRow(itemTitle, pay.paymentNo, pay.paidAt, pay.amount);
+                    int index = pay.installmentIndex > 0 ? pay.installmentIndex : (i + 1);
+                    String stageLabel = pay.stageLabel != null && !pay.stageLabel.isEmpty()
+                            ? pay.stageLabel
+                            : (index == 1 ? getString(R.string.booking_label_stage_deposit) : getString(R.string.booking_label_stage_balance));
+                    addPaymentHistoryRow(index, stageLabel, pay.paymentNo, pay.paidAt, pay.amount, pay.isVerified, pay.status, pay.receiptNo);
+                }
+            } else if (detail.receipts != null && !detail.receipts.isEmpty()) {
+                layoutInstallmentsContainer.setVisibility(View.VISIBLE);
+                for (int i = 0; i < detail.receipts.size(); i++) {
+                    BookingDetailDto.ReceiptInfo rec = detail.receipts.get(i);
+                    String itemTitle = (i == 0) ? getString(R.string.receipt_deposit_title) : getString(R.string.receipt_installment_title, i + 1);
+                    addPaymentHistoryRow(i + 1, itemTitle, rec.receiptNo, rec.receiptDate, rec.amount, true, "verified", rec.receiptNo);
                 }
             } else {
                 layoutInstallmentsContainer.setVisibility(View.GONE);
@@ -261,44 +264,104 @@ public class ReceiptViewerActivity extends BaseActivity {
         }
     }
 
-    private void addInstallmentRow(String title, String no, String date, double amount) {
+    private void addPaymentHistoryRow(int index, String stage, String paymentNo, String date, double amount, boolean isVerified, String status, String receiptNo) {
         if (layoutInstallmentsList == null) return;
 
-        LinearLayout row = new LinearLayout(this);
-        row.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        row.setOrientation(LinearLayout.HORIZONTAL);
-        row.setPadding(0, 8, 0, 8);
-        row.setGravity(android.view.Gravity.CENTER_VERTICAL);
+        LinearLayout card = new LinearLayout(this);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(0, 0, 0, 16);
+        card.setLayoutParams(lp);
+        card.setOrientation(LinearLayout.VERTICAL);
+        card.setBackgroundResource(R.drawable.bg_tip_pill);
+        card.setPadding(24, 20, 24, 20);
 
-        LinearLayout left = new LinearLayout(this);
-        left.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f));
-        left.setOrientation(LinearLayout.VERTICAL);
+        // Header: "Payment #1 • Deposit" (left) + "RM 200.00" (right)
+        LinearLayout header = new LinearLayout(this);
+        header.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        header.setOrientation(LinearLayout.HORIZONTAL);
+        header.setGravity(android.view.Gravity.CENTER_VERTICAL);
 
         TextView tvTitle = new TextView(this);
-        tvTitle.setText(title + " (" + (no != null ? no : "—") + ")");
+        tvTitle.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f));
+        tvTitle.setText(getString(R.string.payment_history_item_title, index, stage));
         tvTitle.setTextColor(Color.parseColor("#18181B"));
-        tvTitle.setTextSize(12f);
+        tvTitle.setTextSize(13f);
         tvTitle.setTypeface(null, android.graphics.Typeface.BOLD);
+
+        TextView tvAmt = new TextView(this);
+        tvAmt.setText(BookingRequest.formatPrice(amount));
+        tvAmt.setTextColor(getResources().getColor(R.color.brand_magenta));
+        tvAmt.setTextSize(14f);
+        tvAmt.setTypeface(null, android.graphics.Typeface.BOLD);
+
+        header.addView(tvTitle);
+        header.addView(tvAmt);
+        card.addView(header);
+
+        // Sub meta: Ref No & Date
+        LinearLayout meta = new LinearLayout(this);
+        meta.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        meta.setOrientation(LinearLayout.HORIZONTAL);
+        meta.setPadding(0, 8, 0, 0);
+
+        TextView tvRef = new TextView(this);
+        tvRef.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f));
+        String refText = (paymentNo != null && !paymentNo.isEmpty()) ? paymentNo : (receiptNo != null ? receiptNo : "—");
+        tvRef.setText(getString(R.string.payment_history_ref_format, refText));
+        tvRef.setTextColor(Color.parseColor("#71717A"));
+        tvRef.setTextSize(11f);
 
         TextView tvDate = new TextView(this);
         tvDate.setText(date != null ? date : "—");
         tvDate.setTextColor(Color.parseColor("#71717A"));
         tvDate.setTextSize(11f);
 
-        left.addView(tvTitle);
-        left.addView(tvDate);
+        meta.addView(tvRef);
+        meta.addView(tvDate);
+        card.addView(meta);
 
-        TextView tvAmt = new TextView(this);
-        tvAmt.setText(BookingRequest.formatPrice(amount));
-        tvAmt.setTextColor(getResources().getColor(R.color.brand_magenta));
-        tvAmt.setTextSize(13f);
-        tvAmt.setTypeface(null, android.graphics.Typeface.BOLD);
+        // Status & Receipt badge row
+        LinearLayout badgeRow = new LinearLayout(this);
+        badgeRow.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        badgeRow.setOrientation(LinearLayout.HORIZONTAL);
+        badgeRow.setGravity(android.view.Gravity.CENTER_VERTICAL);
+        badgeRow.setPadding(0, 10, 0, 0);
 
-        row.addView(left);
-        row.addView(tvAmt);
+        TextView tvStatus = new TextView(this);
+        if (isVerified) {
+            tvStatus.setText(getString(R.string.status_received));
+            tvStatus.setTextColor(Color.parseColor("#059669"));
+            tvStatus.setBackgroundResource(R.drawable.bg_pill_success);
+        } else {
+            tvStatus.setText(status != null ? status.toUpperCase(Locale.ROOT) : getString(R.string.status_pending_confirmation));
+            tvStatus.setTextColor(Color.parseColor("#D97706"));
+            tvStatus.setBackgroundResource(R.drawable.bg_pill_accent);
+        }
+        tvStatus.setTextSize(10f);
+        tvStatus.setTypeface(null, android.graphics.Typeface.BOLD);
+        tvStatus.setPadding(16, 6, 16, 6);
+        badgeRow.addView(tvStatus);
 
-        layoutInstallmentsList.addView(row);
+        if (receiptNo != null && !receiptNo.isEmpty()) {
+            TextView tvRecBadge = new TextView(this);
+            LinearLayout.LayoutParams rLp = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            rLp.setMarginStart(12);
+            tvRecBadge.setLayoutParams(rLp);
+            tvRecBadge.setText(getString(R.string.payment_history_receipt_tag, receiptNo));
+            tvRecBadge.setTextColor(Color.parseColor("#4B5563"));
+            tvRecBadge.setTextSize(10.5f);
+            tvRecBadge.setBackgroundResource(R.drawable.bg_tip_pill);
+            tvRecBadge.setPadding(14, 6, 14, 6);
+            badgeRow.addView(tvRecBadge);
+        }
+
+        card.addView(badgeRow);
+        layoutInstallmentsList.addView(card);
     }
 
     private void saveOrPrintReceiptPdf() {

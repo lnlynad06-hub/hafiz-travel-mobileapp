@@ -19,6 +19,7 @@ public class BookingRequest implements Serializable {
     public String selectedDepartureDate = "";
     /** Raw backend departure ID (`departures[].id`) for the selected departure; sent as `departure_id`. */
     public String selectedDepartureId = "";
+    public Integer selectedPricingId = null;
     public String promoCode = "";
     public double discountAmount = 0.0;
     public PackageDetail packageDetail;

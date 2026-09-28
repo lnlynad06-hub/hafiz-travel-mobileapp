@@ -132,6 +132,7 @@ public class MainActivity extends BaseActivity {
         }
         activeLanguage = currentSaved;
         loadSessionState();
+        setupRegisterCta();
         startHeroShowcase();
         updateFavoriteBadge();
 
@@ -254,6 +255,7 @@ public class MainActivity extends BaseActivity {
             isLoggedIn = info.loggedIn;
             loggedInUserName = info.nickname;
             setupHeroSection();
+            setupRegisterCta();
         });
         mainViewModel.getHomeContent().observe(this, content -> {
             if (content == null) {
@@ -972,20 +974,33 @@ public class MainActivity extends BaseActivity {
     }
 
     private void setupRegisterCta() {
+        View guestSection = findViewById(R.id.guestInfoSection);
         View ctaCard = findViewById(R.id.registerCtaCard);
 
-        if (isLoggedIn) {
-            ctaCard.setVisibility(View.GONE);
+        boolean userLoggedIn = isLoggedIn || SessionManager.getInstance(this).isLoggedIn();
+
+        if (userLoggedIn) {
+            if (guestSection != null) guestSection.setVisibility(View.GONE);
+            if (ctaCard != null) ctaCard.setVisibility(View.GONE);
             return;
         }
 
-        ctaCard.setVisibility(View.VISIBLE);
+        if (guestSection != null) guestSection.setVisibility(View.VISIBLE);
+        if (ctaCard != null) ctaCard.setVisibility(View.VISIBLE);
 
-        findViewById(R.id.registerCtaButton).setOnClickListener(v ->
-                startActivity(new Intent(this, SignUpActivity.class)));
+        View registerBtn = findViewById(R.id.registerCtaButton);
+        if (registerBtn != null) {
+            registerBtn.setOnClickListener(v ->
+                    startActivity(new Intent(this, SignUpActivity.class)));
+        }
 
-        findViewById(R.id.registerCtaDismiss).setOnClickListener(v ->
-                ctaCard.setVisibility(View.GONE));
+        View dismissBtn = findViewById(R.id.registerCtaDismiss);
+        if (dismissBtn != null) {
+            dismissBtn.setOnClickListener(v -> {
+                if (guestSection != null) guestSection.setVisibility(View.GONE);
+                if (ctaCard != null) ctaCard.setVisibility(View.GONE);
+            });
+        }
     }
 
     private void setupPodcastSection() {

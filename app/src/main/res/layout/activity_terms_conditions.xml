@@ -523,52 +523,30 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Sticky Bottom Agreement & Action Area -->
+    <!-- Sticky Bottom Close Area -->
     <LinearLayout
         android:id="@+id/termsBottomBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/card_surface"
         android:elevation="16dp"
-        android:orientation="vertical"
         android:paddingHorizontal="16dp"
-        android:paddingTop="12dp"
-        android:paddingBottom="14dp"
+        android:paddingVertical="12dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <!-- Agreement Checkbox (Unchecked by default) -->
-        <CheckBox
-            android:id="@+id/termsAgreementCheckbox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="false"
-            android:text="@string/terms_checkbox_agree"
-            android:textColor="@color/text_dark"
-            android:textSize="13sp"
-            android:button="@drawable/selector_checkbox_pink"
-            android:buttonTint="@null"
-            app:buttonTint="@null"
-            android:lineSpacingExtra="2dp"
-            android:paddingStart="8dp"
-            android:paddingEnd="0dp"
-            android:layout_marginBottom="10dp" />
-
-        <!-- Continue to Payment Button -->
         <LinearLayout
-            android:id="@+id/btnContinueToPayment"
+            android:id="@+id/btnTermsClose"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:background="@drawable/bg_booking_primary_button"
-            android:clickable="false"
-            android:focusable="false"
-            android:gravity="center"
-            android:alpha="0.45">
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center">
 
             <TextView
-                android:id="@+id/txtContinuePaymentLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/terms_continue_payment"
+                android:text="@string/terms_close_viewer"
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 android:textStyle="bold" />

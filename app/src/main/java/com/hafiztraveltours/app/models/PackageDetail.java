@@ -137,6 +137,7 @@ public class PackageDetail implements java.io.Serializable {
         public Integer seatsBooked;
         public Integer seatsAvailable;
         public boolean isFull;
+        public java.util.List<UmrahPackage.DepartureItem.PricingTier> pricing;
 
         public DepartureOption(String id, String departureDate, String returnDate, String label) {
             this(id, departureDate, returnDate, label, null, null, null, false);
@@ -353,8 +354,7 @@ public class PackageDetail implements java.io.Serializable {
                     int available = item.seatsAvailable != null ? item.seatsAvailable : Math.max(0, totalSeats - booked);
                     boolean full = Boolean.TRUE.equals(item.isFull) || available <= 0;
 
-                    d.availableDepartureDates.add(label);
-                    d.availableDepartures.add(new DepartureOption(
+                    DepartureOption depOpt = new DepartureOption(
                             item.id,
                             item.departureDate,
                             item.returnDate,
@@ -363,7 +363,10 @@ public class PackageDetail implements java.io.Serializable {
                             booked,
                             available,
                             full
-                    ));
+                    );
+                    depOpt.pricing = item.pricing;
+                    d.availableDepartureDates.add(label);
+                    d.availableDepartures.add(depOpt);
                 }
             }
         }

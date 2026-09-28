@@ -1139,40 +1139,26 @@
     <string name="payment_summary_format">%1$s • %2$s • %3$d Pax</string>
     <string name="passenger_err_pax_over">Too many travellers (%1$d added, booking requires %2$d). Please remove %3$d traveller(s).</string>
     <!-- Audit fix: layout user-facing strings -->
-    <string name="booking_success_title">Booking Successfully Created!</string>
-    <string name="booking_success_body">Thank you for choosing Hafiz Travel &amp; Tours as your trusted pilgrimage partner.</string>
-    <string name="booking_success_total_label">Total Payment</string>
-    <string name="booking_success_view">VIEW MY BOOKINGS</string>
-    <string name="booking_success_home">BACK TO HOME</string>
-    <string name="booking_success_download_invoice">Download Invoice / Receipt (PDF)</string>
-    <string name="booking_success_manage_docs">Manage Traveller Documents</string>
-    <string name="booking_success_next_steps_title">Next Steps Guide</string>
-    <string name="booking_success_step1_title">1. Upload Traveller Documents</string>
-    <string name="booking_success_step1_desc">Please upload passport copies &amp; visa photos for Umrah visa processing.</string>
-    <string name="booking_success_step2_title">2. Balance Payment</string>
-    <string name="booking_success_step2_desc">Remaining balance must be settled 45 days before your departure date.</string>
-    <string name="booking_success_step3_title">3. Briefing &amp; Luggage Collection</string>
-    <string name="booking_success_step3_desc">Collect your travel kit and attend the Umrah briefing at your chosen branch.</string>
     <string name="booking_success_copy_no">Copy</string>
     <string name="booking_success_copied_toast">Booking No. copied: %1$s</string>
     <string name="content_desc_back">Back</string>
     <string name="summary_title">Booking Review</string>
-    <string name="payment_title">Payment &amp; Confirm</string>
     <string name="config_title">Package &amp; Room Options</string>
     <string name="departure_range_format">%1$s to %2$s</string>
     <!-- M7: booking/summary/payment/config layouts -->
     <string name="summary_step_package">01 Package</string>
     <string name="summary_step_travellers">02 Travellers</string>
-    <string name="summary_step_review">03 Review</string>
-    <string name="summary_step_review_done">03 Review</string>
-    <string name="summary_step_payment">04 Payment</string>
+    <string name="summary_step_review">03 Review &amp; Confirm</string>
     <string name="summary_card_package">Selected Package Summary</string>
     <string name="summary_card_travellers">Traveller List</string>
     <string name="summary_card_payment">Payment Summary</string>
     <string name="summary_grand_total">Grand Total</string>
-    <string name="summary_phase2_title">Phase 2 Verification Complete</string>
-    <string name="summary_phase2_body">Booking and traveller information has been successfully verified. Official payment module integration &amp; backend submission will be carried out in Phase 3.</string>
-    <string name="summary_continue_payment">CONTINUE TO PAYMENT</string>
+    <string name="summary_payment_notice_title">Payment &amp; Deposit Information</string>
+    <string name="summary_payment_notice_body">Booking confirmation does not require immediate payment. Once confirmed, you can conveniently make your deposit or package payment anytime via My Booking.</string>
+    <string name="summary_checkbox_agree">I have read and agree to the Terms &amp; Conditions and Cancellation Policy of Hafiz Travel &amp; Tours.</string>
+    <string name="summary_view_terms_link">View Full Terms &amp; Conditions ›</string>
+    <string name="btn_confirm_booking">CONFIRM BOOKING</string>
+    <string name="booking_confirmed_success">Booking confirmed successfully! Please settle your deposit via My Booking.</string>
     <string name="config_subtitle">Please select a room &amp; pax count before filling in traveller details</string>
     <string name="config_room_type">Room Type</string>
     <string name="config_pax_label">Number of Travellers (Adults)</string>
@@ -1183,22 +1169,6 @@
     <string name="config_apply">APPLY</string>
     <string name="config_total_label">Estimated Total Cost</string>
     <string name="config_continue">CONTINUE TO TRAVELLER DETAILS</string>
-    <string name="pay_amount_label">Estimated Amount Due</string>
-    <string name="pay_type_header">Payment Mode Options</string>
-    <string name="pay_full">Estimated Full Payment</string>
-    <string name="pay_full_sub">Full one-time payment for all travellers</string>
-    <string name="pay_deposit">Deposit Payment (RM 1,000 / pax)</string>
-    <string name="pay_deposit_sub">RM 1,000 / pax • Balance due 45 days before departure</string>
-    <string name="pay_channel_header">Payment Channels</string>
-    <string name="pay_fpx">Online Banking / FPX (ToyyibPay Gateway)</string>
-    <string name="pay_fpx_sub">Maybank2u, CIMB Clicks, Bank Islam &amp; others</string>
-    <string name="pay_card">Credit / Debit Card</string>
-    <string name="pay_card_sub">Visa &amp; Mastercard</string>
-    <string name="pay_bank">Manual Bank Transfer (Upload Receipt)</string>
-    <string name="pay_bank_sub">Company account transfer / Cash Deposit Machine (CDM)</string>
-    <string name="pay_trust_banner">256-Bit SSL Secure Transaction • Shariah Compliant</string>
-    <string name="pay_confirm">PAY &amp; CONFIRM BOOKING</string>
-    <string name="pay_deposit_cta">PAY DEPOSIT (%1$s)</string>
     <string name="clothes_size_format">Size: %1$s</string>
     <string name="content_desc_close">Close</string>
     <string name="content_desc_refresh">Refresh location</string>
@@ -1232,11 +1202,8 @@
     <string name="doc_name_passport_photo">Passport Photo (White Background)</string>
     <!-- Terms & Conditions Booking Step (Exact Official PDF) -->
     <string name="terms_title">Terms &amp; Conditions</string>
-    <string name="terms_header_subtitle">Please read and understand the official Terms &amp; Conditions of Hafiz Travel &amp; Tours Sdn Bhd before proceeding to payment.</string>
-    <string name="terms_checkbox_agree">I have read and agree to the Terms &amp; Conditions</string>
-    <string name="terms_continue_payment">CONTINUE TO PAYMENT</string>
-    <string name="summary_continue_terms">CONTINUE TO TERMS &amp; CONDITIONS</string>
-    <string name="terms_required_error">You must agree to the Terms &amp; Conditions before proceeding to payment.</string>
+    <string name="terms_close_viewer">Understood &amp; Back</string>
+    <string name="terms_required_error">Please agree to the Terms &amp; Conditions before confirming your booking.</string>
 
     <string name="terms_company_title">HAFIZ TRAVEL &amp; TOURS SDN BHD</string>
     <string name="terms_company_reg">Reg. No.: 202201043065 (1488762-A) | KPK/LN: 10751</string>
@@ -1369,6 +1336,9 @@
     <string name="receipt_list_title">Payment Receipts</string>
     <string name="receipt_list_sub">Official receipts for verified deposit and monthly installment payments.</string>
     <string name="receipt_no_records">No payment receipts recorded yet. Official receipts will be generated automatically upon payment verification.</string>
+    <string name="payment_history_item_title">Payment #%1$d • %2$s</string>
+    <string name="payment_history_ref_format">Ref: %1$s</string>
+    <string name="payment_history_receipt_tag">Receipt: %1$s</string>
 
     <!-- Dialog / Toast Strings -->
     <string name="toast_doc_verified">Document has been verified.</string>
@@ -1380,9 +1350,57 @@
     <string name="dialog_btn_understand">Understand</string>
     <string name="dialog_btn_close">Close</string>
 
-    <string name="booking_success_view_invoice">View Official Invoice (PDF)</string>
-    <string name="booking_success_view_receipt">View Payment Receipt (PDF)</string>
-
     <string name="doc_passport_validity_note">Ensure your international passport is valid for at least 6 months before the departure date.</string>
     <string name="doc_photo_spec_note">Color passport-sized photograph with white background according to Umrah / Tour visa specifications.</string>
+
+    <!-- Luxury My Booking Overhaul Strings -->
+    <string name="booking_category_umrah">UMRAH PACKAGE</string>
+    <string name="booking_category_tour">INTERNATIONAL TOUR</string>
+    <string name="status_completed">COMPLETED</string>
+    <string name="payment_status_deposit_pending">DEPOSIT PENDING</string>
+    <string name="payment_status_deposit_partial">DEPOSIT PARTIAL</string>
+    <string name="payment_status_deposit_paid">DEPOSIT PAID</string>
+    <string name="payment_status_balance_partial">INSTALLMENT ACTIVE</string>
+    <string name="payment_status_fully_paid">FULLY PAID</string>
+    <string name="booking_label_stage_deposit">STAGE 1: DEPOSIT</string>
+    <string name="booking_label_stage_balance">STAGE 2: PACKAGE BALANCE</string>
+    <string name="booking_label_stage_completed">PAYMENT COMPLETED</string>
+    <string name="booking_label_paid_amount">Total Paid</string>
+    <string name="booking_label_balance_due">Outstanding Balance</string>
+    <string name="booking_label_deposit_progress">Deposit: %1$s / %2$s</string>
+    <string name="booking_label_balance_progress">Package Balance: %1$s / %2$s</string>
+    <string name="booking_label_remaining_deposit_format">Remaining Deposit: %1$s</string>
+    <string name="booking_label_remaining_balance_format">Remaining Balance: %1$s</string>
+    <string name="booking_btn_pay_now">Pay Now</string>
+    <string name="booking_btn_pay_deposit_format">Pay Deposit (%1$s)</string>
+    <string name="booking_btn_pay_balance_format">Pay Balance (%1$s)</string>
+    <string name="booking_meta_format">%1$s • %2$d Days %3$d Nights • %4$d Pax</string>
+    <string name="booking_meta_no_duration_format">%1$s • %2$d Pax</string>
+
+    <!-- Pay Now Quick Sheet Strings -->
+    <string name="pay_sheet_title">Make Payment</string>
+    <string name="pay_sheet_sub">Select payment amount and method for your booking.</string>
+    <string name="pay_sheet_opt_full_deposit">Pay Remaining Deposit (%1$s)</string>
+    <string name="pay_sheet_opt_full_balance">Pay Total Balance (%1$s)</string>
+    <string name="pay_sheet_opt_custom">Custom Installment Amount</string>
+    <string name="pay_sheet_custom_hint">Enter installment amount in RM</string>
+    <string name="pay_sheet_method_title">Select Payment Method</string>
+    <string name="pay_sheet_method_fpx">FPX Online Banking (Instant)</string>
+    <string name="pay_sheet_method_card">Credit / Debit Card (Visa/Mastercard)</string>
+    <string name="pay_sheet_method_bank">Bank Transfer / DuitNow QR</string>
+    <string name="pay_sheet_btn_confirm">Confirm &amp; Pay %1$s</string>
+    <string name="pay_sheet_success">Payment of %1$s was successful! Receipt has been generated.</string>
+    <string name="pay_sheet_err_min_amount">Please enter a valid payment amount.</string>
+    <string name="pay_sheet_err_max_amount">Payment amount cannot exceed remaining balance of %1$s.</string>
+    <string name="pay_sheet_processing">Processing payment, please wait...</string>
+
+    <string name="booking_meta_duration_format">%1$d Days %2$d Nights</string>
+    <string name="booking_meta_pax_format">%1$d Pax</string>
+    <string name="payment_detail_fully_paid_format">Completed: %1$s / %2$s (Balance: RM 0.00)</string>
+    <string name="payment_detail_deposit_format">Deposit: %1$s / %2$s (Remaining: %3$s)</string>
+    <string name="payment_detail_balance_format">Package Balance: %1$s / %2$s (Remaining: %3$s)</string>
+    <string name="pay_sheet_opt_deposit_preset">Pay Remaining Deposit (%1$s)</string>
+    <string name="pay_sheet_opt_balance_preset">Pay Total Balance (%1$s)</string>
+    <string name="pay_success_toast">Payment of %1$s successful! Official receipt generated.</string>
+    <string name="pay_btn_view_receipt">View Receipt</string>
 </resources>

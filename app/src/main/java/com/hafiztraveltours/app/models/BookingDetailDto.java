@@ -109,6 +109,9 @@ public class BookingDetailDto extends BookingDto {
         @SerializedName("payment_no")
         public String paymentNo;
 
+        @SerializedName("installment_index")
+        public int installmentIndex;
+
         @SerializedName("amount")
         public double amount;
 
@@ -117,6 +120,24 @@ public class BookingDetailDto extends BookingDto {
 
         @SerializedName("status")
         public String status;
+
+        @SerializedName("is_verified")
+        public boolean isVerified;
+
+        @SerializedName("stage")
+        public String stage;
+
+        @SerializedName("stage_label")
+        public String stageLabel;
+
+        @SerializedName("receipt_id")
+        public Integer receiptId;
+
+        @SerializedName("receipt_no")
+        public String receiptNo;
+
+        @SerializedName("receipt_date")
+        public String receiptDate;
 
         @SerializedName("paid_at")
         public String paidAt;

@@ -95,4 +95,10 @@ public interface ApiService {
             @retrofit2.http.Part("traveller_id") okhttp3.RequestBody travellerId,
             @retrofit2.http.Part okhttp3.MultipartBody.Part file
     );
+
+    @retrofit2.http.POST("v1/bookings/{booking}/pay")
+    Call<ApiResponse<com.hafiztraveltours.app.models.BookingDetailDto>> payBooking(
+            @Path("booking") int bookingId,
+            @retrofit2.http.Body java.util.Map<String, Object> body
+    );
 }

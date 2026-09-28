@@ -1021,40 +1021,26 @@
     <string name="err_current_password_required">Sila masukkan kata laluan semasa anda</string>
     <string name="passenger_err_pax_over">Terlalu ramai jemaah (%1$d ditambah, tempahan memerlukan %2$d). Sila keluarkan %3$d jemaah.</string>
     <!-- Audit fix: layout user-facing strings -->
-    <string name="booking_success_title">Tempahan Berjaya Didaftarkan!</string>
-    <string name="booking_success_body">Alhamdulillah, terima kasih kerana memilih Hafiz Travel &amp; Tours sebagai rakan perjalanan ibadah anda.</string>
-    <string name="booking_success_total_label">Jumlah Pembayaran</string>
-    <string name="booking_success_view">LIHAT TEMPAHAN SAYA</string>
-    <string name="booking_success_home">KEMBALI KE HALAMAN UTAMA</string>
-    <string name="booking_success_download_invoice">Muat Turun Invois / Resit (PDF)</string>
-    <string name="booking_success_manage_docs">Urus Dokumen Jemaah</string>
-    <string name="booking_success_next_steps_title">Panduan Langkah Seterusnya</string>
-    <string name="booking_success_step1_title">1. Muat Naik Dokumen Jemaah</string>
-    <string name="booking_success_step1_desc">Sila muat naik salinan pasport &amp; gambar visa untuk proses permohonan visa Umrah.</string>
-    <string name="booking_success_step2_title">2. Penjelasan Baki Bayaran</string>
-    <string name="booking_success_step2_desc">Baki bayaran perlu diselesaikan 45 hari sebelum tarikh pelepasan anda.</string>
-    <string name="booking_success_step3_title">3. Taklimat &amp; Beg Umrah</string>
-    <string name="booking_success_step3_desc">Ambil beg dan sertai taklimat umrah di cawangan pilihan anda.</string>
     <string name="booking_success_copy_no">Salin</string>
     <string name="booking_success_copied_toast">No. Tempahan disalin: %1$s</string>
     <string name="content_desc_back">Kembali</string>
     <string name="summary_title">Semakan Tempahan</string>
-    <string name="payment_title">Pembayaran &amp; Sahkan</string>
     <string name="config_title">Pilihan Pakej &amp; Bilik</string>
     <string name="departure_range_format">%1$s hingga %2$s</string>
     <!-- M7: booking/summary/payment/config layouts -->
     <string name="summary_step_package">01 Pakej</string>
     <string name="summary_step_travellers">02 Jemaah</string>
-    <string name="summary_step_review">03 Semakan</string>
-    <string name="summary_step_review_done">03 Semakan</string>
-    <string name="summary_step_payment">04 Bayaran</string>
+    <string name="summary_step_review">03 Semak &amp; Sahkan</string>
     <string name="summary_card_package">Ringkasan Pakej Terpilih</string>
     <string name="summary_card_travellers">Senarai Jemaah</string>
     <string name="summary_card_payment">Ringkasan Bayaran</string>
     <string name="summary_grand_total">Jumlah Keseluruhan</string>
-    <string name="summary_phase2_title">Pengesahan Fasa 2 Tamat</string>
-    <string name="summary_phase2_body">Maklumat tempahan dan jemaah telah berjaya disemak. Integrasi modul pembayaran rasmi &amp; penyerahan backend akan dilaksanakan dalam Fasa 3.</string>
-    <string name="summary_continue_payment">TERUSKAN KE PEMBAYARAN</string>
+    <string name="summary_payment_notice_title">Maklumat Bayaran &amp; Deposit</string>
+    <string name="summary_payment_notice_body">Pengesahan tempahan ini tidak memerlukan bayaran segera. Setelah tempahan disahkan, anda boleh membuat bayaran deposit atau baki pakej pada bila-bila masa melalui menu Tempahan Saya (My Booking).</string>
+    <string name="summary_checkbox_agree">Saya telah membaca dan bersetuju dengan Terma &amp; Syarat serta Polisi Pembatalan Hafiz Travel &amp; Tours.</string>
+    <string name="summary_view_terms_link">Lihat Terma &amp; Syarat Lengkap ›</string>
+    <string name="btn_confirm_booking">SAHKAN TEMPAHAN</string>
+    <string name="booking_confirmed_success">Tempahan berjaya dihantar! Sila jelaskan deposit melalui Tempahan Saya.</string>
     <string name="config_subtitle">Sila pilih bilik &amp; bilangan pax sebelum mengisi maklumat jemaah</string>
     <string name="config_room_type">Jenis Bilik</string>
     <string name="config_pax_label">Bilangan Jemaah (Dewasa)</string>
@@ -1065,22 +1051,6 @@
     <string name="config_apply">GUNA</string>
     <string name="config_total_label">Jumlah Anggaran Kos</string>
     <string name="config_continue">TERUSKAN KE BUTIRAN JEMAAH</string>
-    <string name="pay_amount_label">Jumlah Bayaran Anggaran</string>
-    <string name="pay_type_header">Pilihan Mod Bayaran</string>
-    <string name="pay_full">Bayaran Penuh Anggaran</string>
-    <string name="pay_full_sub">Bayaran penuh sekaligus untuk semua jemaah</string>
-    <string name="pay_deposit">Bayaran Deposit (RM 1,000 / pax)</string>
-    <string name="pay_deposit_sub">RM 1,000 / pax • Baki dijelaskan 45 hari sebelum bertolak</string>
-    <string name="pay_channel_header">Saluran Pembayaran</string>
-    <string name="pay_fpx">Online Banking / FPX (ToyyibPay Gateway)</string>
-    <string name="pay_fpx_sub">Maybank2u, CIMB Clicks, Bank Islam &amp; lain-lain</string>
-    <string name="pay_card">Kad Kredit / Debit</string>
-    <string name="pay_card_sub">Visa &amp; Mastercard</string>
-    <string name="pay_bank">Pemindahan Bank Manual (Upload Resit)</string>
-    <string name="pay_bank_sub">Pindahan akaun syarikat / Mesin Deposit Tunai (CDM)</string>
-    <string name="pay_trust_banner">Transaksi Selamat 256-Bit SSL • Patuh Syariah</string>
-    <string name="pay_confirm">BAYAR &amp; SAHKAN TEMPAHAN</string>
-    <string name="pay_deposit_cta">BAYAR DEPOSIT (%1$s)</string>
     <string name="clothes_size_format">Saiz: %1$s</string>
     <string name="content_desc_close">Tutup</string>
     <string name="content_desc_refresh">Muat semula lokasi</string>
@@ -1114,11 +1084,8 @@
     <string name="doc_name_passport_photo">Foto Pasport (Latar Belakang Putih)</string>
     <!-- Terms & Conditions Booking Step (Exact Official PDF) -->
     <string name="terms_title">Terma &amp; Syarat</string>
-    <string name="terms_header_subtitle">Sila baca dan fahami Terma &amp; Syarat rasmi Hafiz Travel &amp; Tours Sdn Bhd sebelum meneruskan pembayaran.</string>
-    <string name="terms_checkbox_agree">Saya telah membaca dan bersetuju dengan Terma &amp; Syarat</string>
-    <string name="terms_continue_payment">TERUSKAN KE PEMBAYARAN</string>
-    <string name="summary_continue_terms">TERUSKAN KE TERMA &amp; SYARAT</string>
-    <string name="terms_required_error">Sila baca dan bersetuju dengan Terma &amp; Syarat sebelum meneruskan pembayaran.</string>
+    <string name="terms_close_viewer">Faham &amp; Kembali</string>
+    <string name="terms_required_error">Sila tanda persetujuan Terma &amp; Syarat sebelum membuat pengesahan tempahan.</string>
 
     <string name="terms_company_title">HAFIZ TRAVEL &amp; TOURS SDN BHD</string>
     <string name="terms_company_reg">No. Pendaftaran: 202201043065 (1488762-A) | KPK/LN: 10751</string>
@@ -1251,6 +1218,9 @@
     <string name="receipt_list_title">Resit Bayaran</string>
     <string name="receipt_list_sub">Resit rasmi bagi setiap bayaran deposit dan ansuran bulanan yang telah disahkan.</string>
     <string name="receipt_no_records">Tiada resit bayaran direkodkan lagi. Resit rasmi akan dijana secara automatik setelah bayaran disahkan.</string>
+    <string name="payment_history_item_title">Bayaran #%1$d • %2$s</string>
+    <string name="payment_history_ref_format">Rujukan: %1$s</string>
+    <string name="payment_history_receipt_tag">Resit: %1$s</string>
 
     <!-- Dialog / Toast Strings -->
     <string name="toast_doc_verified">Dokumen telah disahkan.</string>
@@ -1262,9 +1232,57 @@
     <string name="dialog_btn_understand">Faham</string>
     <string name="dialog_btn_close">Tutup</string>
 
-    <string name="booking_success_view_invoice">Lihat Invois Rasmi (PDF)</string>
-    <string name="booking_success_view_receipt">Lihat Resit Bayaran (PDF)</string>
-
     <string name="doc_passport_validity_note">Pastikan salinan pasport antarabangsa anda sah sekurang-kurangnya 6 bulan sebelum tarikh pelepasan.</string>
     <string name="doc_photo_spec_note">Gambar berwarna berukuran pasport dengan latar belakang putih mengikut spesifikasi visa Umrah / Pelancongan.</string>
+
+    <!-- Luxury My Booking Overhaul Strings -->
+    <string name="booking_category_umrah">PAKEJ UMRAH</string>
+    <string name="booking_category_tour">PELANCONGAN ANTARABANGSA</string>
+    <string name="status_completed">SELESAI</string>
+    <string name="payment_status_deposit_pending">MENUNGGU DEPOSIT</string>
+    <string name="payment_status_deposit_partial">DEPOSIT SEPARA</string>
+    <string name="payment_status_deposit_paid">DEPOSIT SELESAI</string>
+    <string name="payment_status_balance_partial">BAKI ANSURAN AKTIF</string>
+    <string name="payment_status_fully_paid">BAYARAN PENUH</string>
+    <string name="booking_label_stage_deposit">PERINGKAT 1: DEPOSIT</string>
+    <string name="booking_label_stage_balance">PERINGKAT 2: BAKI PAKEJ</string>
+    <string name="booking_label_stage_completed">BAYARAN SELESAI</string>
+    <string name="booking_label_paid_amount">Jumlah Dibayar</string>
+    <string name="booking_label_balance_due">Baki Tertunggak</string>
+    <string name="booking_label_deposit_progress">Deposit: %1$s / %2$s</string>
+    <string name="booking_label_balance_progress">Baki Pakej: %1$s / %2$s</string>
+    <string name="booking_label_remaining_deposit_format">Baki Deposit: %1$s</string>
+    <string name="booking_label_remaining_balance_format">Baki Perlu Dibayar: %1$s</string>
+    <string name="booking_btn_pay_now">Bayar Sekarang</string>
+    <string name="booking_btn_pay_deposit_format">Bayar Deposit (%1$s)</string>
+    <string name="booking_btn_pay_balance_format">Bayar Baki (%1$s)</string>
+    <string name="booking_meta_format">%1$s • %2$d Hari %3$d Malam • %4$d Jemaah</string>
+    <string name="booking_meta_no_duration_format">%1$s • %2$d Jemaah</string>
+
+    <!-- Pay Now Quick Sheet Strings -->
+    <string name="pay_sheet_title">Buat Bayaran</string>
+    <string name="pay_sheet_sub">Pilih jumlah dan kaedah bayaran bagi tempahan anda.</string>
+    <string name="pay_sheet_opt_full_deposit">Bayar Penuh Baki Deposit (%1$s)</string>
+    <string name="pay_sheet_opt_full_balance">Bayar Penuh Baki Pakej (%1$s)</string>
+    <string name="pay_sheet_opt_custom">Bayaran Ansuran Pilihan</string>
+    <string name="pay_sheet_custom_hint">Masukkan jumlah ansuran dalam RM</string>
+    <string name="pay_sheet_method_title">Pilih Kaedah Bayaran</string>
+    <string name="pay_sheet_method_fpx">FPX Perbankan Dalam Talian (Segera)</string>
+    <string name="pay_sheet_method_card">Kad Kredit / Debit (Visa/Mastercard)</string>
+    <string name="pay_sheet_method_bank">Pindahan Bank / DuitNow QR</string>
+    <string name="pay_sheet_btn_confirm">Sahkan &amp; Bayar %1$s</string>
+    <string name="pay_sheet_success">Bayaran sebanyak %1$s berjaya! Resit rasmi telah dijana.</string>
+    <string name="pay_sheet_err_min_amount">Sila masukkan jumlah bayaran yang sah.</string>
+    <string name="pay_sheet_err_max_amount">Jumlah bayaran tidak boleh melebihi baki tertunggak %1$s.</string>
+    <string name="pay_sheet_processing">Memproses bayaran, sila tunggu...</string>
+
+    <string name="booking_meta_duration_format">%1$d Hari %2$d Malam</string>
+    <string name="booking_meta_pax_format">%1$d Jemaah</string>
+    <string name="payment_detail_fully_paid_format">Selesai: %1$s / %2$s (Baki: RM 0.00)</string>
+    <string name="payment_detail_deposit_format">Deposit: %1$s / %2$s (Baki Deposit: %3$s)</string>
+    <string name="payment_detail_balance_format">Baki Pakej: %1$s / %2$s (Tinggal: %3$s)</string>
+    <string name="pay_sheet_opt_deposit_preset">Bayar Penuh Baki Deposit (%1$s)</string>
+    <string name="pay_sheet_opt_balance_preset">Bayar Penuh Baki Pakej (%1$s)</string>
+    <string name="pay_success_toast">Bayaran sebanyak %1$s berjaya! Resit rasmi telah dijana.</string>
+    <string name="pay_btn_view_receipt">Lihat Resit</string>
 </resources>
