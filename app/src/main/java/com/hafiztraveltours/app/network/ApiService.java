@@ -82,8 +82,9 @@ public interface ApiService {
     );
 
     @retrofit2.http.GET("v1/bookings/{booking}/documents")
-    Call<ApiResponse<List<com.hafiztraveltours.app.models.DocumentDto>>> getBookingDocuments(
-            @Path("booking") int bookingId
+    Call<com.hafiztraveltours.app.models.BookingDocumentsResponse> getBookingDocuments(
+            @Path("booking") int bookingId,
+            @Query("traveller_id") Integer travellerId
     );
 
     @retrofit2.http.Multipart
@@ -91,6 +92,7 @@ public interface ApiService {
     Call<ApiResponse<com.hafiztraveltours.app.models.DocumentDto>> uploadBookingDocument(
             @Path("booking") int bookingId,
             @retrofit2.http.Part("document_code") okhttp3.RequestBody documentCode,
+            @retrofit2.http.Part("traveller_id") okhttp3.RequestBody travellerId,
             @retrofit2.http.Part okhttp3.MultipartBody.Part file
     );
 }

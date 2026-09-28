@@ -61,7 +61,7 @@
             android:paddingTop="16dp"
             android:paddingBottom="24dp">
 
-            <!-- Summary Intro Card -->
+            <!-- Summary Intro Card & Official Entity Header -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -89,18 +89,205 @@
                     android:textStyle="bold"
                     tools:text="Standard • 1 Jemaah" />
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="10dp"
+                    android:background="@color/card_border" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/terms_company_title"
+                    android:textColor="@color/brand_magenta"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="@string/terms_company_reg"
+                    android:textColor="@color/text_dark"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/terms_company_address"
+                    android:textColor="@color/text_gray"
+                    android:textSize="11sp"
+                    android:lineSpacingExtra="2dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:text="@string/terms_company_contact"
+                    android:textColor="@color/text_gray"
+                    android:textSize="11sp"
+                    android:lineSpacingExtra="2dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="10dp"
+                    android:background="@color/card_border" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/terms_scope_body"
+                    android:textColor="@color/text_dark"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:lineSpacingExtra="3dp" />
+
+            </LinearLayout>
+
+            <!-- 1. Deposit & Bayaran Penuh Pakej -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_detail_card"
+                android:padding="16dp"
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/terms_sec_deposit_title"
+                    android:textColor="@color/brand_magenta"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="@string/terms_header_subtitle"
-                    android:textColor="@color/text_gray"
+                    android:text="@string/terms_sec_deposit_body"
+                    android:textColor="@color/text_dark"
                     android:textSize="12sp"
-                    android:lineSpacingExtra="2dp" />
+                    android:lineSpacingExtra="3dp" />
 
             </LinearLayout>
 
-            <!-- Section 1: Registration -->
+            <!-- 2. Pemulangan Wang -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_detail_card"
+                android:padding="16dp"
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/terms_sec_refund_title"
+                    android:textColor="@color/brand_magenta"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/terms_sec_refund_body"
+                    android:textColor="@color/text_dark"
+                    android:textSize="12sp"
+                    android:lineSpacingExtra="3dp" />
+
+            </LinearLayout>
+
+            <!-- A. Aturcara & Perjalanan Pakej -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_detail_card"
+                android:padding="16dp"
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/terms_sec_itinerary_title"
+                    android:textColor="@color/text_dark"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/terms_sec_itinerary_body"
+                    android:textColor="@color/text_gray"
+                    android:textSize="12sp"
+                    android:lineSpacingExtra="3dp" />
+
+            </LinearLayout>
+
+            <!-- B. Hotel Penginapan -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_detail_card"
+                android:padding="16dp"
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/terms_sec_hotel_title"
+                    android:textColor="@color/text_dark"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/terms_sec_hotel_body"
+                    android:textColor="@color/text_gray"
+                    android:textSize="12sp"
+                    android:lineSpacingExtra="3dp" />
+
+            </LinearLayout>
+
+            <!-- C. Syarat Tambahan -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_detail_card"
+                android:padding="16dp"
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/terms_sec_extra_title"
+                    android:textColor="@color/text_dark"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/terms_sec_extra_body"
+                    android:textColor="@color/text_gray"
+                    android:textSize="12sp"
+                    android:lineSpacingExtra="3dp" />
+
+            </LinearLayout>
+
+            <!-- D. Pendaftaran Pakej -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -120,7 +307,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="8dp"
                     android:text="@string/terms_sec_registration_body"
                     android:textColor="@color/text_gray"
                     android:textSize="12sp"
@@ -128,7 +315,7 @@
 
             </LinearLayout>
 
-            <!-- Section 2: Payment & Deposit -->
+            <!-- E. Dokumen Perjalanan -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -140,7 +327,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/terms_sec_payment_title"
+                    android:text="@string/terms_sec_documents_title"
                     android:textColor="@color/text_dark"
                     android:textSize="13sp"
                     android:textStyle="bold" />
@@ -148,15 +335,15 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:text="@string/terms_sec_payment_body"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/terms_sec_documents_body"
                     android:textColor="@color/text_gray"
                     android:textSize="12sp"
                     android:lineSpacingExtra="3dp" />
 
             </LinearLayout>
 
-            <!-- Section 3: Visa & Documents -->
+            <!-- F. Pembatalan Pakej, Penarikan Diri, Pindaan atau Perubahan Nama Peserta -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -168,7 +355,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/terms_sec_visa_title"
+                    android:text="@string/terms_sec_cancellation_f_title"
                     android:textColor="@color/text_dark"
                     android:textSize="13sp"
                     android:textStyle="bold" />
@@ -176,15 +363,15 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:text="@string/terms_sec_visa_body"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/terms_sec_cancellation_f_body"
                     android:textColor="@color/text_gray"
                     android:textSize="12sp"
                     android:lineSpacingExtra="3dp" />
 
             </LinearLayout>
 
-            <!-- Section 4: Cancellation & Refund -->
+            <!-- G. Terma dan Syarat Caj Pembatalan dan Penangguhan Tempahan -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -196,17 +383,17 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/terms_sec_cancellation_title"
-                    android:textColor="@color/text_dark"
+                    android:text="@string/terms_sec_cancellation_charges_title"
+                    android:textColor="@color/brand_magenta"
                     android:textSize="13sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:text="@string/terms_sec_cancellation_body"
-                    android:textColor="@color/text_gray"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/terms_sec_cancellation_charges_body"
+                    android:textColor="@color/text_dark"
                     android:textSize="12sp"
                     android:lineSpacingExtra="3dp" />
 
@@ -220,7 +407,7 @@
 
             </LinearLayout>
 
-            <!-- Section 5: Responsibilities -->
+            <!-- H. Hafiz Travel & Tours Sebagai Pihak Ketiga / Pihak Berkecuali -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -232,7 +419,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/terms_sec_responsibilities_title"
+                    android:text="@string/terms_sec_third_party_title"
                     android:textColor="@color/text_dark"
                     android:textSize="13sp"
                     android:textStyle="bold" />
@@ -240,15 +427,71 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:text="@string/terms_sec_responsibilities_body"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/terms_sec_third_party_body"
                     android:textColor="@color/text_gray"
                     android:textSize="12sp"
                     android:lineSpacingExtra="3dp" />
 
             </LinearLayout>
 
-            <!-- Section 6: Force Majeure -->
+            <!-- I. Hak Untuk Menolak Tempahan -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_detail_card"
+                android:padding="16dp"
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/terms_sec_refusal_title"
+                    android:textColor="@color/text_dark"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/terms_sec_refusal_body"
+                    android:textColor="@color/text_gray"
+                    android:textSize="12sp"
+                    android:lineSpacingExtra="3dp" />
+
+            </LinearLayout>
+
+            <!-- J. Tanggungjawab Pelanggan -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_detail_card"
+                android:padding="16dp"
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/terms_sec_customer_duty_title"
+                    android:textColor="@color/text_dark"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/terms_sec_customer_duty_body"
+                    android:textColor="@color/text_gray"
+                    android:textSize="12sp"
+                    android:lineSpacingExtra="3dp" />
+
+            </LinearLayout>
+
+            <!-- K. Lain - Lain Hal & Force Majeure -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -260,7 +503,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/terms_sec_force_majeure_title"
+                    android:text="@string/terms_sec_misc_title"
                     android:textColor="@color/text_dark"
                     android:textSize="13sp"
                     android:textStyle="bold" />
@@ -268,8 +511,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:text="@string/terms_sec_force_majeure_body"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/terms_sec_misc_body"
                     android:textColor="@color/text_gray"
                     android:textSize="12sp"
                     android:lineSpacingExtra="3dp" />
@@ -302,9 +545,11 @@
             android:text="@string/terms_checkbox_agree"
             android:textColor="@color/text_dark"
             android:textSize="13sp"
-            android:buttonTint="@color/brand_magenta"
+            android:button="@drawable/selector_checkbox_pink"
+            android:buttonTint="@null"
+            app:buttonTint="@null"
             android:lineSpacingExtra="2dp"
-            android:paddingStart="6dp"
+            android:paddingStart="8dp"
             android:paddingEnd="0dp"
             android:layout_marginBottom="10dp" />
 

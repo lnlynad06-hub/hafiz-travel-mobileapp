@@ -61,7 +61,8 @@ public final class ApiErrors {
         if (context == null) return "";
         if (response == null) return context.getString(fallback);
         int code = response.code();
-        logServerDetail(code, response);
+        String serverDetail = extractServerMessage(response);
+        Log.w(TAG, "HTTP " + code + (serverDetail != null ? ": " + serverDetail : ""));
         switch (code) {
             case 401:
                 return context.getString(R.string.err_session_expired);
@@ -69,10 +70,10 @@ public final class ApiErrors {
                 return context.getString(R.string.err_forbidden);
             case 404:
                 return context.getString(R.string.err_not_found);
-            case 422: {
-                String validation = firstValidationMessage(response);
-                return validation != null ? validation : context.getString(R.string.err_validation);
-            }
+            case 422:
+                return (serverDetail != null && !serverDetail.isEmpty())
+                        ? serverDetail
+                        : context.getString(R.string.err_validation);
             case 429:
                 return context.getString(R.string.err_too_many_requests);
             default:
@@ -103,15 +104,6 @@ public final class ApiErrors {
 
     // ---------- internals ----------
 
-    private static void logServerDetail(int code, Response<?> response) {
-        try {
-            String detail = extractServerMessage(response);
-            Log.w(TAG, "HTTP " + code + (detail != null ? ": " + detail : " (no body)"));
-        } catch (Exception e) {
-            Log.w(TAG, "HTTP " + response.code() + " (unreadable body)");
-        }
-    }
-
     /** Best-effort server text for logging / 422 UX. Null when absent/unparseable. */
     private static String extractServerMessage(Response<?> response) {
         if (response == null) return null;
@@ -135,11 +127,6 @@ public final class ApiErrors {
             }
         } catch (Exception ignored) {}
         return null;
-    }
-
-    /** First Laravel validation message: body.message, errorBody.message, or errors.*[0]. */
-    private static String firstValidationMessage(Response<?> response) {
-        return extractServerMessage(response);
     }
 
     private static String firstErrorsEntry(Object errors) {

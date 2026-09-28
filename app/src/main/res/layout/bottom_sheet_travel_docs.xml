@@ -61,6 +61,25 @@
             app:tint="#616161" />
     </RelativeLayout>
 
+    <!-- Traveller Selector for Multi-Passenger Bookings -->
+    <HorizontalScrollView
+        android:id="@+id/scrollTravellerSelector"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="14dp"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        android:visibility="gone">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroupTravellers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:singleLine="true"
+            app:singleSelection="true"
+            app:selectionRequired="true" />
+    </HorizontalScrollView>
+
     <!-- 2. Security / Information Banner -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"

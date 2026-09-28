@@ -126,7 +126,7 @@
 
             </LinearLayout>
 
-            <!-- Card 1: Amount Due Card -->
+            <!-- Card 1: Amount Due Overview Card -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -163,7 +163,7 @@
 
             </LinearLayout>
 
-            <!-- Card 2: Payment Type Selection (Full vs Deposit) -->
+            <!-- Card 2: Payment Type Selection (Full vs Deposit Luxury Cards) -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -180,36 +180,105 @@
                     android:textSize="13sp"
                     android:textStyle="bold" />
 
-                <RadioGroup
-                    android:id="@+id/radioGroupPaymentType"
+                <!-- 1. Full Payment Option Card -->
+                <LinearLayout
+                    android:id="@+id/cardFullPayment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp">
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_selection_card_selected"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="12dp">
 
-                    <RadioButton
-                        android:id="@+id/radioFullPayment"
-                        android:layout_width="match_parent"
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:padding="8dp"
-                        android:text="@string/pay_full"
-                        android:textColor="@color/text_dark"
-                        android:textSize="13sp" />
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
-                    <RadioButton
-                        android:id="@+id/radioDepositPayment"
-                        android:layout_width="match_parent"
+                        <TextView
+                            android:id="@+id/tvFullPaymentTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/pay_full"
+                            android:textColor="@color/pink_dark"
+                            android:textSize="13.5sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvFullPaymentSub"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="@string/pay_full_sub"
+                            android:textColor="@color/text_gray"
+                            android:textSize="11.5sp" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/ivCheckFullPayment"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_marginStart="8dp"
+                        android:src="@drawable/ic_check_circle_magenta"
+                        android:contentDescription="@null" />
+                </LinearLayout>
+
+                <!-- 2. Deposit Payment Option Card -->
+                <LinearLayout
+                    android:id="@+id/cardDepositPayment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_selection_card_unselected"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="12dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:padding="8dp"
-                        android:text="@string/pay_deposit"
-                        android:textColor="@color/text_dark"
-                        android:textSize="13sp" />
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
-                </RadioGroup>
+                        <TextView
+                            android:id="@+id/tvDepositPaymentTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/pay_deposit"
+                            android:textColor="@color/text_dark"
+                            android:textSize="13.5sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvDepositPaymentSub"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="@string/pay_deposit_sub"
+                            android:textColor="@color/text_gray"
+                            android:textSize="11.5sp" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/ivCheckDepositPayment"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_marginStart="8dp"
+                        android:src="@drawable/ic_circle_unselected"
+                        android:contentDescription="@null" />
+                </LinearLayout>
 
             </LinearLayout>
 
-            <!-- Card 3: Payment Method Options -->
+            <!-- Card 3: Payment Method Channels (Luxury Selectable Cards) -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -226,42 +295,217 @@
                     android:textSize="13sp"
                     android:textStyle="bold" />
 
-                <RadioGroup
-                    android:id="@+id/radioGroupPaymentMethod"
+                <!-- Channel 1: FPX Online Banking -->
+                <LinearLayout
+                    android:id="@+id/cardChannelFpx"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp">
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_selection_card_selected"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="12dp">
 
-                    <RadioButton
-                        android:id="@+id/radioFpxPayment"
-                        android:layout_width="match_parent"
+                    <FrameLayout
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="@drawable/circle_bg_light">
+
+                        <ImageView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_card"
+                            app:tint="@color/pink_dark"
+                            android:contentDescription="@null" />
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:padding="8dp"
-                        android:text="@string/pay_fpx"
-                        android:textColor="@color/text_dark"
-                        android:textSize="13sp" />
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
-                    <RadioButton
-                        android:id="@+id/radioCardPayment"
-                        android:layout_width="match_parent"
+                        <TextView
+                            android:id="@+id/tvChannelFpxTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/pay_fpx"
+                            android:textColor="@color/pink_dark"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="1dp"
+                            android:text="@string/pay_fpx_sub"
+                            android:textColor="@color/text_gray"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/ivCheckChannelFpx"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_marginStart="8dp"
+                        android:src="@drawable/ic_check_circle_magenta"
+                        android:contentDescription="@null" />
+                </LinearLayout>
+
+                <!-- Channel 2: Credit / Debit Card -->
+                <LinearLayout
+                    android:id="@+id/cardChannelCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_selection_card_unselected"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="12dp">
+
+                    <FrameLayout
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="@drawable/circle_bg_light">
+
+                        <ImageView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_card"
+                            app:tint="@color/text_gray"
+                            android:contentDescription="@null" />
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:padding="8dp"
-                        android:text="@string/pay_card"
-                        android:textColor="@color/text_dark"
-                        android:textSize="13sp" />
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
-                    <RadioButton
-                        android:id="@+id/radioBankTransfer"
-                        android:layout_width="match_parent"
+                        <TextView
+                            android:id="@+id/tvChannelCardTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/pay_card"
+                            android:textColor="@color/text_dark"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="1dp"
+                            android:text="@string/pay_card_sub"
+                            android:textColor="@color/text_gray"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/ivCheckChannelCard"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_marginStart="8dp"
+                        android:src="@drawable/ic_circle_unselected"
+                        android:contentDescription="@null" />
+                </LinearLayout>
+
+                <!-- Channel 3: Manual Bank Transfer / CDM -->
+                <LinearLayout
+                    android:id="@+id/cardChannelBank"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_selection_card_unselected"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="12dp">
+
+                    <FrameLayout
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="@drawable/circle_bg_light">
+
+                        <ImageView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_doc_passport"
+                            app:tint="@color/text_gray"
+                            android:contentDescription="@null" />
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:padding="8dp"
-                        android:text="@string/pay_bank"
-                        android:textColor="@color/text_dark"
-                        android:textSize="13sp" />
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
-                </RadioGroup>
+                        <TextView
+                            android:id="@+id/tvChannelBankTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/pay_bank"
+                            android:textColor="@color/text_dark"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="1dp"
+                            android:text="@string/pay_bank_sub"
+                            android:textColor="@color/text_gray"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/ivCheckChannelBank"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_marginStart="8dp"
+                        android:src="@drawable/ic_circle_unselected"
+                        android:contentDescription="@null" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Trust & Security Banner -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingVertical="8dp">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_shield_check"
+                    app:tint="@color/text_gray"
+                    android:contentDescription="@null" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:text="@string/pay_trust_banner"
+                    android:textColor="@color/text_gray"
+                    android:textSize="11sp" />
             </LinearLayout>
 
             <!-- Loading Indicator -->
@@ -270,7 +514,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="12dp"
                 android:indeterminateTint="@color/brand_magenta"
                 android:visibility="gone" />
 
@@ -299,6 +543,7 @@
             android:gravity="center">
 
             <TextView
+                android:id="@+id/txtPayButtonLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/pay_confirm"
@@ -311,3 +556,4 @@
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+

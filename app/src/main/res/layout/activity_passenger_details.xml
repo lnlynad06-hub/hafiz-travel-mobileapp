@@ -200,12 +200,21 @@
                 android:id="@+id/btnAddTravellerCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="12dp"
                 android:background="@drawable/bg_detail_card"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center"
+                android:orientation="horizontal"
                 android:padding="14dp">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/ic_users"
+                    app:tint="@color/brand_magenta"
+                    android:contentDescription="@null" />
 
                 <TextView
                     android:layout_width="wrap_content"

@@ -1063,6 +1063,11 @@
     <string name="passenger_missing_clothes_size">Clothing / Abaya Size</string>
     <string name="passenger_traveller_title_format">Traveller %1$d</string>
     <string name="passenger_delete">Delete</string>
+    <string name="passenger_sub_personal_info">Personal Information</string>
+    <string name="passenger_sub_passport_info">International Passport Document</string>
+    <string name="passenger_sub_extra_info">Additional Options &amp; Mahram</string>
+    <string name="passenger_passport_hint_validity">Must be valid for at least 6 months before departure date</string>
+    <string name="passenger_default_preview_name">Please enter traveller details</string>
     <string name="passenger_field_title_hint">Title</string>
     <string name="passenger_field_name_label">Full Name as Passport / IC *</string>
     <string name="passenger_field_name_hint">e.g. Jane Doe</string>
@@ -1134,21 +1139,32 @@
     <string name="payment_summary_format">%1$s • %2$s • %3$d Pax</string>
     <string name="passenger_err_pax_over">Too many travellers (%1$d added, booking requires %2$d). Please remove %3$d traveller(s).</string>
     <!-- Audit fix: layout user-facing strings -->
-    <string name="booking_success_title">Booking Successfully Created</string>
-    <string name="booking_success_body">Thank you for choosing Hafiz Travel &amp; Tours. Your booking details have been recorded.</string>
+    <string name="booking_success_title">Booking Successfully Created!</string>
+    <string name="booking_success_body">Thank you for choosing Hafiz Travel &amp; Tours as your trusted pilgrimage partner.</string>
     <string name="booking_success_total_label">Total Payment</string>
     <string name="booking_success_view">VIEW MY BOOKINGS</string>
     <string name="booking_success_home">BACK TO HOME</string>
+    <string name="booking_success_download_invoice">Download Invoice / Receipt (PDF)</string>
+    <string name="booking_success_manage_docs">Manage Traveller Documents</string>
+    <string name="booking_success_next_steps_title">Next Steps Guide</string>
+    <string name="booking_success_step1_title">1. Upload Traveller Documents</string>
+    <string name="booking_success_step1_desc">Please upload passport copies &amp; visa photos for Umrah visa processing.</string>
+    <string name="booking_success_step2_title">2. Balance Payment</string>
+    <string name="booking_success_step2_desc">Remaining balance must be settled 45 days before your departure date.</string>
+    <string name="booking_success_step3_title">3. Briefing &amp; Luggage Collection</string>
+    <string name="booking_success_step3_desc">Collect your travel kit and attend the Umrah briefing at your chosen branch.</string>
+    <string name="booking_success_copy_no">Copy</string>
+    <string name="booking_success_copied_toast">Booking No. copied: %1$s</string>
     <string name="content_desc_back">Back</string>
     <string name="summary_title">Booking Review</string>
     <string name="payment_title">Payment &amp; Confirm</string>
     <string name="config_title">Package &amp; Room Options</string>
     <string name="departure_range_format">%1$s to %2$s</string>
     <!-- M7: booking/summary/payment/config layouts -->
-    <string name="summary_step_package">01 Package ✓</string>
-    <string name="summary_step_travellers">02 Travellers ✓</string>
+    <string name="summary_step_package">01 Package</string>
+    <string name="summary_step_travellers">02 Travellers</string>
     <string name="summary_step_review">03 Review</string>
-    <string name="summary_step_review_done">03 Review ✓</string>
+    <string name="summary_step_review_done">03 Review</string>
     <string name="summary_step_payment">04 Payment</string>
     <string name="summary_card_package">Selected Package Summary</string>
     <string name="summary_card_travellers">Traveller List</string>
@@ -1170,12 +1186,20 @@
     <string name="pay_amount_label">Estimated Amount Due</string>
     <string name="pay_type_header">Payment Mode Options</string>
     <string name="pay_full">Estimated Full Payment</string>
+    <string name="pay_full_sub">Full one-time payment for all travellers</string>
     <string name="pay_deposit">Deposit Payment (RM 1,000 / pax)</string>
+    <string name="pay_deposit_sub">RM 1,000 / pax • Balance due 45 days before departure</string>
     <string name="pay_channel_header">Payment Channels</string>
     <string name="pay_fpx">Online Banking / FPX (ToyyibPay Gateway)</string>
+    <string name="pay_fpx_sub">Maybank2u, CIMB Clicks, Bank Islam &amp; others</string>
     <string name="pay_card">Credit / Debit Card</string>
+    <string name="pay_card_sub">Visa &amp; Mastercard</string>
     <string name="pay_bank">Manual Bank Transfer (Upload Receipt)</string>
+    <string name="pay_bank_sub">Company account transfer / Cash Deposit Machine (CDM)</string>
+    <string name="pay_trust_banner">256-Bit SSL Secure Transaction • Shariah Compliant</string>
     <string name="pay_confirm">PAY &amp; CONFIRM BOOKING</string>
+    <string name="pay_deposit_cta">PAY DEPOSIT (%1$s)</string>
+    <string name="clothes_size_format">Size: %1$s</string>
     <string name="content_desc_close">Close</string>
     <string name="content_desc_refresh">Refresh location</string>
     <string name="content_desc_share">Share package</string>
@@ -1206,25 +1230,58 @@
     <string name="doc_name_passport">Passport Copy (Main Page)</string>
     <string name="doc_name_ic">MyKad / Identity Card (IC)</string>
     <string name="doc_name_passport_photo">Passport Photo (White Background)</string>
-    <!-- Terms & Conditions Booking Step -->
+    <!-- Terms & Conditions Booking Step (Exact Official PDF) -->
     <string name="terms_title">Terms &amp; Conditions</string>
-    <string name="terms_header_subtitle">Please read and agree to the booking terms before proceeding to payment.</string>
+    <string name="terms_header_subtitle">Please read and understand the official Terms &amp; Conditions of Hafiz Travel &amp; Tours Sdn Bhd before proceeding to payment.</string>
     <string name="terms_checkbox_agree">I have read and agree to the Terms &amp; Conditions</string>
     <string name="terms_continue_payment">CONTINUE TO PAYMENT</string>
     <string name="summary_continue_terms">CONTINUE TO TERMS &amp; CONDITIONS</string>
     <string name="terms_required_error">You must agree to the Terms &amp; Conditions before proceeding to payment.</string>
-    <string name="terms_sec_registration_title">1. Registration &amp; Booking Confirmation</string>
-    <string name="terms_sec_registration_body">Booking is considered confirmed only upon receipt of the deposit/payment and issuance of an official booking confirmation. Hafiz Travel &amp; Tour reserves the right to decline or adjust registrations subject to seat availability and regulatory guidelines.</string>
-    <string name="terms_sec_payment_title">2. Deposit &amp; Payment Schedule</string>
-    <string name="terms_sec_payment_body">A deposit is required at booking time to secure seats and accommodation. The remaining balance must be paid in full at least 45 days prior to the scheduled departure date unless stated otherwise in the package details.</string>
-    <string name="terms_sec_visa_title">3. Visa Processing &amp; Travel Documents</string>
-    <string name="terms_sec_visa_body">Travel visa processing is handled directly by Hafiz Travel &amp; Tour on behalf of the customer. Customers must ensure their international passport is valid for at least 6 months from the departure date and provide accurate personal information.</string>
-    <string name="terms_sec_cancellation_title">4. Cancellation &amp; Refund Policy</string>
-    <string name="terms_sec_cancellation_body">Any cancellation request must be submitted in writing. Deposit payments are non-refundable. Cancellations 45 days or more before departure are subject to administrative fees; cancellations under 45 days are subject to airline, hotel, and supplier cancellation penalties.</string>
-    <string name="terms_sec_responsibilities_title">5. Pilgrim Responsibilities &amp; Code of Conduct</string>
-    <string name="terms_sec_responsibilities_body">Pilgrims and travellers agree to abide by the laws of Malaysia and destination countries, follow tour leader and mutawwif instructions, and maintain appropriate health and travel fitness.</string>
-    <string name="terms_sec_force_majeure_title">6. Force Majeure &amp; Itinerary Adjustments</string>
-    <string name="terms_sec_force_majeure_body">Hafiz Travel &amp; Tour is not liable for changes or cancellations due to unforeseen circumstances beyond reasonable control, including natural disasters, flight reschedules, visa authority policy shifts, or government directives. Necessary itinerary adjustments will be made in the best interest of traveller safety and welfare.</string>
+
+    <string name="terms_company_title">HAFIZ TRAVEL &amp; TOURS SDN BHD</string>
+    <string name="terms_company_reg">Reg. No.: 202201043065 (1488762-A) | KPK/LN: 10751</string>
+    <string name="terms_company_address">No. 31, Jalan Dataran Larkin 1, Taman Dataran Larkin, 80350 Johor Bahru, Johor, Malaysia</string>
+    <string name="terms_company_contact">Tel: +607-244 2262 / +6018-405 2262\nEmail: sales@hafiztraveltours.com | Web: www.hafiztraveltours.com</string>
+    <string name="terms_scope_body">These Terms &amp; Conditions apply to all tour packages offered by Hafiz Travel &amp; Tours Sdn. Bhd. (hereafter referred to as Hafiz Travel &amp; Tours), covering Umrah, “Outbound”, and “Inbound” tour packages.</string>
+
+    <string name="terms_sec_deposit_title">DEPOSIT &amp; FULL PACKAGE PAYMENT</string>
+    <string name="terms_sec_deposit_body">1. Advance deposit for each Umrah package is RM1,000.00 per person.\n2. Advance deposit for each “Outbound” and “Inbound” package is RM500.00 per person.\n3. The balance of package payment must be settled within:\n   I. 60 days before departure date for School Holiday Umrah Packages\n   II. 45 days before departure date for Regular Season Umrah Packages\n4. Payment can be made via:\n   I. Cash only at Hafiz Travel &amp; Tours Head Office\n   II. Cash deposit to Hafiz Travel &amp; Tours Bank Account (Transaction slip will serve as proof of payment)\n5. Official Bank Account Information:\n   HAFIZ TRAVEL &amp; TOURS SDN. BHD.\n   Bank Muamalat Malaysia Berhad: 0101 0003 8447 14\n6. Hafiz Travel &amp; Tours shall not be held responsible for any payments made to non-company accounts or third-party accounts.</string>
+
+    <string name="terms_sec_refund_title">REFUND POLICY</string>
+    <string name="terms_sec_refund_body">1. Any refund or reimbursement of package fees, whether cancellation is initiated by the participant or Hafiz Travel &amp; Tours, is subject to refund approvals from third-party service providers.\n2. The refund processing period is between three (3) to nine (9) months from the date of cancellation.\n3. No refund will be provided to participants if they do not utilize any activities or inclusions provided within the package.\n4. Refunds or administration fees charged are subject to the sole discretion of Hafiz Travel &amp; Tours if cancellation arises from unavoidable emergencies such as critical illness or death.</string>
+
+    <string name="terms_sec_itinerary_title">A. ITINERARY &amp; PACKAGE TRAVEL</string>
+    <string name="terms_sec_itinerary_body">1. Hafiz Travel &amp; Tours does not guarantee that provided packages are suitable for all segments of society, but guarantees the highest quality of dedicated service to all registered participants.\n2. Hafiz Travel &amp; Tours cannot be held liable for any illness, health issues, accidents, or fatalities arising from any activities provided or self-elected optional activities.\n3. Itinerary adjustments are governed under Regulation 9 of Schedule 4, Tourism Industry Act 1992. Should alternative arrangements be required, Hafiz Travel &amp; Tours is not obligated to ensure the alternative matches the exact cost/value of the original itinerary. Hafiz Travel &amp; Tours is not liable if pilgrims miss itinerary activities due to personal negligence or failure.</string>
+
+    <string name="terms_sec_hotel_title">B. HOTEL ACCOMMODATION</string>
+    <string name="terms_sec_hotel_body">1. Hotel star ratings and distances stated in promotional materials are based on hotel self-ratings provided for reference only.\n2. Star ratings and hospitality standards may differ across countries.\n3. Hafiz Travel &amp; Tours reserves the right to substitute advertised hotels due to lack of availability or unforeseen circumstances without prior notice.\n4. In the event of changes, Hafiz Travel &amp; Tours will make every reasonable effort to provide equivalent or superior hotel substitutes.\n5. Check-in and check-out policies vary by hotel; Hafiz Travel &amp; Tours is not liable for inconvenience caused by hotel policies.\n6. Room arrangements are strictly segregated by gender (men with men, women with women).</string>
+
+    <string name="terms_sec_extra_title">C. ADDITIONAL CONDITIONS &amp; ROOMING</string>
+    <string name="terms_sec_extra_body">1. Pilgrims registering for double (2-bed) or triple (3-bed) rooms must specify their designated roommates during registration.\n2. Pilgrims choosing quad (4-bed) or quint (5-bed) rooms must be prepared to upgrade (additional fee) to triple or double rooms if pairing quotas cannot be fulfilled.\n3. Each package includes one (1) Mutawwif. If a group requires two (2) Mutawwifs, an additional RM250.00 per person applies.\n4. If additional nights in Madinah are incurred due to airline schedule changes, supplementary charges apply: RM200.00/pax (Quad), RM350.00/pax (Triple), RM600.00/pax (Double) for economy hotels.\n5. If additional nights in Makkah are incurred due to airline schedule changes, supplementary charges apply: RM300.00/pax (Quad), RM450.00/pax (Triple), RM800.00/pax (Double) for economy hotels; or RM600.00/pax (Quad), RM900.00/pax (Triple), RM1,200.00/pax (Double) for 5-star hotels.</string>
+
+    <string name="terms_sec_registration_title">D. PACKAGE REGISTRATION</string>
+    <string name="terms_sec_registration_body">1. Customers are required to provide complete and accurate information:\n   I. Full participant name\n   II. Identification / passport number\n   III. Participant telephone number\n   IV. Full address of lead representative if registering as a group\n   V. Name and contact details of next-of-kin residing in Malaysia\n2. Hafiz Travel &amp; Tours will not be held responsible for incorrect or false particulars submitted.</string>
+
+    <string name="terms_sec_documents_title">E. TRAVEL DOCUMENTS</string>
+    <string name="terms_sec_documents_body">1. Participants must submit copies of the following documents:\n   I. International passport (valid for more than 6 months from departure date)\n   II. Meningococcal vaccination record (ACYW-135)\n   III. Visa photograph\n   IV. Mahram documentation (where applicable)\n   V. Additional relevant documentation for non-Malaysian citizens\n2. Copies must be submitted to Hafiz Travel &amp; Tours upon registration and no later than 60 days before the package departure date.\n3. Hafiz Travel &amp; Tours is not liable for issues arising if documents are not submitted within the stipulated timeframe.\n4. Hafiz Travel &amp; Tours acts as an intermediary for Umrah/tourist visa applications; visa issuance is subject to the sole approval of Saudi Arabian authorities.\n5. If visa is rejected, Hafiz Travel &amp; Tours is not liable and re-application fees apply.\n6. Sudden regulatory policy changes by authorities that prevent visa issuance or cause flight/hotel forfeiture are non-refundable.\n7. Hafiz Travel &amp; Tours is not liable for loss or damage to personal travel documents during the journey.</string>
+
+    <string name="terms_sec_cancellation_f_title">F. PACKAGE CANCELLATION, WITHDRAWAL, NAME &amp; DATE AMENDMENTS</string>
+    <string name="terms_sec_cancellation_f_body">1. Cancellation or amendment by Hafiz Travel &amp; Tours:\n   I. Hafiz Travel &amp; Tours reserves the right to cancel or amend trips subject to written notice.\n   II. An equivalent or better alternative package will be offered.\n   III. Participants may accept or decline the alternative.\n   IV. If declined, a refund will be issued after deducting administrative fees and third-party commitments already paid (hotels, flights, etc.).\n   V. Updates will be communicated via phone call, email, or WhatsApp.\n   VI. If amendments are not agreed upon, formal written notice is required to assess applicable charges.\n   VII. If agreeing to amendments, current prevailing rates of the new package apply.\n\n2. Cancellation &amp; withdrawal by participant:\n   I. All participant cancellations must be submitted in writing.\n   II. Cancellations (including promotional packages) entail full deposit forfeiture per person.\n   III. Hafiz Travel &amp; Tours is not liable if a participant is denied service by airlines, hotels, or service operators.\n   IV. If cancellation notice is received 44 working days or less before departure, standard fee schedules apply:</string>
+
+    <string name="terms_sec_cancellation_charges_title">G. CANCELLATION &amp; POSTPONEMENT FEE SCHEDULE</string>
+    <string name="terms_sec_cancellation_charges_body" formatted="false">1. Deposits are non-refundable once booking is entered into the system.\n2. 22-44 working days before flight date: 75% fee of total package price.\n3. 02-21 working days before flight date: 100% fee of total package price.\n4. If non-refundable commitments have been paid to third parties (flights, hotels, visas), the company reserves the right to deduct actual costs and refund only the remaining balance.\n5. Amendments by participant:\n   I. Any amendment must be submitted in writing.\n   II. Administration fee of RM200.00/person (standard packages) or RM500.00/person (promotional packages) applies for amendments.\n   III. If participant name change is requested after flight tickets have been ticketed, airline change penalties plus RM200.00 admin fee apply.\n6. Cancellations due to unavoidable illness or death require official supporting documentation (charges referenced in Item 3 apply).</string>
+
+    <string name="terms_sec_third_party_title">H. THIRD-PARTY &amp; INTERMEDIARY STATUS</string>
+    <string name="terms_sec_third_party_body">1. Hafiz Travel &amp; Tours acts solely as an intermediary between travellers and airlines, accommodation providers, transport companies, and ground operators.\n2. Hafiz Travel &amp; Tours does not own or operate third-party transport companies, airlines, hotels, or tour attractions.\n3. Hafiz Travel &amp; Tours is not liable for damages, delays, distress, or unforeseen occurrences resulting from third-party breach of contract.</string>
+
+    <string name="terms_sec_refusal_title">I. RIGHT TO DECLINE OR CANCEL BOOKING</string>
+    <string name="terms_sec_refusal_body">1. Hafiz Travel &amp; Tours reserves the right to cancel or withdraw any booking/itinerary if deemed hazardous to health/safety, or if it diminishes the comfort or well-being of other tour members.\n2. Hafiz Travel &amp; Tours is not liable if third-party operators (airlines, hotels) refuse admission to any participant.</string>
+
+    <string name="terms_sec_customer_duty_title">J. CUSTOMER RESPONSIBILITIES &amp; OBLIGATIONS</string>
+    <string name="terms_sec_customer_duty_body">1. Customers must check and ensure their immigration clearance status before departure. Hafiz Travel &amp; Tours is not liable for losses if a participant is blacklisted or barred from international travel.\n2. Participants with pre-existing medical conditions must submit written health declarations prior to departure.\n3. Participants with health concerns aged over 65 must travel accompanied by next-of-kin and are strongly advised to obtain supplementary travel insurance/takaful.\n4. Baggage weight limits and excess baggage fees are the sole responsibility of the participant.\n5. Hafiz Travel &amp; Tours is not liable for baggage loss/damage during travel, but will provide all reasonable assistance with lost baggage recovery and claims.\n6. Package pricing is subject to foreign currency fluctuations, prevailing taxes, and airline fuel/fare surcharges.\n7. Hafiz Travel &amp; Tours is not liable for flight delays or missed departures resulting from participant negligence.\n8. Pilgrims are strongly encouraged to attend at least one official Umrah Kursus / preparation workshop before departing.</string>
+
+    <string name="terms_sec_misc_title">K. MISCELLANEOUS &amp; FORCE MAJEURE</string>
+    <string name="terms_sec_misc_body">1. Hafiz Travel &amp; Tours is not liable and will not refund payments for inability to perform obligations due to events beyond reasonable company control.\n2. Force Majeure events include:\n   I. War, hostilities, invasion, or actions by foreign enemies\n   II. Rebellion, revolution, insurrection, or civil war\n   III. Riots, civil commotion, or public disorder\n   IV. Directives or border closures by Malaysian, Saudi Arabian, or destination authorities\n3. Hafiz Travel &amp; Tours reserves the right to use photos and videos shared by pilgrims for promotional and marketing purposes.\n\nPlease be informed that these updated Terms &amp; Conditions (T&amp;C) take effect and apply to all flight packages commencing 1 June 2026.\n(E &amp; OE)</string>
     <!-- Profile Redesign: DOB, Gender, Nationality Picker Bottom Sheets -->
     <string name="profile_dob_sheet_title">Date of Birth</string>
     <string name="profile_dob_sheet_sub">Select your birth date</string>
@@ -1256,4 +1313,76 @@
     <string name="departure_zero_seats_format">0 / %1$d seats left</string>
     <string name="err_departure_fully_booked">Selected departure is fully booked. Please select another date.</string>
     <string name="err_departure_not_enough_seats">Only %1$d seats left on this departure. Please reduce passenger count or choose another date.</string>
+
+    <!-- Booking Item Buttons & Labels -->
+    <string name="booking_btn_invoice">Invoice</string>
+    <string name="booking_btn_receipt">Receipt</string>
+    <string name="booking_btn_documents">Documents</string>
+    <string name="booking_label_departure">DEPARTURE DATE</string>
+    <string name="booking_label_grand_total">GRAND TOTAL</string>
+    <string name="booking_no_official_label">OFFICIAL BOOKING NO.</string>
+
+    <!-- Booking Status Badges -->
+    <string name="status_confirmed">CONFIRMED</string>
+    <string name="status_cancelled">CANCELLED</string>
+    <string name="status_pending_confirmation">PENDING CONFIRMATION</string>
+    <string name="status_deposit_paid">DEPOSIT PAID</string>
+    <string name="status_received">RECEIVED</string>
+
+    <!-- Invoice Viewer Strings -->
+    <string name="invoice_title_official">Official Invoice</string>
+    <string name="invoice_meta_no">INVOICE / BOOKING NO.</string>
+    <string name="invoice_meta_date">ISSUE DATE</string>
+    <string name="invoice_sec_bill_to">BILL TO</string>
+    <string name="invoice_sec_pkg">PACKAGE &amp; TRIP DETAILS</string>
+    <string name="invoice_th_desc">DESCRIPTION</string>
+    <string name="invoice_th_qty">QTY</string>
+    <string name="invoice_th_total">AMOUNT</string>
+    <string name="invoice_subtotal_label">Subtotal:</string>
+    <string name="invoice_discount_label">Promotional Discount:</string>
+    <string name="invoice_grand_total_label">GRAND TOTAL:</string>
+    <string name="invoice_paid_amount_label">Total Amount Paid:</string>
+    <string name="invoice_balance_due_label">Balance Due:</string>
+    <string name="invoice_footer_notice">This invoice is electronically generated by the official system of Hafiz Travel &amp; Tours.</string>
+    <string name="invoice_footer_thanks">Thank you for choosing our services.</string>
+    <string name="invoice_btn_share">📤 Share</string>
+    <string name="invoice_btn_save_pdf">📥 Save PDF</string>
+    <string name="invoice_share_title">Official Invoice</string>
+
+    <!-- Receipt Viewer Strings -->
+    <string name="receipt_title_official">Official Receipt</string>
+    <string name="receipt_company_header">HAFIZ TRAVEL &amp; TOURS</string>
+    <string name="receipt_company_sub">KPK/LN: 10751 • SSM: 202201043065\nOfficial Payment Receipt</string>
+    <string name="receipt_meta_no">RECEIPT NO.</string>
+    <string name="receipt_meta_date">PAYMENT DATE</string>
+    <string name="receipt_label_received_from">Received From:</string>
+    <string name="receipt_label_booking_ref">Booking Ref: %1$s</string>
+    <string name="receipt_label_method">Payment Method: %1$s</string>
+    <string name="receipt_label_amount">PAYMENT AMOUNT</string>
+    <string name="receipt_label_balance">Current Outstanding Balance: %1$s</string>
+    <string name="receipt_electronic_notice">This official receipt is electronically generated by Hafiz Travel &amp; Tours and is valid without a signature.</string>
+    <string name="receipt_deposit_title">Deposit Payment Receipt</string>
+    <string name="receipt_installment_title">Monthly Installment Receipt #%1$d</string>
+    <string name="receipt_btn_download_format">📥 Download Receipt PDF (%1$s)</string>
+    <string name="receipt_btn_download">📥 Download Receipt PDF</string>
+    <string name="receipt_btn_view">View Receipt</string>
+    <string name="receipt_list_title">Payment Receipts</string>
+    <string name="receipt_list_sub">Official receipts for verified deposit and monthly installment payments.</string>
+    <string name="receipt_no_records">No payment receipts recorded yet. Official receipts will be generated automatically upon payment verification.</string>
+
+    <!-- Dialog / Toast Strings -->
+    <string name="toast_doc_verified">Document has been verified.</string>
+    <string name="toast_doc_under_review">Document is currently under review by staff.</string>
+    <string name="toast_doc_uploaded_success">Document uploaded successfully!</string>
+    <string name="toast_invoice_saved_success">Invoice successfully saved to Downloads:\n%1$s</string>
+    <string name="toast_receipt_saved_success">Receipt successfully saved to Downloads:\n%1$s</string>
+    <string name="toast_receipt_saved_failed">Error generating receipt PDF. Please try again.</string>
+    <string name="dialog_btn_understand">Understand</string>
+    <string name="dialog_btn_close">Close</string>
+
+    <string name="booking_success_view_invoice">View Official Invoice (PDF)</string>
+    <string name="booking_success_view_receipt">View Payment Receipt (PDF)</string>
+
+    <string name="doc_passport_validity_note">Ensure your international passport is valid for at least 6 months before the departure date.</string>
+    <string name="doc_photo_spec_note">Color passport-sized photograph with white background according to Umrah / Tour visa specifications.</string>
 </resources>

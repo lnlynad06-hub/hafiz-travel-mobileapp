@@ -1,0 +1,516 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F4F5F7"
+    android:fitsSystemWindows="true">
+
+    <!-- Top App Bar -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="2dp"
+        app:cardCornerRadius="0dp"
+        app:cardBackgroundColor="@color/white">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:paddingHorizontal="16dp">
+
+            <ImageButton
+                android:id="@+id/btnInvoiceBack"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_arrow_back"
+                android:contentDescription="@string/content_desc_back"
+                app:tint="@color/text_dark" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/invoice_title_official"
+                android:textColor="@color/text_dark"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Scrollable Invoice Document -->
+    <ScrollView
+        android:id="@+id/invoiceScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:clipToPadding="false"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:id="@+id/invoiceContentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_detail_card"
+            android:padding="20dp"
+            android:elevation="3dp">
+
+            <!-- Company Brand Header -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:src="@drawable/ic_check_circle_magenta"
+                    android:contentDescription="@null" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="12dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/receipt_company_header"
+                        android:textColor="@color/brand_magenta"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.02" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="KPK/LN: 10751 • SSM: 202201043065\nMalaysia"
+                        android:textColor="@color/text_muted"
+                        android:textSize="10.5sp"
+                        android:lineSpacingExtra="1dp" />
+
+                </LinearLayout>
+
+                <!-- Status Badge -->
+                <TextView
+                    android:id="@+id/tvInvoiceStatusBadge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_pill_success"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="5dp"
+                    android:text="@string/status_confirmed"
+                    android:textColor="#059669"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="16dp"
+                android:background="#E5E7EB" />
+
+            <!-- Invoice Meta Grid -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:baselineAligned="false">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/invoice_meta_no"
+                        android:textColor="@color/text_muted"
+                        android:textSize="10.5sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.05" />
+
+                    <TextView
+                        android:id="@+id/tvInvoiceNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="INV-260928-OIUEXZ"
+                        android:textColor="@color/text_dark"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="end">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/invoice_meta_date"
+                        android:textColor="@color/text_muted"
+                        android:textSize="10.5sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.05" />
+
+                    <TextView
+                        android:id="@+id/tvInvoiceDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="28 Sep 2026"
+                        android:textColor="@color/text_dark"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Bill To Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="#F8FAFC"
+                android:padding="12dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/invoice_sec_bill_to"
+                    android:textColor="@color/text_muted"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.05" />
+
+                <TextView
+                    android:id="@+id/tvInvoiceCustomerName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:textColor="@color/text_dark"
+                    android:textSize="13.5sp"
+                    android:textStyle="bold"
+                    tools:text="Danial Bin Ahmad" />
+
+                <TextView
+                    android:id="@+id/tvInvoiceCustomerDetails"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:textColor="@color/text_gray"
+                    android:textSize="11.5sp"
+                    tools:text="No. IC/Passport: —" />
+
+            </LinearLayout>
+
+            <!-- Package Details Card -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/invoice_sec_pkg"
+                    android:textColor="@color/text_muted"
+                    android:textSize="10.5sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.05" />
+
+                <TextView
+                    android:id="@+id/tvInvoicePackageName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textColor="@color/text_dark"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:text="Pakej Umrah Ziarah Premium" />
+
+                <TextView
+                    android:id="@+id/tvInvoiceTripMeta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/text_gray"
+                    android:textSize="12sp"
+                    tools:text="Pelepasan: 12 Nov 2026 • 2 Pax" />
+
+            </LinearLayout>
+
+            <!-- Table Header -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="#F1F5F9"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="8dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.0"
+                    android:text="@string/invoice_th_desc"
+                    android:textColor="@color/text_dark"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.8"
+                    android:text="@string/invoice_th_qty"
+                    android:textColor="@color/text_dark"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:gravity="center" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.2"
+                    android:text="@string/invoice_th_total"
+                    android:textColor="@color/text_dark"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:gravity="end" />
+
+            </LinearLayout>
+
+            <!-- Line Items Container -->
+            <LinearLayout
+                android:id="@+id/layoutInvoiceItems"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="6dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="12dp"
+                android:background="#E5E7EB" />
+
+            <!-- Subtotal & Totals Breakdown -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="4dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/invoice_subtotal_label"
+                        android:textColor="@color/text_gray"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/tvInvoiceSubtotal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:textColor="@color/text_dark"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        tools:text="RM 43,444.00" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:paddingTop="8dp"
+                    android:background="@drawable/bg_border_top_dashed">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/invoice_grand_total_label"
+                        android:textColor="@color/text_dark"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvInvoiceGrandTotal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:textColor="@color/brand_magenta"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        tools:text="RM 43,444.00" />
+
+                </RelativeLayout>
+
+                <!-- Paid Amount -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/invoice_paid_amount_label"
+                        android:textColor="@color/text_gray"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/tvInvoicePaidAmount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:textColor="#059669"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        tools:text="RM 1,000.00" />
+
+                </RelativeLayout>
+
+                <!-- Balance Due -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/invoice_balance_due_label"
+                        android:textColor="@color/text_dark"
+                        android:textSize="12.5sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvInvoiceBalanceDue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:textColor="@color/brand_magenta"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        tools:text="RM 42,444.00" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <!-- Bottom Official Stamp Footer -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:paddingTop="12dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/invoice_footer_notice"
+                    android:textColor="@color/text_muted"
+                    android:textSize="10sp"
+                    android:gravity="center" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="@string/invoice_footer_thanks"
+                    android:textColor="@color/text_muted"
+                    android:textSize="10sp"
+                    android:textStyle="italic" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <!-- Bottom Action Bar (Download / Print PDF) -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="8dp"
+        app:cardCornerRadius="0dp"
+        app:cardBackgroundColor="@color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:gravity="center">
+
+            <!-- Share Button -->
+            <Button
+                android:id="@+id/btnInvoiceShare"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:text="@string/invoice_btn_share"
+                android:textAllCaps="false"
+                android:textColor="@color/brand_magenta"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                app:strokeColor="@color/brand_magenta"
+                app:cornerRadius="12dp" />
+
+            <!-- Download / Print PDF Button -->
+            <Button
+                android:id="@+id/btnInvoiceDownloadPdf"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1.4"
+                android:layout_marginStart="8dp"
+                android:backgroundTint="@color/brand_magenta"
+                android:text="@string/invoice_btn_save_pdf"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                app:cornerRadius="12dp" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

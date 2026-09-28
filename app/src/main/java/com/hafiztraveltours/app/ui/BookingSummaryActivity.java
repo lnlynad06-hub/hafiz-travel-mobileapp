@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.HapticFeedbackConstants;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -132,43 +133,61 @@ public class BookingSummaryActivity extends BaseActivity {
         for (int i = 0; i < bookingRequest.passengers.size(); i++) {
             BookingRequest.Passenger p = bookingRequest.passengers.get(i);
 
-            LinearLayout item = new LinearLayout(this);
-            item.setOrientation(LinearLayout.VERTICAL);
-            item.setPadding(0, dp(4), 0, dp(8));
+            View card = getLayoutInflater().inflate(R.layout.item_summary_passenger_card, containerPassengers, false);
 
-            TextView nameView = new TextView(this);
-            nameView.setText(getString(R.string.summary_traveller_index_format, (i + 1), p.fullName, (p.isLead ? " " + getString(R.string.summary_lead_suffix) : "")));
-            nameView.setTextSize(13);
-            nameView.setTypeface(null, Typeface.BOLD);
-            nameView.setTextColor(getResources().getColor(R.color.text_dark));
-            item.addView(nameView);
+            TextView tvName = card.findViewById(R.id.tvSummaryPassengerName);
+            TextView tvId = card.findViewById(R.id.tvSummaryPassengerId);
+            TextView tvRole = card.findViewById(R.id.tvSummaryPassengerRole);
+            TextView tvGenderChip = card.findViewById(R.id.tvSummaryGenderChip);
+            TextView tvDobChip = card.findViewById(R.id.tvSummaryDobChip);
+            TextView tvClothesChip = card.findViewById(R.id.tvSummaryClothesChip);
 
-            TextView icView = new TextView(this);
-            String maskedId = maskSensitiveDoc(p.icPassportNumber);
-            icView.setText(getString(R.string.summary_id_label_format, maskedId));
-            icView.setTextSize(12);
-            icView.setTextColor(getResources().getColor(R.color.text_gray));
-            item.addView(icView);
+            String displayName = (p.fullName != null && !p.fullName.trim().isEmpty())
+                    ? p.fullName.trim()
+                    : getString(R.string.passenger_traveller_title_format, (i + 1));
+            tvName.setText(displayName);
+
+            String docNo = (p.icPassportNumber != null && !p.icPassportNumber.isEmpty())
+                    ? p.icPassportNumber : (p.passportNumber != null && !p.passportNumber.isEmpty() ? p.passportNumber : p.icNumber);
+            String masked = maskSensitiveDoc(docNo);
+            tvId.setText(getString(R.string.summary_id_label_format, masked));
 
             if (p.isLead) {
-                if (p.phoneNumber != null && !p.phoneNumber.isEmpty()) {
-                    TextView phoneView = new TextView(this);
-                    phoneView.setText(getString(R.string.summary_phone_label_format, p.phoneNumber));
-                    phoneView.setTextSize(12);
-                    phoneView.setTextColor(getResources().getColor(R.color.text_gray));
-                    item.addView(phoneView);
-                }
-
-                if (p.email != null && !p.email.isEmpty()) {
-                    TextView emailView = new TextView(this);
-                    emailView.setText(getString(R.string.summary_email_label_format, p.email));
-                    emailView.setTextSize(12);
-                    emailView.setTextColor(getResources().getColor(R.color.text_gray));
-                    item.addView(emailView);
-                }
+                tvRole.setText(getString(R.string.summary_lead_suffix));
+                tvRole.setBackgroundResource(R.drawable.bg_status_pending);
+                tvRole.setTextColor(getResources().getColor(R.color.pink_dark));
+            } else {
+                tvRole.setText(getString(R.string.passenger_traveller_title_format, (i + 1)));
+                tvRole.setBackgroundResource(R.drawable.bg_chip_minimal);
+                tvRole.setTextColor(getResources().getColor(R.color.text_dark));
             }
 
-            containerPassengers.addView(item);
+            // Gender Chip
+            if (p.gender != null && !p.gender.trim().isEmpty()) {
+                tvGenderChip.setText(p.gender);
+                tvGenderChip.setVisibility(View.VISIBLE);
+            } else {
+                tvGenderChip.setVisibility(View.GONE);
+            }
+
+            // DOB Chip
+            if (p.dateOfBirth != null && !p.dateOfBirth.trim().isEmpty()) {
+                String formattedDob = ProfileActivity.formatDateDisplay(this, p.dateOfBirth);
+                tvDobChip.setText(formattedDob);
+                tvDobChip.setVisibility(View.VISIBLE);
+            } else {
+                tvDobChip.setVisibility(View.GONE);
+            }
+
+            // Clothes Size Chip
+            if (p.clothesSize != null && !p.clothesSize.trim().isEmpty()) {
+                tvClothesChip.setText(getString(R.string.clothes_size_format, p.clothesSize));
+                tvClothesChip.setVisibility(View.VISIBLE);
+            } else {
+                tvClothesChip.setVisibility(View.GONE);
+            }
+
+            containerPassengers.addView(card);
         }
     }
 

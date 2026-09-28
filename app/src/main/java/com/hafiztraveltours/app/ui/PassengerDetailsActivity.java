@@ -8,20 +8,33 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.HapticFeedbackConstants;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import android.text.Editable;
+import android.text.TextWatcher;
+
+import androidx.core.content.ContextCompat;
+
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.hafiztraveltours.app.R;
+import com.hafiztraveltours.app.adapters.CountryDropdownAdapter;
 import com.hafiztraveltours.app.models.BookingRequest;
 import com.hafiztraveltours.app.models.PackageDetail;
 import com.hafiztraveltours.app.network.UserDto;
+import com.hafiztraveltours.app.utils.HapticUtil;
 import com.hafiztraveltours.app.utils.LocaleHelper;
 
 import java.util.ArrayList;
@@ -59,36 +72,57 @@ public class PassengerDetailsActivity extends BaseActivity {
         int index; // 1-based index among additional travellers (2, 3...)
         boolean isExpanded = true;
 
-        LinearLayout cardView;
-        LinearLayout headerRow;
+        View cardView;
+        View headerRow;
         TextView titleText;
+        TextView txtNamePreview;
         ImageView expandIcon;
-        TextView btnDelete;
-        LinearLayout expandableBody;
+        View btnDelete;
+        View expandableBody;
 
-        MaterialAutoCompleteTextView inputTitle;
-        EditText inputName;
+        TextInputEditText inputName;
         TextView errorName;
 
-        EditText inputIc;
+        View fieldDobContainer;
+        TextView tvDobValue;
+        TextView tvDobAge;
+        String selectedDob = null;
+
+        View fieldGenderContainer;
+        ImageView ivGenderBadge;
+        TextView tvGenderValue;
+        String selectedGender = null;
+
+        View fieldNationalityContainer;
+        TextView tvNationalityFlag;
+        TextView tvNationalityValue;
+        String selectedNationality = null;
+
+        View layoutIcSection;
+        TextInputEditText inputIc;
         TextView errorIc;
 
-        EditText inputPassport;
+        View layoutPassportSection;
+        TextInputEditText inputPassport;
         TextView errorPassport;
-        EditText inputPassportExpiry;
+        View fieldPassportExpiryContainer;
+        TextView tvPassportExpiryValue;
         TextView errorPassportExpiry;
-        EditText inputIssuingCountry;
+        String selectedPassportExpiry = null;
+        View fieldIssuingCountryContainer;
+        TextView tvIssuingCountryFlag;
+        TextView tvIssuingCountryValue;
+        String selectedIssuingCountry = null;
 
-        EditText inputDob;
-        MaterialAutoCompleteTextView inputGender;
-        EditText inputNationality;
+        View layoutExtraSection;
+        View layoutClothesSizeSection;
         MaterialAutoCompleteTextView inputClothesSize;
 
+        View layoutMahramSection;
         MaterialAutoCompleteTextView inputMahram;
-        EditText inputRelationship;
+        TextInputEditText inputRelationship;
     }
 
-    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -431,232 +465,139 @@ public class PassengerDetailsActivity extends BaseActivity {
         AdditionalTravellerHolder holder = new AdditionalTravellerHolder();
         holder.index = index;
 
-        LinearLayout card = new LinearLayout(this);
-        card.setOrientation(LinearLayout.VERTICAL);
-        card.setBackgroundResource(R.drawable.bg_detail_card);
-        card.setPadding(dp(14), dp(12), dp(14), dp(12));
-        LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        cp.topMargin = dp(10);
-        card.setLayoutParams(cp);
+        View card = getLayoutInflater().inflate(R.layout.item_additional_traveller_card, additionalTravellersContainer, false);
+        holder.cardView = card;
+        holder.headerRow = card.findViewById(R.id.headerRowTraveller);
+        holder.titleText = card.findViewById(R.id.txtTravellerIndex);
+        holder.txtNamePreview = card.findViewById(R.id.txtTravellerNamePreview);
+        holder.btnDelete = card.findViewById(R.id.btnDeleteTraveller);
+        holder.expandIcon = card.findViewById(R.id.imgExpandCollapse);
+        holder.expandableBody = card.findViewById(R.id.layoutExpandableBody);
 
-        // Header Row
-        LinearLayout headerRow = new LinearLayout(this);
-        headerRow.setOrientation(LinearLayout.HORIZONTAL);
-        headerRow.setGravity(android.view.Gravity.CENTER_VERTICAL);
+        holder.inputName = card.findViewById(R.id.inputName);
+        holder.errorName = card.findViewById(R.id.errorName);
 
-        TextView title = new TextView(this);
-        title.setText(getString(R.string.passenger_traveller_title_format, index));
-        title.setTextSize(13);
-        title.setTypeface(null, Typeface.BOLD);
-        title.setTextColor(getResources().getColor(R.color.brand_magenta));
-        LinearLayout.LayoutParams tp = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
-        title.setLayoutParams(tp);
-        headerRow.addView(title);
+        holder.fieldDobContainer = card.findViewById(R.id.fieldDobContainer);
+        holder.tvDobValue = card.findViewById(R.id.tvDobValue);
+        holder.tvDobAge = card.findViewById(R.id.tvDobAge);
 
-        TextView btnDelete = new TextView(this);
-        btnDelete.setText(getString(R.string.passenger_delete));
-        btnDelete.setTextSize(11);
-        btnDelete.setTextColor(Color.parseColor("#DC2626"));
-        btnDelete.setPadding(dp(8), dp(4), dp(8), dp(4));
-        btnDelete.setOnClickListener(v -> {
+        holder.fieldGenderContainer = card.findViewById(R.id.fieldGenderContainer);
+        holder.ivGenderBadge = card.findViewById(R.id.ivGenderBadge);
+        holder.tvGenderValue = card.findViewById(R.id.tvGenderValue);
+
+        holder.fieldNationalityContainer = card.findViewById(R.id.fieldNationalityContainer);
+        holder.tvNationalityFlag = card.findViewById(R.id.tvNationalityFlag);
+        holder.tvNationalityValue = card.findViewById(R.id.tvNationalityValue);
+
+        holder.layoutIcSection = card.findViewById(R.id.layoutIcSection);
+        holder.inputIc = card.findViewById(R.id.inputIc);
+        holder.errorIc = card.findViewById(R.id.errorIc);
+
+        holder.layoutPassportSection = card.findViewById(R.id.layoutPassportSection);
+        holder.inputPassport = card.findViewById(R.id.inputPassport);
+        holder.errorPassport = card.findViewById(R.id.errorPassport);
+        holder.fieldPassportExpiryContainer = card.findViewById(R.id.fieldPassportExpiryContainer);
+        holder.tvPassportExpiryValue = card.findViewById(R.id.tvPassportExpiryValue);
+        holder.errorPassportExpiry = card.findViewById(R.id.errorPassportExpiry);
+        holder.fieldIssuingCountryContainer = card.findViewById(R.id.fieldIssuingCountryContainer);
+        holder.tvIssuingCountryFlag = card.findViewById(R.id.tvIssuingCountryFlag);
+        holder.tvIssuingCountryValue = card.findViewById(R.id.tvIssuingCountryValue);
+
+        holder.layoutExtraSection = card.findViewById(R.id.layoutExtraSection);
+        holder.layoutClothesSizeSection = card.findViewById(R.id.layoutClothesSizeSection);
+        holder.inputClothesSize = card.findViewById(R.id.inputClothesSize);
+
+        holder.layoutMahramSection = card.findViewById(R.id.layoutMahramSection);
+        holder.inputMahram = card.findViewById(R.id.inputMahram);
+        holder.inputRelationship = card.findViewById(R.id.inputRelationship);
+
+        // Configure Title
+        holder.titleText.setText(getString(R.string.passenger_traveller_title_format, index));
+
+        // Configure Name & Real-time preview
+        holder.inputName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override
+            public void afterTextChanged(Editable s) {
+                String val = s.toString().trim();
+                if (val.isEmpty()) {
+                    holder.txtNamePreview.setText(R.string.passenger_default_preview_name);
+                } else {
+                    holder.txtNamePreview.setText(val);
+                }
+                updateMahramDropdownOptions();
+            }
+        });
+
+        // Configure Default Nationality (Malaysia)
+        String defNationality = getString(R.string.default_nationality);
+        holder.selectedNationality = defNationality;
+        holder.tvNationalityValue.setText(defNationality);
+        holder.tvNationalityValue.setTextColor(ContextCompat.getColor(this, R.color.text_dark));
+        holder.tvNationalityFlag.setText(CountryDropdownAdapter.getFlagForCountry(defNationality));
+        holder.tvNationalityFlag.setVisibility(View.VISIBLE);
+
+        // Configure Default Issuing Country (Malaysia)
+        String defCountry = getString(R.string.default_country);
+        holder.selectedIssuingCountry = defCountry;
+        holder.tvIssuingCountryValue.setText(defCountry);
+        holder.tvIssuingCountryValue.setTextColor(ContextCompat.getColor(this, R.color.text_dark));
+        holder.tvIssuingCountryFlag.setText(CountryDropdownAdapter.getFlagForCountry(defCountry));
+        holder.tvIssuingCountryFlag.setVisibility(View.VISIBLE);
+
+        // Configure Pickers & Bottom Sheets
+        holder.fieldDobContainer.setOnClickListener(v -> showDobPickerBottomSheet(holder));
+        holder.fieldGenderContainer.setOnClickListener(v -> showGenderPickerBottomSheet(holder));
+        holder.fieldNationalityContainer.setOnClickListener(v -> showNationalityPickerBottomSheet(holder));
+        holder.fieldPassportExpiryContainer.setOnClickListener(v -> showPassportExpiryPickerBottomSheet(holder));
+        holder.fieldIssuingCountryContainer.setOnClickListener(v -> showIssuingCountryPickerBottomSheet(holder));
+
+        // Package requirement visibility toggles
+        if (!reqIc && holder.layoutIcSection != null) {
+            holder.layoutIcSection.setVisibility(View.GONE);
+        }
+
+        if (!reqPassport && holder.layoutPassportSection != null) {
+            holder.layoutPassportSection.setVisibility(View.GONE);
+        }
+
+        if (!reqClothesSize && holder.layoutClothesSizeSection != null) {
+            holder.layoutClothesSizeSection.setVisibility(View.GONE);
+        } else if (holder.inputClothesSize != null) {
+            holder.inputClothesSize.setInputType(InputType.TYPE_NULL);
+            holder.inputClothesSize.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, new String[]{"S", "M", "L", "XL", "2XL", "3XL", "4XL", "Custom"}));
+            holder.inputClothesSize.setOnClickListener(v -> holder.inputClothesSize.showDropDown());
+        }
+
+        if (!reqMahram && holder.layoutMahramSection != null) {
+            holder.layoutMahramSection.setVisibility(View.GONE);
+        } else if (holder.inputMahram != null) {
+            holder.inputMahram.setInputType(InputType.TYPE_NULL);
+            holder.inputMahram.setOnClickListener(v -> holder.inputMahram.showDropDown());
+        }
+
+        if (!reqClothesSize && !reqMahram && holder.layoutExtraSection != null) {
+            holder.layoutExtraSection.setVisibility(View.GONE);
+        }
+
+        // Delete button
+        holder.btnDelete.setOnClickListener(v -> {
             additionalTravellersContainer.removeView(card);
             additionalTravellers.remove(holder);
             reindexAdditionalTravellers();
             updateMahramDropdownOptions();
             updateFooterCount();
         });
-        headerRow.addView(btnDelete);
 
-        ImageView expandIcon = new ImageView(this);
-        expandIcon.setImageResource(R.drawable.ic_back);
-        expandIcon.setRotation(90);
-        expandIcon.setColorFilter(getResources().getColor(R.color.text_gray));
-        LinearLayout.LayoutParams ip = new LinearLayout.LayoutParams(dp(20), dp(20));
-        ip.leftMargin = dp(6);
-        expandIcon.setLayoutParams(ip);
-        headerRow.addView(expandIcon);
-
-        card.addView(headerRow);
-        holder.headerRow = headerRow;
-        holder.titleText = title;
-        holder.btnDelete = btnDelete;
-        holder.expandIcon = expandIcon;
-
-        // Expandable Body
-        LinearLayout body = new LinearLayout(this);
-        body.setOrientation(LinearLayout.VERTICAL);
-        body.setPadding(0, dp(10), 0, 0);
-
-        // Name & Title Row
-        LinearLayout nameRow = new LinearLayout(this);
-        nameRow.setOrientation(LinearLayout.HORIZONTAL);
-
-        MaterialAutoCompleteTextView inputTitle = new MaterialAutoCompleteTextView(this);
-        inputTitle.setHint(getString(R.string.passenger_field_title_hint));
-        inputTitle.setText(getString(R.string.default_title_mr), false);
-        inputTitle.setTextSize(12);
-        inputTitle.setTextColor(getResources().getColor(R.color.text_dark));
-        inputTitle.setBackgroundResource(R.drawable.bg_input_box);
-        inputTitle.setPadding(dp(8), dp(8), dp(8), dp(8));
-        inputTitle.setInputType(InputType.TYPE_NULL);
-        String[] titleOpts = new String[]{"Mr", "Mrs", "Ms", "Dr", "Dato", "Datuk", "Tan Sri"};
-        inputTitle.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, titleOpts));
-        LinearLayout.LayoutParams titleParam = new LinearLayout.LayoutParams(dp(80), ViewGroup.LayoutParams.WRAP_CONTENT);
-        titleParam.topMargin = dp(12);
-        titleParam.rightMargin = dp(6);
-        inputTitle.setLayoutParams(titleParam);
-        nameRow.addView(inputTitle);
-        holder.inputTitle = inputTitle;
-
-        LinearLayout fnCol = new LinearLayout(this);
-        fnCol.setOrientation(LinearLayout.VERTICAL);
-        LinearLayout.LayoutParams fnParam = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
-        fnCol.setLayoutParams(fnParam);
-        fnCol.addView(createFieldLabel(getString(R.string.passenger_field_name_label)));
-        holder.inputName = createEditText(getString(R.string.passenger_field_name_hint), InputType.TYPE_TEXT_FLAG_CAP_WORDS);
-        holder.errorName = createErrorTextView();
-        fnCol.addView(holder.inputName);
-        fnCol.addView(holder.errorName);
-        nameRow.addView(fnCol);
-        body.addView(nameRow);
-
-        // DOB & Gender Row
-        LinearLayout dobGenderRow = new LinearLayout(this);
-        dobGenderRow.setOrientation(LinearLayout.HORIZONTAL);
-
-        LinearLayout colDob = new LinearLayout(this);
-        colDob.setOrientation(LinearLayout.VERTICAL);
-        LinearLayout.LayoutParams colDobP = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
-        colDobP.rightMargin = dp(6);
-        colDob.setLayoutParams(colDobP);
-        colDob.addView(createFieldLabel(getString(R.string.passenger_field_dob_label)));
-        holder.inputDob = createEditText("YYYY-MM-DD", InputType.TYPE_NULL);
-        holder.inputDob.setFocusable(false);
-        holder.inputDob.setOnClickListener(v -> showDatePicker(holder.inputDob));
-        colDob.addView(holder.inputDob);
-
-        LinearLayout colGender = new LinearLayout(this);
-        colGender.setOrientation(LinearLayout.VERTICAL);
-        LinearLayout.LayoutParams colGenP = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
-        colGender.setLayoutParams(colGenP);
-        colGender.addView(createFieldLabel(getString(R.string.passenger_field_gender_label)));
-        holder.inputGender = new MaterialAutoCompleteTextView(this);
-        holder.inputGender.setHint(getString(R.string.passenger_field_gender_hint));
-        holder.inputGender.setTextSize(12);
-        holder.inputGender.setTextColor(getResources().getColor(R.color.text_dark));
-        holder.inputGender.setBackgroundResource(R.drawable.bg_input_box);
-        holder.inputGender.setPadding(dp(8), dp(8), dp(8), dp(8));
-        holder.inputGender.setInputType(InputType.TYPE_NULL);
-        String[] genderOpts = new String[]{getString(R.string.gender_male), getString(R.string.gender_female)};
-        holder.inputGender.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, genderOpts));
-        LinearLayout.LayoutParams gp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        gp.topMargin = dp(4);
-        holder.inputGender.setLayoutParams(gp);
-        colGender.addView(holder.inputGender);
-
-        dobGenderRow.addView(colDob);
-        dobGenderRow.addView(colGender);
-        body.addView(dobGenderRow);
-
-        // Nationality
-        body.addView(createFieldLabel(getString(R.string.passenger_field_nationality_label)));
-        holder.inputNationality = createEditText(getString(R.string.default_nationality), InputType.TYPE_TEXT_FLAG_CAP_WORDS);
-        holder.inputNationality.setText(getString(R.string.default_nationality));
-        body.addView(holder.inputNationality);
-
-        // IC if required
-        if (reqIc) {
-            body.addView(createFieldLabel(getString(R.string.passenger_field_ic_label)));
-            holder.inputIc = createEditText(getString(R.string.passenger_field_ic_hint), InputType.TYPE_CLASS_NUMBER);
-            holder.errorIc = createErrorTextView();
-            body.addView(holder.inputIc);
-            body.addView(holder.errorIc);
-        }
-
-        // Passport if required
-        if (reqPassport) {
-            body.addView(createFieldLabel(getString(R.string.passenger_field_passport_label)));
-            holder.inputPassport = createEditText(getString(R.string.passenger_field_passport_hint), InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
-            holder.errorPassport = createErrorTextView();
-            body.addView(holder.inputPassport);
-            body.addView(holder.errorPassport);
-
-            LinearLayout passRow = new LinearLayout(this);
-            passRow.setOrientation(LinearLayout.HORIZONTAL);
-
-            LinearLayout colEx = new LinearLayout(this);
-            colEx.setOrientation(LinearLayout.VERTICAL);
-            LinearLayout.LayoutParams colExP = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
-            colExP.rightMargin = dp(6);
-            colEx.setLayoutParams(colExP);
-            colEx.addView(createFieldLabel(getString(R.string.passenger_field_passport_expiry_label)));
-            holder.inputPassportExpiry = createEditText("YYYY-MM-DD", InputType.TYPE_NULL);
-            holder.inputPassportExpiry.setFocusable(false);
-            holder.inputPassportExpiry.setOnClickListener(v -> showDatePicker(holder.inputPassportExpiry));
-            holder.errorPassportExpiry = createErrorTextView();
-            colEx.addView(holder.inputPassportExpiry);
-            colEx.addView(holder.errorPassportExpiry);
-
-            LinearLayout colCtry = new LinearLayout(this);
-            colCtry.setOrientation(LinearLayout.VERTICAL);
-            LinearLayout.LayoutParams colCtryP = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
-            colCtry.setLayoutParams(colCtryP);
-            colCtry.addView(createFieldLabel(getString(R.string.passenger_field_issuing_country_label)));
-            holder.inputIssuingCountry = createEditText(getString(R.string.default_country), InputType.TYPE_TEXT_FLAG_CAP_WORDS);
-            holder.inputIssuingCountry.setText(getString(R.string.default_country));
-            colCtry.addView(holder.inputIssuingCountry);
-
-            passRow.addView(colEx);
-            passRow.addView(colCtry);
-            body.addView(passRow);
-        }
-
-        // Clothes Size if required
-        if (reqClothesSize) {
-            body.addView(createFieldLabel(getString(R.string.passenger_field_clothes_size_label)));
-            holder.inputClothesSize = new MaterialAutoCompleteTextView(this);
-            holder.inputClothesSize.setHint(getString(R.string.passenger_field_clothes_size_hint));
-            holder.inputClothesSize.setTextSize(12);
-            holder.inputClothesSize.setTextColor(getResources().getColor(R.color.text_dark));
-            holder.inputClothesSize.setBackgroundResource(R.drawable.bg_input_box);
-            holder.inputClothesSize.setPadding(dp(8), dp(8), dp(8), dp(8));
-            holder.inputClothesSize.setInputType(InputType.TYPE_NULL);
-            holder.inputClothesSize.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, new String[]{"S", "M", "L", "XL", "2XL", "3XL", "4XL", "Custom"}));
-            LinearLayout.LayoutParams szp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            szp.topMargin = dp(4);
-            holder.inputClothesSize.setLayoutParams(szp);
-            body.addView(holder.inputClothesSize);
-        }
-
-        // Mahram Selection if package requires mahram
-        if (reqMahram) {
-            body.addView(createFieldLabel(getString(R.string.passenger_field_mahram_label)));
-            holder.inputMahram = new MaterialAutoCompleteTextView(this);
-            holder.inputMahram.setHint(getString(R.string.passenger_field_mahram_hint));
-            holder.inputMahram.setTextSize(12);
-            holder.inputMahram.setTextColor(getResources().getColor(R.color.text_dark));
-            holder.inputMahram.setBackgroundResource(R.drawable.bg_input_box);
-            holder.inputMahram.setPadding(dp(8), dp(8), dp(8), dp(8));
-            holder.inputMahram.setInputType(InputType.TYPE_NULL);
-            LinearLayout.LayoutParams mhp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            mhp.topMargin = dp(4);
-            holder.inputMahram.setLayoutParams(mhp);
-            body.addView(holder.inputMahram);
-
-            body.addView(createFieldLabel(getString(R.string.passenger_field_mahram_relation_label)));
-            holder.inputRelationship = createEditText(getString(R.string.passenger_field_mahram_relation_hint), InputType.TYPE_TEXT_FLAG_CAP_WORDS);
-            body.addView(holder.inputRelationship);
-        }
-
-        card.addView(body);
-        holder.cardView = card;
-        holder.expandableBody = body;
-
-        headerRow.setOnClickListener(v -> {
-            com.hafiztraveltours.app.utils.HapticUtil.click(v);
+        // Expand / Collapse Header
+        holder.headerRow.setOnClickListener(v -> {
+            HapticUtil.click(v);
             holder.isExpanded = !holder.isExpanded;
-            body.setVisibility(holder.isExpanded ? View.VISIBLE : View.GONE);
-            expandIcon.setRotation(holder.isExpanded ? 90 : 270);
+            holder.expandableBody.setVisibility(holder.isExpanded ? View.VISIBLE : View.GONE);
+            holder.expandIcon.setRotation(holder.isExpanded ? 0 : 180);
         });
 
         additionalTravellers.add(holder);
@@ -670,6 +611,466 @@ public class PassengerDetailsActivity extends BaseActivity {
         updateFooterCount();
     }
 
+    private void showDobPickerBottomSheet(AdditionalTravellerHolder holder) {
+        String[] dateHolder = new String[]{holder.selectedDob != null ? holder.selectedDob : ""};
+        showDatePickerBottomSheet(
+                getString(R.string.profile_dob_sheet_title),
+                getString(R.string.profile_dob_sheet_sub),
+                false,
+                holder.tvDobValue,
+                holder.tvDobAge,
+                dateHolder,
+                () -> holder.selectedDob = dateHolder[0]
+        );
+    }
+
+    private void showPassportExpiryPickerBottomSheet(AdditionalTravellerHolder holder) {
+        String[] dateHolder = new String[]{holder.selectedPassportExpiry != null ? holder.selectedPassportExpiry : ""};
+        showDatePickerBottomSheet(
+                getString(R.string.profile_passport_expiry_sheet_title),
+                getString(R.string.profile_passport_expiry_sheet_sub),
+                true,
+                holder.tvPassportExpiryValue,
+                null,
+                dateHolder,
+                () -> {
+                    holder.selectedPassportExpiry = dateHolder[0];
+                    if (holder.errorPassportExpiry != null) {
+                        holder.errorPassportExpiry.setVisibility(View.GONE);
+                    }
+                }
+        );
+    }
+
+    private void showDatePickerBottomSheet(
+            String title,
+            String subtitle,
+            boolean isExpiryPicker,
+            TextView tvTargetValue,
+            TextView tvTargetAge,
+            String[] selectedDateHolder,
+            Runnable onDateSelected) {
+
+        BottomSheetDialog sheetDialog = new BottomSheetDialog(this);
+        View sheetView = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_dob_picker, null);
+        sheetDialog.setContentView(sheetView);
+
+        if (sheetDialog.getWindow() != null) {
+            sheetDialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
+            sheetDialog.getWindow().setDimAmount(0.55f);
+        }
+
+        View btnClose = sheetView.findViewById(R.id.btnCloseDobSheet);
+        if (btnClose != null) btnClose.setOnClickListener(v -> sheetDialog.dismiss());
+
+        TextView tvSheetTitle = sheetView.findViewById(R.id.tvDobSheetTitle);
+        if (tvSheetTitle != null && title != null && !title.isEmpty()) {
+            tvSheetTitle.setText(title);
+        }
+
+        TextView tvSheetSub = sheetView.findViewById(R.id.tvDobSheetSub);
+        if (tvSheetSub != null && subtitle != null && !subtitle.isEmpty()) {
+            tvSheetSub.setText(subtitle);
+        }
+
+        TextView tvPreview = sheetView.findViewById(R.id.tvDobPreviewText);
+        TextView tvPreviewAge = sheetView.findViewById(R.id.tvDobPreviewAge);
+        NumberPicker npDay = sheetView.findViewById(R.id.npDobDay);
+        NumberPicker npMonth = sheetView.findViewById(R.id.npDobMonth);
+        NumberPicker npYear = sheetView.findViewById(R.id.npDobYear);
+        View btnDone = sheetView.findViewById(R.id.btnDoneDob);
+
+        Calendar today = Calendar.getInstance();
+        int curYear = today.get(Calendar.YEAR);
+
+        int minYear = isExpiryPicker ? (curYear - 10) : 1900;
+        int maxYear = isExpiryPicker ? (curYear + 25) : curYear;
+
+        int initYear = isExpiryPicker ? (curYear + 5) : (curYear - 26);
+        int initMonth = isExpiryPicker ? today.get(Calendar.MONTH) : 0;
+        int initDay = isExpiryPicker ? today.get(Calendar.DAY_OF_MONTH) : 1;
+
+        String currentDateStr = selectedDateHolder != null && selectedDateHolder.length > 0 ? selectedDateHolder[0] : "";
+        if (currentDateStr != null && !currentDateStr.trim().isEmpty()) {
+            try {
+                String[] parts = currentDateStr.trim().split("-");
+                if (parts.length == 3) {
+                    initYear = Integer.parseInt(parts[0]);
+                    initMonth = Integer.parseInt(parts[1]) - 1;
+                    initDay = Integer.parseInt(parts[2]);
+                }
+            } catch (Exception ignored) {}
+        }
+
+        boolean isMalay = "ms".equalsIgnoreCase(LocaleHelper.getSavedLanguage(this));
+        String[] monthNames = isMalay
+                ? new String[]{"Jan", "Feb", "Mac", "Apr", "Mei", "Jun", "Jul", "Ogo", "Sep", "Okt", "Nov", "Dis"}
+                : new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+
+        if (npMonth != null) {
+            npMonth.setMinValue(0);
+            npMonth.setMaxValue(11);
+            npMonth.setDisplayedValues(monthNames);
+            npMonth.setValue(Math.max(0, Math.min(11, initMonth)));
+            npMonth.setWrapSelectorWheel(true);
+        }
+
+        if (npYear != null) {
+            npYear.setMinValue(minYear);
+            npYear.setMaxValue(maxYear);
+            npYear.setValue(Math.max(minYear, Math.min(maxYear, initYear)));
+            npYear.setWrapSelectorWheel(false);
+        }
+
+        Runnable updateDayMax = () -> {
+            int y = npYear != null ? npYear.getValue() : curYear;
+            int m = npMonth != null ? npMonth.getValue() : 0;
+            Calendar tempCal = Calendar.getInstance();
+            tempCal.set(Calendar.YEAR, y);
+            tempCal.set(Calendar.MONTH, m);
+            tempCal.set(Calendar.DAY_OF_MONTH, 1);
+            int maxDays = tempCal.getActualMaximum(Calendar.DAY_OF_MONTH);
+            if (npDay != null) {
+                int oldVal = npDay.getValue();
+                npDay.setMinValue(1);
+                npDay.setMaxValue(maxDays);
+                npDay.setValue(Math.max(1, Math.min(maxDays, oldVal)));
+                npDay.setWrapSelectorWheel(true);
+            }
+        };
+
+        updateDayMax.run();
+        if (npDay != null) {
+            npDay.setValue(Math.max(1, Math.min(31, initDay)));
+        }
+
+        Runnable updatePreview = () -> {
+            int d = npDay != null ? npDay.getValue() : 1;
+            int m = npMonth != null ? npMonth.getValue() : 0;
+            int y = npYear != null ? npYear.getValue() : curYear;
+            String iso = String.format(Locale.US, "%04d-%02d-%02d", y, m + 1, d);
+            String displayStr = ProfileActivity.formatDateDisplay(this, iso);
+            if (tvPreview != null) {
+                tvPreview.setText(displayStr);
+            }
+            if (isExpiryPicker) {
+                if (tvPreviewAge != null) {
+                    tvPreviewAge.setVisibility(View.GONE);
+                }
+            } else {
+                int age = curYear - y;
+                if (today.get(Calendar.MONTH) < m ||
+                        (today.get(Calendar.MONTH) == m && today.get(Calendar.DAY_OF_MONTH) < d)) {
+                    age--;
+                }
+                if (tvPreviewAge != null) {
+                    if (age >= 0) {
+                        tvPreviewAge.setText(getString(R.string.profile_age_format, age));
+                        tvPreviewAge.setVisibility(View.VISIBLE);
+                    } else {
+                        tvPreviewAge.setVisibility(View.GONE);
+                    }
+                }
+            }
+        };
+
+        updatePreview.run();
+
+        NumberPicker.OnValueChangeListener changeListener = (picker, oldVal, newVal) -> {
+            if (picker == npMonth || picker == npYear) {
+                updateDayMax.run();
+            }
+            updatePreview.run();
+        };
+
+        if (npDay != null) npDay.setOnValueChangedListener(changeListener);
+        if (npMonth != null) npMonth.setOnValueChangedListener(changeListener);
+        if (npYear != null) npYear.setOnValueChangedListener(changeListener);
+
+        if (btnDone != null) {
+            btnDone.setOnClickListener(v -> {
+                HapticUtil.click(v);
+                int d = npDay != null ? npDay.getValue() : 1;
+                int m = npMonth != null ? npMonth.getValue() : 0;
+                int y = npYear != null ? npYear.getValue() : curYear;
+                String iso = String.format(Locale.US, "%04d-%02d-%02d", y, m + 1, d);
+                if (selectedDateHolder != null && selectedDateHolder.length > 0) {
+                    selectedDateHolder[0] = iso;
+                }
+                if (tvTargetValue != null) {
+                    tvTargetValue.setText(ProfileActivity.formatDateDisplay(this, iso));
+                    tvTargetValue.setTextColor(ContextCompat.getColor(this, R.color.text_dark));
+                }
+                if (!isExpiryPicker && tvTargetAge != null) {
+                    int age = curYear - y;
+                    if (today.get(Calendar.MONTH) < m ||
+                            (today.get(Calendar.MONTH) == m && today.get(Calendar.DAY_OF_MONTH) < d)) {
+                        age--;
+                    }
+                    if (age >= 0) {
+                        tvTargetAge.setText(getString(R.string.profile_age_format, age));
+                        tvTargetAge.setVisibility(View.VISIBLE);
+                    } else {
+                        tvTargetAge.setVisibility(View.GONE);
+                    }
+                }
+                if (onDateSelected != null) {
+                    onDateSelected.run();
+                }
+                sheetDialog.dismiss();
+            });
+        }
+
+        sheetDialog.show();
+    }
+
+    private void updateGenderFieldDisplay(ImageView ivGenderBadge, TextView tvGenderValue, String gender) {
+        if (tvGenderValue == null) return;
+        String maleStr = getString(R.string.gender_male);
+        String femaleStr = getString(R.string.gender_female);
+        boolean isMale = "male".equalsIgnoreCase(gender) || "lelaki".equalsIgnoreCase(gender)
+                || maleStr.equalsIgnoreCase(gender);
+        boolean isFemale = "female".equalsIgnoreCase(gender) || "perempuan".equalsIgnoreCase(gender)
+                || femaleStr.equalsIgnoreCase(gender);
+
+        if (isMale) {
+            tvGenderValue.setText(maleStr);
+            tvGenderValue.setTextColor(ContextCompat.getColor(this, R.color.text_dark));
+            if (ivGenderBadge != null) {
+                ivGenderBadge.setImageResource(R.drawable.ic_gender_male);
+                ivGenderBadge.setBackgroundResource(R.drawable.bg_gender_badge_male);
+                ivGenderBadge.setColorFilter(ContextCompat.getColor(this, R.color.gender_male_icon));
+                int pad = dp(2);
+                ivGenderBadge.setPadding(pad, pad, pad, pad);
+                ivGenderBadge.setVisibility(View.VISIBLE);
+            }
+        } else if (isFemale) {
+            tvGenderValue.setText(femaleStr);
+            tvGenderValue.setTextColor(ContextCompat.getColor(this, R.color.text_dark));
+            if (ivGenderBadge != null) {
+                ivGenderBadge.setImageResource(R.drawable.ic_gender_female);
+                ivGenderBadge.setBackgroundResource(R.drawable.bg_gender_badge_female);
+                ivGenderBadge.setColorFilter(ContextCompat.getColor(this, R.color.gender_female_icon));
+                int pad = dp(2);
+                ivGenderBadge.setPadding(pad, pad, pad, pad);
+                ivGenderBadge.setVisibility(View.VISIBLE);
+            }
+        } else {
+            tvGenderValue.setText(getString(R.string.profile_field_gender_placeholder));
+            tvGenderValue.setTextColor(ContextCompat.getColor(this, R.color.input_hint));
+            if (ivGenderBadge != null) {
+                ivGenderBadge.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    private void showGenderPickerBottomSheet(AdditionalTravellerHolder holder) {
+        BottomSheetDialog sheetDialog = new BottomSheetDialog(this);
+        View sheetView = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_gender_picker, null);
+        sheetDialog.setContentView(sheetView);
+
+        if (sheetDialog.getWindow() != null) {
+            sheetDialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
+            sheetDialog.getWindow().setDimAmount(0.55f);
+        }
+
+        View btnClose = sheetView.findViewById(R.id.btnCloseGenderSheet);
+        if (btnClose != null) btnClose.setOnClickListener(v -> sheetDialog.dismiss());
+
+        View itemMale = sheetView.findViewById(R.id.itemGenderMale);
+        View itemFemale = sheetView.findViewById(R.id.itemGenderFemale);
+        TextView tvMale = sheetView.findViewById(R.id.tvGenderMaleText);
+        TextView tvFemale = sheetView.findViewById(R.id.tvGenderFemaleText);
+        ImageView ivMaleCheck = sheetView.findViewById(R.id.ivGenderMaleCheck);
+        ImageView ivMaleUncheck = sheetView.findViewById(R.id.ivGenderMaleUnchecked);
+        ImageView ivFemaleCheck = sheetView.findViewById(R.id.ivGenderFemaleCheck);
+        ImageView ivFemaleUncheck = sheetView.findViewById(R.id.ivGenderFemaleUnchecked);
+
+        String maleLabel = getString(R.string.gender_male);
+        String femaleLabel = getString(R.string.gender_female);
+
+        Runnable updateCards = () -> {
+            String current = holder.selectedGender != null ? holder.selectedGender : "";
+            boolean male = "male".equalsIgnoreCase(current) || "lelaki".equalsIgnoreCase(current) || maleLabel.equalsIgnoreCase(current);
+            boolean female = "female".equalsIgnoreCase(current) || "perempuan".equalsIgnoreCase(current) || femaleLabel.equalsIgnoreCase(current);
+
+            if (itemMale != null) {
+                itemMale.setBackgroundResource(male ? R.drawable.bg_selection_card_selected : R.drawable.bg_selection_card_unselected);
+            }
+            if (tvMale != null) {
+                tvMale.setTextColor(ContextCompat.getColor(this, male ? R.color.pink_dark : R.color.text_dark));
+                tvMale.setTypeface(null, male ? Typeface.BOLD : Typeface.NORMAL);
+            }
+            if (ivMaleCheck != null) ivMaleCheck.setVisibility(male ? View.VISIBLE : View.GONE);
+            if (ivMaleUncheck != null) ivMaleUncheck.setVisibility(male ? View.GONE : View.VISIBLE);
+
+            if (itemFemale != null) {
+                itemFemale.setBackgroundResource(female ? R.drawable.bg_selection_card_selected : R.drawable.bg_selection_card_unselected);
+            }
+            if (tvFemale != null) {
+                tvFemale.setTextColor(ContextCompat.getColor(this, female ? R.color.pink_dark : R.color.text_dark));
+                tvFemale.setTypeface(null, female ? Typeface.BOLD : Typeface.NORMAL);
+            }
+            if (ivFemaleCheck != null) ivFemaleCheck.setVisibility(female ? View.VISIBLE : View.GONE);
+            if (ivFemaleUncheck != null) ivFemaleUncheck.setVisibility(female ? View.GONE : View.VISIBLE);
+        };
+
+        updateCards.run();
+
+        if (itemMale != null) {
+            itemMale.setOnClickListener(v -> {
+                HapticUtil.click(v);
+                holder.selectedGender = maleLabel;
+                updateGenderFieldDisplay(holder.ivGenderBadge, holder.tvGenderValue, maleLabel);
+                updateCards.run();
+                itemMale.postDelayed(sheetDialog::dismiss, 120);
+            });
+        }
+
+        if (itemFemale != null) {
+            itemFemale.setOnClickListener(v -> {
+                HapticUtil.click(v);
+                holder.selectedGender = femaleLabel;
+                updateGenderFieldDisplay(holder.ivGenderBadge, holder.tvGenderValue, femaleLabel);
+                updateCards.run();
+                itemFemale.postDelayed(sheetDialog::dismiss, 120);
+            });
+        }
+
+        sheetDialog.show();
+    }
+
+    private void showNationalityPickerBottomSheet(AdditionalTravellerHolder holder) {
+        String[] countryHolder = new String[]{holder.selectedNationality != null ? holder.selectedNationality : ""};
+        showCountrySearchBottomSheet(
+                getString(R.string.profile_nationality_sheet_title),
+                getString(R.string.profile_nationality_sheet_sub),
+                holder.tvNationalityFlag,
+                holder.tvNationalityValue,
+                countryHolder,
+                () -> holder.selectedNationality = countryHolder[0]
+        );
+    }
+
+    private void showIssuingCountryPickerBottomSheet(AdditionalTravellerHolder holder) {
+        String[] countryHolder = new String[]{holder.selectedIssuingCountry != null ? holder.selectedIssuingCountry : ""};
+        showCountrySearchBottomSheet(
+                getString(R.string.profile_issuing_country_sheet_title),
+                getString(R.string.profile_issuing_country_sheet_sub),
+                holder.tvIssuingCountryFlag,
+                holder.tvIssuingCountryValue,
+                countryHolder,
+                () -> holder.selectedIssuingCountry = countryHolder[0]
+        );
+    }
+
+    private void showCountrySearchBottomSheet(
+            String title,
+            String subtitle,
+            TextView tvTargetFlag,
+            TextView tvTargetValue,
+            String[] selectedCountryHolder,
+            Runnable onCountrySelected) {
+
+        BottomSheetDialog sheetDialog = new BottomSheetDialog(this);
+        View sheetView = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_country_search_picker, null);
+        sheetDialog.setContentView(sheetView);
+
+        if (sheetDialog.getWindow() != null) {
+            sheetDialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
+            sheetDialog.getWindow().setDimAmount(0.55f);
+            sheetDialog.getWindow().setSoftInputMode(android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        }
+
+        TextView tvSheetTitle = sheetView.findViewById(R.id.tvCountrySheetTitle);
+        if (tvSheetTitle != null && title != null && !title.isEmpty()) {
+            tvSheetTitle.setText(title);
+        }
+
+        TextView tvSheetSub = sheetView.findViewById(R.id.tvCountrySheetSub);
+        if (tvSheetSub != null && subtitle != null && !subtitle.isEmpty()) {
+            tvSheetSub.setText(subtitle);
+        }
+
+        View btnClose = sheetView.findViewById(R.id.btnCloseCountrySheet);
+        if (btnClose != null) btnClose.setOnClickListener(v -> sheetDialog.dismiss());
+
+        EditText etSearch = sheetView.findViewById(R.id.etCountrySearch);
+        ImageView btnClear = sheetView.findViewById(R.id.btnClearCountrySearch);
+        ListView lvCountries = sheetView.findViewById(R.id.lvCountryPicker);
+        TextView tvNoCountries = sheetView.findViewById(R.id.tvNoCountries);
+
+        String[] seaCountries = getResources().getStringArray(R.array.sea_countries);
+        CountryDropdownAdapter adapter = new CountryDropdownAdapter(this, seaCountries);
+        String curCountry = selectedCountryHolder != null && selectedCountryHolder.length > 0 ? selectedCountryHolder[0] : "";
+        adapter.setSelectedCountry(curCountry);
+
+        CountryDropdownAdapter.OnCountrySelectedListener onSelected = (chosen, pos) -> {
+            if (chosen != null && !chosen.trim().isEmpty()) {
+                if (selectedCountryHolder != null && selectedCountryHolder.length > 0) {
+                    selectedCountryHolder[0] = chosen;
+                }
+                if (tvTargetFlag != null) {
+                    tvTargetFlag.setText(CountryDropdownAdapter.getFlagForCountry(chosen));
+                    tvTargetFlag.setVisibility(View.VISIBLE);
+                }
+                if (tvTargetValue != null) {
+                    tvTargetValue.setText(chosen);
+                    tvTargetValue.setTextColor(ContextCompat.getColor(this, R.color.text_dark));
+                }
+                if (onCountrySelected != null) {
+                    onCountrySelected.run();
+                }
+            }
+            sheetDialog.dismiss();
+        };
+
+        adapter.setOnCountrySelectedListener(onSelected);
+
+        if (lvCountries != null) {
+            lvCountries.setAdapter(adapter);
+            lvCountries.setOnItemClickListener((parent, view, position, id) -> {
+                HapticUtil.click(view);
+                String chosen = adapter.getItem(position);
+                onSelected.onCountrySelected(chosen, position);
+            });
+
+            int selectedPos = adapter.getPositionForCountry(curCountry);
+            if (selectedPos >= 0) {
+                lvCountries.setSelection(selectedPos);
+            }
+        }
+
+        if (etSearch != null) {
+            etSearch.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    String query = s != null ? s.toString() : "";
+                    if (btnClear != null) {
+                        btnClear.setVisibility(query.isEmpty() ? View.GONE : View.VISIBLE);
+                    }
+                    adapter.getFilter().filter(query, countResult -> {
+                        if (tvNoCountries != null) {
+                            tvNoCountries.setVisibility(adapter.getCount() == 0 ? View.VISIBLE : View.GONE);
+                        }
+                    });
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {}
+            });
+        }
+
+        if (btnClear != null && etSearch != null) {
+            btnClear.setOnClickListener(v -> etSearch.setText(""));
+        }
+
+        sheetDialog.show();
+    }
+
     private void reindexAdditionalTravellers() {
         if (txtNoAdditionalTravellers != null) {
             txtNoAdditionalTravellers.setVisibility(additionalTravellers.isEmpty() ? View.VISIBLE : View.GONE);
@@ -678,6 +1079,10 @@ public class PassengerDetailsActivity extends BaseActivity {
             AdditionalTravellerHolder h = additionalTravellers.get(i);
             h.index = i + 2;
             h.titleText.setText(getString(R.string.passenger_traveller_title_format, h.index));
+            String nameVal = h.inputName != null ? h.inputName.getText().toString().trim() : "";
+            if (nameVal.isEmpty()) {
+                h.txtNamePreview.setText(R.string.passenger_default_preview_name);
+            }
         }
     }
 
@@ -690,7 +1095,7 @@ public class PassengerDetailsActivity extends BaseActivity {
 
         // Options 2..N: Additional travellers
         for (int i = 0; i < additionalTravellers.size(); i++) {
-            String name = additionalTravellers.get(i).inputName.getText().toString().trim();
+            String name = additionalTravellers.get(i).inputName != null ? additionalTravellers.get(i).inputName.getText().toString().trim() : "";
             if (name.isEmpty()) name = getString(R.string.passenger_traveller_title_format, (i + 2));
             travellerOptions.add((i + 2) + ". " + name);
         }
@@ -826,13 +1231,13 @@ public class PassengerDetailsActivity extends BaseActivity {
                 if (firstErrorView == null) firstErrorView = holder.inputPassport;
             }
 
-            if (reqPassport && holder.inputPassportExpiry != null && errors.expiryErr != 0) {
+            if (reqPassport && errors.expiryErr != 0) {
                 if (holder.errorPassportExpiry != null) {
                     holder.errorPassportExpiry.setText(getString(errors.expiryErr));
                     holder.errorPassportExpiry.setVisibility(View.VISIBLE);
                 }
                 allValid = false;
-                if (firstErrorView == null) firstErrorView = holder.inputPassportExpiry;
+                if (firstErrorView == null) firstErrorView = holder.fieldPassportExpiryContainer;
             }
         }
 
@@ -859,25 +1264,27 @@ public class PassengerDetailsActivity extends BaseActivity {
         startActivity(intent);
     }
 
-    /** Reads card inputs; null marks fields whose input view doesn't exist (not applicable). */
+    /** Reads card inputs; null marks fields whose input view doesn't exist or is not applicable. */
     private PassengerDetailsViewModel.TravellerInput readTravellerInput(AdditionalTravellerHolder holder) {
         PassengerDetailsViewModel.TravellerInput in = new PassengerDetailsViewModel.TravellerInput();
-        in.title = holder.inputTitle != null ? holder.inputTitle.getText().toString().trim() : null;
-        in.fullName = holder.inputName.getText().toString().trim();
-        in.icNumber = holder.inputIc != null ? holder.inputIc.getText().toString().trim() : null;
-        in.passportNumber = holder.inputPassport != null ? holder.inputPassport.getText().toString().trim() : null;
-        in.passportExpiryDate = holder.inputPassportExpiry != null
-                ? holder.inputPassportExpiry.getText().toString().trim() : null;
-        in.issuingCountry = holder.inputIssuingCountry != null
-                ? holder.inputIssuingCountry.getText().toString().trim() : null;
-        in.dateOfBirth = holder.inputDob != null ? holder.inputDob.getText().toString().trim() : null;
-        in.gender = holder.inputGender != null ? holder.inputGender.getText().toString().trim() : null;
-        in.nationality = holder.inputNationality != null
-                ? holder.inputNationality.getText().toString().trim() : null;
-        in.clothesSize = holder.inputClothesSize != null
+        in.title = null;
+        in.fullName = holder.inputName != null ? holder.inputName.getText().toString().trim() : "";
+        in.icNumber = (holder.inputIc != null && holder.layoutIcSection != null && holder.layoutIcSection.getVisibility() == View.VISIBLE)
+                ? holder.inputIc.getText().toString().trim() : null;
+        in.passportNumber = (holder.inputPassport != null && holder.layoutPassportSection != null && holder.layoutPassportSection.getVisibility() == View.VISIBLE)
+                ? holder.inputPassport.getText().toString().trim() : null;
+        in.passportExpiryDate = (holder.layoutPassportSection != null && holder.layoutPassportSection.getVisibility() == View.VISIBLE)
+                ? holder.selectedPassportExpiry : null;
+        in.issuingCountry = (holder.layoutPassportSection != null && holder.layoutPassportSection.getVisibility() == View.VISIBLE)
+                ? holder.selectedIssuingCountry : null;
+        in.dateOfBirth = holder.selectedDob;
+        in.gender = holder.selectedGender;
+        in.nationality = holder.selectedNationality;
+        in.clothesSize = (holder.inputClothesSize != null && holder.layoutClothesSizeSection != null && holder.layoutClothesSizeSection.getVisibility() == View.VISIBLE)
                 ? holder.inputClothesSize.getText().toString().trim() : null;
-        in.mahramText = holder.inputMahram != null ? holder.inputMahram.getText().toString().trim() : null;
-        in.relationship = holder.inputRelationship != null
+        in.mahramText = (holder.inputMahram != null && holder.layoutMahramSection != null && holder.layoutMahramSection.getVisibility() == View.VISIBLE)
+                ? holder.inputMahram.getText().toString().trim() : null;
+        in.relationship = (holder.inputRelationship != null && holder.layoutMahramSection != null && holder.layoutMahramSection.getVisibility() == View.VISIBLE)
                 ? holder.inputRelationship.getText().toString().trim() : null;
         return in;
     }

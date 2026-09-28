@@ -26,6 +26,12 @@ public class BookingDetailDto extends BookingDto {
     @SerializedName("invoices")
     public List<InvoiceInfo> invoices;
 
+    @SerializedName("receipts")
+    public List<ReceiptInfo> receipts;
+
+    @SerializedName("payments")
+    public List<PaymentInfo> payments;
+
     public static class DepartureInfo {
         @SerializedName("departure_no")
         public String departureNo;
@@ -38,6 +44,9 @@ public class BookingDetailDto extends BookingDto {
     }
 
     public static class TravellerInfo {
+        @SerializedName("id")
+        public int id;
+
         @SerializedName("name")
         public String name;
 
@@ -74,5 +83,42 @@ public class BookingDetailDto extends BookingDto {
 
         @SerializedName("status")
         public String status;
+    }
+
+    public static class ReceiptInfo {
+        @SerializedName("id")
+        public int id;
+
+        @SerializedName("receipt_no")
+        public String receiptNo;
+
+        @SerializedName("amount")
+        public double amount;
+
+        @SerializedName("receipt_date")
+        public String receiptDate;
+
+        @SerializedName("payment_method")
+        public String paymentMethod;
+    }
+
+    public static class PaymentInfo {
+        @SerializedName("id")
+        public int id;
+
+        @SerializedName("payment_no")
+        public String paymentNo;
+
+        @SerializedName("amount")
+        public double amount;
+
+        @SerializedName("method")
+        public String method;
+
+        @SerializedName("status")
+        public String status;
+
+        @SerializedName("paid_at")
+        public String paidAt;
     }
 }
