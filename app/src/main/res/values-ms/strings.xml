@@ -1285,4 +1285,20 @@
     <string name="pay_sheet_opt_balance_preset">Bayar Penuh Baki Pakej (%1$s)</string>
     <string name="pay_success_toast">Bayaran sebanyak %1$s berjaya! Resit rasmi telah dijana.</string>
     <string name="pay_btn_view_receipt">Lihat Resit</string>
+
+    <!-- Outstanding Deposit Blocked Dialog Strings -->
+    <string name="booking_blocked_deposit_title">Deposit Diperlukan</string>
+    <string name="booking_blocked_deposit_msg">Anda mempunyai deposit tertunggak untuk tempahan sedia ada (%1$s). Sila bayar deposit yang diperlukan sebelum membuat tempahan baharu.</string>
+    <string name="btn_view_my_bookings">Ke Tempahan Saya</string>
+
+    <!-- Cancel Booking Strings -->
+    <string name="booking_btn_cancel">Batal Tempahan</string>
+    <string name="cancel_booking_title">Batal Tempahan</string>
+    <string name="cancel_booking_confirm_message">Adakah anda pasti ingin membatalkan tempahan %1$s? Tindakan ini akan melepaskan tempat duduk yang ditempah. Rekod bayaran sah akan dikekalkan.</string>
+    <string name="cancel_booking_reason_hint">Sebab pembatalan (pilihan)</string>
+    <string name="cancel_booking_btn_confirm">Ya, Batal Tempahan</string>
+    <string name="cancel_booking_keep">Kekalkan Tempahan</string>
+    <string name="cancel_booking_success">Tempahan %1$s telah berjaya dibatalkan.</string>
+    <string name="cancel_booking_failed">Gagal membatalkan tempahan. Sila cuba lagi.</string>
+    <string name="cancel_booking_processing">Membatalkan tempahan, sila tunggu...</string>
 </resources>

@@ -38,9 +38,14 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
         void onPayClick(BookingDto booking);
     }
 
+    public interface OnCancelClickListener {
+        void onCancelClick(BookingDto booking);
+    }
+
     private List<BookingDto> items;
     private OnDocumentClickListener documentClickListener;
     private OnPayClickListener payClickListener;
+    private OnCancelClickListener cancelClickListener;
 
     public MyBookingsAdapter(List<BookingDto> items) {
         this.items = items != null ? items : new java.util.ArrayList<>();
@@ -52,6 +57,10 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
 
     public void setOnPayClickListener(OnPayClickListener listener) {
         this.payClickListener = listener;
+    }
+
+    public void setOnCancelClickListener(OnCancelClickListener listener) {
+        this.cancelClickListener = listener;
     }
 
     public void setItems(List<BookingDto> newItems) {
@@ -301,6 +310,27 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
             });
         }
 
+        // 12. Cancel Booking Action (State-Aware: Only when eligible and not cancelled)
+        boolean isCancellable = Boolean.TRUE.equals(booking.isCancellable) && !isCancelled;
+        if (holder.btnCancelBooking != null) {
+            if (isCancellable) {
+                holder.btnCancelBooking.setVisibility(View.VISIBLE);
+                holder.btnCancelBooking.setOnClickListener(v -> {
+                    HapticUtil.click(v);
+                    if (cancelClickListener != null) {
+                        cancelClickListener.onCancelClick(booking);
+                    } else {
+                        android.app.Activity act = getActivityFromContext(v.getContext());
+                        if (act instanceof MyBookingsActivity) {
+                            ((MyBookingsActivity) act).showCancelBookingConfirmation(booking);
+                        }
+                    }
+                });
+            } else {
+                holder.btnCancelBooking.setVisibility(View.GONE);
+            }
+        }
+
         // Intentionally NO onClick on holder.itemView to prevent accidental document sheet opening!
     }
 
@@ -330,6 +360,7 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
         MaterialButton btnViewInvoice;
         MaterialButton btnViewReceipt;
         MaterialButton btnManageDocs;
+        MaterialButton btnCancelBooking;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -353,6 +384,7 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
             btnViewInvoice = itemView.findViewById(R.id.btnItemViewInvoice);
             btnViewReceipt = itemView.findViewById(R.id.btnItemViewReceipt);
             btnManageDocs = itemView.findViewById(R.id.btnItemManageDocs);
+            btnCancelBooking = itemView.findViewById(R.id.btnItemCancelBooking);
         }
     }
 }

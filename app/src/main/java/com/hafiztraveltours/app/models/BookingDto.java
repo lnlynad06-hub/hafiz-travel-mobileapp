@@ -66,6 +66,15 @@ public class BookingDto {
     @SerializedName("has_receipts")
     public boolean hasReceipts;
 
+    @SerializedName("is_cancellable")
+    public Boolean isCancellable;
+
+    @SerializedName("cancellation_reason")
+    public String cancellationReason;
+
+    @SerializedName("cancelled_at")
+    public String cancelledAt;
+
     @SerializedName("created_at")
     public String createdAt;
 }

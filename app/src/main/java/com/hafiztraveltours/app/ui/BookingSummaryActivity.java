@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import android.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.hafiztraveltours.app.R;
@@ -278,8 +279,31 @@ public class BookingSummaryActivity extends BaseActivity {
                     startActivity(intent);
                     finish();
                 } else {
-                    String errorMsg = com.hafiztraveltours.app.network.ApiErrors.userMessage(BookingSummaryActivity.this, response, R.string.booking_failed);
-                    Toast.makeText(BookingSummaryActivity.this, errorMsg, Toast.LENGTH_LONG).show();
+                    String rawError = null;
+                    String errorCode = null;
+                    String blockingBookingNo = null;
+                    try {
+                        if (response.errorBody() != null) {
+                            rawError = response.errorBody().string();
+                            if (rawError != null && !rawError.isEmpty()) {
+                                org.json.JSONObject obj = new org.json.JSONObject(rawError);
+                                errorCode = obj.optString("code", "");
+                                if (obj.has("blocking_booking") && !obj.isNull("blocking_booking")) {
+                                    org.json.JSONObject blk = obj.optJSONObject("blocking_booking");
+                                    if (blk != null) {
+                                        blockingBookingNo = blk.optString("booking_no", "");
+                                    }
+                                }
+                            }
+                        }
+                    } catch (Exception ignored) {}
+
+                    if ("UNPAID_DEPOSIT_EXISTS".equalsIgnoreCase(errorCode) || (rawError != null && rawError.contains("UNPAID_DEPOSIT_EXISTS"))) {
+                        showUnpaidDepositBlockedDialog(blockingBookingNo);
+                    } else {
+                        String errorMsg = rawError != null ? parseErrorMessage(rawError) : getString(R.string.booking_failed);
+                        Toast.makeText(BookingSummaryActivity.this, errorMsg, Toast.LENGTH_LONG).show();
+                    }
                 }
             }
 
@@ -341,5 +365,45 @@ public class BookingSummaryActivity extends BaseActivity {
         apiRequest.termsAgreedAt = com.hafiztraveltours.app.utils.DateFormats.nowIsoDateTime();
         apiRequest.termsVersion = TermsConditionsActivity.TERMS_VERSION;
         return apiRequest;
+    }
+
+    private void showUnpaidDepositBlockedDialog(String bookingNo) {
+        String msg = bookingNo != null && !bookingNo.isEmpty()
+                ? getString(R.string.booking_blocked_deposit_msg, bookingNo)
+                : getString(R.string.booking_blocked_deposit_msg, "");
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.booking_blocked_deposit_title)
+                .setMessage(msg)
+                .setPositiveButton(R.string.btn_view_my_bookings, (d, w) -> {
+                    Intent intent = new Intent(this, MyBookingsActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(intent);
+                    finish();
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
+    private String parseErrorMessage(String rawJson) {
+        try {
+            org.json.JSONObject obj = new org.json.JSONObject(rawJson);
+            if (obj.has("message") && !obj.isNull("message")) {
+                String m = obj.optString("message", "").trim();
+                if (!m.isEmpty()) return m;
+            }
+            if (obj.has("errors") && !obj.isNull("errors")) {
+                org.json.JSONObject errors = obj.optJSONObject("errors");
+                if (errors != null) {
+                    java.util.Iterator<String> keys = errors.keys();
+                    if (keys.hasNext()) {
+                        org.json.JSONArray arr = errors.optJSONArray(keys.next());
+                        if (arr != null && arr.length() > 0) {
+                            return arr.optString(0, "");
+                        }
+                    }
+                }
+            }
+        } catch (Exception ignored) {}
+        return getString(R.string.booking_failed);
     }
 }

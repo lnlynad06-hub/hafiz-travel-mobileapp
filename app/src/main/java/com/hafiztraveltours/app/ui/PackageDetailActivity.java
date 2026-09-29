@@ -261,8 +261,52 @@ public class PackageDetailActivity extends BaseActivity {
             return;
         }
 
+        checkEligibilityAndOpenBookingSheet();
+    }
+
+    private void checkEligibilityAndOpenBookingSheet() {
+        ApiClient.getApiService().checkBookingEligibility().enqueue(new retrofit2.Callback<ApiResponse<BookingEligibilityDto>>() {
+            @Override
+            public void onResponse(retrofit2.Call<ApiResponse<BookingEligibilityDto>> call,
+                                   retrofit2.Response<ApiResponse<BookingEligibilityDto>> response) {
+                if (isFinishing() || isDestroyed()) return;
+                if (response.isSuccessful() && response.body() != null && response.body().data != null) {
+                    BookingEligibilityDto eligibility = response.body().data;
+                    if (!eligibility.canBook) {
+                        String bookingNo = eligibility.blockingBooking != null ? eligibility.blockingBooking.bookingNo : "";
+                        showUnpaidDepositBlockedDialog(bookingNo);
+                        return;
+                    }
+                }
+                openBookingConfigurationSheet();
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<ApiResponse<BookingEligibilityDto>> call, Throwable t) {
+                if (isFinishing() || isDestroyed()) return;
+                openBookingConfigurationSheet();
+            }
+        });
+    }
+
+    private void openBookingConfigurationSheet() {
         BookingConfigurationBottomSheet sheet = BookingConfigurationBottomSheet.newInstance(detail, selectedPriceOptionIndex);
         sheet.show(getSupportFragmentManager(), "BookingConfigSheet");
+    }
+
+    private void showUnpaidDepositBlockedDialog(String bookingNo) {
+        String msg = bookingNo != null && !bookingNo.isEmpty()
+                ? getString(R.string.booking_blocked_deposit_msg, bookingNo)
+                : getString(R.string.booking_blocked_deposit_msg, "");
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.booking_blocked_deposit_title)
+                .setMessage(msg)
+                .setPositiveButton(R.string.btn_view_my_bookings, (d, w) -> {
+                    Intent intent = new Intent(this, MyBookingsActivity.class);
+                    startActivity(intent);
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
     }
 
     private void showProfileIncompleteDialog() {

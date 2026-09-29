@@ -101,4 +101,13 @@ public interface ApiService {
             @Path("booking") int bookingId,
             @retrofit2.http.Body java.util.Map<String, Object> body
     );
+
+    @GET("v1/bookings/check-eligibility")
+    Call<ApiResponse<com.hafiztraveltours.app.models.BookingEligibilityDto>> checkBookingEligibility();
+
+    @retrofit2.http.POST("v1/bookings/{booking}/cancel")
+    Call<ApiResponse<com.hafiztraveltours.app.models.BookingDetailDto>> cancelBooking(
+            @Path("booking") int bookingId,
+            @retrofit2.http.Body com.hafiztraveltours.app.models.CancelBookingRequest body
+    );
 }

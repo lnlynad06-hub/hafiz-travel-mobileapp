@@ -1403,4 +1403,20 @@
     <string name="pay_sheet_opt_balance_preset">Pay Total Balance (%1$s)</string>
     <string name="pay_success_toast">Payment of %1$s successful! Official receipt generated.</string>
     <string name="pay_btn_view_receipt">View Receipt</string>
+
+    <!-- Outstanding Deposit Blocked Dialog Strings -->
+    <string name="booking_blocked_deposit_title">Outstanding Deposit Required</string>
+    <string name="booking_blocked_deposit_msg">You have an outstanding deposit for an existing booking (%1$s). Please pay the required deposit before creating another booking.</string>
+    <string name="btn_view_my_bookings">Go to My Bookings</string>
+
+    <!-- Cancel Booking Strings -->
+    <string name="booking_btn_cancel">Cancel Booking</string>
+    <string name="cancel_booking_title">Cancel Booking</string>
+    <string name="cancel_booking_confirm_message">Are you sure you want to cancel booking %1$s? This action will release your reserved seats. Legitimate payment records will be preserved.</string>
+    <string name="cancel_booking_reason_hint">Reason for cancellation (optional)</string>
+    <string name="cancel_booking_btn_confirm">Yes, Cancel Booking</string>
+    <string name="cancel_booking_keep">Keep Booking</string>
+    <string name="cancel_booking_success">Booking %1$s has been successfully cancelled.</string>
+    <string name="cancel_booking_failed">Failed to cancel booking. Please try again.</string>
+    <string name="cancel_booking_processing">Cancelling booking, please wait...</string>
 </resources>

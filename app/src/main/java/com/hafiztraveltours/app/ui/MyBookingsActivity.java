@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.provider.OpenableColumns;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,12 +30,15 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.hafiztraveltours.app.R;
 import com.hafiztraveltours.app.adapters.MyBookingsAdapter;
+import com.hafiztraveltours.app.models.BookingDetailDto;
 import com.hafiztraveltours.app.models.BookingDocumentsResponse;
 import com.hafiztraveltours.app.models.BookingDto;
 import com.hafiztraveltours.app.models.BookingListPage;
 import com.hafiztraveltours.app.models.BookingRequest;
+import com.hafiztraveltours.app.models.CancelBookingRequest;
 import com.hafiztraveltours.app.models.DocumentDto;
 import com.hafiztraveltours.app.network.ApiClient;
+import com.hafiztraveltours.app.network.ApiErrors;
 import com.hafiztraveltours.app.network.ApiResponse;
 import com.hafiztraveltours.app.utils.BottomNavHelper;
 import com.hafiztraveltours.app.utils.DocumentStatus;
@@ -115,6 +119,7 @@ public class MyBookingsActivity extends BaseActivity {
         adapter = new MyBookingsAdapter(new ArrayList<>());
         adapter.setOnDocumentClickListener(this::showBookingDocsSheet);
         adapter.setOnPayClickListener(this::showQuickPaySheet);
+        adapter.setOnCancelClickListener(this::showCancelBookingConfirmation);
         recyclerView.setAdapter(adapter);
         viewState = new ViewStateController(progressBar, recyclerView, emptyContainer);
 
@@ -844,5 +849,83 @@ public class MyBookingsActivity extends BaseActivity {
                 .setMessage(message)
                 .setPositiveButton(getString(R.string.dialog_btn_understand), (d, w) -> d.dismiss())
                 .show();
+    }
+
+    public void showCancelBookingConfirmation(BookingDto booking) {
+        if (booking == null || booking.id <= 0) return;
+
+        String bookingRef = booking.bookingNo != null ? booking.bookingNo : "BKG-" + booking.id;
+
+        LinearLayout container = new LinearLayout(this);
+        container.setOrientation(LinearLayout.VERTICAL);
+        int pad = dp(20);
+        container.setPadding(pad, dp(10), pad, dp(5));
+
+        TextView tvMsg = new TextView(this);
+        tvMsg.setText(getString(R.string.cancel_booking_confirm_message, bookingRef));
+        tvMsg.setTextSize(14);
+        tvMsg.setTextColor(getResources().getColor(R.color.text_dark));
+        tvMsg.setLineSpacing(dp(2), 1.1f);
+        container.addView(tvMsg);
+
+        EditText etReason = new EditText(this);
+        etReason.setHint(getString(R.string.cancel_booking_reason_hint));
+        etReason.setTextSize(13);
+        etReason.setPadding(dp(12), dp(10), dp(12), dp(10));
+        etReason.setBackgroundResource(R.drawable.bg_input_box);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lp.topMargin = dp(14);
+        etReason.setLayoutParams(lp);
+        container.addView(etReason);
+
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.cancel_booking_title)
+                .setView(container)
+                .setPositiveButton(R.string.cancel_booking_btn_confirm, (dialog, which) -> {
+                    String reason = etReason.getText().toString().trim();
+                    performCancelBooking(booking, reason);
+                })
+                .setNegativeButton(R.string.cancel_booking_keep, null)
+                .show();
+    }
+
+    private void performCancelBooking(BookingDto booking, String reason) {
+        String bookingRef = booking.bookingNo != null ? booking.bookingNo : "BKG-" + booking.id;
+        AlertDialog progressDialog = new AlertDialog.Builder(this)
+                .setMessage(R.string.cancel_booking_processing)
+                .setCancelable(false)
+                .create();
+        progressDialog.show();
+
+        CancelBookingRequest req = new CancelBookingRequest(!reason.isEmpty() ? reason : null);
+        ApiClient.getApiService().cancelBooking(booking.id, req)
+                .enqueue(new Callback<ApiResponse<BookingDetailDto>>() {
+                    @Override
+                    public void onResponse(Call<ApiResponse<BookingDetailDto>> call, Response<ApiResponse<BookingDetailDto>> response) {
+                        if (isFinishing() || isDestroyed()) return;
+                        progressDialog.dismiss();
+
+                        if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                            Toast.makeText(MyBookingsActivity.this,
+                                    getString(R.string.cancel_booking_success, bookingRef), Toast.LENGTH_LONG).show();
+                            loadBookings();
+                        } else {
+                            String err = ApiErrors.userMessage(MyBookingsActivity.this, response, R.string.cancel_booking_failed);
+                            Toast.makeText(MyBookingsActivity.this, err, Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ApiResponse<BookingDetailDto>> call, Throwable t) {
+                        if (isFinishing() || isDestroyed()) return;
+                        progressDialog.dismiss();
+                        String err = ApiErrors.userMessage(MyBookingsActivity.this, t, R.string.cancel_booking_failed);
+                        Toast.makeText(MyBookingsActivity.this, err, Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
+
+    private int dp(int value) {
+        return Math.round(value * getResources().getDisplayMetrics().density);
     }
 }
