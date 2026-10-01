@@ -146,6 +146,12 @@
                     android:lineSpacingExtra="3dp" />
 
             </LinearLayout>
+            <!-- Umrah Terms Container -->
+            <LinearLayout
+                android:id="@+id/containerUmrahSections"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
             <!-- 1. Deposit & Bayaran Penuh Pakej -->
             <LinearLayout
@@ -516,6 +522,46 @@
                     android:textColor="@color/text_gray"
                     android:textSize="12sp"
                     android:lineSpacingExtra="3dp" />
+
+            </LinearLayout>
+
+            <!-- End Umrah Terms Container -->
+            </LinearLayout>
+
+            <!-- Tour Terms Container (Clean Notice / Future Extension) -->
+            <LinearLayout
+                android:id="@+id/containerTourSections"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/bg_detail_card"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/terms_tour_notice_title"
+                        android:textColor="@color/brand_magenta"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/terms_tour_notice_body"
+                        android:textColor="@color/text_dark"
+                        android:textSize="12sp"
+                        android:lineSpacingExtra="3dp" />
+
+                </LinearLayout>
 
             </LinearLayout>
 

@@ -105,6 +105,11 @@ public interface ApiService {
     @GET("v1/bookings/check-eligibility")
     Call<ApiResponse<com.hafiztraveltours.app.models.BookingEligibilityDto>> checkBookingEligibility();
 
+    @GET("v1/bookings/{booking}/cancellation-quote")
+    Call<ApiResponse<com.hafiztraveltours.app.models.CancellationQuoteDto>> getCancellationQuote(
+            @Path("booking") int bookingId
+    );
+
     @retrofit2.http.POST("v1/bookings/{booking}/cancel")
     Call<ApiResponse<com.hafiztraveltours.app.models.BookingDetailDto>> cancelBooking(
             @Path("booking") int bookingId,

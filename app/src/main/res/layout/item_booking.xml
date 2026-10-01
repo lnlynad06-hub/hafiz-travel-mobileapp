@@ -7,191 +7,88 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="16dp"
     android:layout_marginVertical="10dp"
-    app:cardCornerRadius="18dp"
-    app:cardElevation="2dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="3dp"
     app:cardBackgroundColor="@color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="18dp">
+        android:padding="20dp">
 
-        <!-- 1. Top Bar: Category Pill, Booking No & Booking Status Badge -->
+        <!-- 1. Header Row: Left = Booking Status Badge, Right = Vertical Kebab Menu -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/tvItemCategoryTag"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bg_pill_accent"
-                    android:paddingHorizontal="7dp"
-                    android:paddingVertical="3dp"
-                    android:text="@string/booking_category_umrah"
-                    android:textColor="@color/brand_magenta"
-                    android:textSize="9.5sp"
-                    android:textStyle="bold"
-                    android:letterSpacing="0.04" />
-
-                <TextView
-                    android:id="@+id/itemBookingNo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:fontFamily="monospace"
-                    android:textColor="@color/text_dark"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    tools:text="BKG-260928-OIUEXZ" />
-
-                <ImageView
-                    android:id="@+id/btnItemCopyBookingNo"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:layout_marginStart="4dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="@string/booking_success_copy_no"
-                    android:padding="2dp"
-                    android:src="@drawable/ic_copy"
-                    app:tint="@color/text_muted" />
-
-            </LinearLayout>
 
             <TextView
                 android:id="@+id/itemBookingStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:background="@drawable/bg_pill_accent"
-                android:paddingHorizontal="9dp"
-                android:paddingVertical="4.5dp"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp"
                 android:textColor="#D97706"
-                android:textSize="10.5sp"
+                android:textSize="11sp"
                 android:textStyle="bold"
-                tools:text="MENUNGGU PENGESAHAN" />
+                tools:text="PENDING CONFIRMATION" />
+
+            <ImageView
+                android:id="@+id/btnBookingKebabMenu"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="More options"
+                android:padding="6dp"
+                android:src="@drawable/ic_more_vert"
+                app:tint="@color/text_dark" />
 
         </RelativeLayout>
 
-        <!-- Divider -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="12dp"
-            android:background="#F1F5F9" />
-
-        <!-- 2. Package Hero Title & Travel Meta -->
+        <!-- 2. Package Title -->
         <TextView
             android:id="@+id/itemBookingPackageName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:lineSpacingExtra="3dp"
+            android:layout_marginTop="12dp"
+            android:lineSpacingExtra="4dp"
             android:textColor="@color/text_dark"
-            android:textSize="17sp"
+            android:textSize="18sp"
             android:textStyle="bold"
-            tools:text="Pakej Umrah Ziarah VIP Cuti Sekolah" />
+            tools:text="Umrah Sukuk LITE" />
 
+        <!-- 3. Trip Information: Travel Date • Duration • Pax -->
         <TextView
             android:id="@+id/itemBookingTripMeta"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:drawablePadding="6dp"
+            android:layout_marginTop="6dp"
             android:textColor="@color/text_gray"
             android:textSize="12.5sp"
-            tools:text="12 Nov 2026 • 12 Hari 10 Malam • 2 Jemaah" />
+            tools:text="07 Nov 2026 • 12 days 11 nights • 2 pax" />
 
-        <!-- 3. Two-Stage Payment & Financial Matrix Card -->
+        <!-- 4. Single-Surface Payment Summary Matrix -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/bg_detail_card"
             android:orientation="vertical"
-            android:padding="14dp">
+            android:padding="16dp">
 
-            <!-- Payment Stage & Stage Status Badge -->
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/itemPaymentStageLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:text="@string/booking_label_stage_deposit"
-                    android:textColor="@color/brand_magenta"
-                    android:textSize="11sp"
-                    android:textStyle="bold"
-                    android:letterSpacing="0.04" />
-
-                <TextView
-                    android:id="@+id/itemPaymentStatusBadge"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/bg_pill_accent"
-                    android:paddingHorizontal="7dp"
-                    android:paddingVertical="3dp"
-                    android:text="@string/payment_status_deposit_partial"
-                    android:textColor="#D97706"
-                    android:textSize="9.5sp"
-                    android:textStyle="bold"
-                    tools:text="DEPOSIT SEPARA" />
-
-            </RelativeLayout>
-
-            <!-- Progress Bar -->
-            <ProgressBar
-                android:id="@+id/itemPaymentProgressBar"
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="6dp"
-                android:layout_marginTop="8dp"
-                android:max="100"
-                android:progress="40"
-                android:progressTint="@color/brand_magenta"
-                android:progressBackgroundTint="#E2E8F0" />
-
-            <!-- Payment Stage Breakdown Detail -->
-            <TextView
-                android:id="@+id/itemPaymentStageDetail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:textColor="@color/text_gray"
-                android:textSize="11sp"
-                tools:text="Deposit: RM 400.00 / RM 1,000.00 (Baki Deposit: RM 600.00)" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:background="#E2E8F0" />
-
-            <!-- Financial Summary Grid -->
+            <!-- 3-Column Financial Summary -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:baselineAligned="false">
+                android:baselineAligned="false"
+                android:orientation="horizontal">
 
-                <!-- Paid Amount -->
+                <!-- Column 1: Total Paid -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -201,25 +98,61 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:letterSpacing="0.03"
                         android:text="@string/booking_label_paid_amount"
                         android:textColor="@color/text_muted"
-                        android:textSize="10sp"
-                        android:textStyle="bold"
-                        android:letterSpacing="0.04" />
+                        android:textSize="10.5sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/itemBookingPaidAmount"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:singleLine="true"
                         android:textColor="#059669"
                         android:textSize="14sp"
                         android:textStyle="bold"
-                        tools:text="RM 400.00" />
+                        tools:text="RM 5,925" />
 
                 </LinearLayout>
 
-                <!-- Outstanding Balance -->
+                <!-- Column 2: Outstanding Balance -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:letterSpacing="0.03"
+                        android:text="@string/booking_label_balance_due"
+                        android:textColor="@color/text_muted"
+                        android:textSize="10.5sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/itemBookingOutstandingAmount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:ellipsize="end"
+                        android:gravity="center_horizontal"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColor="@color/brand_magenta"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        tools:text="RM 15,375" />
+
+                </LinearLayout>
+
+                <!-- Column 3: Grand Total -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -230,150 +163,152 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/booking_label_balance_due"
+                        android:letterSpacing="0.03"
+                        android:text="@string/booking_label_grand_total_summary"
                         android:textColor="@color/text_muted"
-                        android:textSize="10sp"
-                        android:textStyle="bold"
-                        android:letterSpacing="0.04" />
+                        android:textSize="10.5sp"
+                        android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/itemBookingOutstandingAmount"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/itemBookingGrandTotal"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:textColor="@color/brand_magenta"
-                        android:textSize="15sp"
+                        android:ellipsize="end"
+                        android:gravity="end"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColor="@color/text_dark"
+                        android:textSize="14sp"
                         android:textStyle="bold"
-                        tools:text="RM 9,600.00" />
+                        tools:text="RM 21,300" />
 
                 </LinearLayout>
 
             </LinearLayout>
 
+            <!-- Progress Bar -->
+            <ProgressBar
+                android:id="@+id/itemPaymentProgressBar"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:layout_marginTop="12dp"
+                android:max="100"
+                android:progress="40"
+                android:progressBackgroundTint="#E2E8F0"
+                android:progressTint="@color/brand_magenta" />
+
+            <!-- Payment Stage Detail & Semantic Payment Status Tag -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/itemPaymentStageDetail"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/text_gray"
+                    android:textSize="11.5sp"
+                    tools:text="Deposit: RM 400.00 / RM 1,000.00" />
+
+                <TextView
+                    android:id="@+id/itemPaymentStageLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/itemPaymentStatusBadge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_pill_accent"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="4dp"
+                    android:textColor="#D97706"
+                    android:textSize="10.5sp"
+                    android:textStyle="bold"
+                    tools:text="Installment active" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
-        <!-- 4. Pay Now Primary Action (Visible when outstanding balance exists) -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnItemPayNow"
-            android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:layout_marginTop="14dp"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:text="@string/booking_btn_pay_now"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="13.5sp"
-            android:textStyle="bold"
-            app:icon="@drawable/ic_card"
-            app:iconGravity="textStart"
-            app:iconPadding="8dp"
-            app:iconTint="@color/white"
-            app:backgroundTint="@color/brand_magenta"
-            app:cornerRadius="12dp"
-            app:elevation="2dp"
-            tools:text="Pay Now" />
-
-        <!-- 5. Secondary Action Buttons (Invoice, Receipt, Documents) -->
+        <!-- 5. Action Buttons: Full-width stacked layout -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:layout_marginTop="16dp"
+            android:orientation="vertical">
 
-            <!-- View Invoice Button -->
+            <!-- 1. Pay Now (Primary CTA full-width action, Magenta) -->
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnItemViewInvoice"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="0dp"
-                android:layout_height="38dp"
-                android:layout_weight="1"
-                android:layout_marginEnd="4dp"
+                android:id="@+id/btnItemPayNow"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
-                android:minHeight="0dp"
-                android:paddingStart="4dp"
-                android:paddingEnd="4dp"
-                android:text="@string/booking_btn_invoice"
+                android:text="@string/booking_btn_pay_now"
                 android:textAllCaps="false"
-                android:textColor="@color/brand_magenta"
-                android:textSize="12sp"
+                android:textColor="@color/white"
+                android:textSize="14sp"
                 android:textStyle="bold"
-                android:clickable="true"
-                app:strokeColor="@color/brand_magenta"
-                app:cornerRadius="10dp" />
+                app:backgroundTint="@color/brand_magenta"
+                app:cornerRadius="12dp"
+                app:elevation="2dp"
+                app:icon="@drawable/ic_card"
+                app:iconGravity="textStart"
+                app:iconPadding="8dp"
+                app:iconTint="@color/white"
+                tools:text="Pay now" />
 
-            <!-- View Receipt Button (State-Aware: only when payments exist) -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnItemViewReceipt"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="0dp"
-                android:layout_height="38dp"
-                android:layout_weight="1"
-                android:layout_marginStart="2dp"
-                android:layout_marginEnd="4dp"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                android:minHeight="0dp"
-                android:paddingStart="4dp"
-                android:paddingEnd="4dp"
-                android:text="@string/booking_btn_receipt"
-                android:textAllCaps="false"
-                android:textColor="#0284C7"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:clickable="true"
-                app:strokeColor="#0284C7"
-                app:cornerRadius="10dp" />
-
-            <!-- Manage Documents Button (Direct Click) -->
+            <!-- 2. Documents (Secondary full-width action) -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnItemManageDocs"
                 style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
-                android:layout_width="0dp"
-                android:layout_height="38dp"
-                android:layout_weight="1"
-                android:layout_marginStart="2dp"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
-                android:minHeight="0dp"
-                android:paddingStart="4dp"
-                android:paddingEnd="4dp"
                 android:text="@string/booking_btn_documents"
                 android:textAllCaps="false"
                 android:textColor="@color/text_dark"
-                android:textSize="12sp"
+                android:textSize="13.5sp"
                 android:textStyle="bold"
-                android:clickable="true"
                 app:backgroundTint="#F1F5F9"
-                app:cornerRadius="10dp"
+                app:cornerRadius="12dp"
                 app:elevation="0dp" />
 
-        </LinearLayout>
+            <!-- 3. Cancel Booking (Destructive full-width action) -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnItemCancelBooking"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="@string/booking_btn_cancel"
+                android:textAllCaps="false"
+                android:textColor="#DC2626"
+                android:textSize="12.5sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:backgroundTint="#FEF2F2"
+                app:cornerRadius="12dp"
+                app:elevation="0dp"
+                app:strokeColor="#FECACA"
+                app:strokeWidth="1dp"
+                tools:visibility="visible" />
 
-        <!-- 6. Destructive / Secondary Action: Cancel Booking (Visible when eligible) -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnItemCancelBooking"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="match_parent"
-            android:layout_height="38dp"
-            android:layout_marginTop="8dp"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:minHeight="0dp"
-            android:text="@string/booking_btn_cancel"
-            android:textAllCaps="false"
-            android:textColor="#DC2626"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            android:clickable="true"
-            android:visibility="gone"
-            app:strokeColor="#FCA5A5"
-            app:strokeWidth="1dp"
-            app:backgroundTint="#FEF2F2"
-            app:cornerRadius="10dp"
-            tools:visibility="visible" />
+        </LinearLayout>
 
     </LinearLayout>
 

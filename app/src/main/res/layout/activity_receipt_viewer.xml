@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#F4F5F7"
+    android:background="#F8FAFC"
     android:fitsSystemWindows="true">
 
     <!-- Top App Bar -->
@@ -44,7 +44,7 @@
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- Scrollable Receipt Content -->
+    <!-- Scrollable Receipt Document -->
     <ScrollView
         android:id="@+id/receiptScrollView"
         android:layout_width="match_parent"
@@ -60,19 +60,19 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@drawable/bg_detail_card"
-            android:padding="20dp"
+            android:padding="24dp"
             android:elevation="3dp">
 
-            <!-- Company Brand Header -->
+            <!-- 1. COMPANY HEADER — TRAVEL AGENCY -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="top">
 
                 <ImageView
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:src="@drawable/ic_check_circle_magenta"
                     android:contentDescription="@null" />
 
@@ -84,25 +84,48 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tvCompanyHeaderName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/receipt_company_header"
+                        android:text="Hafiz Travel &amp; Tours Sdn Bhd"
                         android:textColor="@color/brand_magenta"
-                        android:textSize="15sp"
+                        android:textSize="16sp"
                         android:textStyle="bold"
-                        android:letterSpacing="0.02" />
+                        android:letterSpacing="0.01" />
 
                     <TextView
+                        android:id="@+id/tvCompanyHeaderMeta"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/receipt_company_sub"
+                        android:layout_marginTop="2dp"
+                        android:text="Reg. No. 1384210-U / KPK/LN: 10751"
+                        android:textColor="@color/text_dark"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvCompanyHeaderAddress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="No. 12-01, Jalan Padi Emas 1/2, Bandar Baru Uda, 81200 Johor Bahru, Johor"
                         android:textColor="@color/text_muted"
                         android:textSize="10.5sp"
                         android:lineSpacingExtra="1dp" />
 
+                    <TextView
+                        android:id="@+id/tvCompanyHeaderContact"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Tel: +60 7-238 4567 • WA: +60 19-778 4567\nEmail: info@hafiztraveltours.com • www.hafiztraveltours.com"
+                        android:textColor="@color/text_muted"
+                        android:textSize="10sp"
+                        android:lineSpacingExtra="1dp" />
+
                 </LinearLayout>
 
-                <!-- Status Badge -->
+                <!-- Distinct Receipt Status Badge (Green/Verified) -->
                 <TextView
                     android:id="@+id/tvReceiptStatusBadge"
                     android:layout_width="wrap_content"
@@ -117,17 +140,130 @@
 
             </LinearLayout>
 
-            <!-- Divider -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginVertical="16dp"
-                android:background="#E5E7EB" />
+                android:background="#E2E8F0" />
 
-            <!-- Receipt Meta Grid -->
+            <!-- Document Type Header (Green Accent for RECEIPT) -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp">
+
+                <TextView
+                    android:id="@+id/tvDocTypeTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="OFFICIAL PAYMENT RECEIPT / RESIT BAYARAN RASMI"
+                    android:textColor="#059669"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.04" />
+
+                <TextView
+                    android:id="@+id/tvReceiptNumberHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="RCT-2609-001"
+                    android:textColor="#059669"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+            <!-- 12. RECEIPT EMPHASIS HERO CARD -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#F0FDF4"
+                android:padding="16dp"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="JUMLAH DITERIMA / AMOUNT RECEIVED"
+                        android:textColor="#166534"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.05" />
+
+                    <TextView
+                        android:id="@+id/tvReceiptAmount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:textColor="#059669"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        tools:text="RM 1,000.00" />
+
+                </RelativeLayout>
+
+                <!-- Amount in Words -->
+                <TextView
+                    android:id="@+id/tvReceiptAmountInWords"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:textColor="#15803D"
+                    android:textSize="11.5sp"
+                    android:textStyle="bold|italic"
+                    tools:text="RM One Thousand and Zero Cents Only" />
+
+            </LinearLayout>
+
+            <!-- 2. RECEIVED FROM / CUSTOMER INFO -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:background="#F8FAFC"
+                android:padding="14dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DITERIMA DARIPADA / RECEIVED FROM"
+                    android:textColor="@color/text_muted"
+                    android:textSize="10.5sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.05" />
+
+                <TextView
+                    android:id="@+id/tvReceiptCustomerName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:textColor="@color/text_dark"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:text="Danial Bin Ahmad" />
+
+                <TextView
+                    android:id="@+id/tvReceiptCustomerDetails"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/text_gray"
+                    android:textSize="11.5sp"
+                    tools:text="Telefon: +60 12-345 6789 • Johor Bahru, Johor" />
+
+            </LinearLayout>
+
+            <!-- 3. RECEIPT & PAYMENT METADATA GRID -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:orientation="horizontal"
                 android:baselineAligned="false">
 
@@ -140,120 +276,41 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/receipt_meta_no"
+                        android:text="Tarikh Bayaran / Payment Date"
                         android:textColor="@color/text_muted"
-                        android:textSize="10.5sp"
-                        android:textStyle="bold"
-                        android:letterSpacing="0.05" />
-
-                    <TextView
-                        android:id="@+id/tvReceiptNumber"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:text="REC-260928-1029"
-                        android:textColor="@color/text_dark"
-                        android:textSize="14sp"
+                        android:textSize="10sp"
                         android:textStyle="bold" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:gravity="end">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/receipt_meta_date"
-                        android:textColor="@color/text_muted"
-                        android:textSize="10.5sp"
-                        android:textStyle="bold"
-                        android:letterSpacing="0.05" />
 
                     <TextView
                         android:id="@+id/tvReceiptDate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="28 Sep 2026"
                         android:textColor="@color/text_dark"
-                        android:textSize="14sp"
+                        android:textSize="12.5sp"
+                        android:textStyle="bold"
+                        tools:text="28 Sep 2026" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Kaedah Bayaran / Payment Method"
+                        android:textColor="@color/text_muted"
+                        android:textSize="10sp"
                         android:textStyle="bold" />
 
+                    <TextView
+                        android:id="@+id/tvReceiptPaymentMethod"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:textColor="@color/text_dark"
+                        android:textSize="12.5sp"
+                        android:textStyle="bold"
+                        tools:text="FPX / Online Banking" />
+
                 </LinearLayout>
-
-            </LinearLayout>
-
-            <!-- Received From Section -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="#F8FAFC"
-                android:padding="14dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/receipt_label_received_from"
-                    android:textColor="@color/text_muted"
-                    android:textSize="10.5sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvReceiptCustomerName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:textColor="@color/text_dark"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    tools:text="Danial Bin Ahmad" />
-
-                <TextView
-                    android:id="@+id/tvReceiptBookingRef"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:textColor="@color/brand_magenta"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    tools:text="Rujukan: BKG-260928-OIUEXZ" />
-
-                <TextView
-                    android:id="@+id/tvReceiptPackageName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:textColor="@color/text_dark"
-                    android:textSize="12.5sp"
-                    tools:text="Pakej Umrah Ziarah Premium" />
-
-                <TextView
-                    android:id="@+id/tvReceiptPaymentMethod"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:textColor="@color/text_gray"
-                    android:textSize="11.5sp"
-                    tools:text="Kaedah: FPX / Online Banking" />
-
-            </LinearLayout>
-
-            <!-- Amount Highlight Banner -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/bg_tip_pill"
-                android:padding="16dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -264,48 +321,162 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/receipt_label_amount"
+                        android:text="No. Rujukan / Ref. No."
                         android:textColor="@color/text_muted"
-                        android:textSize="11sp"
-                        android:textStyle="bold"
-                        android:letterSpacing="0.05" />
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tvReceiptAmount"
+                        android:id="@+id/tvReceiptRefNo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="3dp"
-                        android:textColor="@color/brand_magenta"
-                        android:textSize="22sp"
+                        android:layout_marginTop="2dp"
+                        android:textColor="@color/text_dark"
+                        android:textSize="12.5sp"
                         android:textStyle="bold"
-                        tools:text="RM 1,000.00" />
+                        tools:text="TOYYIB-MOCK-260928-9812" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Rujukan Tempahan / Booking Ref"
+                        android:textColor="@color/text_muted"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvReceiptBookingRef"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:textColor="@color/brand_magenta"
+                        android:textSize="12.5sp"
+                        android:textStyle="bold"
+                        tools:text="BKG-260928-OIUEXZ" />
+
                 </LinearLayout>
 
-                <ImageView
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:src="@drawable/ic_check_circle_magenta"
-                    app:tint="@color/brand_magenta"
-                    android:contentDescription="@null" />
             </LinearLayout>
 
-            <!-- Balance Due Breakdown -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="#F8FAFC"
-                android:padding="12dp"
+                android:layout_marginTop="12dp"
                 android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/invoice_sec_pkg"
+                    android:textColor="@color/text_muted"
+                    android:textSize="10.5sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvReceiptPackageName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/text_dark"
+                    android:textSize="13.5sp"
+                    android:textStyle="bold"
+                    tools:text="Pakej Umrah Ziarah Istanbul &amp; Taif 12 Hari" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="16dp"
+                android:background="#E2E8F0" />
+
+            <!-- 4. PASSENGER DETAILS TABLE -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MAKLUMAT JEMAAH / PASSENGER DETAILS"
+                android:textColor="#059669"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.05" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="#F1F5F9"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="8dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="32dp"
+                    android:layout_height="wrap_content"
+                    android:text="No."
+                    android:textColor="@color/text_dark"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Nama Jemaah / Passenger Name"
+                    android:textColor="@color/text_dark"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="No. IC / Pasport"
+                    android:textColor="@color/text_dark"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutReceiptPassengersContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="16dp"
+                android:background="#E2E8F0" />
+
+            <!-- 6. FINANCIAL SUMMARY & OUTSTANDING BALANCE -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="RINGKASAN KEWANGAN / FINANCIAL SUMMARY"
+                android:textColor="#059669"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.05" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical"
+                android:paddingHorizontal="4dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/invoice_grand_total_label"
+                        android:text="Jumlah Keseluruhan Pakej"
                         android:textColor="@color/text_gray"
                         android:textSize="12sp" />
 
@@ -315,20 +486,47 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:textColor="@color/text_dark"
-                        android:textSize="12sp"
+                        android:textSize="12.5sp"
                         android:textStyle="bold"
-                        tools:text="RM 43,444.00" />
+                        tools:text="RM 29,170.00" />
+
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp">
+                    android:layout_marginTop="4dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/invoice_balance_due_label"
+                        android:text="Jumlah Bayaran Terkumpul (Paid to Date)"
+                        android:textColor="@color/text_gray"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/tvReceiptTotalPaid"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:textColor="#059669"
+                        android:textSize="12.5sp"
+                        android:textStyle="bold"
+                        tools:text="RM 2,000.00" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:paddingTop="8dp"
+                    android:background="@drawable/bg_border_top_dashed">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Baki Tertunggak / Outstanding Balance"
                         android:textColor="@color/text_dark"
                         android:textSize="12.5sp"
                         android:textStyle="bold" />
@@ -339,54 +537,114 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:textColor="@color/brand_magenta"
-                        android:textSize="13sp"
+                        android:textSize="14sp"
                         android:textStyle="bold"
-                        tools:text="RM 42,444.00" />
+                        tools:text="RM 27,170.00" />
+
                 </RelativeLayout>
 
             </LinearLayout>
 
-            <!-- Multiple Installments List (if exists) -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="16dp"
+                android:background="#E2E8F0" />
+
+            <!-- 7. FULL PAYMENT HISTORY TABLE -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SEJARAH SEBANYAK BAYARAN / PAYMENT HISTORY"
+                android:textColor="#059669"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.05" />
+
             <LinearLayout
                 android:id="@+id/layoutInstallmentsContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/receipt_list_title"
-                    android:textColor="@color/brand_magenta"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
+                android:layout_marginTop="8dp"
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:id="@+id/layoutInstallmentsList"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
                     android:orientation="vertical" />
+
             </LinearLayout>
 
-            <!-- Electronic Signature Footer -->
-            <TextView
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="16dp"
+                android:background="#E2E8F0" />
+
+            <!-- 8. OFFICIAL CONFIRMATION & BANK DETAILS -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="#F8FAFC"
+                android:padding="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PENGESAHAN RASMI &amp; MAKLUMAT SYARIKAT / OFFICIAL CONFIRMATION"
+                    android:textColor="#059669"
+                    android:textSize="10.5sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvReceiptOfficialNotes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textColor="@color/text_gray"
+                    android:textSize="11sp"
+                    android:lineSpacingExtra="1.5dp"
+                    tools:text="Bayaran anda telah berjaya diterima dan dikemaskini dalam sistem ERP Hafiz Travel &amp; Tours Sdn Bhd." />
+
+            </LinearLayout>
+
+            <!-- 11. DOCUMENT FOOTER -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
+                android:paddingTop="12dp"
                 android:gravity="center"
-                android:text="@string/receipt_electronic_notice"
-                android:textColor="@color/text_muted"
-                android:textSize="10sp"
-                android:lineSpacingExtra="2dp" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvDocumentDisclaimer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Computer generated receipt, no signature required / Resit jana komputasi, tanda tangan tidak diperlukan"
+                    android:textColor="@color/text_muted"
+                    android:textSize="10sp"
+                    android:gravity="center" />
+
+                <TextView
+                    android:id="@+id/tvDocumentPageInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Hafiz Travel ERP v2.0 • Page 1 of 1"
+                    android:textColor="@color/text_muted"
+                    android:textSize="9.5sp"
+                    android:textStyle="italic" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
     </ScrollView>
 
-    <!-- Bottom Action Bar -->
+    <!-- Bottom Action Bar (Download / Print PDF) -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -411,21 +669,21 @@
                 android:layout_marginEnd="8dp"
                 android:text="@string/invoice_btn_share"
                 android:textAllCaps="false"
-                android:textColor="@color/brand_magenta"
+                android:textColor="#059669"
                 android:textSize="13sp"
                 android:textStyle="bold"
-                app:strokeColor="@color/brand_magenta"
+                app:strokeColor="#059669"
                 app:cornerRadius="12dp" />
 
-            <!-- Download PDF Button -->
+            <!-- Download / Print PDF Button -->
             <Button
                 android:id="@+id/btnReceiptDownloadPdf"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_weight="1.4"
                 android:layout_marginStart="8dp"
-                android:backgroundTint="@color/brand_magenta"
-                android:text="@string/receipt_btn_download"
+                android:backgroundTint="#059669"
+                android:text="@string/invoice_btn_save_pdf"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="13sp"

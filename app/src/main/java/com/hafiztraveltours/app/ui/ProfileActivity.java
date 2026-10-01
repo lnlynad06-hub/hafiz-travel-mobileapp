@@ -171,6 +171,20 @@ public class ProfileActivity extends BaseActivity {
             });
         }
 
+        if (upcomingCard != null) {
+            upcomingCard.setOnClickListener(v -> {
+                HapticUtil.click(v);
+                startActivity(new Intent(this, MyBookingsActivity.class));
+            });
+        }
+        View seeAllUpcoming = findViewById(R.id.upcomingSeeAll);
+        if (seeAllUpcoming != null) {
+            seeAllUpcoming.setOnClickListener(v -> {
+                HapticUtil.click(v);
+                startActivity(new Intent(this, MyBookingsActivity.class));
+            });
+        }
+
         findViewById(R.id.editProfileRow).setOnClickListener(v -> showEditProfileDialog());
         findViewById(R.id.languageRow).setOnClickListener(v -> showLanguageBottomSheet());
         findViewById(R.id.travelDocsRow).setOnClickListener(v -> showTravelDocsBottomSheet());

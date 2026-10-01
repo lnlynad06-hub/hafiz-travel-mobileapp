@@ -76,7 +76,6 @@ dependencies {
     implementation(libs.firebase.auth)
     // Google Sign-In SDK
     implementation(libs.play.services.auth)
-    implementation(libs.constraintlayout)
 
     implementation(libs.activity.ktx)
     implementation(libs.appcompat)
@@ -87,8 +86,6 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     implementation("androidx.core:core-splashscreen:1.0.1")
-    implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
-    implementation("com.google.firebase:firebase-auth")
     implementation("com.google.android.flexbox:flexbox:3.0.0")
     implementation("com.batoulapps.adhan:adhan:1.2.1")
     implementation("com.github.bumptech.glide:glide:4.16.0")

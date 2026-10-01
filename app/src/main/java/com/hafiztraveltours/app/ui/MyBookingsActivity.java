@@ -6,10 +6,12 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.provider.OpenableColumns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -43,6 +45,7 @@ import com.hafiztraveltours.app.network.ApiResponse;
 import com.hafiztraveltours.app.utils.BottomNavHelper;
 import com.hafiztraveltours.app.utils.DocumentStatus;
 import com.hafiztraveltours.app.utils.HapticUtil;
+import com.hafiztraveltours.app.utils.MoneyFormat;
 import com.hafiztraveltours.app.utils.SessionManager;
 import com.hafiztraveltours.app.utils.ViewStateController;
 
@@ -204,233 +207,290 @@ public class MyBookingsActivity extends BaseActivity {
 
         TextView tvPkgName = sheetView.findViewById(R.id.tvPayBookingPackageName);
         TextView tvBookingRef = sheetView.findViewById(R.id.tvPayBookingRef);
-        TextView tvRemainingDue = sheetView.findViewById(R.id.tvPayTotalRemainingAmount);
         ImageView btnClose = sheetView.findViewById(R.id.btnClosePaySheet);
 
-        View cardPreset = sheetView.findViewById(R.id.cardPayOptionPreset);
-        ImageView ivCheckPreset = sheetView.findViewById(R.id.ivCheckPayPreset);
-        TextView tvPresetLabel = sheetView.findViewById(R.id.tvPayPresetLabel);
+        TextView tvDueAmount = sheetView.findViewById(R.id.tvPaymentDueAmount);
+        TextView tvPurposeBadge = sheetView.findViewById(R.id.tvPaymentPurposeBadge);
 
-        View cardCustom = sheetView.findViewById(R.id.cardPayOptionCustom);
-        ImageView ivCheckCustom = sheetView.findViewById(R.id.ivCheckPayCustom);
-        View layoutCustomInput = sheetView.findViewById(R.id.layoutCustomAmountInput);
-        EditText etCustom = sheetView.findViewById(R.id.etCustomAmount);
-
-        View cardFpx = sheetView.findViewById(R.id.cardPayMethodFpx);
-        ImageView ivCheckFpx = sheetView.findViewById(R.id.ivCheckMethodFpx);
-        View cardCard = sheetView.findViewById(R.id.cardPayMethodCard);
-        ImageView ivCheckCard = sheetView.findViewById(R.id.ivCheckMethodCard);
-
-        if (ivCheckPreset != null) ivCheckPreset.clearColorFilter();
-        if (ivCheckCustom != null) ivCheckCustom.clearColorFilter();
-        if (ivCheckFpx != null) ivCheckFpx.clearColorFilter();
-        if (ivCheckCard != null) ivCheckCard.clearColorFilter();
+        TextView tvTotalAmount = sheetView.findViewById(R.id.tvPayPackageTotal);
+        TextView tvPaidAmount = sheetView.findViewById(R.id.tvPayPreviouslyPaid);
+        TextView tvCurrentAmount = sheetView.findViewById(R.id.tvPayCurrentAmount);
+        TextView tvBalanceAfter = sheetView.findViewById(R.id.tvPayBalanceAfter);
 
         MaterialButton btnSubmit = sheetView.findViewById(R.id.btnSubmitQuickPay);
-        ProgressBar pbLoading = sheetView.findViewById(R.id.pbPayLoading);
 
         if (btnClose != null) btnClose.setOnClickListener(v -> payDialog.dismiss());
 
-        if (tvPkgName != null) tvPkgName.setText(booking.packageName != null ? booking.packageName : getString(R.string.booking_category_umrah));
-        if (tvBookingRef != null) tvBookingRef.setText(booking.bookingNo != null ? booking.bookingNo : "BKG-" + booking.id);
-        if (tvRemainingDue != null) tvRemainingDue.setText(BookingRequest.formatPrice(booking.balanceAmount));
+        String packageName = booking.packageName != null ? booking.packageName : getString(R.string.booking_category_umrah);
+        String bookingRef = booking.bookingNo != null ? booking.bookingNo : "BKG-" + booking.id;
 
-        // Determine preset stage amount
-        final double presetAmount;
-        if (booking.depositRemaining > 0) {
-            presetAmount = booking.depositRemaining;
-            if (tvPresetLabel != null) {
-                tvPresetLabel.setText(getString(R.string.pay_sheet_opt_deposit_preset, BookingRequest.formatPrice(presetAmount)));
+        if (tvPkgName != null) tvPkgName.setText(packageName);
+        if (tvBookingRef != null) tvBookingRef.setText(getString(R.string.booking_ref_prefix) + " " + bookingRef);
+
+        // Determine payment stage amount & purpose
+        final double requiredDep = booking.getRequiredDepositAmount();
+        final double remainingDep = booking.getDepositRemainingAmount();
+        final double totalBal = booking.balanceAmount > 0 ? booking.balanceAmount : Math.max(0, booking.totalAmount - booking.paidAmount);
+
+        final double[] selectedAmount = new double[1];
+        final String[] selectedPurpose = new String[1];
+        final String[] selectedType = new String[1];
+
+        View layoutInstallmentOptions = sheetView.findViewById(R.id.layoutInstallmentOptions);
+        Button btnPreset100 = sheetView.findViewById(R.id.btnPayPreset100);
+        Button btnPreset200 = sheetView.findViewById(R.id.btnPayPreset200);
+        Button btnPreset500 = sheetView.findViewById(R.id.btnPayPreset500);
+        Button btnPresetFull = sheetView.findViewById(R.id.btnPayPresetFull);
+
+        Runnable updateUI = () -> {
+            double amt = selectedAmount[0];
+            String formatted = MoneyFormat.formatRMCents(amt);
+            if (tvDueAmount != null) tvDueAmount.setText(formatted);
+            if (tvPurposeBadge != null) tvPurposeBadge.setText(selectedPurpose[0]);
+            if (tvCurrentAmount != null) tvCurrentAmount.setText(formatted);
+            double balAfter = Math.max(0, booking.totalAmount - (booking.paidAmount + amt));
+            if (tvBalanceAfter != null) tvBalanceAfter.setText(MoneyFormat.formatRMCents(balAfter));
+            if (btnSubmit != null) {
+                btnSubmit.setText(getString(R.string.pay_sheet_btn_pay_format, formatted));
             }
+        };
+
+        if (remainingDep > 0) {
+            if (layoutInstallmentOptions != null) layoutInstallmentOptions.setVisibility(View.GONE);
+            selectedAmount[0] = remainingDep;
+            selectedType[0] = "deposit";
+            selectedPurpose[0] = (booking.paidAmount <= 0)
+                    ? getString(R.string.pay_sheet_purpose_initial_deposit)
+                    : getString(R.string.pay_sheet_purpose_remaining_deposit);
+            updateUI.run();
         } else {
-            presetAmount = booking.balanceAmount;
-            if (tvPresetLabel != null) {
-                tvPresetLabel.setText(getString(R.string.pay_sheet_opt_balance_preset, BookingRequest.formatPrice(presetAmount)));
+            if (layoutInstallmentOptions != null) layoutInstallmentOptions.setVisibility(View.VISIBLE);
+
+            final Button[] buttons = new Button[]{btnPreset100, btnPreset200, btnPreset500, btnPresetFull};
+            final double[] amounts = new double[]{100.0, 200.0, 500.0, totalBal};
+
+            class PresetHandler {
+                void select(int idx) {
+                    double chosenAmt = amounts[idx];
+                    if (chosenAmt >= totalBal) {
+                        chosenAmt = totalBal;
+                        selectedPurpose[0] = getString(R.string.pay_sheet_purpose_final_payment);
+                        selectedType[0] = "balance";
+                    } else {
+                        selectedPurpose[0] = getString(R.string.pay_sheet_purpose_additional_payment);
+                        selectedType[0] = "installment";
+                    }
+                    selectedAmount[0] = chosenAmt;
+                    updateUI.run();
+
+                    for (int b = 0; b < buttons.length; b++) {
+                        if (buttons[b] == null) continue;
+                        if (b == idx) {
+                            buttons[b].setBackgroundColor(Color.parseColor("#9C0E63"));
+                            buttons[b].setTextColor(Color.WHITE);
+                        } else {
+                            buttons[b].setBackgroundColor(Color.TRANSPARENT);
+                            buttons[b].setTextColor(Color.parseColor("#4B5563"));
+                        }
+                    }
+                }
             }
-        }
+            final PresetHandler handler = new PresetHandler();
 
-        final boolean[] isCustomSelected = {false};
-        final String[] selectedMethod = {"fpx"};
+            for (int i = 0; i < buttons.length; i++) {
+                final int buttonIdx = i;
+                if (buttons[i] != null) {
+                    if (i < 3 && amounts[i] > totalBal) {
+                        buttons[i].setEnabled(false);
+                        buttons[i].setAlpha(0.4f);
+                    } else {
+                        buttons[i].setEnabled(true);
+                        buttons[i].setAlpha(1.0f);
+                        buttons[i].setOnClickListener(v -> {
+                            HapticUtil.click(v);
+                            handler.select(buttonIdx);
+                        });
+                    }
+                }
+            }
 
-        Runnable updateSubmitButtonText = () -> {
-            if (btnSubmit == null) return;
-            if (!isCustomSelected[0]) {
-                btnSubmit.setText(getString(R.string.pay_sheet_btn_confirm, BookingRequest.formatPrice(presetAmount)));
+            // Default preset selection: RM 100 if available, else full balance
+            if (totalBal > 100) {
+                handler.select(0);
             } else {
-                String input = etCustom != null ? etCustom.getText().toString().trim() : "";
-                double customAmt = 0;
-                try {
-                    customAmt = Double.parseDouble(input);
-                } catch (Exception ignored) {}
-                if (customAmt > 0) {
-                    btnSubmit.setText(getString(R.string.pay_sheet_btn_confirm, BookingRequest.formatPrice(customAmt)));
-                } else {
-                    btnSubmit.setText(getString(R.string.booking_btn_pay_now));
-                }
+                handler.select(3);
             }
-        };
-
-        updateSubmitButtonText.run();
-
-        // Option 1 Preset Click
-        if (cardPreset != null) {
-            cardPreset.setOnClickListener(v -> {
-                HapticUtil.click(v);
-                isCustomSelected[0] = false;
-                cardPreset.setBackgroundResource(R.drawable.bg_selection_card_selected);
-                if (ivCheckPreset != null) {
-                    ivCheckPreset.setImageResource(R.drawable.ic_checkbox_checked_pink);
-                    ivCheckPreset.clearColorFilter();
-                }
-
-                if (cardCustom != null) cardCustom.setBackgroundResource(R.drawable.bg_selection_card_unselected);
-                if (ivCheckCustom != null) {
-                    ivCheckCustom.setImageResource(R.drawable.ic_checkbox_unchecked);
-                    ivCheckCustom.clearColorFilter();
-                }
-                if (layoutCustomInput != null) layoutCustomInput.setVisibility(View.GONE);
-                updateSubmitButtonText.run();
-            });
         }
 
-        // Option 2 Custom Click
-        if (cardCustom != null) {
-            cardCustom.setOnClickListener(v -> {
-                HapticUtil.click(v);
-                isCustomSelected[0] = true;
-                cardCustom.setBackgroundResource(R.drawable.bg_selection_card_selected);
-                if (ivCheckCustom != null) {
-                    ivCheckCustom.setImageResource(R.drawable.ic_checkbox_checked_pink);
-                    ivCheckCustom.clearColorFilter();
-                }
+        if (tvTotalAmount != null) tvTotalAmount.setText(MoneyFormat.formatRMCents(booking.totalAmount));
+        if (tvPaidAmount != null) tvPaidAmount.setText(MoneyFormat.formatRMCents(booking.paidAmount));
 
-                if (cardPreset != null) cardPreset.setBackgroundResource(R.drawable.bg_selection_card_unselected);
-                if (ivCheckPreset != null) {
-                    ivCheckPreset.setImageResource(R.drawable.ic_checkbox_unchecked);
-                    ivCheckPreset.clearColorFilter();
-                }
-                if (layoutCustomInput != null) layoutCustomInput.setVisibility(View.VISIBLE);
-                if (etCustom != null) etCustom.requestFocus();
-                updateSubmitButtonText.run();
-            });
-        }
-
-        if (etCustom != null) {
-            etCustom.addTextChangedListener(new android.text.TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if (isCustomSelected[0]) updateSubmitButtonText.run();
-                }
-                @Override
-                public void afterTextChanged(android.text.Editable s) {}
-            });
-        }
-
-        // Payment Method selection (Only supported gateway providers)
-        View.OnClickListener methodClickListener = v -> {
-            HapticUtil.click(v);
-            if (v == cardFpx) {
-                selectedMethod[0] = "fpx";
-            } else if (v == cardCard) {
-                selectedMethod[0] = "card";
-            }
-
-            // Update visuals
-            if (cardFpx != null) cardFpx.setBackgroundResource("fpx".equals(selectedMethod[0]) ? R.drawable.bg_selection_card_selected : R.drawable.bg_selection_card_unselected);
-            if (ivCheckFpx != null) {
-                ivCheckFpx.setImageResource("fpx".equals(selectedMethod[0]) ? R.drawable.ic_checkbox_checked_pink : R.drawable.ic_checkbox_unchecked);
-                ivCheckFpx.clearColorFilter();
-            }
-
-            if (cardCard != null) cardCard.setBackgroundResource("card".equals(selectedMethod[0]) ? R.drawable.bg_selection_card_selected : R.drawable.bg_selection_card_unselected);
-            if (ivCheckCard != null) {
-                ivCheckCard.setImageResource("card".equals(selectedMethod[0]) ? R.drawable.ic_checkbox_checked_pink : R.drawable.ic_checkbox_unchecked);
-                ivCheckCard.clearColorFilter();
-            }
-        };
-
-        if (cardFpx != null) cardFpx.setOnClickListener(methodClickListener);
-        if (cardCard != null) cardCard.setOnClickListener(methodClickListener);
-
-        // Submit Button Click
         if (btnSubmit != null) {
             btnSubmit.setOnClickListener(v -> {
                 HapticUtil.click(v);
-                double finalAmount;
-                if (!isCustomSelected[0]) {
-                    finalAmount = presetAmount;
-                } else {
-                    String amtStr = etCustom != null ? etCustom.getText().toString().trim() : "";
-                    try {
-                        finalAmount = Double.parseDouble(amtStr);
-                    } catch (Exception e) {
-                        Toast.makeText(MyBookingsActivity.this, getString(R.string.pay_sheet_err_min_amount), Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    if (finalAmount <= 0) {
-                        Toast.makeText(MyBookingsActivity.this, getString(R.string.pay_sheet_err_min_amount), Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    if (finalAmount > booking.balanceAmount + 0.01) {
-                        Toast.makeText(MyBookingsActivity.this, getString(R.string.pay_sheet_err_max_amount, BookingRequest.formatPrice(booking.balanceAmount)), Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                }
-
-                // Show loading
-                btnSubmit.setEnabled(false);
-                btnSubmit.setText("");
-                if (pbLoading != null) pbLoading.setVisibility(View.VISIBLE);
-
-                Map<String, Object> body = new HashMap<>();
-                body.put("amount", finalAmount);
-                body.put("payment_method", selectedMethod[0]);
-
-                ApiClient.getApiService().payBooking(booking.id, body).enqueue(new Callback<ApiResponse<com.hafiztraveltours.app.models.BookingDetailDto>>() {
-                    @Override
-                    public void onResponse(Call<ApiResponse<com.hafiztraveltours.app.models.BookingDetailDto>> call, Response<ApiResponse<com.hafiztraveltours.app.models.BookingDetailDto>> response) {
-                        if (isFinishing() || isDestroyed()) return;
-                        if (pbLoading != null) pbLoading.setVisibility(View.GONE);
-                        btnSubmit.setEnabled(true);
-                        updateSubmitButtonText.run();
-
-                        if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
-                            payDialog.dismiss();
-                            new AlertDialog.Builder(MyBookingsActivity.this)
-                                    .setTitle(getString(R.string.receipt_title_official))
-                                    .setMessage(getString(R.string.pay_sheet_success, BookingRequest.formatPrice(finalAmount)))
-                                    .setPositiveButton(getString(R.string.pay_btn_view_receipt), (d, w) -> {
-                                        d.dismiss();
-                                        Intent recIntent = new Intent(MyBookingsActivity.this, ReceiptViewerActivity.class);
-                                        recIntent.putExtra(ReceiptViewerActivity.EXTRA_BOOKING_ID, booking.id);
-                                        recIntent.putExtra(ReceiptViewerActivity.EXTRA_BOOKING_NO, booking.bookingNo);
-                                        startActivity(recIntent);
-                                    })
-                                    .setNegativeButton(getString(R.string.dialog_btn_close), (d, w) -> d.dismiss())
-                                    .show();
-                            loadBookings();
-                        } else {
-                            Toast.makeText(MyBookingsActivity.this,
-                                    com.hafiztraveltours.app.network.ApiErrors.userMessage(MyBookingsActivity.this, response, R.string.err_network), Toast.LENGTH_LONG).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ApiResponse<com.hafiztraveltours.app.models.BookingDetailDto>> call, Throwable t) {
-                        if (isFinishing() || isDestroyed()) return;
-                        if (pbLoading != null) pbLoading.setVisibility(View.GONE);
-                        btnSubmit.setEnabled(true);
-                        updateSubmitButtonText.run();
-                        Toast.makeText(MyBookingsActivity.this,
-                                com.hafiztraveltours.app.network.ApiErrors.userMessage(MyBookingsActivity.this, t, R.string.err_network), Toast.LENGTH_LONG).show();
-                    }
-                });
+                payDialog.dismiss();
+                showPaymentConfirmationDialog(booking, selectedAmount[0], selectedPurpose[0], selectedType[0]);
             });
         }
 
         payDialog.show();
+    }
+
+    private void showPaymentConfirmationDialog(BookingDto booking, double paymentAmount, String paymentPurpose, String paymentType) {
+        String bookingRef = booking.bookingNo != null ? booking.bookingNo : "BKG-" + booking.id;
+        String packageName = booking.packageName != null ? booking.packageName : getString(R.string.booking_category_umrah);
+        String formattedAmount = MoneyFormat.formatRMCents(paymentAmount);
+
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_confirm_payment, null);
+        AlertDialog confirmDialog = new AlertDialog.Builder(this)
+                .setView(dialogView)
+                .setCancelable(true)
+                .create();
+
+        if (confirmDialog.getWindow() != null) {
+            confirmDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+
+        TextView tvAmount = dialogView.findViewById(R.id.tvConfirmPayAmount);
+        TextView tvSubtitle = dialogView.findViewById(R.id.tvConfirmPaySubtitle);
+        TextView tvPurpose = dialogView.findViewById(R.id.tvConfirmPayPurpose);
+        View btnCancel = dialogView.findViewById(R.id.btnCancelPayConfirm);
+        View btnSubmit = dialogView.findViewById(R.id.btnSubmitPayConfirm);
+
+        if (tvAmount != null) tvAmount.setText(formattedAmount);
+        if (tvSubtitle != null) tvSubtitle.setText(packageName + " • " + bookingRef);
+        if (tvPurpose != null) tvPurpose.setText(paymentPurpose);
+
+        if (btnCancel != null) {
+            btnCancel.setOnClickListener(v -> {
+                HapticUtil.click(v);
+                confirmDialog.dismiss();
+            });
+        }
+
+        if (btnSubmit != null) {
+            btnSubmit.setOnClickListener(v -> {
+                HapticUtil.click(v);
+                confirmDialog.dismiss();
+                executeMockPayment(booking, paymentAmount, paymentPurpose, paymentType);
+            });
+        }
+
+        confirmDialog.show();
+    }
+
+    private void executeMockPayment(BookingDto booking, double paymentAmount, String paymentPurpose, String paymentType) {
+        String formattedAmount = MoneyFormat.formatRMCents(paymentAmount);
+
+        AlertDialog progressDialog = new AlertDialog.Builder(this)
+                .setMessage(R.string.pay_sheet_processing)
+                .setCancelable(false)
+                .create();
+        progressDialog.show();
+
+        Map<String, Object> body = new HashMap<>();
+        body.put("amount", paymentAmount);
+        body.put("payment_method", "toyyibpay");
+        body.put("payment_type", paymentType);
+
+        ApiClient.getApiService().payBooking(booking.id, body).enqueue(new Callback<ApiResponse<BookingDetailDto>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<BookingDetailDto>> call, Response<ApiResponse<BookingDetailDto>> response) {
+                if (isFinishing() || isDestroyed()) return;
+                progressDialog.dismiss();
+
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    BookingDetailDto detail = response.body().data;
+                    if (detail != null) {
+                        booking.paidAmount = detail.paidAmount;
+                        booking.balanceAmount = detail.balanceAmount;
+                        booking.depositPaid = detail.depositPaid;
+                        booking.depositRemaining = detail.depositRemaining;
+                        booking.isDepositPaid = detail.isDepositPaid;
+                        booking.isMerchandiseEligible = detail.isMerchandiseEligible;
+                        booking.status = detail.status;
+                        booking.paymentStatus = detail.paymentStatus;
+                        booking.hasReceipts = true;
+                        booking.receiptsCount = detail.receipts != null ? detail.receipts.size() : Math.max(1, booking.receiptsCount + 1);
+                    } else {
+                        booking.paidAmount += paymentAmount;
+                        booking.balanceAmount = Math.max(0, booking.balanceAmount - paymentAmount);
+                        booking.depositPaid += paymentAmount;
+                        booking.depositRemaining = Math.max(0, booking.depositRemaining - paymentAmount);
+                        if (booking.depositRemaining <= 0) {
+                            booking.isDepositPaid = true;
+                            booking.isMerchandiseEligible = true;
+                        }
+                    }
+                    if (adapter != null) {
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    // Show Payment Successful Dialog
+                    showPaymentSuccessfulDialog(booking, paymentAmount);
+
+                    // Sync latest state from backend
+                    loadBookings();
+                } else {
+                    String err = ApiErrors.userMessage(MyBookingsActivity.this, response, R.string.err_network);
+                    Toast.makeText(MyBookingsActivity.this, err, Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<BookingDetailDto>> call, Throwable t) {
+                if (isFinishing() || isDestroyed()) return;
+                progressDialog.dismiss();
+                String err = ApiErrors.userMessage(MyBookingsActivity.this, t, R.string.err_network);
+                Toast.makeText(MyBookingsActivity.this, err, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void showPaymentSuccessfulDialog(BookingDto booking, double paymentAmount) {
+        String bookingRef = booking.bookingNo != null ? booking.bookingNo : "BKG-" + booking.id;
+        String packageName = booking.packageName != null ? booking.packageName : getString(R.string.booking_category_umrah);
+        String formattedAmount = MoneyFormat.formatRMCents(paymentAmount);
+
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_payment_successful, null);
+        AlertDialog successDialog = new AlertDialog.Builder(this)
+                .setView(dialogView)
+                .setCancelable(true)
+                .create();
+
+        if (successDialog.getWindow() != null) {
+            successDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+
+        TextView tvAmount = dialogView.findViewById(R.id.tvSuccessAmount);
+        TextView tvSubtitle = dialogView.findViewById(R.id.tvSuccessSubtitle);
+        TextView tvMessage = dialogView.findViewById(R.id.tvSuccessMessage);
+        View btnViewReceipt = dialogView.findViewById(R.id.btnSuccessViewReceipt);
+        View btnDone = dialogView.findViewById(R.id.btnSuccessDone);
+
+        if (tvAmount != null) tvAmount.setText(formattedAmount);
+        if (tvSubtitle != null) tvSubtitle.setText(packageName + " • " + bookingRef);
+        if (tvMessage != null) tvMessage.setText(getString(R.string.pay_success_dialog_msg, formattedAmount));
+
+        if (btnViewReceipt != null) {
+            btnViewReceipt.setOnClickListener(v -> {
+                HapticUtil.click(v);
+                successDialog.dismiss();
+                Intent recIntent = new Intent(MyBookingsActivity.this, ReceiptViewerActivity.class);
+                recIntent.putExtra(ReceiptViewerActivity.EXTRA_BOOKING_ID, booking.id);
+                recIntent.putExtra(ReceiptViewerActivity.EXTRA_BOOKING_NO, booking.bookingNo);
+                startActivity(recIntent);
+            });
+        }
+
+        if (btnDone != null) {
+            btnDone.setOnClickListener(v -> {
+                HapticUtil.click(v);
+                successDialog.dismiss();
+            });
+        }
+
+        successDialog.show();
     }
 
     public void showBookingDocsSheet(BookingDto booking) {
@@ -853,40 +913,120 @@ public class MyBookingsActivity extends BaseActivity {
 
     public void showCancelBookingConfirmation(BookingDto booking) {
         if (booking == null || booking.id <= 0) return;
+        displayCancellationDialog(booking);
+    }
 
+    private void displayCancellationDialog(BookingDto booking) {
         String bookingRef = booking.bookingNo != null ? booking.bookingNo : "BKG-" + booking.id;
+        String pkgName = booking.packageName != null ? booking.packageName : getString(R.string.booking_category_umrah);
 
-        LinearLayout container = new LinearLayout(this);
-        container.setOrientation(LinearLayout.VERTICAL);
-        int pad = dp(20);
-        container.setPadding(pad, dp(10), pad, dp(5));
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_cancel_booking, null);
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(dialogView)
+                .setCancelable(true)
+                .create();
 
-        TextView tvMsg = new TextView(this);
-        tvMsg.setText(getString(R.string.cancel_booking_confirm_message, bookingRef));
-        tvMsg.setTextSize(14);
-        tvMsg.setTextColor(getResources().getColor(R.color.text_dark));
-        tvMsg.setLineSpacing(dp(2), 1.1f);
-        container.addView(tvMsg);
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
 
-        EditText etReason = new EditText(this);
-        etReason.setHint(getString(R.string.cancel_booking_reason_hint));
-        etReason.setTextSize(13);
-        etReason.setPadding(dp(12), dp(10), dp(12), dp(10));
-        etReason.setBackgroundResource(R.drawable.bg_input_box);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        lp.topMargin = dp(14);
-        etReason.setLayoutParams(lp);
-        container.addView(etReason);
+        TextView tvSubtitle = dialogView.findViewById(R.id.tvCancelDialogSubtitle);
+        EditText etReason = dialogView.findViewById(R.id.etCancelReasonInput);
+        View btnKeep = dialogView.findViewById(R.id.btnCancelKeep);
+        View btnConfirm = dialogView.findViewById(R.id.btnCancelConfirm);
 
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.cancel_booking_title)
-                .setView(container)
-                .setPositiveButton(R.string.cancel_booking_btn_confirm, (dialog, which) -> {
-                    String reason = etReason.getText().toString().trim();
-                    performCancelBooking(booking, reason);
-                })
-                .setNegativeButton(R.string.cancel_booking_keep, null)
-                .show();
+        if (tvSubtitle != null) {
+            tvSubtitle.setText(pkgName + " • " + bookingRef);
+        }
+
+        ApiClient.getApiService().getCancellationQuote(booking.id)
+                .enqueue(new Callback<ApiResponse<com.hafiztraveltours.app.models.CancellationQuoteDto>>() {
+                    @Override
+                    public void onResponse(Call<ApiResponse<com.hafiztraveltours.app.models.CancellationQuoteDto>> call,
+                                           Response<ApiResponse<com.hafiztraveltours.app.models.CancellationQuoteDto>> response) {
+                        if (isFinishing() || isDestroyed() || !dialog.isShowing()) return;
+
+                        com.hafiztraveltours.app.models.CancellationQuoteDto quote =
+                                (response.isSuccessful() && response.body() != null && response.body().isSuccess())
+                                        ? response.body().data : null;
+
+                        populateQuoteBreakdown(dialogView, quote);
+                    }
+
+                    @Override
+                    public void onFailure(Call<ApiResponse<com.hafiztraveltours.app.models.CancellationQuoteDto>> call, Throwable t) {
+                        // Keep cancellation dialog active without breakdown if quote fails
+                    }
+                });
+
+        if (btnKeep != null) {
+            btnKeep.setOnClickListener(v -> {
+                HapticUtil.click(v);
+                dialog.dismiss();
+            });
+        }
+
+        if (btnConfirm != null) {
+            btnConfirm.setOnClickListener(v -> {
+                HapticUtil.click(v);
+                dialog.dismiss();
+                String reason = etReason != null ? etReason.getText().toString().trim() : "";
+                performCancelBooking(booking, reason);
+            });
+        }
+
+        dialog.show();
+    }
+
+    private void populateQuoteBreakdown(View dialogView, com.hafiztraveltours.app.models.CancellationQuoteDto quote) {
+        if (quote == null || dialogView == null) return;
+        View layoutBreakdown = dialogView.findViewById(R.id.layoutQuoteBreakdown);
+        TextView tvWorkingDays = dialogView.findViewById(R.id.tvQuoteWorkingDays);
+        TextView tvCharge = dialogView.findViewById(R.id.tvQuoteCharge);
+        TextView tvDepositNote = dialogView.findViewById(R.id.tvQuoteDepositNote);
+        TextView tvRefund = dialogView.findViewById(R.id.tvQuoteRefund);
+        TextView tvRefundPeriod = dialogView.findViewById(R.id.tvQuoteRefundPeriod);
+        TextView tvNoRefund = dialogView.findViewById(R.id.tvQuoteNoRefund);
+
+        if (layoutBreakdown != null) {
+            layoutBreakdown.setVisibility(View.VISIBLE);
+
+            if (tvWorkingDays != null && quote.workingDaysToDeparture != null) {
+                tvWorkingDays.setText(getString(R.string.cancel_quote_working_days, quote.workingDaysToDeparture));
+                tvWorkingDays.setVisibility(View.VISIBLE);
+            }
+
+            if (tvCharge != null) {
+                String pctStr = Math.round(quote.chargePercentage) + "%";
+                tvCharge.setText(getString(R.string.cancel_quote_charge_summary, BookingRequest.formatPrice(quote.chargeAmount), pctStr));
+                tvCharge.setVisibility(View.VISIBLE);
+            }
+
+            if (tvDepositNote != null) {
+                tvDepositNote.setVisibility(View.VISIBLE);
+            }
+
+            if (quote.refundAmount > 0) {
+                if (tvRefund != null) {
+                    tvRefund.setText(getString(R.string.cancel_quote_estimated_refund, BookingRequest.formatPrice(quote.refundAmount)));
+                    tvRefund.setVisibility(View.VISIBLE);
+                }
+                if (tvRefundPeriod != null) {
+                    tvRefundPeriod.setVisibility(View.VISIBLE);
+                }
+                if (tvNoRefund != null) {
+                    tvNoRefund.setVisibility(View.GONE);
+                }
+            } else if (quote.paidAmount > 0) {
+                if (tvRefund != null) tvRefund.setVisibility(View.GONE);
+                if (tvRefundPeriod != null) tvRefundPeriod.setVisibility(View.GONE);
+                if (tvNoRefund != null) tvNoRefund.setVisibility(View.VISIBLE);
+            } else {
+                if (tvRefund != null) tvRefund.setVisibility(View.GONE);
+                if (tvRefundPeriod != null) tvRefundPeriod.setVisibility(View.GONE);
+                if (tvNoRefund != null) tvNoRefund.setVisibility(View.GONE);
+            }
+        }
     }
 
     private void performCancelBooking(BookingDto booking, String reason) {
@@ -898,6 +1038,8 @@ public class MyBookingsActivity extends BaseActivity {
         progressDialog.show();
 
         CancelBookingRequest req = new CancelBookingRequest(!reason.isEmpty() ? reason : null);
+        Log.d("MyBookingsActivity", "Cancel request initiated -> Method: POST, Path: /v1/bookings/" + booking.id + "/cancel, bookingId=" + booking.id);
+
         ApiClient.getApiService().cancelBooking(booking.id, req)
                 .enqueue(new Callback<ApiResponse<BookingDetailDto>>() {
                     @Override
@@ -905,12 +1047,23 @@ public class MyBookingsActivity extends BaseActivity {
                         if (isFinishing() || isDestroyed()) return;
                         progressDialog.dismiss();
 
+                        String contentType = response.headers() != null ? response.headers().get("Content-Type") : "unknown";
+                        Log.d("MyBookingsActivity", "Cancel response received -> Code: " + response.code() + ", Content-Type: " + contentType);
+
                         if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
                             Toast.makeText(MyBookingsActivity.this,
                                     getString(R.string.cancel_booking_success, bookingRef), Toast.LENGTH_LONG).show();
+                            
+                            // Optimistically update memory state and immediately refresh UI
+                            booking.status = "cancelled";
+                            booking.isCancellable = Boolean.FALSE;
+                            if (adapter != null) {
+                                adapter.notifyDataSetChanged();
+                            }
                             loadBookings();
                         } else {
                             String err = ApiErrors.userMessage(MyBookingsActivity.this, response, R.string.cancel_booking_failed);
+                            Log.w("MyBookingsActivity", "Cancel failed -> Parsed Error: " + com.hafiztraveltours.app.utils.LogSanitizer.sanitize(err));
                             Toast.makeText(MyBookingsActivity.this, err, Toast.LENGTH_LONG).show();
                         }
                     }
@@ -920,6 +1073,7 @@ public class MyBookingsActivity extends BaseActivity {
                         if (isFinishing() || isDestroyed()) return;
                         progressDialog.dismiss();
                         String err = ApiErrors.userMessage(MyBookingsActivity.this, t, R.string.cancel_booking_failed);
+                        Log.e("MyBookingsActivity", "Cancel transport failure -> " + com.hafiztraveltours.app.utils.LogSanitizer.sanitize(t.getMessage()), t);
                         Toast.makeText(MyBookingsActivity.this, err, Toast.LENGTH_LONG).show();
                     }
                 });

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#F4F5F7"
+    android:background="#F8FAFC"
     android:fitsSystemWindows="true">
 
     <!-- Top App Bar -->
@@ -60,19 +60,19 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@drawable/bg_detail_card"
-            android:padding="20dp"
+            android:padding="24dp"
             android:elevation="3dp">
 
-            <!-- Company Brand Header -->
+            <!-- 1. COMPANY HEADER — TRAVEL AGENCY -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="top">
 
                 <ImageView
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:src="@drawable/ic_check_circle_magenta"
                     android:contentDescription="@null" />
 
@@ -84,20 +84,43 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tvCompanyHeaderName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/receipt_company_header"
+                        android:text="Hafiz Travel &amp; Tours Sdn Bhd"
                         android:textColor="@color/brand_magenta"
-                        android:textSize="15sp"
+                        android:textSize="16sp"
                         android:textStyle="bold"
-                        android:letterSpacing="0.02" />
+                        android:letterSpacing="0.01" />
 
                     <TextView
+                        android:id="@+id/tvCompanyHeaderMeta"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="KPK/LN: 10751 • SSM: 202201043065\nMalaysia"
+                        android:layout_marginTop="2dp"
+                        android:text="Reg. No. 1384210-U / KPK/LN: 10751"
+                        android:textColor="@color/text_dark"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvCompanyHeaderAddress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="No. 12-01, Jalan Padi Emas 1/2, Bandar Baru Uda, 81200 Johor Bahru, Johor"
                         android:textColor="@color/text_muted"
                         android:textSize="10.5sp"
+                        android:lineSpacingExtra="1dp" />
+
+                    <TextView
+                        android:id="@+id/tvCompanyHeaderContact"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Tel: +60 7-238 4567 • WA: +60 19-778 4567\nEmail: info@hafiztraveltours.com • www.hafiztraveltours.com"
+                        android:textColor="@color/text_muted"
+                        android:textSize="10sp"
                         android:lineSpacingExtra="1dp" />
 
                 </LinearLayout>
@@ -117,17 +140,92 @@
 
             </LinearLayout>
 
-            <!-- Divider -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginVertical="16dp"
-                android:background="#E5E7EB" />
+                android:background="#E2E8F0" />
 
-            <!-- Invoice Meta Grid -->
+            <!-- Document Title Header -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp">
+
+                <TextView
+                    android:id="@+id/tvDocTypeTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="OFFICIAL INVOICE / INVOIS RASMI"
+                    android:textColor="@color/text_dark"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.05" />
+
+                <TextView
+                    android:id="@+id/tvInvoiceNumberHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="HQ INV2609-312"
+                    android:textColor="@color/brand_magenta"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+            <!-- 2. CUSTOMER INFORMATION — BILL TO -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#F8FAFC"
+                android:padding="14dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/invoice_sec_bill_to"
+                    android:textColor="@color/brand_magenta"
+                    android:textSize="10.5sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.05" />
+
+                <TextView
+                    android:id="@+id/tvInvoiceCustomerName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:textColor="@color/text_dark"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:text="Danial Bin Ahmad (Group Leader)" />
+
+                <TextView
+                    android:id="@+id/tvInvoiceCustomerAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/text_gray"
+                    android:textSize="11.5sp"
+                    tools:text="No. 45, Jalan Harmoni 3, Taman Desa Harmoni, 81100 Johor Bahru, Johor" />
+
+                <TextView
+                    android:id="@+id/tvInvoiceCustomerPhone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/text_gray"
+                    android:textSize="11.5sp"
+                    tools:text="Telefon: +60 12-345 6789" />
+
+            </LinearLayout>
+
+            <!-- 3. INVOICE & PACKAGE METADATA GRID -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:orientation="horizontal"
                 android:baselineAligned="false">
 
@@ -140,21 +238,39 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/invoice_meta_no"
+                        android:text="@string/invoice_meta_date"
                         android:textColor="@color/text_muted"
-                        android:textSize="10.5sp"
-                        android:textStyle="bold"
-                        android:letterSpacing="0.05" />
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tvInvoiceNumber"
+                        android:id="@+id/tvInvoiceDate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="INV-260928-OIUEXZ"
                         android:textColor="@color/text_dark"
-                        android:textSize="14sp"
+                        android:textSize="12.5sp"
+                        android:textStyle="bold"
+                        tools:text="28 Sep 2026" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Tour Code / Kod Pakej"
+                        android:textColor="@color/text_muted"
+                        android:textSize="10sp"
                         android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvTourCode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:textColor="@color/text_dark"
+                        android:textSize="12.5sp"
+                        android:textStyle="bold"
+                        tools:text="11DIS26UISTB2 [NEW]" />
 
                 </LinearLayout>
 
@@ -162,76 +278,53 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:gravity="end">
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/invoice_meta_date"
+                        android:text="Tarikh Pelepasan / Departure"
                         android:textColor="@color/text_muted"
-                        android:textSize="10.5sp"
-                        android:textStyle="bold"
-                        android:letterSpacing="0.05" />
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tvInvoiceDate"
+                        android:id="@+id/tvDepartureDate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="28 Sep 2026"
                         android:textColor="@color/text_dark"
-                        android:textSize="14sp"
+                        android:textSize="12.5sp"
+                        android:textStyle="bold"
+                        tools:text="12 Nov 2026" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Tempoh Akhir Bayaran / Due Date"
+                        android:textColor="@color/text_muted"
+                        android:textSize="10sp"
                         android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvPaymentDueDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:textColor="@color/brand_magenta"
+                        android:textSize="12.5sp"
+                        android:textStyle="bold"
+                        tools:text="12 Oct 2026" />
 
                 </LinearLayout>
 
             </LinearLayout>
 
-            <!-- Bill To Section -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="#F8FAFC"
-                android:padding="12dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/invoice_sec_bill_to"
-                    android:textColor="@color/text_muted"
-                    android:textSize="10sp"
-                    android:textStyle="bold"
-                    android:letterSpacing="0.05" />
-
-                <TextView
-                    android:id="@+id/tvInvoiceCustomerName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
-                    android:textColor="@color/text_dark"
-                    android:textSize="13.5sp"
-                    android:textStyle="bold"
-                    tools:text="Danial Bin Ahmad" />
-
-                <TextView
-                    android:id="@+id/tvInvoiceCustomerDetails"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="1dp"
-                    android:textColor="@color/text_gray"
-                    android:textSize="11.5sp"
-                    tools:text="No. IC/Passport: —" />
-
-            </LinearLayout>
-
-            <!-- Package Details Card -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="12dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -240,35 +333,110 @@
                     android:text="@string/invoice_sec_pkg"
                     android:textColor="@color/text_muted"
                     android:textSize="10.5sp"
-                    android:textStyle="bold"
-                    android:letterSpacing="0.05" />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvInvoicePackageName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="2dp"
                     android:textColor="@color/text_dark"
-                    android:textSize="14sp"
+                    android:textSize="13.5sp"
                     android:textStyle="bold"
-                    tools:text="Pakej Umrah Ziarah Premium" />
+                    tools:text="Pakej Umrah Ziarah Istanbul &amp; Taif 12 Hari" />
 
                 <TextView
-                    android:id="@+id/tvInvoiceTripMeta"
+                    android:id="@+id/tvRoomSetup"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:textColor="@color/text_gray"
+                    android:textColor="@color/brand_magenta"
                     android:textSize="12sp"
-                    tools:text="Pelepasan: 12 Nov 2026 • 2 Pax" />
+                    android:textStyle="bold"
+                    tools:text="Bilik: DBL — Room Pairing 01" />
 
             </LinearLayout>
 
-            <!-- Table Header -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="16dp"
+                android:background="#E2E8F0" />
+
+            <!-- 4. PASSENGER DETAILS TABLE -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MAKLUMAT JEMAAH / PASSENGER DETAILS"
+                android:textColor="@color/brand_magenta"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.05" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
+                android:background="#F1F5F9"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="8dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="32dp"
+                    android:layout_height="wrap_content"
+                    android:text="No."
+                    android:textColor="@color/text_dark"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Nama Jemaah / Passenger Name"
+                    android:textColor="@color/text_dark"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="No. IC / Pasport"
+                    android:textColor="@color/text_dark"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutPassengersContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="16dp"
+                android:background="#E2E8F0" />
+
+            <!-- 5. ITEMIZED BILLING TABLE -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PERINCIAN CAJ / ITEMIZED BILLING"
+                android:textColor="@color/brand_magenta"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.05" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:background="#F1F5F9"
                 android:paddingHorizontal="10dp"
                 android:paddingVertical="8dp"
@@ -305,7 +473,6 @@
 
             </LinearLayout>
 
-            <!-- Line Items Container -->
             <LinearLayout
                 android:id="@+id/layoutInvoiceItems"
                 android:layout_width="match_parent"
@@ -318,9 +485,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginVertical="12dp"
-                android:background="#E5E7EB" />
+                android:background="#E2E8F0" />
 
-            <!-- Subtotal & Totals Breakdown -->
+            <!-- 6. TOTALS & FINANCIAL SUMMARY & AMOUNT IN WORDS -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -347,7 +514,7 @@
                         android:textColor="@color/text_dark"
                         android:textSize="12sp"
                         android:textStyle="bold"
-                        tools:text="RM 43,444.00" />
+                        tools:text="RM 29,170.00" />
 
                 </RelativeLayout>
 
@@ -374,11 +541,10 @@
                         android:textColor="@color/brand_magenta"
                         android:textSize="15sp"
                         android:textStyle="bold"
-                        tools:text="RM 43,444.00" />
+                        tools:text="RM 29,170.00" />
 
                 </RelativeLayout>
 
-                <!-- Paid Amount -->
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -399,11 +565,10 @@
                         android:textColor="#059669"
                         android:textSize="12sp"
                         android:textStyle="bold"
-                        tools:text="RM 1,000.00" />
+                        tools:text="RM 2,000.00" />
 
                 </RelativeLayout>
 
-                <!-- Balance Due -->
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -425,13 +590,144 @@
                         android:textColor="@color/brand_magenta"
                         android:textSize="13sp"
                         android:textStyle="bold"
-                        tools:text="RM 42,444.00" />
+                        tools:text="RM 27,170.00" />
 
                 </RelativeLayout>
 
+                <!-- Amount in Words -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:background="#F8FAFC"
+                    android:padding="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="JUMLAH DALAM PERKATAAN / AMOUNT IN WORDS"
+                        android:textColor="@color/text_muted"
+                        android:textSize="9.5sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvInvoiceAmountInWords"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:textColor="@color/text_dark"
+                        android:textSize="11.5sp"
+                        android:textStyle="bold|italic"
+                        tools:text="RM Twenty Nine Thousand One Hundred Seventy and Zero Cents Only" />
+
+                </LinearLayout>
+
             </LinearLayout>
 
-            <!-- Bottom Official Stamp Footer -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="16dp"
+                android:background="#E2E8F0" />
+
+            <!-- 7. PAYMENT RECORD TABLE -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="REKOD BAYARAN / PAYMENT HISTORY"
+                android:textColor="@color/brand_magenta"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.05" />
+
+            <LinearLayout
+                android:id="@+id/layoutPaymentRecordsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="16dp"
+                android:background="#E2E8F0" />
+
+            <!-- 8. BANK DETAILS & PAYMENT TERMS -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="#F8FAFC"
+                android:padding="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="MAKLUMAT BANK &amp; SYARAT BAYARAN / BANK &amp; PAYMENT TERMS"
+                    android:textColor="@color/brand_magenta"
+                    android:textSize="10.5sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvBankDetails"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textColor="@color/text_dark"
+                    android:textSize="11.5sp"
+                    tools:text="Bank: Bank Islam Malaysia Berhad\nAkaun: 01014010088888\nPenerima: Hafiz Travel &amp; Tours Sdn Bhd" />
+
+                <TextView
+                    android:id="@+id/tvPaymentTerms"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:textColor="@color/text_gray"
+                    android:textSize="10.5sp"
+                    android:lineSpacingExtra="1dp"
+                    tools:text="Polisi Deposit: Deposit RM 1,000 seorang semasa tempahan rasmi.\nBaki Bayaran: Penyelesaian baki bayaran penuh 45 hari sebelum pelepasan." />
+
+            </LinearLayout>
+
+            <!-- 9. TOUR REMARKS & 10. TERMS & CONDITIONS -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CATATAN &amp; TERMA RASMI / REMARKS &amp; TERMS"
+                    android:textColor="@color/text_muted"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvTourRemarks"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:textColor="@color/text_dark"
+                    android:textSize="11sp"
+                    tools:text="Catatan: Pakej termasuk visa umrah, tiket penerbangan, penginapan &amp; bimbingan mutawwif rasmi." />
+
+                <TextView
+                    android:id="@+id/tvTermsConditions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textColor="@color/text_muted"
+                    android:textSize="10sp"
+                    android:lineSpacingExtra="1.5dp"
+                    tools:text="1. Atur cara perjalanan &amp; penginapan tertakluk kepada perubahan visa/penerbangan.\n2. Pasport hendaklah sah sekurang-kurangnya 6 bulan dari tarikh pelepasan." />
+
+            </LinearLayout>
+
+            <!-- 11. DOCUMENT FOOTER -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -441,20 +737,22 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/tvDocumentDisclaimer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/invoice_footer_notice"
+                    android:text="Computer generated invoice, no signature required / Invois jana komputasi, tanda tangan tidak diperlukan"
                     android:textColor="@color/text_muted"
                     android:textSize="10sp"
                     android:gravity="center" />
 
                 <TextView
+                    android:id="@+id/tvDocumentPageInfo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="@string/invoice_footer_thanks"
+                    android:text="Hafiz Travel ERP v2.0 • Page 1 of 1"
                     android:textColor="@color/text_muted"
-                    android:textSize="10sp"
+                    android:textSize="9.5sp"
                     android:textStyle="italic" />
 
             </LinearLayout>

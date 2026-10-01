@@ -62,14 +62,21 @@ public final class ApiErrors {
         if (response == null) return context.getString(fallback);
         int code = response.code();
         String serverDetail = extractServerMessage(response);
-        Log.w(TAG, "HTTP " + code + (serverDetail != null ? ": " + serverDetail : ""));
+        Log.w(TAG, "HTTP " + code + (serverDetail != null ? ": " + com.hafiztraveltours.app.utils.LogSanitizer.sanitize(serverDetail) : ""));
         switch (code) {
             case 401:
                 return context.getString(R.string.err_session_expired);
             case 403:
-                return context.getString(R.string.err_forbidden);
+                return (serverDetail != null && !serverDetail.isEmpty())
+                        ? serverDetail
+                        : context.getString(R.string.err_forbidden);
             case 404:
-                return context.getString(R.string.err_not_found);
+                if (serverDetail != null && !serverDetail.isEmpty()
+                        && !serverDetail.startsWith("The route ")
+                        && !serverDetail.toLowerCase(java.util.Locale.ROOT).contains("could not be found")) {
+                    return serverDetail;
+                }
+                return context.getString(fallback != 0 ? fallback : R.string.err_not_found);
             case 422:
                 return (serverDetail != null && !serverDetail.isEmpty())
                         ? serverDetail
@@ -78,7 +85,9 @@ public final class ApiErrors {
                 return context.getString(R.string.err_too_many_requests);
             default:
                 if (code >= 500) return context.getString(R.string.err_server);
-                return context.getString(fallback);
+                return (serverDetail != null && !serverDetail.isEmpty())
+                        ? serverDetail
+                        : context.getString(fallback);
         }
     }
 

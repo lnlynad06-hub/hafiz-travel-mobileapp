@@ -1,7 +1,5 @@
 package com.hafiztraveltours.app.adapters;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -9,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -94,52 +93,42 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
 
         Context ctx = holder.itemView.getContext();
 
-        // 1. Category Tag
-        if (holder.tvCategoryTag != null) {
-            String pkgName = booking.packageName != null ? booking.packageName.toLowerCase(Locale.ROOT) : "";
-            if (pkgName.contains("tour") || pkgName.contains("pelancongan") || pkgName.contains("vietnam")
-                    || pkgName.contains("balkan") || pkgName.contains("turki") || pkgName.contains("turkey")
-                    || pkgName.contains("japan") || pkgName.contains("korea") || pkgName.contains("switzerland")) {
-                holder.tvCategoryTag.setText(ctx.getString(R.string.booking_category_tour));
-            } else {
-                holder.tvCategoryTag.setText(ctx.getString(R.string.booking_category_umrah));
-            }
-        }
-
-        // 2. Booking Reference No & Copy
-        holder.txtBookingNo.setText(booking.bookingNo != null ? booking.bookingNo : "BKG-" + booking.id);
-        if (holder.btnCopyBookingNo != null) {
-            holder.btnCopyBookingNo.setOnClickListener(v -> {
-                HapticUtil.click(v);
-                ClipboardManager clipboard = (ClipboardManager) ctx.getSystemService(Context.CLIPBOARD_SERVICE);
-                if (clipboard != null && booking.bookingNo != null) {
-                    ClipData clip = ClipData.newPlainText("Booking No", booking.bookingNo);
-                    clipboard.setPrimaryClip(clip);
-                    Toast.makeText(ctx, ctx.getString(R.string.booking_success_copied_toast, booking.bookingNo), Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-
-        // 3. Booking Status Badge
+        // 1. Booking Status Badge (Header Row Left)
         String rawStatus = booking.status != null ? booking.status.toLowerCase(Locale.ROOT) : "";
-        if (rawStatus.contains("confirm") || rawStatus.contains("active") || rawStatus.contains("sah")) {
-            holder.txtStatus.setText(ctx.getString(R.string.status_confirmed));
-            holder.txtStatus.setTextColor(Color.parseColor("#059669"));
-            holder.txtStatus.setBackgroundResource(R.drawable.bg_pill_success);
+        if (rawStatus.contains("cancel_req") || rawStatus.contains("cancellation_requested") || rawStatus.contains("mohon_batal")) {
+            holder.txtStatus.setText(ctx.getString(R.string.status_cancellation_requested));
+            holder.txtStatus.setTextColor(Color.parseColor("#D97706"));
+            holder.txtStatus.setBackgroundResource(R.drawable.bg_pill_accent);
         } else if (rawStatus.contains("cancel") || rawStatus.contains("batal")) {
             holder.txtStatus.setText(ctx.getString(R.string.status_cancelled));
             holder.txtStatus.setTextColor(Color.parseColor("#DC2626"));
             holder.txtStatus.setBackgroundResource(R.drawable.bg_pill_inactive);
+        } else if (rawStatus.contains("confirm") || rawStatus.contains("active") || rawStatus.contains("sah")) {
+            holder.txtStatus.setText(ctx.getString(R.string.status_confirmed));
+            holder.txtStatus.setTextColor(Color.parseColor("#059669"));
+            holder.txtStatus.setBackgroundResource(R.drawable.bg_pill_success);
+        } else if (rawStatus.contains("complet") || rawStatus.contains("selesai")) {
+            holder.txtStatus.setText(ctx.getString(R.string.status_completed));
+            holder.txtStatus.setTextColor(Color.parseColor("#059669"));
+            holder.txtStatus.setBackgroundResource(R.drawable.bg_pill_success);
         } else {
             holder.txtStatus.setText(ctx.getString(R.string.status_pending_confirmation));
             holder.txtStatus.setTextColor(Color.parseColor("#D97706"));
             holder.txtStatus.setBackgroundResource(R.drawable.bg_pill_accent);
         }
 
-        // 4. Package Hero Name
+        // 2. Custom Luxury Kebab Popup Menu (Header Row Right)
+        if (holder.btnKebabMenu != null) {
+            holder.btnKebabMenu.setOnClickListener(v -> {
+                HapticUtil.click(v);
+                showCustomKebabMenu(ctx, v, booking);
+            });
+        }
+
+        // 3. Package Title
         holder.txtPackageName.setText(booking.packageName != null ? booking.packageName : ctx.getString(R.string.booking_category_umrah));
 
-        // 5. Trip Meta: Departure Date, Duration & Pax
+        // 4. Trip Information (Travel date • Duration • Pax)
         if (holder.txtTripMeta != null) {
             StringBuilder meta = new StringBuilder();
             if (booking.departureDate != null && !booking.departureDate.isEmpty()) {
@@ -159,32 +148,81 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
             holder.txtTripMeta.setText(meta.toString());
         }
 
-        // 6. Two-Stage Payment Calculation & Presentation
+        // 5. Payment Amounts (3-column summary with single-line baseline alignment)
         double totalAmt = booking.totalAmount;
         double paidAmt = booking.paidAmount;
         double balAmt = booking.balanceAmount;
 
-        double reqDeposit = booking.requiredDeposit > 0 ? booking.requiredDeposit : totalAmt;
-        double depPaid = booking.depositPaid > 0 ? booking.depositPaid : Math.min(paidAmt, reqDeposit);
-        double depRem = booking.depositRemaining > 0 ? booking.depositRemaining : Math.max(0, reqDeposit - depPaid);
+        if (holder.txtPaidAmount != null) {
+            holder.txtPaidAmount.setText(BookingRequest.formatPrice(paidAmt));
+        }
+        if (holder.txtOutstandingAmount != null) {
+            holder.txtOutstandingAmount.setText(BookingRequest.formatPrice(balAmt));
+        }
+        if (holder.txtGrandTotal != null) {
+            holder.txtGrandTotal.setText(BookingRequest.formatPrice(totalAmt));
+        }
 
-        double pkgBalTotal = booking.balanceTotal > 0 ? booking.balanceTotal : Math.max(0, totalAmt - reqDeposit);
-        double pkgBalPaid = booking.balancePaid > 0 ? booking.balancePaid : Math.max(0, paidAmt - reqDeposit);
-        double pkgBalRem = booking.balanceRemaining > 0 ? booking.balanceRemaining : Math.max(0, pkgBalTotal - pkgBalPaid);
+        // Progress bar
+        if (holder.paymentProgressBar != null) {
+            int progress = totalAmt > 0 ? (int) Math.round((paidAmt / totalAmt) * 100) : 0;
+            holder.paymentProgressBar.setProgress(Math.max(0, Math.min(100, progress)));
+        }
 
-        if (balAmt <= 0 && totalAmt > 0) {
-            // FULLY PAID
-            if (holder.tvPaymentStageLabel != null) {
-                holder.tvPaymentStageLabel.setText(ctx.getString(R.string.booking_label_stage_completed));
-                holder.tvPaymentStageLabel.setTextColor(Color.parseColor("#059669"));
+        // 6. Payment Status Tag & Stage Details
+        String rawPaymentStatus = booking.paymentStatus != null ? booking.paymentStatus.toLowerCase(Locale.ROOT) : "";
+        double reqDeposit = booking.getRequiredDepositAmount();
+        double depPaid = Math.min(paidAmt, reqDeposit);
+        double depRem = booking.getDepositRemainingAmount();
+
+        double pkgBalTotal = Math.max(0, totalAmt - reqDeposit);
+        double pkgBalPaid = Math.max(0, paidAmt - reqDeposit);
+        double pkgBalRem = Math.max(0, pkgBalTotal - pkgBalPaid);
+
+        boolean isCancelled = rawStatus.contains("cancel") || rawStatus.contains("batal");
+
+        if (isCancelled || rawPaymentStatus.contains("cancel")) {
+            if (holder.tvPaymentStatusBadge != null) {
+                holder.tvPaymentStatusBadge.setText(ctx.getString(R.string.payment_status_cancelled));
+                holder.tvPaymentStatusBadge.setTextColor(Color.parseColor("#DC2626"));
+                holder.tvPaymentStatusBadge.setBackgroundResource(R.drawable.bg_pill_inactive);
             }
+            if (holder.tvPaymentStageDetail != null) {
+                holder.tvPaymentStageDetail.setText(ctx.getString(R.string.status_cancelled));
+            }
+        } else if (rawPaymentStatus.contains("refund")) {
+            if (holder.tvPaymentStatusBadge != null) {
+                holder.tvPaymentStatusBadge.setText(ctx.getString(R.string.payment_status_refunded));
+                holder.tvPaymentStatusBadge.setTextColor(Color.parseColor("#64748B"));
+                holder.tvPaymentStatusBadge.setBackgroundResource(R.drawable.bg_pill_accent);
+            }
+            if (holder.tvPaymentStageDetail != null) {
+                holder.tvPaymentStageDetail.setText(ctx.getString(R.string.payment_status_refunded));
+            }
+        } else if (rawPaymentStatus.contains("fail")) {
+            if (holder.tvPaymentStatusBadge != null) {
+                holder.tvPaymentStatusBadge.setText(ctx.getString(R.string.payment_status_failed));
+                holder.tvPaymentStatusBadge.setTextColor(Color.parseColor("#DC2626"));
+                holder.tvPaymentStatusBadge.setBackgroundResource(R.drawable.bg_pill_inactive);
+            }
+            if (holder.tvPaymentStageDetail != null) {
+                holder.tvPaymentStageDetail.setText(ctx.getString(R.string.payment_status_failed));
+            }
+        } else if (rawPaymentStatus.contains("overdue")) {
+            if (holder.tvPaymentStatusBadge != null) {
+                holder.tvPaymentStatusBadge.setText(ctx.getString(R.string.payment_status_overdue));
+                holder.tvPaymentStatusBadge.setTextColor(Color.parseColor("#DC2626"));
+                holder.tvPaymentStatusBadge.setBackgroundResource(R.drawable.bg_pill_inactive);
+            }
+            if (holder.tvPaymentStageDetail != null) {
+                holder.tvPaymentStageDetail.setText(ctx.getString(R.string.payment_status_overdue));
+            }
+        } else if (balAmt <= 0 && totalAmt > 0) {
+            // FULLY PAID
             if (holder.tvPaymentStatusBadge != null) {
                 holder.tvPaymentStatusBadge.setText(ctx.getString(R.string.payment_status_fully_paid));
                 holder.tvPaymentStatusBadge.setTextColor(Color.parseColor("#059669"));
                 holder.tvPaymentStatusBadge.setBackgroundResource(R.drawable.bg_pill_success);
-            }
-            if (holder.paymentProgressBar != null) {
-                holder.paymentProgressBar.setProgress(100);
             }
             if (holder.tvPaymentStageDetail != null) {
                 holder.tvPaymentStageDetail.setText(ctx.getString(R.string.payment_detail_fully_paid_format,
@@ -192,10 +230,6 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
             }
         } else if (depRem > 0) {
             // STAGE 1: DEPOSIT PENDING / PARTIAL
-            if (holder.tvPaymentStageLabel != null) {
-                holder.tvPaymentStageLabel.setText(ctx.getString(R.string.booking_label_stage_deposit));
-                holder.tvPaymentStageLabel.setTextColor(ctx.getResources().getColor(R.color.brand_magenta));
-            }
             if (holder.tvPaymentStatusBadge != null) {
                 if (depPaid > 0) {
                     holder.tvPaymentStatusBadge.setText(ctx.getString(R.string.payment_status_deposit_partial));
@@ -207,28 +241,27 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
                     holder.tvPaymentStatusBadge.setBackgroundResource(R.drawable.bg_pill_inactive);
                 }
             }
-            if (holder.paymentProgressBar != null) {
-                int progress = reqDeposit > 0 ? (int) Math.round((depPaid / reqDeposit) * 100) : 0;
-                holder.paymentProgressBar.setProgress(Math.max(0, Math.min(100, progress)));
-            }
             if (holder.tvPaymentStageDetail != null) {
-                holder.tvPaymentStageDetail.setText(ctx.getString(R.string.payment_detail_deposit_format,
-                        BookingRequest.formatPrice(depPaid), BookingRequest.formatPrice(reqDeposit), BookingRequest.formatPrice(depRem)));
+                if (depPaid > 0) {
+                    holder.tvPaymentStageDetail.setText(ctx.getString(R.string.payment_detail_deposit_format,
+                            BookingRequest.formatPrice(depPaid), BookingRequest.formatPrice(reqDeposit), BookingRequest.formatPrice(depRem)));
+                } else {
+                    holder.tvPaymentStageDetail.setText(ctx.getString(R.string.payment_detail_deposit_required_format,
+                            BookingRequest.formatPrice(0), BookingRequest.formatPrice(reqDeposit), BookingRequest.formatPrice(reqDeposit)));
+                }
             }
         } else {
-            // STAGE 2: PACKAGE BALANCE INSTALLMENT
-            if (holder.tvPaymentStageLabel != null) {
-                holder.tvPaymentStageLabel.setText(ctx.getString(R.string.booking_label_stage_balance));
-                holder.tvPaymentStageLabel.setTextColor(ctx.getResources().getColor(R.color.brand_magenta));
-            }
+            // STAGE 2: PACKAGE BALANCE INSTALLMENT ACTIVE
             if (holder.tvPaymentStatusBadge != null) {
-                holder.tvPaymentStatusBadge.setText(ctx.getString(R.string.payment_status_balance_partial));
-                holder.tvPaymentStatusBadge.setTextColor(Color.parseColor("#2563EB"));
-                holder.tvPaymentStatusBadge.setBackgroundResource(R.drawable.bg_pill_accent);
-            }
-            if (holder.paymentProgressBar != null) {
-                int progress = totalAmt > 0 ? (int) Math.round((paidAmt / totalAmt) * 100) : 0;
-                holder.paymentProgressBar.setProgress(Math.max(0, Math.min(100, progress)));
+                if (rawPaymentStatus.contains("pending")) {
+                    holder.tvPaymentStatusBadge.setText(ctx.getString(R.string.payment_status_pending));
+                    holder.tvPaymentStatusBadge.setTextColor(Color.parseColor("#D97706"));
+                    holder.tvPaymentStatusBadge.setBackgroundResource(R.drawable.bg_pill_accent);
+                } else {
+                    holder.tvPaymentStatusBadge.setText(ctx.getString(R.string.payment_status_balance_partial));
+                    holder.tvPaymentStatusBadge.setTextColor(Color.parseColor("#2563EB"));
+                    holder.tvPaymentStatusBadge.setBackgroundResource(R.drawable.bg_pill_accent);
+                }
             }
             if (holder.tvPaymentStageDetail != null) {
                 holder.tvPaymentStageDetail.setText(ctx.getString(R.string.payment_detail_balance_format,
@@ -236,18 +269,9 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
             }
         }
 
-        // 7. Paid & Outstanding Amounts
-        if (holder.txtPaidAmount != null) {
-            holder.txtPaidAmount.setText(BookingRequest.formatPrice(paidAmt));
-        }
-        if (holder.txtOutstandingAmount != null) {
-            holder.txtOutstandingAmount.setText(BookingRequest.formatPrice(balAmt));
-        }
-
-        // 8. Pay Now Action (State-Aware: only when outstanding balance exists and not cancelled)
-        boolean isCancelled = rawStatus.contains("cancel") || rawStatus.contains("batal");
+        // 7. Action 1: Pay Now (Primary CTA, Full width, Magenta)
         if (holder.btnPayNow != null) {
-            if (balAmt > 0 && !isCancelled) {
+            if (balAmt > 0 && !isCancelled && !"completed".equalsIgnoreCase(rawStatus)) {
                 holder.btnPayNow.setVisibility(View.VISIBLE);
                 holder.btnPayNow.setText(R.string.booking_btn_pay_now);
                 holder.btnPayNow.setOnClickListener(v -> {
@@ -266,34 +290,7 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
             }
         }
 
-        // 9. In-App Invoice Action
-        if (holder.btnViewInvoice != null) {
-            holder.btnViewInvoice.setOnClickListener(v -> {
-                HapticUtil.click(v);
-                Intent intent = new Intent(ctx, InvoiceViewerActivity.class);
-                intent.putExtra(InvoiceViewerActivity.EXTRA_BOOKING_ID, booking.id);
-                intent.putExtra(InvoiceViewerActivity.EXTRA_BOOKING_NO, booking.bookingNo);
-                ctx.startActivity(intent);
-            });
-        }
-
-        // 10. In-App Receipt Action (State-Aware: ONLY when verified receipts exist)
-        if (holder.btnViewReceipt != null) {
-            if (booking.hasReceipts || booking.receiptsCount > 0) {
-                holder.btnViewReceipt.setVisibility(View.VISIBLE);
-                holder.btnViewReceipt.setOnClickListener(v -> {
-                    HapticUtil.click(v);
-                    Intent intent = new Intent(ctx, ReceiptViewerActivity.class);
-                    intent.putExtra(ReceiptViewerActivity.EXTRA_BOOKING_ID, booking.id);
-                    intent.putExtra(ReceiptViewerActivity.EXTRA_BOOKING_NO, booking.bookingNo);
-                    ctx.startActivity(intent);
-                });
-            } else {
-                holder.btnViewReceipt.setVisibility(View.GONE);
-            }
-        }
-
-        // 11. Manage Documents Action (Direct click only)
+        // 8. Action 2: Manage Documents (Secondary full width)
         if (holder.btnManageDocs != null) {
             holder.btnManageDocs.setEnabled(true);
             holder.btnManageDocs.setClickable(true);
@@ -310,8 +307,9 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
             });
         }
 
-        // 12. Cancel Booking Action (State-Aware: Only when eligible and not cancelled)
-        boolean isCancellable = Boolean.TRUE.equals(booking.isCancellable) && !isCancelled;
+        // 9. Action 3: Cancel Booking (Destructive full width action)
+        boolean isCancellable = (booking.isCancellable != null ? booking.isCancellable.booleanValue() : true)
+                && !isCancelled && !"completed".equalsIgnoreCase(rawStatus);
         if (holder.btnCancelBooking != null) {
             if (isCancellable) {
                 holder.btnCancelBooking.setVisibility(View.VISIBLE);
@@ -330,8 +328,86 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
                 holder.btnCancelBooking.setVisibility(View.GONE);
             }
         }
+    }
 
-        // Intentionally NO onClick on holder.itemView to prevent accidental document sheet opening!
+    private void showCustomKebabMenu(Context ctx, View anchorView, BookingDto booking) {
+        boolean hasConfirmedPayment = (booking.paidAmount > 0)
+                || booking.isDepositPaid
+                || booking.hasReceipts
+                || (booking.receiptsCount > 0);
+
+        try {
+            View popupView = LayoutInflater.from(ctx).inflate(R.layout.popup_kebab_menu, null);
+            PopupWindow popupWindow = new PopupWindow(
+                    popupView,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    true
+            );
+
+            popupWindow.setElevation(12f);
+            popupWindow.setOutsideTouchable(true);
+
+            View btnInvoice = popupView.findViewById(R.id.menuItemInvoice);
+            View btnReceipt = popupView.findViewById(R.id.menuItemReceipt);
+            View menuDivider = popupView.findViewById(R.id.menuDivider);
+
+            if (btnInvoice != null) {
+                btnInvoice.setOnClickListener(vItem -> {
+                    HapticUtil.click(vItem);
+                    popupWindow.dismiss();
+                    Intent intent = new Intent(ctx, InvoiceViewerActivity.class);
+                    intent.putExtra(InvoiceViewerActivity.EXTRA_BOOKING_ID, booking.id);
+                    intent.putExtra(InvoiceViewerActivity.EXTRA_BOOKING_NO, booking.bookingNo);
+                    ctx.startActivity(intent);
+                });
+            }
+
+            if (hasConfirmedPayment) {
+                if (btnReceipt != null) {
+                    btnReceipt.setVisibility(View.VISIBLE);
+                    btnReceipt.setOnClickListener(vItem -> {
+                        HapticUtil.click(vItem);
+                        popupWindow.dismiss();
+                        Intent intent = new Intent(ctx, ReceiptViewerActivity.class);
+                        intent.putExtra(ReceiptViewerActivity.EXTRA_BOOKING_ID, booking.id);
+                        intent.putExtra(ReceiptViewerActivity.EXTRA_BOOKING_NO, booking.bookingNo);
+                        ctx.startActivity(intent);
+                    });
+                }
+                if (menuDivider != null) menuDivider.setVisibility(View.VISIBLE);
+            } else {
+                if (btnReceipt != null) btnReceipt.setVisibility(View.GONE);
+                if (menuDivider != null) menuDivider.setVisibility(View.GONE);
+            }
+
+            int xOffset = -Math.round(110 * ctx.getResources().getDisplayMetrics().density);
+            popupWindow.showAsDropDown(anchorView, xOffset, 0);
+        } catch (Exception e) {
+            // Fallback to PopupMenu if custom PopupWindow fails
+            androidx.appcompat.widget.PopupMenu fallbackMenu = new androidx.appcompat.widget.PopupMenu(ctx, anchorView);
+            fallbackMenu.getMenu().add(0, 1, 0, ctx.getString(R.string.menu_invoice));
+            if (hasConfirmedPayment) {
+                fallbackMenu.getMenu().add(0, 2, 1, ctx.getString(R.string.menu_receipt));
+            }
+            fallbackMenu.setOnMenuItemClickListener(item -> {
+                if (item.getItemId() == 1) {
+                    Intent intent = new Intent(ctx, InvoiceViewerActivity.class);
+                    intent.putExtra(InvoiceViewerActivity.EXTRA_BOOKING_ID, booking.id);
+                    intent.putExtra(InvoiceViewerActivity.EXTRA_BOOKING_NO, booking.bookingNo);
+                    ctx.startActivity(intent);
+                    return true;
+                } else if (item.getItemId() == 2 && hasConfirmedPayment) {
+                    Intent intent = new Intent(ctx, ReceiptViewerActivity.class);
+                    intent.putExtra(ReceiptViewerActivity.EXTRA_BOOKING_ID, booking.id);
+                    intent.putExtra(ReceiptViewerActivity.EXTRA_BOOKING_NO, booking.bookingNo);
+                    ctx.startActivity(intent);
+                    return true;
+                }
+                return false;
+            });
+            fallbackMenu.show();
+        }
     }
 
     @Override
@@ -340,10 +416,8 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvCategoryTag;
-        TextView txtBookingNo;
-        ImageView btnCopyBookingNo;
         TextView txtStatus;
+        ImageView btnKebabMenu;
 
         TextView txtPackageName;
         TextView txtTripMeta;
@@ -355,19 +429,16 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
 
         TextView txtPaidAmount;
         TextView txtOutstandingAmount;
+        TextView txtGrandTotal;
 
         MaterialButton btnPayNow;
-        MaterialButton btnViewInvoice;
-        MaterialButton btnViewReceipt;
         MaterialButton btnManageDocs;
         MaterialButton btnCancelBooking;
 
         ViewHolder(View itemView) {
             super(itemView);
-            tvCategoryTag = itemView.findViewById(R.id.tvItemCategoryTag);
-            txtBookingNo = itemView.findViewById(R.id.itemBookingNo);
-            btnCopyBookingNo = itemView.findViewById(R.id.btnItemCopyBookingNo);
             txtStatus = itemView.findViewById(R.id.itemBookingStatus);
+            btnKebabMenu = itemView.findViewById(R.id.btnBookingKebabMenu);
 
             txtPackageName = itemView.findViewById(R.id.itemBookingPackageName);
             txtTripMeta = itemView.findViewById(R.id.itemBookingTripMeta);
@@ -379,10 +450,9 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
 
             txtPaidAmount = itemView.findViewById(R.id.itemBookingPaidAmount);
             txtOutstandingAmount = itemView.findViewById(R.id.itemBookingOutstandingAmount);
+            txtGrandTotal = itemView.findViewById(R.id.itemBookingGrandTotal);
 
             btnPayNow = itemView.findViewById(R.id.btnItemPayNow);
-            btnViewInvoice = itemView.findViewById(R.id.btnItemViewInvoice);
-            btnViewReceipt = itemView.findViewById(R.id.btnItemViewReceipt);
             btnManageDocs = itemView.findViewById(R.id.btnItemManageDocs);
             btnCancelBooking = itemView.findViewById(R.id.btnItemCancelBooking);
         }

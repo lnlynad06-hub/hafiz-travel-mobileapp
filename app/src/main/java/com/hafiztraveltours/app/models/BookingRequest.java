@@ -22,11 +22,32 @@ public class BookingRequest implements Serializable {
     public Integer selectedPricingId = null;
     public String promoCode = "";
     public double discountAmount = 0.0;
+    public String packageCategory = "umrah";
     public PackageDetail packageDetail;
 
     public boolean termsAgreed = false;
     public String termsAgreedAt = "";
     public String termsVersion = "1.0";
+
+    public boolean isUmrahPackage() {
+        if (packageCategory != null && !packageCategory.isEmpty()) {
+            return "umrah".equalsIgnoreCase(packageCategory);
+        }
+        if (packageName != null) {
+            String lower = packageName.toLowerCase(java.util.Locale.ROOT);
+            if (lower.contains("tour") || lower.contains("pelancongan") || lower.contains("switzerland") 
+                    || lower.contains("swiss") || lower.contains("turkey") || lower.contains("turki") 
+                    || lower.contains("japan") || lower.contains("korea") || lower.contains("balkan") 
+                    || lower.contains("vietnam") || lower.contains("china")) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isTourPackage() {
+        return !isUmrahPackage();
+    }
 
     public List<Passenger> passengers = new ArrayList<>();
 

@@ -60,6 +60,18 @@ public class BookingDto {
     @SerializedName("payment_status")
     public String paymentStatus;
 
+    @SerializedName("deposit_due_date")
+    public String depositDueDate;
+
+    @SerializedName("is_deposit_paid")
+    public boolean isDepositPaid;
+
+    @SerializedName("is_merchandise_eligible")
+    public boolean isMerchandiseEligible;
+
+    @SerializedName("is_tour")
+    public boolean isTour;
+
     @SerializedName("receipts_count")
     public int receiptsCount;
 
@@ -77,4 +89,34 @@ public class BookingDto {
 
     @SerializedName("created_at")
     public String createdAt;
+
+    public boolean isTourPackage() {
+        if (isTour) return true;
+        if (packageCategory != null) {
+            String cat = packageCategory.toLowerCase(java.util.Locale.ROOT);
+            if (cat.contains("tour") || cat.contains("pelancongan") || cat.contains("inbound") || cat.contains("outbound")) return true;
+        }
+        if (packageName != null) {
+            String name = packageName.toLowerCase(java.util.Locale.ROOT);
+            if (name.contains("tour") || name.contains("pelancongan") || name.contains("vietnam")
+                    || name.contains("balkan") || name.contains("turki") || name.contains("turkey")
+                    || name.contains("japan") || name.contains("korea") || name.contains("switzerland")
+                    || name.contains("europe") || name.contains("china")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public double getRequiredDepositAmount() {
+        int pax = totalPax > 0 ? totalPax : 1;
+        double ratePerPax = isTourPackage() ? 500.0 : 1000.0;
+        return ratePerPax * pax;
+    }
+
+    public double getDepositRemainingAmount() {
+        double req = getRequiredDepositAmount();
+        double paid = paidAmount;
+        return Math.max(0, req - paid);
+    }
 }

@@ -40,6 +40,8 @@ public class TermsConditionsActivity extends BaseActivity {
         TextView txtPackageName = findViewById(R.id.termsPackageName);
         TextView txtPackageMeta = findViewById(R.id.termsPackageMeta);
         containerPackageCancellation = findViewById(R.id.containerPackageCancellation);
+        View containerUmrahSections = findViewById(R.id.containerUmrahSections);
+        View containerTourSections = findViewById(R.id.containerTourSections);
 
         if (bookingRequest != null) {
             if (txtPackageName != null && bookingRequest.packageName != null) {
@@ -54,8 +56,20 @@ public class TermsConditionsActivity extends BaseActivity {
                         room, pax));
             }
 
+            // Toggle T&C container based on package type (Umrah vs Tour)
+            if (bookingRequest.isTourPackage()) {
+                if (containerUmrahSections != null) containerUmrahSections.setVisibility(View.GONE);
+                if (containerTourSections != null) containerTourSections.setVisibility(View.VISIBLE);
+            } else {
+                if (containerUmrahSections != null) containerUmrahSections.setVisibility(View.VISIBLE);
+                if (containerTourSections != null) containerTourSections.setVisibility(View.GONE);
+            }
+
             // Render package-specific cancellation policy if available
             renderPackageCancellationPolicy();
+        } else {
+            if (containerUmrahSections != null) containerUmrahSections.setVisibility(View.VISIBLE);
+            if (containerTourSections != null) containerTourSections.setVisibility(View.GONE);
         }
 
         View btnTermsClose = findViewById(R.id.btnTermsClose);

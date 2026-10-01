@@ -26,6 +26,12 @@ public final class MoneyFormat {
         }
     }
 
+    /** "RM1,234.00" with 2 decimal places. */
+    public static String formatRMCents(double amount) {
+        if (Double.isNaN(amount) || Double.isInfinite(amount)) return "RM0.00";
+        return String.format(java.util.Locale.US, "RM%,.2f", amount);
+    }
+
     /** Raw API string (may be null/"RM 7,990.00"/"") rendered with RM prefix; null/blank → "RM -". */
     public static String formatRaw(String raw) {
         if (raw == null || raw.trim().isEmpty()) return "RM -";

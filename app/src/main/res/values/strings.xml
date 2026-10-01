@@ -1379,7 +1379,7 @@
 
     <!-- Pay Now Quick Sheet Strings -->
     <string name="pay_sheet_title">Make Payment</string>
-    <string name="pay_sheet_sub">Select payment amount and method for your booking.</string>
+    <string name="pay_sheet_sub">Review your payment details and proceed securely.</string>
     <string name="pay_sheet_opt_full_deposit">Pay Remaining Deposit (%1$s)</string>
     <string name="pay_sheet_opt_full_balance">Pay Total Balance (%1$s)</string>
     <string name="pay_sheet_opt_custom">Custom Installment Amount</string>
@@ -1394,12 +1394,37 @@
     <string name="pay_sheet_err_max_amount">Payment amount cannot exceed remaining balance of %1$s.</string>
     <string name="pay_sheet_processing">Processing payment, please wait...</string>
 
+    <!-- Make Payment Redesign Strings -->
+    <string name="pay_sheet_due_label">PAYMENT DUE</string>
+    <string name="pay_sheet_purpose_initial_deposit">Initial Deposit</string>
+    <string name="pay_sheet_purpose_remaining_deposit">Remaining Deposit</string>
+    <string name="pay_sheet_purpose_balance">Package Balance</string>
+    <string name="pay_sheet_package_total">Package Total</string>
+    <string name="pay_sheet_previously_paid">Previously Paid</string>
+    <string name="pay_sheet_this_payment">Payment Due Now</string>
+    <string name="pay_sheet_balance_after">Balance After Payment</string>
+    <string name="pay_sheet_btn_pay_format">Pay %1$s</string>
+    <string name="pay_sheet_secure_title">Secure Payment via ToyyibPay</string>
+    <string name="pay_sheet_secure_desc">256-bit encryption. Online payment gateway integration powered by ToyyibPay (Test Mode).</string>
+    <string name="pay_confirm_dialog_title">Confirm Payment</string>
+    <string name="pay_confirm_purpose_label">Payment Purpose</string>
+    <string name="pay_confirm_gateway_label">Payment Gateway</string>
+    <string name="pay_confirm_gateway_mock_name">ToyyibPay (Mock Sandbox)</string>
+    <string name="pay_confirm_dialog_msg">You are confirming payment of %1$s for %2$s.</string>
+    <string name="pay_confirm_dialog_mock_notice">This transaction is processed in mock test mode and will immediately update your booking status.</string>
+    <string name="pay_confirm_btn_pay">Confirm &amp; Pay</string>
+    <string name="pay_success_dialog_title">Payment Successful!</string>
+    <string name="pay_success_dialog_msg">Payment of %1$s has been successfully recorded. Official receipt and booking schedule have been generated.</string>
+    <string name="pay_btn_done">Done</string>
+
     <string name="booking_meta_duration_format">%1$d Days %2$d Nights</string>
     <string name="booking_meta_pax_format">%1$d Pax</string>
     <string name="payment_detail_fully_paid_format">Completed: %1$s / %2$s (Balance: RM 0.00)</string>
     <string name="payment_detail_deposit_format">Deposit: %1$s / %2$s (Remaining: %3$s)</string>
+    <string name="payment_detail_deposit_required_format">Deposit: %1$s / %2$s (Required: %3$s)</string>
     <string name="payment_detail_balance_format">Package Balance: %1$s / %2$s (Remaining: %3$s)</string>
-    <string name="pay_sheet_opt_deposit_preset">Pay Remaining Deposit (%1$s)</string>
+    <string name="pay_sheet_opt_deposit_preset">Pay Required Deposit (%1$s)</string>
+    <string name="pay_sheet_opt_deposit_remaining_preset">Pay Remaining Deposit (%1$s)</string>
     <string name="pay_sheet_opt_balance_preset">Pay Total Balance (%1$s)</string>
     <string name="pay_success_toast">Payment of %1$s successful! Official receipt generated.</string>
     <string name="pay_btn_view_receipt">View Receipt</string>
@@ -1412,11 +1437,48 @@
     <!-- Cancel Booking Strings -->
     <string name="booking_btn_cancel">Cancel Booking</string>
     <string name="cancel_booking_title">Cancel Booking</string>
-    <string name="cancel_booking_confirm_message">Are you sure you want to cancel booking %1$s? This action will release your reserved seats. Legitimate payment records will be preserved.</string>
+    <string name="cancel_booking_confirm_message">Are you sure you want to cancel this booking? This action will release your reserved seats. Legitimate payment records will be preserved.</string>
     <string name="cancel_booking_reason_hint">Reason for cancellation (optional)</string>
     <string name="cancel_booking_btn_confirm">Yes, Cancel Booking</string>
     <string name="cancel_booking_keep">Keep Booking</string>
     <string name="cancel_booking_success">Booking %1$s has been successfully cancelled.</string>
     <string name="cancel_booking_failed">Failed to cancel booking. Please try again.</string>
     <string name="cancel_booking_processing">Cancelling booking, please wait...</string>
+    <string name="cancel_booking_quote_loading">Calculating cancellation policy and refund quote...</string>
+    <string name="cancel_quote_working_days">Working days before departure: %1$d days</string>
+    <string name="cancel_quote_charge_summary">Cancellation Charge: %1$s (%2$s of package price)</string>
+    <string name="cancel_quote_non_refundable_deposit">* Deposit is non-refundable per company policy.</string>
+    <string name="cancel_quote_estimated_refund">Estimated Refund: %1$s</string>
+    <string name="cancel_quote_refund_period">* Refund processing takes 3 to 9 months subject to 3rd-party approvals.</string>
+    <string name="cancel_quote_no_refund">No refund is eligible for this cancellation timeline.</string>
+    <string name="cancel_booking_irreversible_notice">This action is permanent and cannot be undone.</string>
+    <string name="terms_tour_notice_title">Tour Package Terms &amp; Conditions</string>
+    <string name="terms_tour_notice_body">Terms &amp; Conditions for Tour packages will be provided upon confirmation and finalized itinerary. For further inquiries, please contact our customer service.</string>
+    <string name="booking_ref_prefix">Ref:</string>
+    <string name="payment_stage_initial_deposit">Initial Deposit</string>
+    <string name="payment_stage_additional_payment">Additional Payment</string>
+    <string name="payment_stage_final_payment">Final Payment</string>
+    <string name="payment_stage_full_payment">Full Payment</string>
+    <string name="payment_stage_pending">Pending Verification</string>
+    <string name="pay_sheet_purpose_additional_payment">Additional Payment</string>
+    <string name="pay_sheet_purpose_final_payment">Final Payment</string>
+    <string name="pay_sheet_installment_options_title">Select Payment Amount</string>
+    <string name="pay_sheet_chip_full_balance">Full Balance</string>
+    <string name="receipt_total_paid_label">Total Paid</string>
+    <string name="receipt_package_total_label">Package Total</string>
+    <string name="receipt_balance_due_label">Remaining Balance</string>
+
+    <!-- My Booking Redesign Strings -->
+    <string name="menu_invoice">Invoice</string>
+    <string name="menu_receipt">Receipt</string>
+    <string name="booking_no_receipts_available">No receipt available until payment is made.</string>
+    <string name="booking_no_invoices_available">No invoice available for this booking.</string>
+    <string name="booking_label_grand_total_summary">Grand Total</string>
+    <string name="status_cancellation_requested">Cancellation Requested</string>
+    <string name="payment_status_pending">Payment Pending</string>
+    <string name="payment_status_partially_paid">Partially Paid</string>
+    <string name="payment_status_overdue">Payment Overdue</string>
+    <string name="payment_status_failed">Payment Failed</string>
+    <string name="payment_status_refunded">Refunded</string>
+    <string name="payment_status_cancelled">Cancelled</string>
 </resources>

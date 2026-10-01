@@ -1,7 +1,4 @@
 package com.hafiztraveltours.app.network;
-import com.hafiztraveltours.app.models.*;
-import com.hafiztraveltours.app.R;
-
 
 import java.util.concurrent.TimeUnit;
 
@@ -37,6 +34,7 @@ public class ApiClient {
             loggingInterceptor.setLevel(com.hafiztraveltours.app.BuildConfig.DEBUG
                     ? HttpLoggingInterceptor.Level.HEADERS
                     : HttpLoggingInterceptor.Level.NONE);
+            loggingInterceptor.redactHeader("Authorization");
 
             OkHttpClient okHttpClient = new OkHttpClient.Builder()
                     .addInterceptor(loggingInterceptor)
