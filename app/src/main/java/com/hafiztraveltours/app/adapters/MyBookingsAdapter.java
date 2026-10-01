@@ -292,19 +292,24 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
 
         // 8. Action 2: Manage Documents (Secondary full width)
         if (holder.btnManageDocs != null) {
-            holder.btnManageDocs.setEnabled(true);
-            holder.btnManageDocs.setClickable(true);
-            holder.btnManageDocs.setOnClickListener(v -> {
-                HapticUtil.click(v);
-                if (documentClickListener != null) {
-                    documentClickListener.onDocumentClick(booking);
-                } else {
-                    android.app.Activity act = getActivityFromContext(v.getContext());
-                    if (act instanceof MyBookingsActivity) {
-                        ((MyBookingsActivity) act).showBookingDocsSheet(booking);
+            if (isCancelled || "completed".equalsIgnoreCase(rawStatus)) {
+                holder.btnManageDocs.setVisibility(View.GONE);
+            } else {
+                holder.btnManageDocs.setVisibility(View.VISIBLE);
+                holder.btnManageDocs.setEnabled(true);
+                holder.btnManageDocs.setClickable(true);
+                holder.btnManageDocs.setOnClickListener(v -> {
+                    HapticUtil.click(v);
+                    if (documentClickListener != null) {
+                        documentClickListener.onDocumentClick(booking);
+                    } else {
+                        android.app.Activity act = getActivityFromContext(v.getContext());
+                        if (act instanceof MyBookingsActivity) {
+                            ((MyBookingsActivity) act).showBookingDocsSheet(booking);
+                        }
                     }
-                }
-            });
+                });
+            }
         }
 
         // 9. Action 3: Cancel Booking (Destructive full width action)

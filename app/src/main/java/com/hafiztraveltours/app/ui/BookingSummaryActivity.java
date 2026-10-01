@@ -294,6 +294,18 @@ public class BookingSummaryActivity extends BaseActivity {
                                         blockingBookingNo = blk.optString("booking_no", "");
                                     }
                                 }
+                                if ((blockingBookingNo == null || blockingBookingNo.isEmpty()) && obj.has("data") && !obj.isNull("data")) {
+                                    org.json.JSONObject dataObj = obj.optJSONObject("data");
+                                    if (dataObj != null) {
+                                        blockingBookingNo = dataObj.optString("unpaid_booking_no", "");
+                                        if (blockingBookingNo.isEmpty() && dataObj.has("blocking_booking") && !dataObj.isNull("blocking_booking")) {
+                                            org.json.JSONObject blk = dataObj.optJSONObject("blocking_booking");
+                                            if (blk != null) {
+                                                blockingBookingNo = blk.optString("booking_no", "");
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     } catch (Exception ignored) {}
