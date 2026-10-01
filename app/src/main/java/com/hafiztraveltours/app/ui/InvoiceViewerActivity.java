@@ -180,27 +180,28 @@ public class InvoiceViewerActivity extends BaseActivity {
         if (req.passengers != null && !req.passengers.isEmpty()) {
             BookingRequest.Passenger lead = req.passengers.get(0);
             if (tvInvoiceCustomerName != null) {
-                tvInvoiceCustomerName.setText(lead.fullName != null && !lead.fullName.isEmpty() ? lead.fullName + " (Ketua Jemaah)" : getString(R.string.default_user_name));
+                String leadRole = "ms".equalsIgnoreCase(Locale.getDefault().getLanguage()) ? "(Ketua Jemaah)" : "(Lead Passenger)";
+                tvInvoiceCustomerName.setText(lead.fullName != null && !lead.fullName.isEmpty() ? lead.fullName + " " + leadRole : getString(R.string.default_user_name));
             }
             if (tvInvoiceCustomerAddress != null) {
                 tvInvoiceCustomerAddress.setText("Johor Bahru, Johor, Malaysia");
             }
             if (tvInvoiceCustomerPhone != null) {
                 String phoneStr = (lead.phoneNumber != null && !lead.phoneNumber.isEmpty()) ? lead.phoneNumber : "—";
-                tvInvoiceCustomerPhone.setText("Telefon: " + phoneStr);
+                tvInvoiceCustomerPhone.setText(phoneStr);
             }
         }
 
         // Package & Room
         if (tvInvoicePackageName != null) {
-            tvInvoicePackageName.setText(req.packageName != null ? req.packageName : "Pakej Umrah / Pelancongan");
+            tvInvoicePackageName.setText(req.packageName != null ? req.packageName : "Pakej Umrah");
         }
         if (tvRoomSetup != null) {
             String room = (req.roomLabel != null && !req.roomLabel.isEmpty()) ? req.roomLabel : "Standard Room";
-            tvRoomSetup.setText("Bilik: " + room + " — Room Pairing 01");
+            tvRoomSetup.setText(room + " — Room Pairing 01");
         }
         if (tvTourCode != null) {
-            tvTourCode.setText("HT-TOUR-" + (req.selectedDepartureDate != null ? req.selectedDepartureDate.replace("-", "") : "2026"));
+            tvTourCode.setText(formatTourCode(req.selectedDepartureDate != null ? req.selectedDepartureDate : "4827"));
         }
         if (tvDepartureDate != null) {
             tvDepartureDate.setText(req.selectedDepartureDate != null ? formatDatePretty(req.selectedDepartureDate) : "—");
@@ -324,8 +325,8 @@ public class InvoiceViewerActivity extends BaseActivity {
             if (tvInvoiceDate != null && detail.invoiceMeta.invoiceDate != null) {
                 tvInvoiceDate.setText(formatDatePretty(detail.invoiceMeta.invoiceDate));
             }
-            if (tvTourCode != null && detail.invoiceMeta.tourCode != null) {
-                tvTourCode.setText(detail.invoiceMeta.tourCode);
+            if (tvTourCode != null) {
+                tvTourCode.setText(formatTourCode(detail.invoiceMeta.tourCode != null ? detail.invoiceMeta.tourCode : String.valueOf(detail.id)));
             }
             if (tvDepartureDate != null && detail.invoiceMeta.departureDate != null) {
                 tvDepartureDate.setText(formatDatePretty(detail.invoiceMeta.departureDate));
@@ -348,8 +349,8 @@ public class InvoiceViewerActivity extends BaseActivity {
                 tvInvoiceDate.setText(formatDatePretty(dateRaw));
             }
             if (tvTourCode != null) {
-                String tc = (detail.departure != null && detail.departure.departureNo != null) ? detail.departure.departureNo : "HT-TOUR-2026";
-                tvTourCode.setText(tc);
+                String tc = (detail.departure != null && detail.departure.departureNo != null) ? detail.departure.departureNo : String.valueOf(detail.id);
+                tvTourCode.setText(formatTourCode(tc));
             }
             if (tvDepartureDate != null) {
                 String dep = (detail.departure != null && detail.departure.departureDate != null) ? detail.departure.departureDate : detail.departureDate;
@@ -364,7 +365,7 @@ public class InvoiceViewerActivity extends BaseActivity {
         }
 
         if (tvRoomSetup != null) {
-            tvRoomSetup.setText("Bilik: " + (detail.roomSetup != null ? detail.roomSetup : "Standard Room — Room Pairing 01"));
+            tvRoomSetup.setText(detail.roomSetup != null ? detail.roomSetup : "Standard Room — Room Pairing 01");
         }
 
         // 4. Passenger Details Table
@@ -402,7 +403,10 @@ public class InvoiceViewerActivity extends BaseActivity {
         if (tvInvoiceBalanceDue != null) tvInvoiceBalanceDue.setText(BookingRequest.formatPrice(detail.balanceAmount));
 
         if (tvInvoiceAmountInWords != null) {
-            String words = (detail.amountInWords != null && !detail.amountInWords.isEmpty()) ? detail.amountInWords : detail.amountInWordsMs;
+            boolean isMalay = "ms".equalsIgnoreCase(Locale.getDefault().getLanguage()) || "in".equalsIgnoreCase(Locale.getDefault().getLanguage());
+            String words = isMalay
+                    ? (detail.amountInWordsMs != null && !detail.amountInWordsMs.isEmpty() ? detail.amountInWordsMs : detail.amountInWords)
+                    : (detail.amountInWords != null && !detail.amountInWords.isEmpty() ? detail.amountInWords : detail.amountInWordsMs);
             if (words != null && !words.isEmpty()) {
                 tvInvoiceAmountInWords.setText(words);
             } else {
@@ -663,5 +667,15 @@ public class InvoiceViewerActivity extends BaseActivity {
             }
         } catch (Exception ignored) {}
         return raw;
+    }
+
+    public static String formatTourCode(String rawCode) {
+        if (rawCode != null && rawCode.matches("^\\d{4}$")) {
+            return rawCode;
+        }
+        String seed = (rawCode != null && !rawCode.trim().isEmpty()) ? rawCode.trim() : "4827";
+        int hash = Math.abs(seed.hashCode());
+        int fourDigit = 1000 + (hash % 9000);
+        return String.format(Locale.US, "%04d", fourDigit);
     }
 }

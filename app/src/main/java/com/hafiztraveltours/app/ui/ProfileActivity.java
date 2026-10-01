@@ -289,17 +289,15 @@ public class ProfileActivity extends BaseActivity {
     }
 
     private void showLogoutConfirmationDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.profile_logout)
-                .setMessage(R.string.logout_confirm_message)
-                .setPositiveButton(R.string.profile_logout, (dialog, which) -> {
-                    profileViewModel.logout();
-                    refreshHeader();
-                    renderStats(null);
-                    Toast.makeText(this, getString(R.string.profile_logout_success), Toast.LENGTH_SHORT).show();
-                })
-                .setNegativeButton(R.string.cancel, null)
-                .show();
+        LogoutConfirmationDialog.show(this, () -> {
+            profileViewModel.logout();
+            Toast.makeText(this, getString(R.string.profile_logout_success), Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            overridePendingTransition(R.anim.nav_seamless_fade_in, R.anim.nav_seamless_fade_out);
+            finishAffinity();
+        });
     }
 
     private void renderStats(com.hafiztraveltours.app.models.ProfileStatsDto stats) {

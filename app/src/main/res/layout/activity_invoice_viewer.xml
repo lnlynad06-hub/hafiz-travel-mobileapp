@@ -156,7 +156,7 @@
                     android:id="@+id/tvDocTypeTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="OFFICIAL INVOICE / INVOIS RASMI"
+                    android:text="@string/invoice_title_official"
                     android:textColor="@color/text_dark"
                     android:textSize="15sp"
                     android:textStyle="bold"
@@ -257,7 +257,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Tour Code / Kod Pakej"
+                        android:text="@string/invoice_meta_tour_code"
                         android:textColor="@color/text_muted"
                         android:textSize="10sp"
                         android:textStyle="bold" />
@@ -270,7 +270,7 @@
                         android:textColor="@color/text_dark"
                         android:textSize="12.5sp"
                         android:textStyle="bold"
-                        tools:text="11DIS26UISTB2 [NEW]" />
+                        tools:text="4827" />
 
                 </LinearLayout>
 
@@ -283,7 +283,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Tarikh Pelepasan / Departure"
+                        android:text="@string/invoice_meta_departure"
                         android:textColor="@color/text_muted"
                         android:textSize="10sp"
                         android:textStyle="bold" />
@@ -302,7 +302,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Tempoh Akhir Bayaran / Due Date"
+                        android:text="@string/invoice_meta_due_date"
                         android:textColor="@color/text_muted"
                         android:textSize="10sp"
                         android:textStyle="bold" />
@@ -367,7 +367,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="MAKLUMAT JEMAAH / PASSENGER DETAILS"
+                android:text="@string/invoice_sec_passengers"
                 android:textColor="@color/brand_magenta"
                 android:textSize="11sp"
                 android:textStyle="bold"
@@ -385,7 +385,7 @@
                 <TextView
                     android:layout_width="32dp"
                     android:layout_height="wrap_content"
-                    android:text="No."
+                    android:text="@string/invoice_th_no"
                     android:textColor="@color/text_dark"
                     android:textSize="11sp"
                     android:textStyle="bold" />
@@ -394,7 +394,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Nama Jemaah / Passenger Name"
+                    android:text="@string/invoice_th_passenger_name"
                     android:textColor="@color/text_dark"
                     android:textSize="11sp"
                     android:textStyle="bold" />
@@ -402,7 +402,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="No. IC / Pasport"
+                    android:text="@string/invoice_th_ic_passport"
                     android:textColor="@color/text_dark"
                     android:textSize="11sp"
                     android:textStyle="bold" />
@@ -427,7 +427,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="PERINCIAN CAJ / ITEMIZED BILLING"
+                android:text="@string/invoice_sec_itemized_billing"
                 android:textColor="@color/brand_magenta"
                 android:textSize="11sp"
                 android:textStyle="bold"
@@ -606,7 +606,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="JUMLAH DALAM PERKATAAN / AMOUNT IN WORDS"
+                        android:text="@string/invoice_sec_amount_in_words"
                         android:textColor="@color/text_muted"
                         android:textSize="9.5sp"
                         android:textStyle="bold" />
@@ -635,7 +635,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="REKOD BAYARAN / PAYMENT HISTORY"
+                android:text="@string/invoice_sec_payment_history"
                 android:textColor="@color/brand_magenta"
                 android:textSize="11sp"
                 android:textStyle="bold"
@@ -665,7 +665,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="MAKLUMAT BANK &amp; SYARAT BAYARAN / BANK &amp; PAYMENT TERMS"
+                    android:text="@string/invoice_sec_bank_terms"
                     android:textColor="@color/brand_magenta"
                     android:textSize="10.5sp"
                     android:textStyle="bold" />
@@ -701,7 +701,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="CATATAN &amp; TERMA RASMI / REMARKS &amp; TERMS"
+                    android:text="@string/invoice_sec_remarks_terms"
                     android:textColor="@color/text_muted"
                     android:textSize="10sp"
                     android:textStyle="bold" />
@@ -740,7 +740,7 @@
                     android:id="@+id/tvDocumentDisclaimer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Computer generated invoice, no signature required / Invois jana komputasi, tanda tangan tidak diperlukan"
+                    android:text="@string/invoice_disclaimer"
                     android:textColor="@color/text_muted"
                     android:textSize="10sp"
                     android:gravity="center" />

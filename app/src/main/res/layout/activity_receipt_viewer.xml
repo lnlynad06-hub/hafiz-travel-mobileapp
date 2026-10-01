@@ -156,7 +156,7 @@
                     android:id="@+id/tvDocTypeTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="OFFICIAL PAYMENT RECEIPT / RESIT BAYARAN RASMI"
+                    android:text="@string/receipt_title_official"
                     android:textColor="#059669"
                     android:textSize="14sp"
                     android:textStyle="bold"
@@ -189,7 +189,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="JUMLAH DITERIMA / AMOUNT RECEIVED"
+                        android:text="@string/receipt_amount_received_label"
                         android:textColor="#166534"
                         android:textSize="11sp"
                         android:textStyle="bold"
@@ -232,7 +232,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="DITERIMA DARIPADA / RECEIVED FROM"
+                    android:text="@string/receipt_sec_received_from"
                     android:textColor="@color/text_muted"
                     android:textSize="10.5sp"
                     android:textStyle="bold"
@@ -276,7 +276,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Tarikh Bayaran / Payment Date"
+                        android:text="@string/receipt_meta_payment_date"
                         android:textColor="@color/text_muted"
                         android:textSize="10sp"
                         android:textStyle="bold" />
@@ -295,7 +295,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Kaedah Bayaran / Payment Method"
+                        android:text="@string/receipt_meta_payment_method"
                         android:textColor="@color/text_muted"
                         android:textSize="10sp"
                         android:textStyle="bold" />
@@ -321,7 +321,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="No. Rujukan / Ref. No."
+                        android:text="@string/receipt_meta_ref_no"
                         android:textColor="@color/text_muted"
                         android:textSize="10sp"
                         android:textStyle="bold" />
@@ -340,7 +340,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Rujukan Tempahan / Booking Ref"
+                        android:text="@string/receipt_meta_booking_ref"
                         android:textColor="@color/text_muted"
                         android:textSize="10sp"
                         android:textStyle="bold" />
@@ -395,7 +395,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="MAKLUMAT JEMAAH / PASSENGER DETAILS"
+                android:text="@string/receipt_sec_passengers"
                 android:textColor="#059669"
                 android:textSize="11sp"
                 android:textStyle="bold"
@@ -413,7 +413,7 @@
                 <TextView
                     android:layout_width="32dp"
                     android:layout_height="wrap_content"
-                    android:text="No."
+                    android:text="@string/receipt_th_no"
                     android:textColor="@color/text_dark"
                     android:textSize="11sp"
                     android:textStyle="bold" />
@@ -422,7 +422,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Nama Jemaah / Passenger Name"
+                    android:text="@string/receipt_th_passenger_name"
                     android:textColor="@color/text_dark"
                     android:textSize="11sp"
                     android:textStyle="bold" />
@@ -430,7 +430,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="No. IC / Pasport"
+                    android:text="@string/receipt_th_ic_passport"
                     android:textColor="@color/text_dark"
                     android:textSize="11sp"
                     android:textStyle="bold" />
@@ -455,7 +455,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="RINGKASAN KEWANGAN / FINANCIAL SUMMARY"
+                android:text="@string/receipt_sec_financial_summary"
                 android:textColor="#059669"
                 android:textSize="11sp"
                 android:textStyle="bold"
@@ -476,7 +476,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Jumlah Keseluruhan Pakej"
+                        android:text="@string/receipt_total_package_price"
                         android:textColor="@color/text_gray"
                         android:textSize="12sp" />
 
@@ -500,7 +500,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Jumlah Bayaran Terkumpul (Paid to Date)"
+                        android:text="@string/receipt_total_paid_to_date"
                         android:textColor="@color/text_gray"
                         android:textSize="12sp" />
 
@@ -526,7 +526,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Baki Tertunggak / Outstanding Balance"
+                        android:text="@string/receipt_balance_due"
                         android:textColor="@color/text_dark"
                         android:textSize="12.5sp"
                         android:textStyle="bold" />
@@ -555,7 +555,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="SEJARAH SEBANYAK BAYARAN / PAYMENT HISTORY"
+                android:text="@string/receipt_sec_payment_history"
                 android:textColor="#059669"
                 android:textSize="11sp"
                 android:textStyle="bold"
@@ -593,7 +593,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="PENGESAHAN RASMI &amp; MAKLUMAT SYARIKAT / OFFICIAL CONFIRMATION"
+                    android:text="@string/receipt_sec_official_confirmation"
                     android:textColor="#059669"
                     android:textSize="10.5sp"
                     android:textStyle="bold" />
@@ -623,7 +623,7 @@
                     android:id="@+id/tvDocumentDisclaimer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Computer generated receipt, no signature required / Resit jana komputasi, tanda tangan tidak diperlukan"
+                    android:text="@string/receipt_disclaimer"
                     android:textColor="@color/text_muted"
                     android:textSize="10sp"
                     android:gravity="center" />

@@ -137,6 +137,9 @@ public class ProfileRepository {
             });
         } catch (Exception ignored) {}
         session.clearSession();
+        try {
+            userPrefs().edit().clear().apply();
+        } catch (Exception ignored) {}
     }
 
     // ---------- local profile extras (user_profile prefs) ----------

@@ -57,6 +57,52 @@
     <string name="login_failed_user_not_found">Tiada akaun dijumpai dengan emel ini.</string>
     <string name="login_failed_wrong_password">Kata laluan tidak tepat. Sila cuba lagi.</string>
     <string name="login_failed_default">Log masuk gagal. Sila periksa maklumat anda.</string>
+
+    <!-- FLOW A: Account Verification -->
+    <string name="verify_account_title">Sahkan Akaun Anda</string>
+    <string name="verify_account_desc">Kami telah menghantar kod pengesahan 6 digit ke &lt;b&gt;%1$s&lt;/b&gt;</string>
+    <string name="verify_account_button">Sahkan Akaun</string>
+    <string name="verify_account_verifying">Mengesahkan…</string>
+    <string name="verify_account_resend_prompt">Tidak menerima kod?</string>
+    <string name="verify_account_resend_action">Hantar Semula Kod</string>
+    <string name="verify_account_resend_countdown">Anda boleh menghantar semula kod dalam %1$s</string>
+    <string name="verify_account_back_login">Kembali ke Log Masuk</string>
+    <string name="verify_account_success">Akaun anda telah berjaya disahkan! Sila log masuk.</string>
+    <string name="verify_account_resend_success">Kod pengesahan baharu telah dihantar.</string>
+    <string name="verify_account_code_required">Sila masukkan kesemua 6 digit kod pengesahan.</string>
+    <string name="unverified_account_login_msg">Sila sahkan akaun anda sebelum log masuk.</string>
+    <string name="unverified_account_verify_now">Sahkan Sekarang</string>
+
+    <!-- FLOW B: Forgot Password Flow -->
+    <string name="forgot_pass_screen_title">Lupa Kata Laluan?</string>
+    <string name="forgot_pass_screen_desc">Masukkan alamat e-mel anda dan kami akan menghantar kod pengesahan untuk menetapkan semula kata laluan anda.</string>
+    <string name="forgot_pass_email_hint">Alamat E-mel</string>
+    <string name="forgot_pass_btn_send_code">Hantar Kod</string>
+    <string name="forgot_pass_sending">Menghantar Kod…</string>
+    <string name="reset_password_account_not_found">Tiada akaun ditemui untuk alamat e-mel ini.</string>
+
+    <!-- FLOW B: Enter Reset Code -->
+    <string name="enter_reset_code_title">Sahkan Kod Tetapan Semula</string>
+    <string name="enter_reset_code_desc">Masukkan kod 6 digit yang dihantar ke &lt;b&gt;%1$s&lt;/b&gt;</string>
+    <string name="enter_reset_code_btn_verify">Sahkan Kod</string>
+    <string name="enter_reset_code_verifying">Mengesahkan…</string>
+    <string name="enter_reset_code_resend_prompt">Tidak menerima kod?</string>
+    <string name="enter_reset_code_resend_action">Hantar Semula Kod</string>
+    <string name="enter_reset_code_resend_countdown">Hantar semula dalam %1$s</string>
+    <string name="enter_reset_code_resend_success">Kod pengesahan baharu telah dihantar.</string>
+
+    <!-- FLOW B: Reset Password -->
+    <string name="reset_pass_screen_title">Tetapkan Semula Kata Laluan</string>
+    <string name="reset_pass_screen_desc">Cipta kata laluan baharu untuk akaun anda.</string>
+    <string name="reset_pass_new_password_hint">Kata Laluan Baharu</string>
+    <string name="reset_pass_confirm_password_hint">Sahkan Kata Laluan Baharu</string>
+    <string name="reset_pass_btn_submit">Tetapkan Semula Kata Laluan</string>
+    <string name="reset_pass_submitting">Mengemas kini Kata Laluan…</string>
+
+    <!-- FLOW B: Password Reset Success -->
+    <string name="reset_pass_success_title">Kata Laluan Berjaya Ditetapkan Semula</string>
+    <string name="reset_pass_success_desc">Kata laluan anda telah dikemas kini. Anda kini boleh log masuk menggunakan kata laluan baharu anda.</string>
+    <string name="reset_pass_success_btn_login">Kembali ke Log Masuk</string>
     <string name="signup_title">Cipta Akaun</string>
     <string name="signup_subtitle">Daftar untuk mula rancang percutian anda.</string>
     <string name="hint_full_name">Nama Penuh *</string>
@@ -371,9 +417,9 @@
     <string name="hint_enter_email">Masukkan emel anda</string>
     <string name="btn_send">HANTAR</string>
     <string name="btn_cancel">BATAL</string>
-    <string name="reset_password_invalid_email">Sila masukkan emel yang sah</string>
-    <string name="reset_password_sent">Pautan tetapan semula kata laluan telah dihantar. Sila semak peti masuk anda.</string>
-    <string name="reset_password_failed">Gagal menghantar emel. Sila cuba lagi.</string>
+    <string name="reset_password_invalid_email">Sila masukkan alamat e-mel yang sah</string>
+    <string name="reset_password_sent">E-mel tetapan semula kata laluan telah dihantar. Sila semak peti masuk anda.</string>
+    <string name="reset_password_failed">Penetapan semula kata laluan gagal. Sila cuba lagi.</string>
     <string name="login_google_signin_failed">Log masuk Google gagal: Kod %1$d</string>
     <string name="login_google_success">Log masuk Google berjaya! %1$s</string>
     <string name="login_google_failed">Log masuk Google gagal. Sila cuba lagi.</string>
@@ -759,7 +805,7 @@
     <string name="profile_language">Bahasa</string>
     <string name="upcoming_trip">Perjalanan Akan Datang</string>
     <string name="profile_theme_current">Terang</string>
-    <string name="logout_confirm_message">Adakah anda pasti mahu log keluar?</string>
+    <string name="logout_confirm_message">Adakah anda pasti mahu log keluar daripada akaun anda?</string>
     <string name="profile_saving">Menyimpan…</string>
     <string name="profile_update_failed">Gagal mengemaskini profil. Sila cuba lagi.</string>
 
@@ -1180,10 +1226,18 @@
 
     <!-- Invoice Viewer Strings -->
     <string name="invoice_title_official">Invois Rasmi</string>
-    <string name="invoice_meta_no">NO. INVOIS / TEMPAHAN</string>
-    <string name="invoice_meta_date">TARIKH DIKELUARKAN</string>
+    <string name="invoice_meta_no">NO. INVOIS</string>
+    <string name="invoice_meta_date">TARIKH INVOIS</string>
+    <string name="invoice_meta_tour_code">KOD LAWATAN</string>
+    <string name="invoice_meta_departure">TARIKH PELEPASAN</string>
+    <string name="invoice_meta_due_date">TEMPOH AKHIR BAYARAN</string>
     <string name="invoice_sec_bill_to">BIL KEPADA</string>
     <string name="invoice_sec_pkg">BUTIRAN PAKEJ &amp; PERJALANAN</string>
+    <string name="invoice_sec_passengers">MAKLUMAT JEMAAH</string>
+    <string name="invoice_th_no">No.</string>
+    <string name="invoice_th_passenger_name">Nama Jemaah</string>
+    <string name="invoice_th_ic_passport">No. KP / Pasport</string>
+    <string name="invoice_sec_itemized_billing">PERINCIAN CAJ</string>
     <string name="invoice_th_desc">KETERANGAN</string>
     <string name="invoice_th_qty">KUANTITI</string>
     <string name="invoice_th_total">JUMLAH</string>
@@ -1192,6 +1246,11 @@
     <string name="invoice_grand_total_label">JUMLAH KESELURUHAN:</string>
     <string name="invoice_paid_amount_label">Jumlah Telah Dibayar:</string>
     <string name="invoice_balance_due_label">Baki Perlu Dibayar:</string>
+    <string name="invoice_sec_amount_in_words">JUMLAH DALAM PERKATAAN</string>
+    <string name="invoice_sec_payment_history">REKOD BAYARAN</string>
+    <string name="invoice_sec_bank_terms">MAKLUMAT BANK &amp; SYARAT BAYARAN</string>
+    <string name="invoice_sec_remarks_terms">CATATAN &amp; TERMA RASMI</string>
+    <string name="invoice_disclaimer">Invois jana komputer, tandatangan tidak diperlukan.</string>
     <string name="invoice_footer_notice">Invois ini dijana secara elektronik oleh sistem rasmi Hafiz Travel &amp; Tours.</string>
     <string name="invoice_footer_thanks">Terima kasih kerana memilih perkhidmatan kami.</string>
     <string name="invoice_btn_share">📤 Kongsi</string>
@@ -1199,27 +1258,44 @@
     <string name="invoice_share_title">Invois Rasmi</string>
 
     <!-- Receipt Viewer Strings -->
-    <string name="receipt_title_official">Resit Rasmi</string>
+    <string name="receipt_title_official">Resit Bayaran Rasmi</string>
     <string name="receipt_company_header">HAFIZ TRAVEL &amp; TOURS</string>
-    <string name="receipt_company_sub">KPK/LN: 10751 • SSM: 202201043065\nResit Rasmi Pembayaran</string>
+    <string name="receipt_company_sub">KPK/LN: 10751 • SSM: 202201043065\nResit Bayaran Rasmi</string>
     <string name="receipt_meta_no">NO. RESIT</string>
     <string name="receipt_meta_date">TARIKH BAYARAN</string>
+    <string name="receipt_amount_received_label">JUMLAH DITERIMA</string>
+    <string name="receipt_sec_received_from">DITERIMA DARIPADA</string>
+    <string name="receipt_meta_payment_date">Tarikh Bayaran</string>
+    <string name="receipt_meta_payment_method">Kaedah Bayaran</string>
+    <string name="receipt_meta_ref_no">No. Rujukan</string>
+    <string name="receipt_meta_booking_ref">Rujukan Tempahan</string>
+    <string name="receipt_sec_passengers">MAKLUMAT JEMAAH</string>
+    <string name="receipt_th_no">No.</string>
+    <string name="receipt_th_passenger_name">Nama Jemaah</string>
+    <string name="receipt_th_ic_passport">No. KP / Pasport</string>
+    <string name="receipt_sec_financial_summary">RINGKASAN KEWANGAN</string>
+    <string name="receipt_total_package_price">Jumlah Keseluruhan Pakej</string>
+    <string name="receipt_total_paid_to_date">Jumlah Bayaran Terkumpul</string>
+    <string name="receipt_balance_due">Baki Tertunggak</string>
+    <string name="receipt_sec_payment_history">SEJARAH BAYARAN</string>
+    <string name="receipt_sec_official_confirmation">PENGESAHAN RASMI &amp; MAKLUMAT SYARIKAT</string>
+    <string name="receipt_disclaimer">Resit jana komputer, tandatangan tidak diperlukan.</string>
     <string name="receipt_label_received_from">Diterima Daripada:</string>
     <string name="receipt_label_booking_ref">Rujukan Tempahan: %1$s</string>
     <string name="receipt_label_method">Kaedah Bayaran: %1$s</string>
     <string name="receipt_label_amount">JUMLAH BAYARAN</string>
     <string name="receipt_label_balance">Baki Tertunggak Semasa: %1$s</string>
-    <string name="receipt_electronic_notice">Resit rasmi ini dijana secara elektronik oleh sistem Hafiz Travel &amp; Tours dan sah tanpa tandatangan.</string>
-    <string name="receipt_deposit_title">Resit Bayaran Deposit</string>
-    <string name="receipt_installment_title">Resit Bayaran Ansuran Bulanan #%1$d</string>
-    <string name="receipt_btn_download_format">📥 Simpan Resit PDF (%1$s)</string>
-    <string name="receipt_btn_download">📥 Simpan Resit PDF</string>
+    <string name="receipt_deposit_title">Resit Pembayaran Deposit</string>
+    <string name="receipt_installment_title">Resit Bayaran Ansuran #%1$d</string>
+    <string name="receipt_btn_download_format">📥 Muat Turun Resit PDF (%1$s)</string>
+    <string name="receipt_btn_download">📥 Muat Turun Resit PDF</string>
+    <string name="receipt_btn_save_pdf">📥 Simpan Resit PDF</string>
     <string name="receipt_btn_view">Lihat Resit</string>
-    <string name="receipt_list_title">Resit Bayaran</string>
-    <string name="receipt_list_sub">Resit rasmi bagi setiap bayaran deposit dan ansuran bulanan yang telah disahkan.</string>
-    <string name="receipt_no_records">Tiada resit bayaran direkodkan lagi. Resit rasmi akan dijana secara automatik setelah bayaran disahkan.</string>
+    <string name="receipt_list_title">Resit Pembayaran</string>
+    <string name="receipt_list_sub">Resit rasmi untuk bayaran deposit dan ansuran bulanan yang disahkan.</string>
+    <string name="receipt_no_records">Tiada resit bayaran direkodkan lagi. Resit rasmi akan dijana secara automatik selepas pengesahan bayaran.</string>
     <string name="payment_history_item_title">Bayaran #%1$d • %2$s</string>
-    <string name="payment_history_ref_format">Rujukan: %1$s</string>
+    <string name="payment_history_ref_format">Ruj: %1$s</string>
     <string name="payment_history_receipt_tag">Resit: %1$s</string>
 
     <!-- Dialog / Toast Strings -->
@@ -1245,12 +1321,12 @@
     <string name="payment_status_balance_partial">BAKI ANSURAN AKTIF</string>
     <string name="payment_status_fully_paid">BAYARAN PENUH</string>
     <string name="booking_label_stage_deposit">PERINGKAT 1: DEPOSIT</string>
-    <string name="booking_label_stage_balance">PERINGKAT 2: BAKI PAKEJ</string>
+    <string name="booking_label_stage_balance">PERINGKAT 2: BAKI BAYARAN</string>
     <string name="booking_label_stage_completed">BAYARAN SELESAI</string>
     <string name="booking_label_paid_amount">Jumlah Dibayar</string>
     <string name="booking_label_balance_due">Baki Tertunggak</string>
     <string name="booking_label_deposit_progress">Deposit: %1$s / %2$s</string>
-    <string name="booking_label_balance_progress">Baki Pakej: %1$s / %2$s</string>
+    <string name="booking_label_balance_progress">Baki: %1$s / %2$s</string>
     <string name="booking_label_remaining_deposit_format">Baki Deposit: %1$s</string>
     <string name="booking_label_remaining_balance_format">Baki Perlu Dibayar: %1$s</string>
     <string name="booking_btn_pay_now">Bayar Sekarang</string>
@@ -1263,7 +1339,7 @@
     <string name="pay_sheet_title">Buat Bayaran</string>
     <string name="pay_sheet_sub">Semak butiran bayaran anda dan teruskan dengan selamat.</string>
     <string name="pay_sheet_opt_full_deposit">Bayar Penuh Baki Deposit (%1$s)</string>
-    <string name="pay_sheet_opt_full_balance">Bayar Penuh Baki Pakej (%1$s)</string>
+    <string name="pay_sheet_opt_full_balance">Bayar Penuh Baki Bayaran (%1$s)</string>
     <string name="pay_sheet_opt_custom">Bayaran Ansuran Pilihan</string>
     <string name="pay_sheet_custom_hint">Masukkan jumlah ansuran dalam RM</string>
     <string name="pay_sheet_method_title">Pilih Kaedah Bayaran</string>
@@ -1280,7 +1356,7 @@
     <string name="pay_sheet_due_label">BAYARAN PERLU DIJELASKAN</string>
     <string name="pay_sheet_purpose_initial_deposit">Deposit Permulaan</string>
     <string name="pay_sheet_purpose_remaining_deposit">Baki Deposit</string>
-    <string name="pay_sheet_purpose_balance">Baki Penuh Pakej</string>
+    <string name="pay_sheet_purpose_balance">Baki Bayaran</string>
     <string name="pay_sheet_package_total">Jumlah Harga Pakej</string>
     <string name="pay_sheet_previously_paid">Telah Dibayar</string>
     <string name="pay_sheet_this_payment">Bayaran Sekarang</string>
@@ -1304,10 +1380,10 @@
     <string name="payment_detail_fully_paid_format">Selesai: %1$s / %2$s (Baki: RM 0.00)</string>
     <string name="payment_detail_deposit_format">Deposit: %1$s / %2$s (Baki Deposit: %3$s)</string>
     <string name="payment_detail_deposit_required_format">Deposit: %1$s / %2$s (Diperlukan: %3$s)</string>
-    <string name="payment_detail_balance_format">Baki Pakej: %1$s / %2$s (Tinggal: %3$s)</string>
+    <string name="payment_detail_balance_format">Baki: %1$s / %2$s (Tinggal: %3$s)</string>
     <string name="pay_sheet_opt_deposit_preset">Bayar Deposit Diperlukan (%1$s)</string>
     <string name="pay_sheet_opt_deposit_remaining_preset">Bayar Baki Deposit (%1$s)</string>
-    <string name="pay_sheet_opt_balance_preset">Bayar Penuh Baki Pakej (%1$s)</string>
+    <string name="pay_sheet_opt_balance_preset">Bayar Penuh Baki Bayaran (%1$s)</string>
     <string name="pay_success_toast">Bayaran sebanyak %1$s berjaya! Resit rasmi telah dijana.</string>
     <string name="pay_btn_view_receipt">Lihat Resit</string>
 
@@ -1358,9 +1434,5 @@
     <string name="booking_label_grand_total_summary">Jumlah Penuh</string>
     <string name="status_cancellation_requested">Permohonan Pembatalan</string>
     <string name="payment_status_pending">Pembayaran Belum Selesai</string>
-    <string name="payment_status_partially_paid">Dibayar Sebahagian</string>
-    <string name="payment_status_overdue">Pembayaran Lewat</string>
-    <string name="payment_status_failed">Pembayaran Gagal</string>
-    <string name="payment_status_refunded">Dipulangkan</string>
-    <string name="payment_status_cancelled">Dibatalkan</string>
 </resources>
+

@@ -163,109 +163,17 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
             holder.txtGrandTotal.setText(BookingRequest.formatPrice(totalAmt));
         }
 
+        boolean isCancelled = rawStatus.contains("cancel") || rawStatus.contains("batal")
+                || (booking.paymentStatus != null && booking.paymentStatus.toLowerCase(Locale.ROOT).contains("cancel"));
+
         // Progress bar
         if (holder.paymentProgressBar != null) {
-            int progress = totalAmt > 0 ? (int) Math.round((paidAmt / totalAmt) * 100) : 0;
-            holder.paymentProgressBar.setProgress(Math.max(0, Math.min(100, progress)));
-        }
-
-        // 6. Payment Status Tag & Stage Details
-        String rawPaymentStatus = booking.paymentStatus != null ? booking.paymentStatus.toLowerCase(Locale.ROOT) : "";
-        double reqDeposit = booking.getRequiredDepositAmount();
-        double depPaid = Math.min(paidAmt, reqDeposit);
-        double depRem = booking.getDepositRemainingAmount();
-
-        double pkgBalTotal = Math.max(0, totalAmt - reqDeposit);
-        double pkgBalPaid = Math.max(0, paidAmt - reqDeposit);
-        double pkgBalRem = Math.max(0, pkgBalTotal - pkgBalPaid);
-
-        boolean isCancelled = rawStatus.contains("cancel") || rawStatus.contains("batal");
-
-        if (isCancelled || rawPaymentStatus.contains("cancel")) {
-            if (holder.tvPaymentStatusBadge != null) {
-                holder.tvPaymentStatusBadge.setText(ctx.getString(R.string.payment_status_cancelled));
-                holder.tvPaymentStatusBadge.setTextColor(Color.parseColor("#DC2626"));
-                holder.tvPaymentStatusBadge.setBackgroundResource(R.drawable.bg_pill_inactive);
-            }
-            if (holder.tvPaymentStageDetail != null) {
-                holder.tvPaymentStageDetail.setText(ctx.getString(R.string.status_cancelled));
-            }
-        } else if (rawPaymentStatus.contains("refund")) {
-            if (holder.tvPaymentStatusBadge != null) {
-                holder.tvPaymentStatusBadge.setText(ctx.getString(R.string.payment_status_refunded));
-                holder.tvPaymentStatusBadge.setTextColor(Color.parseColor("#64748B"));
-                holder.tvPaymentStatusBadge.setBackgroundResource(R.drawable.bg_pill_accent);
-            }
-            if (holder.tvPaymentStageDetail != null) {
-                holder.tvPaymentStageDetail.setText(ctx.getString(R.string.payment_status_refunded));
-            }
-        } else if (rawPaymentStatus.contains("fail")) {
-            if (holder.tvPaymentStatusBadge != null) {
-                holder.tvPaymentStatusBadge.setText(ctx.getString(R.string.payment_status_failed));
-                holder.tvPaymentStatusBadge.setTextColor(Color.parseColor("#DC2626"));
-                holder.tvPaymentStatusBadge.setBackgroundResource(R.drawable.bg_pill_inactive);
-            }
-            if (holder.tvPaymentStageDetail != null) {
-                holder.tvPaymentStageDetail.setText(ctx.getString(R.string.payment_status_failed));
-            }
-        } else if (rawPaymentStatus.contains("overdue")) {
-            if (holder.tvPaymentStatusBadge != null) {
-                holder.tvPaymentStatusBadge.setText(ctx.getString(R.string.payment_status_overdue));
-                holder.tvPaymentStatusBadge.setTextColor(Color.parseColor("#DC2626"));
-                holder.tvPaymentStatusBadge.setBackgroundResource(R.drawable.bg_pill_inactive);
-            }
-            if (holder.tvPaymentStageDetail != null) {
-                holder.tvPaymentStageDetail.setText(ctx.getString(R.string.payment_status_overdue));
-            }
-        } else if (balAmt <= 0 && totalAmt > 0) {
-            // FULLY PAID
-            if (holder.tvPaymentStatusBadge != null) {
-                holder.tvPaymentStatusBadge.setText(ctx.getString(R.string.payment_status_fully_paid));
-                holder.tvPaymentStatusBadge.setTextColor(Color.parseColor("#059669"));
-                holder.tvPaymentStatusBadge.setBackgroundResource(R.drawable.bg_pill_success);
-            }
-            if (holder.tvPaymentStageDetail != null) {
-                holder.tvPaymentStageDetail.setText(ctx.getString(R.string.payment_detail_fully_paid_format,
-                        BookingRequest.formatPrice(totalAmt), BookingRequest.formatPrice(totalAmt)));
-            }
-        } else if (depRem > 0) {
-            // STAGE 1: DEPOSIT PENDING / PARTIAL
-            if (holder.tvPaymentStatusBadge != null) {
-                if (depPaid > 0) {
-                    holder.tvPaymentStatusBadge.setText(ctx.getString(R.string.payment_status_deposit_partial));
-                    holder.tvPaymentStatusBadge.setTextColor(Color.parseColor("#D97706"));
-                    holder.tvPaymentStatusBadge.setBackgroundResource(R.drawable.bg_pill_accent);
-                } else {
-                    holder.tvPaymentStatusBadge.setText(ctx.getString(R.string.payment_status_deposit_pending));
-                    holder.tvPaymentStatusBadge.setTextColor(Color.parseColor("#DC2626"));
-                    holder.tvPaymentStatusBadge.setBackgroundResource(R.drawable.bg_pill_inactive);
-                }
-            }
-            if (holder.tvPaymentStageDetail != null) {
-                if (depPaid > 0) {
-                    holder.tvPaymentStageDetail.setText(ctx.getString(R.string.payment_detail_deposit_format,
-                            BookingRequest.formatPrice(depPaid), BookingRequest.formatPrice(reqDeposit), BookingRequest.formatPrice(depRem)));
-                } else {
-                    holder.tvPaymentStageDetail.setText(ctx.getString(R.string.payment_detail_deposit_required_format,
-                            BookingRequest.formatPrice(0), BookingRequest.formatPrice(reqDeposit), BookingRequest.formatPrice(reqDeposit)));
-                }
-            }
-        } else {
-            // STAGE 2: PACKAGE BALANCE INSTALLMENT ACTIVE
-            if (holder.tvPaymentStatusBadge != null) {
-                if (rawPaymentStatus.contains("pending")) {
-                    holder.tvPaymentStatusBadge.setText(ctx.getString(R.string.payment_status_pending));
-                    holder.tvPaymentStatusBadge.setTextColor(Color.parseColor("#D97706"));
-                    holder.tvPaymentStatusBadge.setBackgroundResource(R.drawable.bg_pill_accent);
-                } else {
-                    holder.tvPaymentStatusBadge.setText(ctx.getString(R.string.payment_status_balance_partial));
-                    holder.tvPaymentStatusBadge.setTextColor(Color.parseColor("#2563EB"));
-                    holder.tvPaymentStatusBadge.setBackgroundResource(R.drawable.bg_pill_accent);
-                }
-            }
-            if (holder.tvPaymentStageDetail != null) {
-                holder.tvPaymentStageDetail.setText(ctx.getString(R.string.payment_detail_balance_format,
-                        BookingRequest.formatPrice(pkgBalPaid), BookingRequest.formatPrice(pkgBalTotal), BookingRequest.formatPrice(pkgBalRem)));
+            if (isCancelled) {
+                holder.paymentProgressBar.setVisibility(View.GONE);
+            } else {
+                holder.paymentProgressBar.setVisibility(View.VISIBLE);
+                int progress = totalAmt > 0 ? (int) Math.round((paidAmt / totalAmt) * 100) : 0;
+                holder.paymentProgressBar.setProgress(Math.max(0, Math.min(100, progress)));
             }
         }
 
@@ -311,28 +219,6 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
                 });
             }
         }
-
-        // 9. Action 3: Cancel Booking (Destructive full width action)
-        boolean isCancellable = (booking.isCancellable != null ? booking.isCancellable.booleanValue() : true)
-                && !isCancelled && !"completed".equalsIgnoreCase(rawStatus);
-        if (holder.btnCancelBooking != null) {
-            if (isCancellable) {
-                holder.btnCancelBooking.setVisibility(View.VISIBLE);
-                holder.btnCancelBooking.setOnClickListener(v -> {
-                    HapticUtil.click(v);
-                    if (cancelClickListener != null) {
-                        cancelClickListener.onCancelClick(booking);
-                    } else {
-                        android.app.Activity act = getActivityFromContext(v.getContext());
-                        if (act instanceof MyBookingsActivity) {
-                            ((MyBookingsActivity) act).showCancelBookingConfirmation(booking);
-                        }
-                    }
-                });
-            } else {
-                holder.btnCancelBooking.setVisibility(View.GONE);
-            }
-        }
     }
 
     private void showCustomKebabMenu(Context ctx, View anchorView, BookingDto booking) {
@@ -340,6 +226,12 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
                 || booking.isDepositPaid
                 || booking.hasReceipts
                 || (booking.receiptsCount > 0);
+
+        String rawStatus = booking.status != null ? booking.status.toLowerCase(Locale.ROOT) : "";
+        boolean isCancelled = rawStatus.contains("cancel") || rawStatus.contains("batal")
+                || (booking.paymentStatus != null && booking.paymentStatus.toLowerCase(Locale.ROOT).contains("cancel"));
+        boolean isCancellable = (booking.isCancellable != null ? booking.isCancellable.booleanValue() : true)
+                && !isCancelled && !"completed".equalsIgnoreCase(rawStatus);
 
         try {
             View popupView = LayoutInflater.from(ctx).inflate(R.layout.popup_kebab_menu, null);
@@ -356,6 +248,8 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
             View btnInvoice = popupView.findViewById(R.id.menuItemInvoice);
             View btnReceipt = popupView.findViewById(R.id.menuItemReceipt);
             View menuDivider = popupView.findViewById(R.id.menuDivider);
+            View btnCancel = popupView.findViewById(R.id.menuItemCancel);
+            View menuDividerCancel = popupView.findViewById(R.id.menuDividerCancel);
 
             if (btnInvoice != null) {
                 btnInvoice.setOnClickListener(vItem -> {
@@ -386,6 +280,28 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
                 if (menuDivider != null) menuDivider.setVisibility(View.GONE);
             }
 
+            if (isCancellable) {
+                if (btnCancel != null) {
+                    btnCancel.setVisibility(View.VISIBLE);
+                    btnCancel.setOnClickListener(vItem -> {
+                        HapticUtil.click(vItem);
+                        popupWindow.dismiss();
+                        if (cancelClickListener != null) {
+                            cancelClickListener.onCancelClick(booking);
+                        } else {
+                            android.app.Activity act = getActivityFromContext(ctx);
+                            if (act instanceof MyBookingsActivity) {
+                                ((MyBookingsActivity) act).showCancelBookingConfirmation(booking);
+                            }
+                        }
+                    });
+                }
+                if (menuDividerCancel != null) menuDividerCancel.setVisibility(View.VISIBLE);
+            } else {
+                if (btnCancel != null) btnCancel.setVisibility(View.GONE);
+                if (menuDividerCancel != null) menuDividerCancel.setVisibility(View.GONE);
+            }
+
             int xOffset = -Math.round(110 * ctx.getResources().getDisplayMetrics().density);
             popupWindow.showAsDropDown(anchorView, xOffset, 0);
         } catch (Exception e) {
@@ -394,6 +310,9 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
             fallbackMenu.getMenu().add(0, 1, 0, ctx.getString(R.string.menu_invoice));
             if (hasConfirmedPayment) {
                 fallbackMenu.getMenu().add(0, 2, 1, ctx.getString(R.string.menu_receipt));
+            }
+            if (isCancellable) {
+                fallbackMenu.getMenu().add(0, 3, 2, ctx.getString(R.string.booking_btn_cancel));
             }
             fallbackMenu.setOnMenuItemClickListener(item -> {
                 if (item.getItemId() == 1) {
@@ -407,6 +326,16 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
                     intent.putExtra(ReceiptViewerActivity.EXTRA_BOOKING_ID, booking.id);
                     intent.putExtra(ReceiptViewerActivity.EXTRA_BOOKING_NO, booking.bookingNo);
                     ctx.startActivity(intent);
+                    return true;
+                } else if (item.getItemId() == 3 && isCancellable) {
+                    if (cancelClickListener != null) {
+                        cancelClickListener.onCancelClick(booking);
+                    } else {
+                        android.app.Activity act = getActivityFromContext(ctx);
+                        if (act instanceof MyBookingsActivity) {
+                            ((MyBookingsActivity) act).showCancelBookingConfirmation(booking);
+                        }
+                    }
                     return true;
                 }
                 return false;
@@ -427,10 +356,7 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
         TextView txtPackageName;
         TextView txtTripMeta;
 
-        TextView tvPaymentStageLabel;
-        TextView tvPaymentStatusBadge;
         ProgressBar paymentProgressBar;
-        TextView tvPaymentStageDetail;
 
         TextView txtPaidAmount;
         TextView txtOutstandingAmount;
@@ -438,7 +364,6 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
 
         MaterialButton btnPayNow;
         MaterialButton btnManageDocs;
-        MaterialButton btnCancelBooking;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -448,10 +373,7 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
             txtPackageName = itemView.findViewById(R.id.itemBookingPackageName);
             txtTripMeta = itemView.findViewById(R.id.itemBookingTripMeta);
 
-            tvPaymentStageLabel = itemView.findViewById(R.id.itemPaymentStageLabel);
-            tvPaymentStatusBadge = itemView.findViewById(R.id.itemPaymentStatusBadge);
             paymentProgressBar = itemView.findViewById(R.id.itemPaymentProgressBar);
-            tvPaymentStageDetail = itemView.findViewById(R.id.itemPaymentStageDetail);
 
             txtPaidAmount = itemView.findViewById(R.id.itemBookingPaidAmount);
             txtOutstandingAmount = itemView.findViewById(R.id.itemBookingOutstandingAmount);
@@ -459,7 +381,6 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
 
             btnPayNow = itemView.findViewById(R.id.btnItemPayNow);
             btnManageDocs = itemView.findViewById(R.id.btnItemManageDocs);
-            btnCancelBooking = itemView.findViewById(R.id.btnItemCancelBooking);
         }
     }
 }

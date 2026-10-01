@@ -68,6 +68,52 @@
     <string name="login_failed_wrong_password">Incorrect password. Please try again.</string>
     <string name="login_failed_default">Login failed. Please check your credentials.</string>
 
+    <!-- FLOW A: Account Verification -->
+    <string name="verify_account_title">Verify Your Account</string>
+    <string name="verify_account_desc">We\'ve sent a 6-digit verification code to &lt;b&gt;%1$s&lt;/b&gt;</string>
+    <string name="verify_account_button">Verify Account</string>
+    <string name="verify_account_verifying">Verifying…</string>
+    <string name="verify_account_resend_prompt">Didn\'t receive the code?</string>
+    <string name="verify_account_resend_action">Resend Code</string>
+    <string name="verify_account_resend_countdown">Resend available in %1$s</string>
+    <string name="verify_account_back_login">Back to Login</string>
+    <string name="verify_account_success">Account verified successfully! Please log in.</string>
+    <string name="verify_account_resend_success">A new verification code has been sent.</string>
+    <string name="verify_account_code_required">Please enter all 6 digits of the verification code.</string>
+    <string name="unverified_account_login_msg">Please verify your account before logging in.</string>
+    <string name="unverified_account_verify_now">Verify Now</string>
+
+    <!-- FLOW B: Forgot Password Flow -->
+    <string name="forgot_pass_screen_title">Forgot Password?</string>
+    <string name="forgot_pass_screen_desc">Enter your email address and we\'ll send you a verification code to reset your password.</string>
+    <string name="forgot_pass_email_hint">Email Address</string>
+    <string name="forgot_pass_btn_send_code">Send Code</string>
+    <string name="forgot_pass_sending">Sending Code…</string>
+    <string name="reset_password_account_not_found">No account found for this email address.</string>
+
+    <!-- FLOW B: Enter Reset Code -->
+    <string name="enter_reset_code_title">Verify Reset Code</string>
+    <string name="enter_reset_code_desc">Enter the 6-digit code sent to &lt;b&gt;%1$s&lt;/b&gt;</string>
+    <string name="enter_reset_code_btn_verify">Verify Code</string>
+    <string name="enter_reset_code_verifying">Verifying…</string>
+    <string name="enter_reset_code_resend_prompt">Didn\'t receive the code?</string>
+    <string name="enter_reset_code_resend_action">Resend Code</string>
+    <string name="enter_reset_code_resend_countdown">Resend in %1$s</string>
+    <string name="enter_reset_code_resend_success">A new verification code has been sent.</string>
+
+    <!-- FLOW B: Reset Password -->
+    <string name="reset_pass_screen_title">Reset Password</string>
+    <string name="reset_pass_screen_desc">Create a new password for your account.</string>
+    <string name="reset_pass_new_password_hint">New Password</string>
+    <string name="reset_pass_confirm_password_hint">Confirm New Password</string>
+    <string name="reset_pass_btn_submit">Reset Password</string>
+    <string name="reset_pass_submitting">Updating Password…</string>
+
+    <!-- FLOW B: Password Reset Success -->
+    <string name="reset_pass_success_title">Password Reset Successfully</string>
+    <string name="reset_pass_success_desc">Your password has been updated. You can now log in with your new password.</string>
+    <string name="reset_pass_success_btn_login">Back to Login</string>
+
     <!-- Sign Up screen -->
     <string name="signup_title">Create an Account</string>
     <string name="signup_subtitle">Sign up to start planning your vacation.</string>
@@ -437,9 +483,9 @@
     <string name="btn_send">SEND</string>
     <string name="btn_cancel">CANCEL</string>
 
-    <string name="reset_password_invalid_email">Please enter a valid email</string>
+    <string name="reset_password_invalid_email">Please enter a valid email address</string>
     <string name="reset_password_sent">Password reset email sent. Please check your inbox.</string>
-    <string name="reset_password_failed">Failed to send email. Please try again.</string>
+    <string name="reset_password_failed">Password reset failed. Please try again.</string>
 
     <string name="login_google_signin_failed">Google Sign-In failed: Code %1$d</string>
     <string name="login_google_success">Google login successful! %1$s</string>
@@ -876,7 +922,7 @@
     <string name="profile_language">Language</string>
     <string name="upcoming_trip">Upcoming Trip</string>
     <string name="profile_theme_current">Light</string>
-    <string name="logout_confirm_message">Are you sure you want to log out?</string>
+    <string name="logout_confirm_message">Are you sure you want to log out of your account?</string>
     <string name="profile_saving">Saving…</string>
     <string name="profile_update_failed">Failed to update profile. Please try again.</string>
 
@@ -1298,10 +1344,18 @@
 
     <!-- Invoice Viewer Strings -->
     <string name="invoice_title_official">Official Invoice</string>
-    <string name="invoice_meta_no">INVOICE / BOOKING NO.</string>
+    <string name="invoice_meta_no">INVOICE NO.</string>
     <string name="invoice_meta_date">ISSUE DATE</string>
+    <string name="invoice_meta_tour_code">TOUR CODE</string>
+    <string name="invoice_meta_departure">DEPARTURE DATE</string>
+    <string name="invoice_meta_due_date">PAYMENT DUE DATE</string>
     <string name="invoice_sec_bill_to">BILL TO</string>
     <string name="invoice_sec_pkg">PACKAGE &amp; TRIP DETAILS</string>
+    <string name="invoice_sec_passengers">PASSENGER DETAILS</string>
+    <string name="invoice_th_no">No.</string>
+    <string name="invoice_th_passenger_name">Passenger Name</string>
+    <string name="invoice_th_ic_passport">IC / Passport No.</string>
+    <string name="invoice_sec_itemized_billing">ITEMIZED BILLING</string>
     <string name="invoice_th_desc">DESCRIPTION</string>
     <string name="invoice_th_qty">QTY</string>
     <string name="invoice_th_total">AMOUNT</string>
@@ -1310,6 +1364,11 @@
     <string name="invoice_grand_total_label">GRAND TOTAL:</string>
     <string name="invoice_paid_amount_label">Total Amount Paid:</string>
     <string name="invoice_balance_due_label">Balance Due:</string>
+    <string name="invoice_sec_amount_in_words">AMOUNT IN WORDS</string>
+    <string name="invoice_sec_payment_history">PAYMENT HISTORY</string>
+    <string name="invoice_sec_bank_terms">BANK &amp; PAYMENT TERMS</string>
+    <string name="invoice_sec_remarks_terms">REMARKS &amp; TERMS</string>
+    <string name="invoice_disclaimer">Computer generated invoice, no signature required.</string>
     <string name="invoice_footer_notice">This invoice is electronically generated by the official system of Hafiz Travel &amp; Tours.</string>
     <string name="invoice_footer_thanks">Thank you for choosing our services.</string>
     <string name="invoice_btn_share">📤 Share</string>
@@ -1317,21 +1376,38 @@
     <string name="invoice_share_title">Official Invoice</string>
 
     <!-- Receipt Viewer Strings -->
-    <string name="receipt_title_official">Official Receipt</string>
+    <string name="receipt_title_official">Official Payment Receipt</string>
     <string name="receipt_company_header">HAFIZ TRAVEL &amp; TOURS</string>
     <string name="receipt_company_sub">KPK/LN: 10751 • SSM: 202201043065\nOfficial Payment Receipt</string>
     <string name="receipt_meta_no">RECEIPT NO.</string>
     <string name="receipt_meta_date">PAYMENT DATE</string>
+    <string name="receipt_amount_received_label">AMOUNT RECEIVED</string>
+    <string name="receipt_sec_received_from">RECEIVED FROM</string>
+    <string name="receipt_meta_payment_date">Payment Date</string>
+    <string name="receipt_meta_payment_method">Payment Method</string>
+    <string name="receipt_meta_ref_no">Ref. No.</string>
+    <string name="receipt_meta_booking_ref">Booking Ref</string>
+    <string name="receipt_sec_passengers">PASSENGER DETAILS</string>
+    <string name="receipt_th_no">No.</string>
+    <string name="receipt_th_passenger_name">Passenger Name</string>
+    <string name="receipt_th_ic_passport">IC / Passport No.</string>
+    <string name="receipt_sec_financial_summary">FINANCIAL SUMMARY</string>
+    <string name="receipt_total_package_price">Total Package Price</string>
+    <string name="receipt_total_paid_to_date">Total Amount Paid</string>
+    <string name="receipt_balance_due">Outstanding Balance</string>
+    <string name="receipt_sec_payment_history">PAYMENT HISTORY</string>
+    <string name="receipt_sec_official_confirmation">OFFICIAL CONFIRMATION &amp; COMPANY DETAILS</string>
+    <string name="receipt_disclaimer">Computer generated receipt, no signature required.</string>
     <string name="receipt_label_received_from">Received From:</string>
     <string name="receipt_label_booking_ref">Booking Ref: %1$s</string>
     <string name="receipt_label_method">Payment Method: %1$s</string>
     <string name="receipt_label_amount">PAYMENT AMOUNT</string>
     <string name="receipt_label_balance">Current Outstanding Balance: %1$s</string>
-    <string name="receipt_electronic_notice">This official receipt is electronically generated by Hafiz Travel &amp; Tours and is valid without a signature.</string>
     <string name="receipt_deposit_title">Deposit Payment Receipt</string>
     <string name="receipt_installment_title">Monthly Installment Receipt #%1$d</string>
     <string name="receipt_btn_download_format">📥 Download Receipt PDF (%1$s)</string>
     <string name="receipt_btn_download">📥 Download Receipt PDF</string>
+    <string name="receipt_btn_save_pdf">📥 Save Receipt PDF</string>
     <string name="receipt_btn_view">View Receipt</string>
     <string name="receipt_list_title">Payment Receipts</string>
     <string name="receipt_list_sub">Official receipts for verified deposit and monthly installment payments.</string>
@@ -1363,12 +1439,12 @@
     <string name="payment_status_balance_partial">INSTALLMENT ACTIVE</string>
     <string name="payment_status_fully_paid">FULLY PAID</string>
     <string name="booking_label_stage_deposit">STAGE 1: DEPOSIT</string>
-    <string name="booking_label_stage_balance">STAGE 2: PACKAGE BALANCE</string>
+    <string name="booking_label_stage_balance">STAGE 2: REMAINING BALANCE</string>
     <string name="booking_label_stage_completed">PAYMENT COMPLETED</string>
     <string name="booking_label_paid_amount">Total Paid</string>
     <string name="booking_label_balance_due">Outstanding Balance</string>
     <string name="booking_label_deposit_progress">Deposit: %1$s / %2$s</string>
-    <string name="booking_label_balance_progress">Package Balance: %1$s / %2$s</string>
+    <string name="booking_label_balance_progress">Remaining: %1$s / %2$s</string>
     <string name="booking_label_remaining_deposit_format">Remaining Deposit: %1$s</string>
     <string name="booking_label_remaining_balance_format">Remaining Balance: %1$s</string>
     <string name="booking_btn_pay_now">Pay Now</string>
@@ -1398,7 +1474,7 @@
     <string name="pay_sheet_due_label">PAYMENT DUE</string>
     <string name="pay_sheet_purpose_initial_deposit">Initial Deposit</string>
     <string name="pay_sheet_purpose_remaining_deposit">Remaining Deposit</string>
-    <string name="pay_sheet_purpose_balance">Package Balance</string>
+    <string name="pay_sheet_purpose_balance">Remaining Balance</string>
     <string name="pay_sheet_package_total">Package Total</string>
     <string name="pay_sheet_previously_paid">Previously Paid</string>
     <string name="pay_sheet_this_payment">Payment Due Now</string>
@@ -1422,7 +1498,7 @@
     <string name="payment_detail_fully_paid_format">Completed: %1$s / %2$s (Balance: RM 0.00)</string>
     <string name="payment_detail_deposit_format">Deposit: %1$s / %2$s (Remaining: %3$s)</string>
     <string name="payment_detail_deposit_required_format">Deposit: %1$s / %2$s (Required: %3$s)</string>
-    <string name="payment_detail_balance_format">Package Balance: %1$s / %2$s (Remaining: %3$s)</string>
+    <string name="payment_detail_balance_format">Remaining: %1$s / %2$s</string>
     <string name="pay_sheet_opt_deposit_preset">Pay Required Deposit (%1$s)</string>
     <string name="pay_sheet_opt_deposit_remaining_preset">Pay Remaining Deposit (%1$s)</string>
     <string name="pay_sheet_opt_balance_preset">Pay Total Balance (%1$s)</string>

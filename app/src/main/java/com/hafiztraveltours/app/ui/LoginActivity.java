@@ -167,7 +167,8 @@ public class LoginActivity extends BaseActivity {
 
         findViewById(R.id.forgotPasswordText).setOnClickListener(v -> {
             com.hafiztraveltours.app.utils.HapticUtil.click(v);
-            showForgotPasswordBottomSheet();
+            startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         });
 
         findViewById(R.id.goToSignUp).setOnClickListener(v -> {
@@ -217,6 +218,12 @@ public class LoginActivity extends BaseActivity {
                     startActivity(new Intent(this, MainActivity.class));
                 }
                 finish();
+            } else if (result.errorResponse != null && result.errorResponse.code() == 403) {
+                Toast.makeText(this, getString(R.string.unverified_account_login_msg), Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(this, VerifyAccountActivity.class);
+                intent.putExtra(VerifyAccountActivity.EXTRA_EMAIL, pendingLoginEmail);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             } else {
                 Toast.makeText(this, result.resolveMessage(this), Toast.LENGTH_LONG).show();
             }

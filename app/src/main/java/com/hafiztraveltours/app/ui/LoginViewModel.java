@@ -201,11 +201,14 @@ public class LoginViewModel extends AndroidViewModel {
             public void onResponse(Call<ApiResponse<Object>> call,
                                    Response<ApiResponse<Object>> response) {
                 forgotBusy = false;
-                if (response.isSuccessful()) {
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
                     forgotOp.setValue(new SingleEvent<>(ApiOpResult.success()));
                 } else {
+                    int fallback = (response.code() == 404)
+                            ? R.string.reset_password_account_not_found
+                            : R.string.reset_password_failed;
                     forgotOp.setValue(new SingleEvent<>(
-                            ApiOpResult.failure(response, R.string.reset_password_failed)));
+                            ApiOpResult.failure(response, fallback)));
                 }
             }
 

@@ -154,6 +154,11 @@ public class SessionManager {
                 .remove(KEY_PROFILE_STATS)
                 .remove(KEY_USER_DOCUMENTS)
                 .apply();
+        if (appContext != null) {
+            try {
+                SecurePrefs.wrap(appContext, "user_profile").edit().clear().apply();
+            } catch (Exception ignored) {}
+        }
         syncApiToken();
     }
 

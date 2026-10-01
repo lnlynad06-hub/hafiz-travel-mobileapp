@@ -49,6 +49,10 @@
         <activity android:name=".ui.WelcomeActivity" android:exported="false" />
         <activity android:name=".ui.LoginActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
         <activity android:name=".ui.SignUpActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.VerifyAccountActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.ForgotPasswordActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.VerifyResetCodeActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.ResetPasswordActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
         <activity android:name=".ui.UmrahActivity" android:exported="false" />
         <activity android:name=".ui.TourActivity" android:exported="false" />
         <activity android:name=".ui.FavoriteActivity" android:exported="false" />

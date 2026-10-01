@@ -293,7 +293,10 @@ public class ReceiptViewerActivity extends BaseActivity {
 
         // Amount in Words
         if (tvReceiptAmountInWords != null) {
-            String words = (detail.amountInWords != null && !detail.amountInWords.isEmpty()) ? detail.amountInWords : detail.amountInWordsMs;
+            boolean isMalay = "ms".equalsIgnoreCase(Locale.getDefault().getLanguage()) || "in".equalsIgnoreCase(Locale.getDefault().getLanguage());
+            String words = isMalay
+                    ? (detail.amountInWordsMs != null && !detail.amountInWordsMs.isEmpty() ? detail.amountInWordsMs : detail.amountInWords)
+                    : (detail.amountInWords != null && !detail.amountInWords.isEmpty() ? detail.amountInWords : detail.amountInWordsMs);
             if (words != null && !words.isEmpty()) {
                 tvReceiptAmountInWords.setText(words);
             } else {
@@ -309,7 +312,7 @@ public class ReceiptViewerActivity extends BaseActivity {
             if (tvReceiptCustomerDetails != null) {
                 String phone = detail.customerInfo.mobileNumber != null ? detail.customerInfo.mobileNumber : "—";
                 String addr = detail.customerInfo.address != null ? detail.customerInfo.address : "Johor Bahru, Johor";
-                tvReceiptCustomerDetails.setText("Telefon: " + phone + " • " + addr);
+                tvReceiptCustomerDetails.setText(phone + " • " + addr);
             }
         } else if (detail.travellers != null && !detail.travellers.isEmpty()) {
             BookingDetailDto.TravellerInfo lead = detail.travellers.get(0);
