@@ -143,6 +143,77 @@ public class UmrahPackage implements java.io.Serializable {
     @SerializedName("package_type")
     public String packageType;
 
+    @SerializedName("tour_category_type")
+    public String tourCategoryType;
+
+    @SerializedName("is_umrah")
+    public Boolean isUmrahFlag;
+
+    @SerializedName("tour_hotels")
+    public java.util.List<TourHotelItem> tourHotels;
+
+    @SerializedName("season_prices")
+    public java.util.Map<String, String> seasonPrices;
+
+    @SerializedName("season_pricing")
+    public SeasonPricingData seasonPricing;
+
+    @SerializedName("child_pricing_rules")
+    public ChildPricingRules childPricingRules;
+
+    public static class TourHotelItem implements java.io.Serializable {
+        @SerializedName("id")
+        public String id;
+
+        @SerializedName("hotel_name")
+        public String hotelName;
+
+        @SerializedName("nights")
+        public Integer nights;
+
+        @SerializedName("rating")
+        public String rating;
+
+        @SerializedName("sort_order")
+        public Integer sortOrder;
+    }
+
+    public static class SeasonPricingData implements java.io.Serializable {
+        @SerializedName("standard")
+        public SeasonRate standard;
+
+        @SerializedName("low_peak")
+        public SeasonRate lowPeak;
+
+        @SerializedName("high_peak")
+        public SeasonRate highPeak;
+    }
+
+    public static class SeasonRate implements java.io.Serializable {
+        @SerializedName("adult_price")
+        public double adultPrice;
+
+        @SerializedName("child_with_bed")
+        public double childWithBed;
+
+        @SerializedName("child_without_bed")
+        public double childWithoutBed;
+
+        @SerializedName("child_under_2")
+        public double childUnder2;
+
+        @SerializedName("child_2_to_4")
+        public double child2To4;
+    }
+
+    public static class ChildPricingRules implements java.io.Serializable {
+        @SerializedName("tour")
+        public java.util.Map<String, String> tour;
+
+        @SerializedName("umrah")
+        public java.util.Map<String, String> umrah;
+    }
+
     @SerializedName("requires_passport")
     public Boolean requiresPassport;
 
@@ -265,10 +336,18 @@ public class UmrahPackage implements java.io.Serializable {
     public String collectionName;
 
     public boolean isUmrah() {
-        if (category != null) {
-            String cat = category.toLowerCase();
-            if (cat.contains("umrah") || cat.contains("haji") || cat.contains("hajj") || cat.contains("ziarah")) return true;
-            if (cat.contains("tour") || cat.contains("pelancongan") || cat.contains("holiday") || cat.contains("travel")) return false;
+        if (isUmrahFlag != null) {
+            return isUmrahFlag;
+        }
+        if (tourCategoryType != null && !tourCategoryType.trim().isEmpty()) {
+            String tct = tourCategoryType.trim().toLowerCase();
+            if ("umrah".equals(tct)) return true;
+            if ("outbound".equals(tct) || "domestic".equals(tct)) return false;
+        }
+        if (packageType != null && !packageType.trim().isEmpty()) {
+            String pt = packageType.trim().toLowerCase();
+            if (pt.contains("umrah") || pt.contains("haji") || pt.contains("hajj") || pt.contains("ziarah")) return true;
+            if (pt.contains("outbound") || pt.contains("international") || pt.contains("domestic") || pt.contains("tour")) return false;
         }
         if (collectionName != null) {
             String col = collectionName.toLowerCase();
@@ -278,14 +357,7 @@ public class UmrahPackage implements java.io.Serializable {
         if (nightsMakkah != null && nightsMakkah > 0) return true;
         if (hotelMakkahName != null && !hotelMakkahName.trim().isEmpty()) return true;
 
-        String combined = ((name != null ? name : "") + " " +
-                (title != null ? title : "") + " " +
-                (destination != null ? destination : "") + " " +
-                (summary != null ? summary : "")).toLowerCase();
-
-        return combined.contains("umrah") || combined.contains("makkah") ||
-                combined.contains("madinah") || combined.contains("ramadhan") ||
-                combined.contains("syawal");
+        return false;
     }
 
     /**

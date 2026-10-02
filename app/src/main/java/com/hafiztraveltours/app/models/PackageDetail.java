@@ -63,6 +63,10 @@ public class PackageDetail implements java.io.Serializable {
     public int passportValidityMonths = 6;
     public boolean isUmrah; // set from UmrahPackage.isUmrah() during parsing
 
+    public UmrahPackage.SeasonPricingData seasonPricing;
+    public java.util.Map<String, String> seasonPrices;
+    public UmrahPackage rawPackage;
+
     public static class NightBreakdown implements java.io.Serializable {
         public String city;          // set by Activity from getString() using slot
         public int nights;
@@ -196,6 +200,9 @@ public class PackageDetail implements java.io.Serializable {
 
         boolean isUmrah = pkg.isUmrah();
         d.isUmrah = isUmrah;
+        d.rawPackage = pkg;
+        d.seasonPricing = pkg.seasonPricing;
+        d.seasonPrices = pkg.seasonPrices;
 
         // Package-driven requirements & type (H4): copy backend values when present,
         // otherwise keep the model defaults. Previously these were never copied, so
@@ -231,32 +238,44 @@ public class PackageDetail implements java.io.Serializable {
             d.nightsBreakdown.add(nb);
         }
 
-        // 2. Hotel info — title built by Activity using getString() for locale support
-        if (pkg.hotelMakkahName != null && !pkg.hotelMakkahName.trim().isEmpty()) {
-            String rating = (pkg.hotelMakkahRating != null && !pkg.hotelMakkahRating.trim().isEmpty())
-                    ? pkg.hotelMakkahRating : "";
-            String subtitle = pkg.hotelMakkahName.trim() +
-                    ((pkg.hotelMakkahDistance != null && !pkg.hotelMakkahDistance.trim().isEmpty())
-                            ? " (" + pkg.hotelMakkahDistance.trim() + ")" : "");
-            d.hotels.add(new HotelInfo("hotel", 0, rating, subtitle));
-        }
+        // 2. Hotel info — dynamically handle Tour hotels if Tour package, or Umrah structure
+        if (!isUmrah && pkg.tourHotels != null && !pkg.tourHotels.isEmpty()) {
+            int slotIdx = 0;
+            for (UmrahPackage.TourHotelItem th : pkg.tourHotels) {
+                if (th.hotelName != null && !th.hotelName.trim().isEmpty()) {
+                    String rating = th.rating != null ? th.rating.trim() : "";
+                    int nights = th.nights != null ? th.nights : 1;
+                    String subtitle = th.hotelName.trim() + " (" + nights + " Malam)";
+                    d.hotels.add(new HotelInfo("hotel", slotIdx++, rating, subtitle));
+                }
+            }
+        } else {
+            if (pkg.hotelMakkahName != null && !pkg.hotelMakkahName.trim().isEmpty()) {
+                String rating = (pkg.hotelMakkahRating != null && !pkg.hotelMakkahRating.trim().isEmpty())
+                        ? pkg.hotelMakkahRating : "";
+                String subtitle = pkg.hotelMakkahName.trim() +
+                        ((pkg.hotelMakkahDistance != null && !pkg.hotelMakkahDistance.trim().isEmpty())
+                                ? " (" + pkg.hotelMakkahDistance.trim() + ")" : "");
+                d.hotels.add(new HotelInfo("hotel", 0, rating, subtitle));
+            }
 
-        if (pkg.hotelMadinahName != null && !pkg.hotelMadinahName.trim().isEmpty()) {
-            String rating = (pkg.hotelMadinahRating != null && !pkg.hotelMadinahRating.trim().isEmpty())
-                    ? pkg.hotelMadinahRating : "";
-            String subtitle = pkg.hotelMadinahName.trim() +
-                    ((pkg.hotelMadinahDistance != null && !pkg.hotelMadinahDistance.trim().isEmpty())
-                            ? " (" + pkg.hotelMadinahDistance.trim() + ")" : "");
-            d.hotels.add(new HotelInfo("hotel", 1, rating, subtitle));
-        }
+            if (pkg.hotelMadinahName != null && !pkg.hotelMadinahName.trim().isEmpty()) {
+                String rating = (pkg.hotelMadinahRating != null && !pkg.hotelMadinahRating.trim().isEmpty())
+                        ? pkg.hotelMadinahRating : "";
+                String subtitle = pkg.hotelMadinahName.trim() +
+                        ((pkg.hotelMadinahDistance != null && !pkg.hotelMadinahDistance.trim().isEmpty())
+                                ? " (" + pkg.hotelMadinahDistance.trim() + ")" : "");
+                d.hotels.add(new HotelInfo("hotel", 1, rating, subtitle));
+            }
 
-        if (pkg.hotelTaifName != null && !pkg.hotelTaifName.trim().isEmpty()) {
-            String rating = (pkg.hotelTaifRating != null && !pkg.hotelTaifRating.trim().isEmpty())
-                    ? pkg.hotelTaifRating : "";
-            String subtitle = pkg.hotelTaifName.trim() +
-                    ((pkg.hotelTaifDistance != null && !pkg.hotelTaifDistance.trim().isEmpty())
-                            ? " (" + pkg.hotelTaifDistance.trim() + ")" : "");
-            d.hotels.add(new HotelInfo("hotel", 2, rating, subtitle));
+            if (pkg.hotelTaifName != null && !pkg.hotelTaifName.trim().isEmpty()) {
+                String rating = (pkg.hotelTaifRating != null && !pkg.hotelTaifRating.trim().isEmpty())
+                        ? pkg.hotelTaifRating : "";
+                String subtitle = pkg.hotelTaifName.trim() +
+                        ((pkg.hotelTaifDistance != null && !pkg.hotelTaifDistance.trim().isEmpty())
+                                ? " (" + pkg.hotelTaifDistance.trim() + ")" : "");
+                d.hotels.add(new HotelInfo("hotel", 2, rating, subtitle));
+            }
         }
 
         // 3. Jadual Perjalanan (Itinerary)

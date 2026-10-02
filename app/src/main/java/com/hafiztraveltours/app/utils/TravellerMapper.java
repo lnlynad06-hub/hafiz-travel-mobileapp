@@ -99,6 +99,7 @@ public final class TravellerMapper {
         tr.icPassport = p.icPassportNumber;
         tr.phone = p.phoneNumber;
         tr.email = p.email;
+        tr.withBed = p.withBed;
         tr.isLead = p.isLead || forceLead;
         return tr;
     }

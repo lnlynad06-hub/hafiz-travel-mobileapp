@@ -23,6 +23,7 @@ public class BookingRequest implements Serializable {
     public String promoCode = "";
     public double discountAmount = 0.0;
     public String packageCategory = "umrah";
+    public String season = "standard";
     public PackageDetail packageDetail;
 
     public boolean termsAgreed = false;
@@ -30,17 +31,11 @@ public class BookingRequest implements Serializable {
     public String termsVersion = "1.0";
 
     public boolean isUmrahPackage() {
+        if (packageDetail != null) {
+            return packageDetail.isUmrah;
+        }
         if (packageCategory != null && !packageCategory.isEmpty()) {
             return "umrah".equalsIgnoreCase(packageCategory);
-        }
-        if (packageName != null) {
-            String lower = packageName.toLowerCase(java.util.Locale.ROOT);
-            if (lower.contains("tour") || lower.contains("pelancongan") || lower.contains("switzerland") 
-                    || lower.contains("swiss") || lower.contains("turkey") || lower.contains("turki") 
-                    || lower.contains("japan") || lower.contains("korea") || lower.contains("balkan") 
-                    || lower.contains("vietnam") || lower.contains("china")) {
-                return false;
-            }
         }
         return true;
     }
@@ -71,6 +66,8 @@ public class BookingRequest implements Serializable {
         public String address = "";
         public String passportDocumentPath = "";
         public String icDocumentPath = "";
+        public Boolean withBed = true;
+        public double passengerCalculatedPrice = 0.0;
         public boolean isComplete = false;
     }
 

@@ -117,6 +117,7 @@ public class PassengerDetailsViewModel extends AndroidViewModel {
         public String clothesSize = "";
         public String mahramText = "";
         public String relationship = "";
+        public Boolean withBed = null;
     }
 
     /** Per-traveller validation errors as string IDs (0 = valid). */
@@ -388,6 +389,7 @@ public class PassengerDetailsViewModel extends AndroidViewModel {
         p.icPassportNumber = (!p.passportNumber.isEmpty()) ? p.passportNumber : p.icNumber;
         p.mahramIndex = parseMahramIndex(in.mahramText);
         p.relationship = in.relationship != null ? in.relationship.trim() : "";
+        p.withBed = in.withBed;
         p.isComplete = true;
         return p;
     }

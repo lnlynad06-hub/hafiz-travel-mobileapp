@@ -36,10 +36,12 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
     private PackageDetail detail;
     private int selectedRoomIndex = 0;
     private int paxCount = 1;
+    private String selectedSeason = com.hafiztraveltours.app.utils.PackagePricingCalculator.SEASON_STANDARD;
 
     private ImageView imgPackage;
     private TextView txtPackageName;
     private TextView txtPackageDuration;
+    private LinearLayout containerSeason;
     private LinearLayout containerRoomOptions;
     private TextView txtPaxCount;
     private TextView txtTotalAmount;
@@ -85,6 +87,7 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
         imgPackage = view.findViewById(R.id.configPackageImage);
         txtPackageName = view.findViewById(R.id.configPackageName);
         txtPackageDuration = view.findViewById(R.id.configPackageDuration);
+        containerSeason = view.findViewById(R.id.configSeasonContainer);
         containerRoomOptions = view.findViewById(R.id.configRoomOptionsContainer);
         containerDeparture = view.findViewById(R.id.configDepartureContainer);
         txtPaxCount = view.findViewById(R.id.txtPaxCount);
@@ -139,6 +142,7 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
             proceedToTravellerDetails();
         });
 
+        renderSeasonOptions();
         renderRoomOptions();
         renderDepartureOptions();
         updateUi();
@@ -330,19 +334,105 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
         }
     }
 
+    private void renderSeasonOptions() {
+        if (containerSeason == null) return;
+        containerSeason.removeAllViews();
+
+        String[] seasons = new String[]{
+                com.hafiztraveltours.app.utils.PackagePricingCalculator.SEASON_STANDARD,
+                com.hafiztraveltours.app.utils.PackagePricingCalculator.SEASON_LOW_PEAK,
+                com.hafiztraveltours.app.utils.PackagePricingCalculator.SEASON_HIGH_PEAK
+        };
+
+        for (String season : seasons) {
+            boolean isSelected = season.equalsIgnoreCase(selectedSeason);
+            double price = com.hafiztraveltours.app.utils.PackagePricingCalculator.getSeasonPrice(detail, season);
+
+            LinearLayout card = new LinearLayout(requireContext());
+            card.setOrientation(LinearLayout.VERTICAL);
+            card.setPadding(dp(12), dp(10), dp(12), dp(10));
+            card.setClickable(true);
+            card.setFocusable(true);
+            card.setBackgroundResource(isSelected ? R.drawable.bg_room_card_selected : R.drawable.bg_room_card_unselected);
+
+            LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            cardParams.setMarginEnd(dp(8));
+            card.setLayoutParams(cardParams);
+
+            LinearLayout headerRow = new LinearLayout(requireContext());
+            headerRow.setOrientation(LinearLayout.HORIZONTAL);
+            headerRow.setGravity(Gravity.CENTER_VERTICAL);
+
+            TextView nameText = new TextView(requireContext());
+            nameText.setText(com.hafiztraveltours.app.utils.PackagePricingCalculator.getSeasonLabel(requireContext(), season));
+            nameText.setTextSize(12);
+            nameText.setTypeface(null, Typeface.BOLD);
+            nameText.setTextColor(getResources().getColor(isSelected ? R.color.brand_magenta : R.color.text_dark));
+            headerRow.addView(nameText);
+
+            if (isSelected) {
+                TextView check = new TextView(requireContext());
+                check.setText(" ✓");
+                check.setTextSize(12);
+                check.setTypeface(null, Typeface.BOLD);
+                check.setTextColor(getResources().getColor(R.color.brand_magenta));
+                headerRow.addView(check);
+            }
+            card.addView(headerRow);
+
+            TextView priceText = new TextView(requireContext());
+            priceText.setText(BookingRequest.formatPrice(price));
+            priceText.setTextSize(13);
+            priceText.setTypeface(null, Typeface.BOLD);
+            priceText.setTextColor(getResources().getColor(R.color.brand_magenta));
+            LinearLayout.LayoutParams priceParams = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            priceParams.topMargin = dp(4);
+            priceText.setLayoutParams(priceParams);
+            card.addView(priceText);
+
+            card.setOnClickListener(v -> {
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
+                selectedSeason = season;
+                renderSeasonOptions();
+                renderRoomOptions();
+                updateUi();
+            });
+
+            containerSeason.addView(card);
+        }
+    }
+
+    private double getSelectedUnitAmount() {
+        double baseSeasonPrice = com.hafiztraveltours.app.utils.PackagePricingCalculator.getSeasonPrice(detail, selectedSeason);
+        if (detail.priceOptions != null && !detail.priceOptions.isEmpty() && selectedRoomIndex >= 0 && selectedRoomIndex < detail.priceOptions.size()) {
+            PackageDetail.PriceOption opt = detail.priceOptions.get(selectedRoomIndex);
+            double optPrice = BookingRequest.parsePriceAmount(opt.price);
+            double defaultDetailPrice = BookingRequest.parsePriceAmount(detail.price);
+            if (defaultDetailPrice > 0 && Math.abs(optPrice - defaultDetailPrice) > 0.01) {
+                double diff = optPrice - defaultDetailPrice;
+                return Math.max(0, baseSeasonPrice + diff);
+            } else if (optPrice > 0 && baseSeasonPrice > 0) {
+                return baseSeasonPrice;
+            } else if (optPrice > 0) {
+                return optPrice;
+            }
+        }
+        return baseSeasonPrice > 0 ? baseSeasonPrice : BookingRequest.parsePriceAmount(detail.price);
+    }
+
     private void updateUi() {
         txtPaxCount.setText(getString(R.string.pax_count_format, paxCount));
 
         String roomLabel = getString(R.string.room_standard);
-        String roomPriceStr = detail.price;
-
         if (detail.priceOptions != null && !detail.priceOptions.isEmpty() && selectedRoomIndex >= 0 && selectedRoomIndex < detail.priceOptions.size()) {
             PackageDetail.PriceOption opt = detail.priceOptions.get(selectedRoomIndex);
             roomLabel = com.hafiztraveltours.app.utils.RoomLabels.resolve(requireContext(), opt);
-            roomPriceStr = opt.price;
         }
 
-        double unitAmount = BookingRequest.parsePriceAmount(roomPriceStr);
+        double unitAmount = getSelectedUnitAmount();
+        String roomPriceStr = BookingRequest.formatPrice(unitAmount);
         double subtotal = unitAmount * paxCount;
 
         double totalAmount = Math.max(0, subtotal - appliedDiscount);
@@ -359,17 +449,14 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
             return;
         }
 
-
         String roomLabel = getString(R.string.room_standard);
-        String roomPriceStr = detail.price;
-
         if (detail.priceOptions != null && !detail.priceOptions.isEmpty() && selectedRoomIndex >= 0 && selectedRoomIndex < detail.priceOptions.size()) {
             PackageDetail.PriceOption opt = detail.priceOptions.get(selectedRoomIndex);
             roomLabel = com.hafiztraveltours.app.utils.RoomLabels.resolve(requireContext(), opt);
-            roomPriceStr = opt.price;
         }
 
-        double unitAmount = BookingRequest.parsePriceAmount(roomPriceStr);
+        double unitAmount = getSelectedUnitAmount();
+        String roomPriceStr = BookingRequest.formatPrice(unitAmount);
 
         BookingRequest req = new BookingRequest();
         req.packageId = detail.id;
@@ -382,6 +469,7 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
         req.roomPriceFormatted = roomPriceStr;
         req.unitPriceAmount = unitAmount;
         req.adultPaxCount = paxCount;
+        req.season = selectedSeason;
         req.packageDetail = detail;
 
         List<PackageDetail.DepartureOption> deps = getDepartureOptions();

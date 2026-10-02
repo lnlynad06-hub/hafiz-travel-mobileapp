@@ -133,15 +133,26 @@ public class BookingSummaryActivity extends BaseActivity {
             }
         }
 
-        txtRoomLabel.setText(bookingRequest.roomLabel);
+        String seasonLabel = com.hafiztraveltours.app.utils.PackagePricingCalculator.getSeasonLabel(this, bookingRequest.season);
+        txtRoomLabel.setText(bookingRequest.roomLabel + " • " + seasonLabel);
         txtPaxCount.setText(getString(R.string.summary_pax_adults_format, bookingRequest.adultPaxCount));
 
-        double roomSubtotal = bookingRequest.unitPriceAmount * bookingRequest.adultPaxCount;
+        double calculatedTotal = 0;
+        if (bookingRequest.passengers != null) {
+            for (BookingRequest.Passenger p : bookingRequest.passengers) {
+                calculatedTotal += com.hafiztraveltours.app.utils.PackagePricingCalculator.calculatePassengerPrice(
+                        bookingRequest.packageDetail, bookingRequest.season, p.dateOfBirth, p.withBed, bookingRequest.unitPriceAmount);
+            }
+        } else {
+            calculatedTotal = bookingRequest.unitPriceAmount * bookingRequest.adultPaxCount;
+        }
+
         txtUnitPriceLabel.setText(getString(R.string.summary_room_subtotal_format, bookingRequest.roomPriceFormatted, bookingRequest.adultPaxCount));
-        txtUnitPriceAmount.setText(BookingRequest.formatPrice(roomSubtotal));
+        txtUnitPriceAmount.setText(BookingRequest.formatPrice(calculatedTotal));
 
         renderBreakdown();
-        txtTotalAmount.setText(bookingRequest.totalAmountFormatted);
+        double finalTotal = Math.max(0, calculatedTotal - bookingRequest.discountAmount);
+        txtTotalAmount.setText(BookingRequest.formatPrice(finalTotal));
 
         renderPassengers();
     }
@@ -149,6 +160,29 @@ public class BookingSummaryActivity extends BaseActivity {
     private void renderBreakdown() {
         if (containerBreakdown == null) return;
         containerBreakdown.removeAllViews();
+
+        if (bookingRequest.season != null && !bookingRequest.season.isEmpty()) {
+            LinearLayout sRow = new LinearLayout(this);
+            sRow.setOrientation(LinearLayout.HORIZONTAL);
+            sRow.setPadding(0, dp(2), 0, dp(4));
+
+            TextView sLabel = new TextView(this);
+            sLabel.setText(getString(R.string.package_season_label));
+            sLabel.setTextSize(12);
+            sLabel.setTextColor(getResources().getColor(R.color.text_gray));
+            LinearLayout.LayoutParams slp = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+            sLabel.setLayoutParams(slp);
+
+            TextView sVal = new TextView(this);
+            sVal.setText(com.hafiztraveltours.app.utils.PackagePricingCalculator.getSeasonLabel(this, bookingRequest.season));
+            sVal.setTextSize(12);
+            sVal.setTextColor(getResources().getColor(R.color.brand_magenta));
+            sVal.setTypeface(null, Typeface.BOLD);
+
+            sRow.addView(sLabel);
+            sRow.addView(sVal);
+            containerBreakdown.addView(sRow);
+        }
 
         if (bookingRequest.discountAmount > 0) {
             LinearLayout row = new LinearLayout(this);
@@ -201,12 +235,15 @@ public class BookingSummaryActivity extends BaseActivity {
             String masked = maskSensitiveDoc(docNo);
             tvId.setText(getString(R.string.summary_id_label_format, masked));
 
+            double paxPrice = com.hafiztraveltours.app.utils.PackagePricingCalculator.calculatePassengerPrice(
+                    bookingRequest.packageDetail, bookingRequest.season, p.dateOfBirth, p.withBed, bookingRequest.unitPriceAmount);
+
             if (p.isLead) {
-                tvRole.setText(getString(R.string.summary_lead_suffix));
+                tvRole.setText(getString(R.string.summary_lead_suffix) + " • " + BookingRequest.formatPrice(paxPrice));
                 tvRole.setBackgroundResource(R.drawable.bg_status_pending);
                 tvRole.setTextColor(getResources().getColor(R.color.pink_dark));
             } else {
-                tvRole.setText(getString(R.string.passenger_traveller_title_format, (i + 1)));
+                tvRole.setText(getString(R.string.passenger_traveller_title_format, (i + 1)) + " • " + BookingRequest.formatPrice(paxPrice));
                 tvRole.setBackgroundResource(R.drawable.bg_chip_minimal);
                 tvRole.setTextColor(getResources().getColor(R.color.text_dark));
             }
@@ -219,9 +256,13 @@ public class BookingSummaryActivity extends BaseActivity {
                 tvGenderChip.setVisibility(View.GONE);
             }
 
-            // DOB Chip
+            // DOB Chip & Bed info
             if (p.dateOfBirth != null && !p.dateOfBirth.trim().isEmpty()) {
                 String formattedDob = ProfileActivity.formatDateDisplay(this, p.dateOfBirth);
+                int age = com.hafiztraveltours.app.utils.PackagePricingCalculator.calculateAge(p.dateOfBirth);
+                if (p.withBed != null && age >= 2 && age <= 11) {
+                    formattedDob += " (" + getString(Boolean.TRUE.equals(p.withBed) ? R.string.with_bed : R.string.without_bed) + ")";
+                }
                 tvDobChip.setText(formattedDob);
                 tvDobChip.setVisibility(View.VISIBLE);
             } else {
@@ -350,6 +391,7 @@ public class BookingSummaryActivity extends BaseActivity {
         apiRequest.roomLabel = bookingRequest.roomLabel;
         apiRequest.departureId = parseDepartureId(bookingRequest.selectedDepartureId);
         apiRequest.pricingId = bookingRequest.selectedPricingId;
+        apiRequest.season = bookingRequest.season;
 
         if (bookingRequest.passengers != null && !bookingRequest.passengers.isEmpty()) {
             for (int i = 0; i < bookingRequest.passengers.size(); i++) {

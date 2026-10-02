@@ -1557,4 +1557,27 @@
     <string name="payment_status_failed">Payment Failed</string>
     <string name="payment_status_refunded">Refunded</string>
     <string name="payment_status_cancelled">Cancelled</string>
+
+    <!-- Season & Pricing Management Strings -->
+    <string name="config_season_type">Select Season</string>
+    <string name="season_standard">Standard Season</string>
+    <string name="season_low_peak">Low Peak Season</string>
+    <string name="season_high_peak">High Peak Season</string>
+    <string name="season_badge_standard">STANDARD</string>
+    <string name="season_badge_low_peak">LOW PEAK</string>
+    <string name="season_badge_high_peak">HIGH PEAK</string>
+    <string name="child_with_bed">With Bed</string>
+    <string name="child_without_bed">No Bed</string>
+    <string name="option_bed_label">Bed Requirement (Child aged 2–11)</string>
+    <string name="passenger_type_adult">Adult</string>
+    <string name="passenger_type_child">Child</string>
+    <string name="passenger_type_infant">Infant</string>
+    <string name="summary_season_label">Season:</string>
+    <string name="summary_season_standard">Standard</string>
+    <string name="summary_season_low_peak">Low Peak</string>
+    <string name="summary_season_high_peak">High Peak</string>
+    <string name="package_season_label">Season</string>
+    <string name="with_bed">With Bed</string>
+    <string name="without_bed">Without Bed</string>
+    <string name="child_bed_option_label">Bed Option (Aged 2–11)</string>
 </resources>

@@ -87,6 +87,10 @@ public class PassengerDetailsActivity extends BaseActivity {
         TextView tvDobValue;
         TextView tvDobAge;
         String selectedDob = null;
+        View layoutChildBedOption;
+        TextView tvChildBedStatus;
+        com.google.android.material.switchmaterial.SwitchMaterial switchChildBed;
+        Boolean withBed = null;
 
         View fieldGenderContainer;
         ImageView ivGenderBadge;
@@ -480,6 +484,18 @@ public class PassengerDetailsActivity extends BaseActivity {
         holder.fieldDobContainer = card.findViewById(R.id.fieldDobContainer);
         holder.tvDobValue = card.findViewById(R.id.tvDobValue);
         holder.tvDobAge = card.findViewById(R.id.tvDobAge);
+        holder.layoutChildBedOption = card.findViewById(R.id.layoutChildBedOption);
+        holder.tvChildBedStatus = card.findViewById(R.id.tvChildBedStatus);
+        holder.switchChildBed = card.findViewById(R.id.switchChildBed);
+
+        if (holder.switchChildBed != null) {
+            holder.switchChildBed.setOnCheckedChangeListener((bv, isChecked) -> {
+                holder.withBed = isChecked;
+                if (holder.tvChildBedStatus != null) {
+                    holder.tvChildBedStatus.setText(isChecked ? R.string.with_bed : R.string.without_bed);
+                }
+            });
+        }
 
         holder.fieldGenderContainer = card.findViewById(R.id.fieldGenderContainer);
         holder.ivGenderBadge = card.findViewById(R.id.ivGenderBadge);
@@ -620,8 +636,40 @@ public class PassengerDetailsActivity extends BaseActivity {
                 holder.tvDobValue,
                 holder.tvDobAge,
                 dateHolder,
-                () -> holder.selectedDob = dateHolder[0]
+                () -> {
+                    holder.selectedDob = dateHolder[0];
+                    updateChildBedOptionVisibility(holder);
+                }
         );
+    }
+
+    private void updateChildBedOptionVisibility(AdditionalTravellerHolder holder) {
+        if (holder.layoutChildBedOption == null) return;
+        PackageDetail pkg = bookingRequest != null ? bookingRequest.packageDetail : null;
+        boolean isUmrah = pkg != null ? pkg.isUmrah : false;
+
+        if (isUmrah || holder.selectedDob == null || holder.selectedDob.isEmpty()) {
+            holder.layoutChildBedOption.setVisibility(View.GONE);
+            holder.withBed = null;
+            return;
+        }
+
+        int age = com.hafiztraveltours.app.utils.PackagePricingCalculator.calculateAge(holder.selectedDob);
+        if (age >= 2 && age <= 11) {
+            holder.layoutChildBedOption.setVisibility(View.VISIBLE);
+            if (holder.withBed == null) {
+                holder.withBed = true;
+            }
+            if (holder.switchChildBed != null) {
+                holder.switchChildBed.setChecked(Boolean.TRUE.equals(holder.withBed));
+            }
+            if (holder.tvChildBedStatus != null) {
+                holder.tvChildBedStatus.setText(Boolean.TRUE.equals(holder.withBed) ? R.string.with_bed : R.string.without_bed);
+            }
+        } else {
+            holder.layoutChildBedOption.setVisibility(View.GONE);
+            holder.withBed = null;
+        }
     }
 
     private void showPassportExpiryPickerBottomSheet(AdditionalTravellerHolder holder) {
@@ -1286,6 +1334,7 @@ public class PassengerDetailsActivity extends BaseActivity {
                 ? holder.inputMahram.getText().toString().trim() : null;
         in.relationship = (holder.inputRelationship != null && holder.layoutMahramSection != null && holder.layoutMahramSection.getVisibility() == View.VISIBLE)
                 ? holder.inputRelationship.getText().toString().trim() : null;
+        in.withBed = holder.withBed;
         return in;
     }
 
