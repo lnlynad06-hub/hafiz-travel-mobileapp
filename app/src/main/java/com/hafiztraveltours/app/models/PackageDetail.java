@@ -65,6 +65,11 @@ public class PackageDetail implements java.io.Serializable {
 
     public UmrahPackage.SeasonPricingData seasonPricing;
     public java.util.Map<String, String> seasonPrices;
+    public Double childUnder2Price;
+    public Double child211WithBedPrice;
+    public Double child211NoBedPrice;
+    public Double child2To4Price;
+    public UmrahPackage.ChildPricingRules childPricingRules;
     public UmrahPackage rawPackage;
 
     public static class NightBreakdown implements java.io.Serializable {
@@ -141,6 +146,9 @@ public class PackageDetail implements java.io.Serializable {
         public Integer seatsBooked;
         public Integer seatsAvailable;
         public boolean isFull;
+        public String season;
+        public String price;
+        public String priceFormatted;
         public java.util.List<UmrahPackage.DepartureItem.PricingTier> pricing;
 
         public DepartureOption(String id, String departureDate, String returnDate, String label) {
@@ -203,6 +211,11 @@ public class PackageDetail implements java.io.Serializable {
         d.rawPackage = pkg;
         d.seasonPricing = pkg.seasonPricing;
         d.seasonPrices = pkg.seasonPrices;
+        d.childUnder2Price = pkg.childUnder2Price;
+        d.child211WithBedPrice = pkg.child211WithBedPrice;
+        d.child211NoBedPrice = pkg.child211NoBedPrice;
+        d.child2To4Price = pkg.child2To4Price;
+        d.childPricingRules = pkg.childPricingRules;
 
         // Package-driven requirements & type (H4): copy backend values when present,
         // otherwise keep the model defaults. Previously these were never copied, so
@@ -383,6 +396,9 @@ public class PackageDetail implements java.io.Serializable {
                             available,
                             full
                     );
+                    depOpt.season = item.season;
+                    depOpt.price = item.price;
+                    depOpt.priceFormatted = item.priceFormatted;
                     depOpt.pricing = item.pricing;
                     d.availableDepartureDates.add(label);
                     d.availableDepartures.add(depOpt);

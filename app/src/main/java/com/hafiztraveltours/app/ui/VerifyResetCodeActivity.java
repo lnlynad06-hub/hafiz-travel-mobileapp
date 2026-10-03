@@ -162,7 +162,7 @@ public class VerifyResetCodeActivity extends BaseActivity {
                 intent.putExtra(ResetPasswordActivity.EXTRA_EMAIL, targetEmail);
                 intent.putExtra(ResetPasswordActivity.EXTRA_RESET_TOKEN, result.resetToken);
                 startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                overridePendingTransition(R.anim.nav_seamless_fade_in, R.anim.nav_seamless_fade_out);
                 finish();
             } else {
                 String errorMsg = result.errorMessage != null && !result.errorMessage.isEmpty()

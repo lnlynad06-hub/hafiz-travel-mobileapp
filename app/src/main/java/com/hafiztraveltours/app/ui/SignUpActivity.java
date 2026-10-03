@@ -165,7 +165,7 @@ public class SignUpActivity extends BaseActivity {
         findViewById(R.id.goToLogin).setOnClickListener(v -> {
             com.hafiztraveltours.app.utils.HapticUtil.click(v);
             startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
-            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            overridePendingTransition(R.anim.nav_seamless_fade_in, R.anim.nav_seamless_fade_out);
             finish();
         });
 
@@ -203,7 +203,7 @@ public class SignUpActivity extends BaseActivity {
                 Intent intent = new Intent(SignUpActivity.this, VerifyAccountActivity.class);
                 intent.putExtra(VerifyAccountActivity.EXTRA_EMAIL, email);
                 startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                overridePendingTransition(R.anim.nav_seamless_fade_in, R.anim.nav_seamless_fade_out);
                 finish();
             } else {
                 Toast.makeText(this, result.resolveMessage(this), Toast.LENGTH_LONG).show();

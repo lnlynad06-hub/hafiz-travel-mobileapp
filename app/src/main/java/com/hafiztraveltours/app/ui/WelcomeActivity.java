@@ -150,17 +150,19 @@ public class WelcomeActivity extends BaseActivity {
         TextView tvLogin = findViewById(R.id.loginLinkText);
         if (tvLogin != null) {
             tvLogin.setText(android.text.Html.fromHtml(getString(R.string.welcome_already_have_account_full)));
-            tvLogin.setOnClickListener(v ->
-                    startActivity(new Intent(WelcomeActivity.this, LoginActivity.class))
-            );
+            tvLogin.setOnClickListener(v -> {
+                startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
+                overridePendingTransition(R.anim.nav_seamless_fade_in, R.anim.nav_seamless_fade_out);
+            });
         }
 
         TextView tvSignUp = findViewById(R.id.signupLinkText);
         if (tvSignUp != null) {
             tvSignUp.setText(android.text.Html.fromHtml(getString(R.string.welcome_no_account_full)));
-            tvSignUp.setOnClickListener(v ->
-                    startActivity(new Intent(WelcomeActivity.this, SignUpActivity.class))
-            );
+            tvSignUp.setOnClickListener(v -> {
+                startActivity(new Intent(WelcomeActivity.this, SignUpActivity.class));
+                overridePendingTransition(R.anim.nav_seamless_fade_in, R.anim.nav_seamless_fade_out);
+            });
         }
 
         // Wire Up Onboarding Setup Full-Screen Flow

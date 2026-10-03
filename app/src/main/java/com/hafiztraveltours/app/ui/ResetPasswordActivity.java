@@ -226,6 +226,7 @@ public class ResetPasswordActivity extends BaseActivity {
         Intent intent = new Intent(ResetPasswordActivity.this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
+        overridePendingTransition(R.anim.nav_seamless_fade_in, R.anim.nav_seamless_fade_out);
         finish();
     }
 

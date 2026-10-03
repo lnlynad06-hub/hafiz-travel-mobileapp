@@ -256,8 +256,9 @@ public class PackageDetailActivity extends BaseActivity {
 
         SessionManager session = new SessionManager(this);
         if (!session.isLoggedIn()) {
-            Intent intent = new Intent(this, SignUpActivity.class);
+            Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
+            overridePendingTransition(R.anim.nav_seamless_fade_in, R.anim.nav_seamless_fade_out);
             return;
         }
 
@@ -593,6 +594,7 @@ public class PackageDetailActivity extends BaseActivity {
     }
 
     private void addPriceOptionsSection() {
+        if (!detail.isUmrah) return;
         if (detail.priceOptions.isEmpty()) return;
 
         container.addView(sectionHeading(getString(R.string.detail_section_room_pricing)));

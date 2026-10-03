@@ -302,7 +302,8 @@ public class MainActivity extends BaseActivity {
                 if (isLoggedIn) {
                     startActivity(new Intent(this, ProfileActivity.class));
                 } else {
-                    startActivity(new Intent(this, SignUpActivity.class));
+                    startActivity(new Intent(this, LoginActivity.class));
+                    overridePendingTransition(R.anim.nav_seamless_fade_in, R.anim.nav_seamless_fade_out);
                 }
             });
         }

@@ -133,8 +133,13 @@ public class BookingSummaryActivity extends BaseActivity {
             }
         }
 
-        String seasonLabel = com.hafiztraveltours.app.utils.PackagePricingCalculator.getSeasonLabel(this, bookingRequest.season);
-        txtRoomLabel.setText(bookingRequest.roomLabel + " • " + seasonLabel);
+        boolean isUmrah = bookingRequest.packageDetail != null && bookingRequest.packageDetail.isUmrah;
+        if (isUmrah) {
+            txtRoomLabel.setText(bookingRequest.roomLabel);
+        } else {
+            String seasonLabel = com.hafiztraveltours.app.utils.PackagePricingCalculator.getSeasonLabel(this, bookingRequest.season);
+            txtRoomLabel.setText(seasonLabel);
+        }
         txtPaxCount.setText(getString(R.string.summary_pax_adults_format, bookingRequest.adultPaxCount));
 
         double calculatedTotal = 0;
@@ -161,7 +166,8 @@ public class BookingSummaryActivity extends BaseActivity {
         if (containerBreakdown == null) return;
         containerBreakdown.removeAllViews();
 
-        if (bookingRequest.season != null && !bookingRequest.season.isEmpty()) {
+        boolean isUmrah = bookingRequest.packageDetail != null && bookingRequest.packageDetail.isUmrah;
+        if (!isUmrah && bookingRequest.season != null && !bookingRequest.season.isEmpty()) {
             LinearLayout sRow = new LinearLayout(this);
             sRow.setOrientation(LinearLayout.HORIZONTAL);
             sRow.setPadding(0, dp(2), 0, dp(4));

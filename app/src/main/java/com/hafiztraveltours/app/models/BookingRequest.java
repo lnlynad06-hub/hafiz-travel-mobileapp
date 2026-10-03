@@ -13,6 +13,7 @@ public class BookingRequest implements Serializable {
     public String roomPriceFormatted;
     public double unitPriceAmount;
     public int adultPaxCount = 1;
+    public int kidsPaxCount = 0;
     public double totalAmount;
     public String totalAmountFormatted;
 
@@ -80,7 +81,7 @@ public class BookingRequest implements Serializable {
     }
 
     public void recalculateTotal() {
-        double subtotal = (this.unitPriceAmount * this.adultPaxCount);
+        double subtotal = (this.unitPriceAmount * (this.adultPaxCount + this.kidsPaxCount));
         this.totalAmount = Math.max(0, subtotal - this.discountAmount);
         this.totalAmountFormatted = formatPrice(this.totalAmount);
     }

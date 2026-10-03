@@ -158,6 +158,18 @@ public class UmrahPackage implements java.io.Serializable {
     @SerializedName("season_pricing")
     public SeasonPricingData seasonPricing;
 
+    @SerializedName("child_under_2_price")
+    public Double childUnder2Price;
+
+    @SerializedName("child_2_11_with_bed_price")
+    public Double child211WithBedPrice;
+
+    @SerializedName("child_2_11_no_bed_price")
+    public Double child211NoBedPrice;
+
+    @SerializedName("child_2_to_4_price")
+    public Double child2To4Price;
+
     @SerializedName("child_pricing_rules")
     public ChildPricingRules childPricingRules;
 
@@ -207,11 +219,41 @@ public class UmrahPackage implements java.io.Serializable {
     }
 
     public static class ChildPricingRules implements java.io.Serializable {
-        @SerializedName("tour")
-        public java.util.Map<String, String> tour;
+        @SerializedName("type")
+        public String type;
 
-        @SerializedName("umrah")
-        public java.util.Map<String, String> umrah;
+        @SerializedName("child_under_2_price")
+        public Double childUnder2Price;
+
+        @SerializedName("child_2_11_with_bed_price")
+        public Double child211WithBedPrice;
+
+        @SerializedName("child_2_11_no_bed_price")
+        public Double child211NoBedPrice;
+
+        @SerializedName("child_2_to_4_price")
+        public Double child2To4Price;
+
+        @SerializedName("under_2_fixed_price")
+        public Double under2FixedPrice;
+
+        @SerializedName("under_2_label")
+        public String under2Label;
+
+        @SerializedName("age_2_to_11_bed_label")
+        public String age2To11BedLabel;
+
+        @SerializedName("age_2_to_11_no_bed_label")
+        public String age2To11NoBedLabel;
+
+        @SerializedName("age_2_to_4_label")
+        public String age2To4Label;
+
+        @SerializedName("above_11_label")
+        public String above11Label;
+
+        @SerializedName("above_4_label")
+        public String above4Label;
     }
 
     @SerializedName("requires_passport")
@@ -290,6 +332,15 @@ public class UmrahPackage implements java.io.Serializable {
 
         @SerializedName("is_full")
         public Boolean isFull;
+
+        @SerializedName("season")
+        public String season;
+
+        @SerializedName("price")
+        public String price;
+
+        @SerializedName("price_formatted")
+        public String priceFormatted;
 
         @SerializedName("pricing")
         public java.util.List<PricingTier> pricing;

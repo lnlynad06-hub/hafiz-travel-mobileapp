@@ -36,6 +36,7 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
     private PackageDetail detail;
     private int selectedRoomIndex = 0;
     private int paxCount = 1;
+    private int kidsCount = 0;
     private String selectedSeason = com.hafiztraveltours.app.utils.PackagePricingCalculator.SEASON_STANDARD;
 
     private ImageView imgPackage;
@@ -44,6 +45,7 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
     private LinearLayout containerSeason;
     private LinearLayout containerRoomOptions;
     private TextView txtPaxCount;
+    private TextView txtKidsCount;
     private TextView txtTotalAmount;
     private TextView txtUnitPriceDetail;
 
@@ -91,6 +93,7 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
         containerRoomOptions = view.findViewById(R.id.configRoomOptionsContainer);
         containerDeparture = view.findViewById(R.id.configDepartureContainer);
         txtPaxCount = view.findViewById(R.id.txtPaxCount);
+        txtKidsCount = view.findViewById(R.id.txtKidsCount);
         txtTotalAmount = view.findViewById(R.id.configTotalAmountText);
         txtUnitPriceDetail = view.findViewById(R.id.configUnitPriceDetailText);
 
@@ -124,6 +127,28 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
             }
         });
 
+        View btnKidsDecrease = view.findViewById(R.id.btnKidsDecrease);
+        if (btnKidsDecrease != null) {
+            btnKidsDecrease.setOnClickListener(v -> {
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
+                if (kidsCount > 0) {
+                    kidsCount--;
+                    updateUi();
+                }
+            });
+        }
+
+        View btnKidsIncrease = view.findViewById(R.id.btnKidsIncrease);
+        if (btnKidsIncrease != null) {
+            btnKidsIncrease.setOnClickListener(v -> {
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
+                if (kidsCount < 10) {
+                    kidsCount++;
+                    updateUi();
+                }
+            });
+        }
+
         if (btnApplyPromo != null) {
             btnApplyPromo.setOnClickListener(v -> {
                 com.hafiztraveltours.app.utils.HapticUtil.click(v);
@@ -141,6 +166,22 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
             com.hafiztraveltours.app.utils.HapticUtil.click(v);
             proceedToTravellerDetails();
         });
+
+        View seasonTitle = view.findViewById(R.id.configSeasonTitle);
+        View seasonScrollView = view.findViewById(R.id.configSeasonScrollView);
+        View roomTitle = view.findViewById(R.id.configRoomTitle);
+        View roomScrollView = view.findViewById(R.id.configRoomScrollView);
+
+        if (seasonTitle != null) seasonTitle.setVisibility(View.GONE);
+        if (seasonScrollView != null) seasonScrollView.setVisibility(View.GONE);
+
+        if (detail.isUmrah) {
+            if (roomTitle != null) roomTitle.setVisibility(View.VISIBLE);
+            if (roomScrollView != null) roomScrollView.setVisibility(View.VISIBLE);
+        } else {
+            if (roomTitle != null) roomTitle.setVisibility(View.GONE);
+            if (roomScrollView != null) roomScrollView.setVisibility(View.GONE);
+        }
 
         renderSeasonOptions();
         renderRoomOptions();
@@ -181,6 +222,13 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
         List<PackageDetail.DepartureOption> list = getDepartureOptions();
         if (selectedDepartureIndex >= list.size()) {
             selectedDepartureIndex = 0;
+        }
+
+        if (!detail.isUmrah && selectedDepartureIndex >= 0 && selectedDepartureIndex < list.size()) {
+            PackageDetail.DepartureOption activeDep = list.get(selectedDepartureIndex);
+            if (activeDep != null && activeDep.season != null && !activeDep.season.trim().isEmpty()) {
+                selectedSeason = activeDep.season.trim();
+            }
         }
 
         for (int i = 0; i < list.size(); i++) {
@@ -255,7 +303,15 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
             card.setOnClickListener(v -> {
                 com.hafiztraveltours.app.utils.HapticUtil.click(v);
                 selectedDepartureIndex = index;
+                if (!detail.isUmrah) {
+                    if (opt.season != null && !opt.season.trim().isEmpty()) {
+                        selectedSeason = opt.season.trim();
+                    } else {
+                        selectedSeason = com.hafiztraveltours.app.utils.PackagePricingCalculator.SEASON_STANDARD;
+                    }
+                }
                 renderDepartureOptions();
+                updateUi();
                 if (isFull) {
                     android.widget.Toast.makeText(requireContext(), getString(R.string.err_departure_fully_booked), android.widget.Toast.LENGTH_SHORT).show();
                 }
@@ -405,54 +461,75 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
     }
 
     private double getSelectedUnitAmount() {
-        double baseSeasonPrice = com.hafiztraveltours.app.utils.PackagePricingCalculator.getSeasonPrice(detail, selectedSeason);
-        if (detail.priceOptions != null && !detail.priceOptions.isEmpty() && selectedRoomIndex >= 0 && selectedRoomIndex < detail.priceOptions.size()) {
-            PackageDetail.PriceOption opt = detail.priceOptions.get(selectedRoomIndex);
-            double optPrice = BookingRequest.parsePriceAmount(opt.price);
-            double defaultDetailPrice = BookingRequest.parsePriceAmount(detail.price);
-            if (defaultDetailPrice > 0 && Math.abs(optPrice - defaultDetailPrice) > 0.01) {
-                double diff = optPrice - defaultDetailPrice;
-                return Math.max(0, baseSeasonPrice + diff);
-            } else if (optPrice > 0 && baseSeasonPrice > 0) {
-                return baseSeasonPrice;
-            } else if (optPrice > 0) {
-                return optPrice;
+        if (detail.isUmrah) {
+            if (detail.priceOptions != null && !detail.priceOptions.isEmpty() && selectedRoomIndex >= 0 && selectedRoomIndex < detail.priceOptions.size()) {
+                PackageDetail.PriceOption opt = detail.priceOptions.get(selectedRoomIndex);
+                double optPrice = BookingRequest.parsePriceAmount(opt.price);
+                if (optPrice > 0) return optPrice;
             }
+            return BookingRequest.parsePriceAmount(detail.price);
+        } else {
+            List<PackageDetail.DepartureOption> deps = getDepartureOptions();
+            if (selectedDepartureIndex >= 0 && selectedDepartureIndex < deps.size()) {
+                PackageDetail.DepartureOption dep = deps.get(selectedDepartureIndex);
+                if (dep != null && dep.price != null && !dep.price.trim().isEmpty()) {
+                    double depPrice = BookingRequest.parsePriceAmount(dep.price);
+                    if (depPrice > 0) return depPrice;
+                }
+            }
+            return com.hafiztraveltours.app.utils.PackagePricingCalculator.getSeasonPrice(detail, selectedSeason);
         }
-        return baseSeasonPrice > 0 ? baseSeasonPrice : BookingRequest.parsePriceAmount(detail.price);
     }
 
     private void updateUi() {
-        txtPaxCount.setText(getString(R.string.pax_count_format, paxCount));
+        if (txtPaxCount != null) {
+            txtPaxCount.setText(String.valueOf(paxCount));
+        }
+        if (txtKidsCount != null) {
+            txtKidsCount.setText(String.valueOf(kidsCount));
+        }
 
         String roomLabel = getString(R.string.room_standard);
-        if (detail.priceOptions != null && !detail.priceOptions.isEmpty() && selectedRoomIndex >= 0 && selectedRoomIndex < detail.priceOptions.size()) {
-            PackageDetail.PriceOption opt = detail.priceOptions.get(selectedRoomIndex);
-            roomLabel = com.hafiztraveltours.app.utils.RoomLabels.resolve(requireContext(), opt);
+        if (detail.isUmrah) {
+            if (detail.priceOptions != null && !detail.priceOptions.isEmpty() && selectedRoomIndex >= 0 && selectedRoomIndex < detail.priceOptions.size()) {
+                PackageDetail.PriceOption opt = detail.priceOptions.get(selectedRoomIndex);
+                roomLabel = com.hafiztraveltours.app.utils.RoomLabels.resolve(requireContext(), opt);
+            }
+        } else {
+            roomLabel = com.hafiztraveltours.app.utils.PackagePricingCalculator.getSeasonLabel(requireContext(), selectedSeason);
         }
 
         double unitAmount = getSelectedUnitAmount();
         String roomPriceStr = BookingRequest.formatPrice(unitAmount);
-        double subtotal = unitAmount * paxCount;
+        int totalPax = paxCount + kidsCount;
+        double subtotal = unitAmount * totalPax;
 
         double totalAmount = Math.max(0, subtotal - appliedDiscount);
 
         txtTotalAmount.setText(BookingRequest.formatPrice(totalAmount));
-        txtUnitPriceDetail.setText(getString(R.string.room_price_x_pax_format, roomPriceStr, paxCount));
+        if (kidsCount > 0) {
+            txtUnitPriceDetail.setText(getString(R.string.room_price_x_pax_format, roomPriceStr, totalPax));
+        } else {
+            txtUnitPriceDetail.setText(getString(R.string.room_price_x_pax_format, roomPriceStr, paxCount));
+        }
     }
 
     private void proceedToTravellerDetails() {
         SessionManager session = new SessionManager(requireContext());
         if (!session.isLoggedIn()) {
             dismiss();
-            startActivity(new Intent(requireContext(), SignUpActivity.class));
+            startActivity(new Intent(requireContext(), LoginActivity.class));
             return;
         }
 
         String roomLabel = getString(R.string.room_standard);
-        if (detail.priceOptions != null && !detail.priceOptions.isEmpty() && selectedRoomIndex >= 0 && selectedRoomIndex < detail.priceOptions.size()) {
-            PackageDetail.PriceOption opt = detail.priceOptions.get(selectedRoomIndex);
-            roomLabel = com.hafiztraveltours.app.utils.RoomLabels.resolve(requireContext(), opt);
+        if (detail.isUmrah) {
+            if (detail.priceOptions != null && !detail.priceOptions.isEmpty() && selectedRoomIndex >= 0 && selectedRoomIndex < detail.priceOptions.size()) {
+                PackageDetail.PriceOption opt = detail.priceOptions.get(selectedRoomIndex);
+                roomLabel = com.hafiztraveltours.app.utils.RoomLabels.resolve(requireContext(), opt);
+            }
+        } else {
+            roomLabel = com.hafiztraveltours.app.utils.PackagePricingCalculator.getSeasonLabel(requireContext(), selectedSeason);
         }
 
         double unitAmount = getSelectedUnitAmount();
@@ -469,7 +546,8 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
         req.roomPriceFormatted = roomPriceStr;
         req.unitPriceAmount = unitAmount;
         req.adultPaxCount = paxCount;
-        req.season = selectedSeason;
+        req.kidsPaxCount = kidsCount;
+        req.season = detail.isUmrah ? null : selectedSeason;
         req.packageDetail = detail;
 
         List<PackageDetail.DepartureOption> deps = getDepartureOptions();
@@ -479,7 +557,8 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
                 android.widget.Toast.makeText(requireContext(), getString(R.string.err_departure_fully_booked), android.widget.Toast.LENGTH_SHORT).show();
                 return;
             }
-            if (paxCount > selected.getAvailableSeatsCount()) {
+            int totalPax = paxCount + kidsCount;
+            if (totalPax > selected.getAvailableSeatsCount()) {
                 android.widget.Toast.makeText(requireContext(), getString(R.string.err_departure_not_enough_seats, selected.getAvailableSeatsCount()), android.widget.Toast.LENGTH_SHORT).show();
                 return;
             }

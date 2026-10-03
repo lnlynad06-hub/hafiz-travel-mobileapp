@@ -177,8 +177,9 @@ public class PassengerDetailsActivity extends BaseActivity {
             validateAndProceed();
         });
 
-        // Initialize required additional traveller count based on adultPaxCount
-        int extraNeeded = Math.max(0, bookingRequest.adultPaxCount - 1);
+        // Initialize required additional traveller count based on total pax (adults + kids)
+        int totalPaxNeeded = bookingRequest.adultPaxCount + bookingRequest.kidsPaxCount;
+        int extraNeeded = Math.max(0, totalPaxNeeded - 1);
         for (int i = 0; i < extraNeeded; i++) {
             addAdditionalTraveller();
         }
@@ -1157,9 +1158,10 @@ public class PassengerDetailsActivity extends BaseActivity {
 
     private void updateFooterCount() {
         int totalPax = 1 + additionalTravellers.size();
-        txtRoomAndPax.setText(getString(R.string.passenger_room_pax_format, bookingRequest.roomLabel, bookingRequest.adultPaxCount));
+        int totalPaxNeeded = bookingRequest.adultPaxCount + bookingRequest.kidsPaxCount;
+        txtRoomAndPax.setText(getString(R.string.passenger_room_pax_format, bookingRequest.roomLabel, totalPaxNeeded));
         txtTotalAmount.setText(bookingRequest.totalAmountFormatted);
-        txtPaxCountFooter.setText(getString(R.string.passenger_footer_count_format, totalPax, bookingRequest.adultPaxCount));
+        txtPaxCountFooter.setText(getString(R.string.passenger_footer_count_format, totalPax, totalPaxNeeded));
     }
 
     private void showDatePicker(EditText editText) {
@@ -1223,13 +1225,14 @@ public class PassengerDetailsActivity extends BaseActivity {
 
         // 2. Validate Total Pax Count vs Selected Booking Pax (exact match required)
         int totalPax = 1 + additionalTravellers.size();
+        int totalPaxNeeded = bookingRequest.adultPaxCount + bookingRequest.kidsPaxCount;
         PassengerDetailsViewModel.PaxCheck paxCheck =
-                passengerViewModel.checkPaxCount(totalPax, bookingRequest.adultPaxCount);
+                passengerViewModel.checkPaxCount(totalPax, totalPaxNeeded);
         if (paxCheck == PassengerDetailsViewModel.PaxCheck.UNDER) {
-            Toast.makeText(this, getString(R.string.passenger_err_pax_count_mismatch, bookingRequest.adultPaxCount, totalPax, Math.max(0, bookingRequest.adultPaxCount - totalPax)), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.passenger_err_pax_count_mismatch, totalPaxNeeded, totalPax, Math.max(0, totalPaxNeeded - totalPax)), Toast.LENGTH_LONG).show();
             return;
         } else if (paxCheck == PassengerDetailsViewModel.PaxCheck.OVER) {
-            Toast.makeText(this, getString(R.string.passenger_err_pax_over, totalPax, bookingRequest.adultPaxCount, totalPax - bookingRequest.adultPaxCount), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.passenger_err_pax_over, totalPax, totalPaxNeeded, totalPax - totalPaxNeeded), Toast.LENGTH_LONG).show();
             return;
         }
 

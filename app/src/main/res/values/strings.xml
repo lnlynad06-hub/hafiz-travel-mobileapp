@@ -1568,7 +1568,7 @@
     <string name="season_badge_high_peak">HIGH PEAK</string>
     <string name="child_with_bed">With Bed</string>
     <string name="child_without_bed">No Bed</string>
-    <string name="option_bed_label">Bed Requirement (Child aged 2–11)</string>
+    <string name="option_bed_label">Bed Requirement (11 years and below)</string>
     <string name="passenger_type_adult">Adult</string>
     <string name="passenger_type_child">Child</string>
     <string name="passenger_type_infant">Infant</string>
@@ -1579,5 +1579,17 @@
     <string name="package_season_label">Season</string>
     <string name="with_bed">With Bed</string>
     <string name="without_bed">Without Bed</string>
-    <string name="child_bed_option_label">Bed Option (Aged 2–11)</string>
+    <string name="child_bed_option_label">Bed Option (11 years and below)</string>
+    <string name="config_pax_section_title">Number of Travellers</string>
+    <string name="config_pax_adults_label">Adults</string>
+    <string name="config_pax_adults_sub">Above 11 years (Adult price)</string>
+    <string name="config_pax_kids_label">Kids</string>
+    <string name="config_pax_kids_sub">11 years and below</string>
+    <string name="label_starting_from">Starting from</string>
+    <string name="season_standard_short">Standard</string>
+    <string name="season_low_peak_short">Low Peak</string>
+    <string name="season_high_peak_short">High Peak</string>
+    <string name="under_2">Under 2</string>
+    <string name="travel_date">Travel Date</string>
+    <string name="departure_date">Departure Date</string>
 </resources>

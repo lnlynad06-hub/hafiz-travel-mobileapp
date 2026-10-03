@@ -168,13 +168,13 @@ public class LoginActivity extends BaseActivity {
         findViewById(R.id.forgotPasswordText).setOnClickListener(v -> {
             com.hafiztraveltours.app.utils.HapticUtil.click(v);
             startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            overridePendingTransition(R.anim.nav_seamless_fade_in, R.anim.nav_seamless_fade_out);
         });
 
         findViewById(R.id.goToSignUp).setOnClickListener(v -> {
             com.hafiztraveltours.app.utils.HapticUtil.click(v);
             startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            overridePendingTransition(R.anim.nav_seamless_fade_in, R.anim.nav_seamless_fade_out);
         });
 
         View btnLanguagePicker = findViewById(R.id.btnLanguagePicker);
@@ -223,7 +223,7 @@ public class LoginActivity extends BaseActivity {
                 Intent intent = new Intent(this, VerifyAccountActivity.class);
                 intent.putExtra(VerifyAccountActivity.EXTRA_EMAIL, pendingLoginEmail);
                 startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                overridePendingTransition(R.anim.nav_seamless_fade_in, R.anim.nav_seamless_fade_out);
             } else {
                 Toast.makeText(this, result.resolveMessage(this), Toast.LENGTH_LONG).show();
             }

@@ -248,7 +248,7 @@ public class VerifyAccountActivity extends BaseActivity {
         intent.putExtra("prefill_email", targetEmail);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        overridePendingTransition(R.anim.nav_seamless_fade_in, R.anim.nav_seamless_fade_out);
         finish();
     }
 

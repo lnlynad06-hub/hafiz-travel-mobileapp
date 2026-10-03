@@ -136,7 +136,7 @@ public class ForgotPasswordActivity extends BaseActivity {
                 Intent intent = new Intent(ForgotPasswordActivity.this, VerifyResetCodeActivity.class);
                 intent.putExtra(VerifyResetCodeActivity.EXTRA_EMAIL, email);
                 startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                overridePendingTransition(R.anim.nav_seamless_fade_in, R.anim.nav_seamless_fade_out);
                 finish();
             } else {
                 String errorMsg = result.resolveMessage(this);

@@ -1450,7 +1450,7 @@
     <string name="season_badge_high_peak">HIGH PEAK</string>
     <string name="child_with_bed">Dengan Katil</string>
     <string name="child_without_bed">Tanpa Katil</string>
-    <string name="option_bed_label">Keperluan Katil (Kanak-kanak 2–11 tahun)</string>
+    <string name="option_bed_label">Keperluan Katil (11 tahun dan ke bawah)</string>
     <string name="passenger_type_adult">Dewasa</string>
     <string name="passenger_type_child">Kanak-kanak</string>
     <string name="passenger_type_infant">Bayi</string>
@@ -1461,6 +1461,18 @@
     <string name="package_season_label">Musim</string>
     <string name="with_bed">Dengan Katil</string>
     <string name="without_bed">Tanpa Katil</string>
-    <string name="child_bed_option_label">Pilihan Katil (2–11 tahun)</string>
+    <string name="child_bed_option_label">Pilihan Katil (11 tahun dan ke bawah)</string>
+    <string name="config_pax_section_title">Bilangan Jemaah / Pelancong</string>
+    <string name="config_pax_adults_label">Dewasa</string>
+    <string name="config_pax_adults_sub">Lebih 11 tahun (Harga dewasa)</string>
+    <string name="config_pax_kids_label">Kanak-kanak</string>
+    <string name="config_pax_kids_sub">11 tahun dan ke bawah</string>
+    <string name="label_starting_from">Bermula daripada</string>
+    <string name="season_standard_short">Standard</string>
+    <string name="season_low_peak_short">Luar Puncak</string>
+    <string name="season_high_peak_short">Puncak</string>
+    <string name="under_2">Bawah 2 Tahun</string>
+    <string name="travel_date">Tarikh Perjalanan</string>
+    <string name="departure_date">Tarikh Pelepasan</string>
 </resources>
 

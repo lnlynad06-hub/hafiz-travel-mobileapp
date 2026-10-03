@@ -34,6 +34,28 @@ public final class PackagePricingCalculator {
         return com.hafiztraveltours.app.models.BookingRequest.parsePriceAmount(detail.price);
     }
 
+    public static double getSeasonAdultPrice(UmrahPackage pkg, String season, double fallbackPrice) {
+        if (pkg == null) return fallbackPrice;
+        if (pkg.seasonPrices != null && season != null) {
+            String raw = pkg.seasonPrices.get(season);
+            if (raw != null && !raw.trim().isEmpty()) {
+                double parsed = MoneyFormat.parseAmount(raw);
+                if (parsed > 0) return parsed;
+            }
+        }
+        if (pkg.seasonPricing != null && season != null) {
+            UmrahPackage.SeasonRate rate = null;
+            if (SEASON_STANDARD.equalsIgnoreCase(season)) rate = pkg.seasonPricing.standard;
+            else if (SEASON_LOW_PEAK.equalsIgnoreCase(season)) rate = pkg.seasonPricing.lowPeak;
+            else if (SEASON_HIGH_PEAK.equalsIgnoreCase(season)) rate = pkg.seasonPricing.highPeak;
+
+            if (rate != null && rate.adultPrice > 0) {
+                return rate.adultPrice;
+            }
+        }
+        return fallbackPrice > 0 ? fallbackPrice : pkg.getNumericPrice();
+    }
+
     public static String getSeasonLabel(android.content.Context context, String season) {
         if (context == null || season == null) return "Standard";
         if (SEASON_LOW_PEAK.equalsIgnoreCase(season)) {
@@ -70,32 +92,22 @@ public final class PackagePricingCalculator {
         String departureDate = (detail != null && detail.availableDepartures != null && !detail.availableDepartures.isEmpty())
                 ? detail.availableDepartures.get(0).departureDate : null;
 
-        return calculatePassengerPrice(isUmrah, baseAdult, dobIso, departureDate, withBed);
-    }
-
-    public static double getSeasonAdultPrice(UmrahPackage pkg, String season, double fallbackPrice) {
-        if (pkg == null) return fallbackPrice;
-        if (pkg.seasonPrices != null && season != null) {
-            String raw = pkg.seasonPrices.get(season);
-            if (raw != null && !raw.trim().isEmpty()) {
-                double parsed = MoneyFormat.parseAmount(raw);
-                if (parsed > 0) return parsed;
-            }
-        }
-        if (pkg.seasonPricing != null && season != null) {
-            UmrahPackage.SeasonRate rate = null;
-            if (SEASON_STANDARD.equalsIgnoreCase(season)) rate = pkg.seasonPricing.standard;
-            else if (SEASON_LOW_PEAK.equalsIgnoreCase(season)) rate = pkg.seasonPricing.lowPeak;
-            else if (SEASON_HIGH_PEAK.equalsIgnoreCase(season)) rate = pkg.seasonPricing.highPeak;
-
-            if (rate != null && rate.adultPrice > 0) {
-                return rate.adultPrice;
-            }
-        }
-        return fallbackPrice > 0 ? fallbackPrice : pkg.getNumericPrice();
+        return calculatePassengerPrice(detail, season, isUmrah, baseAdult, dobIso, departureDate, withBed);
     }
 
     public static double calculatePassengerPrice(
+            boolean isUmrah,
+            double baseAdultPrice,
+            String dobIso,
+            String departureDateIso,
+            Boolean withBed) {
+
+        return calculatePassengerPrice(null, null, isUmrah, baseAdultPrice, dobIso, departureDateIso, withBed);
+    }
+
+    public static double calculatePassengerPrice(
+            com.hafiztraveltours.app.models.PackageDetail detail,
+            String season,
             boolean isUmrah,
             double baseAdultPrice,
             String dobIso,
@@ -126,31 +138,87 @@ public final class PackagePricingCalculator {
         Calendar twelveYears = (Calendar) dobCal.clone();
         twelveYears.add(Calendar.YEAR, 12);
 
+        UmrahPackage.SeasonRate seasonRate = getSeasonRate(detail, season);
+
         if (isUmrah) {
-            // A. Below 2 years -> Fixed RM2,000
+            // A. Below 2 years (reference date is before 2nd birthday)
             if (refCal.before(twoYears)) {
-                return 2000.0;
+                Double configured = getChildUnder2Price(detail, seasonRate);
+                return configured != null ? configured : 2000.0;
             }
-            // B. 2 years 1 day through 4 years -> Basic - RM300
+            // B. Aged 2 years 1 day through 4 years (2nd birthday up to 4th birthday)
             if (!refCal.before(twoYears) && !refCal.after(fourYears)) {
-                return Math.max(0, baseAdultPrice - 300.0);
+                Double configured = getChild2To4Price(detail, seasonRate);
+                return configured != null ? configured : Math.max(0, baseAdultPrice - 300.0);
             }
-            // C. 4 years 1 day and above -> Adult price
+            // C. 4 years 1 day and above -> Adult room price
             return baseAdultPrice;
         } else {
             // TOUR
-            // A. Below 2 years -> Fixed RM500
+            // A. Below 2 years (reference date is before 2nd birthday)
             if (refCal.before(twoYears)) {
-                return 500.0;
+                Double configured = getChildUnder2Price(detail, seasonRate);
+                return configured != null ? configured : 500.0;
             }
-            // B. 2 to 11 years (before 12th birthday)
+            // B. 11 years old and below (aged 2 to 11, i.e. before 12th birthday)
             if (!refCal.before(twoYears) && refCal.before(twelveYears)) {
                 boolean bed = (withBed == null || withBed);
-                return Math.max(0, baseAdultPrice - (bed ? 100.0 : 200.0));
+                if (bed) {
+                    Double configured = getChildWithBedPrice(detail, seasonRate);
+                    return configured != null ? configured : Math.max(0, baseAdultPrice - 100.0);
+                } else {
+                    Double configured = getChildNoBedPrice(detail, seasonRate);
+                    return configured != null ? configured : Math.max(0, baseAdultPrice - 200.0);
+                }
             }
-            // C. 12 years and above -> Adult price
+            // C. Above 11 years old (12th birthday and above) -> Adult season price
             return baseAdultPrice;
         }
+    }
+
+    private static UmrahPackage.SeasonRate getSeasonRate(com.hafiztraveltours.app.models.PackageDetail detail, String season) {
+        if (detail == null || detail.seasonPricing == null || season == null) return null;
+        if (SEASON_STANDARD.equalsIgnoreCase(season)) return detail.seasonPricing.standard;
+        if (SEASON_LOW_PEAK.equalsIgnoreCase(season)) return detail.seasonPricing.lowPeak;
+        if (SEASON_HIGH_PEAK.equalsIgnoreCase(season)) return detail.seasonPricing.highPeak;
+        return null;
+    }
+
+    private static Double getChildUnder2Price(com.hafiztraveltours.app.models.PackageDetail detail, UmrahPackage.SeasonRate seasonRate) {
+        if (detail != null) {
+            if (detail.childUnder2Price != null && detail.childUnder2Price > 0) return detail.childUnder2Price;
+            if (detail.childPricingRules != null && detail.childPricingRules.childUnder2Price != null && detail.childPricingRules.childUnder2Price > 0) return detail.childPricingRules.childUnder2Price;
+            if (detail.childPricingRules != null && detail.childPricingRules.under2FixedPrice != null && detail.childPricingRules.under2FixedPrice > 0) return detail.childPricingRules.under2FixedPrice;
+        }
+        if (seasonRate != null && seasonRate.childUnder2 > 0) return seasonRate.childUnder2;
+        return null;
+    }
+
+    private static Double getChild2To4Price(com.hafiztraveltours.app.models.PackageDetail detail, UmrahPackage.SeasonRate seasonRate) {
+        if (detail != null) {
+            if (detail.child2To4Price != null && detail.child2To4Price > 0) return detail.child2To4Price;
+            if (detail.childPricingRules != null && detail.childPricingRules.child2To4Price != null && detail.childPricingRules.child2To4Price > 0) return detail.childPricingRules.child2To4Price;
+        }
+        if (seasonRate != null && seasonRate.child2To4 > 0) return seasonRate.child2To4;
+        return null;
+    }
+
+    private static Double getChildWithBedPrice(com.hafiztraveltours.app.models.PackageDetail detail, UmrahPackage.SeasonRate seasonRate) {
+        if (detail != null) {
+            if (detail.child211WithBedPrice != null && detail.child211WithBedPrice > 0) return detail.child211WithBedPrice;
+            if (detail.childPricingRules != null && detail.childPricingRules.child211WithBedPrice != null && detail.childPricingRules.child211WithBedPrice > 0) return detail.childPricingRules.child211WithBedPrice;
+        }
+        if (seasonRate != null && seasonRate.childWithBed > 0) return seasonRate.childWithBed;
+        return null;
+    }
+
+    private static Double getChildNoBedPrice(com.hafiztraveltours.app.models.PackageDetail detail, UmrahPackage.SeasonRate seasonRate) {
+        if (detail != null) {
+            if (detail.child211NoBedPrice != null && detail.child211NoBedPrice > 0) return detail.child211NoBedPrice;
+            if (detail.childPricingRules != null && detail.childPricingRules.child211NoBedPrice != null && detail.childPricingRules.child211NoBedPrice > 0) return detail.childPricingRules.child211NoBedPrice;
+        }
+        if (seasonRate != null && seasonRate.childWithoutBed > 0) return seasonRate.childWithoutBed;
+        return null;
     }
 
     public static String getPassengerCategory(boolean isUmrah, String dobIso, String departureDateIso) {

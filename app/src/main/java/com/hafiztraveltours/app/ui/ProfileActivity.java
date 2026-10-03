@@ -166,8 +166,9 @@ public class ProfileActivity extends BaseActivity {
 
         if (guestLoginButton != null) {
             guestLoginButton.setOnClickListener(v -> {
-                Intent intent = new Intent(this, SignUpActivity.class);
+                Intent intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.nav_seamless_fade_in, R.anim.nav_seamless_fade_out);
             });
         }
 
