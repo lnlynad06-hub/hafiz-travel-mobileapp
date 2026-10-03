@@ -17,6 +17,12 @@ public final class PackagePricingCalculator {
     public static final String SEASON_LOW_PEAK = "low_peak";
     public static final String SEASON_HIGH_PEAK = "high_peak";
 
+    public static class PricingConfigurationException extends IllegalStateException {
+        public PricingConfigurationException(String message) {
+            super(message);
+        }
+    }
+
     private PackagePricingCalculator() {}
 
     public static double getSeasonPrice(com.hafiztraveltours.app.models.PackageDetail detail, String season) {
@@ -144,12 +150,18 @@ public final class PackagePricingCalculator {
             // A. Below 2 years (reference date is before 2nd birthday)
             if (refCal.before(twoYears)) {
                 Double configured = getChildUnder2Price(detail, seasonRate);
-                return configured != null ? configured : baseAdultPrice;
+                if (configured == null || configured <= 0) {
+                    throw new PricingConfigurationException("Harga kanak-kanak (bawah 2 tahun) belum ditetapkan dalam ERP untuk pakej ini.");
+                }
+                return configured;
             }
             // B. Aged 2 years 1 day through 4 years (2nd birthday up to 4th birthday)
             if (!refCal.before(twoYears) && !refCal.after(fourYears)) {
                 Double configured = getChild2To4Price(detail, seasonRate);
-                return configured != null ? configured : baseAdultPrice;
+                if (configured == null || configured <= 0) {
+                    throw new PricingConfigurationException("Harga kanak-kanak (2-4 tahun) belum ditetapkan dalam ERP untuk pakej ini.");
+                }
+                return configured;
             }
             // C. 4 years 1 day and above -> Adult room price
             return baseAdultPrice;
@@ -158,17 +170,26 @@ public final class PackagePricingCalculator {
             // A. Below 2 years (reference date is before 2nd birthday)
             if (refCal.before(twoYears)) {
                 Double configured = getChildUnder2Price(detail, seasonRate);
-                return configured != null ? configured : baseAdultPrice;
+                if (configured == null || configured <= 0) {
+                    throw new PricingConfigurationException("Harga kanak-kanak (bawah 2 tahun) belum ditetapkan dalam ERP untuk pakej ini.");
+                }
+                return configured;
             }
             // B. 11 years old and below (aged 2 to 11, i.e. before 12th birthday)
             if (!refCal.before(twoYears) && refCal.before(twelveYears)) {
                 boolean bed = (withBed == null || withBed);
                 if (bed) {
                     Double configured = getChildWithBedPrice(detail, seasonRate);
-                    return configured != null ? configured : baseAdultPrice;
+                    if (configured == null || configured <= 0) {
+                        throw new PricingConfigurationException("Harga kanak-kanak (2-11 tahun dengan katil) belum ditetapkan dalam ERP untuk pakej ini.");
+                    }
+                    return configured;
                 } else {
                     Double configured = getChildNoBedPrice(detail, seasonRate);
-                    return configured != null ? configured : baseAdultPrice;
+                    if (configured == null || configured <= 0) {
+                        throw new PricingConfigurationException("Harga kanak-kanak (2-11 tahun tanpa katil) belum ditetapkan dalam ERP untuk pakej ini.");
+                    }
+                    return configured;
                 }
             }
             // C. Above 11 years old (12th birthday and above) -> Adult season price

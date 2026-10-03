@@ -122,4 +122,14 @@ public class PackagePricingCalculatorTest {
         assertEquals(4000.0, PackagePricingCalculator.calculatePassengerPrice(
                 detail, null, true, adultUmrah, "2022-10-01", departureDate, null), 0.001);
     }
+
+    @Test(expected = PackagePricingCalculator.PricingConfigurationException.class)
+    public void testMissingChildPriceThrowsException() {
+        com.hafiztraveltours.app.models.PackageDetail detail = new com.hafiztraveltours.app.models.PackageDetail();
+        detail.isUmrah = false;
+        detail.price = "2800.0";
+        // child pricing fields are left NULL/unconfigured
+        PackagePricingCalculator.calculatePassengerPrice(
+                detail, "standard", false, 2800.0, "2020-01-01", "2026-10-02", true);
+    }
 }

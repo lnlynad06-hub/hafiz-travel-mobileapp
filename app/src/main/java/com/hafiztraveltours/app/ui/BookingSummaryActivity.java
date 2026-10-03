@@ -143,13 +143,17 @@ public class BookingSummaryActivity extends BaseActivity {
         txtPaxCount.setText(getString(R.string.summary_pax_adults_format, bookingRequest.adultPaxCount));
 
         double calculatedTotal = 0;
-        if (bookingRequest.passengers != null) {
-            for (BookingRequest.Passenger p : bookingRequest.passengers) {
-                calculatedTotal += com.hafiztraveltours.app.utils.PackagePricingCalculator.calculatePassengerPrice(
-                        bookingRequest.packageDetail, bookingRequest.season, p.dateOfBirth, p.withBed, bookingRequest.unitPriceAmount);
+        try {
+            if (bookingRequest.passengers != null) {
+                for (BookingRequest.Passenger p : bookingRequest.passengers) {
+                    calculatedTotal += com.hafiztraveltours.app.utils.PackagePricingCalculator.calculatePassengerPrice(
+                            bookingRequest.packageDetail, bookingRequest.season, p.dateOfBirth, p.withBed, bookingRequest.unitPriceAmount);
+                }
+            } else {
+                calculatedTotal = bookingRequest.unitPriceAmount * bookingRequest.adultPaxCount;
             }
-        } else {
-            calculatedTotal = bookingRequest.unitPriceAmount * bookingRequest.adultPaxCount;
+        } catch (com.hafiztraveltours.app.utils.PackagePricingCalculator.PricingConfigurationException e) {
+            android.widget.Toast.makeText(this, e.getMessage(), android.widget.Toast.LENGTH_LONG).show();
         }
 
         txtUnitPriceLabel.setText(getString(R.string.summary_room_subtotal_format, bookingRequest.roomPriceFormatted, bookingRequest.adultPaxCount));
@@ -241,8 +245,11 @@ public class BookingSummaryActivity extends BaseActivity {
             String masked = maskSensitiveDoc(docNo);
             tvId.setText(getString(R.string.summary_id_label_format, masked));
 
-            double paxPrice = com.hafiztraveltours.app.utils.PackagePricingCalculator.calculatePassengerPrice(
-                    bookingRequest.packageDetail, bookingRequest.season, p.dateOfBirth, p.withBed, bookingRequest.unitPriceAmount);
+            double paxPrice = 0;
+            try {
+                paxPrice = com.hafiztraveltours.app.utils.PackagePricingCalculator.calculatePassengerPrice(
+                        bookingRequest.packageDetail, bookingRequest.season, p.dateOfBirth, p.withBed, bookingRequest.unitPriceAmount);
+            } catch (com.hafiztraveltours.app.utils.PackagePricingCalculator.PricingConfigurationException ignored) {}
 
             if (p.isLead) {
                 tvRole.setText(getString(R.string.summary_lead_suffix) + " • " + BookingRequest.formatPrice(paxPrice));
