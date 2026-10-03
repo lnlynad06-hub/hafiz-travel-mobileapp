@@ -7,39 +7,41 @@ import org.junit.Test;
 public class PackagePricingCalculatorTest {
 
     @Test
-    public void testTourChildPricingRules() {
+    public void testTourChildPricingRulesAndBoundaries() {
         com.hafiztraveltours.app.models.PackageDetail detail = new com.hafiztraveltours.app.models.PackageDetail();
         detail.isUmrah = false;
-        detail.price = "2800.0";
+        detail.price = "3000.0";
         detail.childUnder2Price = 500.0;
-        detail.child211WithBedPrice = 2700.0;
-        detail.child211NoBedPrice = 2600.0;
+        detail.child211WithBedDiscount = 200.0;  // Final: 3000 - 200 = 2800.0
+        detail.child211NoBedDiscount = 300.0;    // Final: 3000 - 300 = 2700.0
 
-        com.hafiztraveltours.app.models.PackageDetail.DepartureOption dep = new com.hafiztraveltours.app.models.PackageDetail.DepartureOption(
-                "1", "2026-10-02", "2026-10-12", "Oct 2", 40, 0, 40, false);
-        detail.availableDepartures.add(dep);
+        double adultPrice = 3000.0;
+        String departureDate = "2026-10-02";
 
-        double adultPrice = 2800.0;
-
-        // 1. Infant < 2 years -> ERP configured RM500
+        // 1. Tour under 2 years (dob: 2025-05-01) -> Fixed RM500
         double infantPrice = PackagePricingCalculator.calculatePassengerPrice(
-                detail, "standard", false, adultPrice, "2025-05-01", "2026-10-02", null);
+                detail, "standard", false, adultPrice, "2025-05-01", departureDate, null);
         assertEquals(500.0, infantPrice, 0.001);
 
-        // 2. Child 2-11 with bed -> ERP configured RM2700
-        double childWithBed = PackagePricingCalculator.calculatePassengerPrice(
-                detail, "standard", false, adultPrice, "2020-01-01", "2026-10-02", true);
-        assertEquals(2700.0, childWithBed, 0.001);
+        // 2. Tour exactly 2 years on departure (dob: 2024-10-02) + Bed -> RM2800
+        double exact2yWithBed = PackagePricingCalculator.calculatePassengerPrice(
+                detail, "standard", false, adultPrice, "2024-10-02", departureDate, true);
+        assertEquals(2800.0, exact2yWithBed, 0.001);
 
-        // 3. Child 2-11 without bed -> ERP configured RM2600
-        double childWithoutBed = PackagePricingCalculator.calculatePassengerPrice(
-                detail, "standard", false, adultPrice, "2020-01-01", "2026-10-02", false);
-        assertEquals(2600.0, childWithoutBed, 0.001);
+        // 3. Tour 2 years 1 day on departure (dob: 2024-10-01) No Bed -> RM2700
+        double age2y1dNoBed = PackagePricingCalculator.calculatePassengerPrice(
+                detail, "standard", false, adultPrice, "2024-10-01", departureDate, false);
+        assertEquals(2700.0, age2y1dNoBed, 0.001);
 
-        // 4. Passenger > 11 years -> Adult price RM2800
-        double olderPassenger = PackagePricingCalculator.calculatePassengerPrice(
-                detail, "standard", false, adultPrice, "2010-01-01", "2026-10-02", null);
-        assertEquals(2800.0, olderPassenger, 0.001);
+        // 4. Tour exactly 11 years on departure (dob: 2015-10-02) + Bed -> RM2800
+        double exact11yWithBed = PackagePricingCalculator.calculatePassengerPrice(
+                detail, "standard", false, adultPrice, "2015-10-02", departureDate, true);
+        assertEquals(2800.0, exact11yWithBed, 0.001);
+
+        // 5. Tour exactly 12 years on departure (dob: 2014-10-02) -> Adult price RM3000
+        double exact12yAdult = PackagePricingCalculator.calculatePassengerPrice(
+                detail, "standard", false, adultPrice, "2014-10-02", departureDate, null);
+        assertEquals(3000.0, exact12yAdult, 0.001);
     }
 
     @Test
@@ -48,8 +50,8 @@ public class PackagePricingCalculatorTest {
         detail.isUmrah = false;
         detail.price = "3300.0";
         detail.childUnder2Price = 500.0;
-        detail.child211WithBedPrice = 3200.0;
-        detail.child211NoBedPrice = 3100.0;
+        detail.child211WithBedDiscount = 100.0; // 3300 - 100 = 3200
+        detail.child211NoBedDiscount = 200.0;   // 3300 - 200 = 3100
 
         double highPeakAdult = 3300.0;
         String departureDate = "2026-10-02";
@@ -72,64 +74,67 @@ public class PackagePricingCalculatorTest {
     }
 
     @Test
-    public void testUmrahChildPricingRules() {
+    public void testUmrahChildPricingRulesAndBoundaries() {
         com.hafiztraveltours.app.models.PackageDetail detail = new com.hafiztraveltours.app.models.PackageDetail();
         detail.isUmrah = true;
         detail.price = "3500.0";
         detail.childUnder2Price = 2000.0;
-        detail.child2To4Price = 3200.0;
+        detail.child2To4Discount = 300.0; // Final: 3500 - 300 = 3200.0
 
         double adultUmrah = 3500.0;
         String departureDate = "2026-10-02";
 
-        // 1. Infant < 2 years -> ERP configured RM2000
-        assertEquals(2000.0, PackagePricingCalculator.calculatePassengerPrice(
-                detail, null, true, adultUmrah, "2025-05-01", departureDate, null), 0.001);
-
-        // 2. Child 2y 1d to 4y -> ERP configured RM3200
-        assertEquals(3200.0, PackagePricingCalculator.calculatePassengerPrice(
-                detail, null, true, adultUmrah, "2023-01-01", departureDate, null), 0.001);
-
-        // 3. Child > 4y 1d -> Adult room price RM3500
-        assertEquals(3500.0, PackagePricingCalculator.calculatePassengerPrice(
-                detail, null, true, adultUmrah, "2020-01-01", departureDate, null), 0.001);
-    }
-
-    @Test
-    public void testUmrahExactDobBoundaries() {
-        com.hafiztraveltours.app.models.PackageDetail detail = new com.hafiztraveltours.app.models.PackageDetail();
-        detail.isUmrah = true;
-        detail.price = "4000.0";
-        detail.childUnder2Price = 2000.0;
-        detail.child2To4Price = 3700.0;
-
-        double adultUmrah = 4000.0;
-        String departureDate = "2026-10-02";
-
-        // 1 day before 2nd birthday: < 2 years -> Infant (RM2000)
+        // 1. Umrah under 2 years (1 day before 2nd birthday: 2024-10-03) -> Infant (RM2000)
         assertEquals(2000.0, PackagePricingCalculator.calculatePassengerPrice(
                 detail, null, true, adultUmrah, "2024-10-03", departureDate, null), 0.001);
 
-        // Exactly 2 years on departure: 2 years 0 days -> Child (RM3700)
-        assertEquals(3700.0, PackagePricingCalculator.calculatePassengerPrice(
+        // 2. Umrah exactly 2 years on departure (dob: 2024-10-02) -> Child (3500 - 300 = RM3200)
+        assertEquals(3200.0, PackagePricingCalculator.calculatePassengerPrice(
                 detail, null, true, adultUmrah, "2024-10-02", departureDate, null), 0.001);
 
-        // Exactly 4 years on departure: <= 4.0 years -> Child (RM3700)
-        assertEquals(3700.0, PackagePricingCalculator.calculatePassengerPrice(
+        // 3. Umrah 2 years 1 day on departure (dob: 2024-10-01) -> Child (RM3200)
+        assertEquals(3200.0, PackagePricingCalculator.calculatePassengerPrice(
+                detail, null, true, adultUmrah, "2024-10-01", departureDate, null), 0.001);
+
+        // 4. Umrah exactly 4 years on departure (dob: 2022-10-02) -> Child (RM3200)
+        assertEquals(3200.0, PackagePricingCalculator.calculatePassengerPrice(
                 detail, null, true, adultUmrah, "2022-10-02", departureDate, null), 0.001);
 
-        // 4 years + 1 day before departure: > 4.0 years -> Adult room price (RM4000)
-        assertEquals(4000.0, PackagePricingCalculator.calculatePassengerPrice(
+        // 5. Umrah 4 years 1 day on departure (dob: 2022-10-01) -> Adult room price (RM3500)
+        assertEquals(3500.0, PackagePricingCalculator.calculatePassengerPrice(
                 detail, null, true, adultUmrah, "2022-10-01", departureDate, null), 0.001);
     }
 
     @Test(expected = PackagePricingCalculator.PricingConfigurationException.class)
-    public void testMissingChildPriceThrowsException() {
+    public void testMissingDiscountConfigurationThrowsException() {
         com.hafiztraveltours.app.models.PackageDetail detail = new com.hafiztraveltours.app.models.PackageDetail();
         detail.isUmrah = false;
         detail.price = "2800.0";
-        // child pricing fields are left NULL/unconfigured
+        // child pricing/discount fields left NULL
         PackagePricingCalculator.calculatePassengerPrice(
                 detail, "standard", false, 2800.0, "2020-01-01", "2026-10-02", true);
     }
+
+    @Test(expected = PackagePricingCalculator.PricingConfigurationException.class)
+    public void testInvalidDiscountGreaterThanAdultPriceThrowsException() {
+        com.hafiztraveltours.app.models.PackageDetail detail = new com.hafiztraveltours.app.models.PackageDetail();
+        detail.isUmrah = false;
+        detail.price = "3000.0";
+        detail.child211WithBedDiscount = 3500.0; // Discount > Adult price (3000)
+
+        PackagePricingCalculator.calculatePassengerPrice(
+                detail, "standard", false, 3000.0, "2020-01-01", "2026-10-02", true);
+    }
+
+    @Test(expected = PackagePricingCalculator.PricingConfigurationException.class)
+    public void testNegativeDiscountThrowsException() {
+        com.hafiztraveltours.app.models.PackageDetail detail = new com.hafiztraveltours.app.models.PackageDetail();
+        detail.isUmrah = false;
+        detail.price = "3000.0";
+        detail.child211WithBedDiscount = -100.0; // Negative discount
+
+        PackagePricingCalculator.calculatePassengerPrice(
+                detail, "standard", false, 3000.0, "2020-01-01", "2026-10-02", true);
+    }
 }
+

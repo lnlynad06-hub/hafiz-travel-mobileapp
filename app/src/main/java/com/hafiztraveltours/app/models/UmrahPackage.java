@@ -161,6 +161,15 @@ public class UmrahPackage implements java.io.Serializable {
     @SerializedName("child_under_2_price")
     public Double childUnder2Price;
 
+    @SerializedName("child_2_11_with_bed_discount")
+    public Double child211WithBedDiscount;
+
+    @SerializedName("child_2_11_no_bed_discount")
+    public Double child211NoBedDiscount;
+
+    @SerializedName("child_2_to_4_discount")
+    public Double child2To4Discount;
+
     @SerializedName("child_2_11_with_bed_price")
     public Double child211WithBedPrice;
 
@@ -224,6 +233,15 @@ public class UmrahPackage implements java.io.Serializable {
 
         @SerializedName("child_under_2_price")
         public Double childUnder2Price;
+
+        @SerializedName("child_2_11_with_bed_discount")
+        public Double child211WithBedDiscount;
+
+        @SerializedName("child_2_11_no_bed_discount")
+        public Double child211NoBedDiscount;
+
+        @SerializedName("child_2_to_4_discount")
+        public Double child2To4Discount;
 
         @SerializedName("child_2_11_with_bed_price")
         public Double child211WithBedPrice;

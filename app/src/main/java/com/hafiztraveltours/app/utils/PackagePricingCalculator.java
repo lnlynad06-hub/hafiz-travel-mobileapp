@@ -157,11 +157,14 @@ public final class PackagePricingCalculator {
             }
             // B. Aged 2 years 1 day through 4 years (2nd birthday up to 4th birthday)
             if (!refCal.before(twoYears) && !refCal.after(fourYears)) {
-                Double configured = getChild2To4Price(detail, seasonRate);
-                if (configured == null || configured <= 0) {
-                    throw new PricingConfigurationException("Harga kanak-kanak (2-4 tahun) belum ditetapkan dalam ERP untuk pakej ini.");
+                Double discount = getChild2To4Discount(detail, seasonRate, baseAdultPrice);
+                if (discount == null) {
+                    throw new PricingConfigurationException("Diskaun kanak-kanak (2-4 tahun) belum ditetapkan dalam ERP untuk pakej ini.");
                 }
-                return configured;
+                if (discount <= 0 || discount >= baseAdultPrice) {
+                    throw new PricingConfigurationException("Amaun diskaun kanak-kanak (2-4 tahun) tidak sah dalam ERP.");
+                }
+                return baseAdultPrice - discount;
             }
             // C. 4 years 1 day and above -> Adult room price
             return baseAdultPrice;
@@ -179,17 +182,23 @@ public final class PackagePricingCalculator {
             if (!refCal.before(twoYears) && refCal.before(twelveYears)) {
                 boolean bed = (withBed == null || withBed);
                 if (bed) {
-                    Double configured = getChildWithBedPrice(detail, seasonRate);
-                    if (configured == null || configured <= 0) {
-                        throw new PricingConfigurationException("Harga kanak-kanak (2-11 tahun dengan katil) belum ditetapkan dalam ERP untuk pakej ini.");
+                    Double discount = getChildWithBedDiscount(detail, seasonRate, baseAdultPrice);
+                    if (discount == null) {
+                        throw new PricingConfigurationException("Diskaun kanak-kanak (2-11 tahun dengan katil) belum ditetapkan dalam ERP untuk pakej ini.");
                     }
-                    return configured;
+                    if (discount <= 0 || discount >= baseAdultPrice) {
+                        throw new PricingConfigurationException("Amaun diskaun kanak-kanak dengan katil tidak sah dalam ERP.");
+                    }
+                    return baseAdultPrice - discount;
                 } else {
-                    Double configured = getChildNoBedPrice(detail, seasonRate);
-                    if (configured == null || configured <= 0) {
-                        throw new PricingConfigurationException("Harga kanak-kanak (2-11 tahun tanpa katil) belum ditetapkan dalam ERP untuk pakej ini.");
+                    Double discount = getChildNoBedDiscount(detail, seasonRate, baseAdultPrice);
+                    if (discount == null) {
+                        throw new PricingConfigurationException("Diskaun kanak-kanak (2-11 tahun tanpa katil) belum ditetapkan dalam ERP untuk pakej ini.");
                     }
-                    return configured;
+                    if (discount <= 0 || discount >= baseAdultPrice) {
+                        throw new PricingConfigurationException("Amaun diskaun kanak-kanak tanpa katil tidak sah dalam ERP.");
+                    }
+                    return baseAdultPrice - discount;
                 }
             }
             // C. Above 11 years old (12th birthday and above) -> Adult season price
@@ -215,30 +224,54 @@ public final class PackagePricingCalculator {
         return null;
     }
 
-    private static Double getChild2To4Price(com.hafiztraveltours.app.models.PackageDetail detail, UmrahPackage.SeasonRate seasonRate) {
+    private static Double getChild2To4Discount(com.hafiztraveltours.app.models.PackageDetail detail, UmrahPackage.SeasonRate seasonRate, double baseAdultPrice) {
         if (detail != null) {
-            if (detail.child2To4Price != null && detail.child2To4Price > 0) return detail.child2To4Price;
-            if (detail.childPricingRules != null && detail.childPricingRules.child2To4Price != null && detail.childPricingRules.child2To4Price > 0) return detail.childPricingRules.child2To4Price;
+            if (detail.child2To4Discount != null) return detail.child2To4Discount;
+            if (detail.childPricingRules != null && detail.childPricingRules.child2To4Discount != null) return detail.childPricingRules.child2To4Discount;
+            if (detail.child2To4Price != null && detail.child2To4Price > 0 && detail.child2To4Price < baseAdultPrice) {
+                return baseAdultPrice - detail.child2To4Price;
+            }
+            if (detail.childPricingRules != null && detail.childPricingRules.child2To4Price != null && detail.childPricingRules.child2To4Price > 0 && detail.childPricingRules.child2To4Price < baseAdultPrice) {
+                return baseAdultPrice - detail.childPricingRules.child2To4Price;
+            }
         }
-        if (seasonRate != null && seasonRate.child2To4 > 0) return seasonRate.child2To4;
+        if (seasonRate != null && seasonRate.child2To4 > 0 && seasonRate.child2To4 < baseAdultPrice) {
+            return baseAdultPrice - seasonRate.child2To4;
+        }
         return null;
     }
 
-    private static Double getChildWithBedPrice(com.hafiztraveltours.app.models.PackageDetail detail, UmrahPackage.SeasonRate seasonRate) {
+    private static Double getChildWithBedDiscount(com.hafiztraveltours.app.models.PackageDetail detail, UmrahPackage.SeasonRate seasonRate, double baseAdultPrice) {
         if (detail != null) {
-            if (detail.child211WithBedPrice != null && detail.child211WithBedPrice > 0) return detail.child211WithBedPrice;
-            if (detail.childPricingRules != null && detail.childPricingRules.child211WithBedPrice != null && detail.childPricingRules.child211WithBedPrice > 0) return detail.childPricingRules.child211WithBedPrice;
+            if (detail.child211WithBedDiscount != null) return detail.child211WithBedDiscount;
+            if (detail.childPricingRules != null && detail.childPricingRules.child211WithBedDiscount != null) return detail.childPricingRules.child211WithBedDiscount;
+            if (detail.child211WithBedPrice != null && detail.child211WithBedPrice > 0 && detail.child211WithBedPrice < baseAdultPrice) {
+                return baseAdultPrice - detail.child211WithBedPrice;
+            }
+            if (detail.childPricingRules != null && detail.childPricingRules.child211WithBedPrice != null && detail.childPricingRules.child211WithBedPrice > 0 && detail.childPricingRules.child211WithBedPrice < baseAdultPrice) {
+                return baseAdultPrice - detail.childPricingRules.child211WithBedPrice;
+            }
         }
-        if (seasonRate != null && seasonRate.childWithBed > 0) return seasonRate.childWithBed;
+        if (seasonRate != null && seasonRate.childWithBed > 0 && seasonRate.childWithBed < baseAdultPrice) {
+            return baseAdultPrice - seasonRate.childWithBed;
+        }
         return null;
     }
 
-    private static Double getChildNoBedPrice(com.hafiztraveltours.app.models.PackageDetail detail, UmrahPackage.SeasonRate seasonRate) {
+    private static Double getChildNoBedDiscount(com.hafiztraveltours.app.models.PackageDetail detail, UmrahPackage.SeasonRate seasonRate, double baseAdultPrice) {
         if (detail != null) {
-            if (detail.child211NoBedPrice != null && detail.child211NoBedPrice > 0) return detail.child211NoBedPrice;
-            if (detail.childPricingRules != null && detail.childPricingRules.child211NoBedPrice != null && detail.childPricingRules.child211NoBedPrice > 0) return detail.childPricingRules.child211NoBedPrice;
+            if (detail.child211NoBedDiscount != null) return detail.child211NoBedDiscount;
+            if (detail.childPricingRules != null && detail.childPricingRules.child211NoBedDiscount != null) return detail.childPricingRules.child211NoBedDiscount;
+            if (detail.child211NoBedPrice != null && detail.child211NoBedPrice > 0 && detail.child211NoBedPrice < baseAdultPrice) {
+                return baseAdultPrice - detail.child211NoBedPrice;
+            }
+            if (detail.childPricingRules != null && detail.childPricingRules.child211NoBedPrice != null && detail.childPricingRules.child211NoBedPrice > 0 && detail.childPricingRules.child211NoBedPrice < baseAdultPrice) {
+                return baseAdultPrice - detail.childPricingRules.child211NoBedPrice;
+            }
         }
-        if (seasonRate != null && seasonRate.childWithoutBed > 0) return seasonRate.childWithoutBed;
+        if (seasonRate != null && seasonRate.childWithoutBed > 0 && seasonRate.childWithoutBed < baseAdultPrice) {
+            return baseAdultPrice - seasonRate.childWithoutBed;
+        }
         return null;
     }
 

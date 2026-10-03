@@ -66,6 +66,9 @@ public class PackageDetail implements java.io.Serializable {
     public UmrahPackage.SeasonPricingData seasonPricing;
     public java.util.Map<String, String> seasonPrices;
     public Double childUnder2Price;
+    public Double child211WithBedDiscount;
+    public Double child211NoBedDiscount;
+    public Double child2To4Discount;
     public Double child211WithBedPrice;
     public Double child211NoBedPrice;
     public Double child2To4Price;
@@ -212,6 +215,9 @@ public class PackageDetail implements java.io.Serializable {
         d.seasonPricing = pkg.seasonPricing;
         d.seasonPrices = pkg.seasonPrices;
         d.childUnder2Price = pkg.childUnder2Price;
+        d.child211WithBedDiscount = pkg.child211WithBedDiscount;
+        d.child211NoBedDiscount = pkg.child211NoBedDiscount;
+        d.child2To4Discount = pkg.child2To4Discount;
         d.child211WithBedPrice = pkg.child211WithBedPrice;
         d.child211NoBedPrice = pkg.child211NoBedPrice;
         d.child2To4Price = pkg.child2To4Price;
