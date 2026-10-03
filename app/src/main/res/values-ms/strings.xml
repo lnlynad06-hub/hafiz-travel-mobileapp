@@ -1467,6 +1467,14 @@
     <string name="config_pax_adults_sub">Lebih 11 tahun (Harga dewasa)</string>
     <string name="config_pax_kids_label">Kanak-kanak</string>
     <string name="config_pax_kids_sub">11 tahun dan ke bawah</string>
+    <string name="child_title_format">Kanak-kanak %d</string>
+    <string name="child_dob_label">Tarikh Lahir</string>
+    <string name="child_select_dob_hint">Pilih tarikh</string>
+    <string name="child_bed_label">Katil</string>
+    <string name="child_age_format">Umur: %d tahun</string>
+    <string name="child_age_under_2">Umur: Bawah 2 tahun</string>
+    <string name="err_child_dob_required">Sila pilih Tarikh Lahir untuk Kanak-kanak %d</string>
+    <string name="err_child_bed_required">Sila pilih Dengan Katil atau Tanpa Katil untuk Kanak-kanak %d</string>
     <string name="label_starting_from">Bermula daripada</string>
     <string name="season_standard_short">Standard</string>
     <string name="season_low_peak_short">Luar Puncak</string>

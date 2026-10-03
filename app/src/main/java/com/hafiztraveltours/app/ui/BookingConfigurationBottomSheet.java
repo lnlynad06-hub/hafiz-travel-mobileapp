@@ -44,6 +44,8 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
     private TextView txtPackageDuration;
     private LinearLayout containerSeason;
     private LinearLayout containerRoomOptions;
+    private LinearLayout containerChildDetails;
+    private final List<BookingRequest.ChildConfig> childConfigs = new java.util.ArrayList<>();
     private TextView txtPaxCount;
     private TextView txtKidsCount;
     private TextView txtTotalAmount;
@@ -92,6 +94,7 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
         containerSeason = view.findViewById(R.id.configSeasonContainer);
         containerRoomOptions = view.findViewById(R.id.configRoomOptionsContainer);
         containerDeparture = view.findViewById(R.id.configDepartureContainer);
+        containerChildDetails = view.findViewById(R.id.containerChildDetails);
         txtPaxCount = view.findViewById(R.id.txtPaxCount);
         txtKidsCount = view.findViewById(R.id.txtKidsCount);
         txtTotalAmount = view.findViewById(R.id.configTotalAmountText);
@@ -133,6 +136,8 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
                 com.hafiztraveltours.app.utils.HapticUtil.click(v);
                 if (kidsCount > 0) {
                     kidsCount--;
+                    syncChildConfigsSize();
+                    renderChildDetails();
                     updateUi();
                 }
             });
@@ -144,6 +149,8 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
                 com.hafiztraveltours.app.utils.HapticUtil.click(v);
                 if (kidsCount < 10) {
                     kidsCount++;
+                    syncChildConfigsSize();
+                    renderChildDetails();
                     updateUi();
                 }
             });
@@ -186,14 +193,261 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
         renderSeasonOptions();
         renderRoomOptions();
         renderDepartureOptions();
+        renderChildDetails();
         updateUi();
+    }
+
+    private void syncChildConfigsSize() {
+        while (childConfigs.size() < kidsCount) {
+            BookingRequest.ChildConfig cfg = new BookingRequest.ChildConfig();
+            cfg.childIndex = childConfigs.size() + 1;
+            cfg.dateOfBirth = "";
+            cfg.withBed = null;
+            childConfigs.add(cfg);
+        }
+        while (childConfigs.size() > kidsCount) {
+            childConfigs.remove(childConfigs.size() - 1);
+        }
+    }
+
+    private String getSelectedDepartureDate() {
+        List<PackageDetail.DepartureOption> deps = getDepartureOptions();
+        if (selectedDepartureIndex >= 0 && selectedDepartureIndex < deps.size()) {
+            PackageDetail.DepartureOption selected = deps.get(selectedDepartureIndex);
+            if (selected != null && selected.departureDate != null && !selected.departureDate.trim().isEmpty()) {
+                return selected.departureDate.trim();
+            }
+        }
+        return null;
+    }
+
+    private int calculateChildAge(String dobIso, String refDateIso) {
+        if (dobIso == null || dobIso.trim().isEmpty()) return 0;
+        try {
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.US);
+            java.util.Date dobDate = sdf.parse(dobIso.trim());
+            if (dobDate == null) return 0;
+            java.util.Calendar dobCal = java.util.Calendar.getInstance();
+            dobCal.setTime(dobDate);
+
+            java.util.Calendar refCal = java.util.Calendar.getInstance();
+            if (refDateIso != null && !refDateIso.trim().isEmpty()) {
+                java.util.Date refDate = sdf.parse(refDateIso.trim());
+                if (refDate != null) refCal.setTime(refDate);
+            }
+
+            int age = refCal.get(java.util.Calendar.YEAR) - dobCal.get(java.util.Calendar.YEAR);
+            if (refCal.get(java.util.Calendar.MONTH) < dobCal.get(java.util.Calendar.MONTH) ||
+                    (refCal.get(java.util.Calendar.MONTH) == dobCal.get(java.util.Calendar.MONTH) && refCal.get(java.util.Calendar.DAY_OF_MONTH) < dobCal.get(java.util.Calendar.DAY_OF_MONTH))) {
+                age--;
+            }
+            return Math.max(0, age);
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
+    private void showChildDobPicker(int index, BookingRequest.ChildConfig config) {
+        java.util.Calendar c = java.util.Calendar.getInstance();
+        if (config.dateOfBirth != null && !config.dateOfBirth.trim().isEmpty()) {
+            try {
+                String[] parts = config.dateOfBirth.trim().split("-");
+                if (parts.length == 3) {
+                    c.set(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]) - 1, Integer.parseInt(parts[2]));
+                }
+            } catch (Exception ignored) {}
+        } else {
+            c.add(java.util.Calendar.YEAR, -5);
+        }
+
+        android.app.DatePickerDialog dpd = new android.app.DatePickerDialog(
+                requireContext(),
+                (view, year, month, dayOfMonth) -> {
+                    String formatted = String.format(java.util.Locale.US, "%04d-%02d-%02d", year, month + 1, dayOfMonth);
+                    config.dateOfBirth = formatted;
+                    renderChildDetails();
+                    updateUi();
+                },
+                c.get(java.util.Calendar.YEAR),
+                c.get(java.util.Calendar.MONTH),
+                c.get(java.util.Calendar.DAY_OF_MONTH)
+        );
+        dpd.getDatePicker().setMaxDate(System.currentTimeMillis());
+        dpd.show();
+    }
+
+    private void renderChildDetails() {
+        if (containerChildDetails == null) return;
+        containerChildDetails.removeAllViews();
+
+        if (kidsCount <= 0) {
+            containerChildDetails.setVisibility(View.GONE);
+            return;
+        }
+
+        containerChildDetails.setVisibility(View.VISIBLE);
+        String depDateIso = getSelectedDepartureDate();
+
+        for (int i = 0; i < kidsCount && i < childConfigs.size(); i++) {
+            final int childIdx = i;
+            final BookingRequest.ChildConfig config = childConfigs.get(i);
+
+            LinearLayout card = new LinearLayout(requireContext());
+            card.setOrientation(LinearLayout.VERTICAL);
+            card.setBackgroundResource(R.drawable.bg_detail_card);
+            card.setPadding(dp(12), dp(10), dp(12), dp(10));
+
+            LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            cardParams.topMargin = dp(8);
+            card.setLayoutParams(cardParams);
+
+            // Child Title Header
+            TextView txtChildTitle = new TextView(requireContext());
+            txtChildTitle.setText(getString(R.string.child_title_format, i + 1));
+            txtChildTitle.setTextSize(13);
+            txtChildTitle.setTypeface(null, Typeface.BOLD);
+            txtChildTitle.setTextColor(getResources().getColor(R.color.brand_magenta));
+            card.addView(txtChildTitle);
+
+            // DOB Selector Row
+            LinearLayout dobRow = new LinearLayout(requireContext());
+            dobRow.setOrientation(LinearLayout.HORIZONTAL);
+            dobRow.setGravity(Gravity.CENTER_VERTICAL);
+            dobRow.setBackgroundResource(R.drawable.bg_luxury_form_field);
+            dobRow.setPadding(dp(10), dp(8), dp(10), dp(8));
+            dobRow.setClickable(true);
+            dobRow.setFocusable(true);
+
+            LinearLayout.LayoutParams dobParams = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            dobParams.topMargin = dp(6);
+            dobRow.setLayoutParams(dobParams);
+
+            LinearLayout dobTextCol = new LinearLayout(requireContext());
+            dobTextCol.setOrientation(LinearLayout.VERTICAL);
+            LinearLayout.LayoutParams dobColParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+            dobTextCol.setLayoutParams(dobColParams);
+
+            TextView lblDob = new TextView(requireContext());
+            lblDob.setText(getString(R.string.child_dob_label));
+            lblDob.setTextSize(10);
+            lblDob.setTextColor(getResources().getColor(R.color.text_gray));
+            dobTextCol.addView(lblDob);
+
+            TextView valDob = new TextView(requireContext());
+            boolean hasDob = config.dateOfBirth != null && !config.dateOfBirth.trim().isEmpty();
+            valDob.setText(hasDob ? config.dateOfBirth.trim() : getString(R.string.child_select_dob_hint));
+            valDob.setTextSize(13);
+            valDob.setTypeface(null, Typeface.BOLD);
+            valDob.setTextColor(getResources().getColor(hasDob ? R.color.text_dark : R.color.input_hint));
+            dobTextCol.addView(valDob);
+
+            dobRow.addView(dobTextCol);
+
+            // Helper Age Text chip
+            if (hasDob) {
+                int age = calculateChildAge(config.dateOfBirth.trim(), depDateIso);
+                TextView txtAgeChip = new TextView(requireContext());
+                txtAgeChip.setText(age < 2 ? getString(R.string.child_age_under_2) : getString(R.string.child_age_format, age));
+                txtAgeChip.setTextSize(10);
+                txtAgeChip.setTypeface(null, Typeface.BOLD);
+                txtAgeChip.setTextColor(getResources().getColor(R.color.brand_magenta));
+                txtAgeChip.setBackgroundResource(R.drawable.bg_status_pending);
+                txtAgeChip.setPadding(dp(6), dp(2), dp(6), dp(2));
+                dobRow.addView(txtAgeChip);
+            }
+
+            dobRow.setOnClickListener(v -> {
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
+                showChildDobPicker(childIdx, config);
+            });
+
+            card.addView(dobRow);
+
+            // Tour Bed Selector (Only for Tour package when child age is 2-11)
+            if (!detail.isUmrah && hasDob) {
+                int age = calculateChildAge(config.dateOfBirth.trim(), depDateIso);
+                if (age >= 2 && age <= 11) {
+                    LinearLayout bedContainer = new LinearLayout(requireContext());
+                    bedContainer.setOrientation(LinearLayout.VERTICAL);
+                    LinearLayout.LayoutParams bedParams = new LinearLayout.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    bedParams.topMargin = dp(8);
+                    bedContainer.setLayoutParams(bedParams);
+
+                    TextView lblBed = new TextView(requireContext());
+                    lblBed.setText(getString(R.string.child_bed_label));
+                    lblBed.setTextSize(11);
+                    lblBed.setTypeface(null, Typeface.BOLD);
+                    lblBed.setTextColor(getResources().getColor(R.color.text_dark));
+                    bedContainer.addView(lblBed);
+
+                    LinearLayout bedSegmentRow = new LinearLayout(requireContext());
+                    bedSegmentRow.setOrientation(LinearLayout.HORIZONTAL);
+                    LinearLayout.LayoutParams segParams = new LinearLayout.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    segParams.topMargin = dp(4);
+                    bedSegmentRow.setLayoutParams(segParams);
+
+                    // Segment 1: With Bed
+                    boolean isWithBedSelected = Boolean.TRUE.equals(config.withBed);
+                    TextView btnWithBed = new TextView(requireContext());
+                    btnWithBed.setText(getString(R.string.with_bed));
+                    btnWithBed.setTextSize(12);
+                    btnWithBed.setTypeface(null, Typeface.BOLD);
+                    btnWithBed.setGravity(Gravity.CENTER);
+                    btnWithBed.setPadding(dp(8), dp(8), dp(8), dp(8));
+                    btnWithBed.setBackgroundResource(isWithBedSelected ? R.drawable.bg_room_card_selected : R.drawable.bg_room_card_unselected);
+                    btnWithBed.setTextColor(getResources().getColor(isWithBedSelected ? R.color.brand_magenta : R.color.text_dark));
+                    LinearLayout.LayoutParams b1Lp = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+                    b1Lp.setMarginEnd(dp(4));
+                    btnWithBed.setLayoutParams(b1Lp);
+
+                    btnWithBed.setOnClickListener(v -> {
+                        com.hafiztraveltours.app.utils.HapticUtil.click(v);
+                        config.withBed = true;
+                        renderChildDetails();
+                        updateUi();
+                    });
+
+                    // Segment 2: Without Bed
+                    boolean isWithoutBedSelected = Boolean.FALSE.equals(config.withBed);
+                    TextView btnWithoutBed = new TextView(requireContext());
+                    btnWithoutBed.setText(getString(R.string.without_bed));
+                    btnWithoutBed.setTextSize(12);
+                    btnWithoutBed.setTypeface(null, Typeface.BOLD);
+                    btnWithoutBed.setGravity(Gravity.CENTER);
+                    btnWithoutBed.setPadding(dp(8), dp(8), dp(8), dp(8));
+                    btnWithoutBed.setBackgroundResource(isWithoutBedSelected ? R.drawable.bg_room_card_selected : R.drawable.bg_room_card_unselected);
+                    btnWithoutBed.setTextColor(getResources().getColor(isWithoutBedSelected ? R.color.brand_magenta : R.color.text_dark));
+                    LinearLayout.LayoutParams b2Lp = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+                    b2Lp.setMarginStart(dp(4));
+                    btnWithoutBed.setLayoutParams(b2Lp);
+
+                    btnWithoutBed.setOnClickListener(v -> {
+                        com.hafiztraveltours.app.utils.HapticUtil.click(v);
+                        config.withBed = false;
+                        renderChildDetails();
+                        updateUi();
+                    });
+
+                    bedSegmentRow.addView(btnWithBed);
+                    bedSegmentRow.addView(btnWithoutBed);
+                    bedContainer.addView(bedSegmentRow);
+
+                    card.addView(bedContainer);
+                }
+            }
+
+            containerChildDetails.addView(card);
+        }
     }
 
     private List<PackageDetail.DepartureOption> getDepartureOptions() {
         if (detail != null && detail.availableDepartures != null && !detail.availableDepartures.isEmpty()) {
             return detail.availableDepartures;
         }
-        // Legacy fallback: display-only labels without a backend ID (departure_id stays null).
         List<PackageDetail.DepartureOption> fallback = new java.util.ArrayList<>();
         if (detail != null && detail.availableDepartureDates != null && !detail.availableDepartureDates.isEmpty()) {
             for (String label : detail.availableDepartureDates) {
@@ -260,7 +514,6 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
             cardParams.setMarginEnd(dp(8));
             card.setLayoutParams(cardParams);
 
-            // Row 1: Departure Date & selection check
             LinearLayout headerRow = new LinearLayout(requireContext());
             headerRow.setOrientation(LinearLayout.HORIZONTAL);
             headerRow.setGravity(Gravity.CENTER_VERTICAL);
@@ -282,7 +535,6 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
             }
             card.addView(headerRow);
 
-            // Row 2: Real-time Seat availability counter & label
             TextView seatStatus = new TextView(requireContext());
             seatStatus.setTextSize(10);
             seatStatus.setTypeface(null, Typeface.BOLD);
@@ -311,6 +563,7 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
                     }
                 }
                 renderDepartureOptions();
+                renderChildDetails();
                 updateUi();
                 if (isFull) {
                     android.widget.Toast.makeText(requireContext(), getString(R.string.err_departure_fully_booked), android.widget.Toast.LENGTH_SHORT).show();
@@ -502,9 +755,26 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
         double unitAmount = getSelectedUnitAmount();
         String roomPriceStr = BookingRequest.formatPrice(unitAmount);
         int totalPax = paxCount + kidsCount;
-        double subtotal = unitAmount * totalPax;
 
-        double totalAmount = Math.max(0, subtotal - appliedDiscount);
+        double calculatedSubtotal = unitAmount * paxCount;
+        String depDateIso = getSelectedDepartureDate();
+
+        for (int i = 0; i < kidsCount && i < childConfigs.size(); i++) {
+            BookingRequest.ChildConfig cfg = childConfigs.get(i);
+            if (cfg.dateOfBirth != null && !cfg.dateOfBirth.trim().isEmpty()) {
+                try {
+                    double childPrice = com.hafiztraveltours.app.utils.PackagePricingCalculator.calculatePassengerPrice(
+                            detail, selectedSeason, detail.isUmrah, unitAmount, cfg.dateOfBirth.trim(), depDateIso, cfg.withBed);
+                    calculatedSubtotal += childPrice;
+                } catch (com.hafiztraveltours.app.utils.PackagePricingCalculator.PricingConfigurationException e) {
+                    calculatedSubtotal += unitAmount;
+                }
+            } else {
+                calculatedSubtotal += unitAmount;
+            }
+        }
+
+        double totalAmount = Math.max(0, calculatedSubtotal - appliedDiscount);
 
         txtTotalAmount.setText(BookingRequest.formatPrice(totalAmount));
         if (kidsCount > 0) {
@@ -520,6 +790,26 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
             dismiss();
             startActivity(new Intent(requireContext(), LoginActivity.class));
             return;
+        }
+
+        if (kidsCount > 0) {
+            String depDateIso = getSelectedDepartureDate();
+            for (int i = 0; i < kidsCount && i < childConfigs.size(); i++) {
+                BookingRequest.ChildConfig cfg = childConfigs.get(i);
+                if (cfg.dateOfBirth == null || cfg.dateOfBirth.trim().isEmpty()) {
+                    android.widget.Toast.makeText(requireContext(), getString(R.string.err_child_dob_required, i + 1), android.widget.Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (!detail.isUmrah) {
+                    int age = calculateChildAge(cfg.dateOfBirth.trim(), depDateIso);
+                    if (age >= 2 && age <= 11) {
+                        if (cfg.withBed == null) {
+                            android.widget.Toast.makeText(requireContext(), getString(R.string.err_child_bed_required, i + 1), android.widget.Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                    }
+                }
+            }
         }
 
         String roomLabel = getString(R.string.room_standard);
@@ -547,6 +837,7 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
         req.unitPriceAmount = unitAmount;
         req.adultPaxCount = paxCount;
         req.kidsPaxCount = kidsCount;
+        req.childConfigs = new java.util.ArrayList<>(childConfigs);
         req.season = detail.isUmrah ? null : selectedSeason;
         req.packageDetail = detail;
 

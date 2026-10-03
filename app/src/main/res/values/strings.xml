@@ -1583,8 +1583,16 @@
     <string name="config_pax_section_title">Number of Travellers</string>
     <string name="config_pax_adults_label">Adults</string>
     <string name="config_pax_adults_sub">Above 11 years (Adult price)</string>
-    <string name="config_pax_kids_label">Kids</string>
+    <string name="config_pax_kids_label">Children</string>
     <string name="config_pax_kids_sub">11 years and below</string>
+    <string name="child_title_format">Child %d</string>
+    <string name="child_dob_label">Date of Birth</string>
+    <string name="child_select_dob_hint">Select date</string>
+    <string name="child_bed_label">Bed</string>
+    <string name="child_age_format">Age: %d years</string>
+    <string name="child_age_under_2">Age: Under 2 years</string>
+    <string name="err_child_dob_required">Please select Date of Birth for Child %d</string>
+    <string name="err_child_bed_required">Please select With Bed or Without Bed for Child %d</string>
     <string name="label_starting_from">Starting from</string>
     <string name="season_standard_short">Standard</string>
     <string name="season_low_peak_short">Low Peak</string>

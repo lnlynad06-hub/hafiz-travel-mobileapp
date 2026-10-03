@@ -183,6 +183,31 @@ public class PassengerDetailsActivity extends BaseActivity {
         for (int i = 0; i < extraNeeded; i++) {
             addAdditionalTraveller();
         }
+
+        // Prefill child travellers' DOB and bed options if provided from BookingConfigurationBottomSheet
+        if (bookingRequest.childConfigs != null && !bookingRequest.childConfigs.isEmpty()) {
+            int adultExtra = Math.max(0, bookingRequest.adultPaxCount - 1);
+            for (int k = 0; k < bookingRequest.childConfigs.size(); k++) {
+                int travellerIdx = adultExtra + k;
+                if (travellerIdx >= 0 && travellerIdx < additionalTravellers.size()) {
+                    AdditionalTravellerHolder holder = additionalTravellers.get(travellerIdx);
+                    BookingRequest.ChildConfig cfg = bookingRequest.childConfigs.get(k);
+                    if (cfg.dateOfBirth != null && !cfg.dateOfBirth.trim().isEmpty()) {
+                        holder.selectedDob = cfg.dateOfBirth.trim();
+                        holder.tvDobValue.setText(cfg.dateOfBirth.trim());
+                        holder.tvDobValue.setTextColor(ContextCompat.getColor(this, R.color.text_dark));
+                        int age = com.hafiztraveltours.app.utils.PackagePricingCalculator.calculateAge(cfg.dateOfBirth.trim());
+                        if (holder.tvDobAge != null) {
+                            holder.tvDobAge.setText(age < 2 ? getString(R.string.child_age_under_2) : (age + " tahun"));
+                            holder.tvDobAge.setVisibility(View.VISIBLE);
+                        }
+                        holder.withBed = cfg.withBed;
+                        updateChildBedOptionVisibility(holder);
+                    }
+                }
+            }
+        }
+
         updateFooterCount();
     }
 

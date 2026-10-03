@@ -302,6 +302,15 @@
 
         </LinearLayout>
 
+        <!-- Dynamic Child Details Container -->
+        <LinearLayout
+            android:id="@+id/containerChildDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="vertical"
+            android:visibility="gone" />
+
     </LinearLayout>
 
     <!-- Departure Dates Selector -->

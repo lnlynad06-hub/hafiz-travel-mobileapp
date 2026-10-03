@@ -17,6 +17,14 @@ public class BookingRequest implements Serializable {
     public double totalAmount;
     public String totalAmountFormatted;
 
+    public static class ChildConfig implements Serializable {
+        public int childIndex;
+        public String dateOfBirth = "";
+        public Boolean withBed = null; // null if unselected or not applicable
+    }
+
+    public List<ChildConfig> childConfigs = new ArrayList<>();
+
     public String selectedDepartureDate = "";
     /** Raw backend departure ID (`departures[].id`) for the selected departure; sent as `departure_id`. */
     public String selectedDepartureId = "";
