@@ -144,12 +144,12 @@ public final class PackagePricingCalculator {
             // A. Below 2 years (reference date is before 2nd birthday)
             if (refCal.before(twoYears)) {
                 Double configured = getChildUnder2Price(detail, seasonRate);
-                return configured != null ? configured : 2000.0;
+                return configured != null ? configured : baseAdultPrice;
             }
             // B. Aged 2 years 1 day through 4 years (2nd birthday up to 4th birthday)
             if (!refCal.before(twoYears) && !refCal.after(fourYears)) {
                 Double configured = getChild2To4Price(detail, seasonRate);
-                return configured != null ? configured : Math.max(0, baseAdultPrice - 300.0);
+                return configured != null ? configured : baseAdultPrice;
             }
             // C. 4 years 1 day and above -> Adult room price
             return baseAdultPrice;
@@ -158,17 +158,17 @@ public final class PackagePricingCalculator {
             // A. Below 2 years (reference date is before 2nd birthday)
             if (refCal.before(twoYears)) {
                 Double configured = getChildUnder2Price(detail, seasonRate);
-                return configured != null ? configured : 500.0;
+                return configured != null ? configured : baseAdultPrice;
             }
             // B. 11 years old and below (aged 2 to 11, i.e. before 12th birthday)
             if (!refCal.before(twoYears) && refCal.before(twelveYears)) {
                 boolean bed = (withBed == null || withBed);
                 if (bed) {
                     Double configured = getChildWithBedPrice(detail, seasonRate);
-                    return configured != null ? configured : Math.max(0, baseAdultPrice - 100.0);
+                    return configured != null ? configured : baseAdultPrice;
                 } else {
                     Double configured = getChildNoBedPrice(detail, seasonRate);
-                    return configured != null ? configured : Math.max(0, baseAdultPrice - 200.0);
+                    return configured != null ? configured : baseAdultPrice;
                 }
             }
             // C. Above 11 years old (12th birthday and above) -> Adult season price
