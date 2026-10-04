@@ -42,11 +42,18 @@ public class PrayerTimeScheduler {
             return;
         }
 
-        scheduleOne(context, "fajr", fajrEpoch, 1);
-        scheduleOne(context, "dhuhr", dhuhrEpoch, 2);
-        scheduleOne(context, "asr", asrEpoch, 3);
-        scheduleOne(context, "maghrib", maghribEpoch, 4);
-        scheduleOne(context, "isha", ishaEpoch, 5);
+        scheduleOne(context, "fajr", fajrEpoch, 1, false);
+        scheduleOne(context, "dhuhr", dhuhrEpoch, 2, false);
+        scheduleOne(context, "asr", asrEpoch, 3, false);
+        scheduleOne(context, "maghrib", maghribEpoch, 4, false);
+        scheduleOne(context, "isha", ishaEpoch, 5, false);
+
+        // Schedule 5-minute pre-prayer notification reminders
+        scheduleOne(context, "fajr", fajrEpoch - 300, 11, true);
+        scheduleOne(context, "dhuhr", dhuhrEpoch - 300, 12, true);
+        scheduleOne(context, "asr", asrEpoch - 300, 13, true);
+        scheduleOne(context, "maghrib", maghribEpoch - 300, 14, true);
+        scheduleOne(context, "isha", ishaEpoch - 300, 15, true);
     }
 
     // Dipanggil oleh BootReceiver atau ProfileActivity, guna cache tersimpan (tak perlu network call)
@@ -66,11 +73,17 @@ public class PrayerTimeScheduler {
 
         if (fajr == 0) return; // belum ada cache, tunggu app dibuka
 
-        scheduleOne(context, "fajr", fajr, 1);
-        scheduleOne(context, "dhuhr", dhuhr, 2);
-        scheduleOne(context, "asr", asr, 3);
-        scheduleOne(context, "maghrib", maghrib, 4);
-        scheduleOne(context, "isha", isha, 5);
+        scheduleOne(context, "fajr", fajr, 1, false);
+        scheduleOne(context, "dhuhr", dhuhr, 2, false);
+        scheduleOne(context, "asr", asr, 3, false);
+        scheduleOne(context, "maghrib", maghrib, 4, false);
+        scheduleOne(context, "isha", isha, 5, false);
+
+        scheduleOne(context, "fajr", fajr - 300, 11, true);
+        scheduleOne(context, "dhuhr", dhuhr - 300, 12, true);
+        scheduleOne(context, "asr", asr - 300, 13, true);
+        scheduleOne(context, "maghrib", maghrib - 300, 14, true);
+        scheduleOne(context, "isha", isha - 300, 15, true);
     }
 
     public static void cancelAllAlarms(Context context) {
@@ -78,7 +91,7 @@ public class PrayerTimeScheduler {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager == null) return;
 
-        for (int requestCode = 1; requestCode <= 5; requestCode++) {
+        for (int requestCode = 1; requestCode <= 15; requestCode++) {
             try {
                 Intent intent = new Intent(context, PrayerAlarmReceiver.class);
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(
@@ -92,8 +105,8 @@ public class PrayerTimeScheduler {
         }
     }
 
-    private static void scheduleOne(Context context, String prayerName, long epochSeconds, int requestCode) {
-        if (epochSeconds == 0) {
+    private static void scheduleOne(Context context, String prayerName, long epochSeconds, int requestCode, boolean isReminder) {
+        if (epochSeconds <= 0) {
             return;
         }
 
@@ -110,6 +123,7 @@ public class PrayerTimeScheduler {
 
         Intent intent = new Intent(context, PrayerAlarmReceiver.class);
         intent.putExtra("prayer_name", prayerName);
+        intent.putExtra("is_reminder", isReminder);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 context, requestCode, intent,

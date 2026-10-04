@@ -23,6 +23,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 import com.hafiztraveltours.app.R;
 import com.hafiztraveltours.app.utils.HapticUtil;
+import com.hafiztraveltours.app.utils.LoadingButtonUtil;
 import com.hafiztraveltours.app.utils.LocaleHelper;
 import com.hafiztraveltours.app.utils.OtpInputHelper;
 
@@ -239,12 +240,10 @@ public class VerifyResetCodeActivity extends BaseActivity {
 
     private void setLoadingState(boolean loading) {
         if (isFinishing() || isDestroyed()) return;
-        if (btnVerifyCode != null) {
-            btnVerifyCode.setEnabled(!loading);
-            btnVerifyCode.setText(loading ? getString(R.string.enter_reset_code_verifying) : getString(R.string.enter_reset_code_btn_verify));
-        }
-        if (verifyProgressBar != null) {
-            verifyProgressBar.setVisibility(loading ? View.VISIBLE : View.GONE);
+        if (loading) {
+            LoadingButtonUtil.showLoading(btnVerifyCode, verifyProgressBar);
+        } else {
+            LoadingButtonUtil.hideLoading(btnVerifyCode, verifyProgressBar);
         }
         if (otpHelper != null) {
             otpHelper.setEnabled(!loading);

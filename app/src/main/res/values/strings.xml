@@ -1624,18 +1624,60 @@
     <string name="category_2_to_11">2 to 11 years</string>
     <string name="category_adult_rate">Adult rate</string>
 
-    <!-- About Page Strings -->
+    <!-- About Page & Company Strings -->
     <string name="about_title">About</string>
-    <string name="about_section_company">About This App</string>
-    <string name="about_motac_label">MOTAC</string>
-    <string name="about_motac_value">KPK / LN 10751</string>
-    <string name="about_ssm_label">SSM</string>
+    <string name="about_tagline">Create Transparent Memories with Hafiz Travel &amp; Tours</string>
+    <string name="about_company_full_name">Hafiz Travel &amp; Tours Sdn. Bhd.</string>
+    <string name="about_section_app_desc">About The App</string>
+    <string name="about_app_description">Hafiz Travel is your official travel companion for discovering Umrah and travel packages, managing bookings, making secure payments, and accessing travel documents.</string>
+    
+    <!-- Company Information Section -->
+    <string name="about_section_company">Company</string>
+    <string name="about_established_label">Established</string>
+    <string name="about_established_value">2022</string>
+    <string name="about_motac_label">MOTAC License</string>
+    <string name="about_motac_value">KPK/LN 10751</string>
+    <string name="about_ssm_label">SSM Registration</string>
     <string name="about_ssm_value">202201043065 (1488762-A)</string>
-    <string name="about_section_app_desc">About This App</string>
-    <string name="about_app_description">The Hafiz Travel mobile application provides a convenient way to explore travel and Umrah packages, view package details, make bookings, check prayer times, and find the Qibla direction.</string>
-    <string name="about_section_app">Application</string>
+
+    <!-- Contact Section -->
+    <string name="about_section_contact">Contact Us</string>
+    <string name="about_phone_label">Phone</string>
+    <string name="about_phone_value">+6019-785 9867</string>
+    <string name="about_email_label">Email</string>
+    <string name="about_email_value">sales.httsb@gmail.com</string>
+    <string name="about_website_label">Website</string>
+    <string name="about_website_value">hafiztraveltours.com</string>
+    <string name="about_website_url">https://hafiztraveltours.com</string>
+    <string name="about_address_label">Address</string>
+    <string name="about_address_value">No. 31, Jalan Dataran Larkin, 80350 Johor Bahru, Johor, Malaysia</string>
+    <!-- Social Media Section -->
+    <string name="about_section_social">Social Media</string>
+    <string name="about_social_follow_us">Follow Us</string>
+    <string name="social_tiktok">TikTok</string>
+    <string name="social_threads">Threads</string>
+    <string name="social_instagram">Instagram</string>
+    <string name="social_facebook">Facebook</string>
+    <string name="social_youtube">YouTube</string>
+
+    <!-- Legal Section -->
+    <string name="about_section_legal">Legal</string>
+    <string name="about_privacy_policy">Privacy Policy</string>
+    <string name="about_umrah_terms">Umrah Terms &amp; Conditions</string>
+    <string name="about_tour_terms">Tour Terms &amp; Conditions</string>
+    <string name="about_refund_policy">Refund &amp; Cancellation Policy</string>
+    <string name="about_coming_soon">Coming Soon</string>
+
+    <!-- App Version & Developer Footer -->
     <string name="about_app_version">App Version</string>
-    <string name="about_dev_status_label">Development Status</string>
-    <string name="about_dev_status_value">Currently under development</string>
     <string name="about_engineered_by_prefix">Engineered by</string>
+    <string name="about_copyright">© 2022 Hafiz Travel &amp; Tours Sdn. Bhd. All rights reserved.</string>
+
+    <!-- Notification Center & Push Notifications -->
+    <string name="notification_center_title">Notifications</string>
+    <string name="notification_mark_all_read">Mark all as read</string>
+    <string name="notif_doc_verified_title">Travel Document Verified</string>
+    <string name="notif_doc_verified_msg">Your travel document has been verified successfully.</string>
+    <string name="notif_prayer_reminder_title">Prayer Reminder</string>
+    <string name="notif_prayer_reminder_msg">%1$s prayer is in 5 minutes.</string>
 </resources>

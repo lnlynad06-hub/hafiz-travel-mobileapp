@@ -24,6 +24,7 @@ import com.hafiztraveltours.app.network.ApiClient;
 import com.hafiztraveltours.app.network.ApiResponse;
 import com.hafiztraveltours.app.utils.DateFormats;
 import com.hafiztraveltours.app.utils.HapticUtil;
+import com.hafiztraveltours.app.utils.LoadingButtonUtil;
 import com.hafiztraveltours.app.utils.LocaleHelper;
 import com.hafiztraveltours.app.utils.TravellerMapper;
 
@@ -307,8 +308,7 @@ public class BookingSummaryActivity extends BaseActivity {
 
     private void processBookingConfirmation() {
         isSubmitting = true;
-        btnConfirmBooking.setEnabled(false);
-        if (confirmProgressBar != null) confirmProgressBar.setVisibility(View.VISIBLE);
+        LoadingButtonUtil.showLoading(btnConfirmBooking, confirmProgressBar);
 
         CreateBookingRequest apiRequest = buildApiRequest();
 
@@ -322,8 +322,7 @@ public class BookingSummaryActivity extends BaseActivity {
                                    retrofit2.Response<ApiResponse<BookingDetailDto>> response) {
                 if (isFinishing() || isDestroyed()) return;
                 isSubmitting = false;
-                btnConfirmBooking.setEnabled(true);
-                if (confirmProgressBar != null) confirmProgressBar.setVisibility(View.GONE);
+                LoadingButtonUtil.hideLoading(btnConfirmBooking, confirmProgressBar);
 
                 if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
                     Toast.makeText(BookingSummaryActivity.this, R.string.booking_confirmed_success, Toast.LENGTH_LONG).show();
@@ -377,8 +376,7 @@ public class BookingSummaryActivity extends BaseActivity {
             public void onFailure(retrofit2.Call<ApiResponse<BookingDetailDto>> call, Throwable t) {
                 if (isFinishing() || isDestroyed()) return;
                 isSubmitting = false;
-                btnConfirmBooking.setEnabled(true);
-                if (confirmProgressBar != null) confirmProgressBar.setVisibility(View.GONE);
+                LoadingButtonUtil.hideLoading(btnConfirmBooking, confirmProgressBar);
 
                 String errorMsg = com.hafiztraveltours.app.network.ApiErrors.userMessage(BookingSummaryActivity.this, t, R.string.booking_failed);
                 Toast.makeText(BookingSummaryActivity.this, errorMsg, Toast.LENGTH_LONG).show();

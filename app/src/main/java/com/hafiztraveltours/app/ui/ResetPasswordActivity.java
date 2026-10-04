@@ -28,6 +28,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.hafiztraveltours.app.R;
 import com.hafiztraveltours.app.utils.ApiOpResult;
 import com.hafiztraveltours.app.utils.HapticUtil;
+import com.hafiztraveltours.app.utils.LoadingButtonUtil;
 import com.hafiztraveltours.app.utils.LocaleHelper;
 import com.hafiztraveltours.app.utils.PasswordChecklistHelper;
 
@@ -232,12 +233,10 @@ public class ResetPasswordActivity extends BaseActivity {
 
     private void setLoadingState(boolean loading) {
         if (isFinishing() || isDestroyed()) return;
-        if (btnResetPassword != null) {
-            btnResetPassword.setEnabled(!loading);
-            btnResetPassword.setText(loading ? getString(R.string.reset_pass_submitting) : getString(R.string.reset_pass_btn_submit));
-        }
-        if (resetProgressBar != null) {
-            resetProgressBar.setVisibility(loading ? View.VISIBLE : View.GONE);
+        if (loading) {
+            LoadingButtonUtil.showLoading(btnResetPassword, resetProgressBar);
+        } else {
+            LoadingButtonUtil.hideLoading(btnResetPassword, resetProgressBar);
         }
         if (passwordInput != null) passwordInput.setEnabled(!loading);
         if (confirmPasswordInput != null) confirmPasswordInput.setEnabled(!loading);

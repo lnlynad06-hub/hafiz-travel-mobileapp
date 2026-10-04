@@ -118,12 +118,14 @@ public class LoginActivity extends BaseActivity {
                     String val = s.toString().trim();
                     if (val.isEmpty()) {
                         emailLayout.setError(null);
+                        emailLayout.setEndIconMode(com.google.android.material.textfield.TextInputLayout.END_ICON_NONE);
                         emailLayout.setEndIconDrawable(null);
                     } else if (android.util.Patterns.EMAIL_ADDRESS.matcher(val).matches()) {
                         emailLayout.setError(null);
                         emailLayout.setEndIconMode(com.google.android.material.textfield.TextInputLayout.END_ICON_CUSTOM);
                         emailLayout.setEndIconDrawable(R.drawable.ic_check_circle_magenta);
                     } else {
+                        emailLayout.setEndIconMode(com.google.android.material.textfield.TextInputLayout.END_ICON_NONE);
                         emailLayout.setEndIconDrawable(null);
                         emailLayout.setError(getString(R.string.login_email_invalid));
                     }
@@ -309,12 +311,10 @@ public class LoginActivity extends BaseActivity {
 
     private void setLoadingState(boolean loading) {
         if (isFinishing() || isDestroyed()) return;
-        if (loginButton != null) {
-            loginButton.setEnabled(!loading);
-            loginButton.setText(loading ? getString(R.string.login_signing_in) : getString(R.string.login_button));
-        }
-        if (loginProgressBar != null) {
-            loginProgressBar.setVisibility(loading ? View.VISIBLE : View.GONE);
+        if (loading) {
+            LoadingButtonUtil.showLoading(loginButton, loginProgressBar);
+        } else {
+            LoadingButtonUtil.hideLoading(loginButton, loginProgressBar);
         }
     }
 

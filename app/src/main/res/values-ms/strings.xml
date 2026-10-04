@@ -1506,19 +1506,61 @@
     <string name="category_2_to_11">2 hingga 11 tahun</string>
     <string name="category_adult_rate">Kadar Dewasa</string>
 
-    <!-- About Page Strings -->
+    <!-- About Page & Company Strings (Bahasa Melayu) -->
     <string name="about_title">Tentang</string>
-    <string name="about_section_company">Tentang Aplikasi Ini</string>
-    <string name="about_motac_label">MOTAC</string>
-    <string name="about_motac_value">KPK / LN 10751</string>
-    <string name="about_ssm_label">SSM</string>
+    <string name="about_tagline">Bina Memori yang Telus bersama Hafiz Travel &amp; Tours</string>
+    <string name="about_company_full_name">Hafiz Travel &amp; Tours Sdn. Bhd.</string>
+    <string name="about_section_app_desc">Tentang Aplikasi</string>
+    <string name="about_app_description">Hafiz Travel ialah aplikasi rasmi rakan perjalanan anda untuk meneroka pakej Umrah dan pelancongan, mengurus tempahan, membuat pembayaran selamat, serta mengakses dokumen perjalanan.</string>
+    
+    <!-- Company Information Section -->
+    <string name="about_section_company">Syarikat</string>
+    <string name="about_established_label">Ditubuhkan</string>
+    <string name="about_established_value">2022</string>
+    <string name="about_motac_label">Lesen MOTAC</string>
+    <string name="about_motac_value">KPK/LN 10751</string>
+    <string name="about_ssm_label">Pendaftaran SSM</string>
     <string name="about_ssm_value">202201043065 (1488762-A)</string>
-    <string name="about_section_app_desc">Tentang Aplikasi Ini</string>
-    <string name="about_app_description">Aplikasi mudah alih Hafiz Travel memudahkan pengguna meneroka pakej pelancongan dan Umrah, melihat butiran pakej, membuat tempahan, menyemak waktu solat dan mencari arah kiblat.</string>
-    <string name="about_section_app">Aplikasi</string>
+
+    <!-- Contact Section -->
+    <string name="about_section_contact">Hubungi Kami</string>
+    <string name="about_phone_label">Telefon</string>
+    <string name="about_phone_value">+6019-785 9867</string>
+    <string name="about_email_label">E-mel</string>
+    <string name="about_email_value">sales.httsb@gmail.com</string>
+    <string name="about_website_label">Laman Web</string>
+    <string name="about_website_value">hafiztraveltours.com</string>
+    <string name="about_website_url">https://hafiztraveltours.com</string>
+    <string name="about_address_label">Alamat</string>
+    <string name="about_address_value">No. 31, Jalan Dataran Larkin, 80350 Johor Bahru, Johor, Malaysia</string>
+    <!-- Social Media Section (Bahasa Melayu) -->
+    <string name="about_section_social">Media Sosial</string>
+    <string name="about_social_follow_us">Ikuti Kami</string>
+    <string name="social_tiktok">TikTok</string>
+    <string name="social_threads">Threads</string>
+    <string name="social_instagram">Instagram</string>
+    <string name="social_facebook">Facebook</string>
+    <string name="social_youtube">YouTube</string>
+
+    <!-- Legal Section -->
+    <string name="about_section_legal">Undang-undang</string>
+    <string name="about_privacy_policy">Dasar Privasi</string>
+    <string name="about_umrah_terms">Terma &amp; Syarat Umrah</string>
+    <string name="about_tour_terms">Terma &amp; Syarat Tour</string>
+    <string name="about_refund_policy">Polisi Bayaran Balik &amp; Pembatalan</string>
+    <string name="about_coming_soon">Akan Datang</string>
+
+    <!-- App Version & Developer Footer -->
     <string name="about_app_version">Versi Aplikasi</string>
-    <string name="about_dev_status_label">Status Pembangunan</string>
-    <string name="about_dev_status_value">Sedang dalam pembangunan</string>
     <string name="about_engineered_by_prefix">Direka oleh</string>
+    <string name="about_copyright">© 2022 Hafiz Travel &amp; Tours Sdn. Bhd. Hak cipta terpelihara.</string>
+
+    <!-- Notification Center & Push Notifications -->
+    <string name="notification_center_title">Pemberitahuan</string>
+    <string name="notification_mark_all_read">Tanda semua dibaca</string>
+    <string name="notif_doc_verified_title">Dokumen Perjalanan Disahkan</string>
+    <string name="notif_doc_verified_msg">Dokumen perjalanan anda telah berjaya disahkan.</string>
+    <string name="notif_prayer_reminder_title">Peringatan Solat</string>
+    <string name="notif_prayer_reminder_msg">Waktu solat %1$s akan masuk dalam 5 minit.</string>
 </resources>
 

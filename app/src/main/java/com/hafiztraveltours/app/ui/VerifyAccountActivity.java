@@ -23,6 +23,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 import com.hafiztraveltours.app.R;
 import com.hafiztraveltours.app.utils.HapticUtil;
+import com.hafiztraveltours.app.utils.LoadingButtonUtil;
 import com.hafiztraveltours.app.utils.LocaleHelper;
 import com.hafiztraveltours.app.utils.OtpInputHelper;
 
@@ -231,12 +232,10 @@ public class VerifyAccountActivity extends BaseActivity {
 
     private void setLoadingState(boolean loading) {
         if (isFinishing() || isDestroyed()) return;
-        if (btnVerifyAccount != null) {
-            btnVerifyAccount.setEnabled(!loading);
-            btnVerifyAccount.setText(loading ? getString(R.string.verify_account_verifying) : getString(R.string.verify_account_button));
-        }
-        if (verifyProgressBar != null) {
-            verifyProgressBar.setVisibility(loading ? View.VISIBLE : View.GONE);
+        if (loading) {
+            LoadingButtonUtil.showLoading(btnVerifyAccount, verifyProgressBar);
+        } else {
+            LoadingButtonUtil.hideLoading(btnVerifyAccount, verifyProgressBar);
         }
         if (otpHelper != null) {
             otpHelper.setEnabled(!loading);

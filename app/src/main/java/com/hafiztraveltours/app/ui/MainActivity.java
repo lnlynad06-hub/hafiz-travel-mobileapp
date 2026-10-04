@@ -26,6 +26,8 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.graphics.drawable.ColorDrawable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -135,6 +137,7 @@ public class MainActivity extends BaseActivity {
         setupRegisterCta();
         startHeroShowcase();
         updateFavoriteBadge();
+        updateNotificationDotState();
 
         if (OnboardingManager.isPrayerFeatureEnabled(this)) {
             View prayerCard = findViewById(R.id.prayerTimesCard);
@@ -320,20 +323,75 @@ public class MainActivity extends BaseActivity {
         }
 
         View notificationButton = findViewById(R.id.notificationButton);
-        View notificationDot = findViewById(R.id.viewNotificationDot);
-        if (notificationDot != null) {
-            notificationDot.setVisibility(mainViewModel.hasUnreadNotifications() ? View.VISIBLE : View.GONE);
-        }
+        updateNotificationDotState();
         if (notificationButton != null) {
             notificationButton.setOnClickListener(v -> {
                 com.hafiztraveltours.app.utils.HapticUtil.tap(v);
-                if (notificationDot != null) {
-                    notificationDot.setVisibility(View.GONE);
-                    mainViewModel.markNotificationsRead();
-                }
-                Toast.makeText(this, getString(R.string.no_notifications), Toast.LENGTH_SHORT).show();
+                showNotificationCenterBottomSheet();
             });
         }
+    }
+
+    private void updateNotificationDotState() {
+        View notificationDot = findViewById(R.id.viewNotificationDot);
+        if (notificationDot != null) {
+            boolean hasUnread = AppNotificationManager.hasUnread(this);
+            notificationDot.setVisibility(hasUnread ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    private void showNotificationCenterBottomSheet() {
+        BottomSheetDialog dialog = new BottomSheetDialog(this, com.google.android.material.R.style.Theme_Design_BottomSheetDialog);
+        View sheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_notifications, null);
+        dialog.setContentView(sheetView);
+
+        Window w = dialog.getWindow();
+        if (w != null) {
+            w.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            w.setDimAmount(0.55f);
+        }
+
+        View btnClose = sheetView.findViewById(R.id.btnCloseNotifSheet);
+        View btnMarkAll = sheetView.findViewById(R.id.btnMarkAllRead);
+        View emptyView = sheetView.findViewById(R.id.emptyNotifView);
+        RecyclerView rv = sheetView.findViewById(R.id.rvNotifications);
+
+        if (btnClose != null) {
+            btnClose.setOnClickListener(v -> dialog.dismiss());
+        }
+
+        List<AppNotification> list = AppNotificationManager.getNotifications(this);
+
+        if (list.isEmpty()) {
+            if (emptyView != null) emptyView.setVisibility(View.VISIBLE);
+            if (rv != null) rv.setVisibility(View.GONE);
+        } else {
+            if (emptyView != null) emptyView.setVisibility(View.GONE);
+            if (rv != null) {
+                rv.setVisibility(View.VISIBLE);
+                rv.setLayoutManager(new LinearLayoutManager(this));
+                NotificationAdapter adapter = new NotificationAdapter(this, list, notif -> {
+                    updateNotificationDotState();
+                });
+                rv.setAdapter(adapter);
+            }
+        }
+
+        if (btnMarkAll != null) {
+            btnMarkAll.setOnClickListener(v -> {
+                HapticUtil.click(v);
+                AppNotificationManager.markAllRead(this);
+                updateNotificationDotState();
+                if (rv != null && rv.getAdapter() != null) {
+                    rv.getAdapter().notifyDataSetChanged();
+                }
+            });
+        }
+
+        AppNotificationManager.markAllRead(this);
+        updateNotificationDotState();
+
+        dialog.show();
     }
 
     private String getLanguageShortLabel(String langCode) {
@@ -615,9 +673,6 @@ public class MainActivity extends BaseActivity {
     }
 
     private void setupQuickActions() {
-        // Nusuk - links out to the official Nusuk app on the Play Store
-        setupTactileButton(findViewById(R.id.featureNusuk), this::openNusukOnPlayStore);
-
         // Guideline - persediaan/checklist Umrah & Tour
         setupTactileButton(findViewById(R.id.featureGuideline), () ->
                 startActivity(new Intent(this, PanduanUmrahActivity.class)));
@@ -870,15 +925,6 @@ public class MainActivity extends BaseActivity {
         dialog.show();
     }
 
-    private void openNusukOnPlayStore() {
-        try {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + NUSUK_PACKAGE_NAME)));
-        } catch (android.content.ActivityNotFoundException e) {
-            // Play Store app not available - fall back to the web link
-            startActivity(new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("https://play.google.com/store/apps/details?id=" + NUSUK_PACKAGE_NAME)));
-        }
-    }
 
     private void openWhatsApp() {
         try {

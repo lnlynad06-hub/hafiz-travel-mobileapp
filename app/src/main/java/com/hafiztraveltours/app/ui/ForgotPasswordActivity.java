@@ -23,6 +23,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.hafiztraveltours.app.R;
 import com.hafiztraveltours.app.utils.HapticUtil;
+import com.hafiztraveltours.app.utils.LoadingButtonUtil;
 import com.hafiztraveltours.app.utils.LocaleHelper;
 
 public class ForgotPasswordActivity extends BaseActivity {
@@ -169,12 +170,10 @@ public class ForgotPasswordActivity extends BaseActivity {
 
     private void setLoadingState(boolean loading) {
         if (isFinishing() || isDestroyed()) return;
-        if (btnSendCode != null) {
-            btnSendCode.setEnabled(!loading);
-            btnSendCode.setText(loading ? getString(R.string.forgot_pass_sending) : getString(R.string.forgot_pass_btn_send_code));
-        }
-        if (sendProgressBar != null) {
-            sendProgressBar.setVisibility(loading ? View.VISIBLE : View.GONE);
+        if (loading) {
+            LoadingButtonUtil.showLoading(btnSendCode, sendProgressBar);
+        } else {
+            LoadingButtonUtil.hideLoading(btnSendCode, sendProgressBar);
         }
         if (emailInput != null) {
             emailInput.setEnabled(!loading);

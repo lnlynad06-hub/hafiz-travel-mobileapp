@@ -233,12 +233,10 @@ public class SignUpActivity extends BaseActivity {
 
     private void setLoadingState(boolean loading) {
         if (isFinishing() || isDestroyed()) return;
-        if (signUpButton != null) {
-            signUpButton.setEnabled(!loading);
-            signUpButton.setText(loading ? getString(R.string.signup_signing_up) : getString(R.string.signup_button));
-        }
-        if (signUpProgressBar != null) {
-            signUpProgressBar.setVisibility(loading ? View.VISIBLE : View.GONE);
+        if (loading) {
+            LoadingButtonUtil.showLoading(signUpButton, signUpProgressBar);
+        } else {
+            LoadingButtonUtil.hideLoading(signUpButton, signUpProgressBar);
         }
     }
 

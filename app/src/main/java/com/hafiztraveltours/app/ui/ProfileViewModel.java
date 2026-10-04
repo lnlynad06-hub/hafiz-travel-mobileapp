@@ -15,6 +15,7 @@ import com.hafiztraveltours.app.network.ApiResponse;
 import com.hafiztraveltours.app.network.ProfileResponseDto;
 import com.hafiztraveltours.app.network.UserDto;
 import com.hafiztraveltours.app.utils.ApiOpResult;
+import com.hafiztraveltours.app.utils.AppNotificationManager;
 import com.hafiztraveltours.app.utils.DocumentStatus;
 import com.hafiztraveltours.app.utils.SingleEvent;
 import com.hafiztraveltours.app.utils.Validator;
@@ -341,6 +342,7 @@ public class ProfileViewModel extends AndroidViewModel {
                     repository.saveDocuments(docs);
                     docsData.setValue(docs);
                     refreshReadiness(docs);
+                    AppNotificationManager.checkAndNotifyDocumentVerification(getApplication(), docs);
                 }
             }
 

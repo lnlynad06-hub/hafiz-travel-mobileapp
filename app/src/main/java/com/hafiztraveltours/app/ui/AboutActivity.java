@@ -1,12 +1,16 @@
 package com.hafiztraveltours.app.ui;
 
 import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.graphics.LinearGradient;
 import android.graphics.Matrix;
 import android.graphics.Shader;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
@@ -23,22 +27,158 @@ public class AboutActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
 
+        // Header back button
         findViewById(R.id.aboutBackButton).setOnClickListener(v -> {
             HapticUtil.click(v);
             finish();
         });
 
+        // App Version dynamically from build configuration
         TextView tvAppVersion = findViewById(R.id.tvAppVersion);
         if (tvAppVersion != null) {
             tvAppVersion.setText("v" + BuildConfig.VERSION_NAME);
         }
 
+        // Contact Intent Listeners
+        setupContactListeners();
+
+        // Social Media Intent Listeners
+        setupSocialListeners();
+
+        // Developer Shimmer & Link
         setupDanialShimmer();
+    }
+
+    private void setupSocialListeners() {
+        // TikTok
+        View btnTikTok = findViewById(R.id.btnSocialTikTok);
+        if (btnTikTok != null) {
+            btnTikTok.setOnClickListener(v -> {
+                HapticUtil.click(v);
+                openSocialLink("https://www.tiktok.com/@hafiztravelofficial", "com.zhiliaoapp.musically");
+            });
+        }
+
+        // Threads
+        View btnThreads = findViewById(R.id.btnSocialThreads);
+        if (btnThreads != null) {
+            btnThreads.setOnClickListener(v -> {
+                HapticUtil.click(v);
+                openSocialLink("https://www.threads.net/@hafiztravelofficial", "com.instagram.barcelona");
+            });
+        }
+
+        // Instagram
+        View btnInstagram = findViewById(R.id.btnSocialInstagram);
+        if (btnInstagram != null) {
+            btnInstagram.setOnClickListener(v -> {
+                HapticUtil.click(v);
+                openSocialLink("https://www.instagram.com/hafiztravelofficial/", "com.instagram.android");
+            });
+        }
+
+        // Facebook
+        View btnFacebook = findViewById(R.id.btnSocialFacebook);
+        if (btnFacebook != null) {
+            btnFacebook.setOnClickListener(v -> {
+                HapticUtil.click(v);
+                openSocialLink("https://www.facebook.com/hafiztravelntours", "com.facebook.katana");
+            });
+        }
+
+        // YouTube
+        View btnYouTube = findViewById(R.id.btnSocialYouTube);
+        if (btnYouTube != null) {
+            btnYouTube.setOnClickListener(v -> {
+                HapticUtil.click(v);
+                openSocialLink("https://www.youtube.com/@hafiztravelandtours", "com.google.android.youtube");
+            });
+        }
+    }
+
+    private void openSocialLink(String url, String packageName) {
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            if (packageName != null) {
+                intent.setPackage(packageName);
+            }
+            startActivity(intent);
+        } catch (Exception e) {
+            startActivitySafely(new Intent(Intent.ACTION_VIEW, Uri.parse(url)), "No app found to open link");
+        }
+    }
+
+    private void setupContactListeners() {
+        // Phone Dialer Intent
+        View btnPhone = findViewById(R.id.btnContactPhone);
+        if (btnPhone != null) {
+            btnPhone.setOnClickListener(v -> {
+                HapticUtil.click(v);
+                String phoneNumber = getString(R.string.about_phone_value);
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phoneNumber.replace(" ", "").replace("-", "")));
+                startActivitySafely(intent, "No dialer app found");
+            });
+        }
+
+        // Email Client Intent
+        View btnEmail = findViewById(R.id.btnContactEmail);
+        if (btnEmail != null) {
+            btnEmail.setOnClickListener(v -> {
+                HapticUtil.click(v);
+                String email = getString(R.string.about_email_value);
+                Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + email));
+                intent.putExtra(Intent.EXTRA_SUBJECT, "Inquiry via Hafiz Travel App");
+                startActivitySafely(Intent.createChooser(intent, "Send Email"), "No email app found");
+            });
+        }
+
+        // Website Browser Intent
+        View btnWebsite = findViewById(R.id.btnContactWebsite);
+        if (btnWebsite != null) {
+            btnWebsite.setOnClickListener(v -> {
+                HapticUtil.click(v);
+                String webUrl = getString(R.string.about_website_url);
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(webUrl));
+                startActivitySafely(intent, "No browser app found");
+            });
+        }
+
+        // Address Maps Intent
+        View btnAddress = findViewById(R.id.btnContactAddress);
+        if (btnAddress != null) {
+            btnAddress.setOnClickListener(v -> {
+                HapticUtil.click(v);
+                String address = getString(R.string.about_address_value);
+                Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + Uri.encode(address));
+                Intent intent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                intent.setPackage("com.google.android.apps.maps");
+                if (intent.resolveActivity(getPackageManager()) == null) {
+                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://maps.google.com/?q=" + Uri.encode(address)));
+                }
+                startActivitySafely(intent, "No maps app found");
+            });
+        }
+    }
+
+
+
+    private void startActivitySafely(Intent intent, String errorMessage) {
+        try {
+            startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void setupDanialShimmer() {
         TextView tvDanial = findViewById(R.id.tvAuthorDanial);
         if (tvDanial == null) return;
+
+        tvDanial.setOnClickListener(v -> {
+            HapticUtil.click(v);
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://nellsosuzxy.github.io/"));
+            startActivitySafely(intent, "No browser app found");
+        });
 
         tvDanial.post(() -> {
             if (isFinishing() || isDestroyed()) return;
