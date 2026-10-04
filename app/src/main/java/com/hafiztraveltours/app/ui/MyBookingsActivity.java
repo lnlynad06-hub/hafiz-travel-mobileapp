@@ -1051,14 +1051,24 @@ public class MyBookingsActivity extends BaseActivity {
                         Log.d("MyBookingsActivity", "Cancel response received -> Code: " + response.code() + ", Content-Type: " + contentType);
 
                         if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
-                            Toast.makeText(MyBookingsActivity.this,
-                                    getString(R.string.cancel_booking_success, bookingRef), Toast.LENGTH_LONG).show();
-                            
-                            // Optimistically update memory state and immediately refresh UI
-                            booking.status = "cancelled";
-                            booking.isCancellable = Boolean.FALSE;
-                            if (adapter != null) {
-                                adapter.notifyDataSetChanged();
+                            boolean isZeroPaid = (booking.paidAmount <= 0);
+
+                            if (isZeroPaid) {
+                                Toast.makeText(MyBookingsActivity.this,
+                                        getString(R.string.cancel_booking_success, bookingRef), Toast.LENGTH_LONG).show();
+
+                                if (adapter != null) {
+                                    adapter.removeBooking(booking);
+                                }
+                            } else {
+                                Toast.makeText(MyBookingsActivity.this,
+                                        getString(R.string.cancel_booking_success, bookingRef), Toast.LENGTH_LONG).show();
+
+                                booking.status = "cancelled";
+                                booking.isCancellable = Boolean.FALSE;
+                                if (adapter != null) {
+                                    adapter.notifyDataSetChanged();
+                                }
                             }
                             loadBookings();
                         } else {

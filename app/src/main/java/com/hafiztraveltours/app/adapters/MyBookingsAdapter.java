@@ -67,6 +67,19 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
         notifyDataSetChanged();
     }
 
+    public void removeBooking(BookingDto booking) {
+        if (items != null && booking != null) {
+            int index = items.indexOf(booking);
+            if (index >= 0) {
+                items.remove(index);
+                notifyItemRemoved(index);
+                notifyItemRangeChanged(index, items.size());
+            } else {
+                notifyDataSetChanged();
+            }
+        }
+    }
+
     public static android.app.Activity getActivityFromContext(Context context) {
         while (context instanceof android.content.ContextWrapper) {
             if (context instanceof android.app.Activity) {

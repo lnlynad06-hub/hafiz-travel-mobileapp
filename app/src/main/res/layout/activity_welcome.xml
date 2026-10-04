@@ -41,8 +41,8 @@
 
                     <ImageView
                         android:id="@+id/logoTop"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:scaleType="fitCenter"
                         android:src="@drawable/logo" />
 
@@ -95,7 +95,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="14dp"
-                app:cardCornerRadius="22dp"
+                app:cardCornerRadius="18dp"
                 app:cardElevation="2dp"
                 app:cardBackgroundColor="#EFECE6"
                 app:layout_constraintDimensionRatio="1:1.05"
@@ -116,7 +116,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/img_turkiye" />
+                        android:src="@drawable/bg_image_placeholder" />
 
                     <!-- Gentle Editorial Gradient Scrim -->
                     <View
@@ -346,8 +346,8 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/logo"
                 tools:ignore="ContentDescription" />
@@ -482,8 +482,8 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/logo"
                 tools:ignore="ContentDescription" />

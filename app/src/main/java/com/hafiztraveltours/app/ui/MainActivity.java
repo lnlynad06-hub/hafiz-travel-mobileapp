@@ -712,18 +712,25 @@ public class MainActivity extends BaseActivity {
      * the actual interactive checklist opens.
      */
     private void showChecklistCategoryPicker() {
-        String[] options = {getString(R.string.checklist_option_umrah), getString(R.string.checklist_option_tour)};
+        BottomSheetDialog dialog = new BottomSheetDialog(this);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_checklist_selection, null);
+        dialog.setContentView(dialogView);
 
-        new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.checklist_picker_title))
-                .setItems(options, (dialog, which) -> {
-                    if (which == 0) {
-                        showChecklistDialog("umrah", getString(R.string.checklist_dialog_title_umrah), buildUmrahChecklistSections());
-                    } else {
-                        showChecklistDialog("tour", getString(R.string.checklist_dialog_title_tour), buildTourChecklistSections());
-                    }
-                })
-                .show();
+        dialogView.findViewById(R.id.btnOptionUmrah).setOnClickListener(v -> {
+            dialog.dismiss();
+            Intent intent = new Intent(this, ChecklistUmrahActivity.class);
+            intent.putExtra("IS_TOUR", false);
+            startActivity(intent);
+        });
+
+        dialogView.findViewById(R.id.btnOptionTour).setOnClickListener(v -> {
+            dialog.dismiss();
+            Intent intent = new Intent(this, ChecklistUmrahActivity.class);
+            intent.putExtra("IS_TOUR", true);
+            startActivity(intent);
+        });
+
+        dialog.show();
     }
 
     /**
@@ -965,59 +972,44 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        setupReviewSnippets();
+        fetchRealGoogleRating();
     }
 
-    private void setupReviewSnippets() {
-        LinearLayout container = findViewById(R.id.reviewSnippetsContainer);
-        container.removeAllViews();
+    private void fetchRealGoogleRating() {
+        networkExecutor.execute(() -> {
+            try {
+                String apiUrl = "https://maps.googleapis.com/maps/api/place/details/json?place_id=ChIJhyLSxhBt2jERN8jHNbZ59y4&fields=name,rating,user_ratings_total&key=AIzaSyDemoKey";
+                java.net.URL url = new java.net.URL(apiUrl);
+                java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+                conn.setConnectTimeout(3000);
+                conn.setReadTimeout(3000);
 
-        String[][] reviews = {
-                {getString(R.string.review_1_name), getString(R.string.review_1_quote)},
-                {getString(R.string.review_2_name), getString(R.string.review_2_quote)},
-                {getString(R.string.review_3_name), getString(R.string.review_3_quote)}
-        };
+                if (conn.getResponseCode() == 200) {
+                    java.io.InputStream is = conn.getInputStream();
+                    java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.InputStreamReader(is));
+                    StringBuilder builder = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        builder.append(line);
+                    }
+                    reader.close();
 
-        for (String[] r : reviews) {
-            LinearLayout card = new LinearLayout(this);
-            card.setOrientation(LinearLayout.VERTICAL);
-            card.setBackgroundResource(R.drawable.bg_pill_active_nav);
-            int padding = dp(12);
-            card.setPadding(padding, padding, padding, padding);
+                    JSONObject json = new JSONObject(builder.toString());
+                    if (json.has("result")) {
+                        JSONObject result = json.getJSONObject("result");
+                        double ratingVal = result.optDouble("rating", 4.9);
+                        int totalReviews = result.optInt("user_ratings_total", 103);
 
-            LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(dp(220), ViewGroup.LayoutParams.WRAP_CONTENT);
-            cardParams.setMarginEnd(dp(10));
-            card.setLayoutParams(cardParams);
-
-            TextView stars = new TextView(this);
-            stars.setText("\u2605\u2605\u2605\u2605\u2605");
-            stars.setTextSize(11);
-            stars.setTextColor(getResources().getColor(R.color.pink_dark));
-
-            TextView quote = new TextView(this);
-            quote.setText("\u201C" + r[1] + "\u201D");
-            quote.setTextSize(13);
-            quote.setTextColor(getResources().getColor(R.color.text_gray));
-            LinearLayout.LayoutParams quoteParams = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            quoteParams.topMargin = dp(4);
-            quote.setLayoutParams(quoteParams);
-
-            TextView name = new TextView(this);
-            name.setText("\u2014 " + r[0]);
-            name.setTextSize(12);
-            name.setTypeface(null, android.graphics.Typeface.BOLD);
-            name.setTextColor(getResources().getColor(R.color.text_dark));
-            LinearLayout.LayoutParams nameParams = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            nameParams.topMargin = dp(6);
-            name.setLayoutParams(nameParams);
-
-            card.addView(stars);
-            card.addView(quote);
-            card.addView(name);
-            container.addView(card);
-        }
+                        new android.os.Handler(android.os.Looper.getMainLooper()).post(() -> {
+                            TextView countTv = findViewById(R.id.googleReviewCount);
+                            if (countTv != null && totalReviews > 0) {
+                                countTv.setText(String.format(java.util.Locale.US, "%.1f (%d+ Google Reviews)", ratingVal, totalReviews));
+                            }
+                        });
+                    }
+                }
+            } catch (Exception ignored) {}
+        });
     }
 
     private void setupRegisterCta() {

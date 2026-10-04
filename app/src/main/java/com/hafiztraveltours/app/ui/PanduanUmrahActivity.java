@@ -19,8 +19,10 @@ import android.text.SpannableStringBuilder;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -260,21 +262,38 @@ public class PanduanUmrahActivity extends BaseActivity {
     private View buildSectionItem(SectionItem section) {
         LinearLayout item = new LinearLayout(this);
         item.setOrientation(LinearLayout.VERTICAL);
-        item.setBackgroundResource(R.drawable.bg_search_white);
+        item.setBackgroundResource(R.drawable.bg_detail_card);
         LinearLayout.LayoutParams itemParams = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        itemParams.bottomMargin = dp(12);
+        itemParams.bottomMargin = dp(14);
         item.setLayoutParams(itemParams);
-        int padding = dp(16);
+        int padding = dp(18);
         item.setPadding(padding, padding, padding, padding);
         item.setClickable(true);
         item.setFocusable(true);
+
+        LinearLayout headerRow = new LinearLayout(this);
+        headerRow.setOrientation(LinearLayout.HORIZONTAL);
+        headerRow.setGravity(Gravity.CENTER_VERTICAL);
 
         TextView title = new TextView(this);
         title.setText(getString(section.titleResId));
         title.setTextSize(19); // was 15 - bigger for elderly jemaah
         title.setTypeface(null, Typeface.BOLD);
         title.setTextColor(getResources().getColor(R.color.text_dark));
+        LinearLayout.LayoutParams titleParams = new LinearLayout.LayoutParams(
+                0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+        title.setLayoutParams(titleParams);
+
+        ImageView expandIcon = new ImageView(this);
+        expandIcon.setImageResource(R.drawable.ic_chevron_right);
+        expandIcon.setColorFilter(getResources().getColor(R.color.brand_magenta));
+        LinearLayout.LayoutParams iconParams = new LinearLayout.LayoutParams(dp(22), dp(22));
+        iconParams.setMarginStart(dp(8));
+        expandIcon.setLayoutParams(iconParams);
+
+        headerRow.addView(title);
+        headerRow.addView(expandIcon);
 
         TextView summary = new TextView(this);
         // FIX: Arabic du'a/niat lines are now auto-detected and enlarged (24sp,
@@ -286,14 +305,17 @@ public class PanduanUmrahActivity extends BaseActivity {
         summary.setVisibility(View.GONE);
         LinearLayout.LayoutParams summaryParams = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        summaryParams.topMargin = dp(10);
+        summaryParams.topMargin = dp(12);
         summary.setLayoutParams(summaryParams);
 
-        item.addView(title);
+        item.addView(headerRow);
         item.addView(summary);
 
-        item.setOnClickListener(v ->
-                summary.setVisibility(summary.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE));
+        item.setOnClickListener(v -> {
+            boolean isExpanded = summary.getVisibility() == View.VISIBLE;
+            summary.setVisibility(isExpanded ? View.GONE : View.VISIBLE);
+            expandIcon.setRotation(isExpanded ? 0f : 90f);
+        });
 
         return item;
     }

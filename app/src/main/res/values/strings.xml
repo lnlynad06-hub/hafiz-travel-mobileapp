@@ -872,7 +872,7 @@
     <string name="promo_hero_kicker">MAKKAH &amp; MADINAH</string>
     <string name="promo_hero_title">School Holiday &amp; Syawal Umrah Package</string>
     <string name="promo_hero_price">From RM 7,990 • 12 Days 10 Nights</string>
-    <string name="google_review_summary">4.9 (250+ Google Reviews)</string>
+    <string name="google_review_summary">4.9 (100+ Google Reviews)</string>
 
     <!-- Package detail badges (were hardcoded in layout) -->
     <string name="package_vip_badge">VIP FEATURED PACKAGE</string>

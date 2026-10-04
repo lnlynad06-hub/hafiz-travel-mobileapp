@@ -294,9 +294,9 @@ public class WelcomeActivity extends BaseActivity {
 
     private void setupFallbackShowcase() {
         showcaseList.clear();
-        showcaseList.add(new ShowcaseItem(null, "tour", R.drawable.img_turkiye, "TURKIYE"));
-        showcaseList.add(new ShowcaseItem(null, "tour", R.drawable.img_korea1, "KOREA"));
-        showcaseList.add(new ShowcaseItem(null, "umrah", R.drawable.img_korea2, "MAKKAH & MADINAH"));
+        showcaseList.add(new ShowcaseItem(null, "tour", R.drawable.bg_image_placeholder, "TURKIYE"));
+        showcaseList.add(new ShowcaseItem(null, "tour", R.drawable.bg_image_placeholder, "KOREA"));
+        showcaseList.add(new ShowcaseItem(null, "umrah", R.drawable.bg_image_placeholder, "MAKKAH & MADINAH"));
         displayCurrentShowcase(false);
     }
 
@@ -317,7 +317,7 @@ public class WelcomeActivity extends BaseActivity {
 
                                     Object img = (p.imageUrl != null && !p.imageUrl.trim().isEmpty())
                                             ? p.imageUrl
-                                            : R.drawable.img_turkiye;
+                                            : R.drawable.bg_image_placeholder;
 
                                     showcaseList.add(new ShowcaseItem(p.id, p.category != null ? p.category : "tour", img, tag));
                                 }
@@ -411,7 +411,7 @@ public class WelcomeActivity extends BaseActivity {
                         .load(item.imageSource)
                         .transition(DrawableTransitionOptions.withCrossFade(400))
                         .placeholder(R.drawable.bg_image_placeholder)
-                        .error(R.drawable.img_turkiye)
+                        .error(R.drawable.bg_image_placeholder)
                         .centerCrop()
                         .into(heroImageMain);
             } catch (Exception ignored) {}

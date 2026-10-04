@@ -73,10 +73,13 @@ public class ChecklistUmrahActivity extends BaseActivity {
 
     private LinearLayout checklistContainer;
     private TextView progressText;
+    private TextView titleView;
+    private android.widget.ProgressBar progressBar;
     private SharedPreferences prefs;
 
     private int totalItems = 0;
     private int checkedCount = 0;
+    private boolean isTour = false;
 
     
     @Override
@@ -89,10 +92,18 @@ public class ChecklistUmrahActivity extends BaseActivity {
         findViewById(R.id.checklistBackButton).setOnClickListener(v -> finish());
         findViewById(R.id.checklistResetButton).setOnClickListener(v -> resetChecklist());
 
+        isTour = getIntent().getBooleanExtra("IS_TOUR", false);
+
+        titleView = findViewById(R.id.checklistTitleView);
+        progressBar = findViewById(R.id.checklistProgressBar);
         checklistContainer = findViewById(R.id.checklistContainer);
         progressText = findViewById(R.id.checklistProgressText);
 
-        List<Section> sections = buildSections();
+        if (titleView != null) {
+            titleView.setText(isTour ? getString(R.string.checklist_option_tour) : getString(R.string.checklist_option_umrah));
+        }
+
+        List<Section> sections = isTour ? buildTourSections() : buildSections();
         renderSections(sections);
         updateProgressText();
     }
@@ -102,12 +113,18 @@ public class ChecklistUmrahActivity extends BaseActivity {
         checklistContainer.removeAllViews();
         totalItems = 0;
         checkedCount = 0;
-        renderSections(buildSections());
+        renderSections(isTour ? buildTourSections() : buildSections());
         updateProgressText();
     }
 
     private void updateProgressText() {
-        progressText.setText(checkedCount + " / " + totalItems + " " + getString(R.string.checklist_progress_suffix));
+        if (progressText != null) {
+            progressText.setText(checkedCount + " / " + totalItems + " " + getString(R.string.checklist_progress_suffix));
+        }
+        if (progressBar != null) {
+            progressBar.setMax(totalItems > 0 ? totalItems : 1);
+            progressBar.setProgress(checkedCount);
+        }
     }
 
     // ---------------------------------------------------------------------
@@ -229,6 +246,48 @@ public class ChecklistUmrahActivity extends BaseActivity {
         return sections;
     }
 
+    private List<Section> buildTourSections() {
+        List<Section> sections = new ArrayList<>();
+
+        Section s1 = new Section(R.string.checklist_section_travel_docs);
+        item(s1, R.string.checklist_tour_docs_1);
+        item(s1, R.string.checklist_tour_docs_2);
+        item(s1, R.string.checklist_tour_docs_3);
+        item(s1, R.string.checklist_tour_docs_4);
+        sections.add(s1);
+
+        Section s2 = new Section(R.string.checklist_section_medicine);
+        item(s2, R.string.checklist_tour_med_1);
+        item(s2, R.string.checklist_tour_med_2);
+        item(s2, R.string.checklist_tour_med_3);
+        item(s2, R.string.checklist_tour_med_4);
+        item(s2, R.string.checklist_tour_med_5);
+        item(s2, R.string.checklist_tour_med_6);
+        item(s2, R.string.checklist_tour_med_7);
+        item(s2, R.string.checklist_tour_med_8);
+        sections.add(s2);
+
+        Section s3 = new Section(R.string.checklist_section_clothing);
+        item(s3, R.string.checklist_tour_clothing_1);
+        item(s3, R.string.checklist_tour_clothing_2);
+        item(s3, R.string.checklist_tour_clothing_3);
+        item(s3, R.string.checklist_tour_clothing_4);
+        item(s3, R.string.checklist_tour_clothing_5);
+        sections.add(s3);
+
+        Section s4 = new Section(R.string.checklist_section_electronics);
+        item(s4, R.string.checklist_tour_elec_1);
+        item(s4, R.string.checklist_tour_elec_2);
+        sections.add(s4);
+
+        Section s5 = new Section(R.string.checklist_section_finance);
+        item(s5, R.string.checklist_tour_finance_1);
+        item(s5, R.string.checklist_tour_finance_2);
+        sections.add(s5);
+
+        return sections;
+    }
+
     private void item(Section section, int textResId, int... subResIds) {
         Block block = new Block(BlockType.ITEM, textResId);
         block.prefsKey = getResources().getResourceEntryName(textResId);
@@ -266,7 +325,7 @@ public class ChecklistUmrahActivity extends BaseActivity {
 
             LinearLayout card = new LinearLayout(this);
             card.setOrientation(LinearLayout.VERTICAL);
-            card.setBackgroundResource(R.drawable.bg_search_white);
+            card.setBackgroundResource(R.drawable.bg_detail_card);
             int pad = dp(16);
             card.setPadding(pad, pad, pad, pad);
             LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(
