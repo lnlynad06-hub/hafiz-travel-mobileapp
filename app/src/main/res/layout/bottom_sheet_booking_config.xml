@@ -1,443 +1,488 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/configNestedScrollView"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="@drawable/bg_bottom_sheet_luxury"
-    android:paddingHorizontal="20dp"
-    android:paddingTop="12dp"
-    android:paddingBottom="24dp">
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:scrollbars="vertical"
+    android:background="@drawable/bg_bottom_sheet_luxury">
 
-    <!-- Drag Handle Indicator -->
-    <View
-        android:layout_width="40dp"
-        android:layout_height="4dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/bg_badge_counter"
-        android:backgroundTint="@color/card_border" />
-
-    <!-- Sheet Header -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/config_title"
-        android:textColor="@color/text_dark"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:text="@string/config_subtitle"
-        android:textColor="@color/text_gray"
-        android:textSize="12sp" />
-
-    <!-- Package Summary Card -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
-        android:background="@drawable/bg_detail_card"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="12dp">
-
-        <ImageView
-            android:id="@+id/configPackageImage"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:scaleType="centerCrop"
-            android:background="@color/skeleton_base"
-            tools:ignore="ContentDescription" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="12dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/configPackageName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/text_dark"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                tools:text="Pakej Umrah VIP Cuti Sekolah" />
-
-            <TextView
-                android:id="@+id/configPackageDuration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:textColor="@color/brand_magenta"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                tools:text="12 Hari 10 Malam" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <!-- Season Selection Section -->
-    <TextView
-        android:id="@+id/configSeasonTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/config_season_type"
-        android:textColor="@color/text_dark"
-        android:textSize="14sp"
-        android:textStyle="bold" />
-
-    <HorizontalScrollView
-        android:id="@+id/configSeasonScrollView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:scrollbars="none"
-        android:overScrollMode="never">
-
-        <LinearLayout
-            android:id="@+id/configSeasonContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" />
-
-    </HorizontalScrollView>
-
-    <!-- Room Selection Title -->
-    <TextView
-        android:id="@+id/configRoomTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        android:text="@string/config_room_type"
-        android:textColor="@color/text_dark"
-        android:textSize="14sp"
-        android:textStyle="bold" />
-
-    <HorizontalScrollView
-        android:id="@+id/configRoomScrollView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:scrollbars="none"
-        android:overScrollMode="never">
-
-        <LinearLayout
-            android:id="@+id/configRoomOptionsContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" />
-
-    </HorizontalScrollView>
-
-    <!-- Number of Travellers Section (Adults & Kids) -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        android:background="@drawable/bg_detail_card"
         android:orientation="vertical"
-        android:padding="14dp">
+        android:paddingHorizontal="20dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="24dp">
+
+        <!-- Drag Handle Indicator -->
+        <View
+            android:layout_width="40dp"
+            android:layout_height="4dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_badge_counter"
+            android:backgroundTint="@color/card_border" />
+
+        <!-- Sheet Header -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/config_title"
+            android:textColor="@color/text_dark"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/config_pax_section_title"
+            android:layout_marginTop="2dp"
+            android:text="@string/config_subtitle"
+            android:textColor="@color/text_gray"
+            android:textSize="12sp" />
+
+        <!-- Package Summary Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/bg_detail_card"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="12dp">
+
+            <ImageView
+                android:id="@+id/configPackageImage"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:scaleType="centerCrop"
+                android:background="@color/skeleton_base"
+                tools:ignore="ContentDescription" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="12dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/configPackageName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_dark"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:text="Pakej Umrah VIP Cuti Sekolah" />
+
+                <TextView
+                    android:id="@+id/configPackageDuration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textColor="@color/brand_magenta"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    tools:text="12 Hari 10 Malam" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Season Selection Section -->
+        <TextView
+            android:id="@+id/configSeasonTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/config_season_type"
             android:textColor="@color/text_dark"
             android:textSize="14sp"
             android:textStyle="bold" />
 
-        <!-- Adults Row -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/config_pax_adults_label"
-                    android:textColor="@color/text_dark"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:text="@string/config_pax_adults_sub"
-                    android:textColor="@color/text_gray"
-                    android:textSize="11sp" />
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/btnPaxDecrease"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:background="@drawable/bg_whatsapp_secondary_button"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:text="-"
-                android:textColor="@color/text_dark"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/txtPaxCount"
-                android:layout_width="48dp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="1"
-                android:textColor="@color/text_dark"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/btnPaxIncrease"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:background="@drawable/bg_booking_primary_button"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:text="+"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-        <!-- Divider -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginVertical="10dp"
-            android:background="@color/card_border" />
-
-        <!-- Kids Row -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/config_pax_kids_label"
-                    android:textColor="@color/text_dark"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:text="@string/config_pax_kids_sub"
-                    android:textColor="@color/text_gray"
-                    android:textSize="11sp" />
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/btnKidsDecrease"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:background="@drawable/bg_whatsapp_secondary_button"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:text="-"
-                android:textColor="@color/text_dark"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/txtKidsCount"
-                android:layout_width="48dp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="0"
-                android:textColor="@color/text_dark"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/btnKidsIncrease"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:background="@drawable/bg_booking_primary_button"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:text="+"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-        <!-- Dynamic Child Details Container -->
-        <LinearLayout
-            android:id="@+id/containerChildDetails"
+        <HorizontalScrollView
+            android:id="@+id/configSeasonScrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:orientation="vertical"
-            android:visibility="gone" />
+            android:scrollbars="none"
+            android:overScrollMode="never">
 
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/configSeasonContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
 
-    <!-- Departure Dates Selector -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/config_departure_label"
-        android:textColor="@color/text_dark"
-        android:textSize="14sp"
-        android:textStyle="bold" />
+        </HorizontalScrollView>
 
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:scrollbars="none"
-        android:overScrollMode="never">
-
-        <LinearLayout
-            android:id="@+id/configDepartureContainer"
+        <!-- Room Selection Title -->
+        <TextView
+            android:id="@+id/configRoomTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" />
-
-    </HorizontalScrollView>
-
-
-    <!-- CRM Promo Code Input Box -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/inputPromoCode"
-            android:layout_width="0dp"
-            android:layout_height="44dp"
-            android:layout_weight="1"
-            android:background="@drawable/bg_input_box"
-            android:hint="@string/config_promo_hint"
-            android:textAllCaps="true"
-            android:paddingHorizontal="12dp"
+            android:layout_marginTop="18dp"
+            android:text="@string/config_room_type"
             android:textColor="@color/text_dark"
-            android:textColorHint="@color/text_muted"
-            android:textSize="13sp" />
-
-        <TextView
-            android:id="@+id/btnApplyPromo"
-            android:layout_width="wrap_content"
-            android:layout_height="44dp"
-            android:layout_marginStart="8dp"
-            android:background="@drawable/bg_whatsapp_secondary_button"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="center"
-            android:paddingHorizontal="16dp"
-            android:text="@string/config_apply"
-            android:textColor="@color/brand_magenta"
-            android:textSize="13sp"
-            android:textStyle="bold" />
-
-    </LinearLayout>
-
-    <!-- Total Price Summary Row -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/config_total_label"
-                android:textColor="@color/text_gray"
-                android:textSize="11sp" />
-
-            <TextView
-                android:id="@+id/configTotalAmountText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/brand_magenta"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                tools:text="RM 17,980" />
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/configUnitPriceDetailText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/text_gray"
-            android:textSize="12sp"
-            tools:text="RM 8,990 × 2 Pax" />
-
-    </LinearLayout>
-
-    <!-- Action Button -->
-    <LinearLayout
-        android:id="@+id/btnProceedToTravellers"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="18dp"
-        android:background="@drawable/bg_booking_primary_button"
-        android:clickable="true"
-        android:focusable="true"
-        android:gravity="center">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/config_continue"
-            android:textColor="@color/white"
             android:textSize="14sp"
             android:textStyle="bold" />
 
+        <HorizontalScrollView
+            android:id="@+id/configRoomScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:scrollbars="none"
+            android:overScrollMode="never">
+
+            <LinearLayout
+                android:id="@+id/configRoomOptionsContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+
+        </HorizontalScrollView>
+
+        <!-- Number of Travellers Section (Adults & Kids) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:background="@drawable/bg_detail_card"
+            android:orientation="vertical"
+            android:padding="14dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/config_pax_section_title"
+                android:textColor="@color/text_dark"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <!-- Adults Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/config_pax_adults_label"
+                        android:textColor="@color/text_dark"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="@string/config_pax_adults_sub"
+                        android:textColor="@color/text_gray"
+                        android:textSize="11sp" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/btnPaxDecrease"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:background="@drawable/bg_whatsapp_secondary_button"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:text="-"
+                    android:textColor="@color/text_dark"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtPaxCount"
+                    android:layout_width="48dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="1"
+                    android:textColor="@color/text_dark"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/btnPaxIncrease"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:background="@drawable/bg_booking_primary_button"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:text="+"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="10dp"
+                android:background="@color/card_border" />
+
+            <!-- Kids Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/config_pax_kids_label"
+                        android:textColor="@color/text_dark"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="@string/config_pax_kids_sub"
+                        android:textColor="@color/text_gray"
+                        android:textSize="11sp" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/btnKidsDecrease"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:background="@drawable/bg_whatsapp_secondary_button"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:text="-"
+                    android:textColor="@color/text_dark"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtKidsCount"
+                    android:layout_width="48dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textColor="@color/text_dark"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/btnKidsIncrease"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:background="@drawable/bg_booking_primary_button"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:text="+"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <!-- Dynamic Child Details Container -->
+            <LinearLayout
+                android:id="@+id/containerChildDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+        <!-- Departure Dates Selector -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/config_departure_label"
+            android:textColor="@color/text_dark"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:scrollbars="none"
+            android:overScrollMode="never">
+
+            <LinearLayout
+                android:id="@+id/configDepartureContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+
+        </HorizontalScrollView>
+
+
+        <!-- CRM Promo Code Input Box -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/inputPromoCode"
+                android:layout_width="0dp"
+                android:layout_height="44dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_input_box"
+                android:hint="@string/config_promo_hint"
+                android:textAllCaps="true"
+                android:paddingHorizontal="12dp"
+                android:textColor="@color/text_dark"
+                android:textColorHint="@color/text_muted"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/btnApplyPromo"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/bg_whatsapp_secondary_button"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:paddingHorizontal="16dp"
+                android:text="@string/config_apply"
+                android:textColor="@color/brand_magenta"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <!-- Estimated Cost Itemized Breakdown Section -->
+        <LinearLayout
+            android:id="@+id/containerCostBreakdownCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_detail_card"
+            android:orientation="vertical"
+            android:padding="14dp">
+
+            <!-- Section Title: Estimated Cost -->
+            <TextView
+                android:id="@+id/txtCostBreakdownTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cost_breakdown_title"
+                android:textColor="@color/text_dark"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <!-- Dynamic Itemized Rows Container -->
+            <LinearLayout
+                android:id="@+id/containerCostBreakdownItems"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical" />
+
+            <!-- Divider Line -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="12dp"
+                android:background="@color/card_border" />
+
+            <!-- Total Price Summary Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/cost_breakdown_estimated_total"
+                        android:textColor="@color/text_gray"
+                        android:textSize="11sp" />
+
+                    <TextView
+                        android:id="@+id/configTotalAmountText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/brand_magenta"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        tools:text="RM 17,980" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/configUnitPriceDetailText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_gray"
+                    android:textSize="12sp"
+                    tools:text="RM 8,990 × 2 Pax" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Action Button -->
+        <LinearLayout
+            android:id="@+id/btnProceedToTravellers"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="18dp"
+            android:background="@drawable/bg_booking_primary_button"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/config_continue"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
-</LinearLayout>
+</androidx.core.widget.NestedScrollView>

@@ -190,6 +190,10 @@ public class ProfileActivity extends BaseActivity {
         findViewById(R.id.languageRow).setOnClickListener(v -> showLanguageBottomSheet());
         findViewById(R.id.travelDocsRow).setOnClickListener(v -> showTravelDocsBottomSheet());
         findViewById(R.id.changePasswordRow).setOnClickListener(v -> showChangePasswordDialog());
+        View aboutRow = findViewById(R.id.aboutSettingRow);
+        if (aboutRow != null) {
+            aboutRow.setOnClickListener(v -> startActivity(new Intent(this, AboutActivity.class)));
+        }
         View logoutButton = findViewById(R.id.logoutButton);
         if (logoutButton != null) {
             logoutButton.setOnClickListener(v -> showLogoutConfirmationDialog());
@@ -545,178 +549,21 @@ public class ProfileActivity extends BaseActivity {
             String[] selectedDateHolder,
             Runnable onDateSelected) {
 
-        com.google.android.material.bottomsheet.BottomSheetDialog sheetDialog =
-                new com.google.android.material.bottomsheet.BottomSheetDialog(this);
-        View sheetView = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_dob_picker, null);
-        sheetDialog.setContentView(sheetView);
-
-        if (sheetDialog.getWindow() != null) {
-            sheetDialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
-            sheetDialog.getWindow().setDimAmount(0.55f);
-        }
-
-        View btnClose = sheetView.findViewById(R.id.btnCloseDobSheet);
-        if (btnClose != null) btnClose.setOnClickListener(v -> sheetDialog.dismiss());
-
-        TextView tvSheetTitle = sheetView.findViewById(R.id.tvDobSheetTitle);
-        if (tvSheetTitle != null && title != null && !title.isEmpty()) {
-            tvSheetTitle.setText(title);
-        }
-
-        TextView tvSheetSub = sheetView.findViewById(R.id.tvDobSheetSub);
-        if (tvSheetSub != null && subtitle != null && !subtitle.isEmpty()) {
-            tvSheetSub.setText(subtitle);
-        }
-
-        TextView tvPreview = sheetView.findViewById(R.id.tvDobPreviewText);
-        TextView tvPreviewAge = sheetView.findViewById(R.id.tvDobPreviewAge);
-        NumberPicker npDay = sheetView.findViewById(R.id.npDobDay);
-        NumberPicker npMonth = sheetView.findViewById(R.id.npDobMonth);
-        NumberPicker npYear = sheetView.findViewById(R.id.npDobYear);
-        View btnDone = sheetView.findViewById(R.id.btnDoneDob);
-
-        java.util.Calendar today = java.util.Calendar.getInstance();
-        int curYear = today.get(java.util.Calendar.YEAR);
-
-        int minYear = isExpiryPicker ? (curYear - 10) : 1900;
-        int maxYear = isExpiryPicker ? (curYear + 25) : curYear;
-
-        int initYear = isExpiryPicker ? (curYear + 5) : (curYear - 26);
-        int initMonth = isExpiryPicker ? today.get(java.util.Calendar.MONTH) : 0;
-        int initDay = isExpiryPicker ? today.get(java.util.Calendar.DAY_OF_MONTH) : 1;
-
-        String currentDateStr = selectedDateHolder != null && selectedDateHolder.length > 0 ? selectedDateHolder[0] : "";
-        if (currentDateStr != null && !currentDateStr.trim().isEmpty()) {
-            try {
-                String[] parts = currentDateStr.trim().split("-");
-                if (parts.length == 3) {
-                    initYear = Integer.parseInt(parts[0]);
-                    initMonth = Integer.parseInt(parts[1]) - 1;
-                    initDay = Integer.parseInt(parts[2]);
-                }
-            } catch (Exception ignored) {}
-        }
-
-        boolean isMalay = "ms".equalsIgnoreCase(LocaleHelper.getSavedLanguage(this));
-        String[] monthNames = isMalay
-                ? new String[]{"Jan", "Feb", "Mac", "Apr", "Mei", "Jun", "Jul", "Ogo", "Sep", "Okt", "Nov", "Dis"}
-                : new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
-
-        if (npMonth != null) {
-            npMonth.setMinValue(0);
-            npMonth.setMaxValue(11);
-            npMonth.setDisplayedValues(monthNames);
-            npMonth.setValue(Math.max(0, Math.min(11, initMonth)));
-            npMonth.setWrapSelectorWheel(true);
-        }
-
-        if (npYear != null) {
-            npYear.setMinValue(minYear);
-            npYear.setMaxValue(maxYear);
-            npYear.setValue(Math.max(minYear, Math.min(maxYear, initYear)));
-            npYear.setWrapSelectorWheel(false);
-        }
-
-        Runnable updateDayMax = () -> {
-            int y = npYear != null ? npYear.getValue() : curYear;
-            int m = npMonth != null ? npMonth.getValue() : 0;
-            java.util.Calendar tempCal = java.util.Calendar.getInstance();
-            tempCal.set(java.util.Calendar.YEAR, y);
-            tempCal.set(java.util.Calendar.MONTH, m);
-            tempCal.set(java.util.Calendar.DAY_OF_MONTH, 1);
-            int maxDays = tempCal.getActualMaximum(java.util.Calendar.DAY_OF_MONTH);
-            if (npDay != null) {
-                int oldVal = npDay.getValue();
-                npDay.setMinValue(1);
-                npDay.setMaxValue(maxDays);
-                npDay.setValue(Math.max(1, Math.min(maxDays, oldVal)));
-                npDay.setWrapSelectorWheel(true);
-            }
-        };
-
-        updateDayMax.run();
-        if (npDay != null) {
-            npDay.setValue(Math.max(1, Math.min(31, initDay)));
-        }
-
-        Runnable updatePreview = () -> {
-            int d = npDay != null ? npDay.getValue() : 1;
-            int m = npMonth != null ? npMonth.getValue() : 0;
-            int y = npYear != null ? npYear.getValue() : curYear;
-            String iso = String.format(java.util.Locale.US, "%04d-%02d-%02d", y, m + 1, d);
-            String displayStr = formatDateDisplay(this, iso);
-            if (tvPreview != null) {
-                tvPreview.setText(displayStr);
-            }
-            if (isExpiryPicker) {
-                if (tvPreviewAge != null) {
-                    tvPreviewAge.setVisibility(View.GONE);
-                }
-            } else {
-                int age = curYear - y;
-                if (today.get(java.util.Calendar.MONTH) < m ||
-                        (today.get(java.util.Calendar.MONTH) == m && today.get(java.util.Calendar.DAY_OF_MONTH) < d)) {
-                    age--;
-                }
-                if (tvPreviewAge != null) {
-                    if (age >= 0) {
-                        tvPreviewAge.setText(getString(R.string.profile_age_format, age));
-                        tvPreviewAge.setVisibility(View.VISIBLE);
-                    } else {
-                        tvPreviewAge.setVisibility(View.GONE);
+        com.hafiztraveltours.app.utils.DatePickerBottomSheetHelper.show(
+                this,
+                title,
+                subtitle,
+                isExpiryPicker,
+                false,
+                tvTargetValue,
+                tvTargetAge,
+                selectedDateHolder,
+                (isoDate, formattedDisplayDate, age) -> {
+                    if (onDateSelected != null) {
+                        onDateSelected.run();
                     }
                 }
-            }
-        };
-
-        updatePreview.run();
-
-        NumberPicker.OnValueChangeListener changeListener = (picker, oldVal, newVal) -> {
-            if (picker == npMonth || picker == npYear) {
-                updateDayMax.run();
-            }
-            updatePreview.run();
-        };
-
-        if (npDay != null) npDay.setOnValueChangedListener(changeListener);
-        if (npMonth != null) npMonth.setOnValueChangedListener(changeListener);
-        if (npYear != null) npYear.setOnValueChangedListener(changeListener);
-
-        if (btnDone != null) {
-            btnDone.setOnClickListener(v -> {
-                com.hafiztraveltours.app.utils.HapticUtil.click(v);
-                int d = npDay != null ? npDay.getValue() : 1;
-                int m = npMonth != null ? npMonth.getValue() : 0;
-                int y = npYear != null ? npYear.getValue() : curYear;
-                String iso = String.format(java.util.Locale.US, "%04d-%02d-%02d", y, m + 1, d);
-                if (selectedDateHolder != null && selectedDateHolder.length > 0) {
-                    selectedDateHolder[0] = iso;
-                }
-                if (tvTargetValue != null) {
-                    tvTargetValue.setText(formatDateDisplay(this, iso));
-                    tvTargetValue.setTextColor(ContextCompat.getColor(this, R.color.text_dark));
-                }
-                if (!isExpiryPicker && tvTargetAge != null) {
-                    int age = curYear - y;
-                    if (today.get(java.util.Calendar.MONTH) < m ||
-                            (today.get(java.util.Calendar.MONTH) == m && today.get(java.util.Calendar.DAY_OF_MONTH) < d)) {
-                        age--;
-                    }
-                    if (age >= 0) {
-                        tvTargetAge.setText(getString(R.string.profile_age_format, age));
-                        tvTargetAge.setVisibility(View.VISIBLE);
-                    } else {
-                        tvTargetAge.setVisibility(View.GONE);
-                    }
-                }
-                if (onDateSelected != null) {
-                    onDateSelected.run();
-                }
-                sheetDialog.dismiss();
-            });
-        }
-
-        sheetDialog.show();
+        );
     }
 
     private void showDobPickerBottomSheet(TextView tvDobValue, TextView tvDobAge, String[] selectedDobHolder) {

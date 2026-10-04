@@ -1482,5 +1482,43 @@
     <string name="under_2">Bawah 2 Tahun</string>
     <string name="travel_date">Tarikh Perjalanan</string>
     <string name="departure_date">Tarikh Pelepasan</string>
+
+    <!-- Estimated Cost Breakdown Strings (Bahasa Melayu) -->
+    <string name="cost_breakdown_title">Pecahan Anggaran Kos</string>
+    <string name="cost_breakdown_adult_format">Dewasa × %d</string>
+    <string name="cost_breakdown_child_title_format">Kanak-kanak %1$d · %2$d tahun</string>
+    <string name="cost_breakdown_child_title_under_2_format">Kanak-kanak %1$d · Bawah 2 tahun</string>
+    <string name="cost_breakdown_child_title_dob_required">Kanak-kanak %1$d · Tarikh lahir diperlukan</string>
+    <string name="cost_breakdown_base_package">Harga Asas Pakej</string>
+    <string name="cost_breakdown_age_label">Umur</string>
+    <string name="cost_breakdown_category_label">Kategori</string>
+    <string name="cost_breakdown_bed_label">Katil</string>
+    <string name="cost_breakdown_yes">Ya</string>
+    <string name="cost_breakdown_no">Tidak</string>
+    <string name="cost_breakdown_bed_adjustment">Pelarasan Katil</string>
+    <string name="cost_breakdown_adjustment">Pelarasan</string>
+    <string name="cost_breakdown_final_child_price">Harga Akhir Kanak-kanak</string>
+    <string name="cost_breakdown_child_total">Harga Akhir</string>
+    <string name="cost_breakdown_estimated_total">Jumlah Anggaran</string>
+    <string name="cost_breakdown_promo_discount">Diskaun promo (%1$s)</string>
+    <string name="category_under_2">2 tahun dan ke bawah</string>
+    <string name="category_2_to_4">2 hingga 4 tahun</string>
+    <string name="category_2_to_11">2 hingga 11 tahun</string>
+    <string name="category_adult_rate">Kadar Dewasa</string>
+
+    <!-- About Page Strings -->
+    <string name="about_title">Tentang</string>
+    <string name="about_section_company">Tentang Aplikasi Ini</string>
+    <string name="about_motac_label">MOTAC</string>
+    <string name="about_motac_value">KPK / LN 10751</string>
+    <string name="about_ssm_label">SSM</string>
+    <string name="about_ssm_value">202201043065 (1488762-A)</string>
+    <string name="about_section_app_desc">Tentang Aplikasi Ini</string>
+    <string name="about_app_description">Aplikasi mudah alih Hafiz Travel memudahkan pengguna meneroka pakej pelancongan dan Umrah, melihat butiran pakej, membuat tempahan, menyemak waktu solat dan mencari arah kiblat.</string>
+    <string name="about_section_app">Aplikasi</string>
+    <string name="about_app_version">Versi Aplikasi</string>
+    <string name="about_dev_status_label">Status Pembangunan</string>
+    <string name="about_dev_status_value">Sedang dalam pembangunan</string>
+    <string name="about_engineered_by_prefix">Direka oleh</string>
 </resources>
 

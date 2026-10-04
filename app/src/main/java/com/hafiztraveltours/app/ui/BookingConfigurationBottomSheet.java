@@ -45,6 +45,7 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
     private LinearLayout containerSeason;
     private LinearLayout containerRoomOptions;
     private LinearLayout containerChildDetails;
+    private LinearLayout containerCostBreakdownItems;
     private final List<BookingRequest.ChildConfig> childConfigs = new java.util.ArrayList<>();
     private TextView txtPaxCount;
     private TextView txtKidsCount;
@@ -75,6 +76,29 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        if (getDialog() != null) {
+            View bottomSheet = getDialog().findViewById(com.google.android.material.R.id.design_bottom_sheet);
+            if (bottomSheet != null) {
+                com.google.android.material.bottomsheet.BottomSheetBehavior<View> behavior =
+                        com.google.android.material.bottomsheet.BottomSheetBehavior.from(bottomSheet);
+                behavior.setState(com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED);
+                behavior.setSkipCollapsed(true);
+
+                ViewGroup.LayoutParams lp = bottomSheet.getLayoutParams();
+                if (lp != null) {
+                    lp.height = ViewGroup.LayoutParams.MATCH_PARENT;
+                    bottomSheet.setLayoutParams(lp);
+                }
+            }
+            if (getDialog().getWindow() != null) {
+                getDialog().getWindow().setSoftInputMode(android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+            }
+        }
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -95,6 +119,7 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
         containerRoomOptions = view.findViewById(R.id.configRoomOptionsContainer);
         containerDeparture = view.findViewById(R.id.configDepartureContainer);
         containerChildDetails = view.findViewById(R.id.containerChildDetails);
+        containerCostBreakdownItems = view.findViewById(R.id.containerCostBreakdownItems);
         txtPaxCount = view.findViewById(R.id.txtPaxCount);
         txtKidsCount = view.findViewById(R.id.txtKidsCount);
         txtTotalAmount = view.findViewById(R.id.configTotalAmountText);
@@ -248,32 +273,25 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
     }
 
     private void showChildDobPicker(int index, BookingRequest.ChildConfig config) {
-        java.util.Calendar c = java.util.Calendar.getInstance();
-        if (config.dateOfBirth != null && !config.dateOfBirth.trim().isEmpty()) {
-            try {
-                String[] parts = config.dateOfBirth.trim().split("-");
-                if (parts.length == 3) {
-                    c.set(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]) - 1, Integer.parseInt(parts[2]));
-                }
-            } catch (Exception ignored) {}
-        } else {
-            c.add(java.util.Calendar.YEAR, -5);
-        }
+        String[] dateHolder = new String[]{config.dateOfBirth != null ? config.dateOfBirth.trim() : ""};
+        String title = getString(R.string.child_title_format, index + 1) + " - " + getString(R.string.child_dob_label);
+        String sub = getString(R.string.profile_dob_sheet_sub);
 
-        android.app.DatePickerDialog dpd = new android.app.DatePickerDialog(
+        com.hafiztraveltours.app.utils.DatePickerBottomSheetHelper.show(
                 requireContext(),
-                (view, year, month, dayOfMonth) -> {
-                    String formatted = String.format(java.util.Locale.US, "%04d-%02d-%02d", year, month + 1, dayOfMonth);
-                    config.dateOfBirth = formatted;
+                title,
+                sub,
+                false,
+                true,
+                null,
+                null,
+                dateHolder,
+                (isoDate, formattedDisplayDate, age) -> {
+                    config.dateOfBirth = isoDate;
                     renderChildDetails();
                     updateUi();
-                },
-                c.get(java.util.Calendar.YEAR),
-                c.get(java.util.Calendar.MONTH),
-                c.get(java.util.Calendar.DAY_OF_MONTH)
+                }
         );
-        dpd.getDatePicker().setMaxDate(System.currentTimeMillis());
-        dpd.show();
     }
 
     private void renderChildDetails() {
@@ -337,7 +355,7 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
 
             TextView valDob = new TextView(requireContext());
             boolean hasDob = config.dateOfBirth != null && !config.dateOfBirth.trim().isEmpty();
-            valDob.setText(hasDob ? config.dateOfBirth.trim() : getString(R.string.child_select_dob_hint));
+            valDob.setText(hasDob ? ProfileActivity.formatDateDisplay(requireContext(), config.dateOfBirth.trim()) : getString(R.string.child_select_dob_hint));
             valDob.setTextSize(13);
             valDob.setTypeface(null, Typeface.BOLD);
             valDob.setTextColor(getResources().getColor(hasDob ? R.color.text_dark : R.color.input_hint));
@@ -776,12 +794,197 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
 
         double totalAmount = Math.max(0, calculatedSubtotal - appliedDiscount);
 
-        txtTotalAmount.setText(BookingRequest.formatPrice(totalAmount));
-        if (kidsCount > 0) {
-            txtUnitPriceDetail.setText(getString(R.string.room_price_x_pax_format, roomPriceStr, totalPax));
-        } else {
-            txtUnitPriceDetail.setText(getString(R.string.room_price_x_pax_format, roomPriceStr, paxCount));
+        if (txtTotalAmount != null) {
+            txtTotalAmount.setText(BookingRequest.formatPrice(totalAmount));
         }
+        if (txtUnitPriceDetail != null) {
+            if (kidsCount > 0) {
+                txtUnitPriceDetail.setText(getString(R.string.room_price_x_pax_format, roomPriceStr, totalPax));
+            } else {
+                txtUnitPriceDetail.setText(getString(R.string.room_price_x_pax_format, roomPriceStr, paxCount));
+            }
+        }
+
+        renderCostBreakdown();
+    }
+
+    private void renderCostBreakdown() {
+        if (containerCostBreakdownItems == null) return;
+        containerCostBreakdownItems.removeAllViews();
+
+        double unitAmount = getSelectedUnitAmount();
+        String depDateIso = getSelectedDepartureDate();
+
+        // 1. Adult(s) item card
+        LinearLayout adultCard = createBreakdownItemCard();
+        double adultTotal = unitAmount * paxCount;
+        String adultHeaderStr = getString(R.string.cost_breakdown_adult_format, paxCount);
+        String adultPriceStr = BookingRequest.formatPrice(adultTotal);
+
+        addBreakdownHeader(adultCard, adultHeaderStr, adultPriceStr, true);
+
+        if (paxCount > 1) {
+            addBreakdownLine(adultCard, getString(R.string.cost_breakdown_base_package), BookingRequest.formatPrice(unitAmount) + " " + getString(R.string.detail_per_pax));
+        } else {
+            addBreakdownLine(adultCard, getString(R.string.cost_breakdown_base_package), BookingRequest.formatPrice(unitAmount));
+        }
+
+        containerCostBreakdownItems.addView(adultCard);
+
+        // 2. Children item cards
+        for (int i = 0; i < kidsCount && i < childConfigs.size(); i++) {
+            BookingRequest.ChildConfig cfg = childConfigs.get(i);
+            boolean hasDob = cfg.dateOfBirth != null && !cfg.dateOfBirth.trim().isEmpty();
+
+            LinearLayout childCard = createBreakdownItemCard();
+
+            if (!hasDob) {
+                String title = getString(R.string.cost_breakdown_child_title_dob_required, i + 1);
+                addBreakdownHeader(childCard, title, BookingRequest.formatPrice(unitAmount), false);
+                addBreakdownLine(childCard, getString(R.string.cost_breakdown_base_package), BookingRequest.formatPrice(unitAmount));
+            } else {
+                int age = calculateChildAge(cfg.dateOfBirth.trim(), depDateIso);
+                double childPrice = unitAmount;
+
+                try {
+                    childPrice = com.hafiztraveltours.app.utils.PackagePricingCalculator.calculatePassengerPrice(
+                            detail, selectedSeason, detail.isUmrah, unitAmount, cfg.dateOfBirth.trim(), depDateIso, cfg.withBed);
+                } catch (com.hafiztraveltours.app.utils.PackagePricingCalculator.PricingConfigurationException e) {
+                    childPrice = unitAmount;
+                }
+
+                String childTitle;
+                if (age < 2) {
+                    childTitle = getString(R.string.cost_breakdown_child_title_under_2_format, i + 1);
+                } else {
+                    childTitle = getString(R.string.cost_breakdown_child_title_format, i + 1, age);
+                }
+
+                addBreakdownHeader(childCard, childTitle, BookingRequest.formatPrice(childPrice), true);
+
+                // Base Package line
+                addBreakdownLine(childCard, getString(R.string.cost_breakdown_base_package), BookingRequest.formatPrice(unitAmount));
+
+                // Age category & Bed lines
+                if (detail.isUmrah) {
+                    if (age < 2) {
+                        addBreakdownLine(childCard, getString(R.string.cost_breakdown_category_label), getString(R.string.category_under_2));
+                        double diff = unitAmount - childPrice;
+                        if (diff > 0) {
+                            addBreakdownLine(childCard, getString(R.string.cost_breakdown_adjustment), "- " + BookingRequest.formatPrice(diff));
+                        }
+                    } else if (age >= 2 && age <= 4) {
+                        addBreakdownLine(childCard, getString(R.string.cost_breakdown_category_label), getString(R.string.category_2_to_4));
+                        double diff = unitAmount - childPrice;
+                        if (diff > 0) {
+                            addBreakdownLine(childCard, getString(R.string.cost_breakdown_adjustment), "- " + BookingRequest.formatPrice(diff));
+                        }
+                    } else {
+                        addBreakdownLine(childCard, getString(R.string.cost_breakdown_category_label), getString(R.string.category_adult_rate));
+                    }
+                } else {
+                    // TOUR package
+                    if (age < 2) {
+                        addBreakdownLine(childCard, getString(R.string.cost_breakdown_category_label), getString(R.string.category_under_2));
+                        double diff = unitAmount - childPrice;
+                        if (diff > 0) {
+                            addBreakdownLine(childCard, getString(R.string.cost_breakdown_adjustment), "- " + BookingRequest.formatPrice(diff));
+                        }
+                    } else if (age >= 2 && age <= 11) {
+                        boolean withBed = Boolean.TRUE.equals(cfg.withBed);
+                        addBreakdownLine(childCard, getString(R.string.cost_breakdown_bed_label), withBed ? getString(R.string.cost_breakdown_yes) : getString(R.string.cost_breakdown_no));
+
+                        double diff = unitAmount - childPrice;
+                        if (diff > 0) {
+                            String adjLabel = withBed ? getString(R.string.cost_breakdown_bed_adjustment) : getString(R.string.cost_breakdown_adjustment);
+                            addBreakdownLine(childCard, adjLabel, "- " + BookingRequest.formatPrice(diff));
+                        }
+                    } else {
+                        addBreakdownLine(childCard, getString(R.string.cost_breakdown_category_label), getString(R.string.category_adult_rate));
+                    }
+                }
+
+                addBreakdownLine(childCard, getString(R.string.cost_breakdown_final_child_price), BookingRequest.formatPrice(childPrice), true);
+            }
+
+            containerCostBreakdownItems.addView(childCard);
+        }
+
+        // 3. Promo discount card (if applied)
+        if (appliedDiscount > 0) {
+            LinearLayout promoCard = createBreakdownItemCard();
+            String promoLabel = getString(R.string.cost_breakdown_promo_discount, appliedPromoCode);
+            addBreakdownHeader(promoCard, promoLabel, "- " + BookingRequest.formatPrice(appliedDiscount), false);
+            containerCostBreakdownItems.addView(promoCard);
+        }
+    }
+
+    private LinearLayout createBreakdownItemCard() {
+        LinearLayout card = new LinearLayout(requireContext());
+        card.setOrientation(LinearLayout.VERTICAL);
+        card.setBackgroundResource(R.drawable.bg_luxury_form_field);
+        card.setPadding(dp(10), dp(8), dp(10), dp(8));
+
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lp.topMargin = dp(6);
+        card.setLayoutParams(lp);
+        return card;
+    }
+
+    private void addBreakdownHeader(LinearLayout container, String titleText, String priceText, boolean isHighlight) {
+        LinearLayout row = new LinearLayout(requireContext());
+        row.setOrientation(LinearLayout.HORIZONTAL);
+        row.setGravity(Gravity.CENTER_VERTICAL);
+
+        TextView title = new TextView(requireContext());
+        title.setText(titleText);
+        title.setTextSize(12);
+        title.setTypeface(null, Typeface.BOLD);
+        title.setTextColor(getResources().getColor(isHighlight ? R.color.text_dark : R.color.text_gray));
+        LinearLayout.LayoutParams titleLp = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+        title.setLayoutParams(titleLp);
+
+        TextView price = new TextView(requireContext());
+        price.setText(priceText);
+        price.setTextSize(13);
+        price.setTypeface(null, Typeface.BOLD);
+        price.setTextColor(getResources().getColor(R.color.brand_magenta));
+
+        row.addView(title);
+        row.addView(price);
+        container.addView(row);
+    }
+
+    private void addBreakdownLine(LinearLayout container, String labelText, String valueText) {
+        addBreakdownLine(container, labelText, valueText, false);
+    }
+
+    private void addBreakdownLine(LinearLayout container, String labelText, String valueText, boolean isBoldValue) {
+        LinearLayout row = new LinearLayout(requireContext());
+        row.setOrientation(LinearLayout.HORIZONTAL);
+        row.setGravity(Gravity.CENTER_VERTICAL);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lp.topMargin = dp(3);
+        row.setLayoutParams(lp);
+
+        TextView label = new TextView(requireContext());
+        label.setText("  • " + labelText);
+        label.setTextSize(11);
+        label.setTextColor(getResources().getColor(R.color.text_gray));
+        LinearLayout.LayoutParams labelLp = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+        label.setLayoutParams(labelLp);
+
+        TextView value = new TextView(requireContext());
+        value.setText(valueText);
+        value.setTextSize(11);
+        value.setTypeface(null, isBoldValue ? Typeface.BOLD : Typeface.NORMAL);
+        value.setTextColor(getResources().getColor(isBoldValue ? R.color.brand_magenta : R.color.text_dark));
+
+        row.addView(label);
+        row.addView(value);
+        container.addView(row);
     }
 
     private void proceedToTravellerDetails() {

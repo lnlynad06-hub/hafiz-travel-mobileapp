@@ -1600,4 +1600,42 @@
     <string name="under_2">Under 2</string>
     <string name="travel_date">Travel Date</string>
     <string name="departure_date">Departure Date</string>
+
+    <!-- Estimated Cost Breakdown Strings -->
+    <string name="cost_breakdown_title">Estimated Cost Breakdown</string>
+    <string name="cost_breakdown_adult_format">Adult × %d</string>
+    <string name="cost_breakdown_child_title_format">Child %1$d · %2$d years</string>
+    <string name="cost_breakdown_child_title_under_2_format">Child %1$d · Under 2 years</string>
+    <string name="cost_breakdown_child_title_dob_required">Child %1$d · Date of birth required</string>
+    <string name="cost_breakdown_base_package">Base package</string>
+    <string name="cost_breakdown_age_label">Age</string>
+    <string name="cost_breakdown_category_label">Category</string>
+    <string name="cost_breakdown_bed_label">Bed</string>
+    <string name="cost_breakdown_yes">Yes</string>
+    <string name="cost_breakdown_no">No</string>
+    <string name="cost_breakdown_bed_adjustment">Bed adjustment</string>
+    <string name="cost_breakdown_adjustment">Adjustment</string>
+    <string name="cost_breakdown_final_child_price">Final child price</string>
+    <string name="cost_breakdown_child_total">Child total</string>
+    <string name="cost_breakdown_estimated_total">Estimated Total</string>
+    <string name="cost_breakdown_promo_discount">Promo discount (%1$s)</string>
+    <string name="category_under_2">2 years and below</string>
+    <string name="category_2_to_4">2 to 4 years</string>
+    <string name="category_2_to_11">2 to 11 years</string>
+    <string name="category_adult_rate">Adult rate</string>
+
+    <!-- About Page Strings -->
+    <string name="about_title">About</string>
+    <string name="about_section_company">About This App</string>
+    <string name="about_motac_label">MOTAC</string>
+    <string name="about_motac_value">KPK / LN 10751</string>
+    <string name="about_ssm_label">SSM</string>
+    <string name="about_ssm_value">202201043065 (1488762-A)</string>
+    <string name="about_section_app_desc">About This App</string>
+    <string name="about_app_description">The Hafiz Travel mobile application provides a convenient way to explore travel and Umrah packages, view package details, make bookings, check prayer times, and find the Qibla direction.</string>
+    <string name="about_section_app">Application</string>
+    <string name="about_app_version">App Version</string>
+    <string name="about_dev_status_label">Development Status</string>
+    <string name="about_dev_status_value">Currently under development</string>
+    <string name="about_engineered_by_prefix">Engineered by</string>
 </resources>
