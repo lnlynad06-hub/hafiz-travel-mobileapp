@@ -1353,13 +1353,13 @@
     <string name="pay_sheet_processing">Memproses bayaran, sila tunggu...</string>
 
     <!-- Make Payment Redesign Strings -->
-    <string name="pay_sheet_due_label">BAYARAN PERLU DIJELASKAN</string>
+    <string name="pay_sheet_due_label">JUMLAH</string>
     <string name="pay_sheet_purpose_initial_deposit">Deposit Permulaan</string>
     <string name="pay_sheet_purpose_remaining_deposit">Baki Deposit</string>
     <string name="pay_sheet_purpose_balance">Baki Bayaran</string>
     <string name="pay_sheet_package_total">Jumlah Harga Pakej</string>
     <string name="pay_sheet_previously_paid">Telah Dibayar</string>
-    <string name="pay_sheet_this_payment">Bayaran Sekarang</string>
+    <string name="pay_sheet_this_payment">Jumlah Bayaran</string>
     <string name="pay_sheet_balance_after">Baki Selepas Bayaran</string>
     <string name="pay_sheet_btn_pay_format">Bayar %1$s</string>
     <string name="pay_sheet_secure_title">Bayaran Selamat melalui ToyyibPay</string>

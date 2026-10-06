@@ -176,7 +176,6 @@
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_weight="1"
-                android:layout_marginEnd="6dp"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
                 android:padding="0dp"
@@ -184,21 +183,24 @@
                 android:textSize="11.5sp"
                 android:textStyle="bold"
                 app:cornerRadius="8dp" />
-
-            <Button
-                android:id="@+id/btnPayPresetFull"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_weight="1.2"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                android:padding="0dp"
-                android:text="@string/pay_sheet_chip_full_balance"
-                android:textSize="11sp"
-                android:textStyle="bold"
-                app:cornerRadius="8dp" />
         </LinearLayout>
+
+        <!-- Centered Full Balance Button -->
+        <Button
+            android:id="@+id/btnPayPresetFull"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:padding="0dp"
+            android:text="@string/pay_sheet_chip_full_balance"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:cornerRadius="8dp" />
     </LinearLayout>
 
     <!-- Editorial Financial Breakdown Card -->

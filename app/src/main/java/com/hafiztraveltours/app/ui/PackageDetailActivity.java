@@ -93,6 +93,13 @@ public class PackageDetailActivity extends BaseActivity {
         findViewById(R.id.detailBackButton).setOnClickListener(v -> finish());
 
         heroImage = findViewById(R.id.detailHeroImage);
+        if (heroImage != null) {
+            heroImage.setOnClickListener(v -> {
+                if (detail != null && detail.imageUrl != null && !detail.imageUrl.trim().isEmpty()) {
+                    showZoomedImage(detail.imageUrl);
+                }
+            });
+        }
         heroCategoryBadge = findViewById(R.id.detailHeroCategoryBadge);
         container = findViewById(R.id.detailContainer);
         bottomPrice = findViewById(R.id.detailBottomPrice);
@@ -443,10 +450,6 @@ public class PackageDetailActivity extends BaseActivity {
             row.addView(buildSpecChip(getString(R.string.duration_days_nights, detail.durationDays, detail.nightsCount)));
         }
 
-        if (rawPackage != null && rawPackage.hotelMakkahRating != null && !rawPackage.hotelMakkahRating.trim().isEmpty()) {
-            row.addView(buildSpecChip("⭐ " + rawPackage.hotelMakkahRating.trim()));
-        }
-
         if (rawPackage != null && rawPackage.airlineName != null && !rawPackage.airlineName.trim().isEmpty()) {
             row.addView(buildSpecChip(rawPackage.airlineName.trim()));
         }
@@ -545,6 +548,15 @@ public class PackageDetailActivity extends BaseActivity {
         boolean isUmrah = detail.isUmrah;
         container.addView(sectionHeading(getString(
                 isUmrah ? R.string.detail_section_hotels_umrah : R.string.detail_section_hotels_tour)));
+
+        if (rawPackage != null && rawPackage.hotelMakkahRating != null && !rawPackage.hotelMakkahRating.trim().isEmpty()) {
+            View ratingChip = buildSpecChip("⭐ " + rawPackage.hotelMakkahRating.trim());
+            LinearLayout.LayoutParams p = (LinearLayout.LayoutParams) ratingChip.getLayoutParams();
+            p.topMargin = dp(6);
+            p.bottomMargin = dp(4);
+            ratingChip.setLayoutParams(p);
+            container.addView(ratingChip);
+        }
 
         if (detail.hotels.isEmpty()) {
             container.addView(buildEmptyNoticeCard(getString(R.string.detail_hotels_empty_notice)));
@@ -1681,16 +1693,42 @@ public class PackageDetailActivity extends BaseActivity {
     }
 
     private void showZoomedImage(String url) {
-        if (isFinishing() || isDestroyed()) return;
+        if (isFinishing() || isDestroyed() || url == null || url.trim().isEmpty()) return;
+
+        android.app.Dialog dialog = new android.app.Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+        dialog.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE);
+
+        android.widget.FrameLayout root = new android.widget.FrameLayout(this);
+        root.setBackgroundColor(Color.BLACK);
+
         ImageView fullImage = new ImageView(this);
-        fullImage.setAdjustViewBounds(true);
         fullImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        android.widget.FrameLayout.LayoutParams imgParams = new android.widget.FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        fullImage.setLayoutParams(imgParams);
+
         try {
             Glide.with(this).load(url).into(fullImage);
         } catch (Exception ignored) {}
 
-        AlertDialog dialog = new AlertDialog.Builder(this).setView(fullImage).create();
+        ImageView closeBtn = new ImageView(this);
+        closeBtn.setImageResource(R.drawable.ic_close);
+        closeBtn.setColorFilter(Color.WHITE);
+        closeBtn.setPadding(dp(12), dp(12), dp(12), dp(12));
+        android.widget.FrameLayout.LayoutParams btnParams = new android.widget.FrameLayout.LayoutParams(dp(48), dp(48));
+        btnParams.gravity = Gravity.TOP | Gravity.END;
+        btnParams.topMargin = dp(24);
+        btnParams.setMarginEnd(dp(16));
+        closeBtn.setLayoutParams(btnParams);
+
+        root.addView(fullImage);
+        root.addView(closeBtn);
+
+        closeBtn.setOnClickListener(v -> dialog.dismiss());
         fullImage.setOnClickListener(v -> dialog.dismiss());
+        root.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.setContentView(root);
         dialog.show();
     }
 

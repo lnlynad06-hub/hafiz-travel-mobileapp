@@ -1471,13 +1471,13 @@
     <string name="pay_sheet_processing">Processing payment, please wait...</string>
 
     <!-- Make Payment Redesign Strings -->
-    <string name="pay_sheet_due_label">PAYMENT DUE</string>
+    <string name="pay_sheet_due_label">AMOUNT</string>
     <string name="pay_sheet_purpose_initial_deposit">Initial Deposit</string>
     <string name="pay_sheet_purpose_remaining_deposit">Remaining Deposit</string>
     <string name="pay_sheet_purpose_balance">Remaining Balance</string>
     <string name="pay_sheet_package_total">Package Total</string>
     <string name="pay_sheet_previously_paid">Previously Paid</string>
-    <string name="pay_sheet_this_payment">Payment Due Now</string>
+    <string name="pay_sheet_this_payment">Amount</string>
     <string name="pay_sheet_balance_after">Balance After Payment</string>
     <string name="pay_sheet_btn_pay_format">Pay %1$s</string>
     <string name="pay_sheet_secure_title">Secure Payment via ToyyibPay</string>
