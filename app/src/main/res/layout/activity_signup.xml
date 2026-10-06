@@ -63,19 +63,12 @@
             android:orientation="vertical"
             android:layout_marginTop="10dp">
 
-            <FrameLayout
-                android:layout_width="84dp"
-                android:layout_height="84dp"
-                android:background="@drawable/circle_bg_light"
-                android:padding="6dp">
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/logo"
-                    android:scaleType="fitCenter"
-                    tools:ignore="ContentDescription" />
-            </FrameLayout>
+            <ImageView
+                android:layout_width="170dp"
+                android:layout_height="170dp"
+                android:src="@drawable/logo"
+                android:scaleType="fitCenter"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:layout_width="wrap_content"

@@ -45,7 +45,18 @@ public class ApiClient {
                         if (authToken != null) {
                             builder.header("Authorization", "Bearer " + authToken);
                         }
-                        return chain.proceed(builder.build());
+                        okhttp3.Response response = chain.proceed(builder.build());
+                        if (response.body() != null) {
+                            try {
+                                okhttp3.ResponseBody responseBody = response.body();
+                                okio.BufferedSource source = responseBody.source();
+                                source.request(Long.MAX_VALUE);
+                                okio.Buffer buffer = source.getBuffer();
+                                String bodyStr = buffer.clone().readString(java.nio.charset.StandardCharsets.UTF_8);
+                                android.util.Log.i("DEV_DEBUG_OTP", "[DEV_DEBUG_OTP] " + original.url() + " [" + response.code() + "] => " + bodyStr);
+                            } catch (Exception ignored) {}
+                        }
+                        return response;
                     })
                     .connectTimeout(15, TimeUnit.SECONDS)
                     .readTimeout(15, TimeUnit.SECONDS)

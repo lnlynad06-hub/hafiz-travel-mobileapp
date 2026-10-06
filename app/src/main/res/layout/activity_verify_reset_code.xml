@@ -79,19 +79,12 @@
             android:orientation="vertical"
             android:layout_marginTop="16dp">
 
-            <FrameLayout
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:background="@drawable/circle_bg_light"
-                android:padding="6dp">
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/logo"
-                    android:scaleType="fitCenter"
-                    tools:ignore="ContentDescription" />
-            </FrameLayout>
+            <ImageView
+                android:layout_width="170dp"
+                android:layout_height="170dp"
+                android:src="@drawable/logo"
+                android:scaleType="fitCenter"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/tvResetCodeTitle"
