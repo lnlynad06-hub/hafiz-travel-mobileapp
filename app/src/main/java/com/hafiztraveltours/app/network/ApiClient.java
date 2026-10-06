@@ -41,7 +41,8 @@ public class ApiClient {
                     .addInterceptor(chain -> {
                         okhttp3.Request original = chain.request();
                         okhttp3.Request.Builder builder = original.newBuilder()
-                                .header("Accept", "application/json");
+                                .header("Accept", "application/json")
+                                .header("User-Agent", "HafizTravelApp/1.6 (Android; Mobile)");
                         if (authToken != null) {
                             builder.header("Authorization", "Bearer " + authToken);
                         }
