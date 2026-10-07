@@ -87,7 +87,7 @@
                         android:id="@+id/tvCompanyHeaderName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Hafiz Travel &amp; Tours Sdn Bhd"
+                        android:text="@string/company_name_full"
                         android:textColor="@color/brand_magenta"
                         android:textSize="16sp"
                         android:textStyle="bold"
@@ -98,7 +98,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="Reg. No. 1384210-U / KPK/LN: 10751"
+                        android:text="@string/company_reg_no"
                         android:textColor="@color/text_dark"
                         android:textSize="11sp"
                         android:textStyle="bold" />
@@ -108,7 +108,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="No. 12-01, Jalan Padi Emas 1/2, Bandar Baru Uda, 81200 Johor Bahru, Johor"
+                        android:text="@string/company_address_full"
                         android:textColor="@color/text_muted"
                         android:textSize="10.5sp"
                         android:lineSpacingExtra="1dp" />
@@ -118,7 +118,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="Tel: +60 7-238 4567 • WA: +60 19-778 4567\nEmail: info@hafiztraveltours.com • www.hafiztraveltours.com"
+                        android:text="@string/company_contact_full"
                         android:textColor="@color/text_muted"
                         android:textSize="10sp"
                         android:lineSpacingExtra="1dp" />
@@ -167,7 +167,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:text="RCT-2609-001"
+                    tools:text="RCT-2609-001"
                     android:textColor="#059669"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -633,7 +633,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Hafiz Travel ERP v2.0 • Page 1 of 1"
+                    android:text="@string/doc_page_footer"
                     android:textColor="@color/text_muted"
                     android:textSize="9.5sp"
                     android:textStyle="italic" />

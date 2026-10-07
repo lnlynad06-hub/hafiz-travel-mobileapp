@@ -150,11 +150,11 @@ public class SignUpViewModel extends AndroidViewModel {
     }
 
     /** Submits Google login once; ignores re-entry while busy. */
-    public void googleLogin(String email, String name, String googleId, String avatar) {
+    public void googleLogin(String email, String name, String googleId, String avatar, String idToken) {
         if (googleBusy) return;
         googleBusy = true;
         cancel(googleCall);
-        GoogleLoginRequest request = new GoogleLoginRequest(email, name, googleId, avatar);
+        GoogleLoginRequest request = new GoogleLoginRequest(email, name, googleId, avatar, idToken);
         Call<ApiResponse<AuthResponse>> call = repository.googleLoginCall(request);
         googleCall = call;
         call.enqueue(new Callback<ApiResponse<AuthResponse>>() {

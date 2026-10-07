@@ -174,11 +174,10 @@ public class AboutActivity extends BaseActivity {
         TextView tvDanial = findViewById(R.id.tvAuthorDanial);
         if (tvDanial == null) return;
 
-        tvDanial.setOnClickListener(v -> {
-            HapticUtil.click(v);
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://nellsosuzxy.github.io/"));
-            startActivitySafely(intent, "No browser app found");
-        });
+        // Production: author credit is display-only (no external personal links).
+        tvDanial.setOnClickListener(null);
+        tvDanial.setClickable(false);
+        tvDanial.setFocusable(false);
 
         tvDanial.post(() -> {
             if (isFinishing() || isDestroyed()) return;

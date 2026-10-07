@@ -407,10 +407,14 @@ public class SignUpActivity extends BaseActivity {
                     String email = account.getEmail() != null ? account.getEmail() : "";
                     String googleId = account.getId() != null ? account.getId() : "";
                     String avatar = account.getPhotoUrl() != null ? account.getPhotoUrl().toString() : "";
+                    String idToken = null;
+                    try {
+                        idToken = account.getIdToken();
+                    } catch (Exception ignored) {}
 
                     setLoadingState(true);
                     pendingGoogleName = name;
-                    signUpViewModel.googleLogin(email, name, googleId, avatar);
+                    signUpViewModel.googleLogin(email, name, googleId, avatar, idToken);
                 }
             } catch (ApiException e) {
                 setLoadingState(false);

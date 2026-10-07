@@ -48,6 +48,14 @@ public class ApiClient {
                         }
                         return chain.proceed(builder.build());
                     })
+                    .addInterceptor(chain -> {
+                        okhttp3.Response response = chain.proceed(chain.request());
+                        // Central 401 funnel (Phase 20): auth screens are excluded inside.
+                        if (response.code() == 401) {
+                            com.hafiztraveltours.app.HafizApp.handleUnauthorized();
+                        }
+                        return response;
+                    })
                     .connectTimeout(15, TimeUnit.SECONDS)
                     .readTimeout(15, TimeUnit.SECONDS)
                     .writeTimeout(15, TimeUnit.SECONDS)
@@ -65,15 +73,19 @@ public class ApiClient {
     }
 
     /**
-     * Tukar Base URL semasa runtime jika menguji di peranti fizikal.
-     * Kept for on-device Laravel testing (debug); production uses the Gradle-provided HTTPS URL.
+     * Test-only base-URL override (Phase 20): debug builds only. Release builds
+     * always use the Gradle-provided HTTPS endpoint and cannot be downgraded.
      */
     public static synchronized void setBaseUrl(String newBaseUrl) {
-        if (newBaseUrl != null && !newBaseUrl.endsWith("/")) {
-            newBaseUrl = newBaseUrl + "/";
+        if (com.hafiztraveltours.app.BuildConfig.DEBUG
+                && newBaseUrl != null
+                && (newBaseUrl.startsWith("http://") || newBaseUrl.startsWith("https://"))) {
+            if (!newBaseUrl.endsWith("/")) {
+                newBaseUrl = newBaseUrl + "/";
+            }
+            BASE_URL = newBaseUrl;
+            retrofit = null;
+            apiService = null;
         }
-        BASE_URL = newBaseUrl;
-        retrofit = null;
-        apiService = null;
     }
 }

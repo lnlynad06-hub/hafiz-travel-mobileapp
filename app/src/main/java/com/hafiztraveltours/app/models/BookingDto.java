@@ -108,7 +108,13 @@ public class BookingDto {
         return false;
     }
 
+    /**
+     * Required deposit (Phase 20): the ERP value wins whenever present.
+     * The local 500/1000-per-pax formula is only a fallback for API responses
+     * that predate the server field — never the source of truth.
+     */
     public double getRequiredDepositAmount() {
+        if (requiredDeposit > 0) return requiredDeposit;
         int pax = totalPax > 0 ? totalPax : 1;
         double ratePerPax = isTourPackage() ? 500.0 : 1000.0;
         return ratePerPax * pax;

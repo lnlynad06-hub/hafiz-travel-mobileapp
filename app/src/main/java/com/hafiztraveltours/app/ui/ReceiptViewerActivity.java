@@ -167,9 +167,9 @@ public class ReceiptViewerActivity extends BaseActivity {
         if (tvReceiptBookingRef != null) tvReceiptBookingRef.setText(displayNo);
 
         if (tvReceiptStatusBadge != null) {
-            tvReceiptStatusBadge.setText(getString(R.string.status_received));
-            tvReceiptStatusBadge.setTextColor(Color.parseColor("#059669"));
-            tvReceiptStatusBadge.setBackgroundResource(R.drawable.bg_pill_success);
+            tvReceiptStatusBadge.setText(getString(R.string.status_pending_confirmation));
+            tvReceiptStatusBadge.setTextColor(Color.parseColor("#D97706"));
+            tvReceiptStatusBadge.setBackgroundResource(R.drawable.bg_pill_accent);
         }
 
         if (req.passengers != null && !req.passengers.isEmpty()) {
@@ -222,14 +222,49 @@ public class ReceiptViewerActivity extends BaseActivity {
                 if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
                     bookingDetail = response.body().data;
                     populateFromBookingDetail(bookingDetail);
+                } else {
+                    showLoadError(true);
                 }
             }
 
             @Override
             public void onFailure(Call<ApiResponse<BookingDetailDto>> call, Throwable t) {
-                // Keep fallback data
+                if (isFinishing() || isDestroyed()) return;
+                showLoadError(false);
             }
         });
+    }
+
+    /** Server data unavailable: error toast + retry instead of silent fallback content. */
+    private void showLoadError(boolean wasResponse) {
+        String msg = getString(R.string.doc_load_failed);
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+        View anchor = receiptContentContainer != null ? receiptContentContainer : findViewById(android.R.id.content);
+        if (anchor != null) {
+            try {
+                com.google.android.material.snackbar.Snackbar.make(anchor, msg,
+                                com.google.android.material.snackbar.Snackbar.LENGTH_LONG)
+                        .setAction(getString(R.string.action_retry), v -> {
+                            if (bookingId > 0) fetchBookingDetailFromApi(bookingId);
+                        })
+                        .show();
+            } catch (Exception ignored) {}
+        }
+    }
+
+    /**
+     * Receipt header is RECEIVED only with backend-verified evidence: any verified
+     * payment record, a verified payment, or a fully-paid balance. Otherwise pending.
+     */
+    private boolean isReceiptVerified(BookingDetailDto detail) {
+        if (detail == null) return false;
+        if (detail.paymentRecords != null && !detail.paymentRecords.isEmpty()) return true;
+        if (detail.payments != null) {
+            for (BookingDetailDto.PaymentInfo p : detail.payments) {
+                if (p != null && p.isVerified) return true;
+            }
+        }
+        return detail.balanceAmount <= 0 && detail.paidAmount > 0;
     }
 
     private void populateFromBookingDetail(BookingDetailDto detail) {
@@ -256,9 +291,15 @@ public class ReceiptViewerActivity extends BaseActivity {
         }
 
         if (tvReceiptStatusBadge != null) {
-            tvReceiptStatusBadge.setText(getString(R.string.status_received));
-            tvReceiptStatusBadge.setTextColor(Color.parseColor("#059669"));
-            tvReceiptStatusBadge.setBackgroundResource(R.drawable.bg_pill_success);
+            if (isReceiptVerified(detail)) {
+                tvReceiptStatusBadge.setText(getString(R.string.status_received));
+                tvReceiptStatusBadge.setTextColor(Color.parseColor("#059669"));
+                tvReceiptStatusBadge.setBackgroundResource(R.drawable.bg_pill_success);
+            } else {
+                tvReceiptStatusBadge.setText(getString(R.string.status_pending_confirmation));
+                tvReceiptStatusBadge.setTextColor(Color.parseColor("#D97706"));
+                tvReceiptStatusBadge.setBackgroundResource(R.drawable.bg_pill_accent);
+            }
         }
 
         // 2. Receipt Meta
@@ -346,7 +387,7 @@ public class ReceiptViewerActivity extends BaseActivity {
             if (detail.paymentRecords != null && !detail.paymentRecords.isEmpty()) {
                 layoutInstallmentsContainer.setVisibility(View.VISIBLE);
                 for (BookingDetailDto.PaymentRecordDto p : detail.paymentRecords) {
-                    addPaymentHistoryRow(p.no, "Bayaran Sah", p.refNo, p.datePaid, p.amount, true, p.authorization, p.orNo);
+                    addPaymentHistoryRow(p.no, getString(R.string.payment_history_paid_label), p.refNo, p.datePaid, p.amount, true, p.authorization, p.orNo);
                 }
             } else if (detail.payments != null && !detail.payments.isEmpty()) {
                 layoutInstallmentsContainer.setVisibility(View.VISIBLE);
@@ -362,7 +403,7 @@ public class ReceiptViewerActivity extends BaseActivity {
         }
 
         if (tvReceiptOfficialNotes != null) {
-            tvReceiptOfficialNotes.setText("Bayaran anda telah disahkan dan direkodkan dengan selamat dalam sistem ERP Hafiz Travel & Tours Sdn Bhd.\nResit ini adalah dokumen sah komputasi.");
+            tvReceiptOfficialNotes.setText(getString(R.string.receipt_official_notes));
         }
     }
 

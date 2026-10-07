@@ -281,11 +281,15 @@ public class LoginActivity extends BaseActivity {
                     String email = account.getEmail() != null ? account.getEmail() : "";
                     String googleId = account.getId() != null ? account.getId() : "";
                     String avatar = account.getPhotoUrl() != null ? account.getPhotoUrl().toString() : "";
+                    String idToken = null;
+                    try {
+                        idToken = account.getIdToken();
+                    } catch (Exception ignored) {}
 
                     setLoadingState(true);
                     pendingGoogleName = name;
                     pendingGoogleEmail = email;
-                    loginViewModel.googleLogin(email, name, googleId, avatar);
+                    loginViewModel.googleLogin(email, name, googleId, avatar, idToken);
                 }
             } catch (ApiException e) {
                 setLoadingState(false);

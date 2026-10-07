@@ -65,6 +65,14 @@ public class BookingDetailDto extends BookingDto {
     @SerializedName("payment_records")
     public List<PaymentRecordDto> paymentRecords;
 
+    /**
+     * Gateway checkout URL for the latest pending payment, when the backend
+     * provides one (ToyyibPay bill). Optional: absent until the backend
+     * implements bill creation. Never fabricated client-side.
+     */
+    @SerializedName("payment_url")
+    public String paymentUrl;
+
     public static class DepartureInfo {
         @SerializedName("departure_no")
         public String departureNo;

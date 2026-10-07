@@ -118,18 +118,18 @@
                 android:textColor="#059669"
                 android:textSize="12sp"
                 android:textStyle="bold"
-                android:text="@string/pay_confirm_gateway_mock_name" />
+                android:text="@string/pay_confirm_gateway_name" />
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Mock Notice -->
+    <!-- Secure redirect notice -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:gravity="center"
         android:lineSpacingMultiplier="1.15"
-        android:text="@string/pay_confirm_dialog_mock_notice"
+        android:text="@string/pay_confirm_dialog_secure_notice"
         android:textColor="#71717A"
         android:textSize="11.5sp" />
 

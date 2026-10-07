@@ -244,14 +244,34 @@ public class InvoiceViewerActivity extends BaseActivity {
                 if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
                     bookingDetail = response.body().data;
                     populateFromBookingDetail(bookingDetail);
+                } else {
+                    showLoadError();
                 }
             }
 
             @Override
             public void onFailure(Call<ApiResponse<BookingDetailDto>> call, Throwable t) {
-                // Keep fallback data
+                if (isFinishing() || isDestroyed()) return;
+                showLoadError();
             }
         });
+    }
+
+    /** Server data unavailable: error toast + retry instead of silent fallback content. */
+    private void showLoadError() {
+        String msg = getString(R.string.doc_load_failed);
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+        View anchor = invoiceContentContainer != null ? invoiceContentContainer : findViewById(android.R.id.content);
+        if (anchor != null) {
+            try {
+                com.google.android.material.snackbar.Snackbar.make(anchor, msg,
+                                com.google.android.material.snackbar.Snackbar.LENGTH_LONG)
+                        .setAction(getString(R.string.action_retry), v -> {
+                            if (bookingId > 0) fetchBookingDetailFromApi(bookingId);
+                        })
+                        .show();
+            } catch (Exception ignored) {}
+        }
     }
 
     private void populateFromBookingDetail(BookingDetailDto detail) {

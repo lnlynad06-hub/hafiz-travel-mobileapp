@@ -67,6 +67,11 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
         notifyDataSetChanged();
     }
 
+    public BookingDto getItem(int position) {
+        if (items == null || position < 0 || position >= items.size()) return null;
+        return items.get(position);
+    }
+
     public void removeBooking(BookingDto booking) {
         if (items != null && booking != null) {
             int index = items.indexOf(booking);
@@ -112,7 +117,8 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
             holder.txtStatus.setText(ctx.getString(R.string.status_cancellation_requested));
             holder.txtStatus.setTextColor(Color.parseColor("#D97706"));
             holder.txtStatus.setBackgroundResource(R.drawable.bg_pill_accent);
-        } else if (rawStatus.contains("cancel") || rawStatus.contains("batal")) {
+        } else if (rawStatus.contains("cancel") || rawStatus.contains("batal")
+                || rawStatus.contains("delet") || rawStatus.contains("hapus")) {
             holder.txtStatus.setText(ctx.getString(R.string.status_cancelled));
             holder.txtStatus.setTextColor(Color.parseColor("#DC2626"));
             holder.txtStatus.setBackgroundResource(R.drawable.bg_pill_inactive);
@@ -177,7 +183,9 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
         }
 
         boolean isCancelled = rawStatus.contains("cancel") || rawStatus.contains("batal")
-                || (booking.paymentStatus != null && booking.paymentStatus.toLowerCase(Locale.ROOT).contains("cancel"));
+                || rawStatus.contains("delet") || rawStatus.contains("hapus")
+                || (booking.paymentStatus != null && (booking.paymentStatus.toLowerCase(Locale.ROOT).contains("cancel")
+                        || booking.paymentStatus.toLowerCase(Locale.ROOT).contains("delet")));
 
         // Progress bar
         if (holder.paymentProgressBar != null) {
@@ -190,25 +198,10 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
             }
         }
 
-        // 7. Action 1: Pay Now (Primary CTA, Full width, Magenta)
+        // Online payment is intentionally not released in this build.
         if (holder.btnPayNow != null) {
-            if (balAmt > 0 && !isCancelled && !"completed".equalsIgnoreCase(rawStatus)) {
-                holder.btnPayNow.setVisibility(View.VISIBLE);
-                holder.btnPayNow.setText(R.string.booking_btn_pay_now);
-                holder.btnPayNow.setOnClickListener(v -> {
-                    HapticUtil.click(v);
-                    if (payClickListener != null) {
-                        payClickListener.onPayClick(booking);
-                    } else {
-                        android.app.Activity act = getActivityFromContext(v.getContext());
-                        if (act instanceof MyBookingsActivity) {
-                            ((MyBookingsActivity) act).showQuickPaySheet(booking);
-                        }
-                    }
-                });
-            } else {
-                holder.btnPayNow.setVisibility(View.GONE);
-            }
+            holder.btnPayNow.setVisibility(View.GONE);
+            holder.btnPayNow.setOnClickListener(null);
         }
 
         // 8. Action 2: Manage Documents (Secondary full width)
@@ -242,7 +235,9 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
 
         String rawStatus = booking.status != null ? booking.status.toLowerCase(Locale.ROOT) : "";
         boolean isCancelled = rawStatus.contains("cancel") || rawStatus.contains("batal")
-                || (booking.paymentStatus != null && booking.paymentStatus.toLowerCase(Locale.ROOT).contains("cancel"));
+                || rawStatus.contains("delet") || rawStatus.contains("hapus")
+                || (booking.paymentStatus != null && (booking.paymentStatus.toLowerCase(Locale.ROOT).contains("cancel")
+                        || booking.paymentStatus.toLowerCase(Locale.ROOT).contains("delet")));
         boolean isCancellable = (booking.isCancellable != null ? booking.isCancellable.booleanValue() : true)
                 && !isCancelled && !"completed".equalsIgnoreCase(rawStatus);
 

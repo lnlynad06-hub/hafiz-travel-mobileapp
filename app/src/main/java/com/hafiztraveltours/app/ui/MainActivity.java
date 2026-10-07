@@ -86,7 +86,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 public class MainActivity extends BaseActivity {
 
-    // TODO: replace with your actual WhatsApp business number, format: countrycode+number, no + or spaces
+    // Official WhatsApp business number, format: countrycode+number.
     private static final String WHATSAPP_PHONE_NUMBER = "60197859867";
     // Official Nusuk app by the Ministry of Hajj and Umrah (verified package name)
     private static final String NUSUK_PACKAGE_NAME = "com.moh.nusukapp";
@@ -691,11 +691,6 @@ public class MainActivity extends BaseActivity {
         BottomNavHelper.updateFavoriteBadge(this);
     }
 
-    /**
-     * TODO: replace with real content (can adapt from the "Checklist Persediaan
-     * Sebelum Menunaikan Umrah" article on hafiztraveltours.com), and consider a
-     * proper screen/artifact instead of a dialog once content grows.
-     */
     private void showGuidelineDialog() {
         String message = getString(R.string.guideline_dialog_message);
 

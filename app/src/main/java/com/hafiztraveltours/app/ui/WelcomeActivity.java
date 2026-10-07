@@ -122,6 +122,24 @@ public class WelcomeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
+        // Predictive-back compatible step navigation (replaces onBackPressed override).
+        getOnBackPressedDispatcher().addCallback(this,
+                new androidx.activity.OnBackPressedCallback(true) {
+                    @Override
+                    public void handleOnBackPressed() {
+                        if (currentStep == STEP_NOTIFICATION) {
+                            currentStep = STEP_PRAYER;
+                            crossFade(layoutNotificationSetup, layoutPrayerSetup);
+                        } else if (currentStep == STEP_PRAYER) {
+                            currentStep = STEP_START_EXPLORING;
+                            crossFade(layoutPrayerSetup, layoutStartExploring);
+                        } else {
+                            setEnabled(false);
+                            getOnBackPressedDispatcher().onBackPressed();
+                        }
+                    }
+                });
+
         layoutStartExploring = findViewById(R.id.layoutStartExploring);
         layoutPrayerSetup = findViewById(R.id.layoutPrayerSetup);
         layoutNotificationSetup = findViewById(R.id.layoutNotificationSetup);
@@ -277,19 +295,6 @@ public class WelcomeActivity extends BaseActivity {
         startActivity(intent);
         overridePendingTransition(R.anim.nav_seamless_fade_in, R.anim.nav_seamless_fade_out);
         finish();
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (currentStep == STEP_NOTIFICATION) {
-            currentStep = STEP_PRAYER;
-            crossFade(layoutNotificationSetup, layoutPrayerSetup);
-        } else if (currentStep == STEP_PRAYER) {
-            currentStep = STEP_START_EXPLORING;
-            crossFade(layoutPrayerSetup, layoutStartExploring);
-        } else {
-            super.onBackPressed();
-        }
     }
 
     private void setupFallbackShowcase() {

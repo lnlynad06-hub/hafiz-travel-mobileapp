@@ -1167,7 +1167,7 @@
     <string name="doc_status_not_uploaded_fallback">not_uploaded</string>
     <string name="readiness_title">Account &amp; Travel Readiness</string>
     <string name="readiness_percent_format">%1$d%% Complete</string>
-    <string name="readiness_complete_msg">Your travel profile &amp; documents are 100% complete!</string>
+    <string name="readiness_complete_msg">Your travel profile &amp; documents are 100%% complete!</string>
     <string name="readiness_incomplete_msg">Complete your profile &amp; travel documents for faster booking clearance</string>
     <string name="readiness_autolink_msg">✓ Auto-linked to all future Umrah &amp; Tour bookings</string>
     <string name="profile_ic_locked">IC number has been filled and cannot be deleted.</string>
@@ -1481,13 +1481,15 @@
     <string name="pay_sheet_balance_after">Balance After Payment</string>
     <string name="pay_sheet_btn_pay_format">Pay %1$s</string>
     <string name="pay_sheet_secure_title">Secure Payment via ToyyibPay</string>
-    <string name="pay_sheet_secure_desc">256-bit encryption. Online payment gateway integration powered by ToyyibPay (Test Mode).</string>
+    <string name="pay_sheet_secure_desc">256-bit encryption. Online payment gateway integration powered by ToyyibPay.</string>
     <string name="pay_confirm_dialog_title">Confirm Payment</string>
     <string name="pay_confirm_purpose_label">Payment Purpose</string>
     <string name="pay_confirm_gateway_label">Payment Gateway</string>
-    <string name="pay_confirm_gateway_mock_name">ToyyibPay (Mock Sandbox)</string>
+    <string name="pay_confirm_gateway_name">ToyyibPay</string>
     <string name="pay_confirm_dialog_msg">You are confirming payment of %1$s for %2$s.</string>
-    <string name="pay_confirm_dialog_mock_notice">This transaction is processed in mock test mode and will immediately update your booking status.</string>
+    <string name="pay_confirm_dialog_secure_notice">You will be redirected to ToyyibPay to complete this payment securely.</string>
+    <string name="pay_browser_continue">Continue the payment in your browser, then return here for confirmation.</string>
+    <string name="pay_pending_verification">Payment initiated. Your booking will update once the payment gateway confirms it.</string>
     <string name="pay_confirm_btn_pay">Confirm &amp; Pay</string>
     <string name="pay_success_dialog_title">Payment Successful!</string>
     <string name="pay_success_dialog_msg">Payment of %1$s has been successfully recorded. Official receipt and booking schedule have been generated.</string>
@@ -1527,6 +1529,8 @@
     <string name="cancel_quote_estimated_refund">Estimated Refund: %1$s</string>
     <string name="cancel_quote_refund_period">* Refund processing takes 3 to 9 months subject to 3rd-party approvals.</string>
     <string name="cancel_quote_no_refund">No refund is eligible for this cancellation timeline.</string>
+    <string name="cancel_quote_failed">Could not load cancellation details. Please try again.</string>
+    <string name="cancel_not_cancellable">This booking can no longer be cancelled. Please contact us for assistance.</string>
     <string name="cancel_booking_irreversible_notice">This action is permanent and cannot be undone.</string>
     <string name="terms_tour_notice_title">Tour Package Terms &amp; Conditions</string>
     <string name="terms_tour_notice_body">Terms &amp; Conditions for Tour packages will be provided upon confirmation and finalized itinerary. For further inquiries, please contact our customer service.</string>
@@ -1680,4 +1684,14 @@
     <string name="notif_doc_verified_msg">Your travel document has been verified successfully.</string>
     <string name="notif_prayer_reminder_title">Prayer Reminder</string>
     <string name="notif_prayer_reminder_msg">%1$s prayer is in 5 minutes.</string>
+    <string name="action_retry">Retry</string>
+    <string name="doc_load_failed">Failed to load document. Please check your connection and retry.</string>
+    <string name="receipt_official_notes">Your payment has been verified and safely recorded in the Hafiz Travel &amp; Tours Sdn Bhd ERP system.\nThis receipt is a valid computed document.</string>
+    <string name="payment_history_paid_label">Verified Payment</string>
+    <string name="company_name_full">Hafiz Travel &amp; Tours Sdn Bhd</string>
+    <string name="company_reg_no">Reg. No. 1384210-U / KPK/LN: 10751</string>
+    <string name="company_address_full">No. 12-01, Jalan Padi Emas 1/2, Bandar Baru Uda, 81200 Johor Bahru, Johor</string>
+    <string name="company_contact_full">Tel: +60 7-238 4567 • WA: +60 19-778 4567\nEmail: info@hafiztraveltours.com • www.hafiztraveltours.com</string>
+    <string name="doc_page_footer">Hafiz Travel ERP v2.0 • Page 1 of 1</string>
+    <string name="checklist_progress_title">Preparation Progress</string>
 </resources>

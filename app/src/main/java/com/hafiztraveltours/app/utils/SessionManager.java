@@ -104,6 +104,21 @@ public class SessionManager {
         return token != null ? token : "";
     }
 
+    /**
+     * Fail-closed token gate (Phase 20): if KeyStore crypto has actually failed,
+     * the stored token cannot be trusted — wipe the session so the user
+     * re-authenticates instead of running on downgraded plaintext secrets.
+     *
+     * @return true when a fail-closed wipe was performed.
+     */
+    public boolean enforceCryptoIntegrity() {
+        if (SecurePrefs.cryptoFailed() && isLoggedIn()) {
+            clearSession();
+            return true;
+        }
+        return false;
+    }
+
     public UserDto getUser() {
         String json = prefs.getString(KEY_USER_DATA, null);
         if (json != null && !json.isEmpty()) {

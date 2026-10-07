@@ -19,10 +19,18 @@ public class GoogleLoginRequest {
     @SerializedName("avatar")
     public String avatar;
 
+    @SerializedName("id_token")
+    public String idToken;
+
     public GoogleLoginRequest(String email, String name, String googleId, String avatar) {
+        this(email, name, googleId, avatar, null);
+    }
+
+    public GoogleLoginRequest(String email, String name, String googleId, String avatar, String idToken) {
         this.email = email;
         this.name = name;
         this.googleId = googleId;
         this.avatar = avatar;
+        this.idToken = idToken;
     }
 }

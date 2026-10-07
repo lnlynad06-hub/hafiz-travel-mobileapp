@@ -133,17 +133,25 @@ public class MyBookingsActivity extends BaseActivity {
                     R.color.brand_dark_pink);
             swipeRefresh.setOnRefreshListener(this::loadBookings);
         }
+        restorePendingPayment();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         loadBookings();
+        // Returning from the gateway browser (or process restart): verify real state.
+        verifyPendingPayment();
     }
 
     @Override
     protected void onDestroy() {
         if (bookingsCall != null) bookingsCall.cancel();
+        if (payCall != null) payCall.cancel();
+        if (verifyCall != null) verifyCall.cancel();
+        if (quoteCall != null) quoteCall.cancel();
+        if (cancelCall != null) cancelCall.cancel();
+        if (uploadCall != null) uploadCall.cancel();
         super.onDestroy();
     }
 
@@ -372,15 +380,32 @@ public class MyBookingsActivity extends BaseActivity {
             btnSubmit.setOnClickListener(v -> {
                 HapticUtil.click(v);
                 confirmDialog.dismiss();
-                executeMockPayment(booking, paymentAmount, paymentPurpose, paymentType);
+                executeGatewayPayment(booking, paymentAmount, paymentPurpose, paymentType);
             });
         }
 
         confirmDialog.show();
     }
 
-    private void executeMockPayment(BookingDto booking, double paymentAmount, String paymentPurpose, String paymentType) {
-        String formattedAmount = MoneyFormat.formatRMCents(paymentAmount);
+    /**
+     * Production gateway payment (Phase 20): initiates payment server-side, opens the
+     * gateway checkout URL (when the backend provides one), and shows success ONLY
+     * after re-verifying state from the backend. Never fabricates amounts/receipts.
+     * Guarded against double submission; no automatic retries.
+     */
+    private boolean payInFlight = false;
+    private Call<?> payCall;
+    private Call<?> verifyCall;
+    private int pendingPaymentBookingId = -1;
+    private double pendingPaymentAmount = 0;
+
+    private static final String PREF_PENDING_PAY = "pending_gateway_payment";
+    private static final String KEY_PENDING_BOOKING_ID = "booking_id";
+    private static final String KEY_PENDING_AMOUNT = "amount";
+
+    private void executeGatewayPayment(BookingDto booking, double paymentAmount, String paymentPurpose, String paymentType) {
+        if (booking == null || payInFlight) return;
+        payInFlight = true;
 
         AlertDialog progressDialog = new AlertDialog.Builder(this)
                 .setMessage(R.string.pay_sheet_processing)
@@ -393,43 +418,48 @@ public class MyBookingsActivity extends BaseActivity {
         body.put("payment_method", "toyyibpay");
         body.put("payment_type", paymentType);
 
-        ApiClient.getApiService().payBooking(booking.id, body).enqueue(new Callback<ApiResponse<BookingDetailDto>>() {
+        if (payCall != null) payCall.cancel();
+        Call<ApiResponse<BookingDetailDto>> call = ApiClient.getApiService().payBooking(booking.id, body);
+        payCall = call;
+        call.enqueue(new Callback<ApiResponse<BookingDetailDto>>() {
             @Override
             public void onResponse(Call<ApiResponse<BookingDetailDto>> call, Response<ApiResponse<BookingDetailDto>> response) {
                 if (isFinishing() || isDestroyed()) return;
                 progressDialog.dismiss();
+                payInFlight = false;
 
-                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()
+                        && response.body().data != null) {
                     BookingDetailDto detail = response.body().data;
-                    if (detail != null) {
-                        booking.paidAmount = detail.paidAmount;
-                        booking.balanceAmount = detail.balanceAmount;
-                        booking.depositPaid = detail.depositPaid;
-                        booking.depositRemaining = detail.depositRemaining;
-                        booking.isDepositPaid = detail.isDepositPaid;
-                        booking.isMerchandiseEligible = detail.isMerchandiseEligible;
-                        booking.status = detail.status;
-                        booking.paymentStatus = detail.paymentStatus;
-                        booking.hasReceipts = true;
-                        booking.receiptsCount = detail.receipts != null ? detail.receipts.size() : Math.max(1, booking.receiptsCount + 1);
-                    } else {
-                        booking.paidAmount += paymentAmount;
-                        booking.balanceAmount = Math.max(0, booking.balanceAmount - paymentAmount);
-                        booking.depositPaid += paymentAmount;
-                        booking.depositRemaining = Math.max(0, booking.depositRemaining - paymentAmount);
-                        if (booking.depositRemaining <= 0) {
-                            booking.isDepositPaid = true;
-                            booking.isMerchandiseEligible = true;
+                    String paymentUrl = detail.paymentUrl;
+                    if (paymentUrl != null
+                            && (paymentUrl.startsWith("https://") || paymentUrl.startsWith("http://"))) {
+                        // Gateway checkout required: hand off to the secure system browser,
+                        // verify on return. The backend webhook is the source of truth.
+                        storePendingPayment(booking.id, paymentAmount);
+                        if (openSecureBrowser(paymentUrl)) {
+                            Toast.makeText(MyBookingsActivity.this,
+                                    getString(R.string.pay_browser_continue), Toast.LENGTH_LONG).show();
+                        } else {
+                            clearPendingPayment();
+                            Toast.makeText(MyBookingsActivity.this,
+                                    getString(R.string.err_network), Toast.LENGTH_LONG).show();
                         }
+                    } else if (isPaymentVerified(detail)) {
+                        // Backend already confirms a verified payment (e.g. instant verification).
+                        syncBookingFromDetail(booking, detail);
+                        if (adapter != null) adapter.notifyDataSetChanged();
+                        showPaymentSuccessfulDialog(booking, paymentAmount);
+                    } else {
+                        // Initiated but not verifiable yet: refresh, never declare success.
+                        Toast.makeText(MyBookingsActivity.this,
+                                getString(R.string.pay_pending_verification), Toast.LENGTH_LONG).show();
                     }
-                    if (adapter != null) {
-                        adapter.notifyDataSetChanged();
-                    }
-
-                    // Show Payment Successful Dialog
-                    showPaymentSuccessfulDialog(booking, paymentAmount);
-
-                    // Sync latest state from backend
+                    loadBookings();
+                } else if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    // Success flag with no data: state is unverifiable — refresh, never declare success.
+                    Toast.makeText(MyBookingsActivity.this,
+                            getString(R.string.pay_pending_verification), Toast.LENGTH_LONG).show();
                     loadBookings();
                 } else {
                     String err = ApiErrors.userMessage(MyBookingsActivity.this, response, R.string.err_network);
@@ -441,10 +471,128 @@ public class MyBookingsActivity extends BaseActivity {
             public void onFailure(Call<ApiResponse<BookingDetailDto>> call, Throwable t) {
                 if (isFinishing() || isDestroyed()) return;
                 progressDialog.dismiss();
+                payInFlight = false;
                 String err = ApiErrors.userMessage(MyBookingsActivity.this, t, R.string.err_network);
                 Toast.makeText(MyBookingsActivity.this, err, Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    /** Copies server-confirmed values into the local item (sync, not fabrication). */
+    private void syncBookingFromDetail(BookingDto booking, BookingDetailDto detail) {
+        booking.paidAmount = detail.paidAmount;
+        booking.balanceAmount = detail.balanceAmount;
+        booking.depositPaid = detail.depositPaid;
+        booking.depositRemaining = detail.depositRemaining;
+        booking.isDepositPaid = detail.isDepositPaid;
+        booking.isMerchandiseEligible = detail.isMerchandiseEligible;
+        booking.status = detail.status;
+        booking.paymentStatus = detail.paymentStatus;
+        if (detail.receipts != null && !detail.receipts.isEmpty()) {
+            booking.hasReceipts = true;
+            booking.receiptsCount = detail.receipts.size();
+        }
+    }
+
+    /** Verified only by backend signals: a verified payment record or paid status. */
+    private boolean isPaymentVerified(BookingDetailDto detail) {
+        if (detail == null) return false;
+        if (detail.payments != null) {
+            for (BookingDetailDto.PaymentInfo p : detail.payments) {
+                if (p != null && p.isVerified) return true;
+            }
+        }
+        return "paid".equalsIgnoreCase(detail.status)
+                || "paid".equalsIgnoreCase(detail.paymentStatus);
+    }
+
+    /** Opens a URL in the secure system browser (never an in-app WebView). */
+    private boolean openSecureBrowser(String url) {
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private void storePendingPayment(int bookingId, double amount) {
+        pendingPaymentBookingId = bookingId;
+        pendingPaymentAmount = amount;
+        try {
+            getSharedPreferences(PREF_PENDING_PAY, MODE_PRIVATE).edit()
+                    .putInt(KEY_PENDING_BOOKING_ID, bookingId)
+                    .putFloat(KEY_PENDING_AMOUNT, (float) amount)
+                    .apply();
+        } catch (Exception ignored) {}
+    }
+
+    private void clearPendingPayment() {
+        pendingPaymentBookingId = -1;
+        pendingPaymentAmount = 0;
+        try {
+            getSharedPreferences(PREF_PENDING_PAY, MODE_PRIVATE).edit().clear().apply();
+        } catch (Exception ignored) {}
+    }
+
+    private void restorePendingPayment() {
+        try {
+            android.content.SharedPreferences prefs =
+                    getSharedPreferences(PREF_PENDING_PAY, MODE_PRIVATE);
+            int id = prefs.getInt(KEY_PENDING_BOOKING_ID, -1);
+            if (id > 0) {
+                pendingPaymentBookingId = id;
+                pendingPaymentAmount = prefs.getFloat(KEY_PENDING_AMOUNT, 0);
+            }
+        } catch (Exception ignored) {}
+    }
+
+    /** After returning from the gateway browser, verify actual backend state. */
+    private void verifyPendingPayment() {
+        if (pendingPaymentBookingId <= 0) return;
+        final int bookingId = pendingPaymentBookingId;
+        final double amount = pendingPaymentAmount;
+        clearPendingPayment();
+
+        if (verifyCall != null) verifyCall.cancel();
+        Call<ApiResponse<BookingDetailDto>> call = ApiClient.getApiService().getBookingDetail(bookingId);
+        verifyCall = call;
+        call.enqueue(new Callback<ApiResponse<BookingDetailDto>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<BookingDetailDto>> call,
+                                   Response<ApiResponse<BookingDetailDto>> response) {
+                if (isFinishing() || isDestroyed()) return;
+                if (response.isSuccessful() && response.body() != null
+                        && response.body().isSuccess() && response.body().data != null
+                        && isPaymentVerified(response.body().data)) {
+                    BookingDto local = findBookingById(bookingId);
+                    if (local != null) {
+                        syncBookingFromDetail(local, response.body().data);
+                        if (adapter != null) adapter.notifyDataSetChanged();
+                        showPaymentSuccessfulDialog(local, amount);
+                    }
+                }
+                loadBookings();
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<BookingDetailDto>> call, Throwable t) {
+                if (isFinishing() || isDestroyed()) return;
+                loadBookings();
+            }
+        });
+    }
+
+    private BookingDto findBookingById(int bookingId) {
+        if (adapter != null) {
+            for (int i = 0; i < adapter.getItemCount(); i++) {
+                BookingDto b = adapter.getItem(i);
+                if (b != null && b.id == bookingId) return b;
+            }
+        }
+        return null;
     }
 
     private void showPaymentSuccessfulDialog(BookingDto booking, double paymentAmount) {
@@ -838,7 +986,8 @@ public class MyBookingsActivity extends BaseActivity {
     }
 
     private void performUploadBookingDocument(String docCode, Uri uri) {
-        if (activeBooking == null || uri == null) return;
+        if (activeBooking == null || uri == null || uploadInFlight) return;
+        uploadInFlight = true;
 
         Toast.makeText(this, getString(R.string.doc_upload_processing), Toast.LENGTH_SHORT).show();
 
@@ -864,12 +1013,16 @@ public class MyBookingsActivity extends BaseActivity {
             RequestBody fileBody = RequestBody.create(MediaType.parse(mimeType), tempFile);
             MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", fileName, fileBody);
 
-            ApiClient.getApiService().uploadBookingDocument(activeBooking.id, codePart, travellerPart, filePart)
-                    .enqueue(new Callback<ApiResponse<DocumentDto>>() {
+            if (uploadCall != null) uploadCall.cancel();
+            Call<ApiResponse<DocumentDto>> uploadRequest =
+                    ApiClient.getApiService().uploadBookingDocument(activeBooking.id, codePart, travellerPart, filePart);
+            uploadCall = uploadRequest;
+            uploadRequest.enqueue(new Callback<ApiResponse<DocumentDto>>() {
                         @Override
                         public void onResponse(Call<ApiResponse<DocumentDto>> call, Response<ApiResponse<DocumentDto>> response) {
                             tempFile.delete();
                             if (isFinishing() || isDestroyed()) return;
+                            uploadInFlight = false;
 
                             if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
                                 Toast.makeText(MyBookingsActivity.this, getString(R.string.toast_doc_uploaded_success), Toast.LENGTH_SHORT).show();
@@ -883,6 +1036,7 @@ public class MyBookingsActivity extends BaseActivity {
                         public void onFailure(Call<ApiResponse<DocumentDto>> call, Throwable t) {
                             tempFile.delete();
                             if (isFinishing() || isDestroyed()) return;
+                            uploadInFlight = false;
                             Toast.makeText(MyBookingsActivity.this, getString(R.string.doc_upload_network_error), Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -939,25 +1093,46 @@ public class MyBookingsActivity extends BaseActivity {
             tvSubtitle.setText(pkgName + " • " + bookingRef);
         }
 
-        ApiClient.getApiService().getCancellationQuote(booking.id)
-                .enqueue(new Callback<ApiResponse<com.hafiztraveltours.app.models.CancellationQuoteDto>>() {
-                    @Override
-                    public void onResponse(Call<ApiResponse<com.hafiztraveltours.app.models.CancellationQuoteDto>> call,
-                                           Response<ApiResponse<com.hafiztraveltours.app.models.CancellationQuoteDto>> response) {
-                        if (isFinishing() || isDestroyed() || !dialog.isShowing()) return;
+        if (btnConfirm != null) {
+            btnConfirm.setEnabled(false);
+            btnConfirm.setAlpha(0.5f);
+        }
 
-                        com.hafiztraveltours.app.models.CancellationQuoteDto quote =
-                                (response.isSuccessful() && response.body() != null && response.body().isSuccess())
-                                        ? response.body().data : null;
+        quoteCall = null;
+        Call<ApiResponse<com.hafiztraveltours.app.models.CancellationQuoteDto>> quoteRequest =
+                ApiClient.getApiService().getCancellationQuote(booking.id);
+        quoteCall = quoteRequest;
+        quoteRequest.enqueue(new Callback<ApiResponse<com.hafiztraveltours.app.models.CancellationQuoteDto>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<com.hafiztraveltours.app.models.CancellationQuoteDto>> call,
+                                   Response<ApiResponse<com.hafiztraveltours.app.models.CancellationQuoteDto>> response) {
+                if (isFinishing() || isDestroyed() || !dialog.isShowing()) return;
 
-                        populateQuoteBreakdown(dialogView, quote);
-                    }
+                com.hafiztraveltours.app.models.CancellationQuoteDto quote =
+                        (response.isSuccessful() && response.body() != null && response.body().isSuccess())
+                                ? response.body().data : null;
 
-                    @Override
-                    public void onFailure(Call<ApiResponse<com.hafiztraveltours.app.models.CancellationQuoteDto>> call, Throwable t) {
-                        // Keep cancellation dialog active without breakdown if quote fails
-                    }
-                });
+                if (quote == null) {
+                    showQuoteError(dialogView, getString(R.string.cancel_quote_failed));
+                    return;
+                }
+                if (!quote.isCancellable) {
+                    showQuoteError(dialogView, getString(R.string.cancel_not_cancellable));
+                    return;
+                }
+                if (btnConfirm != null) {
+                    btnConfirm.setEnabled(true);
+                    btnConfirm.setAlpha(1.0f);
+                }
+                populateQuoteBreakdown(dialogView, quote);
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<com.hafiztraveltours.app.models.CancellationQuoteDto>> call, Throwable t) {
+                if (isFinishing() || isDestroyed() || !dialog.isShowing()) return;
+                showQuoteError(dialogView, getString(R.string.cancel_quote_failed));
+            }
+        });
 
         if (btnKeep != null) {
             btnKeep.setOnClickListener(v -> {
@@ -978,7 +1153,34 @@ public class MyBookingsActivity extends BaseActivity {
         dialog.show();
     }
 
+    private Call<?> quoteCall;
+    private Call<?> cancelCall;
+    private boolean cancelInFlight = false;
+    private Call<?> uploadCall;
+    private boolean uploadInFlight = false;
+
+    /** Shows a blocking message inside the cancel dialog and keeps Confirm disabled. */
+    private void showQuoteError(View dialogView, String message) {
+        if (dialogView == null) return;
+        TextView tvMessage = dialogView.findViewById(R.id.tvCancelDialogMessage);
+        if (tvMessage != null && message != null) {
+            tvMessage.setText(message);
+            tvMessage.setTextColor(Color.parseColor("#DC2626"));
+        }
+        View layoutBreakdown = dialogView.findViewById(R.id.layoutQuoteBreakdown);
+        if (layoutBreakdown != null) layoutBreakdown.setVisibility(View.GONE);
+    }
+
     private void populateQuoteBreakdown(View dialogView, com.hafiztraveltours.app.models.CancellationQuoteDto quote) {
+        if (quote == null || dialogView == null) return;
+        // Backend policy text wins over the generic confirm copy (backend is source of truth).
+        if (quote.policyTerms != null && !quote.policyTerms.trim().isEmpty()) {
+            TextView tvMessage = dialogView.findViewById(R.id.tvCancelDialogMessage);
+            if (tvMessage != null) tvMessage.setText(quote.policyTerms.trim());
+        } else if (quote.policyRule != null && !quote.policyRule.trim().isEmpty()) {
+            TextView tvMessage = dialogView.findViewById(R.id.tvCancelDialogMessage);
+            if (tvMessage != null) tvMessage.setText(quote.policyRule.trim());
+        }
         if (quote == null || dialogView == null) return;
         View layoutBreakdown = dialogView.findViewById(R.id.layoutQuoteBreakdown);
         TextView tvWorkingDays = dialogView.findViewById(R.id.tvQuoteWorkingDays);
@@ -1030,6 +1232,8 @@ public class MyBookingsActivity extends BaseActivity {
     }
 
     private void performCancelBooking(BookingDto booking, String reason) {
+        if (booking == null || cancelInFlight) return;
+        cancelInFlight = true;
         String bookingRef = booking.bookingNo != null ? booking.bookingNo : "BKG-" + booking.id;
         AlertDialog progressDialog = new AlertDialog.Builder(this)
                 .setMessage(R.string.cancel_booking_processing)
@@ -1038,17 +1242,16 @@ public class MyBookingsActivity extends BaseActivity {
         progressDialog.show();
 
         CancelBookingRequest req = new CancelBookingRequest(!reason.isEmpty() ? reason : null);
-        Log.d("MyBookingsActivity", "Cancel request initiated -> Method: POST, Path: /v1/bookings/" + booking.id + "/cancel, bookingId=" + booking.id);
 
-        ApiClient.getApiService().cancelBooking(booking.id, req)
-                .enqueue(new Callback<ApiResponse<BookingDetailDto>>() {
-                    @Override
-                    public void onResponse(Call<ApiResponse<BookingDetailDto>> call, Response<ApiResponse<BookingDetailDto>> response) {
-                        if (isFinishing() || isDestroyed()) return;
-                        progressDialog.dismiss();
-
-                        String contentType = response.headers() != null ? response.headers().get("Content-Type") : "unknown";
-                        Log.d("MyBookingsActivity", "Cancel response received -> Code: " + response.code() + ", Content-Type: " + contentType);
+        if (cancelCall != null) cancelCall.cancel();
+        Call<ApiResponse<BookingDetailDto>> call = ApiClient.getApiService().cancelBooking(booking.id, req);
+        cancelCall = call;
+        call.enqueue(new Callback<ApiResponse<BookingDetailDto>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<BookingDetailDto>> call, Response<ApiResponse<BookingDetailDto>> response) {
+                if (isFinishing() || isDestroyed()) return;
+                progressDialog.dismiss();
+                cancelInFlight = false;
 
                         if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
                             boolean isZeroPaid = (booking.paidAmount <= 0);
@@ -1082,6 +1285,7 @@ public class MyBookingsActivity extends BaseActivity {
                     public void onFailure(Call<ApiResponse<BookingDetailDto>> call, Throwable t) {
                         if (isFinishing() || isDestroyed()) return;
                         progressDialog.dismiss();
+                        cancelInFlight = false;
                         String err = ApiErrors.userMessage(MyBookingsActivity.this, t, R.string.cancel_booking_failed);
                         Log.e("MyBookingsActivity", "Cancel transport failure -> " + com.hafiztraveltours.app.utils.LogSanitizer.sanitize(t.getMessage()), t);
                         Toast.makeText(MyBookingsActivity.this, err, Toast.LENGTH_LONG).show();

@@ -60,10 +60,10 @@ public class WebViewActivity extends BaseActivity {
             }
         });
 
-        if (url != null && (url.startsWith("https://") || url.startsWith("http://"))) {
+        if (url != null && url.startsWith("https://")) {
             webView.loadUrl(url);
         } else {
-            android.util.Log.w("WebViewActivity", "Blocked non-http(s) URL");
+            android.util.Log.w("WebViewActivity", "Blocked non-HTTPS URL");
             finish();
             return;
         }

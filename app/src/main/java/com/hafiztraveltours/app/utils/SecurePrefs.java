@@ -30,9 +30,10 @@ import javax.crypto.spec.GCMParameterSpec;
  * (lazy migration: re-saved encrypted on next write), so existing sessions survive
  * the update. Keys themselves stay plaintext; values are what matter.
  *
- * <p>Fail-open by design: if the KeyStore is broken on a device, values fall back to
- * plaintext (with a Log.w) rather than locking the user out. New writes always attempt
- * encryption first.
+ * <p>Security policy: values fall back to plaintext only when KeyStore crypto
+ * actually fails (fail-open for usability, logged once). A real crypto failure
+ * latches {@link #cryptoFailed()}; SessionManager treats that as fail-closed
+ * for the auth token (forces re-login) while profile data stays fail-open.
  */
 public final class SecurePrefs {
 
@@ -42,6 +43,17 @@ public final class SecurePrefs {
     private static final int GCM_TAG_BITS = 128;
     private static final int IV_BYTES = 12;
     private static boolean warnedFallback = false;
+    /**
+     * Latched on any real KeyStore/crypto failure (never on legacy-plaintext
+     * migration reads). SessionManager treats this as fail-closed for the auth
+     * token; other prefs stay fail-open for usability.
+     */
+    private static volatile boolean cryptoFailed = false;
+
+    /** True if AndroidKeyStore crypto has actually failed in this process. */
+    public static boolean cryptoFailed() {
+        return cryptoFailed;
+    }
 
     private SecurePrefs() {}
 
@@ -90,6 +102,7 @@ public final class SecurePrefs {
             System.arraycopy(cipherText, 0, combined, IV_BYTES, cipherText.length);
             return ENC_PREFIX + Base64.encodeToString(combined, Base64.NO_WRAP);
         } catch (Exception e) {
+            cryptoFailed = true;
             warnOnce("Encryption unavailable, storing plaintext: " + e.getMessage());
             return null;
         }
@@ -109,6 +122,7 @@ public final class SecurePrefs {
             cipher.init(Cipher.DECRYPT_MODE, key, new GCMParameterSpec(GCM_TAG_BITS, iv));
             return new String(cipher.doFinal(cipherText), StandardCharsets.UTF_8);
         } catch (Exception e) {
+            cryptoFailed = true;
             warnOnce("Decryption failed: " + e.getMessage());
             return null;
         }

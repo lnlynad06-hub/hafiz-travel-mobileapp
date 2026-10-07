@@ -1363,13 +1363,15 @@
     <string name="pay_sheet_balance_after">Baki Selepas Bayaran</string>
     <string name="pay_sheet_btn_pay_format">Bayar %1$s</string>
     <string name="pay_sheet_secure_title">Bayaran Selamat melalui ToyyibPay</string>
-    <string name="pay_sheet_secure_desc">Penyulitan 256-bit. Integrasi gerbang pembayaran dikuasakan oleh ToyyibPay (Mod Ujian).</string>
+    <string name="pay_sheet_secure_desc">Penyulitan 256-bit. Integrasi gerbang pembayaran dikuasakan oleh ToyyibPay.</string>
     <string name="pay_confirm_dialog_title">Sahkan Bayaran</string>
     <string name="pay_confirm_purpose_label">Tujuan Bayaran</string>
     <string name="pay_confirm_gateway_label">Gerbang Bayaran</string>
-    <string name="pay_confirm_gateway_mock_name">ToyyibPay (Ujian Sandbox)</string>
+    <string name="pay_confirm_gateway_name">ToyyibPay</string>
     <string name="pay_confirm_dialog_msg">Anda sedang mengesahkan bayaran sebanyak %1$s untuk %2$s.</string>
-    <string name="pay_confirm_dialog_mock_notice">Transaksi ini diproses dalam mod ujian mock dan akan mengemas kini status tempahan anda serta-merta.</string>
+    <string name="pay_confirm_dialog_secure_notice">Anda akan dibawa ke ToyyibPay untuk melengkapkan bayaran ini dengan selamat.</string>
+    <string name="pay_browser_continue">Sambung pembayaran dalam pelayar anda, kemudian kembali ke sini untuk pengesahan.</string>
+    <string name="pay_pending_verification">Pembayaran dimulakan. Tempahan anda akan dikemas kini sebaik sahaja gerbang pembayaran mengesahkannya.</string>
     <string name="pay_confirm_btn_pay">Sahkan &amp; Bayar</string>
     <string name="pay_success_dialog_title">Bayaran Berjaya!</string>
     <string name="pay_success_dialog_msg">Bayaran sebanyak %1$s telah berjaya direkodkan. Resit rasmi dan jadual tempahan telah dijana.</string>
@@ -1409,6 +1411,8 @@
     <string name="cancel_quote_estimated_refund">Anggaran Pemulangan Wang: %1$s</string>
     <string name="cancel_quote_refund_period">* Tempoh pemulangan wang mengambil masa 3 hingga 9 bulan tertakluk kepada pihak ketiga.</string>
     <string name="cancel_quote_no_refund">Tiada pemulangan wang layak berdasarkan garis masa pelepasan penerbangan.</string>
+    <string name="cancel_quote_failed">Tidak dapat memuatkan butiran pembatalan. Sila cuba lagi.</string>
+    <string name="cancel_not_cancellable">Tempahan ini tidak lagi boleh dibatalkan. Sila hubungi kami untuk bantuan.</string>
     <string name="cancel_booking_irreversible_notice">Tindakan ini adalah kekal dan tidak boleh dibatalkan.</string>
     <string name="terms_tour_notice_title">Terma &amp; Syarat Pakej Pelancongan</string>
     <string name="terms_tour_notice_body">Terma &amp; Syarat untuk pakej Pelancongan akan disediakan semasa pengesahan dan jadual perjalanan muktamad. Untuk sebarang pertanyaan lanjut, sila hubungi khidmat pelanggan kami.</string>
@@ -1562,5 +1566,15 @@
     <string name="notif_doc_verified_msg">Dokumen perjalanan anda telah berjaya disahkan.</string>
     <string name="notif_prayer_reminder_title">Peringatan Solat</string>
     <string name="notif_prayer_reminder_msg">Waktu solat %1$s akan masuk dalam 5 minit.</string>
+    <string name="action_retry">Cuba Lagi</string>
+    <string name="doc_load_failed">Gagal memuatkan dokumen. Sila semak sambungan anda dan cuba lagi.</string>
+    <string name="receipt_official_notes">Bayaran anda telah disahkan dan direkodkan dengan selamat dalam sistem ERP Hafiz Travel &amp; Tours Sdn Bhd.\nResit ini adalah dokumen sah komputasi.</string>
+    <string name="payment_history_paid_label">Bayaran Disahkan</string>
+    <string name="company_name_full">Hafiz Travel &amp; Tours Sdn Bhd</string>
+    <string name="company_reg_no">Reg. No. 1384210-U / KPK/LN: 10751</string>
+    <string name="company_address_full">No. 12-01, Jalan Padi Emas 1/2, Bandar Baru Uda, 81200 Johor Bahru, Johor</string>
+    <string name="company_contact_full">Tel: +60 7-238 4567 • WA: +60 19-778 4567\nE-mel: info@hafiztraveltours.com • www.hafiztraveltours.com</string>
+    <string name="doc_page_footer">Hafiz Travel ERP v2.0 • Halaman 1 daripada 1</string>
+    <string name="checklist_progress_title">Kemajuan Persediaan</string>
 </resources>
 

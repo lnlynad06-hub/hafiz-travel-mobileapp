@@ -24,6 +24,20 @@ require(!releaseApiUrl.contains("127.0.0.1") && !releaseApiUrl.contains("10.0.2.
     "Release API URL must be HTTPS and not a local address. Set apiUrlRelease in local.properties."
 }
 
+val releaseKeystorePath = System.getenv("HAFIZ_KEYSTORE_PATH")
+    ?: localProps.getProperty("releaseKeystorePath")
+val releaseStorePassword = System.getenv("HAFIZ_KEYSTORE_PASSWORD")
+    ?: localProps.getProperty("releaseKeystorePassword")
+val releaseKeyAlias = System.getenv("HAFIZ_KEY_ALIAS")
+    ?: localProps.getProperty("releaseKeyAlias")
+val releaseKeyPassword = System.getenv("HAFIZ_KEY_PASSWORD")
+    ?: localProps.getProperty("releaseKeyPassword")
+val releaseSigningReady = !releaseKeystorePath.isNullOrBlank()
+    && rootProject.file(releaseKeystorePath).isFile
+    && !releaseStorePassword.isNullOrBlank()
+    && !releaseKeyAlias.isNullOrBlank()
+    && !releaseKeyPassword.isNullOrBlank()
+
 android {
     namespace = "com.hafiztraveltours.app"
     compileSdk {
@@ -39,6 +53,21 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        // Release signing comes ONLY from environment/CI secrets or untracked
+        // local.properties keys (releaseKeystorePath/Password/Alias/KeyPassword
+        // or HAFIZ_KEYSTORE_PATH/PASSWORD, HAFIZ_KEY_ALIAS, HAFIZ_KEY_PASSWORD).
+        // Nothing secret is committed. Release builds fail unless signing is complete.
+        create("release") {
+            if (releaseSigningReady) {
+                storeFile = rootProject.file(releaseKeystorePath!!)
+                storePassword = releaseStorePassword
+                keyAlias = releaseKeyAlias
+                keyPassword = releaseKeyPassword
+            }
+        }
+    }
+
     buildTypes {
         debug {
             resValue("string", "app_name", "Hafiz Travel")
@@ -47,7 +76,8 @@ android {
         }
         create("staging") {
             initWith(getByName("debug"))
-            resValue("string", "app_name", "Hafiz Travel")
+            // Staging talks to the production API: never debuggable.
+            isDebuggable = false
             buildConfigField("String", "API_BASE_URL", "\"$releaseApiUrl\"")
             manifestPlaceholders["cleartextTraffic"] = false
         }
@@ -55,8 +85,14 @@ android {
             resValue("string", "app_name", "Hafiz Travel")
             buildConfigField("String", "API_BASE_URL", "\"$releaseApiUrl\"")
             manifestPlaceholders["cleartextTraffic"] = false
-            optimization {
-                enable = false
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            if (releaseSigningReady) {
+                signingConfig = signingConfigs.getByName("release")
             }
         }
     }
@@ -103,4 +139,13 @@ dependencies {
     // Skeleton UI Shimmer
     implementation("com.facebook.shimmer:shimmer:0.5.0")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+}
+
+tasks.matching { it.name == "preReleaseBuild" }.configureEach {
+    doFirst {
+        check(releaseSigningReady) {
+            "Release signing is required. Set HAFIZ_KEYSTORE_PATH, HAFIZ_KEYSTORE_PASSWORD, " +
+                "HAFIZ_KEY_ALIAS, and HAFIZ_KEY_PASSWORD through environment variables or ignored local.properties."
+        }
+    }
 }

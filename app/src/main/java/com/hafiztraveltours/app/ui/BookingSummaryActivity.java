@@ -366,7 +366,7 @@ public class BookingSummaryActivity extends BaseActivity {
                     if ("UNPAID_DEPOSIT_EXISTS".equalsIgnoreCase(errorCode) || (rawError != null && rawError.contains("UNPAID_DEPOSIT_EXISTS"))) {
                         showUnpaidDepositBlockedDialog(blockingBookingNo);
                     } else {
-                        String errorMsg = rawError != null ? parseErrorMessage(rawError) : getString(R.string.booking_failed);
+                        String errorMsg = com.hafiztraveltours.app.network.ApiErrors.userMessage(BookingSummaryActivity.this, response, R.string.booking_failed);
                         Toast.makeText(BookingSummaryActivity.this, errorMsg, Toast.LENGTH_LONG).show();
                     }
                 }
@@ -447,28 +447,5 @@ public class BookingSummaryActivity extends BaseActivity {
                 })
                 .setNegativeButton(R.string.cancel, null)
                 .show();
-    }
-
-    private String parseErrorMessage(String rawJson) {
-        try {
-            org.json.JSONObject obj = new org.json.JSONObject(rawJson);
-            if (obj.has("message") && !obj.isNull("message")) {
-                String m = obj.optString("message", "").trim();
-                if (!m.isEmpty()) return m;
-            }
-            if (obj.has("errors") && !obj.isNull("errors")) {
-                org.json.JSONObject errors = obj.optJSONObject("errors");
-                if (errors != null) {
-                    java.util.Iterator<String> keys = errors.keys();
-                    if (keys.hasNext()) {
-                        org.json.JSONArray arr = errors.optJSONArray(keys.next());
-                        if (arr != null && arr.length() > 0) {
-                            return arr.optString(0, "");
-                        }
-                    }
-                }
-            }
-        } catch (Exception ignored) {}
-        return getString(R.string.booking_failed);
     }
 }
