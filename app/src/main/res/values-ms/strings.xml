@@ -3,13 +3,42 @@
     <string name="app_name">HafizTravel&amp;Tours</string>
     <string name="welcome_brand_name">HAFIZ TRAVEL &amp; TOURS</string>
     <string name="welcome_eyebrow">KURASI PERJALANAN PREMIER</string>
-    <string name="welcome_title">Perjalanan Luar Biasa,\nDireka dengan Keanggunan.</string>
-    <string name="welcome_subtitle">Daripada percutian antarabangsa ikonik merentasi Asia, Eropah dan sekitarnya, sehingga ibadah Umrah yang disusun dengan penuh ketenangan.</string>
+    <string name="welcome_title">Selamat Datang ke Hafiz Travel</string>
+    <string name="welcome_subtitle">Temui destinasi menarik, terokai pakej percutian dan urus perjalanan anda di satu tempat.</string>
     <string name="welcome_chip_worldwide">Pakej Percutian</string>
     <string name="welcome_chip_umrah">Umrah &amp; Ziarah</string>
     <string name="welcome_chip_custom">Pakej Khas</string>
     <string name="welcome_start_now">Mula Meneroka</string>
     <string name="welcome_already_have_account_full">Sudah mempunyai akaun? &lt;font color=\'#D81B60\'&gt;&lt;b&gt;Log Masuk&lt;/b&gt;&lt;/font&gt;</string>
+    <string name="welcome_no_account_full">Belum mempunyai akaun? &lt;font color=\'#D81B60\'&gt;&lt;b&gt;Daftar Akaun&lt;/b&gt;&lt;/font&gt;</string>
+
+    <!-- Onboarding Step 1: Prayer Times & Qibla -->
+    <string name="onboarding_step_1_of_2">LANGKAH 1 DARIPADA 2</string>
+    <string name="onboarding_prayer_title">Waktu Solat &amp; Kiblat</string>
+    <string name="onboarding_prayer_desc">Kekal terhubung dengan waktu solat anda sepanjang perjalanan.</string>
+    <string name="onboarding_action_enable">Aktifkan</string>
+    <string name="onboarding_action_maybe_later">Mungkin Nanti</string>
+
+    <!-- Onboarding Step 2: Notification Setup -->
+    <string name="onboarding_step_2_of_2">LANGKAH 2 DARIPADA 2</string>
+    <string name="onboarding_notif_title">Kekal Maklum</string>
+    <string name="onboarding_notif_desc">Dapatkan kemas kini penting mengenai tempahan, pembayaran dan perjalanan anda.</string>
+    <string name="onboarding_action_allow_notif">Benarkan Pemberitahuan</string>
+
+    <!-- Prayer & Azan Settings in Profile -->
+    <string name="profile_prayer_azan_section">Tetapan Waktu Solat &amp; Azan</string>
+    <string name="settings_prayer_times_title">Waktu Solat &amp; Kiblat</string>
+    <string name="settings_prayer_times_desc">Pengiraan solat berasaskan lokasi dan arah kiblat</string>
+    <string name="settings_azan_notif_title">Peringatan &amp; Azan</string>
+    <string name="settings_azan_notif_desc">Terima peringatan dan audio azan pada waktu solat</string>
+    <string name="settings_app_notif_title">Pemberitahuan Aplikasi</string>
+    <string name="settings_app_notif_desc">Kemas kini perjalanan, peringatan tempahan dan promosi</string>
+    <string name="settings_background_op_title">Operasi Latar Belakang</string>
+    <string name="settings_background_op_desc">Benarkan operasi latar belakang untuk azan tepat pada masanya</string>
+    <string name="settings_background_op_enabled">Aktif</string>
+    <string name="settings_background_op_configure">Konfigurasi</string>
+    <string name="prayer_permission_required_toast">Kebenaran lokasi diperlukan untuk waktu solat yang tepat.</string>
+    <string name="notif_permission_required_toast">Kebenaran pemberitahuan diperlukan untuk peringatan aplikasi.</string>
     <string name="filter_all">Semua</string>
     <string name="login_title">Selamat Kembali</string>
     <string name="login_subtitle">Log masuk untuk rancang percutian impian anda</string>
@@ -28,9 +57,57 @@
     <string name="login_failed_user_not_found">Tiada akaun dijumpai dengan emel ini.</string>
     <string name="login_failed_wrong_password">Kata laluan tidak tepat. Sila cuba lagi.</string>
     <string name="login_failed_default">Log masuk gagal. Sila periksa maklumat anda.</string>
+
+    <!-- FLOW A: Account Verification -->
+    <string name="verify_account_title">Sahkan Akaun Anda</string>
+    <string name="verify_account_desc">Kami telah menghantar kod pengesahan 6 digit ke &lt;b&gt;%1$s&lt;/b&gt;</string>
+    <string name="verify_account_button">Sahkan Akaun</string>
+    <string name="verify_account_verifying">Mengesahkan…</string>
+    <string name="verify_account_resend_prompt">Tidak menerima kod?</string>
+    <string name="verify_account_resend_action">Hantar Semula Kod</string>
+    <string name="verify_account_resend_countdown">Anda boleh menghantar semula kod dalam %1$s</string>
+    <string name="verify_account_back_login">Kembali ke Log Masuk</string>
+    <string name="verify_account_success">Akaun anda telah berjaya disahkan! Sila log masuk.</string>
+    <string name="verify_account_resend_success">Kod pengesahan baharu telah dihantar.</string>
+    <string name="verify_account_code_required">Sila masukkan kesemua 6 digit kod pengesahan.</string>
+    <string name="unverified_account_login_msg">Sila sahkan akaun anda sebelum log masuk.</string>
+    <string name="unverified_account_verify_now">Sahkan Sekarang</string>
+
+    <!-- FLOW B: Forgot Password Flow -->
+    <string name="forgot_pass_screen_title">Lupa Kata Laluan?</string>
+    <string name="forgot_pass_screen_desc">Masukkan alamat e-mel anda dan kami akan menghantar kod pengesahan untuk menetapkan semula kata laluan anda.</string>
+    <string name="forgot_pass_email_hint">Alamat E-mel</string>
+    <string name="forgot_pass_btn_send_code">Hantar Kod</string>
+    <string name="forgot_pass_sending">Menghantar Kod…</string>
+    <string name="reset_password_account_not_found">Tiada akaun ditemui untuk alamat e-mel ini.</string>
+
+    <!-- FLOW B: Enter Reset Code -->
+    <string name="enter_reset_code_title">Sahkan Kod Tetapan Semula</string>
+    <string name="enter_reset_code_desc">Masukkan kod 6 digit yang dihantar ke &lt;b&gt;%1$s&lt;/b&gt;</string>
+    <string name="enter_reset_code_btn_verify">Sahkan Kod</string>
+    <string name="enter_reset_code_verifying">Mengesahkan…</string>
+    <string name="enter_reset_code_resend_prompt">Tidak menerima kod?</string>
+    <string name="enter_reset_code_resend_action">Hantar Semula Kod</string>
+    <string name="enter_reset_code_resend_countdown">Hantar semula dalam %1$s</string>
+    <string name="enter_reset_code_resend_success">Kod pengesahan baharu telah dihantar.</string>
+
+    <!-- FLOW B: Reset Password -->
+    <string name="reset_pass_screen_title">Tetapkan Semula Kata Laluan</string>
+    <string name="reset_pass_screen_desc">Cipta kata laluan baharu untuk akaun anda.</string>
+    <string name="reset_pass_new_password_hint">Kata Laluan Baharu</string>
+    <string name="reset_pass_confirm_password_hint">Sahkan Kata Laluan Baharu</string>
+    <string name="reset_pass_btn_submit">Tetapkan Semula Kata Laluan</string>
+    <string name="reset_pass_submitting">Mengemas kini Kata Laluan…</string>
+
+    <!-- FLOW B: Password Reset Success -->
+    <string name="reset_pass_success_title">Kata Laluan Berjaya Ditetapkan Semula</string>
+    <string name="reset_pass_success_desc">Kata laluan anda telah dikemas kini. Anda kini boleh log masuk menggunakan kata laluan baharu anda.</string>
+    <string name="reset_pass_success_btn_login">Kembali ke Log Masuk</string>
     <string name="signup_title">Cipta Akaun</string>
     <string name="signup_subtitle">Daftar untuk mula rancang percutian anda.</string>
-    <string name="hint_full_name">Nama Penuh</string>
+    <string name="hint_full_name">Nama Penuh *</string>
+    <string name="hint_username">Nama Pengguna *</string>
+    <string name="hint_nickname">Nama Pengguna *</string>
     <string name="hint_phone">Nombor Telefon</string>
     <string name="hint_confirm_password">Sahkan Kata Laluan</string>
     <string name="signup_button">Daftar</string>
@@ -41,26 +118,36 @@
     <string name="signup_have_account">Sudah ada akaun? Log masuk</string>
     <string name="signup_or_with">Atau Daftar Dengan</string>
     <string name="signup_guest">Daftar sebagai Tetamu</string>
+    <string name="password_strength_too_short">Terlalu Pendek</string>
     <string name="password_strength_weak">Lemah</string>
     <string name="password_strength_medium">Sederhana</string>
     <string name="password_strength_strong">Kuat</string>
+    <string name="passwords_match">Kata laluan sepadan</string>
+    <string name="passwords_mismatch">Kata laluan tidak sepadan</string>
     <string name="btn_continue_google">Teruskan dengan Google</string>
     <string name="social_signup_google">Daftar dengan Google</string>
     <string name="select_country_code">Pilih Kod Negara</string>
     <string name="region_southeast_asia">ASIA TENGGARA</string>
     <string name="region_international">ANTARABANGSA LAIN</string>
     <string name="err_name_required">Sila masukkan nama penuh</string>
+    <string name="err_username_required">Sila masukkan nama pengguna anda</string>
+    <string name="err_username_taken">Nama pengguna telah digunakan</string>
+    <string name="err_nickname_required">Sila masukkan nama pengguna anda.</string>
     <string name="err_email_invalid">Sila masukkan emel yang sah</string>
     <string name="err_phone_invalid">Sila masukkan nombor telefon yang sah</string>
-    <string name="err_password_short">Kata laluan sekurang-kurangnya 6 aksara</string>
+    <string name="err_password_short">Kata laluan sekurang-kurangnya 8 aksara</string>
     <string name="err_password_mismatch">Kata laluan tidak sepadan</string>
     <string name="err_signup_failed">Pendaftaran gagal. Sila cuba lagi.</string>
     <string name="err_signup_email_exists">Emel atau nombor telefon telah didaftarkan</string>
     <string name="err_network">Ralat sambungan. Sila periksa internet anda.</string>
-    <string name="signup_success">Pendaftaran berjaya!</string>
-    <string name="password_tip_length">8+ aksara</string>
-    <string name="password_tip_number">0–9</string>
-    <string name="password_tip_symbol">!@#$</string>
+    <string name="signup_success">Pendaftaran berjaya! Sila log masuk untuk meneruskan.</string>
+    <string name="password_requirements_header">Syarat kata laluan</string>
+    <string name="req_pass_min_length">Sekurang-kurangnya 8 aksara</string>
+    <string name="req_pass_uppercase">Huruf besar</string>
+    <string name="req_pass_lowercase">Huruf kecil</string>
+    <string name="req_pass_number">Nombor</string>
+    <string name="req_pass_special">Aksara khas</string>
+    <string name="password_status_strong">Kata laluan kukuh</string>
     <string name="guest_greeting">Assalamualaikum</string>
     <string name="user_greeting">Assalamualaikum</string>
     <string name="hero_subtitle_guest">Tetamu Jemaah</string>
@@ -68,15 +155,16 @@
     <string name="hero_headline_guest">Ke mana destinasi\nimpian anda?</string>
     <string name="hero_headline_user">Ke mana destinasi\nimpian anda?</string>
     <string name="nav_home">Utama</string>
+    <string name="nav_booking">Tempahan Saya</string>
     <string name="nav_explore">Teroka</string>
+    <string name="nav_favorite">Kegemaran</string>
+    <string name="nav_profile">Profil</string>
     <string name="nav_umrah">Umrah</string>
     <string name="nav_tour">Tour</string>
-    <string name="nav_favorite">Kegemaran</string>
     <string name="quick_nusuk">Nusuk</string>
     <string name="quick_guideline">Panduan Umrah</string>
     <string name="quick_checklist">Senarai Semak</string>
     <string name="quick_whatsapp">WhatsApp</string>
-    <string name="prayer_times_title">Waktu Solat Hari Ini (anggaran)</string>
     <string name="search_placeholder">Cari destinasi anda</string>
     <string name="popular_packages">Pakej Popular</string>
     <string name="see_all">Lihat Semua</string>
@@ -115,6 +203,10 @@
     <string name="prayer_maghrib">Maghrib</string>
     <string name="prayer_isyak">Isyak</string>
     <string name="prayer_default_location">Waktu Solat - %1$s</string>
+    <string name="prayer_times_header">Waktu Solat</string>
+    <string name="prayer_times_subtitle">Jadual Waktu Solat</string>
+    <string name="prayer_label_upcoming">WAKTU SETERUSNYA</string>
+    <string name="prayer_refresh_action">Kemaskini</string>
     <string name="menu_profile">Profil Saya</string>
     <string name="menu_language">Bahasa</string>
     <string name="menu_about_us">Tentang Kami</string>
@@ -325,9 +417,9 @@
     <string name="hint_enter_email">Masukkan emel anda</string>
     <string name="btn_send">HANTAR</string>
     <string name="btn_cancel">BATAL</string>
-    <string name="reset_password_invalid_email">Sila masukkan emel yang sah</string>
-    <string name="reset_password_sent">Pautan tetapan semula kata laluan telah dihantar. Sila semak peti masuk anda.</string>
-    <string name="reset_password_failed">Gagal menghantar emel. Sila cuba lagi.</string>
+    <string name="reset_password_invalid_email">Sila masukkan alamat e-mel yang sah</string>
+    <string name="reset_password_sent">E-mel tetapan semula kata laluan telah dihantar. Sila semak peti masuk anda.</string>
+    <string name="reset_password_failed">Penetapan semula kata laluan gagal. Sila cuba lagi.</string>
     <string name="login_google_signin_failed">Log masuk Google gagal: Kod %1$d</string>
     <string name="login_google_success">Log masuk Google berjaya! %1$s</string>
     <string name="login_google_failed">Log masuk Google gagal. Sila cuba lagi.</string>
@@ -512,7 +604,7 @@
     <string name="dest_europe">Eropah / Balkan</string>
     <string name="dest_vietnam">Vietnam</string>
     <string name="dest_china">China</string>
-    <string name="prayer_times_header">Waktu Solat Hari Ini</string>
+    <string name="prayer_times_today_label">Waktu Solat Hari Ini</string>
     <string name="prayer_times_today_format">Waktu Solat Hari Ini (%1$s)</string>
     <string name="explore_package_arrow">Teroka Pakej →</string>
     <string name="exclusive_offer_title">Tawaran Eksklusif Jemaah</string>
@@ -556,8 +648,9 @@
     <string name="profile_reset_message">Hantar pautan set semula kata laluan ke emel: %1$s?</string>
     <string name="profile_reset_send">Hantar</string>
     <string name="profile_reset_sent">Pautan tetapan semula kata laluan telah dihantar ke emel anda!</string>
-    <string name="profile_field_full_name">Nama Penuh</string>
-    <string name="profile_field_phone">Nombor Telefon</string>
+    <string name="profile_field_full_name">Nama Penuh <font color="#DC2626">*</font></string>
+    <string name="profile_field_nickname">Nama Panggilan <font color="#DC2626">*</font></string>
+    <string name="profile_field_phone">Nombor Telefon <font color="#DC2626">*</font></string>
     <string name="profile_field_email">E-mel</string>
     <string name="privacy_terms_toast">Hafiz Travel &amp; Tours Sdn Bhd - Privasi &amp; Terma</string>
     <string name="package_fallback_destination">Destinasi Perjalanan</string>
@@ -575,15 +668,24 @@
     <string name="detail_whats_covered">Apa Yang Termasuk</string>
     <string name="detail_whats_covered_sub">Kemudahan dan perkhidmatan yang disediakan dalam pakej anda</string>
     <string name="cat_items_covered_format">%d perkara disertakan</string>
-    <string name="detail_not_covered">Not Covered</string>
+    <string name="detail_not_covered">Tidak Termasuk</string>
     <string name="detail_not_covered_sub">Perkara yang tidak termasuk dalam harga pakej</string>
+    <string name="detail_packing_sub">Barangan disyorkan dan persediaan untuk perjalanan anda</string>
     <string name="detail_terms_guidelines">Syarat &amp; Garis Panduan Pakej</string>
+    <string name="detail_terms_sub">Terma penting, peraturan dan garis panduan tempahan</string>
     <string name="detail_required_documents">Dokumen Yang Diperlukan</string>
+    <string name="detail_docs_sub">Dokumen perjalanan, visa dan sijil yang diperlukan</string>
+    <string name="detail_notes_sub_fallback">Maklumat penting untuk jemaah dan pelancong</string>
+    <string name="detail_cancellation_sub">Terma, garis masa, dan kelayakan pemulangan bayaran</string>
+    <string name="detail_booking_guide">Panduan Tempahan</string>
+    <string name="detail_booking_guide_sub">Langkah mudah untuk membuat tempahan pakej bersama Hafiz Travel &amp; Tours</string>
     <string name="room_quint">Bilik Berlima (Quint)</string>
     <string name="room_quad">Bilik Berempat (Quad)</string>
     <string name="room_triple">Bilik Bertiga (Triple)</string>
     <string name="room_double">Bilik Berdua (Double)</string>
     <string name="room_single">Bilik Perseorangan (Single)</string>
+    <string name="room_standard">Bilik Standard</string>
+    <string name="note_badge_important">Penting</string>
     <string name="detail_price_from">Harga Bermula Dari</string>
     <string name="cat_flights">Penerbangan</string>
     <string name="cat_accommodation">Penginapan</string>
@@ -598,6 +700,8 @@
     <string name="detail_packing_heading">Senarai Barang Disyorkan</string>
     <string name="detail_section_notes">Nota Penting &amp; Panduan Jemaah</string>
     <string name="detail_section_gallery">Galeri Perjalanan</string>
+    <string name="detail_section_related_packages">Pakej Berkaitan</string>
+    <string name="detail_section_cancellation_policy">Polisi Pembatalan &amp; Pemulangan</string>
     <string name="detail_per_pax">seorang</string>
     <string name="nights_unit">Malam</string>
     <string name="nights_label_makkah">Makkah</string>
@@ -627,7 +731,7 @@
     <string name="promo_hero_kicker">MAKKAH &amp; MADINAH</string>
     <string name="promo_hero_title">Pakej Umrah Cuti Sekolah &amp; Syawal</string>
     <string name="promo_hero_price">Dari RM 7,990 • 12 Hari 10 Malam</string>
-    <string name="google_review_summary">4.9 (250+ Ulasan Google)</string>
+    <string name="google_review_summary">4.9 (100+ Ulasan Google)</string>
     <string name="package_vip_badge">PAKEJ PILIHAN VIP</string>
     <string name="package_whatsapp_enquiry">Tanya WhatsApp</string>
     <string name="splash_eyebrow">EKSPEDISI SELURUH DUNIA &amp; UMRAH</string>
@@ -643,13 +747,820 @@
     <string name="azan_stop">Berhenti</string>
     <string name="azan_channel_name">Notifikasi Azan</string>
     <string name="azan_channel_desc">Notifikasi untuk waktu solat &amp; azan</string>
+    <string name="qibla_title">Arah Kiblat</string>
+    <string name="qibla_subtitle">Cari arah Kaabah</string>
+    <string name="qibla_screen_title">Kompas Kiblat</string>
+    <string name="qibla_aligned">✓ Menghadap Kiblat</string>
+    <string name="qibla_degree_format">Kiblat: %1$.0f°</string>
+    <string name="qibla_kaaba_dist">Kaabah: Makkah, Arab Saudi</string>
+    <string name="qibla_current_location">Lokasi Semasa</string>
+    <string name="qibla_label_qibla">Kiblat</string>
+    <string name="qibla_label_distance">Jarak</string>
+    <string name="qibla_label_offset">Pesongan</string>
+    <string name="qibla_no_sensor">Sensor peranti tidak tersedia. Tidak dapat memaparkan pergerakan kompas.</string>
+    <string name="qibla_permission_needed">Kebenaran lokasi diperlukan untuk mengira arah kiblat yang tepat.</string>
+    <string name="qibla_grant_permission">Benarkan Kebenaran Lokasi</string>
+    <string name="qibla_accuracy_title">Ketepatan kompas</string>
+    <string name="qibla_accuracy_notice">Untuk arah yang lebih tepat, pegang telefon anda secara mendatar dan jauhkan daripada magnet, objek logam dan peranti elektronik.</string>
+    <string name="qibla_bearing_label">Arah Kiblat (Bearing)</string>
+    <string name="qibla_distance_label">Jarak ke Kaabah</string>
+    <string name="qibla_angle_label">Sudut ke Kiblat</string>
+    <string name="qibla_angle_left">%1$d° ke kiri</string>
+    <string name="qibla_angle_right">%1$d° ke kanan</string>
+    <string name="qibla_angle_behind">Kiblat di belakang anda (%1$d°)</string>
+    <string name="qibla_angle_behind_left">Kiblat di belakang sebelah kiri (%1$d°)</string>
+    <string name="qibla_angle_behind_right">Kiblat di belakang sebelah kanan (%1$d°)</string>
+    <string name="qibla_angle_aligned">Tepat</string>
+    <string name="qibla_instruction">Arahkan jarum merah ke arah Kiblat</string>
+    <string name="qibla_hold_steady">Kekalkan telefon untuk mengesahkan Kiblat</string>
+    <string name="qibla_hold_steady_timer">Kekalkan telefon · %1$.1fs</string>
+    <string name="qibla_confirmed_aligned">Telefon anda menghadap arah Kiblat</string>
+    <string name="qibla_facing_sub">Menghadap Kaabah</string>
+    <string name="qibla_kaaba_location">Kaabah · Makkah, Arab Saudi</string>
+    <string name="qibla_interference">⚠ Gangguan magnet dikesan\nJauhkan telefon daripada objek logam dan kalibrasikan telefon.</string>
     <string name="battery_title">Pastikan Azan Berfungsi</string>
-    <string name="battery_message">Untuk pastikan notifikasi &amp; azan berbunyi tepat pada waktunya walaupun app ini ditutup, disyorkan benarkan app ini berjalan tanpa had di latar belakang.\n\nLangkah ini pilihan sahaja, boleh disetkan kemudian melalui Tetapan.</string>
-    <string name="battery_now">Setkan Sekarang</string>
+    <string name="battery_message">Benarkan Hafiz Travel berjalan di latar belakang supaya notifikasi solat dan Azan dapat dimainkan tepat pada masanya, walaupun aplikasi ditutup.</string>
+    <string name="battery_supporting_text">Langkah ini adalah pilihan dan boleh dikonfigurasi kemudian di Tetapan.</string>
+    <string name="battery_now">Tetapkan Sekarang</string>
     <string name="battery_later">Nanti</string>
     <string name="hijri_date_fallback">1 Rejab 1448H</string>
     <string name="btn_book_now">TEMPAH SEKARANG</string>
     <string name="btn_ask_questions">Tanya</string>
     <string name="selected_room_label">Bilik Terpilih</string>
     <string name="booking_flow_notice">Pilihan terpilih: %1$s (%2$s). Sila teruskan ke borang maklumat jemaah.</string>
+    <string name="booking_no_format">No. Tempahan: %1$s</string>
+    <string name="booking_failed">Gagal menghantar tempahan. Sila semak sambungan dan cuba lagi.</string>
+    <string name="my_bookings_title">Tempahan Saya</string>
+    <string name="back">Kembali</string>
+    <string name="loyalty_points">Mata Ganjaran</string>
+    <string name="loyalty_tier_progress">RM%1$s lagi ke %2$s</string>
+    <string name="loyalty_top_tier">Tahap tertinggi dicapai</string>
+    <string name="stat_bookings">Tempahan</string>
+    <string name="stat_total_spent">Jumlah Belanja</string>
+    <string name="stat_outstanding">Baki Tertunggak</string>
+    <string name="member_since_format">Ahli sejak %1$s</string>
+    <string name="customer_no_format">ID Ahli: %1$s</string>
+    <string name="login_cta">Log Masuk / Daftar</string>
+    <string name="guest_hero_subtitle">Log masuk untuk lihat tempahan &amp; ganjaran anda</string>
+    <string name="profile_language">Bahasa</string>
+    <string name="upcoming_trip">Perjalanan Akan Datang</string>
+    <string name="profile_theme_current">Terang</string>
+    <string name="logout_confirm_message">Adakah anda pasti mahu log keluar daripada akaun anda?</string>
+    <string name="profile_saving">Menyimpan…</string>
+    <string name="profile_update_failed">Gagal mengemaskini profil. Sila cuba lagi.</string>
+
+    <!-- Profile & Document Vault Strings -->
+    <string name="profile_field_ic_no">Nombor Kad Pengenalan (IC) <font color="#DC2626">*</font></string>
+    <string name="profile_field_passport_no">Nombor Pasport <font color="#DC2626">*</font></string>
+    <string name="profile_field_passport_expiry">Tarikh Tamat Pasport (YYYY-MM-DD) <font color="#DC2626">*</font></string>
+    <string name="profile_field_emergency_name">Nama Kontak Kecemasan <font color="#DC2626">*</font></string>
+    <string name="profile_field_emergency_phone">No. Tel Kontak Kecemasan <font color="#DC2626">*</font></string>
+    <string name="profile_field_mahram_name">Nama Mahram (Jika berkenaan)</string>
+    <string name="profile_age_format">Umur: %1$d</string>
+    <string name="profile_travel_documents">Dokumen Perjalanan</string>
+    <string name="doc_passport_copy">Salinan Pasport (Muka Utama) <font color="#DC2626">*</font></string>
+    <string name="doc_visa_managed_by_company">Diuruskan Syarikat</string>
+    <string name="doc_visa_company_note">Visa perjalanan anda akan diuruskan dan disediakan secara terus oleh pihak Hafiz Travel &amp; Tours sebelum berlepas. Anda tidak perlu memuat naik dokumen ini.</string>
+    <string name="doc_status_verified">Disahkan</string>
+    <string name="doc_status_pending">Dalam Semakan</string>
+    <string name="doc_status_not_uploaded">Belum Dimuat Naik</string>
+    <string name="doc_upload_btn">Muat Naik / Lihat</string>
+
+    <string name="profile_section_personal">Maklumat Peribadi</string>
+    <string name="profile_section_travel_identity">Pasport &amp; Identiti Perjalanan</string>
+    <string name="profile_section_emergency">Kecemasan &amp; Sokongan Rombongan</string>
+    <string name="doc_subtitle_passport">Diperlukan untuk Tiket Penerbangan &amp; Visa Saudi</string>
+    <string name="doc_action_upload">Muat Naik Dokumen</string>
+    <string name="doc_action_view">Lihat Dokumen</string>
+    <string name="doc_action_replace">Ganti Dokumen</string>
+    <string name="doc_trip_requirements">Syarat Dokumen Perjalanan</string>
+    <string name="doc_auto_reused_tag">Digunakan Semula Dari Profil</string>
+    <string name="doc_trip_info">Dokumen digunakan semula secara automatik dari profil anda bersama pelepasan khas trip.</string>
+    <string name="doc_status_rejected">Ditolak</string>
+    <string name="doc_status_expired">Tamat Tempoh</string>
+    <string name="doc_rejection_default">Sila muat naik semula salinan yang jelas</string>
+    <string name="doc_rejection_reason_prefix">Sebab: %1$s</string>
+
+    <!-- Redesigned Edit Profile Strings -->
+    <string name="edit_profile_title">Kemaskini Profil</string>
+    <string name="edit_profile_subtitle">Kemaskini maklumat peribadi, identiti, pasport, alamat &amp; mahram anda</string>
+    <string name="section_personal_info">Maklumat Peribadi</string>
+    <string name="section_identity_info">Identiti / MyKad</string>
+    <string name="section_passport_info">Maklumat Pasport</string>
+    <string name="section_residential_address">Alamat Kediaman</string>
+    <string name="section_emergency_contact">Kontak Kecemasan</string>
+    <string name="section_mahram_info">Maklumat Mahram</string>
+    <string name="section_security">Keselamatan</string>
+    <string name="profile_field_gender">Jantina <font color="#DC2626">*</font></string>
+    <string name="profile_field_dob">Tarikh Lahir <font color="#DC2626">*</font></string>
+    <string name="profile_field_nationality">Kewarganegaraan / Negara <font color="#DC2626">*</font></string>
+    <string name="profile_field_issuing_country">Negara Pengeluar Pasport <font color="#DC2626">*</font></string>
+    <string name="profile_field_address_line_1">Alamat Baris 1 <font color="#DC2626">*</font></string>
+    <string name="profile_field_address_line_2">Alamat Baris 2 (Pilihan)</string>
+    <string name="profile_field_postcode">Poskod <font color="#DC2626">*</font></string>
+    <string name="profile_field_city">Bandar / Daerah <font color="#DC2626">*</font></string>
+    <string name="profile_field_state">Negeri <font color="#DC2626">*</font></string>
+    <string name="profile_field_country">Negara <font color="#DC2626">*</font></string>
+    <string name="hint_address_line_1">Alamat jalan, Peti Surat</string>
+    <string name="hint_address_line_2">Pangsapuri, suite, unit, bangunan, tingkat</string>
+    <string name="hint_postcode">Contoh: 80000</string>
+    <string name="hint_city">Contoh: Johor Bahru</string>
+    <string name="hint_state">Contoh: Johor</string>
+    <string name="hint_country">Contoh: Malaysia</string>
+    <string name="label_mahram_applicable">Berkenaan Mahram?</string>
+    <string name="label_relationship">Hubungan</string>
+    <string name="hint_relationship">Contoh: Suami, Bapa, Abang</string>
+    <string name="change_password_dialog_subtitle">Masukkan kata laluan semasa dan baru anda di bawah</string>
+    <string name="hint_current_password_required">Kata Laluan Semasa <font color="#DC2626">*</font></string>
+    <string name="hint_new_password_required">Kata Laluan Baru <font color="#DC2626">*</font></string>
+    <string name="hint_confirm_new_password_required">Sahkan Kata Laluan Baru <font color="#DC2626">*</font></string>
+    <string name="btn_update_password">Kemaskini Kata Laluan</string>
+    <string name="password_updating">Mengemaskini...</string>
+    <string name="password_updated_success">Kata laluan berjaya dikemaskini!</string>
+    <string name="password_update_failed">Gagal mengemaskini kata laluan. Sila semak kata laluan semasa anda.</string>
+    <string name="passport_expiry_warning">Pasport tamat tidak lama lagi (%1$s). Pembaharuan disyorkan sebelum perjalanan.</string>
+    <string name="passport_expired_warning">Pasport telah tamat luput (%1$s). Pembaharuan diperlukan sebelum perjalanan.</string>
+    <string name="yes">Ya</string>
+    <string name="no">Tidak</string>
+    <string name="doc_vault_info">Dokumen perjalanan anda, semuanya di satu tempat.</string>
+    <string name="vault_security_banner_title">Simpanan Dokumen Selamat</string>
+    <string name="vault_security_banner_body">Dokumen anda disimpan secara selamat dan dilindungi.</string>
+    <string name="vault_section_identity">Dokumen Identiti</string>
+    <string name="vault_section_photo">Foto Peribadi</string>
+    <string name="vault_section_travel">Dokumen Khusus Perjalanan</string>
+    <string name="doc_ic_title">MyKad / Kad Pengenalan (IC) <font color="#DC2626">*</font></string>
+    <string name="doc_ic_desc">Kad pengenalan diperlukan untuk pendaftaran agensi &amp; visa</string>
+    <string name="doc_passport_photo_title">Foto Pasport <font color="#DC2626">*</font></string>
+    <string name="doc_passport_photo_desc">Foto pasport berlatar belakang putih (JPG/PNG)</string>
+    <string name="doc_travel_visa_title">Visa Perjalanan</string>
+    <string name="doc_travel_visa_desc">Dokumen visa yang diperlukan untuk destinasi antarabangsa tertentu.</string>
+    <string name="doc_status_under_review">Dalam Semakan</string>
+    <string name="doc_updated_at_format">Dimuat naik: %1$s</string>
+    <string name="doc_expires_at_format">Tamat tempoh: %1$s</string>
+    <string name="legend_required"><font color="#DC2626">*</font> Diperlukan</string>
+
+    <!-- Requirements & Upload Dialog Strings -->
+    <string name="doc_view_requirements">Lihat Syarat</string>
+    <string name="req_subtitle">Sila semak spesifikasi standard sebelum memuat naik</string>
+    <string name="req_passport_title">Syarat Dokumen Pasport</string>
+    <string name="req_passport_1">Salinan jelas muka surat biodata pasport</string>
+    <string name="req_passport_2">Nama penuh &amp; nombor pasport mesti boleh dibaca jelas</string>
+    <string name="req_passport_3">Foto pasport mesti kelihatan jelas</string>
+    <string name="req_passport_4">Dokumen tidak boleh kabur atau terpotong</string>
+    <string name="req_ic_title">Syarat MyKad / IC</string>
+    <string name="req_ic_1">Salinan jelas MyKad (depan dan belakang jika perlu)</string>
+    <string name="req_ic_2">Nama penuh &amp; nombor kad pengenalan mesti boleh dibaca</string>
+    <string name="req_ic_3">Dokumen tidak boleh kabur atau terpotong</string>
+    <string name="req_photo_title">Syarat Foto Pasport</string>
+    <string name="req_photo_1">Foto saiz pasport terkini</string>
+    <string name="req_photo_2">Muka kelihatan jelas dengan latar belakang polos</string>
+    <string name="req_photo_3">Tiada kekaburan melampau, bayang, atau pencahayaan gelap</string>
+    <string name="req_visa_title">Syarat Visa Perjalanan</string>
+    <string name="req_visa_1">Dokumen visa perjalanan yang sah dikeluarkan untuk negara tujuan</string>
+    <string name="req_visa_2">Butiran visa, destinasi, dan no. rujukan boleh dibaca</string>
+    <string name="req_visa_3">Tarikh dikeluarkan &amp; tamat tempoh dipaparkan jelas</string>
+    <string name="upload_accepted_formats">Format diterima: JPG, JPEG, PNG, PDF</string>
+    <string name="upload_accepted_formats_photo">Format diterima: JPG, JPEG, PNG</string>
+    <string name="upload_max_size">Saiz maksimum fail: 5 MB</string>
+    <string name="upload_tip">Pastikan dokumen jelas, boleh dibaca, dan tidak terpotong.</string>
+    <string name="btn_choose_file">Pilih Fail dari Peranti</string>
+    <string name="btn_got_it">Faham</string>
+    <string name="upload_privacy_notice">Maklumat peribadi dienkripsi dan diproses secara selamat untuk pengesahan.</string>
+    <string name="err_file_format">Format tidak disokong. Diterima: JPG, JPEG, PNG, PDF.</string>
+    <string name="err_file_format_photo">Format tidak disokong. Diterima: JPG, JPEG, PNG.</string>
+    <string name="err_file_size">Fail terlalu besar. Saiz maksimum dibenarkan ialah 5 MB.</string>
+    <string name="err_file_empty">Fail yang dipilih tidak sah atau kosong. Sila pilih fail lain.</string>
+    <string name="doc_upload_success">Dokumen berjaya dimuat naik untuk semakan!</string>
+
+    <!-- Verification Progress Strings -->
+    <string name="doc_verification_title">Pengesahan Dokumen</string>
+    <string name="doc_progress_count_format">%1$d daripada %2$d disahkan</string>
+    <string name="msg_doc_progress_start">Muat naik dokumen wajib anda untuk bermula.</string>
+    <string name="msg_doc_progress_partial">Sesetengah dokumen masih memerlukan perhatian anda.</string>
+    <string name="msg_doc_progress_under_review">Semua dokumen wajib telah dihantar. Pengesahan sedang dijalankan.</string>
+    <string name="msg_doc_progress_complete">Semua dokumen wajib telah disahkan.</string>
+    <string name="msg_doc_progress_rejected">Sesetengah dokumen memerlukan tindakan. Sila semak dan ganti dokumen yang ditolak.</string>
+
+    <!-- Document Status Guidance Strings -->
+    <string name="doc_guidance_under_review">Dokumen anda telah dihantar dan sedang disemak oleh Hafiz Travel.</string>
+    <string name="doc_guidance_verified">Dokumen anda telah diterima dan disahkan.</string>
+    <string name="doc_verified_at_format">Disahkan: %1$s</string>
+    <string name="doc_status_not_required">Tidak Diperlukan</string>
+    <string name="email_readonly_helper">E-mel akaun berdaftar anda</string>
+
+    <string name="prefilled_from_profile">Diisi dari profil anda</string>
+
+
+    <!-- Jemaah & Traveller Selection (Malay) -->
+    <string name="passenger_details_title">Jemaah</string>
+    <string name="passenger_booking_summary">RINGKASAN TEMPAHAN</string>
+    <string name="passenger_departure_format">Pelepasan: %1$s</string>
+    <string name="passenger_room_pax_format">%1$s • %2$d Jemaah</string>
+    <string name="passenger_section_your_profile">BUTIRAN ANDA</string>
+    <string name="passenger_section_additional">JEMAAH TAMBAHAN</string>
+    <string name="passenger_no_additional">Tiada jemaah tambahan ditambah lagi.</string>
+    <string name="passenger_btn_add_another">+ Tambah Jemaah Lain</string>
+    <string name="passenger_footer_count_format">%1$d daripada %2$d Jemaah Ditambah</string>
+    <string name="passenger_btn_continue">TERUSKAN KE SEMAKAN TEMPAHAN</string>
+    <string name="passenger_profile_complete">✓ Profil Lengkap</string>
+    <string name="passenger_profile_incomplete">⚠ Profil Belum Lengkap</string>
+    <string name="passenger_passport_label">Pasport: %1$s</string>
+    <string name="passenger_nationality_label">Kewarganegaraan: %1$s</string>
+    <string name="passenger_doc_passport_available">✓ Dokumen Pasport Tersedia</string>
+    <string name="passenger_doc_passport_pending">• Salinan Pasport: Belum dimuat naik (boleh dihantar selepas tempahan)</string>
+    <string name="passenger_doc_photo_available">✓ Gambar Pasport Tersedia</string>
+    <string name="passenger_doc_photo_pending">• Gambar Pasport: Belum dimuat naik (boleh dihantar selepas tempahan)</string>
+    <string name="passenger_doc_visa_info">• Visa Perjalanan: Diuruskan oleh pihak syarikat</string>
+    <string name="passenger_passport_validity_info">• Tempoh Sah Pasport: Kurang %1$d bulan / perlu diperbaharui sebelum berlepas</string>
+    <string name="passenger_passport_expiry_pending">• Tarikh Luput Pasport: Belum dinyatakan (boleh dikemaskini kemudian)</string>
+    <string name="passenger_doc_ic_available">✓ Dokumen MyKad / IC Tersedia</string>
+    <string name="passenger_btn_edit_profile">Edit Profile</string>
+    <string name="passenger_profile_incomplete_warn">Profil anda belum memenuhi keperluan tempahan pakej ini.\nSila lengkapkan profil anda terlebih dahulu.</string>
+    <string name="passenger_missing_fields_header">Maklumat Profil Diperlukan:</string>
+    <string name="passenger_btn_complete_profile">LENGKAPKAN PROFIL SEKARANG</string>
+    <string name="passenger_not_logged_in">Pengguna belum log masuk</string>
+    <string name="passenger_profile_not_found">Profil tidak dijumpai</string>
+    <string name="passenger_missing_name">Nama Penuh (seperti IC / Pasport)</string>
+    <string name="passenger_missing_ic">No. Kad Pengenalan / MyKad</string>
+    <string name="passenger_missing_passport">No. Pasport</string>
+    <string name="passenger_missing_passport_expiry">Tarikh Luput Pasport</string>
+    <string name="passenger_missing_passport_validity">Pasport tamat luput / kurang %1$d bulan sah</string>
+    <string name="passenger_missing_passport_doc">Salinan Dokumen Pasport</string>
+    <string name="passenger_missing_ic_doc">Salinan Dokumen MyKad / IC</string>
+    <string name="passenger_missing_clothes_size">Saiz Baju / Abaya</string>
+    <string name="passenger_traveller_title_format">Jemaah %1$d</string>
+    <string name="passenger_delete">Padam</string>
+    <string name="passenger_sub_personal_info">Maklumat Peribadi</string>
+    <string name="passenger_sub_passport_info">Dokumen Pasport Antarabangsa</string>
+    <string name="passenger_sub_extra_info">Pilihan Tambahan &amp; Mahram</string>
+    <string name="passenger_passport_hint_validity">Tempoh sah laku wajib sekurang-kurangnya 6 bulan sebelum pelepasan</string>
+    <string name="passenger_default_preview_name">Sila masukkan maklumat jemaah</string>
+    <string name="passenger_field_title_hint">Gelaran</string>
+    <string name="passenger_field_name_label">Nama Penuh seperti Pasport / IC *</string>
+    <string name="passenger_field_name_hint">Contoh: Fatimah Binti Abdullah</string>
+    <string name="passenger_field_dob_label">Tarikh Lahir</string>
+    <string name="passenger_field_gender_label">Jantina</string>
+    <string name="passenger_field_gender_hint">Pilih</string>
+    <string name="passenger_field_nationality_label">Kewarganegaraan</string>
+    <string name="passenger_field_ic_label">No. Kad Pengenalan / MyKad *</string>
+    <string name="passenger_field_ic_hint">Contoh: 950505-10-5544</string>
+    <string name="passenger_field_passport_label">No. Pasport Antarabangsa *</string>
+    <string name="passenger_field_passport_hint">Contoh: A98765432</string>
+    <string name="passenger_field_passport_expiry_label">Tarikh Luput Pasport *</string>
+    <string name="passenger_field_issuing_country_label">Negara Pengeluar</string>
+    <string name="passenger_field_clothes_size_label">Saiz Baju / Abaya</string>
+    <string name="passenger_field_clothes_size_hint">Pilih Saiz</string>
+    <string name="passenger_field_mahram_label">Mahram (Rujukan Jemaah)</string>
+    <string name="passenger_field_mahram_hint">Pilih Jemaah Mahram</string>
+    <string name="passenger_field_mahram_relation_label">Hubungan Mahram</string>
+    <string name="passenger_field_mahram_relation_hint">Contoh: Suami / Bapa / Abang Kandung</string>
+    <string name="passenger_lead_tag">(Ketua Jemaah)</string>
+    <string name="passenger_lead_default_name">Ketua Jemaah</string>
+    <string name="passenger_err_complete_lead_profile">Sila lengkapkan Profil Ketua Jemaah terlebih dahulu.</string>
+    <string name="passenger_err_pax_count_mismatch">Tempahan memerlukan %1$d jemaah (%2$d ditambah). Sila tambah %3$d lagi jemaah.</string>
+    <string name="passenger_err_name_required">Sila isi nama penuh mengikut IC / Pasport.</string>
+    <string name="passenger_err_ic_required">Sila isi no. IC / MyKad.</string>
+    <string name="passenger_err_passport_required">Sila isi no. pasport.</string>
+    <string name="passenger_err_passport_expiry_required">Sila pilih tarikh luput pasport.</string>
+    <string name="passenger_err_complete_all_additional">Sila lengkapkan maklumat semua jemaah tambahan.</string>
+    <string name="gender_male">Lelaki</string>
+    <string name="gender_female">Perempuan</string>
+    <!-- Audit fix: hardcoded user-facing strings moved to resources -->
+    <string name="promo_applied_format">Kod promo %1$s berjaya digunakan (-RM 200)</string>
+    <string name="pax_unit">Pax</string>
+    <string name="pax_count_format">%1$d Pax</string>
+    <string name="room_price_x_pax_format">%1$s × %2$d Pax</string>
+    <string name="summary_departure_format">Pelepasan: %1$s</string>
+    <string name="summary_pax_adults_format">%1$d Pax Dewasa</string>
+    <string name="summary_room_subtotal_format">Subtotal Bilik (%1$s × %2$d Pax)</string>
+    <string name="summary_promo_discount_format">Diskaun Kod Promo (%1$s)</string>
+    <string name="summary_lead_suffix">(Ketua Jemaah)</string>
+    <string name="summary_traveller_index_format">%1$d. %2$s%3$s</string>
+    <string name="summary_id_label_format">No. IC/Pasport: %1$s</string>
+    <string name="summary_phone_label_format">No. Telefon: %1$s</string>
+    <string name="summary_email_label_format">E-mel: %1$s</string>
+    <string name="duration_days_nights_format">%1$d Hari %2$d Malam</string>
+    <string name="label_contact_us">Hubungi Kami</string>
+    <string name="bookings_docs_all_linked">Semua dokumen wajib untuk pakej ini telah dipautkan dan lengkap!</string>
+    <string name="bookings_doc_readiness_format">Kesediaan Dokumen Pakej: %1$d/%2$d Disahkan • %3$d Diguna Semula</string>
+    <string name="doc_trip_specific_tag">✈ Dokumen Khusus Trip</string>
+    <string name="doc_status_fallback_format">%1$s: %2$s</string>
+    <string name="doc_status_not_uploaded_fallback">not_uploaded</string>
+    <string name="readiness_title">Akaun &amp; Kesediaan Travel</string>
+    <string name="readiness_percent_format">%1$d%% Lengkap</string>
+    <string name="readiness_complete_msg">Profil travel &amp; dokumen anda 100% lengkap!</string>
+    <string name="readiness_incomplete_msg">Lengkapkan profil &amp; dokumen travel untuk kelulusan tempahan lebih pantas</string>
+    <string name="readiness_autolink_msg">✓ Dipaut automatik ke semua tempahan Umrah &amp; Tour akan datang</string>
+    <string name="profile_ic_locked">Nombor IC telah diisi dan tidak boleh dipadam.</string>
+    <string name="profile_passport_locked">Nombor pasport telah diisi dan tidak boleh dipadam.</string>
+    <string name="profile_address_locked">Alamat telah diisi dan tidak boleh dipadam.</string>
+    <string name="doc_upload_processing">Muat naik dokumen sedang diproses…</string>
+    <string name="doc_upload_failed_retry">Gagal memuat naik dokumen. Sila cuba lagi.</string>
+    <string name="doc_upload_network_error">Ralat rangkaian semasa muat naik dokumen.</string>
+    <string name="doc_read_error">Ralat membaca fail dokumen.</string>
+    <string name="doc_file_not_found">Fail dokumen tidak dijumpai.</string>
+    <string name="doc_open_failed">Gagal membuka fail dokumen.</string>
+    <string name="default_title_mr">Mr</string>
+    <string name="default_nationality">Malaysian</string>
+    <string name="default_country">Malaysia</string>
+    <string name="payment_summary_format">%1$s • %2$s • %3$d Pax</string>
+    <string name="err_current_password_required">Sila masukkan kata laluan semasa anda</string>
+    <string name="passenger_err_pax_over">Terlalu ramai jemaah (%1$d ditambah, tempahan memerlukan %2$d). Sila keluarkan %3$d jemaah.</string>
+    <!-- Audit fix: layout user-facing strings -->
+    <string name="booking_success_copy_no">Salin</string>
+    <string name="booking_success_copied_toast">No. Tempahan disalin: %1$s</string>
+    <string name="content_desc_back">Kembali</string>
+    <string name="summary_title">Semakan Tempahan</string>
+    <string name="config_title">Pilihan Pakej &amp; Bilik</string>
+    <string name="departure_range_format">%1$s hingga %2$s</string>
+    <!-- M7: booking/summary/payment/config layouts -->
+    <string name="summary_step_package">01 Pakej</string>
+    <string name="summary_step_travellers">02 Jemaah</string>
+    <string name="summary_step_review">03 Semak &amp; Sahkan</string>
+    <string name="summary_card_package">Ringkasan Pakej Terpilih</string>
+    <string name="summary_card_travellers">Senarai Jemaah</string>
+    <string name="summary_card_payment">Ringkasan Bayaran</string>
+    <string name="summary_grand_total">Jumlah Keseluruhan</string>
+    <string name="summary_payment_notice_title">Maklumat Bayaran &amp; Deposit</string>
+    <string name="summary_payment_notice_body">Pengesahan tempahan ini tidak memerlukan bayaran segera. Setelah tempahan disahkan, anda boleh membuat bayaran deposit atau baki pakej pada bila-bila masa melalui menu Tempahan Saya (My Booking).</string>
+    <string name="summary_checkbox_agree">Saya telah membaca dan bersetuju dengan Terma &amp; Syarat serta Polisi Pembatalan Hafiz Travel &amp; Tours.</string>
+    <string name="summary_view_terms_link">Lihat Terma &amp; Syarat Lengkap ›</string>
+    <string name="btn_confirm_booking">SAHKAN TEMPAHAN</string>
+    <string name="booking_confirmed_success">Tempahan berjaya dihantar! Sila jelaskan deposit melalui Tempahan Saya.</string>
+    <string name="config_subtitle">Sila pilih bilik &amp; bilangan pax sebelum mengisi maklumat jemaah</string>
+    <string name="config_room_type">Jenis Bilik</string>
+    <string name="config_pax_label">Bilangan Jemaah (Dewasa)</string>
+    <string name="config_pax_hint">Min 1 Pax • Harga per pax</string>
+    <string name="config_pax_default">1 Pax</string>
+    <string name="config_departure_label">Pilihan Tarikh Pelepasan</string>
+    <string name="config_promo_hint">Kod Promo / Kupon CRM</string>
+    <string name="config_apply">GUNA</string>
+    <string name="config_total_label">Jumlah Anggaran Kos</string>
+    <string name="config_continue">TERUSKAN KE BUTIRAN JEMAAH</string>
+    <string name="clothes_size_format">Saiz: %1$s</string>
+    <string name="content_desc_close">Tutup</string>
+    <string name="content_desc_refresh">Muat semula lokasi</string>
+    <string name="content_desc_share">Kongsi pakej</string>
+    <string name="content_desc_favorite">Simpan kegemaran</string>
+    <string name="content_desc_status">Status</string>
+    <string name="content_desc_shield">Status keselamatan</string>
+    <string name="lang_region_english">United Kingdom / Global</string>
+    <string name="lang_region_malay">Malaysia</string>
+    <string name="label_optional">(Pilihan)</string>
+    <!-- H2: centralized API error mapping -->
+    <string name="err_session_expired">Sesi anda telah tamat. Sila log masuk semula.</string>
+    <string name="err_forbidden">Anda tidak mempunyai kebenaran untuk tindakan ini.</string>
+    <string name="err_not_found">Data yang diminta tidak dijumpai.</string>
+    <string name="err_validation">Sila semak maklumat yang ditandakan dan cuba lagi.</string>
+    <string name="err_too_many_requests">Terlalu banyak permintaan. Sila tunggu sebentar dan cuba lagi.</string>
+    <string name="err_no_internet">Tiada sambungan internet. Sila semak sambungan anda.</string>
+    <string name="err_server">Ralat pelayan berlaku. Sila cuba sebentar lagi.</string>
+    <string name="err_timeout">Masa permintaan tamat. Sila cuba lagi.</string>
+    <string name="lang_english">English</string>
+    <string name="lang_malay">Bahasa Melayu</string>
+    <!-- Customer Booking Eligibility Gate -->
+    <string name="booking_blocked_profile_title">Profil Belum Lengkap</string>
+    <string name="booking_blocked_profile_msg">Sila lengkapkan maklumat peribadi dan perhubungan anda di Kemaskini Profil sebelum mendaftar atau menempah pakej.</string>
+    <string name="booking_blocked_docs_title">Dokumen Travel Diperlukan</string>
+    <string name="booking_blocked_docs_msg">Sila muat naik semua dokumen travel yang diperlukan sebelum mendaftar atau menempah pakej. Dokumen belum lengkap:\n\n%1$s</string>
+    <string name="btn_edit_profile_now">Kemaskini Profil</string>
+    <string name="btn_upload_docs_now">Muat Naik Dokumen</string>
+    <string name="doc_name_passport">Salinan Pasport (Muka Utama)</string>
+    <string name="doc_name_ic">MyKad / Kad Pengenalan (IC)</string>
+    <string name="doc_name_passport_photo">Foto Pasport (Latar Belakang Putih)</string>
+    <!-- Terms & Conditions Booking Step (Exact Official PDF) -->
+    <string name="terms_title">Terma &amp; Syarat</string>
+    <string name="terms_close_viewer">Faham &amp; Kembali</string>
+    <string name="terms_required_error">Sila tanda persetujuan Terma &amp; Syarat sebelum membuat pengesahan tempahan.</string>
+
+    <string name="terms_company_title">HAFIZ TRAVEL &amp; TOURS SDN BHD</string>
+    <string name="terms_company_reg">No. Pendaftaran: 202201043065 (1488762-A) | KPK/LN: 10751</string>
+    <string name="terms_company_address">No. 31, Jalan Dataran Larkin 1, Taman Dataran Larkin, 80350 Johor Bahru, Johor, Malaysia</string>
+    <string name="terms_company_contact">Tel: +607-244 2262 / +6018-405 2262\nEmel: sales@hafiztraveltours.com | Web: www.hafiztraveltours.com</string>
+    <string name="terms_scope_body">Terma &amp; Syarat ini adalah terguna pakai untuk semua pakej pelancongan Hafiz Travel &amp; Tours Sdn. Bhd. (selepas ini dirujuk sebagai Hafiz Travel &amp; Tours) iaitu pakej Umrah, “Outbound” dan “Inbound”.</string>
+
+    <string name="terms_sec_deposit_title">DEPOSIT &amp; BAYARAN PENUH PAKEJ</string>
+    <string name="terms_sec_deposit_body">1. Wang pendahuluan atau deposit setiap pakej Umrah adalah RM1,000.00 seorang.\n2. Wang pendahuluan atau deposit setiap pakej “Outbound” dan “Inbound” adalah RM500.00 seorang.\n3. Baki bagi bayaran pakej mesti dibuat dalam masa:\n   I. 60 hari sebelum tarikh berlepas bagi Pakej Umrah Cuti Sekolah\n   II. 45 hari sebelum tarikh berlepas bagi Pakej Umrah Musim Biasa\n4. Pembayaran boleh dilakukan melalui:\n   I. Tunai hanya di Ibu Pejabat Hafiz Travel &amp; Tours sahaja\n   II. Secara deposit tunai ke Akaun Bank Hafiz Travel &amp; Tours (Salinan transaksi akan dijadikan sebagai bukti bayaran)\n5. Maklumat akaun atas nama:\n   HAFIZ TRAVEL &amp; TOURS SDN. BHD.\n   Bank Muamalat Malaysia Berhad: 0101 0003 8447 14\n6. Hafiz Travel &amp; Tours tidak akan bertanggungjawab terhadap transaksi bayaran yang dibuat bukan ke dalam akaun syarikat atau ke akaun pihak ketiga.</string>
+
+    <string name="terms_sec_refund_title">PEMULANGAN WANG</string>
+    <string name="terms_sec_refund_body">1. Sebarang pemulangan wang atau pengembalian wang bayaran pakej sama ada pembatalan dari peserta atau Hafiz Travel &amp; Tours adalah tertakluk kepada pemulangan wang daripada pihak ketiga.\n2. Tempoh pemulangan wang adalah dari tiga (3) hingga sembilan (9) bulan dari tarikh pembatalan.\n3. Tiada pemulangan wang kepada peserta sekiranya peserta tidak menggunakan apa - apa aktiviti atau kelengkapan yang terkandung di dalam pakej.\n4. Pemulangan wang atau caj fi pentadbiran yang dikenakan adalah tertakluk kepada budi bicara Hafiz Travel &amp; Tours sekiranya pembatalan dibuat kerana masalah yang tidak dapat dielakkan seperti sakit atau kes kematian.</string>
+
+    <string name="terms_sec_itinerary_title">A. ATURCARA &amp; PERJALANAN PAKEJ</string>
+    <string name="terms_sec_itinerary_body">1. Hafiz Travel &amp; Tours tidak menjamin bahawa pakej yang disediakan adalah bersesuaian pada semua lapisan masyarakat. Tetapi, Hafiz Travel &amp; Tours memberi jaminan bahawa Hafiz Travel &amp; Tours akan memberi perkhidmatan terbaik kepada setiap peserta yang berdaftar.\n2. Hafiz Travel &amp; Tours tidak boleh dipertanggungjawabkan atau menanggung liabiliti sekiranya timbul sebarang masalah kesakitan, kesihatan, kecelakaan atau kematian daripada manamana aktiviti yang disediakan atau aktiviti yang dilakukan di atas pilihan peserta sendiri.\n3. Kebarangkalian pertukaran aturcara dan perjalanan adalah tertakluk kepada peraturan 9 Jadual Keempat Akta Industri Pelancongan 1992, sekiranya berlaku pertukaran aturcara dan Hafiz Travel &amp; Tours terpaksa mengadakan aturcara altenatif sebagai ganti, Hafiz Travel &amp; Tours tidak bertanggungjawab dalam memastikan bahawa aturcara atau perjalanan altenatif tersebut menyamai kos atau mempunyai nilai yang sama dan serupa seperti aturcara atau perjalanan asal. Hafiz Travel &amp; tours tidak akan bertanggung jawab sekiranya jemaah tidak mengikuti aturcara disebabakan atas kecuaian, kesilapan dan kegagalan atas pihak jemaah sendiri.</string>
+
+    <string name="terms_sec_hotel_title">B. HOTEL PENGINAPAN</string>
+    <string name="terms_sec_hotel_body">1. Taraf bintang dan jarak hotel yang dinyatakan di dalam mana - mana iklan Hafiz Travel &amp; Tours adalah pentarafan yang diberikan oleh pihak hotel sebagai rujukan sahaja.\n2. Penarafan bintang dan servis yang diberikan hotel mungkin berbeza dari satu negara ke satu negara yang lain.\n3. Hafiz Travel &amp; Tours berhak mengubah hotel yang dinyatakan di dalam iklan di atas sebab tiada kekosongan atau lain-lain masalah berkaitan hotel tanpa sebarang notis.\n4. Sekiranya berlaku perubahan tersebut, Hafiz Travel &amp; Tours tidak memberi jaminan tetapi akan berusaha sebaik mungkin bagi memberikan hotel ganti yang setaraf atau lebih baik.\n5. Polisi mengenai waktu kemasukan (check-in) dan waktu keluar (check-out) hotel adalah berbeza mengikut hotel. Hafiz Travel &amp; Tours tidak boleh dipertanggungjawabkan atau menanggung liabiliti kesusahan yang peserta alami akibat daripada polisi tersebut.\n6. Penyusunan bilik yang dilakukan adalah berdasarkan susunan lelaki dengan lelaki dan perempuan dengan perempuan (mengikut jantina).</string>
+
+    <string name="terms_sec_extra_title">C. SYARAT TAMBAHAN</string>
+    <string name="terms_sec_extra_body">1. Bagi jemaah yang membuat pendaftaran bilik berdua atau bilik bertiga, jemaah perlu sertakan sekali rakan sebilik yang akan tinggal bersama jemaah ketika pendaftaran.\n2. Bagi yang memilih bilik berlima atau berempat (mengikut pakej), jemaah perlu bersedia untuk menaik taraf (bayaran tambahan) ke bilik bertiga atau berdua sekiranya tidak cukup pasangan bagi bilik berlima / berempat yang ditempah.\n3. Setiap pakej hanya ada seorang Mutawwif. Sekiranya pakej 2 mutawwif, tambahan perbezaan pakej adalah RM250.00 seorang.\n4. Sekiranya terdapat pertambahan malam di hotel Madinah kerana perubahan jadual Kapal Terbang, tambahan perbezaan pakej adalah RM200.00 seorang bilik Quad, RM350.00 seorang bilik Triple &amp; RM600.00 seorang bilik Double (hotel ekonomi).\n5. Sekiranya terdapat pertambahan malam di hotel Makkah kerana perubahan jadual Kapal Terbang, tambahan perbezaan pakej adalah RM300.00 seorang bilik Quad, RM450.00 bilik Triple dan RM800.00 bilik Double seorang (hotel ekonomi). Manakala bagi (hotel 5 bintang) RM600.00 seorang bilik Quad, RM900.00 seorang bilik Triple dan RM1,200.00 seorang bilik Double.</string>
+
+    <string name="terms_sec_registration_title">D. PENDAFTARAN PAKEJ</string>
+    <string name="terms_sec_registration_body">1. Pelanggan wajib menyediakan maklumat lengkap:\n   I. Nama peserta\n   II. Nombor kad pengenalan peserta\n   III. Nombor telefon peserta\n   IV. Alamat lengkap bagi ketua atau wakil sekiranya pendaftaran di dalam satu (1) kumpulan\n   V. Nama dan nombor telefon waris yang tinggal di Malaysia dan boleh dihubungi\n2. Hafiz Travel &amp; Tours tidak akan bertanggungjawab sekiranya butiran yang diberikan adalah tidak benar.</string>
+
+    <string name="terms_sec_documents_title">E. DOKUMEN PERJALANAN</string>
+    <string name="terms_sec_documents_body">1. Peserta perlu menyediakan salinan dokumen seperti berikut:\n   I. Pasport antarabangsa (tempoh sah laku melebihi 6 bulan dari tarikh berlepas)\n   II. Buku suntikan Meningococcal (ACYW-135)\n   III. Gambar Visa\n   IV. Dokumen mahram (sekiranya ada)\n   V. Lain – lain dokumen tambahan sekiranya bukan warganegara Malaysia\n2. Salinan tersebut perlu diserahkan kepada Hafiz Travel &amp; Tours semasa pendaftaran &amp; selewat lewatnya 60 hari sebelum Tarikh Pakej.\n3. Hafiz Travel &amp; Tours tidak akan bertanggungjawab ke atas segala kebarangkalian yang berlaku sekiranya peserta gagal menyerahkan salinan dokumen sebagaimana waktu yang telah ditetapkan.\n4. Hafiz Travel &amp; Tours adalah perantara dalam permohonan visa Umrah atau visa pelancong. Segala kelulusan permohonan visa adalah tertakluk kepada pihak kerajaan Arab Saudi.\n5. Sekiranya permohonan visa ditolak oleh kerajaan Arab Saudi atau negara yang akan dilawati, Hafiz Travel &amp; Tours tidak akan bertanggung jawab dan akan mengenakan caj tambahan semula kepada peserta bagi permohonan semula visa. namun begitu, sekiranya visa yang dipohon tetap ditolak oleh Kerajaan tersebut, hafiz travel &amp; tours tidak akan bertanggung jawab atas penolakan tersebut.\n6. Perubahan peraturan dan dasar pengeluaran visa secara mengejut oleh pihak Kerajaan yang berkaitan, pihak Hafiz Travel &amp; Tours tidak akan bertanggung jawab sekiranya visa gagal dikeluarkan dan sebarang tempahan yang melibatkan tiket kapal terbang &amp; hotel tiada pemulangan.\n7. Hafiz Travel &amp; Tours tidak akan bertanggungjawab sekiranya berlaku kehilangan, kerosakan atau lain - lain perkara pada dokumen perjalanan yang menyebabkan peserta tidak dapat meneruskan perjalanan pakej sebagaimana jadual.</string>
+
+    <string name="terms_sec_cancellation_f_title">F. PEMBATALAN PAKEJ, PENARIKAN DIRI, PINDAAN ATAU PERUBAHAN NAMA PESERTA, TARIKH PENERBANGAN &amp; JENIS PAKEJ</string>
+    <string name="terms_sec_cancellation_f_body">1. Pembatalan atau perubahan daripada pihak Hafiz Travel &amp; Tour:\n   I. Hafiz Travel &amp; Tours berhak membatalkan atau meminda perjalanan pakej tertakluk kepada terma &amp; syarat serta perubahan dengan notis bertulis.\n   II. Hafiz Travel &amp; Tours akan memberi tarikh atau pakej altenatif yang lebih baik atau setaraf kepada peserta\n   III. Peserta akan diberikan hak untuk meneruskan atau membatalkan tarikh atau pakej altenatif yang diberikan\n   IV. Sekiranya peserta tidak bersetuju, Hafiz Travel &amp; Tours akan membuat pemulangan kepada pihak peserta selepas penolakan fi pentadbiran &amp; kos bayaran yang telah dibuat kepada pihak ketiga (hotel, tiket &amp; lain-lain)\n   V. Segala perubahan yang berlaku akan dimaklumkan melalui panggilan telefon atau secara bertulis melalui emel atau aplikasi “whatsapp”\n   VI. Sekiranya pindaan pakej yang dibuat oleh Hafiz Travel &amp; Tours tidak dipersetuji oleh perserta, surat rasmi perlu dikeluarkan oleh perserta yang terlibat. Selepas penerimaan surat rasmi pihak Syarikat akan menjalankan semakan terhadap kadar caj yang dikenakan.\n   VII. Sekiranya perserta bersetuju dengan pindaan pakej yang dibuat hafiz travel &amp; tours perserta wajib mengikut harga semasa pakej baru yang telah dipilih.\n\n2. Pembatalan &amp; tarik diri daripada peserta:\n   I. Segala jenis pembatalan yang dibuat oleh peserta wajib dilakukan secara bertulis dan diserahkan kepada pihak Hafiz Travel &amp; Tours\n   II. Segala pembatalan pakej termasuk pakej promosi yang dibuat pelucutan penuh deposit akan dikenakan setiap seorang.\n   III. Hafiz travel &amp; tours tidak boleh dipertanggungjawabkan sekiranya perserta dinafikan dan tidak dapat menggunakan perkhidmatan Syarikat penerbangan, hotel atau mana mana pengurusan yang telah disediakan oleh pihak hafiz travel &amp; tours sebelum atau semasa tempoh pakej berlangsung.\n   IV. Jika notis pembatalan diterima dalam tempoh 44 hari bekerja atau kurang, caj seperti jadual di bawah akan diguna pakai:</string>
+
+    <string name="terms_sec_cancellation_charges_title">G. TERMA DAN SYARAT CAJ PEMBATALAN DAN PENANGGUHAN TEMPAHAN</string>
+    <string name="terms_sec_cancellation_charges_body" formatted="false">1. Deposit tidak dikembalikan setelah tempahan dibuat dan dimasukkan ke dalam sistem.\n2. 22-44 hari bekerja sebelum tarikh penerbangan: caj 75% dari harga pakej\n3. 02-21 hari bekerja sebelum tarikh penerbangan: caj 100% dari harga pakej.\n4. Sekiranya kos bayaran kepada pihak ketiga telah dilakukan (tiket penerbangan, hotel, visa atau lain lain), syarikat berhak mengenakan caj sebenar dan hanya memulangkan baki bayaran selepas penolakan dibuat.\n5. Perubahan atau pindaan daripada pihak peserta:\n   I. Segala perubahan atau pindaan yang di buat oleh peserta wajib dilakukan secara bertulis\n   II. Hafiz Travel &amp; Tours akan mengenakan caj fi pentadbiran sebanyak RM200.00 seorang untuk pakej biasa / RM500.00 untuk pakej promosi bagi setiap pindaan atau perubahan yang dibuat\n   III. Sekiranya peserta ingin membuat pindaan nama peserta selepas tiket penerbangan dibeli, peserta perlu membayar segala jenis penalti yang dikenakan oleh pihak penerbangan dan juga tambahan caj fi Pentadbiran sebanyak RM200.00 juga akan dikenakan\n6. Sekiranya pembatalan dibuat kerana masalah yang tidak dapat dielakkan seperti sakit atau kes kematian. Dokumen yang berkaitan perlu dilampirkan bersama ketika pembatalan dibuat. Rujuk point no 3 bagi caj yang dikenakan.</string>
+
+    <string name="terms_sec_third_party_title">H. HAFIZ TRAVEL &amp; TOURS SEBAGAI PIHAK KETIGA / PIHAK BERKECUALI</string>
+    <string name="terms_sec_third_party_body">1. Hafiz Travel &amp; Tours adalah hanya perantara di antara peserta dan syarikat penerbangan, hotel penginapan, pengangkutan atau pihak pembekal perkhidmatan.\n2. Hafiz Travel &amp; Tours bukan pemilik atau pengendali mana mana syarikat pengangkutan, penerbangan, hotel penginapan atau mana mana tempat lawatan di dalam pakej.\n3. Hafiz Travel &amp; Tours tidak boleh dipertanggungjawabkan ke atas sebarang kerosakan, kelewatan, kesusahan atau apa apa perkara yang tidak dijangka akibat daripada pecah kontrak samada disengajakan atau tidak oleh pihak tersebut.</string>
+
+    <string name="terms_sec_refusal_title">I. HAK UNTUK MENOLAK TEMPAHAN</string>
+    <string name="terms_sec_refusal_body">1. Hafiz Travel &amp; Tours berhak untuk membatalkan atau menarik balik apa - apa jadual perjalanan atau tempahan yang telah di buat peserta sekiranya didapati membahayakan kesihatan atau keselamatan, mengurangkan keselesaan atau keseronokan peserta lain dalam pakej tersebut.\n2. Hafiz Travel &amp; Tours berhak untuk membatalkan atau menarik balik tempahan peserta jika terdapat pihak seperti syarikat penerbangan, hotel atau mana mana pihak pengurusan yang enggan membenarkan mana - mana peserta menyertai pakej tersebut Hafiz Travel &amp; tours tidak akan dipertanggungjawabkan.</string>
+
+    <string name="terms_sec_customer_duty_title">J. TANGGUNGJAWAB PELANGGAN</string>
+    <string name="terms_sec_customer_duty_body">1. Menyemak dan memastikan status kelayakkan keluar negara sebelum berlepas. Hafiz Travel &amp; Tours tidak bertanggungjawab ke atas segala kerugian kos pakej sekiranya peserta disenarai hitam dan berstatus disekat keluar negara pada saat-saat akhir.\n2. Setiap peserta yang mempunyai masalah kesihatan diwajibkan membuat deklarasi kesihatan secara bertulis kepada Hafiz Travel &amp; Tours sebelum berlepas.\n3. Setiap peserta yang mempunyai masalah kesihatan dan melebihi umur 65 tahun diwajibkan untuk terbang bersama waris dan digalakkan untuk mengambil perlindungan insuran/ takaful tambahan.\n4. Sebarang lebihan timbangan berat bagasi adalah tanggungjawab peserta. Hafiz Travel &amp; Tours tidak bertanggungjawab di atas caj - caj tambahan akibat lebihan had berat bagasi tersebut.\n5. Hafiz Travel &amp; Tours tidak boleh dipertanggungjawabkan ke atas kehilangan bagasi/ barang peserta ketika sepanjang perjalanan pakej. Walaubagaimanapun, pihak Hafiz Travel &amp; Tours akan membantu peserta dengan sedaya upaya dalam urusan membuat tuntutan kehilangan bagasi/ barang tersebut.\n6. Harga pakej adalah tertakluk kepada kadar tukaran wang asing, caj cukai semasa dan kenaikan harga tiket penerbangan semasa. Segala perubahan atau kenaikan harga pakej kerana perkara - perkara tersebut adalah di bawah tanggungjawab peserta.\n7. Hafiz Travel &amp; Tours tidak akan bertanggungjawab di atas sebarang kelewatan penerbangan atau kegagalan menghadirkan diri Ketika waktu penerbangan disebabkan oleh kecuaian peserta.\n8. Peserta disarankan untuk hadir sekurang - kurangnya satu kali Kursus Umrah bagi menambah ilmu pengetahuan dan mendapatkan gambaran pakej sebelum berlepas menunaikan Umrah.</string>
+
+    <string name="terms_sec_misc_title">K. LAIN – LAIN HAL</string>
+    <string name="terms_sec_misc_body">1. Hafiz Travel &amp; Tours tidak akan bertanggungjawab dan tidak akan memulangkan bayaran terhadap apa-apa kemungkinan sekiranya Hafiz Travel &amp; Tours tidak dapat melaksanakan kewajiban di bawah terma &amp; syarat atau mana - mana bahagian disebabkan berlakunya kejadian di luar kawalan syarikat.\n2. Antara kejadian-kejadian yang di maksudkan adalah:\n   I. Perperangan, pertempuran, penaklukan atau serangan dan tindakan dari musuhmusuh asing (samada diisytiharkan atau tidak)\n   II. Pemberontakan, rampasan kuasa, atau perang saudara\n   III. Rusuhan, kekacauan atau kekecohan awam\n   IV. Perintah dan larangan dari pihak berkuasa dan kerajaan Malaysia atau Arab Saudi atau negara yang akan dilawati disebabkan perkara - perkara tertentu.\n3. Pihak Hafiz Travel &amp; Tours berhak mengunakan gambar dan video yang dikongsikan oleh jemaah sebagai bahan pemasaran untuk tujuan promosi.\n\nAdalah dimaklumkan bahawa Terma &amp; Syarat (T&amp;C) yang telah dikemaskini akan berkuat kuasa dan terpakai bagi semua pakej penerbangan bermula 1 Jun 2026.\n(E &amp; OE)</string>
+    <!-- Profile Redesign: DOB, Gender, Nationality Picker Bottom Sheets -->
+    <string name="profile_dob_sheet_title">Tarikh Lahir</string>
+    <string name="profile_dob_sheet_sub">Pilih tarikh lahir anda</string>
+    <string name="profile_dob_action_done">Selesai</string>
+    <string name="profile_dob_day">Hari</string>
+    <string name="profile_dob_month">Bulan</string>
+    <string name="profile_dob_year">Tahun</string>
+    <string name="profile_gender_sheet_title">Jantina</string>
+    <string name="profile_gender_sheet_sub">Pilih jantina anda</string>
+    <string name="profile_nationality_sheet_title">Pilih Kewarganegaraan</string>
+    <string name="profile_nationality_sheet_sub">Pilih negara kewarganegaraan anda</string>
+    <string name="profile_country_search_hint">Cari negara</string>
+    <string name="profile_country_no_results">Tiada negara dijumpai</string>
+    <string name="profile_field_dob_placeholder">Pilih tarikh lahir</string>
+    <string name="profile_field_gender_placeholder">Pilih jantina</string>
+    <string name="profile_field_nationality_placeholder">Pilih kewarganegaraan</string>
+    <string name="profile_field_passport_expiry_label">Tarikh Tamat Pasport <font color="#DC2626">*</font></string>
+    <string name="profile_field_passport_expiry_placeholder">Pilih tarikh tamat pasport</string>
+    <string name="profile_passport_expiry_sheet_title">Tarikh Tamat Pasport</string>
+    <string name="profile_passport_expiry_sheet_sub">Pilih tarikh tamat tempoh pada pasport anda</string>
+    <string name="profile_field_issuing_country_placeholder">Pilih negara pengeluar</string>
+    <string name="profile_issuing_country_sheet_title">Pilih Negara Pengeluar</string>
+    <string name="profile_issuing_country_sheet_sub">Pilih negara yang mengeluarkan pasport anda</string>
+
+    <!-- Departure Seat Availability Strings -->
+    <string name="seats_left_format">%1$d / %2$d tempat duduk tersedia</string>
+    <string name="seats_available_label">Tempat duduk tersedia</string>
+    <string name="departure_fully_booked">Telah Penuh</string>
+    <string name="departure_zero_seats_format">0 / %1$d tempat duduk tersedia</string>
+    <string name="err_departure_fully_booked">Tarikh pelepasan yang dipilih telah penuh. Sila pilih tarikh lain.</string>
+    <string name="err_departure_not_enough_seats">Hanya %1$d tempat duduk tersedia untuk tarikh ini. Sila kurangkan bilangan jemaah atau pilih tarikh lain.</string>
+
+    <!-- Booking Item Buttons & Labels -->
+    <string name="booking_btn_invoice">Invois</string>
+    <string name="booking_btn_receipt">Resit</string>
+    <string name="booking_btn_documents">Dokumen</string>
+    <string name="booking_label_departure">TARIKH PELEPASAN</string>
+    <string name="booking_label_grand_total">JUMLAH KESELURUHAN</string>
+    <string name="booking_no_official_label">NO. TEMPAHAN RASMI</string>
+
+    <!-- Booking Status Badges -->
+    <string name="status_confirmed">DIESAHKAN</string>
+    <string name="status_cancelled">DIBATALKAN</string>
+    <string name="status_pending_confirmation">MENUNGGU PENGESAHAN</string>
+    <string name="status_deposit_paid">DEPOSIT DIBAYAR</string>
+    <string name="status_received">DITERIMA</string>
+
+    <!-- Invoice Viewer Strings -->
+    <string name="invoice_title_official">Invois Rasmi</string>
+    <string name="invoice_meta_no">NO. INVOIS</string>
+    <string name="invoice_meta_date">TARIKH INVOIS</string>
+    <string name="invoice_meta_tour_code">KOD LAWATAN</string>
+    <string name="invoice_meta_departure">TARIKH PELEPASAN</string>
+    <string name="invoice_meta_due_date">TEMPOH AKHIR BAYARAN</string>
+    <string name="invoice_sec_bill_to">BIL KEPADA</string>
+    <string name="invoice_sec_pkg">BUTIRAN PAKEJ &amp; PERJALANAN</string>
+    <string name="invoice_sec_passengers">MAKLUMAT JEMAAH</string>
+    <string name="invoice_th_no">No.</string>
+    <string name="invoice_th_passenger_name">Nama Jemaah</string>
+    <string name="invoice_th_ic_passport">No. KP / Pasport</string>
+    <string name="invoice_sec_itemized_billing">PERINCIAN CAJ</string>
+    <string name="invoice_th_desc">KETERANGAN</string>
+    <string name="invoice_th_qty">KUANTITI</string>
+    <string name="invoice_th_total">JUMLAH</string>
+    <string name="invoice_subtotal_label">Jumlah Kecil:</string>
+    <string name="invoice_discount_label">Diskaun Promosi:</string>
+    <string name="invoice_grand_total_label">JUMLAH KESELURUHAN:</string>
+    <string name="invoice_paid_amount_label">Jumlah Telah Dibayar:</string>
+    <string name="invoice_balance_due_label">Baki Perlu Dibayar:</string>
+    <string name="invoice_sec_amount_in_words">JUMLAH DALAM PERKATAAN</string>
+    <string name="invoice_sec_payment_history">REKOD BAYARAN</string>
+    <string name="invoice_sec_bank_terms">MAKLUMAT BANK &amp; SYARAT BAYARAN</string>
+    <string name="invoice_sec_remarks_terms">CATATAN &amp; TERMA RASMI</string>
+    <string name="invoice_disclaimer">Invois jana komputer, tandatangan tidak diperlukan.</string>
+    <string name="invoice_footer_notice">Invois ini dijana secara elektronik oleh sistem rasmi Hafiz Travel &amp; Tours.</string>
+    <string name="invoice_footer_thanks">Terima kasih kerana memilih perkhidmatan kami.</string>
+    <string name="invoice_btn_share">📤 Kongsi</string>
+    <string name="invoice_btn_save_pdf">📥 Simpan PDF</string>
+    <string name="invoice_share_title">Invois Rasmi</string>
+
+    <!-- Receipt Viewer Strings -->
+    <string name="receipt_title_official">Resit Bayaran Rasmi</string>
+    <string name="receipt_company_header">HAFIZ TRAVEL &amp; TOURS</string>
+    <string name="receipt_company_sub">KPK/LN: 10751 • SSM: 202201043065\nResit Bayaran Rasmi</string>
+    <string name="receipt_meta_no">NO. RESIT</string>
+    <string name="receipt_meta_date">TARIKH BAYARAN</string>
+    <string name="receipt_amount_received_label">JUMLAH DITERIMA</string>
+    <string name="receipt_sec_received_from">DITERIMA DARIPADA</string>
+    <string name="receipt_meta_payment_date">Tarikh Bayaran</string>
+    <string name="receipt_meta_payment_method">Kaedah Bayaran</string>
+    <string name="receipt_meta_ref_no">No. Rujukan</string>
+    <string name="receipt_meta_booking_ref">Rujukan Tempahan</string>
+    <string name="receipt_sec_passengers">MAKLUMAT JEMAAH</string>
+    <string name="receipt_th_no">No.</string>
+    <string name="receipt_th_passenger_name">Nama Jemaah</string>
+    <string name="receipt_th_ic_passport">No. KP / Pasport</string>
+    <string name="receipt_sec_financial_summary">RINGKASAN KEWANGAN</string>
+    <string name="receipt_total_package_price">Jumlah Keseluruhan Pakej</string>
+    <string name="receipt_total_paid_to_date">Jumlah Bayaran Terkumpul</string>
+    <string name="receipt_balance_due">Baki Tertunggak</string>
+    <string name="receipt_sec_payment_history">SEJARAH BAYARAN</string>
+    <string name="receipt_sec_official_confirmation">PENGESAHAN RASMI &amp; MAKLUMAT SYARIKAT</string>
+    <string name="receipt_disclaimer">Resit jana komputer, tandatangan tidak diperlukan.</string>
+    <string name="receipt_label_received_from">Diterima Daripada:</string>
+    <string name="receipt_label_booking_ref">Rujukan Tempahan: %1$s</string>
+    <string name="receipt_label_method">Kaedah Bayaran: %1$s</string>
+    <string name="receipt_label_amount">JUMLAH BAYARAN</string>
+    <string name="receipt_label_balance">Baki Tertunggak Semasa: %1$s</string>
+    <string name="receipt_deposit_title">Resit Pembayaran Deposit</string>
+    <string name="receipt_installment_title">Resit Bayaran Ansuran #%1$d</string>
+    <string name="receipt_btn_download_format">📥 Muat Turun Resit PDF (%1$s)</string>
+    <string name="receipt_btn_download">📥 Muat Turun Resit PDF</string>
+    <string name="receipt_btn_save_pdf">📥 Simpan Resit PDF</string>
+    <string name="receipt_btn_view">Lihat Resit</string>
+    <string name="receipt_list_title">Resit Pembayaran</string>
+    <string name="receipt_list_sub">Resit rasmi untuk bayaran deposit dan ansuran bulanan yang disahkan.</string>
+    <string name="receipt_no_records">Tiada resit bayaran direkodkan lagi. Resit rasmi akan dijana secara automatik selepas pengesahan bayaran.</string>
+    <string name="payment_history_item_title">Bayaran #%1$d • %2$s</string>
+    <string name="payment_history_ref_format">Ruj: %1$s</string>
+    <string name="payment_history_receipt_tag">Resit: %1$s</string>
+
+    <!-- Dialog / Toast Strings -->
+    <string name="toast_doc_verified">Dokumen telah disahkan.</string>
+    <string name="toast_doc_under_review">Dokumen sedang disemak oleh pegawai.</string>
+    <string name="toast_doc_uploaded_success">Dokumen berjaya dimuat naik!</string>
+    <string name="toast_invoice_saved_success">Invois berjaya disimpan dalam fail Downloads:\n%1$s</string>
+    <string name="toast_receipt_saved_success">Resit berjaya disimpan dalam Downloads:\n%1$s</string>
+    <string name="toast_receipt_saved_failed">Ralat menjana resit PDF. Sila cuba lagi.</string>
+    <string name="dialog_btn_understand">Faham</string>
+    <string name="dialog_btn_close">Tutup</string>
+
+    <string name="doc_passport_validity_note">Pastikan salinan pasport antarabangsa anda sah sekurang-kurangnya 6 bulan sebelum tarikh pelepasan.</string>
+    <string name="doc_photo_spec_note">Gambar berwarna berukuran pasport dengan latar belakang putih mengikut spesifikasi visa Umrah / Pelancongan.</string>
+
+    <!-- Luxury My Booking Overhaul Strings -->
+    <string name="booking_category_umrah">PAKEJ UMRAH</string>
+    <string name="booking_category_tour">PELANCONGAN ANTARABANGSA</string>
+    <string name="status_completed">SELESAI</string>
+    <string name="payment_status_deposit_pending">MENUNGGU DEPOSIT</string>
+    <string name="payment_status_deposit_partial">DEPOSIT SEPARA</string>
+    <string name="payment_status_deposit_paid">DEPOSIT SELESAI</string>
+    <string name="payment_status_balance_partial">BAKI ANSURAN AKTIF</string>
+    <string name="payment_status_fully_paid">BAYARAN PENUH</string>
+    <string name="booking_label_stage_deposit">PERINGKAT 1: DEPOSIT</string>
+    <string name="booking_label_stage_balance">PERINGKAT 2: BAKI BAYARAN</string>
+    <string name="booking_label_stage_completed">BAYARAN SELESAI</string>
+    <string name="booking_label_paid_amount">Jumlah Dibayar</string>
+    <string name="booking_label_balance_due">Baki Tertunggak</string>
+    <string name="booking_label_deposit_progress">Deposit: %1$s / %2$s</string>
+    <string name="booking_label_balance_progress">Baki: %1$s / %2$s</string>
+    <string name="booking_label_remaining_deposit_format">Baki Deposit: %1$s</string>
+    <string name="booking_label_remaining_balance_format">Baki Perlu Dibayar: %1$s</string>
+    <string name="booking_btn_pay_now">Bayar Sekarang</string>
+    <string name="booking_btn_pay_deposit_format">Bayar Deposit (%1$s)</string>
+    <string name="booking_btn_pay_balance_format">Bayar Baki (%1$s)</string>
+    <string name="booking_meta_format">%1$s • %2$d Hari %3$d Malam • %4$d Jemaah</string>
+    <string name="booking_meta_no_duration_format">%1$s • %2$d Jemaah</string>
+
+    <!-- Pay Now Quick Sheet Strings -->
+    <string name="pay_sheet_title">Buat Bayaran</string>
+    <string name="pay_sheet_sub">Semak butiran bayaran anda dan teruskan dengan selamat.</string>
+    <string name="pay_sheet_opt_full_deposit">Bayar Penuh Baki Deposit (%1$s)</string>
+    <string name="pay_sheet_opt_full_balance">Bayar Penuh Baki Bayaran (%1$s)</string>
+    <string name="pay_sheet_opt_custom">Bayaran Ansuran Pilihan</string>
+    <string name="pay_sheet_custom_hint">Masukkan jumlah ansuran dalam RM</string>
+    <string name="pay_sheet_method_title">Pilih Kaedah Bayaran</string>
+    <string name="pay_sheet_method_fpx">FPX Perbankan Dalam Talian (Segera)</string>
+    <string name="pay_sheet_method_card">Kad Kredit / Debit (Visa/Mastercard)</string>
+    <string name="pay_sheet_method_bank">Pindahan Bank / DuitNow QR</string>
+    <string name="pay_sheet_btn_confirm">Sahkan &amp; Bayar %1$s</string>
+    <string name="pay_sheet_success">Bayaran sebanyak %1$s berjaya! Resit rasmi telah dijana.</string>
+    <string name="pay_sheet_err_min_amount">Sila masukkan jumlah bayaran yang sah.</string>
+    <string name="pay_sheet_err_max_amount">Jumlah bayaran tidak boleh melebihi baki tertunggak %1$s.</string>
+    <string name="pay_sheet_processing">Memproses bayaran, sila tunggu...</string>
+
+    <!-- Make Payment Redesign Strings -->
+    <string name="pay_sheet_due_label">JUMLAH</string>
+    <string name="pay_sheet_purpose_initial_deposit">Deposit Permulaan</string>
+    <string name="pay_sheet_purpose_remaining_deposit">Baki Deposit</string>
+    <string name="pay_sheet_purpose_balance">Baki Bayaran</string>
+    <string name="pay_sheet_package_total">Jumlah Harga Pakej</string>
+    <string name="pay_sheet_previously_paid">Telah Dibayar</string>
+    <string name="pay_sheet_this_payment">Jumlah Bayaran</string>
+    <string name="pay_sheet_balance_after">Baki Selepas Bayaran</string>
+    <string name="pay_sheet_btn_pay_format">Bayar %1$s</string>
+    <string name="pay_sheet_secure_title">Bayaran Selamat melalui ToyyibPay</string>
+    <string name="pay_sheet_secure_desc">Penyulitan 256-bit. Integrasi gerbang pembayaran dikuasakan oleh ToyyibPay (Mod Ujian).</string>
+    <string name="pay_confirm_dialog_title">Sahkan Bayaran</string>
+    <string name="pay_confirm_purpose_label">Tujuan Bayaran</string>
+    <string name="pay_confirm_gateway_label">Gerbang Bayaran</string>
+    <string name="pay_confirm_gateway_mock_name">ToyyibPay (Ujian Sandbox)</string>
+    <string name="pay_confirm_dialog_msg">Anda sedang mengesahkan bayaran sebanyak %1$s untuk %2$s.</string>
+    <string name="pay_confirm_dialog_mock_notice">Transaksi ini diproses dalam mod ujian mock dan akan mengemas kini status tempahan anda serta-merta.</string>
+    <string name="pay_confirm_btn_pay">Sahkan &amp; Bayar</string>
+    <string name="pay_success_dialog_title">Bayaran Berjaya!</string>
+    <string name="pay_success_dialog_msg">Bayaran sebanyak %1$s telah berjaya direkodkan. Resit rasmi dan jadual tempahan telah dijana.</string>
+    <string name="pay_btn_done">Selesai</string>
+
+    <string name="booking_meta_duration_format">%1$d Hari %2$d Malam</string>
+    <string name="booking_meta_pax_format">%1$d Jemaah</string>
+    <string name="payment_detail_fully_paid_format">Selesai: %1$s / %2$s (Baki: RM 0.00)</string>
+    <string name="payment_detail_deposit_format">Deposit: %1$s / %2$s (Baki Deposit: %3$s)</string>
+    <string name="payment_detail_deposit_required_format">Deposit: %1$s / %2$s (Diperlukan: %3$s)</string>
+    <string name="payment_detail_balance_format">Baki: %1$s / %2$s (Tinggal: %3$s)</string>
+    <string name="pay_sheet_opt_deposit_preset">Bayar Deposit Diperlukan (%1$s)</string>
+    <string name="pay_sheet_opt_deposit_remaining_preset">Bayar Baki Deposit (%1$s)</string>
+    <string name="pay_sheet_opt_balance_preset">Bayar Penuh Baki Bayaran (%1$s)</string>
+    <string name="pay_success_toast">Bayaran sebanyak %1$s berjaya! Resit rasmi telah dijana.</string>
+    <string name="pay_btn_view_receipt">Lihat Resit</string>
+
+    <!-- Outstanding Deposit Blocked Dialog Strings -->
+    <string name="booking_blocked_deposit_title">Deposit Diperlukan</string>
+    <string name="booking_blocked_deposit_msg">Anda mempunyai deposit tertunggak untuk tempahan sedia ada (%1$s). Sila bayar deposit yang diperlukan sebelum membuat tempahan baharu.</string>
+    <string name="btn_view_my_bookings">Ke Tempahan Saya</string>
+
+    <!-- Cancel Booking Strings -->
+    <string name="booking_btn_cancel">Batal Tempahan</string>
+    <string name="cancel_booking_title">Batal Tempahan</string>
+    <string name="cancel_booking_confirm_message">Adakah anda pasti ingin membatalkan tempahan ini? Tindakan ini akan melepaskan tempat duduk yang ditempah. Rekod bayaran sah akan dikekalkan.</string>
+    <string name="cancel_booking_reason_hint">Sebab pembatalan (pilihan)</string>
+    <string name="cancel_booking_btn_confirm">Ya, Batal Tempahan</string>
+    <string name="cancel_booking_keep">Kekalkan Tempahan</string>
+    <string name="cancel_booking_success">Tempahan %1$s telah berjaya dibatalkan.</string>
+    <string name="cancel_booking_failed">Gagal membatalkan tempahan. Sila cuba lagi.</string>
+    <string name="cancel_booking_processing">Membatalkan tempahan, sila tunggu...</string>
+    <string name="cancel_booking_quote_loading">Mengira polisi pembatalan dan sebut harga pemulangan wang...</string>
+    <string name="cancel_quote_working_days">Hari bekerja sebelum penerbangan: %1$d hari</string>
+    <string name="cancel_quote_charge_summary">Caj Pembatalan: %1$s (%2$s dari harga pakej)</string>
+    <string name="cancel_quote_non_refundable_deposit">* Wang pendahuluan/deposit tidak dikembalikan mengikut polisi syarikat.</string>
+    <string name="cancel_quote_estimated_refund">Anggaran Pemulangan Wang: %1$s</string>
+    <string name="cancel_quote_refund_period">* Tempoh pemulangan wang mengambil masa 3 hingga 9 bulan tertakluk kepada pihak ketiga.</string>
+    <string name="cancel_quote_no_refund">Tiada pemulangan wang layak berdasarkan garis masa pelepasan penerbangan.</string>
+    <string name="cancel_booking_irreversible_notice">Tindakan ini adalah kekal dan tidak boleh dibatalkan.</string>
+    <string name="terms_tour_notice_title">Terma &amp; Syarat Pakej Pelancongan</string>
+    <string name="terms_tour_notice_body">Terma &amp; Syarat untuk pakej Pelancongan akan disediakan semasa pengesahan dan jadual perjalanan muktamad. Untuk sebarang pertanyaan lanjut, sila hubungi khidmat pelanggan kami.</string>
+    <string name="booking_ref_prefix">No. Rujukan:</string>
+    <string name="payment_stage_initial_deposit">Deposit Awal</string>
+    <string name="payment_stage_additional_payment">Bayaran Tambahan</string>
+    <string name="payment_stage_final_payment">Bayaran Akhir</string>
+    <string name="payment_stage_full_payment">Bayaran Penuh</string>
+    <string name="payment_stage_pending">Dalam Semakan</string>
+    <string name="pay_sheet_purpose_additional_payment">Bayaran Tambahan</string>
+    <string name="pay_sheet_purpose_final_payment">Bayaran Akhir</string>
+    <string name="pay_sheet_installment_options_title">Pilih Jumlah Bayaran</string>
+    <string name="pay_sheet_chip_full_balance">Baki Penuh</string>
+    <string name="receipt_total_paid_label">Jumlah Dibayar</string>
+    <string name="receipt_package_total_label">Jumlah Pakej</string>
+    <string name="receipt_balance_due_label">Baki Tertunggak</string>
+
+    <!-- My Booking Redesign Strings -->
+    <string name="menu_invoice">Invois</string>
+    <string name="menu_receipt">Resit</string>
+    <string name="booking_no_receipts_available">Tiada resit tersedia sehingga pembayaran dibuat.</string>
+    <string name="booking_no_invoices_available">Tiada invois tersedia untuk tempahan ini.</string>
+    <string name="booking_label_grand_total_summary">Jumlah Penuh</string>
+    <string name="status_cancellation_requested">Permohonan Pembatalan</string>
+    <string name="payment_status_pending">Pembayaran Belum Selesai</string>
+    <string name="payment_status_partially_paid">Dibayar Sebahagian</string>
+    <string name="payment_status_overdue">Bayaran Lewat</string>
+    <string name="payment_status_failed">Bayaran Gagal</string>
+    <string name="payment_status_refunded">Dipulangkan</string>
+    <string name="payment_status_cancelled">Dibatalkan</string>
+
+    <!-- Season & Pricing Management Strings -->
+    <string name="config_season_type">Pilih Musim</string>
+    <string name="season_standard">Musim Standard</string>
+    <string name="season_low_peak">Musim Low Peak</string>
+    <string name="season_high_peak">Musim High Peak</string>
+    <string name="season_badge_standard">STANDARD</string>
+    <string name="season_badge_low_peak">LOW PEAK</string>
+    <string name="season_badge_high_peak">HIGH PEAK</string>
+    <string name="child_with_bed">Dengan Katil</string>
+    <string name="child_without_bed">Tanpa Katil</string>
+    <string name="option_bed_label">Keperluan Katil (11 tahun dan ke bawah)</string>
+    <string name="passenger_type_adult">Dewasa</string>
+    <string name="passenger_type_child">Kanak-kanak</string>
+    <string name="passenger_type_infant">Bayi</string>
+    <string name="summary_season_label">Musim:</string>
+    <string name="summary_season_standard">Standard</string>
+    <string name="summary_season_low_peak">Low Peak</string>
+    <string name="summary_season_high_peak">High Peak</string>
+    <string name="package_season_label">Musim</string>
+    <string name="with_bed">Dengan Katil</string>
+    <string name="without_bed">Tanpa Katil</string>
+    <string name="child_bed_option_label">Pilihan Katil (11 tahun dan ke bawah)</string>
+    <string name="config_pax_section_title">Bilangan Jemaah / Pelancong</string>
+    <string name="config_pax_adults_label">Dewasa</string>
+    <string name="config_pax_adults_sub">Lebih 11 tahun (Harga dewasa)</string>
+    <string name="config_pax_kids_label">Kanak-kanak</string>
+    <string name="config_pax_kids_sub">11 tahun dan ke bawah</string>
+    <string name="child_title_format">Kanak-kanak %d</string>
+    <string name="child_dob_label">Tarikh Lahir</string>
+    <string name="child_select_dob_hint">Pilih tarikh</string>
+    <string name="child_bed_label">Katil</string>
+    <string name="child_age_format">Umur: %d tahun</string>
+    <string name="child_age_under_2">Umur: Bawah 2 tahun</string>
+    <string name="err_child_dob_required">Sila pilih Tarikh Lahir untuk Kanak-kanak %d</string>
+    <string name="err_child_bed_required">Sila pilih Dengan Katil atau Tanpa Katil untuk Kanak-kanak %d</string>
+    <string name="label_starting_from">Bermula daripada</string>
+    <string name="season_standard_short">Standard</string>
+    <string name="season_low_peak_short">Luar Puncak</string>
+    <string name="season_high_peak_short">Puncak</string>
+    <string name="under_2">Bawah 2 Tahun</string>
+    <string name="travel_date">Tarikh Perjalanan</string>
+    <string name="departure_date">Tarikh Pelepasan</string>
+
+    <!-- Estimated Cost Breakdown Strings (Bahasa Melayu) -->
+    <string name="cost_breakdown_title">Pecahan Anggaran Kos</string>
+    <string name="cost_breakdown_adult_format">Dewasa × %d</string>
+    <string name="cost_breakdown_child_title_format">Kanak-kanak %1$d · %2$d tahun</string>
+    <string name="cost_breakdown_child_title_under_2_format">Kanak-kanak %1$d · Bawah 2 tahun</string>
+    <string name="cost_breakdown_child_title_dob_required">Kanak-kanak %1$d · Tarikh lahir diperlukan</string>
+    <string name="cost_breakdown_base_package">Harga Asas Pakej</string>
+    <string name="cost_breakdown_age_label">Umur</string>
+    <string name="cost_breakdown_category_label">Kategori</string>
+    <string name="cost_breakdown_bed_label">Katil</string>
+    <string name="cost_breakdown_yes">Ya</string>
+    <string name="cost_breakdown_no">Tidak</string>
+    <string name="cost_breakdown_bed_adjustment">Pelarasan Katil</string>
+    <string name="cost_breakdown_adjustment">Pelarasan</string>
+    <string name="cost_breakdown_final_child_price">Harga Akhir Kanak-kanak</string>
+    <string name="cost_breakdown_child_total">Harga Akhir</string>
+    <string name="cost_breakdown_estimated_total">Jumlah Anggaran</string>
+    <string name="cost_breakdown_promo_discount">Diskaun promo (%1$s)</string>
+    <string name="category_under_2">2 tahun dan ke bawah</string>
+    <string name="category_2_to_4">2 hingga 4 tahun</string>
+    <string name="category_2_to_11">2 hingga 11 tahun</string>
+    <string name="category_adult_rate">Kadar Dewasa</string>
+
+    <!-- About Page & Company Strings (Bahasa Melayu) -->
+    <string name="about_title">Tentang</string>
+    <string name="about_tagline">Bina Memori yang Telus bersama Hafiz Travel &amp; Tours</string>
+    <string name="about_company_full_name">Hafiz Travel &amp; Tours Sdn. Bhd.</string>
+    <string name="about_section_app_desc">Tentang Aplikasi</string>
+    <string name="about_app_description">Hafiz Travel ialah aplikasi rasmi rakan perjalanan anda untuk meneroka pakej Umrah dan pelancongan, mengurus tempahan, membuat pembayaran selamat, serta mengakses dokumen perjalanan.</string>
+    
+    <!-- Company Information Section -->
+    <string name="about_section_company">Syarikat</string>
+    <string name="about_established_label">Ditubuhkan</string>
+    <string name="about_established_value">2022</string>
+    <string name="about_motac_label">Lesen MOTAC</string>
+    <string name="about_motac_value">KPK/LN 10751</string>
+    <string name="about_ssm_label">Pendaftaran SSM</string>
+    <string name="about_ssm_value">202201043065 (1488762-A)</string>
+
+    <!-- Contact Section -->
+    <string name="about_section_contact">Hubungi Kami</string>
+    <string name="about_phone_label">Telefon</string>
+    <string name="about_phone_value">+6019-785 9867</string>
+    <string name="about_email_label">E-mel</string>
+    <string name="about_email_value">sales.httsb@gmail.com</string>
+    <string name="about_website_label">Laman Web</string>
+    <string name="about_website_value">hafiztraveltours.com</string>
+    <string name="about_website_url">https://hafiztraveltours.com</string>
+    <string name="about_address_label">Alamat</string>
+    <string name="about_address_value">No. 31, Jalan Dataran Larkin, 80350 Johor Bahru, Johor, Malaysia</string>
+    <!-- Social Media Section (Bahasa Melayu) -->
+    <string name="about_section_social">Media Sosial</string>
+    <string name="about_social_follow_us">Ikuti Kami</string>
+    <string name="social_tiktok">TikTok</string>
+    <string name="social_threads">Threads</string>
+    <string name="social_instagram">Instagram</string>
+    <string name="social_facebook">Facebook</string>
+    <string name="social_youtube">YouTube</string>
+
+    <!-- Legal Section -->
+    <string name="about_section_legal">Undang-undang</string>
+    <string name="about_privacy_policy">Dasar Privasi</string>
+    <string name="about_umrah_terms">Terma &amp; Syarat Umrah</string>
+    <string name="about_tour_terms">Terma &amp; Syarat Tour</string>
+    <string name="about_refund_policy">Polisi Bayaran Balik &amp; Pembatalan</string>
+    <string name="about_coming_soon">Akan Datang</string>
+
+    <!-- App Version & Developer Footer -->
+    <string name="about_app_version">Versi Aplikasi</string>
+    <string name="about_engineered_by_prefix">Direka oleh</string>
+    <string name="about_copyright">© 2022 Hafiz Travel &amp; Tours Sdn. Bhd. Hak cipta terpelihara.</string>
+
+    <!-- Notification Center & Push Notifications -->
+    <string name="notification_center_title">Pemberitahuan</string>
+    <string name="notification_mark_all_read">Tanda semua dibaca</string>
+    <string name="notif_doc_verified_title">Dokumen Perjalanan Disahkan</string>
+    <string name="notif_doc_verified_msg">Dokumen perjalanan anda telah berjaya disahkan.</string>
+    <string name="notif_prayer_reminder_title">Peringatan Solat</string>
+    <string name="notif_prayer_reminder_msg">Waktu solat %1$s akan masuk dalam 5 minit.</string>
 </resources>
+

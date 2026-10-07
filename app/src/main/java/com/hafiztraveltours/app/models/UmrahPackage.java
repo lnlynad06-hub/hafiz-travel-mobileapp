@@ -12,7 +12,14 @@ import com.hafiztraveltours.app.ui.*;
 
 import com.google.gson.annotations.SerializedName;
 
-public class UmrahPackage {
+/**
+ * API response DTO for packages (H4). Mirrors the Laravel JSON 1:1 — field names and
+ * types are contractual, do not rename. Also carries list helpers (filtering, price
+ * parsing). Convert to {@link PackageDetail} via {@code PackageDetail.fromUmrahPackage()}
+ * before showing booking UI; raw flight/route fields are read directly by
+ * PackageDetailActivity from the DTO.
+ */
+public class UmrahPackage implements java.io.Serializable {
     @SerializedName("id")
     public String id;
 
@@ -133,6 +140,155 @@ public class UmrahPackage {
     @SerializedName("exclusions")
     public java.util.List<String> exclusions;
 
+    @SerializedName("package_type")
+    public String packageType;
+
+    @SerializedName("tour_category_type")
+    public String tourCategoryType;
+
+    @SerializedName("is_umrah")
+    public Boolean isUmrahFlag;
+
+    @SerializedName("tour_hotels")
+    public java.util.List<TourHotelItem> tourHotels;
+
+    @SerializedName("season_prices")
+    public java.util.Map<String, String> seasonPrices;
+
+    @SerializedName("season_pricing")
+    public SeasonPricingData seasonPricing;
+
+    @SerializedName("child_under_2_price")
+    public Double childUnder2Price;
+
+    @SerializedName("child_2_11_with_bed_discount")
+    public Double child211WithBedDiscount;
+
+    @SerializedName("child_2_11_no_bed_discount")
+    public Double child211NoBedDiscount;
+
+    @SerializedName("child_2_to_4_discount")
+    public Double child2To4Discount;
+
+    @SerializedName("child_2_11_with_bed_price")
+    public Double child211WithBedPrice;
+
+    @SerializedName("child_2_11_no_bed_price")
+    public Double child211NoBedPrice;
+
+    @SerializedName("child_2_to_4_price")
+    public Double child2To4Price;
+
+    @SerializedName("child_pricing_rules")
+    public ChildPricingRules childPricingRules;
+
+    public static class TourHotelItem implements java.io.Serializable {
+        @SerializedName("id")
+        public String id;
+
+        @SerializedName("hotel_name")
+        public String hotelName;
+
+        @SerializedName("nights")
+        public Integer nights;
+
+        @SerializedName("rating")
+        public String rating;
+
+        @SerializedName("sort_order")
+        public Integer sortOrder;
+    }
+
+    public static class SeasonPricingData implements java.io.Serializable {
+        @SerializedName("standard")
+        public SeasonRate standard;
+
+        @SerializedName("low_peak")
+        public SeasonRate lowPeak;
+
+        @SerializedName("high_peak")
+        public SeasonRate highPeak;
+    }
+
+    public static class SeasonRate implements java.io.Serializable {
+        @SerializedName("adult_price")
+        public double adultPrice;
+
+        @SerializedName("child_with_bed")
+        public double childWithBed;
+
+        @SerializedName("child_without_bed")
+        public double childWithoutBed;
+
+        @SerializedName("child_under_2")
+        public double childUnder2;
+
+        @SerializedName("child_2_to_4")
+        public double child2To4;
+    }
+
+    public static class ChildPricingRules implements java.io.Serializable {
+        @SerializedName("type")
+        public String type;
+
+        @SerializedName("child_under_2_price")
+        public Double childUnder2Price;
+
+        @SerializedName("child_2_11_with_bed_discount")
+        public Double child211WithBedDiscount;
+
+        @SerializedName("child_2_11_no_bed_discount")
+        public Double child211NoBedDiscount;
+
+        @SerializedName("child_2_to_4_discount")
+        public Double child2To4Discount;
+
+        @SerializedName("child_2_11_with_bed_price")
+        public Double child211WithBedPrice;
+
+        @SerializedName("child_2_11_no_bed_price")
+        public Double child211NoBedPrice;
+
+        @SerializedName("child_2_to_4_price")
+        public Double child2To4Price;
+
+        @SerializedName("under_2_fixed_price")
+        public Double under2FixedPrice;
+
+        @SerializedName("under_2_label")
+        public String under2Label;
+
+        @SerializedName("age_2_to_11_bed_label")
+        public String age2To11BedLabel;
+
+        @SerializedName("age_2_to_11_no_bed_label")
+        public String age2To11NoBedLabel;
+
+        @SerializedName("age_2_to_4_label")
+        public String age2To4Label;
+
+        @SerializedName("above_11_label")
+        public String above11Label;
+
+        @SerializedName("above_4_label")
+        public String above4Label;
+    }
+
+    @SerializedName("requires_passport")
+    public Boolean requiresPassport;
+
+    @SerializedName("requires_ic")
+    public Boolean requiresIc;
+
+    @SerializedName("requires_mahram")
+    public Boolean requiresMahram;
+
+    @SerializedName("requires_clothes_size")
+    public Boolean requiresClothesSize;
+
+    @SerializedName("passport_validity_months")
+    public Integer passportValidityMonths;
+
     @SerializedName("required_documents")
     public java.util.List<String> requiredDocuments;
 
@@ -142,10 +298,35 @@ public class UmrahPackage {
     @SerializedName("important_notes")
     public java.util.List<String> importantNotes;
 
+    @SerializedName("cancellation_policy")
+    public java.util.List<String> cancellationPolicy;
+
+    @SerializedName("company_whatsapp")
+    public String companyWhatsapp;
+
+    @SerializedName("images")
+    public java.util.List<ImageItem> images;
+
+    public static class ImageItem implements java.io.Serializable {
+        // Backend gallery image id (integer PK). String receives both JSON numbers
+        // and numeric strings without crashing (Gson coerces numbers to String).
+        @SerializedName("id")
+        public String id;
+
+        @SerializedName("url")
+        public String url;
+
+        @SerializedName("is_primary")
+        public boolean isPrimary;
+    }
+
     @SerializedName("departures")
     public java.util.List<DepartureItem> departures;
 
     public static class DepartureItem implements java.io.Serializable {
+        // Backend departures PK is an integer, but kept as String on receive:
+        // Gson coerces JSON numbers into String safely, while Integer would crash
+        // on numeric strings. Parsed to Integer at booking creation time.
         @SerializedName("id")
         public String id;
 
@@ -154,12 +335,53 @@ public class UmrahPackage {
 
         @SerializedName("return_date")
         public String returnDate;
+
+        @SerializedName("capacity")
+        public Integer capacity;
+
+        @SerializedName("total_seats")
+        public Integer totalSeats;
+
+        @SerializedName("seats_booked")
+        public Integer seatsBooked;
+
+        @SerializedName("seats_available")
+        public Integer seatsAvailable;
+
+        @SerializedName("is_full")
+        public Boolean isFull;
+
+        @SerializedName("season")
+        public String season;
+
+        @SerializedName("price")
+        public String price;
+
+        @SerializedName("price_formatted")
+        public String priceFormatted;
+
+        @SerializedName("pricing")
+        public java.util.List<PricingTier> pricing;
+
+        public static class PricingTier implements java.io.Serializable {
+            @SerializedName("id")
+            public Integer id;
+            @SerializedName("label")
+            public String label;
+            @SerializedName("amount")
+            public String amount;
+            @SerializedName("currency")
+            public String currency;
+        }
     }
 
     @SerializedName("itineraries")
     public java.util.List<ItineraryItem> itineraries;
 
-    public static class ItineraryItem {
+    @SerializedName("related_packages")
+    public java.util.List<UmrahPackage> relatedPackages;
+
+    public static class ItineraryItem implements java.io.Serializable {
         @SerializedName("day_number")
         public int dayNumber;
 
@@ -183,10 +405,18 @@ public class UmrahPackage {
     public String collectionName;
 
     public boolean isUmrah() {
-        if (category != null) {
-            String cat = category.toLowerCase();
-            if (cat.contains("umrah") || cat.contains("haji") || cat.contains("hajj") || cat.contains("ziarah")) return true;
-            if (cat.contains("tour") || cat.contains("pelancongan") || cat.contains("holiday") || cat.contains("travel")) return false;
+        if (isUmrahFlag != null) {
+            return isUmrahFlag;
+        }
+        if (tourCategoryType != null && !tourCategoryType.trim().isEmpty()) {
+            String tct = tourCategoryType.trim().toLowerCase();
+            if ("umrah".equals(tct)) return true;
+            if ("outbound".equals(tct) || "domestic".equals(tct)) return false;
+        }
+        if (packageType != null && !packageType.trim().isEmpty()) {
+            String pt = packageType.trim().toLowerCase();
+            if (pt.contains("umrah") || pt.contains("haji") || pt.contains("hajj") || pt.contains("ziarah")) return true;
+            if (pt.contains("outbound") || pt.contains("international") || pt.contains("domestic") || pt.contains("tour")) return false;
         }
         if (collectionName != null) {
             String col = collectionName.toLowerCase();
@@ -196,14 +426,7 @@ public class UmrahPackage {
         if (nightsMakkah != null && nightsMakkah > 0) return true;
         if (hotelMakkahName != null && !hotelMakkahName.trim().isEmpty()) return true;
 
-        String combined = ((name != null ? name : "") + " " +
-                (title != null ? title : "") + " " +
-                (destination != null ? destination : "") + " " +
-                (summary != null ? summary : "")).toLowerCase();
-
-        return combined.contains("umrah") || combined.contains("makkah") ||
-                combined.contains("madinah") || combined.contains("ramadhan") ||
-                combined.contains("syawal");
+        return false;
     }
 
     /**
@@ -251,19 +474,11 @@ public class UmrahPackage {
     }
 
     public double getNumericPrice() {
+        // Preserved semantics: startingPrice wins when present (even "0.00"), else price.
         if (startingPrice != null && !startingPrice.trim().isEmpty()) {
-            try {
-                String clean = startingPrice.replaceAll("[^0-9.]", "");
-                if (!clean.isEmpty()) return Double.parseDouble(clean);
-            } catch (Exception ignored) {}
+            return com.hafiztraveltours.app.utils.MoneyFormat.parseAmount(startingPrice);
         }
-        if (price != null && !price.trim().isEmpty()) {
-            try {
-                String clean = price.replaceAll("[^0-9.]", "");
-                if (!clean.isEmpty()) return Double.parseDouble(clean);
-            } catch (Exception ignored) {}
-        }
-        return 0.0;
+        return com.hafiztraveltours.app.utils.MoneyFormat.parseAmount(price);
     }
 
     public boolean matchesCategory(String filterCategory) {

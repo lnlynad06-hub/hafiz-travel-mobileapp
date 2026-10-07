@@ -20,13 +20,9 @@ import android.view.animation.DecelerateInterpolator;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends BaseActivity {
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(LocaleHelper.applySavedLocale(newBase));
-    }
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO);
@@ -86,9 +82,12 @@ public class SplashActivity extends AppCompatActivity {
                     .start();
         }
 
-        // Seamless transition into WelcomeActivity
+        // Seamless transition into MainActivity if onboarding completed, otherwise WelcomeActivity
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            Intent intent = new Intent(SplashActivity.this, WelcomeActivity.class);
+            Class<?> targetClass = OnboardingManager.isOnboardingCompleted(SplashActivity.this)
+                    ? MainActivity.class
+                    : WelcomeActivity.class;
+            Intent intent = new Intent(SplashActivity.this, targetClass);
             startActivity(intent);
             overridePendingTransition(R.anim.nav_seamless_fade_in, R.anim.nav_seamless_fade_out);
             finish();

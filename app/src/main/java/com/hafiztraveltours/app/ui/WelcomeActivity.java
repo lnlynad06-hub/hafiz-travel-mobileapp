@@ -9,9 +9,10 @@ import com.hafiztraveltours.app.utils.*;
 import com.hafiztraveltours.app.views.*;
 import com.hafiztraveltours.app.ui.*;
 
-
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,7 +27,10 @@ import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
@@ -41,10 +45,31 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class WelcomeActivity extends AppCompatActivity {
+public class WelcomeActivity extends BaseActivity {
+
+    public static final int STEP_START_EXPLORING = 0;
+    public static final int STEP_PRAYER = 1;
+    public static final int STEP_NOTIFICATION = 2;
+
+    private int currentStep = STEP_START_EXPLORING;
+
+    private View layoutStartExploring;
+    private View layoutPrayerSetup;
+    private View layoutNotificationSetup;
 
     private String activeLanguage;
     private TextView tvActiveLanguage;
+
+    // Permissions
+    private final ActivityResultLauncher<String[]> locationPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> {
+                goToNotificationSetup();
+            });
+
+    private final ActivityResultLauncher<String> notificationPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                completeOnboardingAndGoHome();
+            });
 
     // Showcase Carousel
     private ImageView heroImageMain;
@@ -76,11 +101,6 @@ public class WelcomeActivity extends AppCompatActivity {
     };
 
     @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(LocaleHelper.applySavedLocale(newBase));
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         activeLanguage = LocaleHelper.getSavedLanguage(this);
@@ -102,6 +122,10 @@ public class WelcomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
+        layoutStartExploring = findViewById(R.id.layoutStartExploring);
+        layoutPrayerSetup = findViewById(R.id.layoutPrayerSetup);
+        layoutNotificationSetup = findViewById(R.id.layoutNotificationSetup);
+
         tvActiveLanguage = findViewById(R.id.tvActiveLanguage);
         heroImageMain = findViewById(R.id.heroImageMain);
         tvHeroTag = findViewById(R.id.tvHeroTag);
@@ -109,7 +133,7 @@ public class WelcomeActivity extends AppCompatActivity {
         setupFallbackShowcase();
         updateActiveLanguageLabel();
 
-        // Luxury Language Picker Bottom Sheet
+        // Luxury Language Picker Bottom Sheet (Discreet on Start Exploring screen)
         findViewById(R.id.btnLanguagePicker).setOnClickListener(v -> showLanguageBottomSheet());
 
         // Category chips quick navigation
@@ -123,32 +147,161 @@ public class WelcomeActivity extends AppCompatActivity {
                 startActivity(new Intent(WelcomeActivity.this, HubungiKamiActivity.class))
         );
 
-        // Navigation
-        findViewById(R.id.getStartedButton).setOnClickListener(v ->
-                startActivity(new Intent(WelcomeActivity.this, MainActivity.class))
-        );
-
         TextView tvLogin = findViewById(R.id.loginLinkText);
-        tvLogin.setText(android.text.Html.fromHtml(getString(R.string.welcome_already_have_account_full)));
-        tvLogin.setOnClickListener(v ->
-                startActivity(new Intent(WelcomeActivity.this, LoginActivity.class))
-        );
+        if (tvLogin != null) {
+            tvLogin.setText(android.text.Html.fromHtml(getString(R.string.welcome_already_have_account_full)));
+            tvLogin.setOnClickListener(v -> {
+                startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
+                overridePendingTransition(R.anim.nav_seamless_fade_in, R.anim.nav_seamless_fade_out);
+            });
+        }
 
-        // Calm, premium entrance animation
-        playEntranceAnimation();
+        TextView tvSignUp = findViewById(R.id.signupLinkText);
+        if (tvSignUp != null) {
+            tvSignUp.setText(android.text.Html.fromHtml(getString(R.string.welcome_no_account_full)));
+            tvSignUp.setOnClickListener(v -> {
+                startActivity(new Intent(WelcomeActivity.this, SignUpActivity.class));
+                overridePendingTransition(R.anim.nav_seamless_fade_in, R.anim.nav_seamless_fade_out);
+            });
+        }
+
+        // Wire Up Onboarding Setup Full-Screen Flow
+        setupOnboardingFlow();
+
+        int startAt = getIntent().getIntExtra("start_at_step", STEP_START_EXPLORING);
+        if (startAt == STEP_PRAYER) {
+            if (layoutStartExploring != null) layoutStartExploring.setVisibility(View.GONE);
+            if (layoutPrayerSetup != null) {
+                layoutPrayerSetup.setVisibility(View.VISIBLE);
+                layoutPrayerSetup.setAlpha(1f);
+            }
+            currentStep = STEP_PRAYER;
+        } else {
+            // Calm, premium entrance animation
+            playEntranceAnimation();
+        }
+    }
+
+    private void setupOnboardingFlow() {
+        // Step 1: Start Exploring CTA -> Transitions to full-screen Prayer Times & Qibla
+        findViewById(R.id.getStartedButton).setOnClickListener(v -> {
+            HapticUtil.click(v);
+            goToPrayerSetup();
+        });
+
+        // Step 2: Prayer Times & Qibla Actions (Grouped with Azan & Background setup)
+        findViewById(R.id.btnEnablePrayer).setOnClickListener(v -> {
+            HapticUtil.click(v);
+            OnboardingManager.setPrayerFeatureEnabled(this, true);
+            OnboardingManager.setQiblaFeatureEnabled(this, true);
+            OnboardingManager.setAzanFeatureEnabled(this, true);
+            boolean hasFine = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+            boolean hasCoarse = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+            if (hasFine || hasCoarse) {
+                goToNotificationSetup();
+            } else {
+                locationPermissionLauncher.launch(new String[]{
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                });
+            }
+        });
+
+        findViewById(R.id.btnSkipPrayer).setOnClickListener(v -> {
+            HapticUtil.click(v);
+            OnboardingManager.setPrayerFeatureEnabled(this, false);
+            OnboardingManager.setQiblaFeatureEnabled(this, false);
+            OnboardingManager.setAzanFeatureEnabled(this, false);
+            PrayerTimeScheduler.cancelAllAlarms(this);
+            goToNotificationSetup();
+        });
+
+        // Step 3: Notification Setup Actions
+        findViewById(R.id.btnAllowNotif).setOnClickListener(v -> {
+            HapticUtil.click(v);
+            OnboardingManager.setNotificationFeatureEnabled(this, true);
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+                    completeOnboardingAndGoHome();
+                } else {
+                    notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+                }
+            } else {
+                completeOnboardingAndGoHome();
+            }
+        });
+
+        findViewById(R.id.btnSkipNotif).setOnClickListener(v -> {
+            HapticUtil.click(v);
+            OnboardingManager.setNotificationFeatureEnabled(this, false);
+            completeOnboardingAndGoHome();
+        });
+    }
+
+    private void goToPrayerSetup() {
+        currentStep = STEP_PRAYER;
+        crossFade(layoutStartExploring, layoutPrayerSetup);
+    }
+
+    private void goToNotificationSetup() {
+        currentStep = STEP_NOTIFICATION;
+        crossFade(layoutPrayerSetup, layoutNotificationSetup);
+    }
+
+    /**
+     * Pure, subtle fade-out and fade-in between full-screen onboarding screens.
+     */
+    private void crossFade(final View outgoing, final View incoming) {
+        if (outgoing == null || incoming == null) return;
+        outgoing.animate()
+                .alpha(0f)
+                .setDuration(200)
+                .withEndAction(() -> {
+                    outgoing.setVisibility(View.GONE);
+                    incoming.setVisibility(View.VISIBLE);
+                    incoming.setAlpha(0f);
+                    incoming.animate()
+                            .alpha(1f)
+                            .setDuration(240)
+                            .start();
+                })
+                .start();
+    }
+
+    /**
+     * Completes onboarding, permanently persists the first-launch flag, and routes to Home.
+     */
+    private void completeOnboardingAndGoHome() {
+        OnboardingManager.setOnboardingCompleted(this, true);
+        Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.nav_seamless_fade_in, R.anim.nav_seamless_fade_out);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (currentStep == STEP_NOTIFICATION) {
+            currentStep = STEP_PRAYER;
+            crossFade(layoutNotificationSetup, layoutPrayerSetup);
+        } else if (currentStep == STEP_PRAYER) {
+            currentStep = STEP_START_EXPLORING;
+            crossFade(layoutPrayerSetup, layoutStartExploring);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     private void setupFallbackShowcase() {
         showcaseList.clear();
-        showcaseList.add(new ShowcaseItem(null, "tour", R.drawable.img_turkiye, "TURKIYE"));
-        showcaseList.add(new ShowcaseItem(null, "tour", R.drawable.img_korea1, "KOREA"));
-        showcaseList.add(new ShowcaseItem(null, "umrah", R.drawable.img_korea2, "MAKKAH & MADINAH"));
+        showcaseList.add(new ShowcaseItem(null, "tour", R.drawable.bg_image_placeholder, "TURKIYE"));
+        showcaseList.add(new ShowcaseItem(null, "tour", R.drawable.bg_image_placeholder, "KOREA"));
+        showcaseList.add(new ShowcaseItem(null, "umrah", R.drawable.bg_image_placeholder, "MAKKAH & MADINAH"));
         displayCurrentShowcase(false);
     }
 
     /**
      * Fetches real packages from Laravel REST API backend (MySQL)
-     * So any added or edited package in Laravel CMS / DB automatically shows here!
      */
     private void fetchLivePackagesFromApi() {
         ApiClient.getApiService().getPackages(null, null, null, null)
@@ -164,7 +317,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
                                     Object img = (p.imageUrl != null && !p.imageUrl.trim().isEmpty())
                                             ? p.imageUrl
-                                            : R.drawable.img_turkiye;
+                                            : R.drawable.bg_image_placeholder;
 
                                     showcaseList.add(new ShowcaseItem(p.id, p.category != null ? p.category : "tour", img, tag));
                                 }
@@ -258,7 +411,7 @@ public class WelcomeActivity extends AppCompatActivity {
                         .load(item.imageSource)
                         .transition(DrawableTransitionOptions.withCrossFade(400))
                         .placeholder(R.drawable.bg_image_placeholder)
-                        .error(R.drawable.img_turkiye)
+                        .error(R.drawable.bg_image_placeholder)
                         .centerCrop()
                         .into(heroImageMain);
             } catch (Exception ignored) {}
@@ -303,7 +456,6 @@ public class WelcomeActivity extends AppCompatActivity {
         View sheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_language_picker, null);
         dialog.setContentView(sheetView);
 
-        // Transparent background so the rounded top corners show perfectly
         if (sheetView.getParent() instanceof View) {
             ((View) sheetView.getParent()).setBackgroundColor(Color.TRANSPARENT);
         }
@@ -317,29 +469,17 @@ public class WelcomeActivity extends AppCompatActivity {
 
         View[] items = {
                 sheetView.findViewById(R.id.itemLangEnglish),
-                sheetView.findViewById(R.id.itemLangMalay),
-                sheetView.findViewById(R.id.itemLangArabic),
-                sheetView.findViewById(R.id.itemLangKorean),
-                sheetView.findViewById(R.id.itemLangJapanese),
-                sheetView.findViewById(R.id.itemLangChinese)
+                sheetView.findViewById(R.id.itemLangMalay)
         };
 
         String[] codes = {
                 LocaleHelper.LANGUAGE_ENGLISH,
-                LocaleHelper.LANGUAGE_MALAY,
-                LocaleHelper.LANGUAGE_ARABIC,
-                LocaleHelper.LANGUAGE_KOREAN,
-                LocaleHelper.LANGUAGE_JAPANESE,
-                LocaleHelper.LANGUAGE_CHINESE
+                LocaleHelper.LANGUAGE_MALAY
         };
 
         int[] radioIds = {
                 R.id.icRadioEnglish,
-                R.id.icRadioMalay,
-                R.id.icRadioArabic,
-                R.id.icRadioKorean,
-                R.id.icRadioJapanese,
-                R.id.icRadioChinese
+                R.id.icRadioMalay
         };
 
         for (int i = 0; i < items.length; i++) {
@@ -363,7 +503,6 @@ public class WelcomeActivity extends AppCompatActivity {
             if (radio != null) radio.setImageResource(R.drawable.ic_circle_unselected);
         }
 
-        // 1. Cascading Staggered Entrance Animation
         item.setAlpha(0f);
         item.setTranslationY(32f);
         item.setScaleX(0.96f);
@@ -378,7 +517,6 @@ public class WelcomeActivity extends AppCompatActivity {
                 .setInterpolator(new DecelerateInterpolator(1.6f))
                 .start();
 
-        // 2. Checkmark spring bounce for the active selection
         if (isSelected && radio != null) {
             radio.setScaleX(0f);
             radio.setScaleY(0f);
@@ -391,9 +529,8 @@ public class WelcomeActivity extends AppCompatActivity {
                     .start();
         }
 
-        // 3. Tactile Press-Bounce Micro-Animation on selection
         item.setOnClickListener(v -> {
-            v.performHapticFeedback(android.view.HapticFeedbackConstants.VIRTUAL_KEY);
+            HapticUtil.click(v);
             item.animate()
                     .scaleX(0.95f)
                     .scaleY(0.95f)
@@ -423,23 +560,25 @@ public class WelcomeActivity extends AppCompatActivity {
         View subtitleText = findViewById(R.id.subtitleText);
         View categoryChipsLayout = findViewById(R.id.categoryChipsLayout);
         View getStartedButton = findViewById(R.id.getStartedButton);
+        View authGroupContainer = findViewById(R.id.authGroupContainer);
         View loginLinkText = findViewById(R.id.loginLinkText);
 
-        View[] views = {heroCard, eyebrowText, titleText, subtitleText, categoryChipsLayout, getStartedButton, loginLinkText};
+        View authView = authGroupContainer != null ? authGroupContainer : loginLinkText;
+        View[] views = {heroCard, eyebrowText, titleText, subtitleText, categoryChipsLayout, getStartedButton, authView};
 
         long delay = 60;
         for (View v : views) {
             if (v != null) {
                 v.setAlpha(0f);
-                v.setTranslationY(24f);
+                v.setTranslationY(20f);
                 v.animate()
                         .alpha(1f)
                         .translationY(0f)
-                        .setDuration(500)
+                        .setDuration(460)
                         .setStartDelay(delay)
                         .setInterpolator(new DecelerateInterpolator(1.4f))
                         .start();
-                delay += 55;
+                delay += 50;
             }
         }
     }

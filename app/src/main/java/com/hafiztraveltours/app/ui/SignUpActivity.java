@@ -47,25 +47,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
-import com.hafiztraveltours.app.network.ApiClient;
-import com.hafiztraveltours.app.network.ApiResponse;
-import com.hafiztraveltours.app.network.AuthResponse;
-import com.hafiztraveltours.app.network.GoogleLoginRequest;
-import com.hafiztraveltours.app.network.RegisterRequest;
-import com.hafiztraveltours.app.network.UserDto;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-public class SignUpActivity extends AppCompatActivity {
+public class SignUpActivity extends BaseActivity {
 
     private static final int RC_SIGN_IN = 9001;
 
     private GoogleSignInClient mGoogleSignInClient;
 
-    private TextInputLayout nameLayout, emailLayout, passwordLayout, confirmPasswordLayout;
-    private TextInputEditText nameInput, emailInput, phoneInput, passwordInput, confirmPasswordInput;
+    private TextInputLayout nameLayout, nicknameLayout, emailLayout, passwordLayout, confirmPasswordLayout;
+    private TextInputEditText nameInput, nicknameInput, emailInput, phoneInput, passwordInput, confirmPasswordInput;
 
     // Phone compound field
     private LinearLayout btnCountryCode;
@@ -79,19 +68,14 @@ public class SignUpActivity extends AppCompatActivity {
     private TextView tvActiveLanguage;
     private TextView tvTermsDisclaimer;
 
-    // Password strength meter
-    private View passwordStrengthContainer;
-    private View passwordStrengthBar;
-    private TextView tvPasswordStrength;
-    private TextView tipLength, tipNumber, tipSymbol;
+    // Password checklist helper
+    private PasswordChecklistHelper passwordChecklistHelper;
 
     private String activeLanguage;
+    private SignUpViewModel signUpViewModel;
+    private String pendingGoogleName = "";
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(LocaleHelper.applySavedLocale(newBase));
-    }
-
+    
     @Override
     protected void onResume() {
         super.onResume();
@@ -116,12 +100,17 @@ public class SignUpActivity extends AppCompatActivity {
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
+        signUpViewModel = new androidx.lifecycle.ViewModelProvider(this).get(SignUpViewModel.class);
+        observeSignUpState();
+
         nameLayout = findViewById(R.id.nameLayout);
+        nicknameLayout = findViewById(R.id.nicknameLayout);
         emailLayout = findViewById(R.id.emailLayout);
         passwordLayout = findViewById(R.id.passwordLayout);
         confirmPasswordLayout = findViewById(R.id.confirmPasswordLayout);
 
         nameInput = findViewById(R.id.nameInput);
+        nicknameInput = findViewById(R.id.nicknameInput);
         emailInput = findViewById(R.id.emailInput);
         
         // Phone compound field
@@ -132,7 +121,7 @@ public class SignUpActivity extends AppCompatActivity {
         phoneInput = findViewById(R.id.phoneInput);
         if (btnCountryCode != null) {
             btnCountryCode.setOnClickListener(v -> {
-                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
                 showCountryPicker();
             });
         }
@@ -147,64 +136,53 @@ public class SignUpActivity extends AppCompatActivity {
 
         // Clear errors as user types + real-time validation
         setupRealtimeNameValidation();
+        setupRealtimeNicknameValidation();
         setupRealtimeEmailValidation();
         setupRealtimePhoneValidation();
         setupRealtimePasswordValidation();
         setupRealtimeConfirmPasswordValidation();
 
-        // Password strength meter
-        passwordStrengthContainer = findViewById(R.id.passwordStrengthContainer);
-        passwordStrengthBar = findViewById(R.id.passwordStrengthBar);
-        tvPasswordStrength = (TextView) findViewById(R.id.tvPasswordStrength);
-        tipLength = (TextView) findViewById(R.id.tipLength);
-        tipNumber = (TextView) findViewById(R.id.tipNumber);
-        tipSymbol = (TextView) findViewById(R.id.tipSymbol);
-        setupPasswordStrengthMeter();
+        // Password requirements checklist
+        View passwordReqLayout = findViewById(R.id.passwordRequirementsLayout);
+        if (passwordReqLayout != null) {
+            passwordChecklistHelper = new PasswordChecklistHelper(passwordReqLayout);
+            passwordChecklistHelper.attachToInput(passwordInput);
+        }
 
         if (tvTermsDisclaimer != null) {
             tvTermsDisclaimer.setText(Html.fromHtml(getString(R.string.signup_terms_disclaimer)));
             tvTermsDisclaimer.setOnClickListener(v -> {
-                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
                 showTermsBottomSheet();
             });
         }
 
         signUpButton.setOnClickListener(v -> {
-            v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+            com.hafiztraveltours.app.utils.HapticUtil.click(v);
             attemptSignUp();
         });
 
         findViewById(R.id.goToLogin).setOnClickListener(v -> {
-            v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+            com.hafiztraveltours.app.utils.HapticUtil.click(v);
             startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
-            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            overridePendingTransition(R.anim.nav_seamless_fade_in, R.anim.nav_seamless_fade_out);
             finish();
         });
 
         View googleBtn = findViewById(R.id.googleSignUpButton);
         if (googleBtn != null) {
             googleBtn.setOnClickListener(v -> {
-                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
                 setLoadingState(true);
                 Intent signInIntent = mGoogleSignInClient.getSignInIntent();
                 startActivityForResult(signInIntent, RC_SIGN_IN);
             });
         }
 
-        View guestSignUpText = findViewById(R.id.guestSignUpText);
-        if (guestSignUpText != null) {
-            guestSignUpText.setOnClickListener(v -> {
-                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                SessionManager.getInstance(SignUpActivity.this).clearSession();
-                startActivity(new Intent(SignUpActivity.this, MainActivity.class));
-                finish();
-            });
-        }
-
         View btnLanguagePicker = findViewById(R.id.btnLanguagePicker);
         if (btnLanguagePicker != null) {
             btnLanguagePicker.setOnClickListener(v -> {
-                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
                 showLanguageBottomSheet();
             });
         }
@@ -212,14 +190,53 @@ public class SignUpActivity extends AppCompatActivity {
         updateActiveLanguageLabel();
     }
 
+    /** Wires ViewModel results to loading UI, toasts and navigation (H1/Phase 10). */
+    private void observeSignUpState() {
+        signUpViewModel.getRegisterOp().observe(this, event -> {
+            com.hafiztraveltours.app.utils.ApiOpResult result =
+                    event != null ? event.consume() : null;
+            if (result == null) return;
+            setLoadingState(false);
+            if (result.success) {
+                String email = emailInput != null && emailInput.getText() != null
+                        ? emailInput.getText().toString().trim() : "";
+                Intent intent = new Intent(SignUpActivity.this, VerifyAccountActivity.class);
+                intent.putExtra(VerifyAccountActivity.EXTRA_EMAIL, email);
+                startActivity(intent);
+                overridePendingTransition(R.anim.nav_seamless_fade_in, R.anim.nav_seamless_fade_out);
+                finish();
+            } else {
+                Toast.makeText(this, result.resolveMessage(this), Toast.LENGTH_LONG).show();
+            }
+        });
+        signUpViewModel.getGoogleOp().observe(this, event -> {
+            com.hafiztraveltours.app.utils.ApiOpResult result =
+                    event != null ? event.consume() : null;
+            if (result == null) return;
+            setLoadingState(false);
+            if (result.success) {
+                Toast.makeText(this, getString(R.string.login_google_success, pendingGoogleName),
+                        Toast.LENGTH_SHORT).show();
+                if (!OnboardingManager.isOnboardingCompleted(this)) {
+                    Intent intent = new Intent(this, WelcomeActivity.class);
+                    intent.putExtra("start_at_step", WelcomeActivity.STEP_PRAYER);
+                    startActivity(intent);
+                } else {
+                    startActivity(new Intent(this, MainActivity.class));
+                }
+                finish();
+            } else {
+                Toast.makeText(this, result.resolveMessage(this), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
     private void setLoadingState(boolean loading) {
         if (isFinishing() || isDestroyed()) return;
-        if (signUpButton != null) {
-            signUpButton.setEnabled(!loading);
-            signUpButton.setText(loading ? getString(R.string.signup_signing_up) : getString(R.string.signup_button));
-        }
-        if (signUpProgressBar != null) {
-            signUpProgressBar.setVisibility(loading ? View.VISIBLE : View.GONE);
+        if (loading) {
+            LoadingButtonUtil.showLoading(signUpButton, signUpProgressBar);
+        } else {
+            LoadingButtonUtil.hideLoading(signUpButton, signUpProgressBar);
         }
     }
 
@@ -242,6 +259,25 @@ public class SignUpActivity extends AppCompatActivity {
                 } else {
                     nameLayout.setEndIconDrawable(null);
                     nameLayout.setError(getString(R.string.err_name_required));
+                }
+            }
+        });
+    }
+
+    private void setupRealtimeNicknameValidation() {
+        if (nicknameInput == null || nicknameLayout == null) return;
+        nicknameInput.addTextChangedListener(new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override public void afterTextChanged(android.text.Editable s) {
+                String val = s.toString().trim();
+                if (val.isEmpty()) {
+                    nicknameLayout.setError(null);
+                    nicknameLayout.setEndIconDrawable(null);
+                } else {
+                    nicknameLayout.setError(null);
+                    nicknameLayout.setEndIconMode(com.google.android.material.textfield.TextInputLayout.END_ICON_CUSTOM);
+                    nicknameLayout.setEndIconDrawable(R.drawable.ic_check_circle_magenta);
                 }
             }
         });
@@ -310,7 +346,7 @@ public class SignUpActivity extends AppCompatActivity {
                 String val = s.toString();
                 if (val.isEmpty()) {
                     passwordLayout.setError(null);
-                } else if (val.length() >= 6) {
+                } else if (val.length() >= 8) {
                     passwordLayout.setError(null);
                 } else {
                     passwordLayout.setError(getString(R.string.err_password_short));
@@ -321,11 +357,11 @@ public class SignUpActivity extends AppCompatActivity {
                     if (!confirmVal.isEmpty()) {
                         if (confirmVal.equals(val)) {
                             confirmPasswordLayout.setError(null);
-                            confirmPasswordLayout.setEndIconMode(com.google.android.material.textfield.TextInputLayout.END_ICON_CUSTOM);
-                            confirmPasswordLayout.setEndIconDrawable(R.drawable.ic_check_circle_magenta);
+                            confirmPasswordLayout.setHelperText(getString(R.string.passwords_match));
+                            confirmPasswordLayout.setHelperTextColor(android.content.res.ColorStateList.valueOf(0xFF047857));
                         } else {
-                            confirmPasswordLayout.setEndIconDrawable(null);
-                            confirmPasswordLayout.setError(getString(R.string.err_password_mismatch));
+                            confirmPasswordLayout.setHelperText(null);
+                            confirmPasswordLayout.setError(getString(R.string.passwords_mismatch));
                         }
                     }
                 }
@@ -344,130 +380,18 @@ public class SignUpActivity extends AppCompatActivity {
                         ? passwordInput.getText().toString() : "";
                 if (val.isEmpty()) {
                     confirmPasswordLayout.setError(null);
-                    confirmPasswordLayout.setEndIconDrawable(null);
+                    confirmPasswordLayout.setHelperText(null);
                 } else if (val.equals(passwordVal)) {
                     confirmPasswordLayout.setError(null);
-                    confirmPasswordLayout.setEndIconMode(com.google.android.material.textfield.TextInputLayout.END_ICON_CUSTOM);
-                    confirmPasswordLayout.setEndIconDrawable(R.drawable.ic_check_circle_magenta);
+                    confirmPasswordLayout.setHelperText(getString(R.string.passwords_match));
+                    confirmPasswordLayout.setHelperTextColor(android.content.res.ColorStateList.valueOf(0xFF047857));
                 } else {
-                    confirmPasswordLayout.setEndIconDrawable(null);
-                    confirmPasswordLayout.setError(getString(R.string.err_password_mismatch));
+                    confirmPasswordLayout.setHelperText(null);
+                    confirmPasswordLayout.setError(getString(R.string.passwords_mismatch));
                 }
             }
         });
     }
-
-    // ── Password Strength Meter ───────────────────────────────────────────────
-
-    private void setupPasswordStrengthMeter() {
-        if (passwordInput == null) return;
-        passwordInput.addTextChangedListener(new android.text.TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
-            @Override public void afterTextChanged(android.text.Editable s) {
-                String val = s.toString();
-                if (val.isEmpty()) {
-                    if (passwordStrengthContainer != null)
-                        passwordStrengthContainer.setVisibility(View.GONE);
-                    return;
-                }
-                if (passwordStrengthContainer != null)
-                    passwordStrengthContainer.setVisibility(View.VISIBLE);
-
-                updateTips(val);
-                int level = calculatePasswordStrength(val);
-                updateStrengthBar(level);
-            }
-        });
-    }
-
-    private void updateTips(String password) {
-        boolean hasLength = password.length() >= 8;
-        boolean hasNumber = password.matches(".*\\d.*");
-        boolean hasSymbol = password.matches(".*[^a-zA-Z0-9].*");
-
-        applyTip(tipLength, hasLength, getString(R.string.password_tip_length));
-        applyTip(tipNumber, hasNumber, getString(R.string.password_tip_number));
-        applyTip(tipSymbol, hasSymbol, getString(R.string.password_tip_symbol));
-    }
-
-    private void applyTip(TextView tip, boolean passed, String label) {
-        if (tip == null) return;
-        if (passed) {
-            tip.setText("\u2713 " + label);
-            tip.setTextColor(0xFF2E7D32);  // green
-        } else {
-            tip.setText("\u2717 " + label);
-            tip.setTextColor(0xFFE53935);  // red
-        }
-    }
-
-    /** Returns 0=Weak, 1=Medium, 2=Strong */
-    private int calculatePasswordStrength(String password) {
-        if (password.length() < 6) return 0;
-        boolean hasNumber = password.matches(".*\\d.*");
-        boolean hasSymbol = password.matches(".*[^a-zA-Z0-9].*");
-        if (password.length() >= 10 && hasNumber && hasSymbol) return 2;
-        if (password.length() >= 6 && (hasNumber || hasSymbol)) return 1;
-        if (password.length() >= 6) return 1;
-        return 0;
-    }
-
-    private void updateStrengthBar(int level) {
-        if (passwordStrengthBar == null || tvPasswordStrength == null) return;
-
-        android.view.ViewGroup.LayoutParams params = passwordStrengthBar.getLayoutParams();
-        android.view.ViewTreeObserver vto = passwordStrengthContainer.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new android.view.ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                passwordStrengthContainer.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                int totalWidth = passwordStrengthBar.getParent() instanceof android.view.View
-                        ? ((android.view.View) passwordStrengthBar.getParent()).getWidth() : 0;
-                if (totalWidth == 0) return;
-
-                int targetWidth;
-                int color;
-                String label;
-
-                switch (level) {
-                    case 2:
-                        targetWidth = totalWidth;
-                        color = 0xFF2E7D32; // dark green
-                        label = getString(R.string.password_strength_strong);
-                        break;
-                    case 1:
-                        targetWidth = totalWidth * 2 / 3;
-                        color = 0xFFE65100; // deep orange
-                        label = getString(R.string.password_strength_medium);
-                        break;
-                    default:
-                        targetWidth = totalWidth / 3;
-                        color = 0xFFE53935; // red
-                        label = getString(R.string.password_strength_weak);
-                        break;
-                }
-
-                android.animation.ValueAnimator animator = android.animation.ValueAnimator.ofInt(passwordStrengthBar.getWidth(), targetWidth);
-                animator.setDuration(300);
-                animator.setInterpolator(new android.view.animation.DecelerateInterpolator());
-                animator.addUpdateListener(a -> {
-                    android.view.ViewGroup.LayoutParams lp = passwordStrengthBar.getLayoutParams();
-                    lp.width = (int) a.getAnimatedValue();
-                    passwordStrengthBar.setLayoutParams(lp);
-                });
-                animator.start();
-
-                passwordStrengthBar.setBackgroundColor(color);
-                tvPasswordStrength.setText(label);
-                tvPasswordStrength.setTextColor(color);
-            }
-        });
-        // Trigger the layout listener
-        passwordStrengthContainer.requestLayout();
-    }
-
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -485,41 +409,8 @@ public class SignUpActivity extends AppCompatActivity {
                     String avatar = account.getPhotoUrl() != null ? account.getPhotoUrl().toString() : "";
 
                     setLoadingState(true);
-                    GoogleLoginRequest request = new GoogleLoginRequest(email, name, googleId, avatar);
-                    ApiClient.getApiService().googleLogin(request)
-                            .enqueue(new Callback<ApiResponse<AuthResponse>>() {
-                                @Override
-                                public void onResponse(Call<ApiResponse<AuthResponse>> call, Response<ApiResponse<AuthResponse>> response) {
-                                    if (isFinishing() || isDestroyed()) return;
-                                    setLoadingState(false);
-
-                                    if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
-                                        AuthResponse authData = response.body().data;
-                                        String token = authData != null ? authData.token : "";
-                                        UserDto user = authData != null ? authData.user : null;
-                                        if (user == null) {
-                                            user = new UserDto("1", name, email, "");
-                                        }
-                                        SessionManager.getInstance(SignUpActivity.this).saveAuthSession(token, user);
-                                        Toast.makeText(SignUpActivity.this, getString(R.string.login_google_success, name), Toast.LENGTH_SHORT).show();
-                                        startActivity(new Intent(SignUpActivity.this, MainActivity.class));
-                                        finish();
-                                    } else {
-                                        String err = getString(R.string.login_google_failed);
-                                        if (response.body() != null && response.body().message != null) {
-                                            err = response.body().message;
-                                        }
-                                        Toast.makeText(SignUpActivity.this, err, Toast.LENGTH_LONG).show();
-                                    }
-                                }
-
-                                @Override
-                                public void onFailure(Call<ApiResponse<AuthResponse>> call, Throwable t) {
-                                    if (isFinishing() || isDestroyed()) return;
-                                    setLoadingState(false);
-                                    Toast.makeText(SignUpActivity.this, getString(R.string.err_connection_detail, t.getMessage()), Toast.LENGTH_LONG).show();
-                                }
-                            });
+                    pendingGoogleName = name;
+                    signUpViewModel.googleLogin(email, name, googleId, avatar);
                 }
             } catch (ApiException e) {
                 setLoadingState(false);
@@ -572,11 +463,10 @@ public class SignUpActivity extends AppCompatActivity {
         View itemThailand = sheetView.findViewById(R.id.itemThailand);
         View itemVietnam = sheetView.findViewById(R.id.itemVietnam);
         View itemPhilippines = sheetView.findViewById(R.id.itemPhilippines);
-        View itemChina = sheetView.findViewById(R.id.itemChina);
-        View itemIndia = sheetView.findViewById(R.id.itemIndia);
-        View itemUk = sheetView.findViewById(R.id.itemUk);
-        View itemUsa = sheetView.findViewById(R.id.itemUsa);
-        View itemAustralia = sheetView.findViewById(R.id.itemAustralia);
+        View itemLaos = sheetView.findViewById(R.id.itemLaos);
+        View itemMyanmar = sheetView.findViewById(R.id.itemMyanmar);
+        View itemCambodia = sheetView.findViewById(R.id.itemCambodia);
+        View itemTimorLeste = sheetView.findViewById(R.id.itemTimorLeste);
 
         if (itemMalaysia != null) {
             itemMalaysia.setOnClickListener(v -> {
@@ -634,42 +524,34 @@ public class SignUpActivity extends AppCompatActivity {
                 dialog.dismiss();
             });
         }
-        if (itemChina != null) {
-            itemChina.setOnClickListener(v -> {
-                selectedCountryCode = "+86";
-                selectedCountryFlag = "\uD83C\uDde8\uD83C\uDdf3";
+        if (itemLaos != null) {
+            itemLaos.setOnClickListener(v -> {
+                selectedCountryCode = "+856";
+                selectedCountryFlag = "\uD83C\uDDF1\uD83C\uDDE6";
                 updateCountryUI();
                 dialog.dismiss();
             });
         }
-        if (itemIndia != null) {
-            itemIndia.setOnClickListener(v -> {
-                selectedCountryCode = "+91";
-                selectedCountryFlag = "\uD83C\uDDEE\uD83C\uDDF3";
+        if (itemMyanmar != null) {
+            itemMyanmar.setOnClickListener(v -> {
+                selectedCountryCode = "+95";
+                selectedCountryFlag = "\uD83C\uDDF2\uD83C\uDDF2";
                 updateCountryUI();
                 dialog.dismiss();
             });
         }
-        if (itemUk != null) {
-            itemUk.setOnClickListener(v -> {
-                selectedCountryCode = "+44";
-                selectedCountryFlag = "\uD83C\uDDEC\uD83C\uDde7";
+        if (itemCambodia != null) {
+            itemCambodia.setOnClickListener(v -> {
+                selectedCountryCode = "+855";
+                selectedCountryFlag = "\uD83C\uDDF0\uD83C\uDDED";
                 updateCountryUI();
                 dialog.dismiss();
             });
         }
-        if (itemUsa != null) {
-            itemUsa.setOnClickListener(v -> {
-                selectedCountryCode = "+1";
-                selectedCountryFlag = "\uD83C\uDDFA\uD83C\uDDF8";
-                updateCountryUI();
-                dialog.dismiss();
-            });
-        }
-        if (itemAustralia != null) {
-            itemAustralia.setOnClickListener(v -> {
-                selectedCountryCode = "+61";
-                selectedCountryFlag = "\uD83C\uDDE6\uD83C\uDDFA";
+        if (itemTimorLeste != null) {
+            itemTimorLeste.setOnClickListener(v -> {
+                selectedCountryCode = "+670";
+                selectedCountryFlag = "\uD83C\uDDF9\uD83C\uDDF1";
                 updateCountryUI();
                 dialog.dismiss();
             });
@@ -702,29 +584,17 @@ public class SignUpActivity extends AppCompatActivity {
 
         View[] items = {
                 sheetView.findViewById(R.id.itemLangEnglish),
-                sheetView.findViewById(R.id.itemLangMalay),
-                sheetView.findViewById(R.id.itemLangArabic),
-                sheetView.findViewById(R.id.itemLangKorean),
-                sheetView.findViewById(R.id.itemLangJapanese),
-                sheetView.findViewById(R.id.itemLangChinese)
+                sheetView.findViewById(R.id.itemLangMalay)
         };
 
         String[] codes = {
                 LocaleHelper.LANGUAGE_ENGLISH,
-                LocaleHelper.LANGUAGE_MALAY,
-                LocaleHelper.LANGUAGE_ARABIC,
-                LocaleHelper.LANGUAGE_KOREAN,
-                LocaleHelper.LANGUAGE_JAPANESE,
-                LocaleHelper.LANGUAGE_CHINESE
+                LocaleHelper.LANGUAGE_MALAY
         };
 
         int[] radioIds = {
                 R.id.icRadioEnglish,
-                R.id.icRadioMalay,
-                R.id.icRadioArabic,
-                R.id.icRadioKorean,
-                R.id.icRadioJapanese,
-                R.id.icRadioChinese
+                R.id.icRadioMalay
         };
 
         for (int i = 0; i < items.length; i++) {
@@ -774,7 +644,7 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
         item.setOnClickListener(v -> {
-            v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+            com.hafiztraveltours.app.utils.HapticUtil.click(v);
             item.animate()
                     .scaleX(0.95f)
                     .scaleY(0.95f)
@@ -799,6 +669,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void attemptSignUp() {
         String name = textOf(nameInput);
+        String nickname = textOf(nicknameInput);
         String email = textOf(emailInput);
         String rawPhone = textOf(phoneInput);
         String password = textOf(passwordInput);
@@ -806,36 +677,46 @@ public class SignUpActivity extends AppCompatActivity {
 
         boolean valid = true;
 
-        if (TextUtils.isEmpty(name)) {
-            nameLayout.setError(getString(R.string.err_name_required));
+        SignUpViewModel.SignUpErrors errors = signUpViewModel.validateSignUp(
+                name, nickname, email, rawPhone, password, confirmPassword);
+
+        if (errors.nameErr != 0) {
+            nameLayout.setError(getString(errors.nameErr));
             valid = false;
         } else {
             nameLayout.setError(null);
         }
 
-        if (TextUtils.isEmpty(email) || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            emailLayout.setError(getString(R.string.err_email_invalid));
+        if (errors.nickErr != 0) {
+            nicknameLayout.setError(getString(errors.nickErr));
+            valid = false;
+        } else {
+            nicknameLayout.setError(null);
+        }
+
+        if (errors.emailErr != 0) {
+            emailLayout.setError(getString(errors.emailErr));
             valid = false;
         } else {
             emailLayout.setError(null);
         }
 
-        if (TextUtils.isEmpty(rawPhone) || rawPhone.length() < 5) {
-            setPhoneError(getString(R.string.err_phone_invalid));
+        if (errors.phoneErr != 0) {
+            setPhoneError(getString(errors.phoneErr));
             valid = false;
         } else {
             setPhoneError(null);
         }
 
-        if (TextUtils.isEmpty(password) || password.length() < 6) {
-            passwordLayout.setError(getString(R.string.err_password_short));
+        if (errors.passErr != 0) {
+            passwordLayout.setError(getString(errors.passErr));
             valid = false;
         } else {
             passwordLayout.setError(null);
         }
 
-        if (!password.equals(confirmPassword)) {
-            confirmPasswordLayout.setError(getString(R.string.err_password_mismatch));
+        if (errors.confirmErr != 0) {
+            confirmPasswordLayout.setError(getString(errors.confirmErr));
             valid = false;
         } else {
             confirmPasswordLayout.setError(null);
@@ -843,63 +724,12 @@ public class SignUpActivity extends AppCompatActivity {
 
         if (!valid) return;
 
-        // Build normalized phone using selected country code
-        final String normalizedPhone;
-        String digits = rawPhone.replaceAll("[^\\d]", "");
-        if (rawPhone.startsWith("+")) {
-            normalizedPhone = rawPhone; // already has a code
-        } else if (rawPhone.startsWith("0")) {
-            // Strip leading 0, add selected country code
-            normalizedPhone = selectedCountryCode + digits.substring(1);
-        } else {
-            normalizedPhone = selectedCountryCode + digits;
-        }
+        // Normalized phone using selected country code (same rule as before).
+        final String normalizedPhone =
+                SignUpViewModel.normalizePhone(rawPhone, selectedCountryCode);
 
         setLoadingState(true);
-
-        RegisterRequest request = new RegisterRequest(name, email, normalizedPhone, password, confirmPassword);
-        ApiClient.getApiService().register(request)
-                .enqueue(new Callback<ApiResponse<AuthResponse>>() {
-                    @Override
-                    public void onResponse(Call<ApiResponse<AuthResponse>> call, Response<ApiResponse<AuthResponse>> response) {
-                        if (isFinishing() || isDestroyed()) return;
-                        setLoadingState(false);
-
-                        if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
-                            AuthResponse authData = response.body().data;
-                            String token = authData != null ? authData.token : "";
-                            UserDto user = authData != null ? authData.user : null;
-                            if (user == null) {
-                                user = new UserDto("1", name, email, normalizedPhone);
-                            }
-                            SessionManager.getInstance(SignUpActivity.this).saveAuthSession(token, user);
-                            Toast.makeText(SignUpActivity.this, getString(R.string.signup_success), Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(SignUpActivity.this, MainActivity.class));
-                            finish();
-                        } else {
-                            String errorMsg = getString(R.string.err_signup_failed);
-                            if (response.body() != null && response.body().message != null && !response.body().message.isEmpty()) {
-                                errorMsg = response.body().message;
-                            } else if (response.errorBody() != null) {
-                                try {
-                                    String errJson = response.errorBody().string();
-                                    org.json.JSONObject obj = new org.json.JSONObject(errJson);
-                                    if (obj.has("message")) {
-                                        errorMsg = obj.getString("message");
-                                    }
-                                } catch (Exception ignored) {}
-                            }
-                            Toast.makeText(SignUpActivity.this, errorMsg, Toast.LENGTH_LONG).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ApiResponse<AuthResponse>> call, Throwable t) {
-                        if (isFinishing() || isDestroyed()) return;
-                        setLoadingState(false);
-                        Toast.makeText(SignUpActivity.this, getString(R.string.err_network), Toast.LENGTH_LONG).show();
-                    }
-                });
+        signUpViewModel.register(name, nickname, email, normalizedPhone, password, confirmPassword);
     }
 
     private String textOf(TextInputEditText field) {

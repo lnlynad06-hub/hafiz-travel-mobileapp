@@ -18,13 +18,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class HubungiKamiActivity extends AppCompatActivity {
+public class HubungiKamiActivity extends BaseActivity {
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(LocaleHelper.applySavedLocale(newBase));
-    }
-
+    
     private static final String PHONE_NUMBER = "+6019-785 9867";
     private static final String PHONE_DIAL_URI = "tel:+60197859867";
     private static final String EMAIL_ADDRESS = "sales.httsb@gmail.com.my";

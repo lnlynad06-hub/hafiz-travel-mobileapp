@@ -1,7 +1,6 @@
 package com.hafiztraveltours.app.models;
 
 import java.io.Serializable;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,40 +13,83 @@ public class BookingRequest implements Serializable {
     public String roomPriceFormatted;
     public double unitPriceAmount;
     public int adultPaxCount = 1;
+    public int kidsPaxCount = 0;
     public double totalAmount;
     public String totalAmountFormatted;
 
+    public static class ChildConfig implements Serializable {
+        public int childIndex;
+        public String dateOfBirth = "";
+        public Boolean withBed = null; // null if unselected or not applicable
+    }
+
+    public List<ChildConfig> childConfigs = new ArrayList<>();
+
     public String selectedDepartureDate = "";
+    /** Raw backend departure ID (`departures[].id`) for the selected departure; sent as `departure_id`. */
+    public String selectedDepartureId = "";
+    public Integer selectedPricingId = null;
     public String promoCode = "";
     public double discountAmount = 0.0;
+    public String packageCategory = "umrah";
+    public String season = "standard";
+    public PackageDetail packageDetail;
+
+    public boolean termsAgreed = false;
+    public String termsAgreedAt = "";
+    public String termsVersion = "1.0";
+
+    public boolean isUmrahPackage() {
+        if (packageDetail != null) {
+            return packageDetail.isUmrah;
+        }
+        if (packageCategory != null && !packageCategory.isEmpty()) {
+            return "umrah".equalsIgnoreCase(packageCategory);
+        }
+        return true;
+    }
+
+    public boolean isTourPackage() {
+        return !isUmrahPackage();
+    }
 
     public List<Passenger> passengers = new ArrayList<>();
 
     public static class Passenger implements Serializable {
         public boolean isLead;
+        public String title = "Mr";
         public String fullName = "";
+        public String icNumber = "";
+        public String passportNumber = "";
+        public String passportExpiryDate = "";
+        public String issuingCountry = "Malaysia";
+        public String gender = "";
+        public String dateOfBirth = "";
+        public String nationality = "Malaysian";
+        public String clothesSize = "";
+        public Integer mahramIndex = null;
+        public String relationship = "";
         public String icPassportNumber = "";
         public String phoneNumber = "";
         public String email = "";
+        public String address = "";
+        public String passportDocumentPath = "";
+        public String icDocumentPath = "";
+        public Boolean withBed = true;
+        public double passengerCalculatedPrice = 0.0;
+        public boolean isComplete = false;
     }
 
     public static double parsePriceAmount(String priceStr) {
-        if (priceStr == null) return 0.0;
-        String clean = priceStr.replaceAll("[^0-9.]", "");
-        try {
-            return Double.parseDouble(clean);
-        } catch (Exception e) {
-            return 0.0;
-        }
+        return com.hafiztraveltours.app.utils.MoneyFormat.parseAmount(priceStr);
     }
 
     public static String formatPrice(double amount) {
-        DecimalFormat formatter = new DecimalFormat("#,###");
-        return "RM " + formatter.format(amount);
+        return com.hafiztraveltours.app.utils.MoneyFormat.formatRM(amount);
     }
 
     public void recalculateTotal() {
-        double subtotal = (this.unitPriceAmount * this.adultPaxCount);
+        double subtotal = (this.unitPriceAmount * (this.adultPaxCount + this.kidsPaxCount));
         this.totalAmount = Math.max(0, subtotal - this.discountAmount);
         this.totalAmountFormatted = formatPrice(this.totalAmount);
     }

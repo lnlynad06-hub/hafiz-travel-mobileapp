@@ -11,13 +11,42 @@
     <!-- Welcome / Onboarding screen (Editorial Luxury) -->
     <string name="welcome_brand_name">HAFIZ TRAVEL &amp; TOURS</string>
     <string name="welcome_eyebrow">PREMIER TRAVEL CURATION</string>
-    <string name="welcome_title">Extraordinary Journeys,\nCrafted with Elegance.</string>
-    <string name="welcome_subtitle">From iconic international tours across Asia, Europe and beyond, to sacred Umrah pilgrimages tailored with complete peace of mind.</string>
+    <string name="welcome_title">Welcome to Hafiz Travel</string>
+    <string name="welcome_subtitle">Discover destinations, explore travel packages and manage your trips in one place.</string>
     <string name="welcome_chip_worldwide">Worldwide Tours</string>
     <string name="welcome_chip_umrah">Umrah &amp; Ziarah</string>
     <string name="welcome_chip_custom">Custom Travel</string>
     <string name="welcome_start_now">Start Exploring</string>
     <string name="welcome_already_have_account_full">Already have an account? &lt;font color=\'#D81B60\'&gt;&lt;b&gt;Log In&lt;/b&gt;&lt;/font&gt;</string>
+    <string name="welcome_no_account_full">Don’t have an account? &lt;font color=\'#D81B60\'&gt;&lt;b&gt;Create Account&lt;/b&gt;&lt;/font&gt;</string>
+
+    <!-- Onboarding Step 1: Prayer Times & Qibla -->
+    <string name="onboarding_step_1_of_2">STEP 1 OF 2</string>
+    <string name="onboarding_prayer_title">Prayer Times &amp; Qibla</string>
+    <string name="onboarding_prayer_desc">Stay connected to your prayer routine while you travel.</string>
+    <string name="onboarding_action_enable">Enable</string>
+    <string name="onboarding_action_maybe_later">Maybe Later</string>
+
+    <!-- Onboarding Step 2: Notification Setup -->
+    <string name="onboarding_step_2_of_2">STEP 2 OF 2</string>
+    <string name="onboarding_notif_title">Stay Updated</string>
+    <string name="onboarding_notif_desc">Get important updates about your bookings, payments and trips.</string>
+    <string name="onboarding_action_allow_notif">Allow Notifications</string>
+
+    <!-- Prayer & Azan Settings in Profile -->
+    <string name="profile_prayer_azan_section">Prayer &amp; Azan Settings</string>
+    <string name="settings_prayer_times_title">Prayer Times &amp; Qibla</string>
+    <string name="settings_prayer_times_desc">Location-based prayer calculations and Qibla direction</string>
+    <string name="settings_azan_notif_title">Azan &amp; Prayer Alerts</string>
+    <string name="settings_azan_notif_desc">Receive alerts and Azan audio at prayer times</string>
+    <string name="settings_app_notif_title">App Notifications</string>
+    <string name="settings_app_notif_desc">Trip updates, booking alerts and promotions</string>
+    <string name="settings_background_op_title">Background Operation</string>
+    <string name="settings_background_op_desc">Allow background execution for punctual Azan alarms</string>
+    <string name="settings_background_op_enabled">Active</string>
+    <string name="settings_background_op_configure">Configure</string>
+    <string name="prayer_permission_required_toast">Location permission is required for accurate prayer times.</string>
+    <string name="notif_permission_required_toast">Notification permission is required for app alerts.</string>
     <string name="filter_all">All</string>
 
     <!-- Login screen -->
@@ -39,10 +68,58 @@
     <string name="login_failed_wrong_password">Incorrect password. Please try again.</string>
     <string name="login_failed_default">Login failed. Please check your credentials.</string>
 
+    <!-- FLOW A: Account Verification -->
+    <string name="verify_account_title">Verify Your Account</string>
+    <string name="verify_account_desc">We\'ve sent a 6-digit verification code to &lt;b&gt;%1$s&lt;/b&gt;</string>
+    <string name="verify_account_button">Verify Account</string>
+    <string name="verify_account_verifying">Verifying…</string>
+    <string name="verify_account_resend_prompt">Didn\'t receive the code?</string>
+    <string name="verify_account_resend_action">Resend Code</string>
+    <string name="verify_account_resend_countdown">Resend available in %1$s</string>
+    <string name="verify_account_back_login">Back to Login</string>
+    <string name="verify_account_success">Account verified successfully! Please log in.</string>
+    <string name="verify_account_resend_success">A new verification code has been sent.</string>
+    <string name="verify_account_code_required">Please enter all 6 digits of the verification code.</string>
+    <string name="unverified_account_login_msg">Please verify your account before logging in.</string>
+    <string name="unverified_account_verify_now">Verify Now</string>
+
+    <!-- FLOW B: Forgot Password Flow -->
+    <string name="forgot_pass_screen_title">Forgot Password?</string>
+    <string name="forgot_pass_screen_desc">Enter your email address and we\'ll send you a verification code to reset your password.</string>
+    <string name="forgot_pass_email_hint">Email Address</string>
+    <string name="forgot_pass_btn_send_code">Send Code</string>
+    <string name="forgot_pass_sending">Sending Code…</string>
+    <string name="reset_password_account_not_found">No account found for this email address.</string>
+
+    <!-- FLOW B: Enter Reset Code -->
+    <string name="enter_reset_code_title">Verify Reset Code</string>
+    <string name="enter_reset_code_desc">Enter the 6-digit code sent to &lt;b&gt;%1$s&lt;/b&gt;</string>
+    <string name="enter_reset_code_btn_verify">Verify Code</string>
+    <string name="enter_reset_code_verifying">Verifying…</string>
+    <string name="enter_reset_code_resend_prompt">Didn\'t receive the code?</string>
+    <string name="enter_reset_code_resend_action">Resend Code</string>
+    <string name="enter_reset_code_resend_countdown">Resend in %1$s</string>
+    <string name="enter_reset_code_resend_success">A new verification code has been sent.</string>
+
+    <!-- FLOW B: Reset Password -->
+    <string name="reset_pass_screen_title">Reset Password</string>
+    <string name="reset_pass_screen_desc">Create a new password for your account.</string>
+    <string name="reset_pass_new_password_hint">New Password</string>
+    <string name="reset_pass_confirm_password_hint">Confirm New Password</string>
+    <string name="reset_pass_btn_submit">Reset Password</string>
+    <string name="reset_pass_submitting">Updating Password…</string>
+
+    <!-- FLOW B: Password Reset Success -->
+    <string name="reset_pass_success_title">Password Reset Successfully</string>
+    <string name="reset_pass_success_desc">Your password has been updated. You can now log in with your new password.</string>
+    <string name="reset_pass_success_btn_login">Back to Login</string>
+
     <!-- Sign Up screen -->
     <string name="signup_title">Create an Account</string>
     <string name="signup_subtitle">Sign up to start planning your vacation.</string>
-    <string name="hint_full_name">Full name</string>
+    <string name="hint_full_name">Full name *</string>
+    <string name="hint_username">Username *</string>
+    <string name="hint_nickname">Username *</string>
     <string name="hint_phone">Phone Number</string>
     <string name="hint_confirm_password">Confirm Password</string>
     <string name="signup_button">Sign Up</string>
@@ -53,26 +130,36 @@
     <string name="signup_have_account">Already have an account? Log in</string>
     <string name="signup_or_with">Or Sign Up With</string>
     <string name="signup_guest">Login as Guest</string>
+    <string name="password_strength_too_short">Too Short</string>
     <string name="password_strength_weak">Weak</string>
     <string name="password_strength_medium">Medium</string>
     <string name="password_strength_strong">Strong</string>
+    <string name="passwords_match">Passwords match</string>
+    <string name="passwords_mismatch">Passwords do not match</string>
     <string name="btn_continue_google">Continue with Google</string>
     <string name="social_signup_google">Sign up with Google</string>
     <string name="select_country_code">Select Country Code</string>
     <string name="region_southeast_asia">SOUTHEAST ASIA</string>
     <string name="region_international">OTHER INTERNATIONAL</string>
     <string name="err_name_required">Please enter your full name</string>
+    <string name="err_username_required">Please enter your username</string>
+    <string name="err_username_taken">Username is already taken</string>
+    <string name="err_nickname_required">Please enter your username.</string>
     <string name="err_email_invalid">Please enter a valid email address</string>
     <string name="err_phone_invalid">Please enter a valid phone number</string>
-    <string name="err_password_short">Password must be at least 6 characters</string>
+    <string name="err_password_short">Password must be at least 8 characters</string>
     <string name="err_password_mismatch">Passwords do not match</string>
     <string name="err_signup_failed">Registration failed. Please try again.</string>
     <string name="err_signup_email_exists">Email or phone number is already registered</string>
     <string name="err_network">Connection error. Please check your internet.</string>
-    <string name="signup_success">Registration successful!</string>
-    <string name="password_tip_length">8+ chars</string>
-    <string name="password_tip_number">0–9</string>
-    <string name="password_tip_symbol">!@#$</string>
+    <string name="signup_success">Registration successful! Please log in to continue.</string>
+    <string name="password_requirements_header">Password requirements</string>
+    <string name="req_pass_min_length">At least 8 characters</string>
+    <string name="req_pass_uppercase">Uppercase letter</string>
+    <string name="req_pass_lowercase">Lowercase letter</string>
+    <string name="req_pass_number">Number</string>
+    <string name="req_pass_special">Special character</string>
+    <string name="password_status_strong">Strong password</string>
 
     <string name="guest_greeting">Assalamualaikum</string>
     <string name="user_greeting">Assalamualaikum</string>
@@ -82,17 +169,18 @@
     <string name="hero_headline_user">Where is your next\ndream journey?</string>
 
     <string name="nav_home">Home</string>
+    <string name="nav_booking">My Booking</string>
     <string name="nav_explore">Explore</string>
+    <string name="nav_favorite">Favorite</string>
+    <string name="nav_profile">Profile</string>
     <string name="nav_umrah">Umrah</string>
     <string name="nav_tour">Tour</string>
-    <string name="nav_favorite">Favorite</string>
 
     <string name="quick_nusuk">Nusuk</string>
     <string name="quick_guideline">Umrah Guide</string>
     <string name="quick_checklist">Checklist</string>
     <string name="quick_whatsapp">WhatsApp</string>
 
-    <string name="prayer_times_title">Prayer Times Today (estimated)</string>
     <string name="search_placeholder">Find your destination</string>
     <string name="popular_packages">Popular Packages</string>
     <string name="see_all">View All</string>
@@ -140,6 +228,10 @@
     <string name="prayer_maghrib">Maghrib</string>
     <string name="prayer_isyak">Isha</string>
     <string name="prayer_default_location">Prayer Times - %1$s</string>
+    <string name="prayer_times_header">Waktu Solat</string>
+    <string name="prayer_times_subtitle">Prayer Times</string>
+    <string name="prayer_label_upcoming">UPCOMING PRAYER</string>
+    <string name="prayer_refresh_action">Refresh</string>
     <string name="menu_profile">My Profile</string>
     <string name="menu_language">Language</string>
     <string name="menu_about_us">About Us</string>
@@ -391,9 +483,9 @@
     <string name="btn_send">SEND</string>
     <string name="btn_cancel">CANCEL</string>
 
-    <string name="reset_password_invalid_email">Please enter a valid email</string>
+    <string name="reset_password_invalid_email">Please enter a valid email address</string>
     <string name="reset_password_sent">Password reset email sent. Please check your inbox.</string>
-    <string name="reset_password_failed">Failed to send email. Please try again.</string>
+    <string name="reset_password_failed">Password reset failed. Please try again.</string>
 
     <string name="login_google_signin_failed">Google Sign-In failed: Code %1$d</string>
     <string name="login_google_success">Google login successful! %1$s</string>
@@ -608,7 +700,7 @@
     <string name="dest_vietnam">Vietnam</string>
     <string name="dest_china">China</string>
 
-    <string name="prayer_times_header">Prayer Times Today</string>
+    <string name="prayer_times_today_label">Prayer Times Today</string>
     <string name="prayer_times_today_format">Prayer Times Today (%1$s)</string>
     <string name="explore_package_arrow">Explore Package →</string>
     <string name="exclusive_offer_title">Exclusive Pilgrim Offer</string>
@@ -624,6 +716,37 @@
     <string name="prayer_countdown_entered">Prayer time has arrived</string>
     <string name="prayer_countdown_min">%1$s in %2$dm</string>
     <string name="prayer_countdown_hour_min">%1$s in %2$dh %3$dm</string>
+    <string name="qibla_title">Qibla Direction</string>
+    <string name="qibla_subtitle">Find the direction of the Kaaba</string>
+    <string name="qibla_screen_title">Qibla Compass</string>
+    <string name="qibla_aligned">✓ Facing Qibla</string>
+    <string name="qibla_degree_format">Qibla: %1$.0f°</string>
+    <string name="qibla_kaaba_dist">Kaaba: Makkah, Saudi Arabia</string>
+    <string name="qibla_current_location">Current Location</string>
+    <string name="qibla_label_qibla">Qibla</string>
+    <string name="qibla_label_distance">Distance</string>
+    <string name="qibla_label_offset">Offset</string>
+    <string name="qibla_no_sensor">Device sensor not available. Unable to display compass movement.</string>
+    <string name="qibla_permission_needed">Location permission is required to calculate accurate Qibla bearing.</string>
+    <string name="qibla_grant_permission">Grant Location Permission</string>
+    <string name="qibla_accuracy_title">Compass accuracy</string>
+    <string name="qibla_accuracy_notice">For a more reliable direction, hold your phone flat and keep it away from magnets, metal objects and electronic devices.</string>
+    <string name="qibla_bearing_label">Qibla Bearing</string>
+    <string name="qibla_distance_label">Distance to Kaabah</string>
+    <string name="qibla_angle_label">Angle to Qibla</string>
+    <string name="qibla_angle_left">%1$d° left</string>
+    <string name="qibla_angle_right">%1$d° right</string>
+    <string name="qibla_angle_behind">Qibla is behind you (%1$d°)</string>
+    <string name="qibla_angle_behind_left">Qibla is behind to the left (%1$d°)</string>
+    <string name="qibla_angle_behind_right">Qibla is behind to the right (%1$d°)</string>
+    <string name="qibla_angle_aligned">Aligned</string>
+    <string name="qibla_instruction">Point the red needle toward Qibla</string>
+    <string name="qibla_hold_steady">Hold steady to confirm Qibla</string>
+    <string name="qibla_hold_steady_timer">Hold steady · %1$.1fs</string>
+    <string name="qibla_confirmed_aligned">Your phone is looking at Qibla direction</string>
+    <string name="qibla_facing_sub">Facing Kaaba</string>
+    <string name="qibla_kaaba_location">Kaaba · Mecca, Saudi Arabia</string>
+    <string name="qibla_interference">⚠ Magnetic interference detected\nMove away from metal objects and calibrate the phone.</string>
 
     <!-- Shared error / status messages (also used for previously hardcoded Toasts & dialogs) -->
     <string name="err_server_connection">Failed to connect to the backend server.</string>
@@ -660,8 +783,9 @@
     <string name="profile_reset_message">Send a password reset link to: %1$s?</string>
     <string name="profile_reset_send">Send</string>
     <string name="profile_reset_sent">A password reset link has been sent to your email!</string>
-    <string name="profile_field_full_name">Full Name</string>
-    <string name="profile_field_phone">Phone Number</string>
+    <string name="profile_field_full_name">Full Name <font color="#DC2626">*</font></string>
+    <string name="profile_field_nickname">Nickname <font color="#DC2626">*</font></string>
+    <string name="profile_field_phone">Phone Number <font color="#DC2626">*</font></string>
     <string name="profile_field_email">Email</string>
 
     <!-- Misc -->
@@ -690,11 +814,17 @@
     <string name="detail_terms_sub">Important terms, rules, and booking guidelines</string>
     <string name="detail_required_documents">Required Documents</string>
     <string name="detail_docs_sub">Required travel documents, visas, and certificates</string>
+    <string name="detail_notes_sub_fallback">Important information for travelers</string>
+    <string name="detail_cancellation_sub">Terms, timelines, and refund eligibility rules</string>
+    <string name="detail_booking_guide">Booking Guide</string>
+    <string name="detail_booking_guide_sub">Simple steps to book your travel package with Hafiz Travel &amp; Tours</string>
     <string name="room_quint">5-Person Room (Quint)</string>
     <string name="room_quad">4-Person Room (Quad)</string>
     <string name="room_triple">3-Person Room (Triple)</string>
     <string name="room_double">2-Person Room (Double)</string>
     <string name="room_single">1-Person Room (Single)</string>
+    <string name="room_standard">Standard Room</string>
+    <string name="note_badge_important">Important</string>
     <string name="detail_price_from">Starting From</string>
     <string name="cat_flights">Flights</string>
     <string name="cat_accommodation">Accommodation</string>
@@ -709,6 +839,8 @@
     <string name="detail_packing_heading">Recommended Packing List</string>
     <string name="detail_section_notes">Important Notes &amp; Guidelines</string>
     <string name="detail_section_gallery">Photo Gallery</string>
+    <string name="detail_section_related_packages">Related Packages</string>
+    <string name="detail_section_cancellation_policy">Cancellation &amp; Refund Policy</string>
     <string name="detail_per_pax">per person</string>
     <string name="nights_unit">Nights</string>
     <string name="nights_label_makkah">Makkah</string>
@@ -740,7 +872,7 @@
     <string name="promo_hero_kicker">MAKKAH &amp; MADINAH</string>
     <string name="promo_hero_title">School Holiday &amp; Syawal Umrah Package</string>
     <string name="promo_hero_price">From RM 7,990 • 12 Days 10 Nights</string>
-    <string name="google_review_summary">4.9 (250+ Google Reviews)</string>
+    <string name="google_review_summary">4.9 (100+ Google Reviews)</string>
 
     <!-- Package detail badges (were hardcoded in layout) -->
     <string name="package_vip_badge">VIP FEATURED PACKAGE</string>
@@ -763,7 +895,8 @@
     <string name="azan_channel_name">Azan Notifications</string>
     <string name="azan_channel_desc">Notifications for prayer times &amp; azan</string>
     <string name="battery_title">Keep Azan Working</string>
-    <string name="battery_message">To ensure notifications &amp; azan play on time even when this app is closed, allow this app to run unrestricted in the background.\n\nThis step is optional and can be set later in Settings.</string>
+    <string name="battery_message">Allow Hafiz Travel to run in the background so prayer notifications and Azan can play on time, even when the app is closed.</string>
+    <string name="battery_supporting_text">This step is optional and can be configured later in Settings.</string>
     <string name="battery_now">Set Up Now</string>
     <string name="battery_later">Later</string>
     <string name="hijri_date_fallback">1 Rajab 1448H</string>
@@ -772,5 +905,779 @@
     <string name="btn_ask_questions">Ask</string>
     <string name="selected_room_label">Selected Room</string>
     <string name="booking_flow_notice">Selected option: %1$s (%2$s). Proceed to enter passenger details.</string>
+    <string name="booking_no_format">Booking No.: %1$s</string>
+    <string name="booking_failed">Failed to submit booking. Please check your connection and try again.</string>
+    <string name="my_bookings_title">My Bookings</string>
+    <string name="back">Back</string>
+    <string name="loyalty_points">Loyalty Points</string>
+    <string name="loyalty_tier_progress">RM%1$s more to %2$s</string>
+    <string name="loyalty_top_tier">Highest tier achieved</string>
+    <string name="stat_bookings">Bookings</string>
+    <string name="stat_total_spent">Total Spent</string>
+    <string name="stat_outstanding">Outstanding</string>
+    <string name="member_since_format">Member since %1$s</string>
+    <string name="customer_no_format">Member ID: %1$s</string>
+    <string name="login_cta">Log In / Sign Up</string>
+    <string name="guest_hero_subtitle">Log in to view your bookings &amp; rewards</string>
+    <string name="profile_language">Language</string>
+    <string name="upcoming_trip">Upcoming Trip</string>
+    <string name="profile_theme_current">Light</string>
+    <string name="logout_confirm_message">Are you sure you want to log out of your account?</string>
+    <string name="profile_saving">Saving…</string>
+    <string name="profile_update_failed">Failed to update profile. Please try again.</string>
 
+    <!-- Profile & Document Vault Strings -->
+    <string name="profile_field_ic_no">IC / NRIC Number <font color="#DC2626">*</font></string>
+    <string name="profile_field_passport_no">Passport Number <font color="#DC2626">*</font></string>
+    <string name="profile_field_passport_expiry">Passport Expiry Date (YYYY-MM-DD) <font color="#DC2626">*</font></string>
+    <string name="profile_field_emergency_name">Emergency Contact Name <font color="#DC2626">*</font></string>
+    <string name="profile_field_emergency_phone">Emergency Contact Phone <font color="#DC2626">*</font></string>
+    <string name="profile_field_mahram_name">Mahram Name (If applicable)</string>
+    <string name="profile_age_format">Age: %1$d</string>
+    <string name="profile_travel_documents">Travel Documents</string>
+    <string name="doc_passport_copy">Passport Copy (Main Page) <font color="#DC2626">*</font></string>
+    <string name="doc_visa_managed_by_company">Managed by Company</string>
+    <string name="doc_visa_company_note">Your travel visa will be arranged and provided directly by Hafiz Travel &amp; Tours prior to departure. Customer upload is not required.</string>
+    <string name="doc_status_verified">Verified</string>
+    <string name="doc_status_pending">Pending Review</string>
+    <string name="doc_status_not_uploaded">Not Uploaded</string>
+    <string name="doc_upload_btn">Upload / View</string>
+    <string name="doc_vault_info">Your travel documents, all in one place.</string>
+
+    <string name="profile_section_personal">Personal Details</string>
+    <string name="profile_section_travel_identity">Passport &amp; Travel Identity</string>
+    <string name="profile_section_emergency">Emergency &amp; Pilgrimage Support</string>
+    <string name="doc_subtitle_passport">Required for Flight &amp; Saudi Visa</string>
+    <string name="doc_action_upload">Upload Document</string>
+    <string name="doc_action_view">View Document</string>
+    <string name="doc_action_replace">Replace Document</string>
+    <string name="doc_trip_requirements">Trip Document Requirements</string>
+    <string name="doc_auto_reused_tag">Auto-Reused from Profile</string>
+    <string name="doc_trip_info">Documents automatically reused from your profile alongside required trip-specific clearance.</string>
+    <string name="doc_status_rejected">Rejected</string>
+    <string name="doc_status_expired">Expired</string>
+    <string name="doc_rejection_default">Please re-upload a clear copy</string>
+    <string name="doc_rejection_reason_prefix">Reason: %1$s</string>
+
+    <!-- Redesigned Edit Profile Strings -->
+    <string name="edit_profile_title">Edit Profile</string>
+    <string name="edit_profile_subtitle">Update your personal, identity, passport, address &amp; mahram details</string>
+    <string name="section_personal_info">Personal Information</string>
+    <string name="section_identity_info">Identity / MyKad</string>
+    <string name="section_passport_info">Passport Information</string>
+    <string name="section_residential_address">Residential Address</string>
+    <string name="section_emergency_contact">Emergency Contact</string>
+    <string name="section_mahram_info">Mahram Information</string>
+    <string name="section_security">Security</string>
+    <string name="profile_field_gender">Gender <font color="#DC2626">*</font></string>
+    <string name="profile_field_dob">Date of Birth <font color="#DC2626">*</font></string>
+    <string name="profile_field_nationality">Nationality / Country <font color="#DC2626">*</font></string>
+    <string name="profile_field_issuing_country">Passport Issuing Country <font color="#DC2626">*</font></string>
+    <string name="profile_field_address_line_1">Address Line 1 <font color="#DC2626">*</font></string>
+    <string name="profile_field_address_line_2">Address Line 2 (Optional)</string>
+    <string name="profile_field_postcode">Postcode <font color="#DC2626">*</font></string>
+    <string name="profile_field_city">City / District <font color="#DC2626">*</font></string>
+    <string name="profile_field_state">State <font color="#DC2626">*</font></string>
+    <string name="profile_field_country">Country <font color="#DC2626">*</font></string>
+    <string name="hint_address_line_1">Street address, P.O. Box</string>
+    <string name="hint_address_line_2">Apartment, suite, unit, building, floor</string>
+    <string name="hint_postcode">e.g. 80000</string>
+    <string name="hint_city">e.g. Johor Bahru</string>
+    <string name="hint_state">e.g. Johor</string>
+    <string name="hint_country">e.g. Malaysia</string>
+    <string name="label_mahram_applicable">Mahram applicable?</string>
+    <string name="label_relationship">Relationship</string>
+    <string name="hint_relationship">e.g. Husband, Father, Brother</string>
+    <string name="change_password_dialog_subtitle">Enter your current and new password below</string>
+    <string name="hint_current_password_required">Current Password <font color="#DC2626">*</font></string>
+    <string name="hint_new_password_required">New Password <font color="#DC2626">*</font></string>
+    <string name="hint_confirm_new_password_required">Confirm New Password <font color="#DC2626">*</font></string>
+    <string name="btn_update_password">Update Password</string>
+    <string name="password_updating">Updating...</string>
+    <string name="password_updated_success">Password updated successfully!</string>
+    <string name="password_update_failed">Failed to update password. Please check your current password.</string>
+    <string name="passport_expiry_warning">Passport expires soon (%1$s). Renewal recommended before travel.</string>
+    <string name="passport_expired_warning">Passport expired (%1$s). Renewal required before travel.</string>
+    <string name="err_current_password_required">Please enter your current password</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="email_readonly_helper">Your registered account email</string>
+    <!-- Redesigned Travel Documents Vault Strings -->
+    <string name="vault_security_banner_title">Secure Document Storage</string>
+    <string name="vault_security_banner_body">Your documents are securely stored and protected.</string>
+    <string name="vault_section_identity">Identity Documents</string>
+    <string name="vault_section_photo">Personal Photo</string>
+    <string name="vault_section_travel">Travel-Specific Documents</string>
+    <string name="doc_ic_title">MyKad / Identity Card (IC) <font color="#DC2626">*</font></string>
+    <string name="doc_ic_desc">National ID required for agency registration &amp; visa clearance</string>
+    <string name="doc_passport_photo_title">Passport Photo <font color="#DC2626">*</font></string>
+    <string name="doc_passport_photo_desc">Standard white background passport photo (JPG/PNG)</string>
+    <string name="doc_travel_visa_title">Travel Visa</string>
+    <string name="doc_travel_visa_desc">Visa document required for certain international destinations.</string>
+    <string name="doc_status_under_review">Pending</string>
+    <string name="doc_updated_at_format">Uploaded: %1$s</string>
+    <string name="doc_expires_at_format">Expires: %1$s</string>
+    <string name="legend_required"><font color="#DC2626">*</font> Required</string>
+
+    <!-- Requirements & Upload Dialog Strings -->
+    <string name="doc_view_requirements">View Requirements</string>
+    <string name="req_subtitle">Please review standard specifications before uploading</string>
+    <string name="req_passport_title">Passport Requirements</string>
+    <string name="req_passport_1">Clear copy of passport biodata page</string>
+    <string name="req_passport_2">Full name &amp; passport number must be clearly readable</string>
+    <string name="req_passport_3">Passport photo must be clearly visible</string>
+    <string name="req_passport_4">Document must not be blurry or cropped</string>
+    <string name="req_ic_title">MyKad / IC Requirements</string>
+    <string name="req_ic_1">Clear copy of MyKad (front and back where required)</string>
+    <string name="req_ic_2">Full name &amp; identification number must be readable</string>
+    <string name="req_ic_3">Document must not be blurry or cropped</string>
+    <string name="req_photo_title">Passport Photo Requirements</string>
+    <string name="req_photo_1">Recent passport-sized photo</string>
+    <string name="req_photo_2">Face clearly visible with plain background</string>
+    <string name="req_photo_3">No excessive blur, shadows, or dark lighting</string>
+    <string name="req_visa_title">Travel Visa Requirements</string>
+    <string name="req_visa_1">Valid travel visa document issued for target country</string>
+    <string name="req_visa_2">Visa details, destination, and reference number readable</string>
+    <string name="req_visa_3">Issue date &amp; expiry date clearly visible</string>
+    <string name="upload_accepted_formats">Accepted formats: JPG, JPEG, PNG, PDF</string>
+    <string name="upload_accepted_formats_photo">Accepted formats: JPG, JPEG, PNG</string>
+    <string name="upload_max_size">Maximum file size: 5 MB</string>
+    <string name="upload_tip">Make sure the document is clear, readable, and not cropped.</string>
+    <string name="btn_choose_file">Choose File from Device</string>
+    <string name="btn_got_it">Got It</string>
+    <string name="upload_privacy_notice">Personal details are encrypted and securely processed for verification.</string>
+    <string name="err_file_format">Unsupported format. Accepted: JPG, JPEG, PNG, PDF.</string>
+    <string name="err_file_format_photo">Unsupported format. Accepted: JPG, JPEG, PNG.</string>
+    <string name="err_file_size">File is too large. Maximum allowed size is 5 MB.</string>
+    <string name="err_file_empty">Selected file is invalid or empty. Please select another file.</string>
+    <string name="doc_upload_success">Document uploaded successfully for review!</string>
+
+    <!-- Verification Progress Strings -->
+    <string name="doc_verification_title">Document Verification</string>
+    <string name="doc_progress_count_format">%1$d of %2$d verified</string>
+    <string name="msg_doc_progress_start">Upload your required documents to get started.</string>
+    <string name="msg_doc_progress_partial">Some documents still require your attention.</string>
+    <string name="msg_doc_progress_under_review">All required documents have been submitted. Verification is in progress.</string>
+    <string name="msg_doc_progress_complete">All required documents have been verified.</string>
+    <string name="msg_doc_progress_rejected">Some documents require action. Please review and replace the rejected document.</string>
+
+    <!-- Document Status Guidance Strings -->
+    <string name="doc_guidance_under_review">Your document has been submitted and is being reviewed by Hafiz Travel.</string>
+    <string name="doc_guidance_verified">Your document has been received and verified.</string>
+    <string name="doc_verified_at_format">Verified: %1$s</string>
+    <string name="doc_status_not_required">Not Required</string>
+
+    <string name="prefilled_from_profile">Filled from your profile</string>
+
+
+    <!-- Travellers & Traveller Selection -->
+    <string name="passenger_details_title">Travellers</string>
+    <string name="passenger_booking_summary">BOOKING SUMMARY</string>
+    <string name="passenger_departure_format">Departure: %1$s</string>
+    <string name="passenger_room_pax_format">%1$s • %2$d Travellers</string>
+    <string name="passenger_section_your_profile">YOUR DETAILS</string>
+    <string name="passenger_section_additional">ADDITIONAL TRAVELLERS</string>
+    <string name="passenger_no_additional">No additional travellers added yet.</string>
+    <string name="passenger_btn_add_another">+ Add Another Traveller</string>
+    <string name="passenger_footer_count_format">%1$d of %2$d Travellers Added</string>
+    <string name="passenger_btn_continue">CONTINUE TO BOOKING SUMMARY</string>
+    <string name="passenger_profile_complete">✓ Profile Complete</string>
+    <string name="passenger_profile_incomplete">⚠ Profile Incomplete</string>
+    <string name="passenger_passport_label">Passport: %1$s</string>
+    <string name="passenger_nationality_label">Nationality: %1$s</string>
+    <string name="passenger_doc_passport_available">✓ Passport Document Available</string>
+    <string name="passenger_doc_passport_pending">• Passport Copy: Not yet uploaded (can be submitted after booking)</string>
+    <string name="passenger_doc_photo_available">✓ Passport Photo Available</string>
+    <string name="passenger_doc_photo_pending">• Passport Photo: Not yet uploaded (can be submitted after booking)</string>
+    <string name="passenger_doc_visa_info">• Travel Visa: Handled by company</string>
+    <string name="passenger_passport_validity_info">• Passport Validity: Less than %1$d months / renew before departure</string>
+    <string name="passenger_passport_expiry_pending">• Passport Expiry: Not yet provided (can be updated later)</string>
+    <string name="passenger_doc_ic_available">✓ MyKad / IC Document Available</string>
+    <string name="passenger_btn_edit_profile">Edit Profile</string>
+    <string name="passenger_profile_incomplete_warn">Your account profile does not meet the requirements for this package.\nPlease complete your profile before continuing.</string>
+    <string name="passenger_missing_fields_header">Required Profile Information:</string>
+    <string name="passenger_btn_complete_profile">COMPLETE PROFILE NOW</string>
+    <string name="passenger_not_logged_in">User not logged in</string>
+    <string name="passenger_profile_not_found">Profile not found</string>
+    <string name="passenger_missing_name">Full Name (as IC / Passport)</string>
+    <string name="passenger_missing_ic">NRIC / MyKad Number</string>
+    <string name="passenger_missing_passport">Passport Number</string>
+    <string name="passenger_missing_passport_expiry">Passport Expiry Date</string>
+    <string name="passenger_missing_passport_validity">Passport expired or less than %1$d months validity</string>
+    <string name="passenger_missing_passport_doc">Passport Copy Document</string>
+    <string name="passenger_missing_ic_doc">MyKad / IC Copy Document</string>
+    <string name="passenger_missing_clothes_size">Clothing / Abaya Size</string>
+    <string name="passenger_traveller_title_format">Traveller %1$d</string>
+    <string name="passenger_delete">Delete</string>
+    <string name="passenger_sub_personal_info">Personal Information</string>
+    <string name="passenger_sub_passport_info">International Passport Document</string>
+    <string name="passenger_sub_extra_info">Additional Options &amp; Mahram</string>
+    <string name="passenger_passport_hint_validity">Must be valid for at least 6 months before departure date</string>
+    <string name="passenger_default_preview_name">Please enter traveller details</string>
+    <string name="passenger_field_title_hint">Title</string>
+    <string name="passenger_field_name_label">Full Name as Passport / IC *</string>
+    <string name="passenger_field_name_hint">e.g. Jane Doe</string>
+    <string name="passenger_field_dob_label">Date of Birth</string>
+    <string name="passenger_field_gender_label">Gender</string>
+    <string name="passenger_field_gender_hint">Select</string>
+    <string name="passenger_field_nationality_label">Nationality</string>
+    <string name="passenger_field_ic_label">NRIC / MyKad Number *</string>
+    <string name="passenger_field_ic_hint">e.g. 950505-10-5544</string>
+    <string name="passenger_field_passport_label">International Passport Number *</string>
+    <string name="passenger_field_passport_hint">e.g. A98765432</string>
+    <string name="passenger_field_passport_expiry_label">Passport Expiry Date *</string>
+    <string name="passenger_field_issuing_country_label">Issuing Country</string>
+    <string name="passenger_field_clothes_size_label">Clothing / Abaya Size</string>
+    <string name="passenger_field_clothes_size_hint">Select Size</string>
+    <string name="passenger_field_mahram_label">Mahram (Reference Traveller)</string>
+    <string name="passenger_field_mahram_hint">Select Mahram Traveller</string>
+    <string name="passenger_field_mahram_relation_label">Mahram Relationship</string>
+    <string name="passenger_field_mahram_relation_hint">e.g. Husband / Father / Brother</string>
+    <string name="passenger_lead_tag">(Lead Traveller)</string>
+    <string name="passenger_lead_default_name">Lead Traveller</string>
+    <string name="passenger_err_complete_lead_profile">Please complete Lead Traveller Profile first.</string>
+    <string name="passenger_err_pax_count_mismatch">Booking requires %1$d travellers (%2$d added). Please add %3$d more traveller(s).</string>
+    <string name="passenger_err_name_required">Please enter full name as in IC / Passport.</string>
+    <string name="passenger_err_ic_required">Please enter NRIC / MyKad number.</string>
+    <string name="passenger_err_passport_required">Please enter passport number.</string>
+    <string name="passenger_err_passport_expiry_required">Please select passport expiry date.</string>
+    <string name="passenger_err_complete_all_additional">Please complete details for all additional travellers.</string>
+    <string name="gender_male">Male</string>
+    <string name="gender_female">Female</string>
+    <!-- Audit fix: hardcoded user-facing strings moved to resources -->
+    <string name="promo_applied_format">Promo code %1$s applied (-RM 200)</string>
+    <string name="pax_unit">Pax</string>
+    <string name="pax_count_format">%1$d Pax</string>
+    <string name="room_price_x_pax_format">%1$s × %2$d Pax</string>
+    <string name="summary_departure_format">Departure: %1$s</string>
+    <string name="summary_pax_adults_format">%1$d Adult Pax</string>
+    <string name="summary_room_subtotal_format">Room Subtotal (%1$s × %2$d Pax)</string>
+    <string name="summary_promo_discount_format">Promo Code Discount (%1$s)</string>
+    <string name="summary_lead_suffix">(Lead Traveller)</string>
+    <string name="summary_traveller_index_format">%1$d. %2$s%3$s</string>
+    <string name="summary_id_label_format">No. IC/Passport: %1$s</string>
+    <string name="summary_phone_label_format">Phone No.: %1$s</string>
+    <string name="summary_email_label_format">Email: %1$s</string>
+    <string name="duration_days_nights_format">%1$d Days %2$d Nights</string>
+    <string name="label_contact_us">Contact Us</string>
+    <string name="bookings_docs_all_linked">All required documents for this package are already linked and complete!</string>
+    <string name="bookings_doc_readiness_format">Package Document Readiness: %1$d/%2$d Verified • %3$d Auto-Reused</string>
+    <string name="doc_trip_specific_tag">✈ Trip-Specific Document</string>
+    <string name="doc_status_fallback_format">%1$s: %2$s</string>
+    <string name="doc_status_not_uploaded_fallback">not_uploaded</string>
+    <string name="readiness_title">Account &amp; Travel Readiness</string>
+    <string name="readiness_percent_format">%1$d%% Complete</string>
+    <string name="readiness_complete_msg">Your travel profile &amp; documents are 100% complete!</string>
+    <string name="readiness_incomplete_msg">Complete your profile &amp; travel documents for faster booking clearance</string>
+    <string name="readiness_autolink_msg">✓ Auto-linked to all future Umrah &amp; Tour bookings</string>
+    <string name="profile_ic_locked">IC number has been filled and cannot be deleted.</string>
+    <string name="profile_passport_locked">Passport number has been filled and cannot be deleted.</string>
+    <string name="profile_address_locked">Address has been filled and cannot be deleted.</string>
+    <string name="doc_upload_processing">Uploading document…</string>
+    <string name="doc_upload_failed_retry">Failed to upload document. Please try again.</string>
+    <string name="doc_upload_network_error">Network error while uploading document.</string>
+    <string name="doc_read_error">Error reading document file.</string>
+    <string name="doc_file_not_found">Document file not found.</string>
+    <string name="doc_open_failed">Failed to open document file.</string>
+    <string name="default_title_mr">Mr</string>
+    <string name="default_nationality">Malaysian</string>
+    <string name="default_country">Malaysia</string>
+    <string name="payment_summary_format">%1$s • %2$s • %3$d Pax</string>
+    <string name="passenger_err_pax_over">Too many travellers (%1$d added, booking requires %2$d). Please remove %3$d traveller(s).</string>
+    <!-- Audit fix: layout user-facing strings -->
+    <string name="booking_success_copy_no">Copy</string>
+    <string name="booking_success_copied_toast">Booking No. copied: %1$s</string>
+    <string name="content_desc_back">Back</string>
+    <string name="summary_title">Booking Review</string>
+    <string name="config_title">Package &amp; Room Options</string>
+    <string name="departure_range_format">%1$s to %2$s</string>
+    <!-- M7: booking/summary/payment/config layouts -->
+    <string name="summary_step_package">01 Package</string>
+    <string name="summary_step_travellers">02 Travellers</string>
+    <string name="summary_step_review">03 Review &amp; Confirm</string>
+    <string name="summary_card_package">Selected Package Summary</string>
+    <string name="summary_card_travellers">Traveller List</string>
+    <string name="summary_card_payment">Payment Summary</string>
+    <string name="summary_grand_total">Grand Total</string>
+    <string name="summary_payment_notice_title">Payment &amp; Deposit Information</string>
+    <string name="summary_payment_notice_body">Booking confirmation does not require immediate payment. Once confirmed, you can conveniently make your deposit or package payment anytime via My Booking.</string>
+    <string name="summary_checkbox_agree">I have read and agree to the Terms &amp; Conditions and Cancellation Policy of Hafiz Travel &amp; Tours.</string>
+    <string name="summary_view_terms_link">View Full Terms &amp; Conditions ›</string>
+    <string name="btn_confirm_booking">CONFIRM BOOKING</string>
+    <string name="booking_confirmed_success">Booking confirmed successfully! Please settle your deposit via My Booking.</string>
+    <string name="config_subtitle">Please select a room &amp; pax count before filling in traveller details</string>
+    <string name="config_room_type">Room Type</string>
+    <string name="config_pax_label">Number of Travellers (Adults)</string>
+    <string name="config_pax_hint">Min 1 Pax • Price per pax</string>
+    <string name="config_pax_default">1 Pax</string>
+    <string name="config_departure_label">Departure Date Options</string>
+    <string name="config_promo_hint">Promo Code / CRM Coupon</string>
+    <string name="config_apply">APPLY</string>
+    <string name="config_total_label">Estimated Total Cost</string>
+    <string name="config_continue">CONTINUE TO TRAVELLER DETAILS</string>
+    <string name="clothes_size_format">Size: %1$s</string>
+    <string name="content_desc_close">Close</string>
+    <string name="content_desc_refresh">Refresh location</string>
+    <string name="content_desc_share">Share package</string>
+    <string name="content_desc_favorite">Save to favorites</string>
+    <string name="content_desc_status">Status</string>
+    <string name="content_desc_shield">Security status</string>
+    <string name="lang_region_english">United Kingdom / Global</string>
+    <string name="lang_region_malay">Malaysia</string>
+    <string name="label_optional">(Optional)</string>
+    <!-- H2: centralized API error mapping -->
+    <string name="err_session_expired">Your session has expired. Please log in again.</string>
+    <string name="err_forbidden">You do not have permission to perform this action.</string>
+    <string name="err_not_found">The requested data was not found.</string>
+    <string name="err_validation">Please check the highlighted fields and try again.</string>
+    <string name="err_too_many_requests">Too many requests. Please wait a moment and try again.</string>
+    <string name="err_no_internet">No internet connection. Please check your connection.</string>
+    <string name="err_server">Server error occurred. Please try again later.</string>
+    <string name="err_timeout">Request timed out. Please try again.</string>
+    <string name="lang_english">English</string>
+    <string name="lang_malay">Bahasa Melayu</string>
+    <!-- Customer Booking Eligibility Gate -->
+    <string name="booking_blocked_profile_title">Profile Incomplete</string>
+    <string name="booking_blocked_profile_msg">Please complete your personal and contact details in Edit Profile before registering or booking a package.</string>
+    <string name="booking_blocked_docs_title">Travel Documents Required</string>
+    <string name="booking_blocked_docs_msg">Please upload all required travel documents before registering or booking a package. Missing documents:\n\n%1$s</string>
+    <string name="btn_edit_profile_now">Edit Profile</string>
+    <string name="btn_upload_docs_now">Upload Documents</string>
+    <string name="doc_name_passport">Passport Copy (Main Page)</string>
+    <string name="doc_name_ic">MyKad / Identity Card (IC)</string>
+    <string name="doc_name_passport_photo">Passport Photo (White Background)</string>
+    <!-- Terms & Conditions Booking Step (Exact Official PDF) -->
+    <string name="terms_title">Terms &amp; Conditions</string>
+    <string name="terms_close_viewer">Understood &amp; Back</string>
+    <string name="terms_required_error">Please agree to the Terms &amp; Conditions before confirming your booking.</string>
+
+    <string name="terms_company_title">HAFIZ TRAVEL &amp; TOURS SDN BHD</string>
+    <string name="terms_company_reg">Reg. No.: 202201043065 (1488762-A) | KPK/LN: 10751</string>
+    <string name="terms_company_address">No. 31, Jalan Dataran Larkin 1, Taman Dataran Larkin, 80350 Johor Bahru, Johor, Malaysia</string>
+    <string name="terms_company_contact">Tel: +607-244 2262 / +6018-405 2262\nEmail: sales@hafiztraveltours.com | Web: www.hafiztraveltours.com</string>
+    <string name="terms_scope_body">These Terms &amp; Conditions apply to all tour packages offered by Hafiz Travel &amp; Tours Sdn. Bhd. (hereafter referred to as Hafiz Travel &amp; Tours), covering Umrah, “Outbound”, and “Inbound” tour packages.</string>
+
+    <string name="terms_sec_deposit_title">DEPOSIT &amp; FULL PACKAGE PAYMENT</string>
+    <string name="terms_sec_deposit_body">1. Advance deposit for each Umrah package is RM1,000.00 per person.\n2. Advance deposit for each “Outbound” and “Inbound” package is RM500.00 per person.\n3. The balance of package payment must be settled within:\n   I. 60 days before departure date for School Holiday Umrah Packages\n   II. 45 days before departure date for Regular Season Umrah Packages\n4. Payment can be made via:\n   I. Cash only at Hafiz Travel &amp; Tours Head Office\n   II. Cash deposit to Hafiz Travel &amp; Tours Bank Account (Transaction slip will serve as proof of payment)\n5. Official Bank Account Information:\n   HAFIZ TRAVEL &amp; TOURS SDN. BHD.\n   Bank Muamalat Malaysia Berhad: 0101 0003 8447 14\n6. Hafiz Travel &amp; Tours shall not be held responsible for any payments made to non-company accounts or third-party accounts.</string>
+
+    <string name="terms_sec_refund_title">REFUND POLICY</string>
+    <string name="terms_sec_refund_body">1. Any refund or reimbursement of package fees, whether cancellation is initiated by the participant or Hafiz Travel &amp; Tours, is subject to refund approvals from third-party service providers.\n2. The refund processing period is between three (3) to nine (9) months from the date of cancellation.\n3. No refund will be provided to participants if they do not utilize any activities or inclusions provided within the package.\n4. Refunds or administration fees charged are subject to the sole discretion of Hafiz Travel &amp; Tours if cancellation arises from unavoidable emergencies such as critical illness or death.</string>
+
+    <string name="terms_sec_itinerary_title">A. ITINERARY &amp; PACKAGE TRAVEL</string>
+    <string name="terms_sec_itinerary_body">1. Hafiz Travel &amp; Tours does not guarantee that provided packages are suitable for all segments of society, but guarantees the highest quality of dedicated service to all registered participants.\n2. Hafiz Travel &amp; Tours cannot be held liable for any illness, health issues, accidents, or fatalities arising from any activities provided or self-elected optional activities.\n3. Itinerary adjustments are governed under Regulation 9 of Schedule 4, Tourism Industry Act 1992. Should alternative arrangements be required, Hafiz Travel &amp; Tours is not obligated to ensure the alternative matches the exact cost/value of the original itinerary. Hafiz Travel &amp; Tours is not liable if pilgrims miss itinerary activities due to personal negligence or failure.</string>
+
+    <string name="terms_sec_hotel_title">B. HOTEL ACCOMMODATION</string>
+    <string name="terms_sec_hotel_body">1. Hotel star ratings and distances stated in promotional materials are based on hotel self-ratings provided for reference only.\n2. Star ratings and hospitality standards may differ across countries.\n3. Hafiz Travel &amp; Tours reserves the right to substitute advertised hotels due to lack of availability or unforeseen circumstances without prior notice.\n4. In the event of changes, Hafiz Travel &amp; Tours will make every reasonable effort to provide equivalent or superior hotel substitutes.\n5. Check-in and check-out policies vary by hotel; Hafiz Travel &amp; Tours is not liable for inconvenience caused by hotel policies.\n6. Room arrangements are strictly segregated by gender (men with men, women with women).</string>
+
+    <string name="terms_sec_extra_title">C. ADDITIONAL CONDITIONS &amp; ROOMING</string>
+    <string name="terms_sec_extra_body">1. Pilgrims registering for double (2-bed) or triple (3-bed) rooms must specify their designated roommates during registration.\n2. Pilgrims choosing quad (4-bed) or quint (5-bed) rooms must be prepared to upgrade (additional fee) to triple or double rooms if pairing quotas cannot be fulfilled.\n3. Each package includes one (1) Mutawwif. If a group requires two (2) Mutawwifs, an additional RM250.00 per person applies.\n4. If additional nights in Madinah are incurred due to airline schedule changes, supplementary charges apply: RM200.00/pax (Quad), RM350.00/pax (Triple), RM600.00/pax (Double) for economy hotels.\n5. If additional nights in Makkah are incurred due to airline schedule changes, supplementary charges apply: RM300.00/pax (Quad), RM450.00/pax (Triple), RM800.00/pax (Double) for economy hotels; or RM600.00/pax (Quad), RM900.00/pax (Triple), RM1,200.00/pax (Double) for 5-star hotels.</string>
+
+    <string name="terms_sec_registration_title">D. PACKAGE REGISTRATION</string>
+    <string name="terms_sec_registration_body">1. Customers are required to provide complete and accurate information:\n   I. Full participant name\n   II. Identification / passport number\n   III. Participant telephone number\n   IV. Full address of lead representative if registering as a group\n   V. Name and contact details of next-of-kin residing in Malaysia\n2. Hafiz Travel &amp; Tours will not be held responsible for incorrect or false particulars submitted.</string>
+
+    <string name="terms_sec_documents_title">E. TRAVEL DOCUMENTS</string>
+    <string name="terms_sec_documents_body">1. Participants must submit copies of the following documents:\n   I. International passport (valid for more than 6 months from departure date)\n   II. Meningococcal vaccination record (ACYW-135)\n   III. Visa photograph\n   IV. Mahram documentation (where applicable)\n   V. Additional relevant documentation for non-Malaysian citizens\n2. Copies must be submitted to Hafiz Travel &amp; Tours upon registration and no later than 60 days before the package departure date.\n3. Hafiz Travel &amp; Tours is not liable for issues arising if documents are not submitted within the stipulated timeframe.\n4. Hafiz Travel &amp; Tours acts as an intermediary for Umrah/tourist visa applications; visa issuance is subject to the sole approval of Saudi Arabian authorities.\n5. If visa is rejected, Hafiz Travel &amp; Tours is not liable and re-application fees apply.\n6. Sudden regulatory policy changes by authorities that prevent visa issuance or cause flight/hotel forfeiture are non-refundable.\n7. Hafiz Travel &amp; Tours is not liable for loss or damage to personal travel documents during the journey.</string>
+
+    <string name="terms_sec_cancellation_f_title">F. PACKAGE CANCELLATION, WITHDRAWAL, NAME &amp; DATE AMENDMENTS</string>
+    <string name="terms_sec_cancellation_f_body">1. Cancellation or amendment by Hafiz Travel &amp; Tours:\n   I. Hafiz Travel &amp; Tours reserves the right to cancel or amend trips subject to written notice.\n   II. An equivalent or better alternative package will be offered.\n   III. Participants may accept or decline the alternative.\n   IV. If declined, a refund will be issued after deducting administrative fees and third-party commitments already paid (hotels, flights, etc.).\n   V. Updates will be communicated via phone call, email, or WhatsApp.\n   VI. If amendments are not agreed upon, formal written notice is required to assess applicable charges.\n   VII. If agreeing to amendments, current prevailing rates of the new package apply.\n\n2. Cancellation &amp; withdrawal by participant:\n   I. All participant cancellations must be submitted in writing.\n   II. Cancellations (including promotional packages) entail full deposit forfeiture per person.\n   III. Hafiz Travel &amp; Tours is not liable if a participant is denied service by airlines, hotels, or service operators.\n   IV. If cancellation notice is received 44 working days or less before departure, standard fee schedules apply:</string>
+
+    <string name="terms_sec_cancellation_charges_title">G. CANCELLATION &amp; POSTPONEMENT FEE SCHEDULE</string>
+    <string name="terms_sec_cancellation_charges_body" formatted="false">1. Deposits are non-refundable once booking is entered into the system.\n2. 22-44 working days before flight date: 75% fee of total package price.\n3. 02-21 working days before flight date: 100% fee of total package price.\n4. If non-refundable commitments have been paid to third parties (flights, hotels, visas), the company reserves the right to deduct actual costs and refund only the remaining balance.\n5. Amendments by participant:\n   I. Any amendment must be submitted in writing.\n   II. Administration fee of RM200.00/person (standard packages) or RM500.00/person (promotional packages) applies for amendments.\n   III. If participant name change is requested after flight tickets have been ticketed, airline change penalties plus RM200.00 admin fee apply.\n6. Cancellations due to unavoidable illness or death require official supporting documentation (charges referenced in Item 3 apply).</string>
+
+    <string name="terms_sec_third_party_title">H. THIRD-PARTY &amp; INTERMEDIARY STATUS</string>
+    <string name="terms_sec_third_party_body">1. Hafiz Travel &amp; Tours acts solely as an intermediary between travellers and airlines, accommodation providers, transport companies, and ground operators.\n2. Hafiz Travel &amp; Tours does not own or operate third-party transport companies, airlines, hotels, or tour attractions.\n3. Hafiz Travel &amp; Tours is not liable for damages, delays, distress, or unforeseen occurrences resulting from third-party breach of contract.</string>
+
+    <string name="terms_sec_refusal_title">I. RIGHT TO DECLINE OR CANCEL BOOKING</string>
+    <string name="terms_sec_refusal_body">1. Hafiz Travel &amp; Tours reserves the right to cancel or withdraw any booking/itinerary if deemed hazardous to health/safety, or if it diminishes the comfort or well-being of other tour members.\n2. Hafiz Travel &amp; Tours is not liable if third-party operators (airlines, hotels) refuse admission to any participant.</string>
+
+    <string name="terms_sec_customer_duty_title">J. CUSTOMER RESPONSIBILITIES &amp; OBLIGATIONS</string>
+    <string name="terms_sec_customer_duty_body">1. Customers must check and ensure their immigration clearance status before departure. Hafiz Travel &amp; Tours is not liable for losses if a participant is blacklisted or barred from international travel.\n2. Participants with pre-existing medical conditions must submit written health declarations prior to departure.\n3. Participants with health concerns aged over 65 must travel accompanied by next-of-kin and are strongly advised to obtain supplementary travel insurance/takaful.\n4. Baggage weight limits and excess baggage fees are the sole responsibility of the participant.\n5. Hafiz Travel &amp; Tours is not liable for baggage loss/damage during travel, but will provide all reasonable assistance with lost baggage recovery and claims.\n6. Package pricing is subject to foreign currency fluctuations, prevailing taxes, and airline fuel/fare surcharges.\n7. Hafiz Travel &amp; Tours is not liable for flight delays or missed departures resulting from participant negligence.\n8. Pilgrims are strongly encouraged to attend at least one official Umrah Kursus / preparation workshop before departing.</string>
+
+    <string name="terms_sec_misc_title">K. MISCELLANEOUS &amp; FORCE MAJEURE</string>
+    <string name="terms_sec_misc_body">1. Hafiz Travel &amp; Tours is not liable and will not refund payments for inability to perform obligations due to events beyond reasonable company control.\n2. Force Majeure events include:\n   I. War, hostilities, invasion, or actions by foreign enemies\n   II. Rebellion, revolution, insurrection, or civil war\n   III. Riots, civil commotion, or public disorder\n   IV. Directives or border closures by Malaysian, Saudi Arabian, or destination authorities\n3. Hafiz Travel &amp; Tours reserves the right to use photos and videos shared by pilgrims for promotional and marketing purposes.\n\nPlease be informed that these updated Terms &amp; Conditions (T&amp;C) take effect and apply to all flight packages commencing 1 June 2026.\n(E &amp; OE)</string>
+    <!-- Profile Redesign: DOB, Gender, Nationality Picker Bottom Sheets -->
+    <string name="profile_dob_sheet_title">Date of Birth</string>
+    <string name="profile_dob_sheet_sub">Select your birth date</string>
+    <string name="profile_dob_action_done">Done</string>
+    <string name="profile_dob_day">Day</string>
+    <string name="profile_dob_month">Month</string>
+    <string name="profile_dob_year">Year</string>
+    <string name="profile_gender_sheet_title">Gender</string>
+    <string name="profile_gender_sheet_sub">Select your gender</string>
+    <string name="profile_nationality_sheet_title">Select Nationality</string>
+    <string name="profile_nationality_sheet_sub">Choose your country of citizenship</string>
+    <string name="profile_country_search_hint">Search country</string>
+    <string name="profile_country_no_results">No countries found</string>
+    <string name="profile_field_dob_placeholder">Select date of birth</string>
+    <string name="profile_field_gender_placeholder">Select gender</string>
+    <string name="profile_field_nationality_placeholder">Select nationality</string>
+    <string name="profile_field_passport_expiry_label">Passport Expiry Date <font color="#DC2626">*</font></string>
+    <string name="profile_field_passport_expiry_placeholder">Select passport expiry date</string>
+    <string name="profile_passport_expiry_sheet_title">Passport Expiry Date</string>
+    <string name="profile_passport_expiry_sheet_sub">Select the expiry date stated on your passport</string>
+    <string name="profile_field_issuing_country_placeholder">Select issuing country</string>
+    <string name="profile_issuing_country_sheet_title">Select Issuing Country</string>
+    <string name="profile_issuing_country_sheet_sub">Choose the country that issued your passport</string>
+
+    <!-- Departure Seat Availability Strings -->
+    <string name="seats_left_format">%1$d / %2$d seats left</string>
+    <string name="seats_available_label">Seats available</string>
+    <string name="departure_fully_booked">Fully Booked</string>
+    <string name="departure_zero_seats_format">0 / %1$d seats left</string>
+    <string name="err_departure_fully_booked">Selected departure is fully booked. Please select another date.</string>
+    <string name="err_departure_not_enough_seats">Only %1$d seats left on this departure. Please reduce passenger count or choose another date.</string>
+
+    <!-- Booking Item Buttons & Labels -->
+    <string name="booking_btn_invoice">Invoice</string>
+    <string name="booking_btn_receipt">Receipt</string>
+    <string name="booking_btn_documents">Documents</string>
+    <string name="booking_label_departure">DEPARTURE DATE</string>
+    <string name="booking_label_grand_total">GRAND TOTAL</string>
+    <string name="booking_no_official_label">OFFICIAL BOOKING NO.</string>
+
+    <!-- Booking Status Badges -->
+    <string name="status_confirmed">CONFIRMED</string>
+    <string name="status_cancelled">CANCELLED</string>
+    <string name="status_pending_confirmation">PENDING CONFIRMATION</string>
+    <string name="status_deposit_paid">DEPOSIT PAID</string>
+    <string name="status_received">RECEIVED</string>
+
+    <!-- Invoice Viewer Strings -->
+    <string name="invoice_title_official">Official Invoice</string>
+    <string name="invoice_meta_no">INVOICE NO.</string>
+    <string name="invoice_meta_date">ISSUE DATE</string>
+    <string name="invoice_meta_tour_code">TOUR CODE</string>
+    <string name="invoice_meta_departure">DEPARTURE DATE</string>
+    <string name="invoice_meta_due_date">PAYMENT DUE DATE</string>
+    <string name="invoice_sec_bill_to">BILL TO</string>
+    <string name="invoice_sec_pkg">PACKAGE &amp; TRIP DETAILS</string>
+    <string name="invoice_sec_passengers">PASSENGER DETAILS</string>
+    <string name="invoice_th_no">No.</string>
+    <string name="invoice_th_passenger_name">Passenger Name</string>
+    <string name="invoice_th_ic_passport">IC / Passport No.</string>
+    <string name="invoice_sec_itemized_billing">ITEMIZED BILLING</string>
+    <string name="invoice_th_desc">DESCRIPTION</string>
+    <string name="invoice_th_qty">QTY</string>
+    <string name="invoice_th_total">AMOUNT</string>
+    <string name="invoice_subtotal_label">Subtotal:</string>
+    <string name="invoice_discount_label">Promotional Discount:</string>
+    <string name="invoice_grand_total_label">GRAND TOTAL:</string>
+    <string name="invoice_paid_amount_label">Total Amount Paid:</string>
+    <string name="invoice_balance_due_label">Balance Due:</string>
+    <string name="invoice_sec_amount_in_words">AMOUNT IN WORDS</string>
+    <string name="invoice_sec_payment_history">PAYMENT HISTORY</string>
+    <string name="invoice_sec_bank_terms">BANK &amp; PAYMENT TERMS</string>
+    <string name="invoice_sec_remarks_terms">REMARKS &amp; TERMS</string>
+    <string name="invoice_disclaimer">Computer generated invoice, no signature required.</string>
+    <string name="invoice_footer_notice">This invoice is electronically generated by the official system of Hafiz Travel &amp; Tours.</string>
+    <string name="invoice_footer_thanks">Thank you for choosing our services.</string>
+    <string name="invoice_btn_share">📤 Share</string>
+    <string name="invoice_btn_save_pdf">📥 Save PDF</string>
+    <string name="invoice_share_title">Official Invoice</string>
+
+    <!-- Receipt Viewer Strings -->
+    <string name="receipt_title_official">Official Payment Receipt</string>
+    <string name="receipt_company_header">HAFIZ TRAVEL &amp; TOURS</string>
+    <string name="receipt_company_sub">KPK/LN: 10751 • SSM: 202201043065\nOfficial Payment Receipt</string>
+    <string name="receipt_meta_no">RECEIPT NO.</string>
+    <string name="receipt_meta_date">PAYMENT DATE</string>
+    <string name="receipt_amount_received_label">AMOUNT RECEIVED</string>
+    <string name="receipt_sec_received_from">RECEIVED FROM</string>
+    <string name="receipt_meta_payment_date">Payment Date</string>
+    <string name="receipt_meta_payment_method">Payment Method</string>
+    <string name="receipt_meta_ref_no">Ref. No.</string>
+    <string name="receipt_meta_booking_ref">Booking Ref</string>
+    <string name="receipt_sec_passengers">PASSENGER DETAILS</string>
+    <string name="receipt_th_no">No.</string>
+    <string name="receipt_th_passenger_name">Passenger Name</string>
+    <string name="receipt_th_ic_passport">IC / Passport No.</string>
+    <string name="receipt_sec_financial_summary">FINANCIAL SUMMARY</string>
+    <string name="receipt_total_package_price">Total Package Price</string>
+    <string name="receipt_total_paid_to_date">Total Amount Paid</string>
+    <string name="receipt_balance_due">Outstanding Balance</string>
+    <string name="receipt_sec_payment_history">PAYMENT HISTORY</string>
+    <string name="receipt_sec_official_confirmation">OFFICIAL CONFIRMATION &amp; COMPANY DETAILS</string>
+    <string name="receipt_disclaimer">Computer generated receipt, no signature required.</string>
+    <string name="receipt_label_received_from">Received From:</string>
+    <string name="receipt_label_booking_ref">Booking Ref: %1$s</string>
+    <string name="receipt_label_method">Payment Method: %1$s</string>
+    <string name="receipt_label_amount">PAYMENT AMOUNT</string>
+    <string name="receipt_label_balance">Current Outstanding Balance: %1$s</string>
+    <string name="receipt_deposit_title">Deposit Payment Receipt</string>
+    <string name="receipt_installment_title">Monthly Installment Receipt #%1$d</string>
+    <string name="receipt_btn_download_format">📥 Download Receipt PDF (%1$s)</string>
+    <string name="receipt_btn_download">📥 Download Receipt PDF</string>
+    <string name="receipt_btn_save_pdf">📥 Save Receipt PDF</string>
+    <string name="receipt_btn_view">View Receipt</string>
+    <string name="receipt_list_title">Payment Receipts</string>
+    <string name="receipt_list_sub">Official receipts for verified deposit and monthly installment payments.</string>
+    <string name="receipt_no_records">No payment receipts recorded yet. Official receipts will be generated automatically upon payment verification.</string>
+    <string name="payment_history_item_title">Payment #%1$d • %2$s</string>
+    <string name="payment_history_ref_format">Ref: %1$s</string>
+    <string name="payment_history_receipt_tag">Receipt: %1$s</string>
+
+    <!-- Dialog / Toast Strings -->
+    <string name="toast_doc_verified">Document has been verified.</string>
+    <string name="toast_doc_under_review">Document is currently under review by staff.</string>
+    <string name="toast_doc_uploaded_success">Document uploaded successfully!</string>
+    <string name="toast_invoice_saved_success">Invoice successfully saved to Downloads:\n%1$s</string>
+    <string name="toast_receipt_saved_success">Receipt successfully saved to Downloads:\n%1$s</string>
+    <string name="toast_receipt_saved_failed">Error generating receipt PDF. Please try again.</string>
+    <string name="dialog_btn_understand">Understand</string>
+    <string name="dialog_btn_close">Close</string>
+
+    <string name="doc_passport_validity_note">Ensure your international passport is valid for at least 6 months before the departure date.</string>
+    <string name="doc_photo_spec_note">Color passport-sized photograph with white background according to Umrah / Tour visa specifications.</string>
+
+    <!-- Luxury My Booking Overhaul Strings -->
+    <string name="booking_category_umrah">UMRAH PACKAGE</string>
+    <string name="booking_category_tour">INTERNATIONAL TOUR</string>
+    <string name="status_completed">COMPLETED</string>
+    <string name="payment_status_deposit_pending">DEPOSIT PENDING</string>
+    <string name="payment_status_deposit_partial">DEPOSIT PARTIAL</string>
+    <string name="payment_status_deposit_paid">DEPOSIT PAID</string>
+    <string name="payment_status_balance_partial">INSTALLMENT ACTIVE</string>
+    <string name="payment_status_fully_paid">FULLY PAID</string>
+    <string name="booking_label_stage_deposit">STAGE 1: DEPOSIT</string>
+    <string name="booking_label_stage_balance">STAGE 2: REMAINING BALANCE</string>
+    <string name="booking_label_stage_completed">PAYMENT COMPLETED</string>
+    <string name="booking_label_paid_amount">Total Paid</string>
+    <string name="booking_label_balance_due">Outstanding Balance</string>
+    <string name="booking_label_deposit_progress">Deposit: %1$s / %2$s</string>
+    <string name="booking_label_balance_progress">Remaining: %1$s / %2$s</string>
+    <string name="booking_label_remaining_deposit_format">Remaining Deposit: %1$s</string>
+    <string name="booking_label_remaining_balance_format">Remaining Balance: %1$s</string>
+    <string name="booking_btn_pay_now">Pay Now</string>
+    <string name="booking_btn_pay_deposit_format">Pay Deposit (%1$s)</string>
+    <string name="booking_btn_pay_balance_format">Pay Balance (%1$s)</string>
+    <string name="booking_meta_format">%1$s • %2$d Days %3$d Nights • %4$d Pax</string>
+    <string name="booking_meta_no_duration_format">%1$s • %2$d Pax</string>
+
+    <!-- Pay Now Quick Sheet Strings -->
+    <string name="pay_sheet_title">Make Payment</string>
+    <string name="pay_sheet_sub">Review your payment details and proceed securely.</string>
+    <string name="pay_sheet_opt_full_deposit">Pay Remaining Deposit (%1$s)</string>
+    <string name="pay_sheet_opt_full_balance">Pay Total Balance (%1$s)</string>
+    <string name="pay_sheet_opt_custom">Custom Installment Amount</string>
+    <string name="pay_sheet_custom_hint">Enter installment amount in RM</string>
+    <string name="pay_sheet_method_title">Select Payment Method</string>
+    <string name="pay_sheet_method_fpx">FPX Online Banking (Instant)</string>
+    <string name="pay_sheet_method_card">Credit / Debit Card (Visa/Mastercard)</string>
+    <string name="pay_sheet_method_bank">Bank Transfer / DuitNow QR</string>
+    <string name="pay_sheet_btn_confirm">Confirm &amp; Pay %1$s</string>
+    <string name="pay_sheet_success">Payment of %1$s was successful! Receipt has been generated.</string>
+    <string name="pay_sheet_err_min_amount">Please enter a valid payment amount.</string>
+    <string name="pay_sheet_err_max_amount">Payment amount cannot exceed remaining balance of %1$s.</string>
+    <string name="pay_sheet_processing">Processing payment, please wait...</string>
+
+    <!-- Make Payment Redesign Strings -->
+    <string name="pay_sheet_due_label">AMOUNT</string>
+    <string name="pay_sheet_purpose_initial_deposit">Initial Deposit</string>
+    <string name="pay_sheet_purpose_remaining_deposit">Remaining Deposit</string>
+    <string name="pay_sheet_purpose_balance">Remaining Balance</string>
+    <string name="pay_sheet_package_total">Package Total</string>
+    <string name="pay_sheet_previously_paid">Previously Paid</string>
+    <string name="pay_sheet_this_payment">Amount</string>
+    <string name="pay_sheet_balance_after">Balance After Payment</string>
+    <string name="pay_sheet_btn_pay_format">Pay %1$s</string>
+    <string name="pay_sheet_secure_title">Secure Payment via ToyyibPay</string>
+    <string name="pay_sheet_secure_desc">256-bit encryption. Online payment gateway integration powered by ToyyibPay (Test Mode).</string>
+    <string name="pay_confirm_dialog_title">Confirm Payment</string>
+    <string name="pay_confirm_purpose_label">Payment Purpose</string>
+    <string name="pay_confirm_gateway_label">Payment Gateway</string>
+    <string name="pay_confirm_gateway_mock_name">ToyyibPay (Mock Sandbox)</string>
+    <string name="pay_confirm_dialog_msg">You are confirming payment of %1$s for %2$s.</string>
+    <string name="pay_confirm_dialog_mock_notice">This transaction is processed in mock test mode and will immediately update your booking status.</string>
+    <string name="pay_confirm_btn_pay">Confirm &amp; Pay</string>
+    <string name="pay_success_dialog_title">Payment Successful!</string>
+    <string name="pay_success_dialog_msg">Payment of %1$s has been successfully recorded. Official receipt and booking schedule have been generated.</string>
+    <string name="pay_btn_done">Done</string>
+
+    <string name="booking_meta_duration_format">%1$d Days %2$d Nights</string>
+    <string name="booking_meta_pax_format">%1$d Pax</string>
+    <string name="payment_detail_fully_paid_format">Completed: %1$s / %2$s (Balance: RM 0.00)</string>
+    <string name="payment_detail_deposit_format">Deposit: %1$s / %2$s (Remaining: %3$s)</string>
+    <string name="payment_detail_deposit_required_format">Deposit: %1$s / %2$s (Required: %3$s)</string>
+    <string name="payment_detail_balance_format">Remaining: %1$s / %2$s</string>
+    <string name="pay_sheet_opt_deposit_preset">Pay Required Deposit (%1$s)</string>
+    <string name="pay_sheet_opt_deposit_remaining_preset">Pay Remaining Deposit (%1$s)</string>
+    <string name="pay_sheet_opt_balance_preset">Pay Total Balance (%1$s)</string>
+    <string name="pay_success_toast">Payment of %1$s successful! Official receipt generated.</string>
+    <string name="pay_btn_view_receipt">View Receipt</string>
+
+    <!-- Outstanding Deposit Blocked Dialog Strings -->
+    <string name="booking_blocked_deposit_title">Outstanding Deposit Required</string>
+    <string name="booking_blocked_deposit_msg">You have an outstanding deposit for an existing booking (%1$s). Please pay the required deposit before creating another booking.</string>
+    <string name="btn_view_my_bookings">Go to My Bookings</string>
+
+    <!-- Cancel Booking Strings -->
+    <string name="booking_btn_cancel">Cancel Booking</string>
+    <string name="cancel_booking_title">Cancel Booking</string>
+    <string name="cancel_booking_confirm_message">Are you sure you want to cancel this booking? This action will release your reserved seats. Legitimate payment records will be preserved.</string>
+    <string name="cancel_booking_reason_hint">Reason for cancellation (optional)</string>
+    <string name="cancel_booking_btn_confirm">Yes, Cancel Booking</string>
+    <string name="cancel_booking_keep">Keep Booking</string>
+    <string name="cancel_booking_success">Booking %1$s has been successfully cancelled.</string>
+    <string name="cancel_booking_failed">Failed to cancel booking. Please try again.</string>
+    <string name="cancel_booking_processing">Cancelling booking, please wait...</string>
+    <string name="cancel_booking_quote_loading">Calculating cancellation policy and refund quote...</string>
+    <string name="cancel_quote_working_days">Working days before departure: %1$d days</string>
+    <string name="cancel_quote_charge_summary">Cancellation Charge: %1$s (%2$s of package price)</string>
+    <string name="cancel_quote_non_refundable_deposit">* Deposit is non-refundable per company policy.</string>
+    <string name="cancel_quote_estimated_refund">Estimated Refund: %1$s</string>
+    <string name="cancel_quote_refund_period">* Refund processing takes 3 to 9 months subject to 3rd-party approvals.</string>
+    <string name="cancel_quote_no_refund">No refund is eligible for this cancellation timeline.</string>
+    <string name="cancel_booking_irreversible_notice">This action is permanent and cannot be undone.</string>
+    <string name="terms_tour_notice_title">Tour Package Terms &amp; Conditions</string>
+    <string name="terms_tour_notice_body">Terms &amp; Conditions for Tour packages will be provided upon confirmation and finalized itinerary. For further inquiries, please contact our customer service.</string>
+    <string name="booking_ref_prefix">Ref:</string>
+    <string name="payment_stage_initial_deposit">Initial Deposit</string>
+    <string name="payment_stage_additional_payment">Additional Payment</string>
+    <string name="payment_stage_final_payment">Final Payment</string>
+    <string name="payment_stage_full_payment">Full Payment</string>
+    <string name="payment_stage_pending">Pending Verification</string>
+    <string name="pay_sheet_purpose_additional_payment">Additional Payment</string>
+    <string name="pay_sheet_purpose_final_payment">Final Payment</string>
+    <string name="pay_sheet_installment_options_title">Select Payment Amount</string>
+    <string name="pay_sheet_chip_full_balance">Full Balance</string>
+    <string name="receipt_total_paid_label">Total Paid</string>
+    <string name="receipt_package_total_label">Package Total</string>
+    <string name="receipt_balance_due_label">Remaining Balance</string>
+
+    <!-- My Booking Redesign Strings -->
+    <string name="menu_invoice">Invoice</string>
+    <string name="menu_receipt">Receipt</string>
+    <string name="booking_no_receipts_available">No receipt available until payment is made.</string>
+    <string name="booking_no_invoices_available">No invoice available for this booking.</string>
+    <string name="booking_label_grand_total_summary">Grand Total</string>
+    <string name="status_cancellation_requested">Cancellation Requested</string>
+    <string name="payment_status_pending">Payment Pending</string>
+    <string name="payment_status_partially_paid">Partially Paid</string>
+    <string name="payment_status_overdue">Payment Overdue</string>
+    <string name="payment_status_failed">Payment Failed</string>
+    <string name="payment_status_refunded">Refunded</string>
+    <string name="payment_status_cancelled">Cancelled</string>
+
+    <!-- Season & Pricing Management Strings -->
+    <string name="config_season_type">Select Season</string>
+    <string name="season_standard">Standard Season</string>
+    <string name="season_low_peak">Low Peak Season</string>
+    <string name="season_high_peak">High Peak Season</string>
+    <string name="season_badge_standard">STANDARD</string>
+    <string name="season_badge_low_peak">LOW PEAK</string>
+    <string name="season_badge_high_peak">HIGH PEAK</string>
+    <string name="child_with_bed">With Bed</string>
+    <string name="child_without_bed">No Bed</string>
+    <string name="option_bed_label">Bed Requirement (11 years and below)</string>
+    <string name="passenger_type_adult">Adult</string>
+    <string name="passenger_type_child">Child</string>
+    <string name="passenger_type_infant">Infant</string>
+    <string name="summary_season_label">Season:</string>
+    <string name="summary_season_standard">Standard</string>
+    <string name="summary_season_low_peak">Low Peak</string>
+    <string name="summary_season_high_peak">High Peak</string>
+    <string name="package_season_label">Season</string>
+    <string name="with_bed">With Bed</string>
+    <string name="without_bed">Without Bed</string>
+    <string name="child_bed_option_label">Bed Option (11 years and below)</string>
+    <string name="config_pax_section_title">Number of Travellers</string>
+    <string name="config_pax_adults_label">Adults</string>
+    <string name="config_pax_adults_sub">Above 11 years (Adult price)</string>
+    <string name="config_pax_kids_label">Children</string>
+    <string name="config_pax_kids_sub">11 years and below</string>
+    <string name="child_title_format">Child %d</string>
+    <string name="child_dob_label">Date of Birth</string>
+    <string name="child_select_dob_hint">Select date</string>
+    <string name="child_bed_label">Bed</string>
+    <string name="child_age_format">Age: %d years</string>
+    <string name="child_age_under_2">Age: Under 2 years</string>
+    <string name="err_child_dob_required">Please select Date of Birth for Child %d</string>
+    <string name="err_child_bed_required">Please select With Bed or Without Bed for Child %d</string>
+    <string name="label_starting_from">Starting from</string>
+    <string name="season_standard_short">Standard</string>
+    <string name="season_low_peak_short">Low Peak</string>
+    <string name="season_high_peak_short">High Peak</string>
+    <string name="under_2">Under 2</string>
+    <string name="travel_date">Travel Date</string>
+    <string name="departure_date">Departure Date</string>
+
+    <!-- Estimated Cost Breakdown Strings -->
+    <string name="cost_breakdown_title">Estimated Cost Breakdown</string>
+    <string name="cost_breakdown_adult_format">Adult × %d</string>
+    <string name="cost_breakdown_child_title_format">Child %1$d · %2$d years</string>
+    <string name="cost_breakdown_child_title_under_2_format">Child %1$d · Under 2 years</string>
+    <string name="cost_breakdown_child_title_dob_required">Child %1$d · Date of birth required</string>
+    <string name="cost_breakdown_base_package">Base package</string>
+    <string name="cost_breakdown_age_label">Age</string>
+    <string name="cost_breakdown_category_label">Category</string>
+    <string name="cost_breakdown_bed_label">Bed</string>
+    <string name="cost_breakdown_yes">Yes</string>
+    <string name="cost_breakdown_no">No</string>
+    <string name="cost_breakdown_bed_adjustment">Bed adjustment</string>
+    <string name="cost_breakdown_adjustment">Adjustment</string>
+    <string name="cost_breakdown_final_child_price">Final child price</string>
+    <string name="cost_breakdown_child_total">Child total</string>
+    <string name="cost_breakdown_estimated_total">Estimated Total</string>
+    <string name="cost_breakdown_promo_discount">Promo discount (%1$s)</string>
+    <string name="category_under_2">2 years and below</string>
+    <string name="category_2_to_4">2 to 4 years</string>
+    <string name="category_2_to_11">2 to 11 years</string>
+    <string name="category_adult_rate">Adult rate</string>
+
+    <!-- About Page & Company Strings -->
+    <string name="about_title">About</string>
+    <string name="about_tagline">Create Transparent Memories with Hafiz Travel &amp; Tours</string>
+    <string name="about_company_full_name">Hafiz Travel &amp; Tours Sdn. Bhd.</string>
+    <string name="about_section_app_desc">About The App</string>
+    <string name="about_app_description">Hafiz Travel is your official travel companion for discovering Umrah and travel packages, managing bookings, making secure payments, and accessing travel documents.</string>
+    
+    <!-- Company Information Section -->
+    <string name="about_section_company">Company</string>
+    <string name="about_established_label">Established</string>
+    <string name="about_established_value">2022</string>
+    <string name="about_motac_label">MOTAC License</string>
+    <string name="about_motac_value">KPK/LN 10751</string>
+    <string name="about_ssm_label">SSM Registration</string>
+    <string name="about_ssm_value">202201043065 (1488762-A)</string>
+
+    <!-- Contact Section -->
+    <string name="about_section_contact">Contact Us</string>
+    <string name="about_phone_label">Phone</string>
+    <string name="about_phone_value">+6019-785 9867</string>
+    <string name="about_email_label">Email</string>
+    <string name="about_email_value">sales.httsb@gmail.com</string>
+    <string name="about_website_label">Website</string>
+    <string name="about_website_value">hafiztraveltours.com</string>
+    <string name="about_website_url">https://hafiztraveltours.com</string>
+    <string name="about_address_label">Address</string>
+    <string name="about_address_value">No. 31, Jalan Dataran Larkin, 80350 Johor Bahru, Johor, Malaysia</string>
+    <!-- Social Media Section -->
+    <string name="about_section_social">Social Media</string>
+    <string name="about_social_follow_us">Follow Us</string>
+    <string name="social_tiktok">TikTok</string>
+    <string name="social_threads">Threads</string>
+    <string name="social_instagram">Instagram</string>
+    <string name="social_facebook">Facebook</string>
+    <string name="social_youtube">YouTube</string>
+
+    <!-- Legal Section -->
+    <string name="about_section_legal">Legal</string>
+    <string name="about_privacy_policy">Privacy Policy</string>
+    <string name="about_umrah_terms">Umrah Terms &amp; Conditions</string>
+    <string name="about_tour_terms">Tour Terms &amp; Conditions</string>
+    <string name="about_refund_policy">Refund &amp; Cancellation Policy</string>
+    <string name="about_coming_soon">Coming Soon</string>
+
+    <!-- App Version & Developer Footer -->
+    <string name="about_app_version">App Version</string>
+    <string name="about_engineered_by_prefix">Engineered by</string>
+    <string name="about_copyright">© 2022 Hafiz Travel &amp; Tours Sdn. Bhd. All rights reserved.</string>
+
+    <!-- Notification Center & Push Notifications -->
+    <string name="notification_center_title">Notifications</string>
+    <string name="notification_mark_all_read">Mark all as read</string>
+    <string name="notif_doc_verified_title">Travel Document Verified</string>
+    <string name="notif_doc_verified_msg">Your travel document has been verified successfully.</string>
+    <string name="notif_prayer_reminder_title">Prayer Reminder</string>
+    <string name="notif_prayer_reminder_msg">%1$s prayer is in 5 minutes.</string>
 </resources>

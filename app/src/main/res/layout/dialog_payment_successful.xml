@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@drawable/bg_dialog_luxury"
+    android:elevation="14dp"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingStart="22dp"
+    android:paddingTop="24dp"
+    android:paddingEnd="22dp"
+    android:paddingBottom="22dp">
+
+    <!-- Top Badge Icon -->
+    <FrameLayout
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@drawable/bg_pill_success">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_check_green"
+            app:tint="#059669"
+            tools:ignore="ContentDescription" />
+    </FrameLayout>
+
+    <!-- Dialog Title -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center"
+        android:text="@string/pay_success_dialog_title"
+        android:textColor="#18181B"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <!-- Big Payment Amount -->
+    <TextView
+        android:id="@+id/tvSuccessAmount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:gravity="center"
+        android:textColor="#059669"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        tools:text="RM 1,000.00" />
+
+    <!-- Subtitle (Package name & Ref) -->
+    <TextView
+        android:id="@+id/tvSuccessSubtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center"
+        android:textColor="#71717A"
+        android:textSize="12sp"
+        tools:text="Pakej Umrah Sukuk Lite • BKG-260929-35TVAU" />
+
+    <!-- Success Message -->
+    <TextView
+        android:id="@+id/tvSuccessMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:lineSpacingMultiplier="1.2"
+        android:textColor="#52525B"
+        android:textSize="12.5sp"
+        tools:text="Your payment has been successfully recorded. An official receipt has been generated." />
+
+    <!-- Action Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <!-- View Receipt Button -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnSuccessViewReceipt"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_marginEnd="6dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_btn_cancel_dialog"
+            android:fontFamily="sans-serif-medium"
+            android:stateListAnimator="@null"
+            android:text="@string/pay_btn_view_receipt"
+            android:textAllCaps="false"
+            android:textColor="#3F3F46"
+            android:textSize="13.5sp"
+            android:textStyle="bold" />
+
+        <!-- Done Button -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnSuccessDone"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_marginStart="6dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_gradient_primary_button"
+            android:fontFamily="sans-serif-medium"
+            android:stateListAnimator="@null"
+            android:text="@string/pay_btn_done"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="13.5sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</LinearLayout>

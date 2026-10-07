@@ -35,21 +35,28 @@ public class LocaleHelper {
 
     public static final String LANGUAGE_ENGLISH = "en";
     public static final String LANGUAGE_MALAY = "ms";
-    public static final String LANGUAGE_ARABIC = "ar";
-    public static final String LANGUAGE_KOREAN = "ko";
-    public static final String LANGUAGE_JAPANESE = "ja";
-    public static final String LANGUAGE_CHINESE = "zh";
 
     public static String getSavedLanguage(Context context) {
         if (context == null) return LANGUAGE_ENGLISH;
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        return prefs.getString(KEY_LANGUAGE, LANGUAGE_ENGLISH);
+        String saved = prefs.getString(KEY_LANGUAGE, LANGUAGE_ENGLISH);
+        if (!LANGUAGE_ENGLISH.equalsIgnoreCase(saved) && !LANGUAGE_MALAY.equalsIgnoreCase(saved)) {
+            prefs.edit().putString(KEY_LANGUAGE, LANGUAGE_ENGLISH).apply();
+            try {
+                AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(LANGUAGE_ENGLISH));
+            } catch (Exception ignored) {}
+            return LANGUAGE_ENGLISH;
+        }
+        return saved;
     }
 
     public static void saveLanguage(Context context, String languageCode) {
         if (context == null || languageCode == null) return;
+        if (!LANGUAGE_ENGLISH.equalsIgnoreCase(languageCode) && !LANGUAGE_MALAY.equalsIgnoreCase(languageCode)) {
+            languageCode = LANGUAGE_ENGLISH;
+        }
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        prefs.edit().putString(KEY_LANGUAGE, languageCode).commit();
+        prefs.edit().putString(KEY_LANGUAGE, languageCode).apply();
         Locale.setDefault(getLocaleForCode(languageCode));
     }
 
@@ -106,14 +113,6 @@ public class LocaleHelper {
         switch (languageCode.toLowerCase()) {
             case LANGUAGE_MALAY:
                 return new Locale("ms", "MY");
-            case LANGUAGE_ARABIC:
-                return new Locale("ar", "SA");
-            case LANGUAGE_KOREAN:
-                return Locale.KOREA;
-            case LANGUAGE_JAPANESE:
-                return Locale.JAPAN;
-            case LANGUAGE_CHINESE:
-                return Locale.SIMPLIFIED_CHINESE;
             case LANGUAGE_ENGLISH:
             default:
                 return Locale.ENGLISH;
@@ -125,36 +124,9 @@ public class LocaleHelper {
         switch (languageCode.toLowerCase()) {
             case LANGUAGE_MALAY:
                 return "BM";
-            case LANGUAGE_ARABIC:
-                return "AR";
-            case LANGUAGE_KOREAN:
-                return "KO";
-            case LANGUAGE_JAPANESE:
-                return "JA";
-            case LANGUAGE_CHINESE:
-                return "ZH";
             case LANGUAGE_ENGLISH:
             default:
                 return "EN";
-        }
-    }
-
-    public static String getLanguageName(String languageCode) {
-        if (languageCode == null) return "English";
-        switch (languageCode.toLowerCase()) {
-            case LANGUAGE_MALAY:
-                return "Bahasa Melayu";
-            case LANGUAGE_ARABIC:
-                return "العربية";
-            case LANGUAGE_KOREAN:
-                return "한국어";
-            case LANGUAGE_JAPANESE:
-                return "日本語";
-            case LANGUAGE_CHINESE:
-                return "中文";
-            case LANGUAGE_ENGLISH:
-            default:
-                return "English";
         }
     }
 

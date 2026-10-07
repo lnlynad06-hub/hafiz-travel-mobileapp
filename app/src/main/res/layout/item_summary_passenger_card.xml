@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/bg_luxury_form_field"
+    android:orientation="vertical"
+    android:padding="12dp">
+
+    <!-- Top Row: Avatar, Name, Index / Lead Badge -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@drawable/circle_bg_light">
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_profile"
+                app:tint="@color/pink_dark"
+                android:contentDescription="@null" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvSummaryPassengerName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_dark"
+                android:textSize="13.5sp"
+                android:textStyle="bold"
+                tools:text="Dania Binti Harun" />
+
+            <TextView
+                android:id="@+id/tvSummaryPassengerId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:textColor="@color/text_gray"
+                android:textSize="11sp"
+                tools:text="No. Dokumen: 950724-10-****" />
+        </LinearLayout>
+
+        <!-- Role Badge (Ketua Jemaah / Jemaah 2) -->
+        <TextView
+            android:id="@+id/tvSummaryPassengerRole"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_status_pending"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="3dp"
+            android:textColor="@color/pink_dark"
+            android:textSize="10.5sp"
+            android:textStyle="bold"
+            tools:text="Ketua Jemaah" />
+
+    </LinearLayout>
+
+    <!-- Bottom Row: Meta Chips (Gender, DOB, Clothes Size, Phone/Email) -->
+    <LinearLayout
+        android:id="@+id/layoutSummaryChips"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <!-- Gender Chip -->
+        <TextView
+            android:id="@+id/tvSummaryGenderChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_chip_minimal"
+            android:paddingHorizontal="7dp"
+            android:paddingVertical="2dp"
+            android:textColor="@color/text_dark"
+            android:textSize="10.5sp"
+            tools:text="Perempuan" />
+
+        <!-- DOB Chip -->
+        <TextView
+            android:id="@+id/tvSummaryDobChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:background="@drawable/bg_chip_minimal"
+            android:paddingHorizontal="7dp"
+            android:paddingVertical="2dp"
+            android:textColor="@color/text_dark"
+            android:textSize="10.5sp"
+            tools:text="24 Jul 1995" />
+
+        <!-- Clothes Size Chip -->
+        <TextView
+            android:id="@+id/tvSummaryClothesChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:background="@drawable/bg_chip_minimal"
+            android:paddingHorizontal="7dp"
+            android:paddingVertical="2dp"
+            android:textColor="@color/text_dark"
+            android:textSize="10.5sp"
+            android:visibility="gone"
+            tools:text="Saiz: XL"
+            tools:visibility="visible" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,7 +1,4 @@
 package com.hafiztraveltours.app.network;
-import com.hafiztraveltours.app.models.*;
-import com.hafiztraveltours.app.R;
-
 
 import java.util.concurrent.TimeUnit;
 
@@ -12,23 +9,45 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
     /**
-     * Base URL konfigurasi:
-     * - Untuk Telefon Sebenar (USB ADB Reverse): "http://127.0.0.1:8000/api/"
-     * - Untuk Telefon Sebenar (Wi-Fi sama): "http://192.168.50.127:8000/api/"
-     * - Untuk Android Studio Emulator: "http://10.0.2.2:8000/api/"
+     * Base URL comes from Gradle per build type (BuildConfig.API_BASE_URL):
+     * - debug: local HTTP for Laravel testing (override via local.properties `apiUrlDebug`,
+     *   e.g. "http://192.168.50.127:8000/api/" for same-WiFi phones or "http://10.0.2.2:8000/api/" for emulator).
+     * - release: HTTPS production (override via `apiUrlRelease`); never loopback/cleartext.
      */
-    public static String BASE_URL = "http://127.0.0.1:8000/api/";
+    public static String BASE_URL = com.hafiztraveltours.app.BuildConfig.API_BASE_URL;
 
     private static Retrofit retrofit = null;
     private static ApiService apiService = null;
+    // In-memory Retrofit token (Phase 5): owned by SessionManager, which is the ONLY
+    // caller of setAuthToken() (init/save/clear). Never read or written elsewhere.
+    private static volatile String authToken = null;
+
+    public static synchronized void setAuthToken(String token) {
+        authToken = (token != null && !token.isEmpty()) ? token : null;
+    }
 
     public static synchronized ApiService getApiService() {
         if (apiService == null) {
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            // PII-safe default: no BODY logging (would leak Bearer token + passwords).
+            // Debug builds log headers only; release logs nothing.
+            loggingInterceptor.setLevel(com.hafiztraveltours.app.BuildConfig.DEBUG
+                    ? HttpLoggingInterceptor.Level.HEADERS
+                    : HttpLoggingInterceptor.Level.NONE);
+            loggingInterceptor.redactHeader("Authorization");
 
             OkHttpClient okHttpClient = new OkHttpClient.Builder()
                     .addInterceptor(loggingInterceptor)
+                    .addInterceptor(chain -> {
+                        okhttp3.Request original = chain.request();
+                        okhttp3.Request.Builder builder = original.newBuilder()
+                                .header("Accept", "application/json")
+                                .header("User-Agent", "HafizTravelApp/1.6 (Android; Mobile)");
+                        if (authToken != null) {
+                            builder.header("Authorization", "Bearer " + authToken);
+                        }
+                        return chain.proceed(builder.build());
+                    })
                     .connectTimeout(15, TimeUnit.SECONDS)
                     .readTimeout(15, TimeUnit.SECONDS)
                     .writeTimeout(15, TimeUnit.SECONDS)
@@ -46,7 +65,8 @@ public class ApiClient {
     }
 
     /**
-     * Tukar Base URL semasa runtime jika menguji di peranti fizikal
+     * Tukar Base URL semasa runtime jika menguji di peranti fizikal.
+     * Kept for on-device Laravel testing (debug); production uses the Gradle-provided HTTPS URL.
      */
     public static synchronized void setBaseUrl(String newBaseUrl) {
         if (newBaseUrl != null && !newBaseUrl.endsWith("/")) {

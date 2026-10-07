@@ -6,26 +6,26 @@
     <color name="pink_accent">#FF4081</color>
     <color name="white">#FFFFFF</color>
     
-    <!-- Canvas & Surfaces -->
-    <color name="background">#F8F9FA</color>
+    <!-- Canvas & Surfaces (Modern Editorial Luxury + Soft Depth) -->
+    <color name="background">#F8F7F4</color>
     <color name="surface">#FFFFFF</color>
     <color name="card_surface">#FFFFFF</color>
-    <color name="card_border">#EBEAE6</color>
-    <color name="card_border_subtle">#F0EFEA</color>
+    <color name="card_border">#E8E3E0</color>
+    <color name="card_border_subtle">#F0ECE9</color>
 
     <!-- Typography -->
     <color name="text_dark">#18181B</color>
-    <color name="text_gray">#71717A</color>
-    <color name="text_muted">#A1A1AA</color>
+    <color name="text_gray">#52525B</color>
+    <color name="text_muted">#94A3B8</color>
     <color name="field_border">#E4E4E7</color>
-    <color name="border">#E2E8F0</color>
+    <color name="border">#E8E3E0</color>
     <color name="error_red">#EF4444</color>
 
     <!-- Luxury Brand Palette -->
     <color name="brand_magenta">#D81B60</color>
     <color name="brand_magenta_dark">#AD1457</color>
     <color name="brand_magenta_light">#FCE4EC</color>
-    <color name="brand_magenta_soft">#FFF0F5</color>
+    <color name="brand_magenta_soft">#FFF5F8</color>
     <color name="brand_magenta_accent">#E91E63</color>
     <color name="gold_accent">#D4AF37</color>
     <color name="brand_dark_pink">#AD1457</color>
@@ -33,11 +33,11 @@
     <!-- Neutrals -->
     <color name="luxury_charcoal">#18181B</color>
     <color name="luxury_subtext">#52525B</color>
-    <color name="luxury_ivory">#FDFBF7</color>
-    <color name="luxury_border">#EBEAE6</color>
+    <color name="luxury_ivory">#F8F7F4</color>
+    <color name="luxury_border">#E8E3E0</color>
 
     <!-- Interactive Chips & Badges -->
-    <color name="service_bg">#FFF0F5</color>
+    <color name="service_bg">#FFF5F8</color>
     <color name="search_bg">#FFFFFF</color>
     <color name="nav_bg">#FFFFFF</color>
 
@@ -52,7 +52,7 @@
 
     <!-- Waktu Solat card -->
     <color name="prayer_card_background">#FFFFFF</color>
-    <color name="prayer_card_border">#FCE4EC</color>
+    <color name="prayer_card_border">#E8E3E0</color>
     <color name="prayer_arc_start">#F472B6</color>
     <color name="prayer_arc_end">#D81B60</color>
     <color name="prayer_arc_dot">#D81B60</color>
@@ -60,7 +60,25 @@
     <color name="prayer_card_text_secondary">#71717A</color>
 
     <!-- Inputs -->
-    <color name="input_background">#F4F4F5</color>
+    <color name="input_background">#FFFFFF</color>
     <color name="input_text">#18181B</color>
-    <color name="input_hint">#A1A1AA</color>
+    <color name="input_hint">#94A3B8</color>
+
+    <!-- Kinetic Silk Design Tokens -->
+    <color name="kinetic_primary">#E6007A</color>
+    <color name="kinetic_on_primary">#FFFFFF</color>
+    <color name="kinetic_secondary">#111827</color>
+    <color name="kinetic_tertiary_success">#10B981</color>
+    <color name="kinetic_tertiary_container">#ECFDF5</color>
+    <color name="kinetic_background">#F8F7F4</color>
+    <color name="kinetic_neutral_muted">#6B7280</color>
+    <color name="kinetic_border">#E8E3E0</color>
+
+    <!-- Gender Selection Badges -->
+    <color name="gender_male_bg">#EFF6FF</color>
+    <color name="gender_male_border">#DBEAFE</color>
+    <color name="gender_male_icon">#2563EB</color>
+    <color name="gender_female_bg">#FFF5F8</color>
+    <color name="gender_female_border">#FCE4EC</color>
+    <color name="gender_female_icon">#D81B60</color>
 </resources>

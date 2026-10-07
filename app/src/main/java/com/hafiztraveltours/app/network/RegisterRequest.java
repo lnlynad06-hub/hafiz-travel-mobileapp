@@ -10,6 +10,12 @@ public class RegisterRequest {
     @SerializedName("name")
     public String name;
 
+    @SerializedName("username")
+    public String username;
+
+    @SerializedName("nickname")
+    public String nickname;
+
     @SerializedName("email")
     public String email;
 
@@ -22,8 +28,10 @@ public class RegisterRequest {
     @SerializedName("password_confirmation")
     public String passwordConfirmation;
 
-    public RegisterRequest(String name, String email, String phone, String password, String passwordConfirmation) {
+    public RegisterRequest(String name, String nickname, String email, String phone, String password, String passwordConfirmation) {
         this.name = name;
+        this.username = nickname;
+        this.nickname = nickname;
         this.email = email;
         this.phone = phone;
         this.password = password;

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="260dp"
+    android:height="260dp"
+    android:viewportWidth="260"
+    android:viewportHeight="260">
+
+    <!-- CONTINUOUS SOLID COMPASS NEEDLE (Single connected body from Y=25 to Y=235) -->
+
+    <!-- Left Half (Continuous Body from Top Qibla Tip to Bottom Tail Tip) -->
+    <path
+        android:pathData="M 130 25 L 116 130 L 130 235 Z"
+        android:fillColor="#B90061"/>
+
+    <!-- Right Half (Continuous Body - Darker Dual-Tone Shading for 3D Bevel) -->
+    <path
+        android:pathData="M 130 25 L 144 130 L 130 235 Z"
+        android:fillColor="#880045"/>
+
+    <!-- Tail Accent Layer (Distinct Slate-Gray Overlay on Bottom Half for Qibla Differentiation) -->
+    <path
+        android:pathData="M 130 130 L 116 130 L 130 235 Z"
+        android:fillColor="#475569"/>
+
+    <path
+        android:pathData="M 130 130 L 144 130 L 130 235 Z"
+        android:fillColor="#334155"/>
+
+    <!-- Center Pivot Ring Assembly (Mounted over the continuous needle body) -->
+    <!-- Outer Pivot Base Ring -->
+    <path
+        android:pathData="M 130 130 A 10 10 0 1 1 129.9 130 Z"
+        android:fillColor="#151C27"/>
+
+    <!-- Inner Metallic Cap -->
+    <path
+        android:pathData="M 130 130 A 5 5 0 1 1 129.9 130 Z"
+        android:fillColor="#FFFFFF"/>
+</vector>

@@ -63,19 +63,12 @@
             android:orientation="vertical"
             android:layout_marginTop="10dp">
 
-            <FrameLayout
-                android:layout_width="84dp"
-                android:layout_height="84dp"
-                android:background="@drawable/circle_bg_light"
-                android:padding="6dp">
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/logo"
-                    android:scaleType="fitCenter"
-                    tools:ignore="ContentDescription" />
-            </FrameLayout>
+            <ImageView
+                android:layout_width="170dp"
+                android:layout_height="170dp"
+                android:src="@drawable/logo"
+                android:scaleType="fitCenter"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -108,6 +101,7 @@
                 android:id="@+id/nameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="@string/hint_full_name"
                 app:boxBackgroundMode="outline"
                 app:boxCornerRadiusTopStart="14dp"
                 app:boxCornerRadiusTopEnd="14dp"
@@ -118,7 +112,7 @@
                 app:boxStrokeWidth="1dp"
                 app:boxStrokeWidthFocused="1.5dp"
                 app:boxStrokeErrorColor="@color/error_red"
-                app:hintEnabled="false"
+                app:hintEnabled="true"
                 app:errorEnabled="true"
                 app:errorIconDrawable="@null"
                 app:startIconDrawable="@drawable/ic_profile"
@@ -127,13 +121,48 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/nameInput"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:paddingVertical="0dp"
                     android:paddingStart="4dp"
                     android:paddingEnd="12dp"
-                    android:hint="@string/hint_full_name"
                     android:inputType="textPersonName"
+                    android:textColor="@color/input_text"
+                    android:textColorHint="@color/input_hint"
+                    android:textSize="14sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Username Input -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/nicknameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:hint="@string/hint_username"
+                app:boxBackgroundMode="outline"
+                app:boxCornerRadiusTopStart="14dp"
+                app:boxCornerRadiusTopEnd="14dp"
+                app:boxCornerRadiusBottomStart="14dp"
+                app:boxCornerRadiusBottomEnd="14dp"
+                app:boxStrokeColor="@color/box_stroke_selector"
+                app:boxBackgroundColor="@color/box_bg_selector"
+                app:boxStrokeWidth="1dp"
+                app:boxStrokeWidthFocused="1.5dp"
+                app:boxStrokeErrorColor="@color/error_red"
+                app:hintEnabled="true"
+                app:errorEnabled="true"
+                app:errorIconDrawable="@null"
+                app:startIconDrawable="@drawable/ic_profile"
+                app:startIconTint="@color/pink_dark">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/nicknameInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:paddingStart="4dp"
+                    android:paddingEnd="12dp"
+                    android:inputType="text"
+                    android:maxLength="50"
                     android:textColor="@color/input_text"
                     android:textColorHint="@color/input_hint"
                     android:textSize="14sp" />
@@ -144,7 +173,8 @@
                 android:id="@+id/emailLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="14dp"
+                android:hint="@string/hint_email"
                 app:boxBackgroundMode="outline"
                 app:boxCornerRadiusTopStart="14dp"
                 app:boxCornerRadiusTopEnd="14dp"
@@ -155,7 +185,7 @@
                 app:boxStrokeWidth="1dp"
                 app:boxStrokeWidthFocused="1.5dp"
                 app:boxStrokeErrorColor="@color/error_red"
-                app:hintEnabled="false"
+                app:hintEnabled="true"
                 app:errorEnabled="true"
                 app:errorIconDrawable="@null"
                 app:startIconDrawable="@drawable/ic_email"
@@ -164,12 +194,10 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/emailInput"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:paddingVertical="0dp"
                     android:paddingStart="4dp"
                     android:paddingEnd="12dp"
-                    android:hint="@string/hint_email"
                     android:inputType="textEmailAddress"
                     android:textColor="@color/input_text"
                     android:textColorHint="@color/input_hint"
@@ -180,7 +208,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="14dp"
                 android:layout_marginBottom="16dp"
                 android:orientation="vertical">
 
@@ -276,7 +304,8 @@
                 android:id="@+id/passwordLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="14dp"
+                android:hint="@string/hint_password"
                 app:boxBackgroundMode="outline"
                 app:boxCornerRadiusTopStart="14dp"
                 app:boxCornerRadiusTopEnd="14dp"
@@ -288,7 +317,7 @@
                 app:boxStrokeWidthFocused="1.5dp"
                 app:boxStrokeErrorColor="@color/error_red"
                 app:helperTextEnabled="false"
-                app:hintEnabled="false"
+                app:hintEnabled="true"
                 app:errorEnabled="true"
                 app:errorIconDrawable="@null"
                 app:startIconDrawable="@drawable/ic_lock"
@@ -299,118 +328,31 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/passwordInput"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:paddingVertical="0dp"
                     android:paddingStart="4dp"
                     android:paddingEnd="12dp"
-                    android:hint="@string/hint_password"
                     android:inputType="textPassword"
                     android:textColor="@color/input_text"
                     android:textColorHint="@color/input_hint"
                     android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Password Strength Meter + Tips -->
-            <LinearLayout
-                android:id="@+id/passwordStrengthContainer"
+            <!-- Password Requirements Checklist -->
+            <include
+                android:id="@+id/passwordRequirementsLayout"
+                layout="@layout/layout_password_requirements"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="2dp"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <!-- Strength Bar -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
-
-                    <FrameLayout
-                        android:layout_width="0dp"
-                        android:layout_height="5dp"
-                        android:layout_weight="1"
-                        android:background="#E5E9EC"
-                        android:clipChildren="true">
-
-                        <View
-                            android:id="@+id/passwordStrengthBar"
-                            android:layout_width="0dp"
-                            android:layout_height="5dp"
-                            android:background="#E53935" />
-                    </FrameLayout>
-
-                    <TextView
-                        android:id="@+id/tvPasswordStrength"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:textSize="11sp"
-                        android:textColor="#E53935"
-                        android:textStyle="bold"
-                        android:minWidth="52dp" />
-                </LinearLayout>
-
-                <!-- Tips Checklist -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:orientation="horizontal"
-                    android:gravity="start">
-
-                    <TextView
-                        android:id="@+id/tipLength"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/bg_tip_pill"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
-                        android:paddingTop="3dp"
-                        android:paddingBottom="3dp"
-                        android:text="@string/password_tip_length"
-                        android:textSize="10sp"
-                        android:textColor="#E53935" />
-
-                    <TextView
-                        android:id="@+id/tipNumber"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/bg_tip_pill"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
-                        android:paddingTop="3dp"
-                        android:paddingBottom="3dp"
-                        android:text="@string/password_tip_number"
-                        android:textSize="10sp"
-                        android:textColor="#E53935" />
-
-                    <TextView
-                        android:id="@+id/tipSymbol"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bg_tip_pill"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
-                        android:paddingTop="3dp"
-                        android:paddingBottom="3dp"
-                        android:text="@string/password_tip_symbol"
-                        android:textSize="10sp"
-                        android:textColor="#E53935" />
-
-                </LinearLayout>
-            </LinearLayout>
-
+                android:layout_marginBottom="4dp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/confirmPasswordLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="14dp"
+                android:hint="@string/hint_confirm_password"
                 app:boxBackgroundMode="outline"
                 app:boxCornerRadiusTopStart="14dp"
                 app:boxCornerRadiusTopEnd="14dp"
@@ -421,7 +363,7 @@
                 app:boxStrokeWidth="1dp"
                 app:boxStrokeWidthFocused="1.5dp"
                 app:boxStrokeErrorColor="@color/error_red"
-                app:hintEnabled="false"
+                app:hintEnabled="true"
                 app:errorEnabled="true"
                 app:errorIconDrawable="@null"
                 app:startIconDrawable="@drawable/ic_lock"
@@ -432,12 +374,10 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/confirmPasswordInput"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:paddingVertical="0dp"
                     android:paddingStart="4dp"
                     android:paddingEnd="12dp"
-                    android:hint="@string/hint_confirm_password"
                     android:inputType="textPassword"
                     android:textColor="@color/input_text"
                     android:textColorHint="@color/input_hint"
@@ -561,19 +501,6 @@
                 android:textSize="14.5sp"
                 android:textStyle="bold" />
         </LinearLayout>
-
-        <!-- Guest Entry -->
-        <TextView
-            android:id="@+id/guestSignUpText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:padding="6dp"
-            android:text="@string/signup_guest"
-            android:textColor="@color/text_gray"
-            android:textSize="13sp"
-            android:clickable="true"
-            android:focusable="true" />
 
     </LinearLayout>
 </ScrollView>

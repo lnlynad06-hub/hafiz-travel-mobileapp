@@ -26,6 +26,8 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.graphics.drawable.ColorDrawable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -61,7 +63,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -69,7 +70,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -83,14 +83,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.inputmethod.InputMethodManager;
 import com.google.android.material.textfield.TextInputEditText;
-import com.hafiztraveltours.app.network.ApiClient;
-import com.hafiztraveltours.app.network.ApiResponse;
-import com.hafiztraveltours.app.network.HomeDataResponse;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     // TODO: replace with your actual WhatsApp business number, format: countrycode+number, no + or spaces
     private static final String WHATSAPP_PHONE_NUMBER = "60197859867";
@@ -115,9 +109,10 @@ public class MainActivity extends AppCompatActivity {
 
     private String activeLanguage;
 
-    // Now backed by real Firebase Authentication session (see loadSessionState()).
+    // Now backed by real Firebase Authentication session (see refreshSession()).
     private boolean isLoggedIn;
     private String loggedInUserName;
+    private MainViewModel mainViewModel;
 
     // Prayer times location permission flow
     private ActivityResultLauncher<String> locationPermissionLauncher;
@@ -126,11 +121,9 @@ public class MainActivity extends AppCompatActivity {
     private Runnable arcRefreshRunnable;
     private String currentResolvedLocationName = "Johor Bahru";
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(LocaleHelper.applySavedLocale(newBase));
-    }
+    // M8 single-flight Calls are owned by MainViewModel since Phase 9.
 
+    
     @Override
     protected void onResume() {
         super.onResume();
@@ -141,17 +134,39 @@ public class MainActivity extends AppCompatActivity {
         }
         activeLanguage = currentSaved;
         loadSessionState();
-        setupHeroSection();
-        startArcAutoRefresh();
+        setupRegisterCta();
         startHeroShowcase();
         updateFavoriteBadge();
+        updateNotificationDotState();
 
-        boolean hasFineLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED;
-        boolean hasCoarseLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED;
-        if (hasFineLocation || hasCoarseLocation) {
-            loadPrayerTimesForCurrentLocation();
+        if (OnboardingManager.isPrayerFeatureEnabled(this)) {
+            View prayerCard = findViewById(R.id.prayerTimesCard);
+            if (prayerCard != null) prayerCard.setVisibility(View.VISIBLE);
+
+            View btnQibla = findViewById(R.id.btnQiblaAction);
+            if (btnQibla != null) {
+                btnQibla.setVisibility(OnboardingManager.isQiblaFeatureEnabled(this) ? View.VISIBLE : View.GONE);
+            }
+
+            startArcAutoRefresh();
+
+            boolean hasFineLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED;
+            boolean hasCoarseLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED;
+            if (hasFineLocation || hasCoarseLocation) {
+                loadPrayerTimesForCurrentLocation();
+            }
+
+            if (OnboardingManager.isAzanFeatureEnabled(this)) {
+                PrayerTimeScheduler.requestExactAlarmPermissionIfNeeded(this);
+                PrayerTimeScheduler.requestBatteryOptimizationExemption(this);
+            }
+        } else {
+            View prayerCard = findViewById(R.id.prayerTimesCard);
+            if (prayerCard != null) prayerCard.setVisibility(View.GONE);
+            stopArcAutoRefresh();
+            PrayerTimeScheduler.cancelAllAlarms(this);
         }
     }
 
@@ -168,6 +183,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mainViewModel = new androidx.lifecycle.ViewModelProvider(this).get(MainViewModel.class);
+        observeMainState();
+
         loadSessionState();
 
         locationPermissionLauncher = registerForActivityResult(
@@ -180,24 +198,19 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-        setupHeroSection();
         setupHeroShowcase();
         setupPopularPackages();
+        mainViewModel.loadHome();
         setupQuickActions();
         setupBottomNav();
         setupInfoSection();
         setupPodcastSection();
         setupPrayerTimesWidget();
         setupSwipeRefresh();
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
-                    != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.POST_NOTIFICATIONS}, 100);
-            }
+        if (OnboardingManager.isPrayerFeatureEnabled(this) && OnboardingManager.isAzanFeatureEnabled(this)) {
+            PrayerTimeScheduler.requestExactAlarmPermissionIfNeeded(this);
+            PrayerTimeScheduler.requestBatteryOptimizationExemption(this);
         }
-        PrayerTimeScheduler.requestExactAlarmPermissionIfNeeded(this);
-        PrayerTimeScheduler.requestBatteryOptimizationExemption(this);
     }
 
     private void setupSwipeRefresh() {
@@ -206,9 +219,10 @@ public class MainActivity extends AppCompatActivity {
             swipeRefreshLayout.setColorSchemeResources(R.color.brand_magenta, R.color.gold_accent, R.color.brand_dark_pink);
             swipeRefreshLayout.setOnRefreshListener(() -> {
                 loadSessionState();
-                setupHeroSection();
-                setupPopularPackages();
-                loadPrayerTimesForCurrentLocation();
+                mainViewModel.loadHome();
+                if (OnboardingManager.isPrayerFeatureEnabled(this)) {
+                    loadPrayerTimesForCurrentLocation();
+                }
                 updateFavoriteBadge();
                 swipeRefreshLayout.postDelayed(() -> swipeRefreshLayout.setRefreshing(false), 1000);
             });
@@ -230,18 +244,38 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Checks the MySQL / REST API session from SessionManager.
-     * If a user is signed in, show their real name.
+     * Checks the MySQL / REST API session via MainViewModel.
+     * Posts SessionInfo; the observer below renders the hero greeting.
      */
     private void loadSessionState() {
-        SessionManager session = SessionManager.getInstance(this);
-        if (session.isLoggedIn()) {
-            isLoggedIn = true;
-            loggedInUserName = session.getUserName();
-        } else {
-            isLoggedIn = false;
-            loggedInUserName = getString(R.string.default_user_name);
-        }
+        mainViewModel.refreshSession();
+    }
+
+    /** Wires ViewModel state to rendering (H1/Phase 9). */
+    private void observeMainState() {
+        mainViewModel.getSessionInfo().observe(this, info -> {
+            if (info == null) return;
+            isLoggedIn = info.loggedIn;
+            loggedInUserName = info.nickname;
+            setupHeroSection();
+            setupRegisterCta();
+        });
+        mainViewModel.getHomeContent().observe(this, content -> {
+            if (content == null) {
+                renderHomeFailure();
+            } else {
+                renderHomeContent(content);
+            }
+        });
+        mainViewModel.getHomeLoading().observe(this, loading -> {
+            if (loading == null || !loading) {
+                com.facebook.shimmer.ShimmerFrameLayout shimmer = findViewById(R.id.homePopularShimmer);
+                if (shimmer != null) {
+                    shimmer.stopShimmer();
+                    shimmer.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     /**
@@ -271,7 +305,8 @@ public class MainActivity extends AppCompatActivity {
                 if (isLoggedIn) {
                     startActivity(new Intent(this, ProfileActivity.class));
                 } else {
-                    startActivity(new Intent(this, SignUpActivity.class));
+                    startActivity(new Intent(this, LoginActivity.class));
+                    overridePendingTransition(R.anim.nav_seamless_fade_in, R.anim.nav_seamless_fade_out);
                 }
             });
         }
@@ -288,21 +323,75 @@ public class MainActivity extends AppCompatActivity {
         }
 
         View notificationButton = findViewById(R.id.notificationButton);
-        View notificationDot = findViewById(R.id.viewNotificationDot);
-        if (notificationDot != null) {
-            boolean hasUnread = getSharedPreferences("app_prefs", MODE_PRIVATE).getBoolean("has_unread_notifications", false);
-            notificationDot.setVisibility(hasUnread ? View.VISIBLE : View.GONE);
-        }
+        updateNotificationDotState();
         if (notificationButton != null) {
             notificationButton.setOnClickListener(v -> {
-                v.performHapticFeedback(android.view.HapticFeedbackConstants.KEYBOARD_TAP);
-                if (notificationDot != null) {
-                    notificationDot.setVisibility(View.GONE);
-                    getSharedPreferences("app_prefs", MODE_PRIVATE).edit().putBoolean("has_unread_notifications", false).apply();
-                }
-                Toast.makeText(this, getString(R.string.no_notifications), Toast.LENGTH_SHORT).show();
+                com.hafiztraveltours.app.utils.HapticUtil.tap(v);
+                showNotificationCenterBottomSheet();
             });
         }
+    }
+
+    private void updateNotificationDotState() {
+        View notificationDot = findViewById(R.id.viewNotificationDot);
+        if (notificationDot != null) {
+            boolean hasUnread = AppNotificationManager.hasUnread(this);
+            notificationDot.setVisibility(hasUnread ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    private void showNotificationCenterBottomSheet() {
+        BottomSheetDialog dialog = new BottomSheetDialog(this, com.google.android.material.R.style.Theme_Design_BottomSheetDialog);
+        View sheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_notifications, null);
+        dialog.setContentView(sheetView);
+
+        Window w = dialog.getWindow();
+        if (w != null) {
+            w.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            w.setDimAmount(0.55f);
+        }
+
+        View btnClose = sheetView.findViewById(R.id.btnCloseNotifSheet);
+        View btnMarkAll = sheetView.findViewById(R.id.btnMarkAllRead);
+        View emptyView = sheetView.findViewById(R.id.emptyNotifView);
+        RecyclerView rv = sheetView.findViewById(R.id.rvNotifications);
+
+        if (btnClose != null) {
+            btnClose.setOnClickListener(v -> dialog.dismiss());
+        }
+
+        List<AppNotification> list = AppNotificationManager.getNotifications(this);
+
+        if (list.isEmpty()) {
+            if (emptyView != null) emptyView.setVisibility(View.VISIBLE);
+            if (rv != null) rv.setVisibility(View.GONE);
+        } else {
+            if (emptyView != null) emptyView.setVisibility(View.GONE);
+            if (rv != null) {
+                rv.setVisibility(View.VISIBLE);
+                rv.setLayoutManager(new LinearLayoutManager(this));
+                NotificationAdapter adapter = new NotificationAdapter(this, list, notif -> {
+                    updateNotificationDotState();
+                });
+                rv.setAdapter(adapter);
+            }
+        }
+
+        if (btnMarkAll != null) {
+            btnMarkAll.setOnClickListener(v -> {
+                HapticUtil.click(v);
+                AppNotificationManager.markAllRead(this);
+                updateNotificationDotState();
+                if (rv != null && rv.getAdapter() != null) {
+                    rv.getAdapter().notifyDataSetChanged();
+                }
+            });
+        }
+
+        AppNotificationManager.markAllRead(this);
+        updateNotificationDotState();
+
+        dialog.show();
     }
 
     private String getLanguageShortLabel(String langCode) {
@@ -331,29 +420,17 @@ public class MainActivity extends AppCompatActivity {
 
         View[] items = {
                 sheetView.findViewById(R.id.itemLangEnglish),
-                sheetView.findViewById(R.id.itemLangMalay),
-                sheetView.findViewById(R.id.itemLangArabic),
-                sheetView.findViewById(R.id.itemLangKorean),
-                sheetView.findViewById(R.id.itemLangJapanese),
-                sheetView.findViewById(R.id.itemLangChinese)
+                sheetView.findViewById(R.id.itemLangMalay)
         };
 
         String[] codes = {
                 LocaleHelper.LANGUAGE_ENGLISH,
-                LocaleHelper.LANGUAGE_MALAY,
-                LocaleHelper.LANGUAGE_ARABIC,
-                LocaleHelper.LANGUAGE_KOREAN,
-                LocaleHelper.LANGUAGE_JAPANESE,
-                LocaleHelper.LANGUAGE_CHINESE
+                LocaleHelper.LANGUAGE_MALAY
         };
 
         int[] radioIds = {
                 R.id.icRadioEnglish,
-                R.id.icRadioMalay,
-                R.id.icRadioArabic,
-                R.id.icRadioKorean,
-                R.id.icRadioJapanese,
-                R.id.icRadioChinese
+                R.id.icRadioMalay
         };
 
         for (int i = 0; i < items.length; i++) {
@@ -404,7 +481,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         item.setOnClickListener(v -> {
-            v.performHapticFeedback(android.view.HapticFeedbackConstants.VIRTUAL_KEY);
+            com.hafiztraveltours.app.utils.HapticUtil.click(v);
             item.animate()
                     .scaleX(0.95f)
                     .scaleY(0.95f)
@@ -445,13 +522,10 @@ public class MainActivity extends AppCompatActivity {
         setupTactileButton(heroShowcaseCard, () -> {
             if (!heroShowcaseList.isEmpty() && heroShowcaseIndex >= 0 && heroShowcaseIndex < heroShowcaseList.size()) {
                 UmrahPackage pkg = heroShowcaseList.get(heroShowcaseIndex);
-                Intent intent = new Intent(MainActivity.this, PackageDetailActivity.class);
                 String collection = (pkg.collectionName != null && !pkg.collectionName.trim().isEmpty())
                         ? pkg.collectionName
                         : (pkg.isUmrah() ? "umrah_packages" : "tour_packages");
-                intent.putExtra(PackageDetailActivity.EXTRA_COLLECTION, collection);
-                intent.putExtra(PackageDetailActivity.EXTRA_PACKAGE_ID, pkg.id);
-                startActivity(intent);
+                com.hafiztraveltours.app.utils.Navigator.openPackage(MainActivity.this, collection, pkg.id);
             } else {
                 startActivity(new Intent(MainActivity.this, AllPackagesActivity.class));
             }
@@ -518,147 +592,64 @@ public class MainActivity extends AppCompatActivity {
 
         if (price != null) {
             String rawPrice = (pkg.price != null && !pkg.price.isEmpty()) ? pkg.price : "";
-            String cleanPrice = rawPrice.replace("RM", "").replace("rm", "").trim();
+            String cleanPrice = com.hafiztraveltours.app.utils.MoneyFormat.numericString(rawPrice);
             if (!cleanPrice.isEmpty()) {
                 price.setText(getString(R.string.package_duration_price, pkg.durationDays, pkg.nightsCount, cleanPrice));
             } else if (pkg.durationDays > 0) {
-                price.setText(pkg.durationDays + " Hari " + pkg.nightsCount + " Malam");
+                price.setText(getString(R.string.duration_days_nights_format, pkg.durationDays, pkg.nightsCount));
             } else {
-                price.setText("Hubungi Kami");
+                price.setText(getString(R.string.label_contact_us));
             }
         }
     }
 
     private List<UmrahPackage> allPopularPackages = new ArrayList<>();
-    private final List<UmrahPackage> homeSearchUmrahCache = new ArrayList<>();
-    private final List<UmrahPackage> homeSearchTourCache = new ArrayList<>();
-    private boolean homeSearchPackagesLoaded = false;
-    private String currentCategoryFilter = "all";
 
     /**
-     * Pakej Popular - Muat turun daripada Laravel REST API Backend (Database MySQL).
+     * Pakej Popular - view setup only; data comes from MainViewModel (Laravel REST API).
      */
     private void setupPopularPackages() {
         RecyclerView recyclerView = findViewById(R.id.popularPackagesRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
-        // Panggil Laravel REST API
-        ApiClient.getApiService().getHomeData().enqueue(new Callback<ApiResponse<HomeDataResponse>>() {
-            @Override
-            public void onResponse(Call<ApiResponse<HomeDataResponse>> call, Response<ApiResponse<HomeDataResponse>> response) {
-                com.facebook.shimmer.ShimmerFrameLayout shimmer = findViewById(R.id.homePopularShimmer);
-                if (shimmer != null) {
-                    shimmer.stopShimmer();
-                    shimmer.setVisibility(View.GONE);
-                }
-                recyclerView.setVisibility(View.VISIBLE);
-
-                if (response.isSuccessful() && response.body() != null && response.body().isSuccess() && response.body().data != null) {
-                    allPopularPackages = new ArrayList<>();
-                    heroShowcaseList.clear();
-                    HomeDataResponse homeData = response.body().data;
-
-                    if (homeData.featured != null && !homeData.featured.isEmpty()) {
-                        for (UmrahPackage p : homeData.featured) {
-                            if (p.collectionName == null || p.collectionName.trim().isEmpty()) {
-                                p.collectionName = p.isUmrah() ? "umrah_packages" : "tour_packages";
-                            }
-                            allPopularPackages.add(p);
-                            heroShowcaseList.add(p);
-                        }
-                    }
-                    if (homeData.popularUmrah != null) {
-                        for (UmrahPackage p : homeData.popularUmrah) {
-                            p.collectionName = "umrah_packages";
-                            allPopularPackages.add(p);
-                        }
-                    }
-                    if (homeData.popularTour != null) {
-                        for (UmrahPackage p : homeData.popularTour) {
-                            p.collectionName = "tour_packages";
-                            allPopularPackages.add(p);
-                        }
-                    }
-
-                    View heroShowcaseCard = findViewById(R.id.heroShowcaseCard);
-                    if (!heroShowcaseList.isEmpty()) {
-                        if (heroShowcaseCard != null) heroShowcaseCard.setVisibility(View.VISIBLE);
-                        startHeroShowcase();
-                    } else {
-                        if (heroShowcaseCard != null) heroShowcaseCard.setVisibility(View.GONE);
-                        stopHeroShowcase();
-                    }
-
-                    recyclerView.setAdapter(new PackagePopularAdapter(MainActivity.this, allPopularPackages));
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ApiResponse<HomeDataResponse>> call, Throwable t) {
-                com.facebook.shimmer.ShimmerFrameLayout shimmer = findViewById(R.id.homePopularShimmer);
-                if (shimmer != null) {
-                    shimmer.stopShimmer();
-                    shimmer.setVisibility(View.GONE);
-                }
-                recyclerView.setVisibility(View.VISIBLE);
-                View heroShowcaseCard = findViewById(R.id.heroShowcaseCard);
-                if (heroShowcaseCard != null) heroShowcaseCard.setVisibility(View.GONE);
-                stopHeroShowcase();
-            }
-        });
-
         findViewById(R.id.seeAllPopular).setOnClickListener(v ->
                 startActivity(new Intent(this, AllPackagesActivity.class)));
     }
 
-    /**
-     * Search homepage - Tapping search opens the complete All Packages search & filter experience.
-     */
+    /** Renders observed home content (same visuals as the previous inline callback). */
+    private void renderHomeContent(MainViewModel.HomeContent content) {
+        RecyclerView recyclerView = findViewById(R.id.popularPackagesRecyclerView);
+        if (recyclerView != null) recyclerView.setVisibility(View.VISIBLE);
 
+        allPopularPackages = new ArrayList<>(content.popular);
+        heroShowcaseList.clear();
+        heroShowcaseList.addAll(content.showcase);
 
-    private void loadHomeSearchPackages(Runnable onLoaded) {
-        ApiClient.getApiService().getPackages(null, null, null, null).enqueue(new Callback<ApiResponse<List<UmrahPackage>>>() {
-            @Override
-            public void onResponse(Call<ApiResponse<List<UmrahPackage>>> call, Response<ApiResponse<List<UmrahPackage>>> response) {
-                homeSearchUmrahCache.clear();
-                homeSearchTourCache.clear();
+        View heroShowcaseCard = findViewById(R.id.heroShowcaseCard);
+        if (!heroShowcaseList.isEmpty()) {
+            if (heroShowcaseCard != null) heroShowcaseCard.setVisibility(View.VISIBLE);
+            startHeroShowcase();
+        } else {
+            if (heroShowcaseCard != null) heroShowcaseCard.setVisibility(View.GONE);
+            stopHeroShowcase();
+        }
 
-                if (response.isSuccessful() && response.body() != null && response.body().data != null) {
-                    for (UmrahPackage pkg : response.body().data) {
-                        if (pkg.isUmrah()) {
-                            pkg.collectionName = "umrah_packages";
-                            homeSearchUmrahCache.add(pkg);
-                        } else {
-                            pkg.collectionName = "tour_packages";
-                            homeSearchTourCache.add(pkg);
-                        }
-                    }
-                }
-
-                homeSearchPackagesLoaded = true;
-                onLoaded.run();
-            }
-
-            @Override
-            public void onFailure(Call<ApiResponse<List<UmrahPackage>>> call, Throwable t) {
-                homeSearchPackagesLoaded = true;
-                onLoaded.run();
-            }
-        });
+        if (recyclerView != null) {
+            recyclerView.setAdapter(new PackageCardAdapter(MainActivity.this, allPopularPackages));
+        }
     }
 
-    private void filterAndShowHomeSearch(String query, RecyclerView resultsRecyclerView) {
-        String q = query.toLowerCase();
-        List<UmrahPackage> results = new ArrayList<>();
-        for (UmrahPackage pkg : homeSearchUmrahCache) {
-            if (pkg.name != null && pkg.name.toLowerCase().contains(q)) results.add(pkg);
-        }
-        for (UmrahPackage pkg : homeSearchTourCache) {
-            if (pkg.name != null && pkg.name.toLowerCase().contains(q)) results.add(pkg);
-        }
-        resultsRecyclerView.setVisibility(View.VISIBLE);
-        resultsRecyclerView.setAdapter(new UmrahPackageAdapter(this, results, null));
+    /** Failure UI: same silent treatment as before (shimmer handled by loading observer). */
+    private void renderHomeFailure() {
+        RecyclerView recyclerView = findViewById(R.id.popularPackagesRecyclerView);
+        if (recyclerView != null) recyclerView.setVisibility(View.VISIBLE);
+        View heroShowcaseCard = findViewById(R.id.heroShowcaseCard);
+        if (heroShowcaseCard != null) heroShowcaseCard.setVisibility(View.GONE);
+        stopHeroShowcase();
     }
+
+    // Home search preload removed (Phase 9): it had no callers — tapping search opens
+    // AllPackagesActivity instead. Local filtering lives in the package list screens.
 
     private void setupTactileButton(View view, Runnable onClick) {
         if (view == null) return;
@@ -682,9 +673,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupQuickActions() {
-        // Nusuk - links out to the official Nusuk app on the Play Store
-        setupTactileButton(findViewById(R.id.featureNusuk), this::openNusukOnPlayStore);
-
         // Guideline - persediaan/checklist Umrah & Tour
         setupTactileButton(findViewById(R.id.featureGuideline), () ->
                 startActivity(new Intent(this, PanduanUmrahActivity.class)));
@@ -724,18 +712,25 @@ public class MainActivity extends AppCompatActivity {
      * the actual interactive checklist opens.
      */
     private void showChecklistCategoryPicker() {
-        String[] options = {getString(R.string.checklist_option_umrah), getString(R.string.checklist_option_tour)};
+        BottomSheetDialog dialog = new BottomSheetDialog(this);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_checklist_selection, null);
+        dialog.setContentView(dialogView);
 
-        new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.checklist_picker_title))
-                .setItems(options, (dialog, which) -> {
-                    if (which == 0) {
-                        showChecklistDialog("umrah", getString(R.string.checklist_dialog_title_umrah), buildUmrahChecklistSections());
-                    } else {
-                        showChecklistDialog("tour", getString(R.string.checklist_dialog_title_tour), buildTourChecklistSections());
-                    }
-                })
-                .show();
+        dialogView.findViewById(R.id.btnOptionUmrah).setOnClickListener(v -> {
+            dialog.dismiss();
+            Intent intent = new Intent(this, ChecklistUmrahActivity.class);
+            intent.putExtra("IS_TOUR", false);
+            startActivity(intent);
+        });
+
+        dialogView.findViewById(R.id.btnOptionTour).setOnClickListener(v -> {
+            dialog.dismiss();
+            Intent intent = new Intent(this, ChecklistUmrahActivity.class);
+            intent.putExtra("IS_TOUR", true);
+            startActivity(intent);
+        });
+
+        dialog.show();
     }
 
     /**
@@ -937,15 +932,6 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void openNusukOnPlayStore() {
-        try {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + NUSUK_PACKAGE_NAME)));
-        } catch (android.content.ActivityNotFoundException e) {
-            // Play Store app not available - fall back to the web link
-            startActivity(new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("https://play.google.com/store/apps/details?id=" + NUSUK_PACKAGE_NAME)));
-        }
-    }
 
     private void openWhatsApp() {
         try {
@@ -986,76 +972,74 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        setupReviewSnippets();
+        fetchRealGoogleRating();
     }
 
-    private void setupReviewSnippets() {
-        LinearLayout container = findViewById(R.id.reviewSnippetsContainer);
-        container.removeAllViews();
+    private void fetchRealGoogleRating() {
+        networkExecutor.execute(() -> {
+            try {
+                String apiUrl = "https://maps.googleapis.com/maps/api/place/details/json?place_id=ChIJhyLSxhBt2jERN8jHNbZ59y4&fields=name,rating,user_ratings_total&key=AIzaSyDemoKey";
+                java.net.URL url = new java.net.URL(apiUrl);
+                java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+                conn.setConnectTimeout(3000);
+                conn.setReadTimeout(3000);
 
-        String[][] reviews = {
-                {getString(R.string.review_1_name), getString(R.string.review_1_quote)},
-                {getString(R.string.review_2_name), getString(R.string.review_2_quote)},
-                {getString(R.string.review_3_name), getString(R.string.review_3_quote)}
-        };
+                if (conn.getResponseCode() == 200) {
+                    java.io.InputStream is = conn.getInputStream();
+                    java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.InputStreamReader(is));
+                    StringBuilder builder = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        builder.append(line);
+                    }
+                    reader.close();
 
-        for (String[] r : reviews) {
-            LinearLayout card = new LinearLayout(this);
-            card.setOrientation(LinearLayout.VERTICAL);
-            card.setBackgroundResource(R.drawable.bg_pill_active_nav);
-            int padding = dp(12);
-            card.setPadding(padding, padding, padding, padding);
+                    JSONObject json = new JSONObject(builder.toString());
+                    if (json.has("result")) {
+                        JSONObject result = json.getJSONObject("result");
+                        double ratingVal = result.optDouble("rating", 4.9);
+                        int totalReviews = result.optInt("user_ratings_total", 103);
 
-            LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(dp(220), ViewGroup.LayoutParams.WRAP_CONTENT);
-            cardParams.setMarginEnd(dp(10));
-            card.setLayoutParams(cardParams);
-
-            TextView stars = new TextView(this);
-            stars.setText("\u2605\u2605\u2605\u2605\u2605");
-            stars.setTextSize(11);
-            stars.setTextColor(getResources().getColor(R.color.pink_dark));
-
-            TextView quote = new TextView(this);
-            quote.setText("\u201C" + r[1] + "\u201D");
-            quote.setTextSize(13);
-            quote.setTextColor(getResources().getColor(R.color.text_gray));
-            LinearLayout.LayoutParams quoteParams = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            quoteParams.topMargin = dp(4);
-            quote.setLayoutParams(quoteParams);
-
-            TextView name = new TextView(this);
-            name.setText("\u2014 " + r[0]);
-            name.setTextSize(12);
-            name.setTypeface(null, android.graphics.Typeface.BOLD);
-            name.setTextColor(getResources().getColor(R.color.text_dark));
-            LinearLayout.LayoutParams nameParams = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            nameParams.topMargin = dp(6);
-            name.setLayoutParams(nameParams);
-
-            card.addView(stars);
-            card.addView(quote);
-            card.addView(name);
-            container.addView(card);
-        }
+                        new android.os.Handler(android.os.Looper.getMainLooper()).post(() -> {
+                            TextView countTv = findViewById(R.id.googleReviewCount);
+                            if (countTv != null && totalReviews > 0) {
+                                countTv.setText(String.format(java.util.Locale.US, "%.1f (%d+ Google Reviews)", ratingVal, totalReviews));
+                            }
+                        });
+                    }
+                }
+            } catch (Exception ignored) {}
+        });
     }
 
     private void setupRegisterCta() {
+        View guestSection = findViewById(R.id.guestInfoSection);
         View ctaCard = findViewById(R.id.registerCtaCard);
 
-        if (isLoggedIn) {
-            ctaCard.setVisibility(View.GONE);
+        boolean userLoggedIn = isLoggedIn || SessionManager.getInstance(this).isLoggedIn();
+
+        if (userLoggedIn) {
+            if (guestSection != null) guestSection.setVisibility(View.GONE);
+            if (ctaCard != null) ctaCard.setVisibility(View.GONE);
             return;
         }
 
-        ctaCard.setVisibility(View.VISIBLE);
+        if (guestSection != null) guestSection.setVisibility(View.VISIBLE);
+        if (ctaCard != null) ctaCard.setVisibility(View.VISIBLE);
 
-        findViewById(R.id.registerCtaButton).setOnClickListener(v ->
-                startActivity(new Intent(this, SignUpActivity.class)));
+        View registerBtn = findViewById(R.id.registerCtaButton);
+        if (registerBtn != null) {
+            registerBtn.setOnClickListener(v ->
+                    startActivity(new Intent(this, SignUpActivity.class)));
+        }
 
-        findViewById(R.id.registerCtaDismiss).setOnClickListener(v ->
-                ctaCard.setVisibility(View.GONE));
+        View dismissBtn = findViewById(R.id.registerCtaDismiss);
+        if (dismissBtn != null) {
+            dismissBtn.setOnClickListener(v -> {
+                if (guestSection != null) guestSection.setVisibility(View.GONE);
+                if (ctaCard != null) ctaCard.setVisibility(View.GONE);
+            });
+        }
     }
 
     private void setupPodcastSection() {
@@ -1113,6 +1097,14 @@ public class MainActivity extends AppCompatActivity {
      *    and every request will fall back to the Adhan estimate.)
      */
     private void setupPrayerTimesWidget() {
+        View prayerCard = findViewById(R.id.prayerTimesCard);
+        if (!OnboardingManager.isPrayerFeatureEnabled(this)) {
+            if (prayerCard != null) prayerCard.setVisibility(View.GONE);
+            return;
+        }
+
+        if (prayerCard != null) prayerCard.setVisibility(View.VISIBLE);
+
         View btnRefresh = findViewById(R.id.btnRefreshPrayerLocation);
         if (btnRefresh != null) {
             btnRefresh.setOnClickListener(v -> refreshPrayerTimesLocation(true));
@@ -1122,6 +1114,13 @@ public class MainActivity extends AppCompatActivity {
             ivRefresh.setOnClickListener(v -> refreshPrayerTimesLocation(true));
         }
 
+        View btnQibla = findViewById(R.id.btnQiblaAction);
+        if (btnQibla != null) {
+            btnQibla.setVisibility(OnboardingManager.isQiblaFeatureEnabled(this) ? View.VISIBLE : View.GONE);
+            btnQibla.setOnClickListener(v ->
+                    startActivity(new Intent(this, QiblaActivity.class)));
+        }
+
         boolean hasFineLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED;
         boolean hasCoarseLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -1129,12 +1128,16 @@ public class MainActivity extends AppCompatActivity {
 
         if (hasFineLocation || hasCoarseLocation) {
             loadPrayerTimesForCurrentLocation();
-        } else {
+        } else if (!OnboardingManager.isOnboardingCompleted(this)) {
             locationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
+        } else {
+            loadPrayerTimesForCurrentLocation();
         }
     }
 
     private void refreshPrayerTimesLocation(boolean userInitiated) {
+        if (!OnboardingManager.isPrayerFeatureEnabled(this)) return;
+
         ImageView ivRefresh = findViewById(R.id.ivRefreshPrayerLocation);
         if (ivRefresh != null) {
             ivRefresh.clearAnimation();
@@ -1164,6 +1167,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadPrayerTimesForCurrentLocation() {
+        if (!OnboardingManager.isPrayerFeatureEnabled(this)) return;
+
         Location location = getBestLastKnownLocation();
         double lat = 1.4927;   // fallback: Johor Bahru (company's own city)
         double lon = 103.7414;
@@ -1179,6 +1184,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void requestFreshLocation() {
+        if (!OnboardingManager.isPrayerFeatureEnabled(this)) return;
+
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (locationManager == null) return;
 
@@ -1303,39 +1310,11 @@ public class MainActivity extends AppCompatActivity {
 
                 String lang = LocaleHelper.getSavedLanguage(this);
                 String[] hijriMonths;
-                if (LocaleHelper.LANGUAGE_ARABIC.equalsIgnoreCase(lang)) {
-                    hijriMonths = new String[]{
-                            "محرم", "صفر", "ربيع الأول", "ربيع الآخر",
-                            "جمادى الأولى", "جمادى الآخرة", "رجب", "شعبان",
-                            "رمضان", "شوال", "ذو القعدة", "ذو الحجة"
-                    };
-                    return day + " " + (month >= 0 && month < hijriMonths.length ? hijriMonths[month] : "") + " " + year + " هـ";
-                } else if (LocaleHelper.LANGUAGE_CHINESE.equalsIgnoreCase(lang)) {
-                    hijriMonths = new String[]{
-                            "穆哈兰姆月", "色法尔月", "赖比尔·奥瓦勒月", "赖比尔·阿色尼月",
-                            "主马达·奥瓦勒月", "主马达·阿色尼月", "赖哲卜月", "舍尔邦月",
-                            "赖买丹月", "闪瓦鲁月", "都尔喀尔德月", "都尔黑哲月"
-                    };
-                    return "回历 " + year + "年 " + (month >= 0 && month < hijriMonths.length ? hijriMonths[month] : "") + " " + day + "日";
-                } else if (LocaleHelper.LANGUAGE_MALAY.equalsIgnoreCase(lang)) {
+                if (LocaleHelper.LANGUAGE_MALAY.equalsIgnoreCase(lang)) {
                     hijriMonths = new String[]{
                             "Muharram", "Safar", "Rabiulawal", "Rabiulakhir",
                             "Jamadilawal", "Jamadilakhir", "Rejab", "Syaaban",
                             "Ramadhan", "Syawal", "Zulkaedah", "Zulhijjah"
-                    };
-                    return day + " " + (month >= 0 && month < hijriMonths.length ? hijriMonths[month] : "") + " " + year + "H";
-                } else if (LocaleHelper.LANGUAGE_KOREAN.equalsIgnoreCase(lang)) {
-                    hijriMonths = new String[]{
-                            "무하람", "사파르", "라비 알아우왈", "라비 앗사니",
-                            "주마다 알아울라", "주마다 알아키라", "라자브", "샤반",
-                            "라마단", "샤왈", "둘카다", "둘히자"
-                    };
-                    return day + " " + (month >= 0 && month < hijriMonths.length ? hijriMonths[month] : "") + " " + year + "H";
-                } else if (LocaleHelper.LANGUAGE_JAPANESE.equalsIgnoreCase(lang)) {
-                    hijriMonths = new String[]{
-                            "ムハッラム", "サファル", "ラビー・アル＝アウワル", "ラビー・アル＝サーニー",
-                            "ジュマーダー・アル＝ウーラー", "ジュマーダー・アル＝アーヒラ", "ラジャブ", "シャアバーン",
-                            "ラマダーン", "シャウワール", "ズー・アル＝カアダ", "ズー・アル＝ヒッジャ"
                     };
                     return day + " " + (month >= 0 && month < hijriMonths.length ? hijriMonths[month] : "") + " " + year + "H";
                 } else {
@@ -1435,9 +1414,6 @@ public class MainActivity extends AppCompatActivity {
             throw new RuntimeException("No entry for today in API response");
         }
 
-        SimpleDateFormat formatter = new SimpleDateFormat("h:mm a", Locale.getDefault());
-        formatter.setTimeZone(TimeZone.getDefault());
-
         JSONObject finalTodayPrayers = todayPrayers;
         String[] names = {
                 getString(R.string.prayer_subuh), getString(R.string.prayer_zohor),
@@ -1469,10 +1445,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private String formatEpochSeconds(long epochSeconds, SimpleDateFormat formatter) {
-        return formatter.format(new Date(epochSeconds * 1000L));
-    }
-
     /**
      * OFFLINE FALLBACK ONLY - used when the JAKIM-sourced API call fails.
      * These are calculated estimates (Adhan library, SINGAPORE method), NOT
@@ -1496,9 +1468,6 @@ public class MainActivity extends AppCompatActivity {
         params.madhab = Madhab.SHAFI;
 
         PrayerTimes prayerTimes = new PrayerTimes(coordinates, dateComponents, params);
-
-        SimpleDateFormat formatter = new SimpleDateFormat("h:mm a", Locale.getDefault());
-        formatter.setTimeZone(TimeZone.getDefault());
 
         String[] names = {
                 getString(R.string.prayer_subuh), getString(R.string.prayer_zohor),
@@ -1542,7 +1511,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void renderPrayerArc(String[] names, long[] epochSeconds) {
-        PrayerArcView arcView = findViewById(R.id.prayerArcView);
         TextView currentLabel = findViewById(R.id.prayerCurrentLabel);
         TextView nextLabel = findViewById(R.id.prayerNextLabel);
         TextView locationLabel = findViewById(R.id.prayerLocationLabel);
@@ -1562,24 +1530,20 @@ public class MainActivity extends AppCompatActivity {
         PrayerProgressCalculator.Result result =
                 PrayerProgressCalculator.calculate(names, epochSeconds, nowEpoch);
 
-        if (arcView != null) {
-            arcView.setProgress(result.progress);
-        }
-
-        SimpleDateFormat formatter = new SimpleDateFormat("h:mm a", LocaleHelper.getCurrentLocale(this));
-        formatter.setTimeZone(TimeZone.getDefault());
-
-        String currentTime = formatter.format(new Date(result.currentEpochSeconds * 1000L));
-        String nextTime = formatter.format(new Date(result.nextEpochSeconds * 1000L));
+        java.util.Locale appLocale = LocaleHelper.getCurrentLocale(this);
+        String currentTime = com.hafiztraveltours.app.utils.DateFormats.formatClockTime(
+                new Date(result.currentEpochSeconds * 1000L), appLocale);
+        String nextTime = com.hafiztraveltours.app.utils.DateFormats.formatClockTime(
+                new Date(result.nextEpochSeconds * 1000L), appLocale);
 
         String localizedCurrentName = getLocalizedPrayerName(result.currentName);
         String localizedNextName = getLocalizedPrayerName(result.nextName);
 
-        if (currentLabel != null) {
-            currentLabel.setText(buildLabelSpanned(localizedCurrentName, currentTime));
-        }
         if (nextLabel != null) {
-            nextLabel.setText(buildLabelSpanned(localizedNextName, nextTime));
+            nextLabel.setText(localizedNextName.toUpperCase(Locale.getDefault()));
+        }
+        if (currentLabel != null) {
+            currentLabel.setText(nextTime);
         }
 
         // Update Live Countdown Timer
@@ -1597,27 +1561,38 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        // Update 5 Daily Prayer Pills
+        // Update Dynamic Prayer Progression Timeline View & Labels
+        PrayerProgressTimelineView timelineView = findViewById(R.id.prayerProgressTimelineView);
+        if (timelineView != null && epochSeconds != null && epochSeconds.length >= 5) {
+            timelineView.setPrayerData(names, epochSeconds, nowEpoch);
+        }
+
+        // Update 5 Daily Prayer Timeline Labels
         if (epochSeconds != null && epochSeconds.length >= 5) {
             LinearLayout pillSubuh = findViewById(R.id.pillSubuh);
             TextView tvNameSubuh = findViewById(R.id.tvNameSubuh);
             TextView tvTimeSubuh = findViewById(R.id.tvTimeSubuh);
+            View dotSubuh = findViewById(R.id.dotSubuh);
 
             LinearLayout pillZohor = findViewById(R.id.pillZohor);
             TextView tvNameZohor = findViewById(R.id.tvNameZohor);
             TextView tvTimeZohor = findViewById(R.id.tvTimeZohor);
+            View dotZohor = findViewById(R.id.dotZohor);
 
             LinearLayout pillAsar = findViewById(R.id.pillAsar);
             TextView tvNameAsar = findViewById(R.id.tvNameAsar);
             TextView tvTimeAsar = findViewById(R.id.tvTimeAsar);
+            View dotAsar = findViewById(R.id.dotAsar);
 
             LinearLayout pillMaghrib = findViewById(R.id.pillMaghrib);
             TextView tvNameMaghrib = findViewById(R.id.tvNameMaghrib);
             TextView tvTimeMaghrib = findViewById(R.id.tvTimeMaghrib);
+            View dotMaghrib = findViewById(R.id.dotMaghrib);
 
             LinearLayout pillIsyak = findViewById(R.id.pillIsyak);
             TextView tvNameIsyak = findViewById(R.id.tvNameIsyak);
             TextView tvTimeIsyak = findViewById(R.id.tvTimeIsyak);
+            View dotIsyak = findViewById(R.id.dotIsyak);
 
             if (tvNameSubuh != null) tvNameSubuh.setText(getString(R.string.prayer_name_subuh));
             if (tvNameZohor != null) tvNameZohor.setText(getString(R.string.prayer_name_zohor));
@@ -1625,11 +1600,11 @@ public class MainActivity extends AppCompatActivity {
             if (tvNameMaghrib != null) tvNameMaghrib.setText(getString(R.string.prayer_name_maghrib));
             if (tvNameIsyak != null) tvNameIsyak.setText(getString(R.string.prayer_name_isyak));
 
-            if (tvTimeSubuh != null) tvTimeSubuh.setText(formatter.format(new Date(epochSeconds[0] * 1000L)));
-            if (tvTimeZohor != null) tvTimeZohor.setText(formatter.format(new Date(epochSeconds[1] * 1000L)));
-            if (tvTimeAsar != null) tvTimeAsar.setText(formatter.format(new Date(epochSeconds[2] * 1000L)));
-            if (tvTimeMaghrib != null) tvTimeMaghrib.setText(formatter.format(new Date(epochSeconds[3] * 1000L)));
-            if (tvTimeIsyak != null) tvTimeIsyak.setText(formatter.format(new Date(epochSeconds[4] * 1000L)));
+            if (tvTimeSubuh != null) tvTimeSubuh.setText(com.hafiztraveltours.app.utils.DateFormats.formatEpochSeconds(epochSeconds[0], appLocale));
+            if (tvTimeZohor != null) tvTimeZohor.setText(com.hafiztraveltours.app.utils.DateFormats.formatEpochSeconds(epochSeconds[1], appLocale));
+            if (tvTimeAsar != null) tvTimeAsar.setText(com.hafiztraveltours.app.utils.DateFormats.formatEpochSeconds(epochSeconds[2], appLocale));
+            if (tvTimeMaghrib != null) tvTimeMaghrib.setText(com.hafiztraveltours.app.utils.DateFormats.formatEpochSeconds(epochSeconds[3], appLocale));
+            if (tvTimeIsyak != null) tvTimeIsyak.setText(com.hafiztraveltours.app.utils.DateFormats.formatEpochSeconds(epochSeconds[4], appLocale));
 
             int activeIndex = -1;
             for (int i = 0; i < names.length; i++) {
@@ -1639,24 +1614,33 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-            updatePrayerPill(pillSubuh, tvNameSubuh, tvTimeSubuh, activeIndex == 0);
-            updatePrayerPill(pillZohor, tvNameZohor, tvTimeZohor, activeIndex == 1);
-            updatePrayerPill(pillAsar, tvNameAsar, tvTimeAsar, activeIndex == 2);
-            updatePrayerPill(pillMaghrib, tvNameMaghrib, tvTimeMaghrib, activeIndex == 3);
-            updatePrayerPill(pillIsyak, tvNameIsyak, tvTimeIsyak, activeIndex == 4);
+            updatePrayerPill(pillSubuh, tvNameSubuh, tvTimeSubuh, dotSubuh, activeIndex == 0);
+            updatePrayerPill(pillZohor, tvNameZohor, tvTimeZohor, dotZohor, activeIndex == 1);
+            updatePrayerPill(pillAsar, tvNameAsar, tvTimeAsar, dotAsar, activeIndex == 2);
+            updatePrayerPill(pillMaghrib, tvNameMaghrib, tvTimeMaghrib, dotMaghrib, activeIndex == 3);
+            updatePrayerPill(pillIsyak, tvNameIsyak, tvTimeIsyak, dotIsyak, activeIndex == 4);
         }
     }
 
-    private void updatePrayerPill(LinearLayout pill, TextView tvName, TextView tvTime, boolean isActive) {
+    private void updatePrayerPill(LinearLayout pill, TextView tvName, TextView tvTime, View dotNode, boolean isActive) {
         if (pill == null || tvName == null || tvTime == null) return;
+        pill.setBackgroundColor(Color.TRANSPARENT);
         if (isActive) {
-            pill.setBackgroundResource(R.drawable.bg_prayer_pill_active);
-            tvName.setTextColor(Color.WHITE);
-            tvTime.setTextColor(Color.parseColor("#FCE4EC"));
+            tvName.setTextColor(ContextCompat.getColor(this, R.color.pink_dark));
+            tvName.setTypeface(null, Typeface.BOLD);
+            tvTime.setTextColor(ContextCompat.getColor(this, R.color.pink_dark));
+            tvTime.setTypeface(null, Typeface.BOLD);
+            if (dotNode != null) {
+                dotNode.setBackgroundResource(R.drawable.bg_timeline_dot_active);
+            }
         } else {
-            pill.setBackgroundResource(R.drawable.bg_prayer_pill_inactive);
-            tvName.setTextColor(ContextCompat.getColor(this, R.color.text_dark));
-            tvTime.setTextColor(ContextCompat.getColor(this, R.color.text_gray));
+            tvName.setTextColor(Color.parseColor("#64748B"));
+            tvName.setTypeface(null, Typeface.NORMAL);
+            tvTime.setTextColor(Color.parseColor("#1E293B"));
+            tvTime.setTypeface(null, Typeface.NORMAL);
+            if (dotNode != null) {
+                dotNode.setBackgroundResource(R.drawable.bg_timeline_dot_inactive);
+            }
         }
     }
 
@@ -1707,7 +1691,6 @@ public class MainActivity extends AppCompatActivity {
      */
     private void showPrayerTimesLocationDenied() {
         TextView dateText = findViewById(R.id.prayerTimesDateText);
-        PrayerArcView arcView = findViewById(R.id.prayerArcView);
         TextView currentLabel = findViewById(R.id.prayerCurrentLabel);
         TextView nextLabel = findViewById(R.id.prayerNextLabel);
         TextView countdownText = findViewById(R.id.prayerCountdownText);
@@ -1722,8 +1705,6 @@ public class MainActivity extends AppCompatActivity {
             countdownText.setText("--");
         }
 
-        // Kosongkan arc & label sebab takde data waktu solat
-        if (arcView != null) arcView.setProgress(0f);
         if (currentLabel != null) currentLabel.setText("");
 
         if (nextLabel != null) {

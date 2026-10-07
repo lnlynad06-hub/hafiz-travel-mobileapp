@@ -16,20 +16,37 @@ import android.content.SharedPreferences;
 import com.google.gson.Gson;
 import com.hafiztraveltours.app.network.UserDto;
 
+/**
+ * Session single source of truth (Phase 5).
+ *
+ * <p>Ownership:
+ * <ul>
+ *   <li>Auth token + user JSON live here, encrypted via SecurePrefs ("hafiz_travel_session").</li>
+ *   <li>{@code ApiClient}'s in-memory token is a write-only copy, synchronized from here
+ *       through {@link #syncApiToken()} — the ONLY place that calls
+ *       {@code ApiClient.setAuthToken()} (save, clear, init). Getters never touch ApiClient.</li>
+ *   <li>Profile updates persist user data only and can never overwrite a stored token
+ *       with null/empty (see {@link #saveAuthSession}).</li>
+ * </ul>
+ */
 public class SessionManager {
 
     private static final String PREF_NAME = "hafiz_travel_session";
     private static final String KEY_IS_LOGGED_IN = "is_logged_in";
     private static final String KEY_AUTH_TOKEN = "auth_token";
     private static final String KEY_USER_DATA = "user_data";
+    private static final String KEY_PROFILE_STATS = "profile_stats";
 
     private static SessionManager instance;
+    private final Context appContext;
     private final SharedPreferences prefs;
     private final Gson gson;
 
     public SessionManager(Context context) {
-        this.prefs = context.getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        this.appContext = context != null ? context.getApplicationContext() : null;
+        this.prefs = SecurePrefs.wrap(this.appContext, PREF_NAME);
         this.gson = new Gson();
+        syncApiToken();
     }
 
     public static synchronized SessionManager getInstance(Context context) {
@@ -39,30 +56,52 @@ public class SessionManager {
         return instance;
     }
 
+    /**
+     * The single synchronization point for the in-memory Retrofit token.
+     * Copies the stored token into ApiClient, or clears ApiClient when no token
+     * is stored (e.g. after logout). Called on init, save and clear only.
+     */
+    private void syncApiToken() {
+        String savedToken = prefs.getString(KEY_AUTH_TOKEN, "");
+        if (savedToken != null && !savedToken.trim().isEmpty()) {
+            ApiClient.setAuthToken(savedToken.trim());
+        } else {
+            ApiClient.setAuthToken(null);
+        }
+    }
+
     public void saveAuthSession(String token, UserDto user) {
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putBoolean(KEY_IS_LOGGED_IN, true);
-        editor.putString(KEY_AUTH_TOKEN, token != null ? token : "");
+        boolean hasToken = token != null && !token.trim().isEmpty();
+        if (hasToken) {
+            editor.putBoolean(KEY_IS_LOGGED_IN, true);
+            editor.putString(KEY_AUTH_TOKEN, token.trim());
+        } else if (isLoggedIn() && getToken() != null && !getToken().trim().isEmpty()) {
+            editor.putBoolean(KEY_IS_LOGGED_IN, true);
+        } else {
+            editor.putBoolean(KEY_IS_LOGGED_IN, false);
+        }
         if (user != null) {
             editor.putString(KEY_USER_DATA, gson.toJson(user));
         }
         editor.apply();
+        syncApiToken();
+    }
+
+    public void saveUser(UserDto user) {
+        if (user != null) {
+            prefs.edit().putString(KEY_USER_DATA, gson.toJson(user)).apply();
+        }
     }
 
     public boolean isLoggedIn() {
         return prefs.getBoolean(KEY_IS_LOGGED_IN, false);
     }
 
+    /** Pure read — never touches ApiClient (see {@link #syncApiToken()}). */
     public String getToken() {
-        return prefs.getString(KEY_AUTH_TOKEN, "");
-    }
-
-    public String getAuthorizationHeader() {
-        String token = getToken();
-        if (token != null && !token.isEmpty()) {
-            return "Bearer " + token;
-        }
-        return "";
+        String token = prefs.getString(KEY_AUTH_TOKEN, "");
+        return token != null ? token : "";
     }
 
     public UserDto getUser() {
@@ -80,6 +119,17 @@ public class SessionManager {
         return user != null && user.name != null ? user.name : "Tetamu Jemaah";
     }
 
+    public String getUserNickname() {
+        UserDto user = getUser();
+        if (user != null && user.nickname != null && !user.nickname.trim().isEmpty()) {
+            return user.nickname.trim();
+        }
+        if (user != null && user.name != null && !user.name.trim().isEmpty()) {
+            return user.name.trim().split(" ")[0];
+        }
+        return "Tetamu Jemaah";
+    }
+
     public String getUserEmail() {
         UserDto user = getUser();
         return user != null && user.email != null ? user.email : "";
@@ -90,20 +140,78 @@ public class SessionManager {
         return user != null && user.phone != null ? user.phone : "";
     }
 
-    public String getUserId() {
-        UserDto user = getUser();
-        return user != null && user.id != null ? user.id : "";
-    }
-
     public String getAuthToken() {
         return getToken();
     }
+
+    private static final String KEY_USER_DOCUMENTS = "user_documents";
 
     public void clearSession() {
         prefs.edit()
                 .putBoolean(KEY_IS_LOGGED_IN, false)
                 .remove(KEY_AUTH_TOKEN)
                 .remove(KEY_USER_DATA)
+                .remove(KEY_PROFILE_STATS)
+                .remove(KEY_USER_DOCUMENTS)
                 .apply();
+        if (appContext != null) {
+            try {
+                SecurePrefs.wrap(appContext, "user_profile").edit().clear().apply();
+            } catch (Exception ignored) {}
+        }
+        syncApiToken();
+    }
+
+    public void saveProfileStats(com.hafiztraveltours.app.models.ProfileStatsDto stats) {
+        prefs.edit().putString(KEY_PROFILE_STATS,
+                stats != null ? gson.toJson(stats) : null).apply();
+    }
+
+    public com.hafiztraveltours.app.models.ProfileStatsDto getProfileStats() {
+        String json = prefs.getString(KEY_PROFILE_STATS, null);
+        if (json != null && !json.isEmpty()) {
+            try {
+                return gson.fromJson(json, com.hafiztraveltours.app.models.ProfileStatsDto.class);
+            } catch (Exception ignored) {}
+        }
+        return null;
+    }
+
+    public void saveDocuments(java.util.List<com.hafiztraveltours.app.models.DocumentDto> docs) {
+        if (docs != null) {
+            prefs.edit().putString(KEY_USER_DOCUMENTS, gson.toJson(docs)).apply();
+        } else {
+            prefs.edit().remove(KEY_USER_DOCUMENTS).apply();
+        }
+    }
+
+    public java.util.List<com.hafiztraveltours.app.models.DocumentDto> getDocuments() {
+        String json = prefs.getString(KEY_USER_DOCUMENTS, null);
+        if (json != null && !json.isEmpty()) {
+            try {
+                java.lang.reflect.Type type = new com.google.gson.reflect.TypeToken<java.util.List<com.hafiztraveltours.app.models.DocumentDto>>() {}.getType();
+                java.util.List<com.hafiztraveltours.app.models.DocumentDto> list = gson.fromJson(json, type);
+                if (list != null) return list;
+            } catch (Exception ignored) {}
+        }
+        return new java.util.ArrayList<>();
+    }
+
+    public java.util.Map<String, String> getProfileExtras() {
+        if (appContext == null) return new java.util.HashMap<>();
+        SharedPreferences profilePrefs = SecurePrefs.wrap(appContext, "user_profile");
+        java.util.Map<String, String> out = new java.util.HashMap<>();
+        String[] keys = {
+                "name", "ic_no", "passport_no", "passport_expiry", "issuing_country",
+                "gender", "date_of_birth", "nationality", "clothes_size",
+                "address", "address_line_1", "address_line_2", "postcode", "city",
+                "state", "country", "emergency_name", "emergency_phone",
+                "mahram_name", "mahram_relationship", "has_vaccine_cert"
+        };
+        for (String k : keys) {
+            String v = profilePrefs.getString(k, "");
+            if (v != null && !v.isEmpty()) out.put(k, v);
+        }
+        return out;
     }
 }

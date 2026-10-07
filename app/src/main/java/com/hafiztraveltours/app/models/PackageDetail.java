@@ -10,10 +10,15 @@ import com.hafiztraveltours.app.views.*;
 import com.hafiztraveltours.app.ui.*;
 
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * UI/domain model for the booking flow (H4). Built ONLY by {@link #fromUmrahPackage},
+ * passed between booking Activities via Intent extras. Holds locale-neutral keys and
+ * backend IDs (departures, room keys); all display text is resolved by Activities
+ * through string resources. Flight/route display stays on the source {@link UmrahPackage}.
+ */
 public class PackageDetail implements java.io.Serializable {
 
     public String id;
@@ -34,17 +39,41 @@ public class PackageDetail implements java.io.Serializable {
     public List<NightBreakdown> nightsBreakdown = new ArrayList<>();
     public String departureDatesNote;
     public List<String> availableDepartureDates = new ArrayList<>();
+    /** Departure options carrying the real backend ID (availableDepartureDates holds display labels only). */
+    public List<DepartureOption> availableDepartures = new ArrayList<>();
     public List<HotelInfo> hotels = new ArrayList<>();
     public List<ItineraryDay> itinerary = new ArrayList<>();
     public List<ImportantNote> importantNotes = new ArrayList<>();
+    public List<String> requiredDocuments = new ArrayList<>();
+    public List<String> cancellationPolicy = new ArrayList<>();
+    public String companyWhatsapp;
     public List<String> included = new ArrayList<>();
     public List<String> excluded = new ArrayList<>();
     public List<String> packingSummer = new ArrayList<>();
     public List<String> packingWinter = new ArrayList<>();
     public List<PriceOption> priceOptions = new ArrayList<>();
     public List<String> galleryImageUrls = new ArrayList<>();
+    public List<UmrahPackage> relatedPackages = new ArrayList<>();
     public String whatsappMessage;
+    public String packageType = "umrah";
+    public boolean requiresPassport = true;
+    public boolean requiresIc = true;
+    public boolean requiresMahram = false;
+    public boolean requiresClothesSize = false;
+    public int passportValidityMonths = 6;
     public boolean isUmrah; // set from UmrahPackage.isUmrah() during parsing
+
+    public UmrahPackage.SeasonPricingData seasonPricing;
+    public java.util.Map<String, String> seasonPrices;
+    public Double childUnder2Price;
+    public Double child211WithBedDiscount;
+    public Double child211NoBedDiscount;
+    public Double child2To4Discount;
+    public Double child211WithBedPrice;
+    public Double child211NoBedPrice;
+    public Double child2To4Price;
+    public UmrahPackage.ChildPricingRules childPricingRules;
+    public UmrahPackage rawPackage;
 
     public static class NightBreakdown implements java.io.Serializable {
         public String city;          // set by Activity from getString() using slot
@@ -96,10 +125,70 @@ public class PackageDetail implements java.io.Serializable {
 
     public static class PriceOption implements java.io.Serializable {
         public String price;
+        /** Locale-neutral room key ("quint"|"quad"|"triple"|"double"|"single"|"from"|"standard"). */
+        public String labelKey;
+        /** Legacy display label (fallback only; UI resolves labelKey via RoomLabels). */
         public String occupancyLabel;
-        public PriceOption(String price, String occupancyLabel) {
+        public PriceOption(String price, String labelKey, String occupancyLabel) {
             this.price = price;
+            this.labelKey = labelKey;
             this.occupancyLabel = occupancyLabel;
+        }
+    }
+
+    /** A selectable departure: backend ID + raw dates; the UI builds the localized label. */
+    public static class DepartureOption implements java.io.Serializable {
+        /** Raw `departures[].id` from the API (numeric string). May be null for legacy fallbacks. */
+        public String id;
+        /** Raw API dates (may be null). */
+        public String departureDate;
+        public String returnDate;
+        /** Pre-built display label (legacy fallback). */
+        public String label;
+        public Integer totalSeats;
+        public Integer seatsBooked;
+        public Integer seatsAvailable;
+        public boolean isFull;
+        public String season;
+        public String price;
+        public String priceFormatted;
+        public java.util.List<UmrahPackage.DepartureItem.PricingTier> pricing;
+
+        public DepartureOption(String id, String departureDate, String returnDate, String label) {
+            this(id, departureDate, returnDate, label, null, null, null, false);
+        }
+
+        public DepartureOption(String id, String departureDate, String returnDate, String label,
+                               Integer totalSeats, Integer seatsBooked, Integer seatsAvailable, boolean isFull) {
+            this.id = id;
+            this.departureDate = departureDate;
+            this.returnDate = returnDate;
+            this.label = label != null ? label : "";
+            this.totalSeats = totalSeats;
+            this.seatsBooked = seatsBooked;
+            this.seatsAvailable = seatsAvailable;
+            this.isFull = isFull;
+        }
+
+        public int getAvailableSeatsCount() {
+            if (seatsAvailable != null) {
+                return Math.max(0, seatsAvailable);
+            }
+            if (totalSeats != null && seatsBooked != null) {
+                return Math.max(0, totalSeats - seatsBooked);
+            }
+            return 40; // Default fallback if capacity was unpopulated
+        }
+
+        public int getTotalSeatsCount() {
+            if (totalSeats != null && totalSeats > 0) {
+                return totalSeats;
+            }
+            return 40;
+        }
+
+        public boolean isFullyBooked() {
+            return isFull || getAvailableSeatsCount() <= 0;
         }
     }
 
@@ -113,7 +202,7 @@ public class PackageDetail implements java.io.Serializable {
         d.summaryLine = pkg.summary != null && !pkg.summary.trim().isEmpty() ? pkg.summary.trim() : "";
         d.durationDays = pkg.durationDays > 0 ? pkg.durationDays : 0;
         d.nightsCount = pkg.nightsCount > 0 ? pkg.nightsCount : 0;
-        d.price = pkg.price != null && !pkg.price.trim().isEmpty() ? pkg.price : "Hubungi Kami";
+        d.price = pkg.price != null && !pkg.price.trim().isEmpty() ? pkg.price : "";
         d.imageUrl = pkg.imageUrl != null && !pkg.imageUrl.trim().isEmpty() ? pkg.imageUrl : "";
         d.posterImageUrl = d.imageUrl;
         d.durationFormatted = pkg.getDurationFormatted();
@@ -122,6 +211,31 @@ public class PackageDetail implements java.io.Serializable {
 
         boolean isUmrah = pkg.isUmrah();
         d.isUmrah = isUmrah;
+        d.rawPackage = pkg;
+        d.seasonPricing = pkg.seasonPricing;
+        d.seasonPrices = pkg.seasonPrices;
+        d.childUnder2Price = pkg.childUnder2Price;
+        d.child211WithBedDiscount = pkg.child211WithBedDiscount;
+        d.child211NoBedDiscount = pkg.child211NoBedDiscount;
+        d.child2To4Discount = pkg.child2To4Discount;
+        d.child211WithBedPrice = pkg.child211WithBedPrice;
+        d.child211NoBedPrice = pkg.child211NoBedPrice;
+        d.child2To4Price = pkg.child2To4Price;
+        d.childPricingRules = pkg.childPricingRules;
+
+        // Package-driven requirements & type (H4): copy backend values when present,
+        // otherwise keep the model defaults. Previously these were never copied, so
+        // PassengerDetails always saw the defaults regardless of the API.
+        if (pkg.packageType != null && !pkg.packageType.trim().isEmpty()) {
+            d.packageType = pkg.packageType.trim();
+        }
+        if (pkg.requiresPassport != null) d.requiresPassport = pkg.requiresPassport;
+        if (pkg.requiresIc != null) d.requiresIc = pkg.requiresIc;
+        if (pkg.requiresMahram != null) d.requiresMahram = pkg.requiresMahram;
+        if (pkg.requiresClothesSize != null) d.requiresClothesSize = pkg.requiresClothesSize;
+        if (pkg.passportValidityMonths != null && pkg.passportValidityMonths > 0) {
+            d.passportValidityMonths = pkg.passportValidityMonths;
+        }
 
         // 1. Nights Breakdown — city labels use slot index, translated by Activity
         // slot 0=Makkah/Hotel1, 1=Madinah/Hotel2, 2=Taif/Hotel3
@@ -143,46 +257,44 @@ public class PackageDetail implements java.io.Serializable {
             d.nightsBreakdown.add(nb);
         }
 
-        // 2. Hotel info — title built by Activity using getString() for locale support
-        if (pkg.hotelMakkahName != null && !pkg.hotelMakkahName.trim().isEmpty()) {
-            String rating = (pkg.hotelMakkahRating != null && !pkg.hotelMakkahRating.trim().isEmpty())
-                    ? pkg.hotelMakkahRating : "";
-            String subtitle = pkg.hotelMakkahName.trim() +
-                    ((pkg.hotelMakkahDistance != null && !pkg.hotelMakkahDistance.trim().isEmpty())
-                            ? " (" + pkg.hotelMakkahDistance.trim() + ")" : "");
-            d.hotels.add(new HotelInfo("hotel", 0, rating, subtitle));
-        }
+        // 2. Hotel info — dynamically handle Tour hotels if Tour package, or Umrah structure
+        if (!isUmrah && pkg.tourHotels != null && !pkg.tourHotels.isEmpty()) {
+            int slotIdx = 0;
+            for (UmrahPackage.TourHotelItem th : pkg.tourHotels) {
+                if (th.hotelName != null && !th.hotelName.trim().isEmpty()) {
+                    String rating = th.rating != null ? th.rating.trim() : "";
+                    int nights = th.nights != null ? th.nights : 1;
+                    String subtitle = th.hotelName.trim() + " (" + nights + " Malam)";
+                    d.hotels.add(new HotelInfo("hotel", slotIdx++, rating, subtitle));
+                }
+            }
+        } else {
+            if (pkg.hotelMakkahName != null && !pkg.hotelMakkahName.trim().isEmpty()) {
+                String rating = (pkg.hotelMakkahRating != null && !pkg.hotelMakkahRating.trim().isEmpty())
+                        ? pkg.hotelMakkahRating : "";
+                String subtitle = pkg.hotelMakkahName.trim() +
+                        ((pkg.hotelMakkahDistance != null && !pkg.hotelMakkahDistance.trim().isEmpty())
+                                ? " (" + pkg.hotelMakkahDistance.trim() + ")" : "");
+                d.hotels.add(new HotelInfo("hotel", 0, rating, subtitle));
+            }
 
-        if (pkg.hotelMadinahName != null && !pkg.hotelMadinahName.trim().isEmpty()) {
-            String rating = (pkg.hotelMadinahRating != null && !pkg.hotelMadinahRating.trim().isEmpty())
-                    ? pkg.hotelMadinahRating : "";
-            String subtitle = pkg.hotelMadinahName.trim() +
-                    ((pkg.hotelMadinahDistance != null && !pkg.hotelMadinahDistance.trim().isEmpty())
-                            ? " (" + pkg.hotelMadinahDistance.trim() + ")" : "");
-            d.hotels.add(new HotelInfo("hotel", 1, rating, subtitle));
-        }
+            if (pkg.hotelMadinahName != null && !pkg.hotelMadinahName.trim().isEmpty()) {
+                String rating = (pkg.hotelMadinahRating != null && !pkg.hotelMadinahRating.trim().isEmpty())
+                        ? pkg.hotelMadinahRating : "";
+                String subtitle = pkg.hotelMadinahName.trim() +
+                        ((pkg.hotelMadinahDistance != null && !pkg.hotelMadinahDistance.trim().isEmpty())
+                                ? " (" + pkg.hotelMadinahDistance.trim() + ")" : "");
+                d.hotels.add(new HotelInfo("hotel", 1, rating, subtitle));
+            }
 
-        if (pkg.hotelTaifName != null && !pkg.hotelTaifName.trim().isEmpty()) {
-            String rating = (pkg.hotelTaifRating != null && !pkg.hotelTaifRating.trim().isEmpty())
-                    ? pkg.hotelTaifRating : "";
-            String subtitle = pkg.hotelTaifName.trim() +
-                    ((pkg.hotelTaifDistance != null && !pkg.hotelTaifDistance.trim().isEmpty())
-                            ? " (" + pkg.hotelTaifDistance.trim() + ")" : "");
-            d.hotels.add(new HotelInfo("hotel", 2, rating, subtitle));
-        }
-
-        if (pkg.airlineName != null && !pkg.airlineName.trim().isEmpty()) {
-            // Flight type & route are raw server data — not translated here
-            String flightType = (pkg.flightType != null && !pkg.flightType.trim().isEmpty())
-                    ? pkg.flightType : null; // null → Activity uses getString(flight_type_fallback)
-            String flightRoute = (pkg.flightRoute != null && !pkg.flightRoute.trim().isEmpty())
-                    ? pkg.flightRoute.trim() : null; // null → Activity uses getString(flight_route_fallback)
-            // Store flightType as rawRating slot, route as subtitle (null handled in Activity)
-            String subtitle = flightRoute != null ? flightRoute : "";
-            HotelInfo fi = new HotelInfo("flight", -1, flightType != null ? flightType : "", subtitle);
-            fi.rawRating = flightType != null ? flightType : ""; // reuse as flightType
-            fi.airlineName = pkg.airlineName.trim();
-            d.hotels.add(fi);
+            if (pkg.hotelTaifName != null && !pkg.hotelTaifName.trim().isEmpty()) {
+                String rating = (pkg.hotelTaifRating != null && !pkg.hotelTaifRating.trim().isEmpty())
+                        ? pkg.hotelTaifRating : "";
+                String subtitle = pkg.hotelTaifName.trim() +
+                        ((pkg.hotelTaifDistance != null && !pkg.hotelTaifDistance.trim().isEmpty())
+                                ? " (" + pkg.hotelTaifDistance.trim() + ")" : "");
+                d.hotels.add(new HotelInfo("hotel", 2, rating, subtitle));
+            }
         }
 
         // 3. Jadual Perjalanan (Itinerary)
@@ -213,24 +325,25 @@ public class PackageDetail implements java.io.Serializable {
             }
         }
 
-        // 4. Pecahan Harga Bilik (Room Pricing Tiers)
+        // 4. Pecahan Harga Bilik (Room Pricing Tiers) — store locale-neutral keys;
+        // the UI resolves them via RoomLabels (EN/MS). No hardcoded language here.
         if (pkg.priceQuint != null && !pkg.priceQuint.trim().isEmpty() && !pkg.priceQuint.equals("0.00")) {
-            d.priceOptions.add(new PriceOption(formatCurrency(pkg.priceQuint), "Bilik Berlima (Quint)"));
+            d.priceOptions.add(new PriceOption(formatCurrency(pkg.priceQuint), "quint", "quint"));
         }
         if (pkg.priceQuad != null && !pkg.priceQuad.trim().isEmpty() && !pkg.priceQuad.equals("0.00")) {
-            d.priceOptions.add(new PriceOption(formatCurrency(pkg.priceQuad), "Bilik Berempat (Quad)"));
+            d.priceOptions.add(new PriceOption(formatCurrency(pkg.priceQuad), "quad", "quad"));
         }
         if (pkg.priceTriple != null && !pkg.priceTriple.trim().isEmpty() && !pkg.priceTriple.equals("0.00")) {
-            d.priceOptions.add(new PriceOption(formatCurrency(pkg.priceTriple), "Bilik Bertiga (Triple)"));
+            d.priceOptions.add(new PriceOption(formatCurrency(pkg.priceTriple), "triple", "triple"));
         }
         if (pkg.priceDouble != null && !pkg.priceDouble.trim().isEmpty() && !pkg.priceDouble.equals("0.00")) {
-            d.priceOptions.add(new PriceOption(formatCurrency(pkg.priceDouble), "Bilik Berdua (Double)"));
+            d.priceOptions.add(new PriceOption(formatCurrency(pkg.priceDouble), "double", "double"));
         }
         if (pkg.priceSingle != null && !pkg.priceSingle.trim().isEmpty() && !pkg.priceSingle.equals("0.00")) {
-            d.priceOptions.add(new PriceOption(formatCurrency(pkg.priceSingle), "Bilik Perseorangan (Single)"));
+            d.priceOptions.add(new PriceOption(formatCurrency(pkg.priceSingle), "single", "single"));
         }
         if (d.priceOptions.isEmpty() && d.price != null && !d.price.isEmpty()) {
-            d.priceOptions.add(new PriceOption(d.price, "Harga Bermula Dari"));
+            d.priceOptions.add(new PriceOption(d.price, "from", "from"));
         }
 
         // 5. Termasuk (Inclusions) & Tidak Termasuk (Exclusions)
@@ -246,24 +359,27 @@ public class PackageDetail implements java.io.Serializable {
             d.packingSummer.addAll(pkg.packingGuide);
         }
 
+        d.companyWhatsapp = pkg.companyWhatsapp;
+
         // 7. Nota Penting & Syarat-Syarat
         if (pkg.importantNotes != null && !pkg.importantNotes.isEmpty()) {
             ImportantNote note = new ImportantNote();
-            note.title = "Syarat & Garis Panduan Pakej";
-            note.badge = "Penting";
+            // Locale-neutral keys only (never displayed directly; UI uses resources).
+            note.title = "terms_guidelines";
+            note.badge = "important";
             note.bullets.addAll(pkg.importantNotes);
             d.importantNotes.add(note);
         }
 
         if (pkg.requiredDocuments != null && !pkg.requiredDocuments.isEmpty()) {
-            ImportantNote docNote = new ImportantNote();
-            docNote.title = "Dokumen Yang Diperlukan";
-            docNote.badge = "Dokumen";
-            docNote.bullets.addAll(pkg.requiredDocuments);
-            d.importantNotes.add(docNote);
+            d.requiredDocuments.addAll(pkg.requiredDocuments);
         }
 
-        // 8. Departures
+        if (pkg.cancellationPolicy != null && !pkg.cancellationPolicy.isEmpty()) {
+            d.cancellationPolicy.addAll(pkg.cancellationPolicy);
+        }
+
+        // 8. Departures — keep backend ID and real-time seat availability.
         if (pkg.departures != null && !pkg.departures.isEmpty()) {
             for (UmrahPackage.DepartureItem item : pkg.departures) {
                 if (item.departureDate != null && !item.departureDate.isEmpty()) {
@@ -271,7 +387,27 @@ public class PackageDetail implements java.io.Serializable {
                     if (item.returnDate != null && !item.returnDate.isEmpty()) {
                         label += " hingga " + item.returnDate;
                     }
+                    int totalSeats = item.totalSeats != null ? item.totalSeats : (item.capacity != null ? item.capacity : 40);
+                    int booked = item.seatsBooked != null ? item.seatsBooked : 0;
+                    int available = item.seatsAvailable != null ? item.seatsAvailable : Math.max(0, totalSeats - booked);
+                    boolean full = Boolean.TRUE.equals(item.isFull) || available <= 0;
+
+                    DepartureOption depOpt = new DepartureOption(
+                            item.id,
+                            item.departureDate,
+                            item.returnDate,
+                            label,
+                            totalSeats,
+                            booked,
+                            available,
+                            full
+                    );
+                    depOpt.season = item.season;
+                    depOpt.price = item.price;
+                    depOpt.priceFormatted = item.priceFormatted;
+                    depOpt.pricing = item.pricing;
                     d.availableDepartureDates.add(label);
+                    d.availableDepartures.add(depOpt);
                 }
             }
         }
@@ -280,18 +416,22 @@ public class PackageDetail implements java.io.Serializable {
         if (d.imageUrl != null && !d.imageUrl.isEmpty()) {
             d.galleryImageUrls.add(d.imageUrl);
         }
+        if (pkg.images != null && !pkg.images.isEmpty()) {
+            for (UmrahPackage.ImageItem img : pkg.images) {
+                if (img.url != null && !img.url.trim().isEmpty() && !d.galleryImageUrls.contains(img.url.trim())) {
+                    d.galleryImageUrls.add(img.url.trim());
+                }
+            }
+        }
+
+        if (pkg.relatedPackages != null && !pkg.relatedPackages.isEmpty()) {
+            d.relatedPackages.addAll(pkg.relatedPackages);
+        }
 
         return d;
     }
 
     private static String formatCurrency(String raw) {
-        if (raw == null) return "RM -";
-        try {
-            double val = Double.parseDouble(raw.replaceAll("[^0-9.]", ""));
-            DecimalFormat df = new DecimalFormat("#,##0");
-            return "RM " + df.format(val);
-        } catch (Exception e) {
-            return "RM " + raw;
-        }
+        return com.hafiztraveltours.app.utils.MoneyFormat.formatRaw(raw);
     }
 }

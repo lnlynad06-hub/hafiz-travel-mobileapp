@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -14,7 +15,7 @@
 
     <application
         android:allowBackup="true"
-        android:usesCleartextTraffic="true"
+        android:usesCleartextTraffic="${cleartextTraffic}"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/icon_app"
@@ -23,14 +24,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HafizTravel">
 
-        <activity android:name=".ui.WebViewActivity" />
+        <activity android:name=".ui.WebViewActivity" android:exported="false" />
 
-        <activity android:name=".ui.HubungiKamiActivity" />
-        <activity android:name=".ui.PanduanUmrahActivity" />
+        <activity android:name=".ui.HubungiKamiActivity" android:exported="false" />
+        <activity android:name=".ui.PanduanUmrahActivity" android:exported="false" />
+        <activity android:name=".ui.QiblaActivity" android:exported="false" />
 
-        <activity android:name=".ui.TentangKamiActivity" />
+        <activity android:name=".ui.TentangKamiActivity" android:exported="false" />
+        <activity android:name=".ui.AboutActivity" android:exported="false" />
 
-        <activity android:name=".ui.ProfileActivity" />
+        <activity android:name=".ui.ProfileActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.MyBookingsActivity" android:exported="false" />
 
         <activity android:name=".ui.MainActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
 
@@ -44,18 +48,33 @@
         </activity>
 
         <activity android:name=".ui.WelcomeActivity" android:exported="false" />
-        <activity android:name=".ui.LoginActivity" android:exported="false" />
-        <activity android:name=".ui.SignUpActivity" android:exported="false" />
+        <activity android:name=".ui.LoginActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.SignUpActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.VerifyAccountActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.ForgotPasswordActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.VerifyResetCodeActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.ResetPasswordActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
         <activity android:name=".ui.UmrahActivity" android:exported="false" />
         <activity android:name=".ui.TourActivity" android:exported="false" />
         <activity android:name=".ui.FavoriteActivity" android:exported="false" />
-        <activity android:name=".ui.ChecklistUmrahActivity" />
+        <activity android:name=".ui.ChecklistUmrahActivity" android:exported="false" />
         <activity android:name=".ui.AllPackagesActivity" android:exported="false" />
         <activity android:name=".ui.PackageDetailActivity" android:exported="false" />
         <activity android:name=".ui.PassengerDetailsActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
         <activity android:name=".ui.BookingSummaryActivity" android:exported="false" />
-        <activity android:name=".ui.PaymentSelectionActivity" android:exported="false" />
-        <activity android:name=".ui.BookingSuccessActivity" android:exported="false" />
+        <activity android:name=".ui.TermsConditionsActivity" android:exported="false" />
+        <activity android:name=".ui.InvoiceViewerActivity" android:exported="false" />
+        <activity android:name=".ui.ReceiptViewerActivity" android:exported="false" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
         <receiver android:name=".services.PrayerAlarmReceiver" android:exported="false" />
         <receiver android:name=".services.BootReceiver" android:exported="true">
