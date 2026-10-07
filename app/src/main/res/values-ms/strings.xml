@@ -421,8 +421,10 @@
     <string name="reset_password_sent">E-mel tetapan semula kata laluan telah dihantar. Sila semak peti masuk anda.</string>
     <string name="reset_password_failed">Penetapan semula kata laluan gagal. Sila cuba lagi.</string>
     <string name="login_google_signin_failed">Log masuk Google gagal: Kod %1$d</string>
-    <string name="login_google_success">Log masuk Google berjaya! %1$s</string>
+    <string name="login_google_success">Log masuk Google berjaya.</string>
     <string name="login_google_failed">Log masuk Google gagal. Sila cuba lagi.</string>
+    <string name="login_google_cancelled">Log masuk Google dibatalkan.</string>
+    <string name="login_google_not_configured">Log masuk Google belum dikonfigurasikan untuk aplikasi ini.</string>
     <string name="login_email_invalid">Sila masukkan emel yang sah</string>
     <string name="login_password_required">Sila masukkan kata laluan</string>
     <string name="login_success">Log masuk berjaya!</string>

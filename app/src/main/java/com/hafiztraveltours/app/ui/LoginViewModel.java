@@ -153,15 +153,13 @@ public class LoginViewModel extends AndroidViewModel {
     }
 
     /** Submits Google login once; ignores re-entry while busy. */
-    public void googleLogin(String email, String name, String googleId, String avatar, String idToken) {
+    public void googleLogin(String idToken) {
         if (googleBusy) return;
         googleBusy = true;
         cancel(googleCall);
         Call<ApiResponse<AuthResponse>> call =
-                repository.googleLoginCall(new GoogleLoginRequest(email, name, googleId, avatar, idToken));
+                repository.googleLoginCall(new GoogleLoginRequest(idToken));
         googleCall = call;
-        final String emailSnapshot = email;
-        final String nameSnapshot = name;
         call.enqueue(new Callback<ApiResponse<AuthResponse>>() {
             @Override
             public void onResponse(Call<ApiResponse<AuthResponse>> call,
@@ -171,8 +169,7 @@ public class LoginViewModel extends AndroidViewModel {
                     AuthResponse authData = response.body().data;
                     String token = authData != null ? authData.token : "";
                     UserDto user = authData != null ? authData.user : null;
-                    repository.persistAuthResult(token, user,
-                            new UserDto("1", nameSnapshot, emailSnapshot, ""));
+                    repository.persistAuthResult(token, user, new UserDto("", "", "", ""));
                     googleOp.setValue(new SingleEvent<>(ApiOpResult.success()));
                 } else {
                     googleOp.setValue(new SingleEvent<>(

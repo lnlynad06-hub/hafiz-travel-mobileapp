@@ -19,7 +19,6 @@
 
 # Google Sign-In / Firebase Auth (SDK reflection + Play services).
 -keep class com.google.android.gms.auth.** { *; }
--keep class com.google.firebase.auth.** { *; }
 -dontwarn com.google.android.gms.**
 
 # Glide generated API (harmless if unused).

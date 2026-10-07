@@ -150,11 +150,11 @@ public class SignUpViewModel extends AndroidViewModel {
     }
 
     /** Submits Google login once; ignores re-entry while busy. */
-    public void googleLogin(String email, String name, String googleId, String avatar, String idToken) {
+    public void googleLogin(String idToken) {
         if (googleBusy) return;
         googleBusy = true;
         cancel(googleCall);
-        GoogleLoginRequest request = new GoogleLoginRequest(email, name, googleId, avatar, idToken);
+        GoogleLoginRequest request = new GoogleLoginRequest(idToken);
         Call<ApiResponse<AuthResponse>> call = repository.googleLoginCall(request);
         googleCall = call;
         call.enqueue(new Callback<ApiResponse<AuthResponse>>() {
@@ -166,8 +166,7 @@ public class SignUpViewModel extends AndroidViewModel {
                     AuthResponse authData = response.body().data;
                     String token = authData != null ? authData.token : "";
                     UserDto user = authData != null ? authData.user : null;
-                    repository.persistAuthResult(token, user,
-                            new UserDto("1", name, email, ""));
+                    repository.persistAuthResult(token, user, new UserDto("", "", "", ""));
                     googleOp.setValue(new SingleEvent<>(ApiOpResult.success()));
                 } else {
                     googleOp.setValue(new SingleEvent<>(

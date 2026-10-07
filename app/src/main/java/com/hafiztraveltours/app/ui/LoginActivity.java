@@ -26,20 +26,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
-
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-// Google Sign-In SDK
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.Task;
 
 /**
  * Enterprise-grade Luxury Login Activity for Hafiz Travel & Tours.
@@ -48,12 +39,9 @@ import com.google.android.gms.tasks.Task;
  */
 public class LoginActivity extends BaseActivity {
 
-    private static final int RC_SIGN_IN = 9001;
     private static final String PREF_AUTH = "auth_prefs";
     private static final String KEY_REMEMBER_ME = "pref_remember_me";
     private static final String KEY_SAVED_EMAIL = "pref_saved_email";
-
-    private GoogleSignInClient mGoogleSignInClient;
 
     private TextInputLayout emailLayout, passwordLayout;
     private TextInputEditText emailInput, passwordInput;
@@ -64,8 +52,6 @@ public class LoginActivity extends BaseActivity {
 
     private String activeLanguage;
     private LoginViewModel loginViewModel;
-    private String pendingGoogleName = "";
-    private String pendingGoogleEmail = "";
     private String pendingLoginEmail = "";
     private BottomSheetDialog forgotDialog;
 
@@ -87,13 +73,6 @@ public class LoginActivity extends BaseActivity {
         androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        // 1. Initialize Google Sign-In
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         loginViewModel = new androidx.lifecycle.ViewModelProvider(this).get(LoginViewModel.class);
         observeLoginState();
@@ -192,8 +171,20 @@ public class LoginActivity extends BaseActivity {
             googleBtn.setOnClickListener(v -> {
                 com.hafiztraveltours.app.utils.HapticUtil.click(v);
                 setLoadingState(true);
-                Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-                startActivityForResult(signInIntent, RC_SIGN_IN);
+                if (!GoogleCredentialLauncher.launch(this, new GoogleCredentialLauncher.Callback() {
+                    @Override public void onToken(String idToken) {
+                        loginViewModel.googleLogin(idToken);
+                    }
+
+                    @Override public void onError(boolean cancelled) {
+                        setLoadingState(false);
+                        Toast.makeText(LoginActivity.this, getString(cancelled
+                                ? R.string.login_google_cancelled : R.string.login_google_failed), Toast.LENGTH_LONG).show();
+                    }
+                })) {
+                    setLoadingState(false);
+                    Toast.makeText(this, R.string.login_google_not_configured, Toast.LENGTH_LONG).show();
+                }
             });
         }
 
@@ -236,9 +227,7 @@ public class LoginActivity extends BaseActivity {
             if (result == null) return;
             setLoadingState(false);
             if (result.success) {
-                saveRememberMePreference(pendingGoogleEmail);
-                Toast.makeText(this, getString(R.string.login_google_success, pendingGoogleName),
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.login_google_success, Toast.LENGTH_SHORT).show();
                 if (!OnboardingManager.isOnboardingCompleted(this)) {
                     Intent intent = new Intent(this, WelcomeActivity.class);
                     intent.putExtra("start_at_step", WelcomeActivity.STEP_PRAYER);
@@ -265,37 +254,6 @@ public class LoginActivity extends BaseActivity {
                 Toast.makeText(this, result.resolveMessage(this), Toast.LENGTH_LONG).show();
             }
         });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == RC_SIGN_IN) {
-            setLoadingState(false);
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                if (account != null) {
-                    String name = account.getDisplayName() != null ? account.getDisplayName() : "Google User";
-                    String email = account.getEmail() != null ? account.getEmail() : "";
-                    String googleId = account.getId() != null ? account.getId() : "";
-                    String avatar = account.getPhotoUrl() != null ? account.getPhotoUrl().toString() : "";
-                    String idToken = null;
-                    try {
-                        idToken = account.getIdToken();
-                    } catch (Exception ignored) {}
-
-                    setLoadingState(true);
-                    pendingGoogleName = name;
-                    pendingGoogleEmail = email;
-                    loginViewModel.googleLogin(email, name, googleId, avatar, idToken);
-                }
-            } catch (ApiException e) {
-                setLoadingState(false);
-                Toast.makeText(this, getString(R.string.login_google_signin_failed, e.getStatusCode()), Toast.LENGTH_LONG).show();
-            }
-        }
     }
 
     private void loadRememberMePreference() {

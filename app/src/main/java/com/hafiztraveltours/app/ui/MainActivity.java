@@ -52,8 +52,6 @@ import com.batoulapps.adhan.Coordinates;
 import com.batoulapps.adhan.data.DateComponents;
 import com.batoulapps.adhan.Madhab;
 import com.batoulapps.adhan.PrayerTimes;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

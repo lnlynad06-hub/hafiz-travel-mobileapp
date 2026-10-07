@@ -31,7 +31,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -39,19 +38,8 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-// Google Sign-In SDK
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.Task;
 
 public class SignUpActivity extends BaseActivity {
-
-    private static final int RC_SIGN_IN = 9001;
-
-    private GoogleSignInClient mGoogleSignInClient;
 
     private TextInputLayout nameLayout, nicknameLayout, emailLayout, passwordLayout, confirmPasswordLayout;
     private TextInputEditText nameInput, nicknameInput, emailInput, phoneInput, passwordInput, confirmPasswordInput;
@@ -73,8 +61,6 @@ public class SignUpActivity extends BaseActivity {
 
     private String activeLanguage;
     private SignUpViewModel signUpViewModel;
-    private String pendingGoogleName = "";
-
     
     @Override
     protected void onResume() {
@@ -93,12 +79,6 @@ public class SignUpActivity extends BaseActivity {
         androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         signUpViewModel = new androidx.lifecycle.ViewModelProvider(this).get(SignUpViewModel.class);
         observeSignUpState();
@@ -174,8 +154,20 @@ public class SignUpActivity extends BaseActivity {
             googleBtn.setOnClickListener(v -> {
                 com.hafiztraveltours.app.utils.HapticUtil.click(v);
                 setLoadingState(true);
-                Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-                startActivityForResult(signInIntent, RC_SIGN_IN);
+                if (!GoogleCredentialLauncher.launch(this, new GoogleCredentialLauncher.Callback() {
+                    @Override public void onToken(String idToken) {
+                        signUpViewModel.googleLogin(idToken);
+                    }
+
+                    @Override public void onError(boolean cancelled) {
+                        setLoadingState(false);
+                        Toast.makeText(SignUpActivity.this, getString(cancelled
+                                ? R.string.login_google_cancelled : R.string.login_google_failed), Toast.LENGTH_LONG).show();
+                    }
+                })) {
+                    setLoadingState(false);
+                    Toast.makeText(this, R.string.login_google_not_configured, Toast.LENGTH_LONG).show();
+                }
             });
         }
 
@@ -215,8 +207,7 @@ public class SignUpActivity extends BaseActivity {
             if (result == null) return;
             setLoadingState(false);
             if (result.success) {
-                Toast.makeText(this, getString(R.string.login_google_success, pendingGoogleName),
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.login_google_success, Toast.LENGTH_SHORT).show();
                 if (!OnboardingManager.isOnboardingCompleted(this)) {
                     Intent intent = new Intent(this, WelcomeActivity.class);
                     intent.putExtra("start_at_step", WelcomeActivity.STEP_PRAYER);
@@ -391,36 +382,6 @@ public class SignUpActivity extends BaseActivity {
                 }
             }
         });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == RC_SIGN_IN) {
-            setLoadingState(false);
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                if (account != null) {
-                    String name = account.getDisplayName() != null ? account.getDisplayName() : "Google User";
-                    String email = account.getEmail() != null ? account.getEmail() : "";
-                    String googleId = account.getId() != null ? account.getId() : "";
-                    String avatar = account.getPhotoUrl() != null ? account.getPhotoUrl().toString() : "";
-                    String idToken = null;
-                    try {
-                        idToken = account.getIdToken();
-                    } catch (Exception ignored) {}
-
-                    setLoadingState(true);
-                    pendingGoogleName = name;
-                    signUpViewModel.googleLogin(email, name, googleId, avatar, idToken);
-                }
-            } catch (ApiException e) {
-                setLoadingState(false);
-                Toast.makeText(this, getString(R.string.login_google_signin_failed, e.getStatusCode()), Toast.LENGTH_LONG).show();
-            }
-        }
     }
 
     private void showTermsBottomSheet() {

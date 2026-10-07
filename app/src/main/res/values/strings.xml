@@ -2,12 +2,6 @@
 <resources>
     <string name="app_name">HafizTravel&amp;Tours</string>
 
-    <!-- default_web_client_id is intentionally NOT declared here - it's auto-generated
-         by the com.google.gms.google-services plugin from google-services.json at build
-         time (app/build/generated/res/google-services/<variant>/values/values.xml).
-         Declaring it in this file too creates a duplicate "string/default_web_client_id"
-         resource, which fails the resource-linking step and breaks the whole build. -->
-
     <!-- Welcome / Onboarding screen (Editorial Luxury) -->
     <string name="welcome_brand_name">HAFIZ TRAVEL &amp; TOURS</string>
     <string name="welcome_eyebrow">PREMIER TRAVEL CURATION</string>
@@ -488,8 +482,10 @@
     <string name="reset_password_failed">Password reset failed. Please try again.</string>
 
     <string name="login_google_signin_failed">Google Sign-In failed: Code %1$d</string>
-    <string name="login_google_success">Google login successful! %1$s</string>
+    <string name="login_google_success">Google sign-in successful.</string>
     <string name="login_google_failed">Google login failed. Please try again.</string>
+    <string name="login_google_cancelled">Google sign-in was cancelled.</string>
+    <string name="login_google_not_configured">Google sign-in is not configured for this app.</string>
     <string name="login_email_invalid">Please enter a valid email</string>
     <string name="login_password_required">Please enter your password</string>
     <string name="login_success">Login successful!</string>
