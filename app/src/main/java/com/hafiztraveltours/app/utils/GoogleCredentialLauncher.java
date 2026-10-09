@@ -63,7 +63,7 @@ public final class GoogleCredentialLauncher {
 
                     @Override
                     public void onError(GetCredentialException error) {
-                        String errType = error.getType();
+                        String errType = error.getClass().getSimpleName();
                         String errMsg = error.getMessage();
                         android.util.Log.e("GoogleAuth", "CredentialManager onError: type=" + errType + ", msg=" + errMsg, error);
                         boolean isCancelled = error.getClass().getSimpleName().contains("Cancellation");
