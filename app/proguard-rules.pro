@@ -6,6 +6,7 @@
 -keep interface com.hafiztraveltours.app.network.ApiService { *; }
 -keep class com.hafiztraveltours.app.network.** { *; }
 -keep class com.hafiztraveltours.app.models.** { *; }
+-keep,allowoptimization,allowobfuscation interface retrofit2.Call
 -keepclassmembers class * implements java.io.Serializable { *; }
 -dontwarn retrofit2.**
 -dontwarn okhttp3.**
@@ -23,3 +24,8 @@
 
 # Glide generated API (harmless if unused).
 -dontwarn com.bumptech.glide.**
+
+# Release builds must not retain device logs, which can contain request failures or auth details.
+-assumenosideeffects class android.util.Log {
+    public static *** *(...);
+}
