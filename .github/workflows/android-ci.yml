@@ -48,6 +48,7 @@ jobs:
           HAFIZ_KEYSTORE_PASSWORD: ${{ secrets.HAFIZ_KEYSTORE_PASSWORD }}
           HAFIZ_KEY_ALIAS: ${{ secrets.HAFIZ_KEY_ALIAS }}
           HAFIZ_KEY_PASSWORD: ${{ secrets.HAFIZ_KEY_PASSWORD }}
+          HAFIZ_GOOGLE_WEB_CLIENT_ID: ${{ secrets.HAFIZ_GOOGLE_WEB_CLIENT_ID }}
         run: ./gradlew assembleRelease --console=plain
       - name: Verify release signature
         run: apksigner verify --verbose app/build/outputs/apk/release/app-release.apk
