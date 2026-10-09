@@ -177,9 +177,17 @@ public class LoginActivity extends BaseActivity {
                     }
 
                     @Override public void onError(boolean cancelled) {
+                        onError(cancelled, null);
+                    }
+
+                    @Override public void onError(boolean cancelled, String detail) {
                         setLoadingState(false);
-                        Toast.makeText(LoginActivity.this, getString(cancelled
-                                ? R.string.login_google_cancelled : R.string.login_google_failed), Toast.LENGTH_LONG).show();
+                        String msg = getString(cancelled
+                                ? R.string.login_google_cancelled : R.string.login_google_failed);
+                        if (!cancelled && detail != null && !detail.isEmpty()) {
+                            msg += "\n(" + detail + ")";
+                        }
+                        Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_LONG).show();
                     }
                 })) {
                     setLoadingState(false);
