@@ -187,8 +187,8 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
                 String code = inputPromo.getText().toString().trim().toUpperCase();
                 if (!code.isEmpty()) {
                     appliedPromoCode = code;
-                    appliedDiscount = 200.0; // RM 200 CRM promo discount
-                    android.widget.Toast.makeText(requireContext(), getString(R.string.promo_applied_format, code), android.widget.Toast.LENGTH_SHORT).show();
+                    appliedDiscount = 0.0;
+                    android.widget.Toast.makeText(requireContext(), getString(R.string.promo_pending_validation_format, code), android.widget.Toast.LENGTH_SHORT).show();
                     updateUi();
                 }
             });
@@ -1103,7 +1103,7 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
         }
 
         req.promoCode = appliedPromoCode;
-        req.discountAmount = appliedDiscount;
+        req.discountAmount = 0.0;
 
         req.recalculateTotal();
 

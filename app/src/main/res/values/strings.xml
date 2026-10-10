@@ -1141,7 +1141,10 @@
     <string name="gender_male">Male</string>
     <string name="gender_female">Female</string>
     <!-- Audit fix: hardcoded user-facing strings moved to resources -->
-    <string name="promo_applied_format">Promo code %1$s applied (-RM 200)</string>
+    <string name="promo_pending_validation_format">Promo code %1$s will be verified when you confirm the booking.</string>
+    <string name="promo_confirmed_format">Promo %1$s applied: -%2$s. Total: %3$s</string>
+    <string name="promo_invalid">This promo code is invalid, expired, inactive, or has reached its usage limit.</string>
+    <string name="promo_network_error">Unable to validate the promo code. Check your connection and try again.</string>
     <string name="pax_unit">Pax</string>
     <string name="pax_count_format">%1$d Pax</string>
     <string name="room_price_x_pax_format">%1$s × %2$d Pax</string>

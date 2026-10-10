@@ -1028,7 +1028,10 @@
     <string name="gender_male">Lelaki</string>
     <string name="gender_female">Perempuan</string>
     <!-- Audit fix: hardcoded user-facing strings moved to resources -->
-    <string name="promo_applied_format">Kod promo %1$s berjaya digunakan (-RM 200)</string>
+    <string name="promo_pending_validation_format">Kod promo %1$s akan disahkan apabila anda mengesahkan tempahan.</string>
+    <string name="promo_confirmed_format">Promo %1$s digunakan: -%2$s. Jumlah: %3$s</string>
+    <string name="promo_invalid">Kod promo ini tidak sah, tamat tempoh, tidak aktif, atau telah mencapai had penggunaan.</string>
+    <string name="promo_network_error">Kod promo tidak dapat disahkan. Periksa sambungan anda dan cuba lagi.</string>
     <string name="pax_unit">Pax</string>
     <string name="pax_count_format">%1$d Pax</string>
     <string name="room_price_x_pax_format">%1$s × %2$d Pax</string>

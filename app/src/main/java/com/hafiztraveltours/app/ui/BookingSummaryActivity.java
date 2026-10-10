@@ -325,6 +325,14 @@ public class BookingSummaryActivity extends BaseActivity {
                 LoadingButtonUtil.hideLoading(btnConfirmBooking, confirmProgressBar);
 
                 if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    BookingDetailDto booking = response.body().data;
+                    if (booking != null && bookingRequest.promoCode != null && !bookingRequest.promoCode.trim().isEmpty()) {
+                        Toast.makeText(BookingSummaryActivity.this, getString(
+                                R.string.promo_confirmed_format,
+                                bookingRequest.promoCode,
+                                BookingRequest.formatPrice(booking.discountAmount),
+                                BookingRequest.formatPrice(booking.totalAmount)), Toast.LENGTH_LONG).show();
+                    }
                     Toast.makeText(BookingSummaryActivity.this, R.string.booking_confirmed_success, Toast.LENGTH_LONG).show();
 
                     Intent intent = new Intent(BookingSummaryActivity.this, MyBookingsActivity.class);
@@ -365,6 +373,8 @@ public class BookingSummaryActivity extends BaseActivity {
 
                     if ("UNPAID_DEPOSIT_EXISTS".equalsIgnoreCase(errorCode) || (rawError != null && rawError.contains("UNPAID_DEPOSIT_EXISTS"))) {
                         showUnpaidDepositBlockedDialog(blockingBookingNo);
+                    } else if (rawError != null && rawError.contains("promo_code")) {
+                        Toast.makeText(BookingSummaryActivity.this, R.string.promo_invalid, Toast.LENGTH_LONG).show();
                     } else {
                         String errorMsg = com.hafiztraveltours.app.network.ApiErrors.userMessage(BookingSummaryActivity.this, response, R.string.booking_failed);
                         Toast.makeText(BookingSummaryActivity.this, errorMsg, Toast.LENGTH_LONG).show();
@@ -378,7 +388,9 @@ public class BookingSummaryActivity extends BaseActivity {
                 isSubmitting = false;
                 LoadingButtonUtil.hideLoading(btnConfirmBooking, confirmProgressBar);
 
-                String errorMsg = com.hafiztraveltours.app.network.ApiErrors.userMessage(BookingSummaryActivity.this, t, R.string.booking_failed);
+                String errorMsg = bookingRequest.promoCode != null && !bookingRequest.promoCode.trim().isEmpty()
+                        ? getString(R.string.promo_network_error)
+                        : com.hafiztraveltours.app.network.ApiErrors.userMessage(BookingSummaryActivity.this, t, R.string.booking_failed);
                 Toast.makeText(BookingSummaryActivity.this, errorMsg, Toast.LENGTH_LONG).show();
             }
         });
@@ -422,7 +434,7 @@ public class BookingSummaryActivity extends BaseActivity {
         apiRequest.adultCount = apiRequest.travellers.size();
         apiRequest.childCount = 0;
         apiRequest.unitPrice = bookingRequest.unitPriceAmount;
-        apiRequest.discountAmount = bookingRequest.discountAmount;
+        apiRequest.discountAmount = 0.0;
         apiRequest.promoCode = bookingRequest.promoCode;
         apiRequest.paymentType = "deposit";
         apiRequest.paymentMethod = "fpx";
