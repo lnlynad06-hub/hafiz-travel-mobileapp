@@ -82,11 +82,16 @@ public class SplashActivity extends BaseActivity {
                     .start();
         }
 
-        // Seamless transition into MainActivity if onboarding completed, otherwise WelcomeActivity
+        // Verify Privacy Policy consent before proceeding to onboarding or main app
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            Class<?> targetClass = OnboardingManager.isOnboardingCompleted(SplashActivity.this)
-                    ? MainActivity.class
-                    : WelcomeActivity.class;
+            Class<?> targetClass;
+            if (!PrivacyPolicyManager.isPrivacyPolicyAccepted(SplashActivity.this)) {
+                targetClass = PrivacyPolicyActivity.class;
+            } else if (OnboardingManager.isOnboardingCompleted(SplashActivity.this)) {
+                targetClass = MainActivity.class;
+            } else {
+                targetClass = WelcomeActivity.class;
+            }
             Intent intent = new Intent(SplashActivity.this, targetClass);
             startActivity(intent);
             overridePendingTransition(R.anim.nav_seamless_fade_in, R.anim.nav_seamless_fade_out);

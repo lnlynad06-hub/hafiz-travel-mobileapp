@@ -33,6 +33,7 @@ public class HafizApp extends Application {
 
     private static final Set<String> AUTH_SCREENS = new HashSet<>(Arrays.asList(
             "SplashActivity",
+            "PrivacyPolicyActivity",
             "WelcomeActivity",
             "LoginActivity",
             "SignUpActivity",

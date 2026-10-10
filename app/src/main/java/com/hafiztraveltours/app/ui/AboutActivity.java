@@ -45,6 +45,17 @@ public class AboutActivity extends BaseActivity {
         // Social Media Intent Listeners
         setupSocialListeners();
 
+        // Privacy Policy
+        View btnPrivacyPolicy = findViewById(R.id.btnAboutPrivacyPolicy);
+        if (btnPrivacyPolicy != null) {
+            btnPrivacyPolicy.setOnClickListener(v -> {
+                HapticUtil.click(v);
+                Intent intent = new Intent(AboutActivity.this, PrivacyPolicyActivity.class);
+                intent.putExtra(PrivacyPolicyActivity.EXTRA_VIEW_ONLY, true);
+                startActivity(intent);
+            });
+        }
+
         // Developer Shimmer & Link
         setupDanialShimmer();
     }

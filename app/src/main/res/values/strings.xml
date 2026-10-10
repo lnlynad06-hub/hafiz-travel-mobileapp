@@ -1693,4 +1693,23 @@
     <string name="company_contact_full">Tel: +60 7-238 4567 • WA: +60 19-778 4567\nEmail: info@hafiztraveltours.com • www.hafiztraveltours.com</string>
     <string name="doc_page_footer">Hafiz Travel ERP v2.0 • Page 1 of 1</string>
     <string name="checklist_progress_title">Preparation Progress</string>
+    <!-- Privacy Policy Screen -->
+    <string name="privacy_policy_title">Privacy Policy</string>
+    <string name="privacy_policy_subtitle">Hafiz Travel &amp; Tours Official Policy</string>
+    <string name="privacy_policy_badge">OFFICIAL POLICY</string>
+    <string name="privacy_policy_version_label">Version %s</string>
+    <string name="privacy_policy_accept">Accept</string>
+    <string name="privacy_policy_decline">Decline</string>
+    <string name="privacy_policy_loading">Loading Privacy Policy…</string>
+    <string name="privacy_policy_error_title">Unable to Load Privacy Policy</string>
+    <string name="privacy_policy_error_desc">Please check your internet connection and try again.</string>
+    <string name="privacy_policy_retry">Retry</string>
+    <string name="privacy_policy_decline_dialog_title">Privacy Policy Required</string>
+    <string name="privacy_policy_decline_dialog_msg">To use the Hafiz Travel app, you must accept our Privacy Policy so we can securely handle your bookings and services. If you decline, the app will close.</string>
+    <string name="privacy_policy_decline_dialog_review">Review Policy</string>
+    <string name="privacy_policy_decline_dialog_exit">Exit App</string>
+    <string name="privacy_policy_already_accepted">Accepted</string>
+    <string name="privacy_policy_open_browser">Open in Browser</string>
+    <string name="privacy_policy_settings_desc">Read our data protection &amp; privacy terms</string>
+    <string name="privacy_policy_close">Close</string>
 </resources>

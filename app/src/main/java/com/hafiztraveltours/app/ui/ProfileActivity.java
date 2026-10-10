@@ -194,6 +194,15 @@ public class ProfileActivity extends BaseActivity {
         if (aboutRow != null) {
             aboutRow.setOnClickListener(v -> startActivity(new Intent(this, AboutActivity.class)));
         }
+        View privacyPolicyRow = findViewById(R.id.privacyPolicySettingRow);
+        if (privacyPolicyRow != null) {
+            privacyPolicyRow.setOnClickListener(v -> {
+                HapticUtil.click(v);
+                Intent intent = new Intent(this, PrivacyPolicyActivity.class);
+                intent.putExtra(PrivacyPolicyActivity.EXTRA_VIEW_ONLY, true);
+                startActivity(intent);
+            });
+        }
         View logoutButton = findViewById(R.id.logoutButton);
         if (logoutButton != null) {
             logoutButton.setOnClickListener(v -> showLogoutConfirmationDialog());

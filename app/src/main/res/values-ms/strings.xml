@@ -1581,5 +1581,24 @@
     <string name="company_contact_full">Tel: +60 7-238 4567 • WA: +60 19-778 4567\nE-mel: info@hafiztraveltours.com • www.hafiztraveltours.com</string>
     <string name="doc_page_footer">Hafiz Travel ERP v2.0 • Halaman 1 daripada 1</string>
     <string name="checklist_progress_title">Kemajuan Persediaan</string>
+    <!-- Privacy Policy Screen -->
+    <string name="privacy_policy_title">Dasar Privasi</string>
+    <string name="privacy_policy_subtitle">Dasar Rasmi Hafiz Travel &amp; Tours</string>
+    <string name="privacy_policy_badge">DASAR RASMI</string>
+    <string name="privacy_policy_version_label">Versi %s</string>
+    <string name="privacy_policy_accept">Terima</string>
+    <string name="privacy_policy_decline">Tolak</string>
+    <string name="privacy_policy_loading">Memuatkan Dasar Privasi…</string>
+    <string name="privacy_policy_error_title">Gagal Memuatkan Dasar Privasi</string>
+    <string name="privacy_policy_error_desc">Sila pastikan sambungan internet anda aktif dan cuba semula.</string>
+    <string name="privacy_policy_retry">Cuba Semula</string>
+    <string name="privacy_policy_decline_dialog_title">Dasar Privasi Diperlukan</string>
+    <string name="privacy_policy_decline_dialog_msg">Untuk menggunakan aplikasi Hafiz Travel, anda perlu bersetuju dengan Dasar Privasi kami bagi membolehkan urusan tempahan dan perkhidmatan anda diproses dengan selamat. Jika anda menolak, aplikasi akan ditutup.</string>
+    <string name="privacy_policy_decline_dialog_review">Semak Semula</string>
+    <string name="privacy_policy_decline_dialog_exit">Keluar Aplikasi</string>
+    <string name="privacy_policy_already_accepted">Diterima</string>
+    <string name="privacy_policy_open_browser">Buka di Pelayar</string>
+    <string name="privacy_policy_settings_desc">Baca dasar perlindungan data &amp; privasi kami</string>
+    <string name="privacy_policy_close">Tutup</string>
 </resources>
 

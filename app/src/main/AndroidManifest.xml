@@ -26,6 +26,7 @@
         android:theme="@style/Theme.HafizTravel">
 
         <activity android:name=".ui.WebViewActivity" android:exported="false" />
+        <activity android:name=".ui.PrivacyPolicyActivity" android:exported="false" />
 
         <activity android:name=".ui.HubungiKamiActivity" android:exported="false" />
         <activity android:name=".ui.PanduanUmrahActivity" android:exported="false" />
