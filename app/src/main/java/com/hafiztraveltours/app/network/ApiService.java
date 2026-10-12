@@ -9,6 +9,7 @@ import java.util.Map;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -18,6 +19,8 @@ import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.Streaming;
+import retrofit2.http.Url;
 
 public interface ApiService {
 
@@ -134,4 +137,8 @@ public interface ApiService {
             @Path("booking") int bookingId,
             @Body CancelBookingRequest body
     );
+
+    @Streaming
+    @GET
+    Call<ResponseBody> downloadFile(@Url String fileUrl);
 }

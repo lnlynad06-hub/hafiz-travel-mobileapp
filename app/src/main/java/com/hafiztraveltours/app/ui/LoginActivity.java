@@ -189,7 +189,8 @@ public class LoginActivity extends BaseActivity {
                     startActivity(new Intent(this, MainActivity.class));
                 }
                 finish();
-            } else if (result.errorResponse != null && result.errorResponse.code() == 403) {
+            } else if (result.errorResponse != null && result.errorResponse.code() == 403
+                    && com.hafiztraveltours.app.network.ApiErrors.isAccountUnverified(result.errorResponse)) {
                 Toast.makeText(this, getString(R.string.unverified_account_login_msg), Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(this, VerifyAccountActivity.class);
                 intent.putExtra(VerifyAccountActivity.EXTRA_EMAIL, pendingLoginEmail);

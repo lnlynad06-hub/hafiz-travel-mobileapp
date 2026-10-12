@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_bottom_sheet_luxury"
@@ -176,9 +177,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="@string/doc_progress_count_format"
                 android:textColor="@color/text_gray"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                tools:text="0 of 2 verified" />
 
             <ProgressBar
                 android:id="@+id/pbDocVerification"

@@ -49,9 +49,12 @@ public class ApiClient {
                         return chain.proceed(builder.build());
                     })
                     .addInterceptor(chain -> {
-                        okhttp3.Response response = chain.proceed(chain.request());
-                        // Central 401 funnel (Phase 20): auth screens are excluded inside.
-                        if (response.code() == 401) {
+                        okhttp3.Request req = chain.request();
+                        okhttp3.Response response = chain.proceed(req);
+                        // Central 401 funnel (Phase 20): only non-auth requests trigger session expiry.
+                        String path = req.url().encodedPath();
+                        boolean isAuthEndpoint = path.contains("/auth/login") || path.contains("/auth/register");
+                        if (response.code() == 401 && !isAuthEndpoint) {
                             com.hafiztraveltours.app.HafizApp.handleUnauthorized();
                         }
                         return response;

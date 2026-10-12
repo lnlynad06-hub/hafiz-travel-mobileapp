@@ -52,6 +52,45 @@ public final class ApiErrors {
         return response != null && response.code() == 401;
     }
 
+    private static final java.util.Map<Response<?>, String> cachedErrorBodies =
+            java.util.Collections.synchronizedMap(new java.util.WeakHashMap<>());
+
+    /**
+     * Reads and caches the raw errorBody string once to prevent stream-closed exceptions.
+     */
+    public static String getRawErrorBody(Response<?> response) {
+        if (response == null) return null;
+        String cached = cachedErrorBodies.get(response);
+        if (cached != null) return cached;
+        if (response.errorBody() != null) {
+            try {
+                String raw = response.errorBody().string();
+                if (raw != null) {
+                    cachedErrorBodies.put(response, raw);
+                    return raw;
+                }
+            } catch (Exception ignored) {}
+        }
+        return null;
+    }
+
+    /** True if server specifically indicated unverified account in 403 error body. */
+    public static boolean isAccountUnverified(Response<?> response) {
+        if (response == null || response.code() != 403) return false;
+        String raw = getRawErrorBody(response);
+        if (raw == null || raw.isEmpty()) return false;
+        try {
+            com.google.gson.JsonElement el = new com.google.gson.JsonParser().parse(raw);
+            if (el.isJsonObject()) {
+                com.google.gson.JsonObject obj = el.getAsJsonObject();
+                if (obj.has("code") && !obj.get("code").isJsonNull()) {
+                    return "ACCOUNT_UNVERIFIED".equalsIgnoreCase(obj.get("code").getAsString());
+                }
+            }
+        } catch (Exception ignored) {}
+        return false;
+    }
+
     /**
      * Localized customer-facing message for a failed HTTP response.
      * Falls back to {@code fallbackResId} for unmapped codes.
@@ -65,6 +104,20 @@ public final class ApiErrors {
         Log.w(TAG, "HTTP " + code + (serverDetail != null ? ": " + com.hafiztraveltours.app.utils.LogSanitizer.sanitize(serverDetail) : ""));
         switch (code) {
             case 401:
+                String reqPath = "";
+                try {
+                    if (response.raw() != null && response.raw().request() != null
+                            && response.raw().request().url() != null) {
+                        reqPath = response.raw().request().url().encodedPath();
+                    }
+                } catch (Exception ignored) {}
+                boolean isLoginRequest = reqPath.contains("/auth/login")
+                        || fallbackResId == R.string.login_failed_default;
+                if (isLoginRequest) {
+                    return (serverDetail != null && !serverDetail.isEmpty())
+                            ? serverDetail
+                            : context.getString(fallback != 0 ? fallback : R.string.login_failed_default);
+                }
                 return context.getString(R.string.err_session_expired);
             case 403:
                 return (serverDetail != null && !serverDetail.isEmpty())
@@ -114,46 +167,48 @@ public final class ApiErrors {
     // ---------- internals ----------
 
     /** Best-effort server text for logging / 422 UX. Null when absent/unparseable. */
-    private static String extractServerMessage(Response<?> response) {
+    public static String extractServerMessage(Response<?> response) {
         if (response == null) return null;
         try {
             if (response.body() instanceof ApiResponse) {
                 String m = ((ApiResponse<?>) response.body()).message;
                 if (m != null && !m.trim().isEmpty()) return truncate(m.trim());
             }
-            if (response.errorBody() != null) {
-                String raw = response.errorBody().string();
-                if (raw == null || raw.isEmpty()) return null;
-                org.json.JSONObject obj = new org.json.JSONObject(raw);
-                if (obj.has("message") && !obj.isNull("message")) {
-                    String m = obj.optString("message", "").trim();
-                    if (!m.isEmpty() && !"null".equalsIgnoreCase(m)) return truncate(m);
-                }
-                if (obj.has("errors") && !obj.isNull("errors")) {
-                    String first = firstErrorsEntry(obj.get("errors"));
-                    if (first != null) return truncate(first);
+            String raw = getRawErrorBody(response);
+            if (raw != null && !raw.isEmpty()) {
+                com.google.gson.JsonElement el = new com.google.gson.JsonParser().parse(raw);
+                if (el.isJsonObject()) {
+                    com.google.gson.JsonObject obj = el.getAsJsonObject();
+                    if (obj.has("message") && !obj.get("message").isJsonNull()) {
+                        String m = obj.get("message").getAsString().trim();
+                        if (!m.isEmpty() && !"null".equalsIgnoreCase(m)) return truncate(m);
+                    }
+                    if (obj.has("errors") && !obj.get("errors").isJsonNull()) {
+                        String first = firstErrorsEntry(obj.get("errors"));
+                        if (first != null) return truncate(first);
+                    }
                 }
             }
         } catch (Exception ignored) {}
         return null;
     }
 
-    private static String firstErrorsEntry(Object errors) {
+    private static String firstErrorsEntry(com.google.gson.JsonElement errors) {
         try {
-            if (errors instanceof org.json.JSONObject) {
-                org.json.JSONObject obj = (org.json.JSONObject) errors;
-                java.util.Iterator<String> keys = obj.keys();
-                while (keys.hasNext()) {
-                    Object v = obj.get(keys.next());
-                    if (v instanceof org.json.JSONArray && ((org.json.JSONArray) v).length() > 0) {
-                        String s = ((org.json.JSONArray) v).optString(0, "").trim();
+            if (errors.isJsonObject()) {
+                com.google.gson.JsonObject obj = errors.getAsJsonObject();
+                for (java.util.Map.Entry<String, com.google.gson.JsonElement> entry : obj.entrySet()) {
+                    com.google.gson.JsonElement v = entry.getValue();
+                    if (v.isJsonArray() && v.getAsJsonArray().size() > 0) {
+                        String s = v.getAsJsonArray().get(0).getAsString().trim();
                         if (!s.isEmpty()) return s;
-                    } else if (v instanceof String && !((String) v).trim().isEmpty()) {
-                        return ((String) v).trim();
+                    } else if (v.isJsonPrimitive()) {
+                        String s = v.getAsString().trim();
+                        if (!s.isEmpty()) return s;
                     }
                 }
-            } else if (errors instanceof org.json.JSONArray && ((org.json.JSONArray) errors).length() > 0) {
-                String s = ((org.json.JSONArray) errors).optString(0, "").trim();
+            } else if (errors.isJsonArray() && errors.getAsJsonArray().size() > 0) {
+                String s = errors.getAsJsonArray().get(0).getAsString().trim();
                 if (!s.isEmpty()) return s;
             }
         } catch (Exception ignored) {}

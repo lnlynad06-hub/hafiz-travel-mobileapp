@@ -1056,6 +1056,11 @@
     <string name="doc_read_error">Ralat membaca fail dokumen.</string>
     <string name="doc_file_not_found">Fail dokumen tidak dijumpai.</string>
     <string name="doc_open_failed">Gagal membuka fail dokumen.</string>
+    <string name="doc_viewer_loading">Memuatkan dokumen…</string>
+    <string name="doc_viewer_load_failed">Gagal memuatkan imej dokumen.</string>
+    <string name="doc_viewer_retry">Cuba Lagi</string>
+    <string name="doc_viewer_unsupported">Format dokumen tidak disokong untuk paparan terus.</string>
+    <string name="doc_viewer_zoom_hint">Cubit untuk zum • Seret untuk gerak • Ketuk dua kali untuk set semula</string>
     <string name="default_title_mr">Mr</string>
     <string name="default_nationality">Malaysian</string>
     <string name="default_country">Malaysia</string>

@@ -21,6 +21,21 @@ public class DocumentDto {
     @SerializedName("file_name")
     public String fileName;
 
+    @SerializedName("document_id")
+    public Long documentId;
+
+    @SerializedName("preview_url")
+    public String previewUrl;
+
+    @SerializedName("download_url")
+    public String downloadUrl;
+
+    @SerializedName("has_file")
+    public boolean hasFile;
+
+    @SerializedName("mime_type")
+    public String mimeType;
+
     @SerializedName("rejection_reason")
     public String rejectionReason;
 
@@ -29,4 +44,17 @@ public class DocumentDto {
 
     @SerializedName("verified_at")
     public String verifiedAt;
+
+    public String getEffectiveUrl() {
+        if (previewUrl != null && !previewUrl.trim().isEmpty()) {
+            return previewUrl.trim();
+        }
+        if (downloadUrl != null && !downloadUrl.trim().isEmpty()) {
+            return downloadUrl.trim();
+        }
+        if (filePath != null && !filePath.trim().isEmpty()) {
+            return filePath.trim();
+        }
+        return null;
+    }
 }

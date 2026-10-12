@@ -1169,6 +1169,11 @@
     <string name="doc_read_error">Error reading document file.</string>
     <string name="doc_file_not_found">Document file not found.</string>
     <string name="doc_open_failed">Failed to open document file.</string>
+    <string name="doc_viewer_loading">Loading document…</string>
+    <string name="doc_viewer_load_failed">Failed to load document image.</string>
+    <string name="doc_viewer_retry">Try Again</string>
+    <string name="doc_viewer_unsupported">Document format is not supported for in-app preview.</string>
+    <string name="doc_viewer_zoom_hint">Pinch to zoom • Drag to pan • Double-tap to reset</string>
     <string name="default_title_mr">Mr</string>
     <string name="default_nationality">Malaysian</string>
     <string name="default_country">Malaysia</string>

@@ -654,6 +654,11 @@ public class MyBookingsActivity extends BaseActivity {
         activeDocsDialog = dialog;
         activeSheetView = sheetView;
 
+        TextView tvDocProgressCount = sheetView.findViewById(R.id.tvDocProgressCount);
+        if (tvDocProgressCount != null) {
+            tvDocProgressCount.setText(getString(R.string.doc_progress_count_format, 0, 2));
+        }
+
         View btnClose = sheetView.findViewById(R.id.btnCloseSheet);
         if (btnClose != null) btnClose.setOnClickListener(v -> dialog.dismiss());
 
@@ -815,9 +820,11 @@ public class MyBookingsActivity extends BaseActivity {
                     bindDocStatusUi(tvVisaStatus, btnVisaAction, tvVisaDates, tvVisaGuidance,
                             visaRejectionContainer, tvVisaRejectionReason, doc, "visa", getString(R.string.doc_travel_visa_title), R.drawable.ic_visa);
                     if (btnVisaAction != null) {
-                        if (doc.filePath != null && !doc.filePath.isEmpty()) {
+                        if (doc.getEffectiveUrl() != null && !doc.getEffectiveUrl().isEmpty()) {
                             btnVisaAction.setVisibility(View.VISIBLE);
                             btnVisaAction.setText(getString(R.string.doc_action_view));
+                            btnVisaAction.setOnClickListener(v -> new com.hafiztraveltours.app.views.DocumentViewerDialog(
+                                    this, getString(R.string.doc_travel_visa_title), doc).show());
                         } else {
                             btnVisaAction.setVisibility(View.GONE);
                         }
@@ -874,7 +881,13 @@ public class MyBookingsActivity extends BaseActivity {
                 btnAction.setText(getString(R.string.doc_action_view));
                 btnAction.setBackgroundResource(R.drawable.bg_button_white_square);
                 btnAction.setTextColor(getResources().getColor(R.color.brand_magenta));
-                btnAction.setOnClickListener(v -> Toast.makeText(this, getString(R.string.toast_doc_under_review), Toast.LENGTH_SHORT).show());
+                btnAction.setOnClickListener(v -> {
+                    if (doc.getEffectiveUrl() != null && !doc.getEffectiveUrl().isEmpty()) {
+                        new com.hafiztraveltours.app.views.DocumentViewerDialog(this, docTitle, doc).show();
+                    } else {
+                        Toast.makeText(this, getString(R.string.toast_doc_under_review), Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
             if (tvGuidance != null) {
                 tvGuidance.setText(getString(R.string.doc_guidance_under_review));
@@ -888,7 +901,13 @@ public class MyBookingsActivity extends BaseActivity {
                 btnAction.setText(getString(R.string.doc_action_view));
                 btnAction.setBackgroundResource(R.drawable.bg_button_white_square);
                 btnAction.setTextColor(getResources().getColor(R.color.brand_magenta));
-                btnAction.setOnClickListener(v -> Toast.makeText(this, getString(R.string.toast_doc_verified), Toast.LENGTH_SHORT).show());
+                btnAction.setOnClickListener(v -> {
+                    if (doc.getEffectiveUrl() != null && !doc.getEffectiveUrl().isEmpty()) {
+                        new com.hafiztraveltours.app.views.DocumentViewerDialog(this, docTitle, doc).show();
+                    } else {
+                        Toast.makeText(this, getString(R.string.toast_doc_verified), Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
             if (tvGuidance != null) {
                 tvGuidance.setText(getString(R.string.doc_guidance_verified));

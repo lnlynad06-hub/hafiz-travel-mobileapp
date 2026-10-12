@@ -1420,6 +1420,9 @@ public class ProfileActivity extends BaseActivity {
         View cardDocProgressContainer = sheetView.findViewById(R.id.cardDocProgressContainer);
         TextView tvDocProgressPercent = sheetView.findViewById(R.id.tvDocProgressPercent);
         TextView tvDocProgressCount = sheetView.findViewById(R.id.tvDocProgressCount);
+        if (tvDocProgressCount != null) {
+            tvDocProgressCount.setText(getString(R.string.doc_progress_count_format, 0, 2));
+        }
         ProgressBar pbDocVerification = sheetView.findViewById(R.id.pbDocVerification);
         TextView tvDocProgressMessage = sheetView.findViewById(R.id.tvDocProgressMessage);
 
@@ -1822,6 +1825,21 @@ public class ProfileActivity extends BaseActivity {
         View btnCancel = dialogView.findViewById(R.id.btnCancelPasswordChange);
         if (btnCancel != null) btnCancel.setOnClickListener(v -> dialog.dismiss());
 
+        View btnForgot = dialogView.findViewById(R.id.btnForgotPasswordInChangeDialog);
+        if (btnForgot != null) {
+            btnForgot.setOnClickListener(v -> {
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
+                dialog.dismiss();
+                Intent intent = new Intent(ProfileActivity.this, ForgotPasswordActivity.class);
+                String email = profileViewModel.getUserEmail();
+                if (email != null && !email.trim().isEmpty()) {
+                    intent.putExtra(ForgotPasswordActivity.EXTRA_PREFILL_EMAIL, email.trim());
+                }
+                startActivity(intent);
+                overridePendingTransition(R.anim.nav_seamless_fade_in, R.anim.nav_seamless_fade_out);
+            });
+        }
+
         TextView btnSave = dialogView.findViewById(R.id.btnSavePasswordChange);
         if (btnSave != null) {
             btnSave.setOnClickListener(v -> {
@@ -2046,32 +2064,27 @@ public class ProfileActivity extends BaseActivity {
 
     private void openUploadedDocument(String docCode) {
         DocumentDto doc = userDocumentsMap.get(docCode != null ? docCode.toLowerCase() : "");
-        if (doc == null || doc.filePath == null || doc.filePath.isEmpty()) {
+        String url = doc != null ? doc.getEffectiveUrl() : null;
+        if (doc == null || url == null || url.isEmpty() || (!doc.hasFile && (doc.filePath == null && doc.previewUrl == null && doc.downloadUrl == null))) {
             Toast.makeText(this, getString(R.string.doc_file_not_found), Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String url = doc.filePath;
-        if (!url.startsWith("http://") && !url.startsWith("https://")) {
-            String baseUrl = ApiClient.BASE_URL;
-            if (baseUrl.endsWith("/api/")) {
-                baseUrl = baseUrl.substring(0, baseUrl.length() - 5);
-            } else if (baseUrl.endsWith("/")) {
-                baseUrl = baseUrl.substring(0, baseUrl.length() - 1);
+        String docTitle = doc.title;
+        if (docTitle == null || docTitle.isEmpty()) {
+            if ("passport".equalsIgnoreCase(docCode)) {
+                docTitle = getString(R.string.doc_passport_copy);
+            } else if ("passport_photo".equalsIgnoreCase(docCode)) {
+                docTitle = getString(R.string.doc_passport_photo_title);
+            } else if ("visa".equalsIgnoreCase(docCode) || "travel_visa".equalsIgnoreCase(docCode)) {
+                docTitle = getString(R.string.doc_travel_visa_title);
+            } else {
+                docTitle = getString(R.string.doc_passport_copy);
             }
-            if (!url.startsWith("/")) {
-                url = "/" + url;
-            }
-            url = baseUrl + url;
         }
 
-        try {
-            android.net.Uri uri = android.net.Uri.parse(url);
-            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-            startActivity(intent);
-        } catch (Exception e) {
-            Toast.makeText(this, getString(R.string.doc_open_failed), Toast.LENGTH_SHORT).show();
-        }
+        DocumentViewerDialog viewerDialog = new DocumentViewerDialog(this, docTitle, doc);
+        viewerDialog.show();
     }
 
     private void showDocRequirementsDialog(String docCode, String docTitle, int iconRes) {
