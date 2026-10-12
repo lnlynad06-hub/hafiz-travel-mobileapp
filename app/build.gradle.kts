@@ -7,7 +7,6 @@ import java.util.Properties
 // Optional overrides in local.properties (gitignored, per-machine):
 //   apiUrlDebug=https://staging.example.com/api/
 //   apiUrlRelease=https://api.example.com/api/
-//   googleWebClientId=YOUR_WEB_OAUTH_CLIENT_ID.apps.googleusercontent.com
 val localProps = Properties()
 val localPropsFile = rootProject.file("local.properties")
 if (localPropsFile.exists()) {
@@ -23,9 +22,7 @@ require(!releaseApiUrl.contains("127.0.0.1") && !releaseApiUrl.contains("10.0.2.
         && releaseApiUrl.startsWith("https://")) {
     "Release API URL must be HTTPS and not a local address. Set apiUrlRelease in local.properties."
 }
-val googleWebClientId: String = localProps.getProperty("googleWebClientId")
-    ?: System.getenv("HAFIZ_GOOGLE_WEB_CLIENT_ID")
-    ?: ""
+
 
 val releaseKeystorePath = System.getenv("HAFIZ_KEYSTORE_PATH")
     ?: localProps.getProperty("releaseKeystorePath")
@@ -54,7 +51,7 @@ android {
         versionCode = 6
         versionName = "1.6"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", "\"$googleWebClientId\"")
+
     }
 
     signingConfigs {
@@ -111,10 +108,7 @@ android {
 }
 
 dependencies {
-    // Google Identity Credential Manager. No Firebase authentication.
-    implementation("androidx.credentials:credentials:1.3.0")
-    implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
-    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.0")
+
 
     implementation(libs.activity.ktx)
     implementation(libs.appcompat)
@@ -150,8 +144,6 @@ tasks.matching { it.name == "preReleaseBuild" }.configureEach {
             "Release signing is required. Set HAFIZ_KEYSTORE_PATH, HAFIZ_KEYSTORE_PASSWORD, " +
                 "HAFIZ_KEY_ALIAS, and HAFIZ_KEY_PASSWORD through environment variables or ignored local.properties."
         }
-        check(googleWebClientId.isNotBlank()) {
-            "Google Sign-In requires HAFIZ_GOOGLE_WEB_CLIENT_ID or googleWebClientId in ignored local.properties."
-        }
+
     }
 }

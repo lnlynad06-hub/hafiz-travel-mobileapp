@@ -6,7 +6,6 @@ import com.hafiztraveltours.app.network.ApiClient;
 import com.hafiztraveltours.app.network.ApiResponse;
 import com.hafiztraveltours.app.network.ApiService;
 import com.hafiztraveltours.app.network.AuthResponse;
-import com.hafiztraveltours.app.network.GoogleLoginRequest;
 import com.hafiztraveltours.app.network.RegisterRequest;
 import com.hafiztraveltours.app.network.UserDto;
 import com.hafiztraveltours.app.utils.SessionManager;
@@ -14,7 +13,7 @@ import com.hafiztraveltours.app.utils.SessionManager;
 import retrofit2.Call;
 
 /**
- * Registration data access (H1/Phase 10). Owns registration + Google-login API
+ * Registration data access (H1/Phase 10). Owns registration API
  * calls and the resulting session persistence. No Views, Toasts, Dialogs, Intents
  * or Activity handling — callers track and cancel the returned Calls.
  *
@@ -39,11 +38,6 @@ public class SignUpRepository {
     /** Fresh registration Call per invocation; caller owns cancellation. No retries. */
     public Call<ApiResponse<AuthResponse>> registerCall(RegisterRequest request) {
         return api().register(request);
-    }
-
-    /** Fresh Google-login Call per invocation; caller owns cancellation. No retries. */
-    public Call<ApiResponse<AuthResponse>> googleLoginCall(GoogleLoginRequest request) {
-        return api().googleLogin(request);
     }
 
     /**

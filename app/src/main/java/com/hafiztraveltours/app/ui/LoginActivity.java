@@ -166,37 +166,7 @@ public class LoginActivity extends BaseActivity {
             });
         }
 
-        View googleBtn = findViewById(R.id.googleLoginButton);
-        if (googleBtn != null) {
-            googleBtn.setOnClickListener(v -> {
-                com.hafiztraveltours.app.utils.HapticUtil.click(v);
-                setLoadingState(true);
-                if (!GoogleCredentialLauncher.launch(this, new GoogleCredentialLauncher.Callback() {
-                    @Override public void onToken(String idToken) {
-                        loginViewModel.googleLogin(idToken);
-                    }
-
-                    @Override public void onError(boolean cancelled) {
-                        onError(cancelled, null);
-                    }
-
-                    @Override public void onError(boolean cancelled, String detail) {
-                        setLoadingState(false);
-                        String msg = getString(cancelled
-                                ? R.string.login_google_cancelled : R.string.login_google_failed);
-                        if (!cancelled && detail != null && !detail.isEmpty()) {
-                            msg += "\n(" + detail + ")";
-                        }
-                        Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_LONG).show();
-                    }
-                })) {
-                    setLoadingState(false);
-                    Toast.makeText(this, R.string.login_google_not_configured, Toast.LENGTH_LONG).show();
-                }
-            });
-        }
-
-        // 5. Update language label & play entrance animation
+// 5. Update language label & play entrance animation
         updateActiveLanguageLabel();
         playEntranceAnimation();
     }
@@ -229,26 +199,7 @@ public class LoginActivity extends BaseActivity {
                 Toast.makeText(this, result.resolveMessage(this), Toast.LENGTH_LONG).show();
             }
         });
-        loginViewModel.getGoogleOp().observe(this, event -> {
-            com.hafiztraveltours.app.utils.ApiOpResult result =
-                    event != null ? event.consume() : null;
-            if (result == null) return;
-            setLoadingState(false);
-            if (result.success) {
-                Toast.makeText(this, R.string.login_google_success, Toast.LENGTH_SHORT).show();
-                if (!OnboardingManager.isOnboardingCompleted(this)) {
-                    Intent intent = new Intent(this, WelcomeActivity.class);
-                    intent.putExtra("start_at_step", WelcomeActivity.STEP_PRAYER);
-                    startActivity(intent);
-                } else {
-                    startActivity(new Intent(this, MainActivity.class));
-                }
-                finish();
-            } else {
-                Toast.makeText(this, result.resolveMessage(this), Toast.LENGTH_LONG).show();
-            }
-        });
-        loginViewModel.getForgotOp().observe(this, event -> {
+loginViewModel.getForgotOp().observe(this, event -> {
             com.hafiztraveltours.app.utils.ApiOpResult result =
                     event != null ? event.consume() : null;
             if (result == null) return;
@@ -469,10 +420,8 @@ public class LoginActivity extends BaseActivity {
         View header = findViewById(R.id.headerContainer);
         View form = findViewById(R.id.formContainer);
         View signUp = findViewById(R.id.goToSignUp);
-        View socialDivider = findViewById(R.id.socialDividerContainer);
-        View googleButton = findViewById(R.id.googleLoginButton);
 
-        View[] views = {header, form, signUp, socialDivider, googleButton};
+        View[] views = {header, form, signUp};
 
         long delay = 60;
         for (View v : views) {

@@ -11,7 +11,6 @@ import com.hafiztraveltours.app.R;
 import com.hafiztraveltours.app.data.repository.SignUpRepository;
 import com.hafiztraveltours.app.network.ApiResponse;
 import com.hafiztraveltours.app.network.AuthResponse;
-import com.hafiztraveltours.app.network.GoogleLoginRequest;
 import com.hafiztraveltours.app.network.RegisterRequest;
 import com.hafiztraveltours.app.network.UserDto;
 import com.hafiztraveltours.app.utils.ApiOpResult;
@@ -61,12 +60,9 @@ public class SignUpViewModel extends AndroidViewModel {
     private final SignUpRepository repository;
 
     private final MutableLiveData<SingleEvent<ApiOpResult>> registerOp = new MutableLiveData<>();
-    private final MutableLiveData<SingleEvent<ApiOpResult>> googleOp = new MutableLiveData<>();
 
     private Call<?> registerCall;
-    private Call<?> googleCall;
     private boolean registerBusy;
-    private boolean googleBusy;
 
     public SignUpViewModel(@NonNull Application application) {
         super(application);
@@ -77,11 +73,7 @@ public class SignUpViewModel extends AndroidViewModel {
         return registerOp;
     }
 
-    public LiveData<SingleEvent<ApiOpResult>> getGoogleOp() {
-        return googleOp;
-    }
-
-    public void clearSession() {
+public void clearSession() {
         repository.clearSession();
     }
 
@@ -149,48 +141,13 @@ public class SignUpViewModel extends AndroidViewModel {
         });
     }
 
-    /** Submits Google login once; ignores re-entry while busy. */
-    public void googleLogin(String idToken) {
-        if (googleBusy) return;
-        googleBusy = true;
-        cancel(googleCall);
-        GoogleLoginRequest request = new GoogleLoginRequest(idToken);
-        Call<ApiResponse<AuthResponse>> call = repository.googleLoginCall(request);
-        googleCall = call;
-        call.enqueue(new Callback<ApiResponse<AuthResponse>>() {
-            @Override
-            public void onResponse(Call<ApiResponse<AuthResponse>> call,
-                                   Response<ApiResponse<AuthResponse>> response) {
-                googleBusy = false;
-                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
-                    AuthResponse authData = response.body().data;
-                    String token = authData != null ? authData.token : "";
-                    UserDto user = authData != null ? authData.user : null;
-                    repository.persistAuthResult(token, user, new UserDto("", "", "", ""));
-                    googleOp.setValue(new SingleEvent<>(ApiOpResult.success()));
-                } else {
-                    googleOp.setValue(new SingleEvent<>(
-                            ApiOpResult.failure(response, R.string.login_google_failed)));
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ApiResponse<AuthResponse>> call, Throwable t) {
-                googleBusy = false;
-                googleOp.setValue(new SingleEvent<>(
-                        ApiOpResult.failure(t, R.string.err_network)));
-            }
-        });
-    }
-
-    private static void cancel(Call<?> call) {
+private static void cancel(Call<?> call) {
         if (call != null) call.cancel();
     }
 
     @Override
     protected void onCleared() {
         cancel(registerCall);
-        cancel(googleCall);
         super.onCleared();
     }
 }

@@ -7,7 +7,6 @@ import com.hafiztraveltours.app.network.ApiClient;
 import com.hafiztraveltours.app.network.ApiResponse;
 import com.hafiztraveltours.app.network.ApiService;
 import com.hafiztraveltours.app.network.AuthResponse;
-import com.hafiztraveltours.app.network.GoogleLoginRequest;
 import com.hafiztraveltours.app.network.LoginRequest;
 import com.hafiztraveltours.app.network.UserDto;
 import com.hafiztraveltours.app.utils.SecurePrefs;
@@ -19,7 +18,7 @@ import java.util.Map;
 import retrofit2.Call;
 
 /**
- * Login data access (H1/Phase 11). Owns login + Google-login + forgot-password
+ * Login data access (H1/Phase 11). Owns login + forgot-password
  * API calls, session persistence and remember-me prefs. No Views, Toasts, Dialogs,
  * Intents or Activity handling — callers track and cancel the returned Calls.
  *
@@ -47,11 +46,6 @@ public class LoginRepository {
     /** Fresh login Call per invocation; caller owns cancellation. No retries. */
     public Call<ApiResponse<AuthResponse>> loginCall(LoginRequest request) {
         return api().login(request);
-    }
-
-    /** Fresh Google-login Call per invocation; caller owns cancellation. No retries. */
-    public Call<ApiResponse<AuthResponse>> googleLoginCall(GoogleLoginRequest request) {
-        return api().googleLogin(request);
     }
 
     /** Fresh forgot-password Call per invocation; caller owns cancellation. No retries. */

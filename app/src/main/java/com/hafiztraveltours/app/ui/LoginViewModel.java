@@ -11,7 +11,6 @@ import com.hafiztraveltours.app.R;
 import com.hafiztraveltours.app.data.repository.LoginRepository;
 import com.hafiztraveltours.app.network.ApiResponse;
 import com.hafiztraveltours.app.network.AuthResponse;
-import com.hafiztraveltours.app.network.GoogleLoginRequest;
 import com.hafiztraveltours.app.network.LoginRequest;
 import com.hafiztraveltours.app.network.UserDto;
 import com.hafiztraveltours.app.utils.ApiOpResult;
@@ -62,14 +61,11 @@ public class LoginViewModel extends AndroidViewModel {
     private final LoginRepository repository;
 
     private final MutableLiveData<SingleEvent<ApiOpResult>> loginOp = new MutableLiveData<>();
-    private final MutableLiveData<SingleEvent<ApiOpResult>> googleOp = new MutableLiveData<>();
     private final MutableLiveData<SingleEvent<ApiOpResult>> forgotOp = new MutableLiveData<>();
 
     private Call<?> loginCall;
-    private Call<?> googleCall;
     private Call<?> forgotCall;
     private boolean loginBusy;
-    private boolean googleBusy;
     private boolean forgotBusy;
 
     public LoginViewModel(@NonNull Application application) {
@@ -81,11 +77,7 @@ public class LoginViewModel extends AndroidViewModel {
         return loginOp;
     }
 
-    public LiveData<SingleEvent<ApiOpResult>> getGoogleOp() {
-        return googleOp;
-    }
-
-    public LiveData<SingleEvent<ApiOpResult>> getForgotOp() {
+public LiveData<SingleEvent<ApiOpResult>> getForgotOp() {
         return forgotOp;
     }
 
@@ -152,41 +144,7 @@ public class LoginViewModel extends AndroidViewModel {
         });
     }
 
-    /** Submits Google login once; ignores re-entry while busy. */
-    public void googleLogin(String idToken) {
-        if (googleBusy) return;
-        googleBusy = true;
-        cancel(googleCall);
-        Call<ApiResponse<AuthResponse>> call =
-                repository.googleLoginCall(new GoogleLoginRequest(idToken));
-        googleCall = call;
-        call.enqueue(new Callback<ApiResponse<AuthResponse>>() {
-            @Override
-            public void onResponse(Call<ApiResponse<AuthResponse>> call,
-                                   Response<ApiResponse<AuthResponse>> response) {
-                googleBusy = false;
-                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
-                    AuthResponse authData = response.body().data;
-                    String token = authData != null ? authData.token : "";
-                    UserDto user = authData != null ? authData.user : null;
-                    repository.persistAuthResult(token, user, new UserDto("", "", "", ""));
-                    googleOp.setValue(new SingleEvent<>(ApiOpResult.success()));
-                } else {
-                    googleOp.setValue(new SingleEvent<>(
-                            ApiOpResult.failure(response, R.string.login_google_failed)));
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ApiResponse<AuthResponse>> call, Throwable t) {
-                googleBusy = false;
-                googleOp.setValue(new SingleEvent<>(
-                        ApiOpResult.failure(t, R.string.err_network)));
-            }
-        });
-    }
-
-    /** Submits forgot-password once; ignores re-entry while busy. */
+/** Submits forgot-password once; ignores re-entry while busy. */
     public void forgotPassword(String email) {
         if (forgotBusy) return;
         forgotBusy = true;
@@ -230,7 +188,6 @@ public class LoginViewModel extends AndroidViewModel {
     @Override
     protected void onCleared() {
         cancel(loginCall);
-        cancel(googleCall);
         cancel(forgotCall);
         super.onCleared();
     }

@@ -38,9 +38,6 @@ public interface ApiService {
     @POST("v1/auth/login")
     Call<ApiResponse<AuthResponse>> login(@Body LoginRequest request);
 
-    @POST("v1/auth/google")
-    Call<ApiResponse<AuthResponse>> googleLogin(@Body GoogleLoginRequest request);
-
     @POST("v1/auth/register")
     Call<ApiResponse<AuthResponse>> register(@Body RegisterRequest request);
 
