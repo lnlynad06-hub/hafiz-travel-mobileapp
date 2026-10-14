@@ -201,6 +201,15 @@
             android:textSize="12sp"
             android:textStyle="bold"
             app:cornerRadius="8dp" />
+
+        <EditText
+            android:id="@+id/inputCustomPaymentAmount"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginTop="10dp"
+            android:hint="@string/pay_sheet_custom_amount_hint"
+            android:inputType="numberDecimal"
+            android:paddingHorizontal="12dp" />
     </LinearLayout>
 
     <!-- Editorial Financial Breakdown Card -->

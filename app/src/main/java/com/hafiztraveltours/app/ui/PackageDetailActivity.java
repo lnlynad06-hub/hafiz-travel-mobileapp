@@ -570,7 +570,8 @@ public class PackageDetailActivity extends BaseActivity {
             int[] tourKeys  = {R.string.hotel_title_tour_hotel1, R.string.hotel_title_tour_hotel2, R.string.hotel_title_tour_extra};
             int slot = Math.max(0, Math.min(hotel.slot, 2));
             String base = getString(isUmrah ? umrahKeys[slot] : tourKeys[slot]);
-            String hotelTitle = !hotel.rawRating.trim().isEmpty() ? base + " (" + hotel.rawRating.trim() + ")" : base;
+            String titleBase = hotel.title != null && !hotel.title.trim().isEmpty() ? hotel.title.trim() : base;
+            String hotelTitle = !hotel.rawRating.trim().isEmpty() ? titleBase + " (" + hotel.rawRating.trim() + ")" : titleBase;
 
             LinearLayout card = new LinearLayout(this);
             card.setOrientation(LinearLayout.VERTICAL);

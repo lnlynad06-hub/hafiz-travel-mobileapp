@@ -10,6 +10,7 @@ public class BookingRequest implements Serializable {
     public String packageImageUrl;
     public String packageDuration;
     public String roomLabel;
+    public String roomType;
     public String roomPriceFormatted;
     public double unitPriceAmount;
     public int adultPaxCount = 1;

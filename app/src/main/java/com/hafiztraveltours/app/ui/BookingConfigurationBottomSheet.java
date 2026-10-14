@@ -648,6 +648,13 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
 
             card.addView(headerRow);
             card.addView(price);
+            if ("family_4".equals(opt.labelKey) || "family_5".equals(opt.labelKey)) {
+                TextView surcharge = new TextView(requireContext());
+                surcharge.setText(getString(R.string.family_room_surcharge_format, opt.surcharge));
+                surcharge.setTextSize(10);
+                surcharge.setTextColor(getResources().getColor(R.color.text_gray));
+                card.addView(surcharge);
+            }
             card.addView(perPax);
 
             card.setOnClickListener(v -> {
@@ -1036,6 +1043,14 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
                 ? getString(R.string.duration_days_nights, detail.durationDays, detail.nightsCount) 
                 : getString(R.string.package_full);
         req.roomLabel = roomLabel;
+        req.roomType = (detail.priceOptions != null && selectedRoomIndex >= 0 && selectedRoomIndex < detail.priceOptions.size()
+                && ("family_4".equals(detail.priceOptions.get(selectedRoomIndex).labelKey) || "family_5".equals(detail.priceOptions.get(selectedRoomIndex).labelKey)))
+                ? detail.priceOptions.get(selectedRoomIndex).labelKey : null;
+        int requiredFamilyPax = "family_4".equals(req.roomType) ? 4 : ("family_5".equals(req.roomType) ? 5 : 0);
+        if (requiredFamilyPax > 0 && paxCount + kidsCount != requiredFamilyPax) {
+            android.widget.Toast.makeText(requireContext(), getString(R.string.family_room_pax_required, requiredFamilyPax), android.widget.Toast.LENGTH_LONG).show();
+            return;
+        }
         req.roomPriceFormatted = roomPriceStr;
         req.unitPriceAmount = unitAmount;
         req.adultPaxCount = paxCount;
@@ -1063,6 +1078,8 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
                 Integer matchedPricingId = null;
                 String selectedKey = (detail.priceOptions != null && selectedRoomIndex >= 0 && selectedRoomIndex < detail.priceOptions.size())
                         ? detail.priceOptions.get(selectedRoomIndex).labelKey : null;
+                if ("family_4".equals(selectedKey)) selectedKey = "quad";
+                if ("family_5".equals(selectedKey)) selectedKey = "quint";
 
                 if (selectedKey != null) {
                     for (com.hafiztraveltours.app.models.UmrahPackage.DepartureItem.PricingTier tier : selected.pricing) {

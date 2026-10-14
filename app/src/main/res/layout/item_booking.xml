@@ -72,6 +72,64 @@
             android:textSize="12.5sp"
             tools:text="07 Nov 2026 • 12 days 11 nights • 2 pax" />
 
+        <!-- Cancellation & Refund Status Notice Card -->
+        <LinearLayout
+            android:id="@+id/layoutCancellationNotice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_warning_light"
+            android:orientation="vertical"
+            android:padding="12dp"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/ivCancellationNoticeIcon"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_warning"
+                    app:tint="#D97706" />
+
+                <TextView
+                    android:id="@+id/tvCancellationNoticeTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:textColor="#92400E"
+                    android:textSize="12.5sp"
+                    android:textStyle="bold"
+                    tools:text="Cancellation Review in Progress" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvCancellationNoticeMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textColor="#78350F"
+                android:textSize="11.5sp"
+                tools:text="Your cancellation request has been submitted and is awaiting review by Hafiz Travel." />
+
+            <TextView
+                android:id="@+id/tvCancellationNoticeMeta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:textColor="#B45309"
+                android:textSize="11sp"
+                tools:text="Submitted: 2026-10-14 • Ref: BKG-1234 • Paid: RM 3,000" />
+
+        </LinearLayout>
+
         <!-- 4. Single-Surface Payment Summary Matrix -->
         <LinearLayout
             android:layout_width="match_parent"

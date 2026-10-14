@@ -412,6 +412,7 @@ public class BookingSummaryActivity extends BaseActivity {
         CreateBookingRequest apiRequest = new CreateBookingRequest();
         apiRequest.packageId = bookingRequest.packageId;
         apiRequest.roomLabel = bookingRequest.roomLabel;
+        apiRequest.roomType = bookingRequest.roomType;
         apiRequest.departureId = parseDepartureId(bookingRequest.selectedDepartureId);
         apiRequest.pricingId = bookingRequest.selectedPricingId;
         apiRequest.season = bookingRequest.season;

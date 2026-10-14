@@ -129,10 +129,15 @@ public class PackageDetail implements java.io.Serializable {
         public String labelKey;
         /** Legacy display label (fallback only; UI resolves labelKey via RoomLabels). */
         public String occupancyLabel;
+        public String surcharge;
         public PriceOption(String price, String labelKey, String occupancyLabel) {
+            this(price, labelKey, occupancyLabel, null);
+        }
+        public PriceOption(String price, String labelKey, String occupancyLabel, String surcharge) {
             this.price = price;
             this.labelKey = labelKey;
             this.occupancyLabel = occupancyLabel;
+            this.surcharge = surcharge;
         }
     }
 
@@ -264,11 +269,19 @@ public class PackageDetail implements java.io.Serializable {
                 if (th.hotelName != null && !th.hotelName.trim().isEmpty()) {
                     String rating = th.rating != null ? th.rating.trim() : "";
                     int nights = th.nights != null ? th.nights : 1;
-                    String subtitle = th.hotelName.trim() + " (" + nights + " Malam)";
+                    String place = ((th.city != null ? th.city + ", " : "") + (th.country != null ? th.country : "")).trim();
+                    String subtitle = th.hotelName.trim() + (place.isEmpty() ? "" : " — " + place) + " (" + nights + " Malam)";
                     d.hotels.add(new HotelInfo("hotel", slotIdx++, rating, subtitle));
                 }
             }
         } else {
+            if (Boolean.TRUE.equals(pkg.isUmrahZiarah) && pkg.tourHotels != null) for (UmrahPackage.TourHotelItem th : pkg.tourHotels) if (th.hotelName != null && !th.hotelName.trim().isEmpty()) {
+                String place = ((th.city != null ? th.city + ", " : "") + (th.country != null ? th.country : "")).trim();
+                String dates = (th.checkInDate != null && th.checkOutDate != null) ? " • " + th.checkInDate + " - " + th.checkOutDate : "";
+                HotelInfo hotel = new HotelInfo("hotel", 3, th.rating, (place.isEmpty() ? "" : place + " • ") + (th.nights != null ? th.nights : 1) + " Malam" + dates);
+                hotel.title = th.hotelName.trim();
+                d.hotels.add(hotel);
+            }
             if (pkg.hotelMakkahName != null && !pkg.hotelMakkahName.trim().isEmpty()) {
                 String rating = (pkg.hotelMakkahRating != null && !pkg.hotelMakkahRating.trim().isEmpty())
                         ? pkg.hotelMakkahRating : "";
@@ -332,6 +345,12 @@ public class PackageDetail implements java.io.Serializable {
         }
         if (pkg.priceQuad != null && !pkg.priceQuad.trim().isEmpty() && !pkg.priceQuad.equals("0.00")) {
             d.priceOptions.add(new PriceOption(formatCurrency(pkg.priceQuad), "quad", "quad"));
+            double surcharge = BookingRequest.parsePriceAmount(pkg.family4Surcharge);
+            d.priceOptions.add(new PriceOption(formatCurrency(String.valueOf(BookingRequest.parsePriceAmount(pkg.priceQuad) + surcharge)), "family_4", "family_4", formatCurrency(String.valueOf(surcharge))));
+        }
+        if (pkg.priceQuint != null && !pkg.priceQuint.trim().isEmpty() && !pkg.priceQuint.equals("0.00")) {
+            double surcharge = BookingRequest.parsePriceAmount(pkg.family5Surcharge);
+            d.priceOptions.add(new PriceOption(formatCurrency(String.valueOf(BookingRequest.parsePriceAmount(pkg.priceQuint) + surcharge)), "family_5", "family_5", formatCurrency(String.valueOf(surcharge))));
         }
         if (pkg.priceTriple != null && !pkg.priceTriple.trim().isEmpty() && !pkg.priceTriple.equals("0.00")) {
             d.priceOptions.add(new PriceOption(formatCurrency(pkg.priceTriple), "triple", "triple"));

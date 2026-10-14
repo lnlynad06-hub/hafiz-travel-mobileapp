@@ -92,4 +92,65 @@ public class BookingEligibilityAndCancellationTest {
         assertEquals("Cancelled by customer", cancelledDto.cancellationReason);
         assertEquals("2026-09-29 15:30:00", cancelledDto.cancelledAt);
     }
+
+    @Test
+    public void testPendingCancellationDisablesPaymentAndCarriesRefundState() {
+        BookingDto dto = gson.fromJson("{\"status\":\"cancellation_requested\",\"total_amount\":5000,\"paid_amount\":1000,\"balance_amount\":4000,\"cancellation_status\":\"requested\",\"refund_status\":\"requested\",\"refund_requested_amount\":1000}", BookingDto.class);
+        assertFalse(dto.canMakePayment());
+        assertTrue(dto.isPendingCancellation());
+        assertFalse(dto.isCancelled());
+        assertTrue(dto.isRefundPendingOrProcessing());
+        assertFalse(dto.isRefundCompleted());
+        assertEquals("requested", dto.cancellationStatus);
+        assertEquals("requested", dto.refundStatus);
+        assertEquals(1000.0, dto.refundRequestedAmount, 0.001);
+    }
+
+    @Test
+    public void testApprovedCancellationWithRefundProcessing() {
+        String json = "{\"status\":\"cancelled\",\"total_amount\":5000,\"paid_amount\":3000,\"balance_amount\":2000,\"cancellation_status\":\"approved\",\"refund_status\":\"processing\",\"refund_approved_amount\":2500}";
+        BookingDto dto = gson.fromJson(json, BookingDto.class);
+        assertFalse(dto.canMakePayment());
+        assertFalse(dto.isPendingCancellation());
+        assertTrue(dto.isCancelled());
+        assertTrue(dto.isRefundPendingOrProcessing());
+        assertFalse(dto.isRefundCompleted());
+        assertEquals("approved", dto.cancellationStatus);
+        assertEquals("processing", dto.refundStatus);
+        assertEquals(2500.0, dto.refundApprovedAmount, 0.001);
+    }
+
+    @Test
+    public void testApprovedCancellationWithRefundCompleted() {
+        String json = "{\"status\":\"cancelled\",\"total_amount\":5000,\"paid_amount\":3000,\"balance_amount\":2000,\"cancellation_status\":\"approved\",\"refund_status\":\"processed\",\"refund_approved_amount\":2500}";
+        BookingDto dto = gson.fromJson(json, BookingDto.class);
+        assertFalse(dto.canMakePayment());
+        assertFalse(dto.isPendingCancellation());
+        assertTrue(dto.isCancelled());
+        assertFalse(dto.isRefundPendingOrProcessing());
+        assertTrue(dto.isRefundCompleted());
+        assertEquals("processed", dto.refundStatus);
+    }
+
+    @Test
+    public void testRejectedCancellationRestoresActiveBookingAndPayment() {
+        String json = "{\"status\":\"confirmed\",\"total_amount\":5000,\"paid_amount\":1000,\"balance_amount\":4000,\"cancellation_status\":\"rejected\",\"cancellation_review_reason\":\"Departure is within 7 days, policy forbids refund\",\"refund_status\":\"rejected\"}";
+        BookingDto dto = gson.fromJson(json, BookingDto.class);
+        assertFalse(dto.isPendingCancellation());
+        assertFalse(dto.isCancelled());
+        assertTrue(dto.isCancellationRejected());
+        assertEquals("Departure is within 7 days, policy forbids refund", dto.cancellationReviewReason);
+        assertTrue(dto.canMakePayment()); // Pay now eligibility restored!
+    }
+
+    @Test
+    public void testUnpaidBookingPendingCancellation() {
+        String json = "{\"status\":\"cancellation_requested\",\"total_amount\":5000,\"paid_amount\":0,\"balance_amount\":5000,\"cancellation_status\":\"requested\",\"refund_status\":null,\"refund_requested_amount\":null}";
+        BookingDto dto = gson.fromJson(json, BookingDto.class);
+        assertTrue(dto.isPendingCancellation());
+        assertFalse(dto.isCancelled());
+        assertFalse(dto.canMakePayment());
+        assertNull(dto.refundStatus);
+        assertNull(dto.refundRequestedAmount);
+    }
 }

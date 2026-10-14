@@ -122,6 +122,12 @@ public class UmrahPackage implements java.io.Serializable {
     @SerializedName("price_quad")
     public String priceQuad;
 
+    @SerializedName("family_4_surcharge")
+    public String family4Surcharge;
+
+    @SerializedName("family_5_surcharge")
+    public String family5Surcharge;
+
     @SerializedName("duration_formatted")
     public String durationFormatted;
 
@@ -148,6 +154,9 @@ public class UmrahPackage implements java.io.Serializable {
 
     @SerializedName("is_umrah")
     public Boolean isUmrahFlag;
+
+    @SerializedName("is_umrah_ziarah")
+    public Boolean isUmrahZiarah;
 
     @SerializedName("tour_hotels")
     public java.util.List<TourHotelItem> tourHotels;
@@ -194,6 +203,11 @@ public class UmrahPackage implements java.io.Serializable {
 
         @SerializedName("rating")
         public String rating;
+
+        @SerializedName("country") public String country;
+        @SerializedName("city") public String city;
+        @SerializedName("check_in_date") public String checkInDate;
+        @SerializedName("check_out_date") public String checkOutDate;
 
         @SerializedName("sort_order")
         public Integer sortOrder;

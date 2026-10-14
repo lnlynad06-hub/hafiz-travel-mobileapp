@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.provider.OpenableColumns;
 import android.view.LayoutInflater;
@@ -52,6 +54,8 @@ import com.hafiztraveltours.app.utils.ViewStateController;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -207,7 +211,7 @@ public class MyBookingsActivity extends BaseActivity {
     }
 
     public void showQuickPaySheet(BookingDto booking) {
-        if (booking == null || booking.id <= 0 || booking.balanceAmount <= 0) return;
+        if (booking == null || booking.id <= 0 || !booking.canMakePayment()) return;
 
         BottomSheetDialog payDialog = new BottomSheetDialog(this);
         View sheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_quick_pay, null);
@@ -238,7 +242,7 @@ public class MyBookingsActivity extends BaseActivity {
         // Determine payment stage amount & purpose
         final double requiredDep = booking.getRequiredDepositAmount();
         final double remainingDep = booking.getDepositRemainingAmount();
-        final double totalBal = booking.balanceAmount > 0 ? booking.balanceAmount : Math.max(0, booking.totalAmount - booking.paidAmount);
+        final double totalBal = booking.getOutstandingAmount();
 
         final double[] selectedAmount = new double[1];
         final String[] selectedPurpose = new String[1];
@@ -249,6 +253,9 @@ public class MyBookingsActivity extends BaseActivity {
         Button btnPreset200 = sheetView.findViewById(R.id.btnPayPreset200);
         Button btnPreset500 = sheetView.findViewById(R.id.btnPayPreset500);
         Button btnPresetFull = sheetView.findViewById(R.id.btnPayPresetFull);
+        EditText inputCustomAmount = sheetView.findViewById(R.id.inputCustomPaymentAmount);
+        final Button[] paymentButtons = new Button[]{btnPreset100, btnPreset200, btnPreset500, btnPresetFull};
+        final BigDecimal balance = BigDecimal.valueOf(totalBal).setScale(2, RoundingMode.HALF_UP);
 
         Runnable updateUI = () -> {
             double amt = selectedAmount[0];
@@ -260,6 +267,7 @@ public class MyBookingsActivity extends BaseActivity {
             if (tvBalanceAfter != null) tvBalanceAfter.setText(MoneyFormat.formatRMCents(balAfter));
             if (btnSubmit != null) {
                 btnSubmit.setText(getString(R.string.pay_sheet_btn_pay_format, formatted));
+                btnSubmit.setEnabled(amt > 0 && amt <= totalBal);
             }
         };
 
@@ -274,11 +282,11 @@ public class MyBookingsActivity extends BaseActivity {
         } else {
             if (layoutInstallmentOptions != null) layoutInstallmentOptions.setVisibility(View.VISIBLE);
 
-            final Button[] buttons = new Button[]{btnPreset100, btnPreset200, btnPreset500, btnPresetFull};
             final double[] amounts = new double[]{100.0, 200.0, 500.0, totalBal};
 
             class PresetHandler {
                 void select(int idx) {
+                    if (inputCustomAmount != null) inputCustomAmount.setText("");
                     double chosenAmt = amounts[idx];
                     if (chosenAmt >= totalBal) {
                         chosenAmt = totalBal;
@@ -291,36 +299,62 @@ public class MyBookingsActivity extends BaseActivity {
                     selectedAmount[0] = chosenAmt;
                     updateUI.run();
 
-                    for (int b = 0; b < buttons.length; b++) {
-                        if (buttons[b] == null) continue;
+                    for (int b = 0; b < paymentButtons.length; b++) {
+                        if (paymentButtons[b] == null) continue;
                         if (b == idx) {
-                            buttons[b].setBackgroundColor(Color.parseColor("#9C0E63"));
-                            buttons[b].setTextColor(Color.WHITE);
+                            paymentButtons[b].setBackgroundColor(Color.parseColor("#9C0E63"));
+                            paymentButtons[b].setTextColor(Color.WHITE);
                         } else {
-                            buttons[b].setBackgroundColor(Color.TRANSPARENT);
-                            buttons[b].setTextColor(Color.parseColor("#4B5563"));
+                            paymentButtons[b].setBackgroundColor(Color.TRANSPARENT);
+                            paymentButtons[b].setTextColor(Color.parseColor("#4B5563"));
                         }
                     }
                 }
             }
             final PresetHandler handler = new PresetHandler();
 
-            for (int i = 0; i < buttons.length; i++) {
+            for (int i = 0; i < paymentButtons.length; i++) {
                 final int buttonIdx = i;
-                if (buttons[i] != null) {
+                if (paymentButtons[i] != null) {
                     if (i < 3 && amounts[i] > totalBal) {
-                        buttons[i].setEnabled(false);
-                        buttons[i].setAlpha(0.4f);
+                        paymentButtons[i].setEnabled(false);
+                        paymentButtons[i].setAlpha(0.4f);
                     } else {
-                        buttons[i].setEnabled(true);
-                        buttons[i].setAlpha(1.0f);
-                        buttons[i].setOnClickListener(v -> {
+                        paymentButtons[i].setEnabled(true);
+                        paymentButtons[i].setAlpha(1.0f);
+                        paymentButtons[i].setOnClickListener(v -> {
                             HapticUtil.click(v);
                             handler.select(buttonIdx);
                         });
                     }
                 }
             }
+
+            if (inputCustomAmount != null) inputCustomAmount.addTextChangedListener(new TextWatcher() {
+                @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+                @Override public void onTextChanged(CharSequence s, int start, int before, int count) { }
+                @Override public void afterTextChanged(Editable value) {
+                    String raw = value.toString().trim();
+                    if (raw.isEmpty()) return;
+                    try {
+                        BigDecimal amount = new BigDecimal(raw).setScale(2, RoundingMode.UNNECESSARY);
+                        if (amount.signum() <= 0 || amount.compareTo(balance) > 0) throw new NumberFormatException();
+                        selectedAmount[0] = amount.doubleValue();
+                        selectedPurpose[0] = getString(R.string.pay_sheet_purpose_additional_payment);
+                        selectedType[0] = "installment";
+                        for (Button button : paymentButtons) if (button != null) {
+                            button.setBackgroundColor(Color.TRANSPARENT);
+                            button.setTextColor(Color.parseColor("#4B5563"));
+                        }
+                        inputCustomAmount.setError(null);
+                        updateUI.run();
+                    } catch (NumberFormatException | ArithmeticException ignored) {
+                        selectedAmount[0] = 0;
+                        updateUI.run();
+                        inputCustomAmount.setError(getString(R.string.pay_sheet_custom_amount_invalid));
+                    }
+                }
+            });
 
             // Default preset selection: RM 100 if available, else full balance
             if (totalBal > 100) {
@@ -335,6 +369,7 @@ public class MyBookingsActivity extends BaseActivity {
 
         if (btnSubmit != null) {
             btnSubmit.setOnClickListener(v -> {
+                if (selectedAmount[0] <= 0 || selectedAmount[0] > totalBal) return;
                 HapticUtil.click(v);
                 payDialog.dismiss();
                 showPaymentConfirmationDialog(booking, selectedAmount[0], selectedPurpose[0], selectedType[0]);
@@ -1104,6 +1139,7 @@ public class MyBookingsActivity extends BaseActivity {
         }
 
         TextView tvSubtitle = dialogView.findViewById(R.id.tvCancelDialogSubtitle);
+        TextView tvSummary = dialogView.findViewById(R.id.tvCancelBookingSummary);
         EditText etReason = dialogView.findViewById(R.id.etCancelReasonInput);
         View btnKeep = dialogView.findViewById(R.id.btnCancelKeep);
         View btnConfirm = dialogView.findViewById(R.id.btnCancelConfirm);
@@ -1160,11 +1196,22 @@ public class MyBookingsActivity extends BaseActivity {
             });
         }
 
+        if (tvSummary != null) {
+            tvSummary.setText(getString(R.string.cancel_booking_summary,
+                    booking.departureDate != null ? booking.departureDate : "-",
+                    BookingRequest.formatPrice(booking.totalAmount), BookingRequest.formatPrice(booking.paidAmount),
+                    BookingRequest.formatPrice(booking.getOutstandingAmount())));
+        }
+
         if (btnConfirm != null) {
             btnConfirm.setOnClickListener(v -> {
                 HapticUtil.click(v);
-                dialog.dismiss();
                 String reason = etReason != null ? etReason.getText().toString().trim() : "";
+                if (reason.length() < 3) {
+                    if (etReason != null) etReason.setError(getString(R.string.cancel_booking_reason_required));
+                    return;
+                }
+                dialog.dismiss();
                 performCancelBooking(booking, reason);
             });
         }
@@ -1260,7 +1307,7 @@ public class MyBookingsActivity extends BaseActivity {
                 .create();
         progressDialog.show();
 
-        CancelBookingRequest req = new CancelBookingRequest(!reason.isEmpty() ? reason : null);
+        CancelBookingRequest req = new CancelBookingRequest(reason);
 
         if (cancelCall != null) cancelCall.cancel();
         Call<ApiResponse<BookingDetailDto>> call = ApiClient.getApiService().cancelBooking(booking.id, req);
@@ -1273,25 +1320,11 @@ public class MyBookingsActivity extends BaseActivity {
                 cancelInFlight = false;
 
                         if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
-                            boolean isZeroPaid = (booking.paidAmount <= 0);
-
-                            if (isZeroPaid) {
-                                Toast.makeText(MyBookingsActivity.this,
-                                        getString(R.string.cancel_booking_success, bookingRef), Toast.LENGTH_LONG).show();
-
-                                if (adapter != null) {
-                                    adapter.removeBooking(booking);
-                                }
-                            } else {
-                                Toast.makeText(MyBookingsActivity.this,
-                                        getString(R.string.cancel_booking_success, bookingRef), Toast.LENGTH_LONG).show();
-
-                                booking.status = "cancelled";
-                                booking.isCancellable = Boolean.FALSE;
-                                if (adapter != null) {
-                                    adapter.notifyDataSetChanged();
-                                }
-                            }
+                            Toast.makeText(MyBookingsActivity.this,
+                                    getString(R.string.cancel_booking_success, bookingRef), Toast.LENGTH_LONG).show();
+                            booking.status = "cancellation_requested";
+                            booking.isCancellable = Boolean.FALSE;
+                            if (adapter != null) adapter.notifyDataSetChanged();
                             loadBookings();
                         } else {
                             String err = ApiErrors.userMessage(MyBookingsActivity.this, response, R.string.cancel_booking_failed);

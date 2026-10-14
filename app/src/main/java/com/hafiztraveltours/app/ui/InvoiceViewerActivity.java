@@ -300,10 +300,24 @@ public class InvoiceViewerActivity extends BaseActivity {
         // Status Badge
         if (tvInvoiceStatusBadge != null) {
             String rawStatus = detail.status != null ? detail.status.toLowerCase(Locale.ROOT) : "";
-            if (rawStatus.contains("cancel") || rawStatus.contains("batal")) {
-                tvInvoiceStatusBadge.setText(getString(R.string.status_cancelled));
-                tvInvoiceStatusBadge.setTextColor(Color.parseColor("#DC2626"));
-                tvInvoiceStatusBadge.setBackgroundResource(R.drawable.bg_pill_inactive);
+            if (detail.isPendingCancellation()) {
+                tvInvoiceStatusBadge.setText(getString(R.string.status_pending_cancellation));
+                tvInvoiceStatusBadge.setTextColor(Color.parseColor("#D97706"));
+                tvInvoiceStatusBadge.setBackgroundResource(R.drawable.bg_pill_accent);
+            } else if (detail.isCancelled()) {
+                if (detail.isRefundCompleted()) {
+                    tvInvoiceStatusBadge.setText(getString(R.string.status_refunded));
+                    tvInvoiceStatusBadge.setTextColor(Color.parseColor("#059669"));
+                    tvInvoiceStatusBadge.setBackgroundResource(R.drawable.bg_pill_success);
+                } else if (detail.isRefundPendingOrProcessing()) {
+                    tvInvoiceStatusBadge.setText(getString(R.string.status_refund_processing));
+                    tvInvoiceStatusBadge.setTextColor(Color.parseColor("#2563EB"));
+                    tvInvoiceStatusBadge.setBackgroundResource(R.drawable.bg_pill_accent);
+                } else {
+                    tvInvoiceStatusBadge.setText(getString(R.string.status_cancelled));
+                    tvInvoiceStatusBadge.setTextColor(Color.parseColor("#DC2626"));
+                    tvInvoiceStatusBadge.setBackgroundResource(R.drawable.bg_pill_inactive);
+                }
             } else if (detail.balanceAmount <= 0 && detail.paidAmount > 0) {
                 tvInvoiceStatusBadge.setText(getString(R.string.payment_status_fully_paid));
                 tvInvoiceStatusBadge.setTextColor(Color.parseColor("#059669"));

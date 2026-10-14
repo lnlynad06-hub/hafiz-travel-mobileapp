@@ -674,6 +674,8 @@
     <string name="detail_booking_guide_sub">Langkah mudah untuk membuat tempahan pakej bersama Hafiz Travel &amp; Tours</string>
     <string name="room_quint">Bilik Berlima (Quint)</string>
     <string name="room_quad">Bilik Berempat (Quad)</string>
+    <string name="room_family_4">Bilik Keluarga (4 Pax)</string>
+    <string name="room_family_5">Bilik Keluarga (5 Pax)</string>
     <string name="room_triple">Bilik Bertiga (Triple)</string>
     <string name="room_double">Bilik Berdua (Double)</string>
     <string name="room_single">Bilik Perseorangan (Single)</string>
@@ -696,6 +698,8 @@
     <string name="detail_section_related_packages">Pakej Berkaitan</string>
     <string name="detail_section_cancellation_policy">Polisi Pembatalan &amp; Pemulangan</string>
     <string name="detail_per_pax">seorang</string>
+    <string name="family_room_surcharge_format">Termasuk caj tambahan keluarga %1$s seorang</string>
+    <string name="family_room_pax_required">Bilik Keluarga ini memerlukan tepat %1$d jemaah.</string>
     <string name="nights_unit">Malam</string>
     <string name="nights_label_makkah">Makkah</string>
     <string name="nights_label_madinah">Madinah</string>
@@ -1396,15 +1400,15 @@
     <string name="btn_view_my_bookings">Ke Tempahan Saya</string>
 
     <!-- Cancel Booking Strings -->
-    <string name="booking_btn_cancel">Batal Tempahan</string>
-    <string name="cancel_booking_title">Batal Tempahan</string>
-    <string name="cancel_booking_confirm_message">Adakah anda pasti ingin membatalkan tempahan ini? Tindakan ini akan melepaskan tempat duduk yang ditempah. Rekod bayaran sah akan dikekalkan.</string>
-    <string name="cancel_booking_reason_hint">Sebab pembatalan (pilihan)</string>
-    <string name="cancel_booking_btn_confirm">Ya, Batal Tempahan</string>
+    <string name="booking_btn_cancel">Mohon Pembatalan</string>
+    <string name="cancel_booking_title">Mohon Pembatalan</string>
+    <string name="cancel_booking_confirm_message">Permohonan anda akan disemak oleh Hafiz Travel. Tempahan tidak dibatalkan sehingga diluluskan dan refund tertakluk kepada polisi pakej.</string>
+    <string name="cancel_booking_reason_hint">Sebab pembatalan (wajib)</string>
+    <string name="cancel_booking_btn_confirm">Hantar Permohonan</string>
     <string name="cancel_booking_keep">Kekalkan Tempahan</string>
-    <string name="cancel_booking_success">Tempahan %1$s telah berjaya dibatalkan.</string>
+    <string name="cancel_booking_success">Permohonan pembatalan untuk %1$s telah dihantar untuk semakan.</string>
     <string name="cancel_booking_failed">Gagal membatalkan tempahan. Sila cuba lagi.</string>
-    <string name="cancel_booking_processing">Membatalkan tempahan, sila tunggu...</string>
+    <string name="cancel_booking_processing">Menghantar permohonan pembatalan, sila tunggu...</string>
     <string name="cancel_booking_quote_loading">Mengira polisi pembatalan dan sebut harga pemulangan wang...</string>
     <string name="cancel_quote_working_days">Hari bekerja sebelum penerbangan: %1$d hari</string>
     <string name="cancel_quote_charge_summary">Caj Pembatalan: %1$s (%2$s dari harga pakej)</string>
@@ -1414,7 +1418,9 @@
     <string name="cancel_quote_no_refund">Tiada pemulangan wang layak berdasarkan garis masa pelepasan penerbangan.</string>
     <string name="cancel_quote_failed">Tidak dapat memuatkan butiran pembatalan. Sila cuba lagi.</string>
     <string name="cancel_not_cancellable">Tempahan ini tidak lagi boleh dibatalkan. Sila hubungi kami untuk bantuan.</string>
-    <string name="cancel_booking_irreversible_notice">Tindakan ini adalah kekal dan tidak boleh dibatalkan.</string>
+    <string name="cancel_booking_irreversible_notice">Jumlah refund tidak diluluskan sehingga semakan Hafiz Travel selesai.</string>
+    <string name="cancel_booking_reason_required">Sila berikan sebab pembatalan.</string>
+    <string name="cancel_booking_summary">Pelepasan: %1$s\nJumlah: %2$s\nTelah Dibayar: %3$s\nBaki: %4$s</string>
     <string name="terms_tour_notice_title">Terma &amp; Syarat Pakej Pelancongan</string>
     <string name="terms_tour_notice_body">Terma &amp; Syarat untuk pakej Pelancongan akan disediakan semasa pengesahan dan jadual perjalanan muktamad. Untuk sebarang pertanyaan lanjut, sila hubungi khidmat pelanggan kami.</string>
     <string name="booking_ref_prefix">No. Rujukan:</string>
@@ -1596,5 +1602,21 @@
     <string name="privacy_policy_open_browser">Buka di Pelayar</string>
     <string name="privacy_policy_settings_desc">Baca dasar perlindungan data &amp; privasi kami</string>
     <string name="privacy_policy_close">Tutup</string>
+    <string name="pay_sheet_custom_amount_hint">Masukkan amaun bayaran tersuai (RM)</string>
+    <string name="pay_sheet_custom_amount_invalid">Masukkan amaun melebihi RM0 dan tidak melebihi baki.</string>
+    <string name="status_pending_cancellation">MENUNGGU PEMBATALAN</string>
+    <string name="status_refund_processing">REFUND DIPROSES</string>
+    <string name="status_refunded">TELAH DIPULANGKAN</string>
+    <string name="cancellation_notice_title_pending">Semakan Pembatalan Sedang Berjalan</string>
+    <string name="cancellation_notice_msg_pending">Permohonan pembatalan anda telah dihantar dan sedang menunggu semakan pihak Hafiz Travel.</string>
+    <string name="cancellation_notice_meta">Dihantar: %1$s • Ruj: %2$s • Dibayar: %3$s • Status: %4$s</string>
+    <string name="cancellation_notice_meta_with_refund">Dihantar: %1$s • Ruj: %2$s • Dibayar: %3$s • Refund: %4$s</string>
+    <string name="cancellation_notice_title_rejected">Permohonan Pembatalan Ditolak</string>
+    <string name="cancellation_notice_msg_rejected">Permohonan pembatalan anda telah ditolak. Sebab penolakan: %1$s</string>
+    <string name="cancellation_notice_title_approved">Pembatalan Diluluskan</string>
+    <string name="cancellation_notice_msg_approved">Tempahan anda telah dibatalkan.</string>
+    <string name="cancellation_refund_status_pending">Menunggu Semakan</string>
+    <string name="cancellation_refund_status_processing">Sedang Diproses</string>
+    <string name="cancellation_refund_status_approved">Diluluskan (RM %1$s)</string>
+    <string name="cancellation_refund_status_processed">Telah Dipulangkan (RM %1$s)</string>
 </resources>
-

@@ -69,6 +69,17 @@
         android:textColor="#52525B"
         android:textSize="12sp" />
 
+    <TextView
+        android:id="@+id/tvCancelBookingSummary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_detail_card"
+        android:padding="12dp"
+        android:textColor="#52525B"
+        android:textSize="12sp"
+        tools:text="Departure: 2026-11-20\nTotal: RM 5,000\nPaid: RM 1,000\nOutstanding: RM 4,000" />
+
     <!-- Dynamic Quote Breakdown Card -->
     <LinearLayout
         android:id="@+id/layoutQuoteBreakdown"

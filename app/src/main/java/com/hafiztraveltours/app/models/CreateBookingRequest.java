@@ -18,6 +18,9 @@ public class CreateBookingRequest {
     @SerializedName("room_label")
     public String roomLabel;
 
+    @SerializedName("room_type")
+    public String roomType;
+
     @SerializedName("season")
     public String season;
 

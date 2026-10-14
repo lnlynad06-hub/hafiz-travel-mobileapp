@@ -26,6 +26,10 @@ public final class RoomLabels {
                 return context.getString(R.string.room_quint);
             case "quad":
                 return context.getString(R.string.room_quad);
+            case "family_4":
+                return context.getString(R.string.room_family_4);
+            case "family_5":
+                return context.getString(R.string.room_family_5);
             case "triple":
                 return context.getString(R.string.room_triple);
             case "double":

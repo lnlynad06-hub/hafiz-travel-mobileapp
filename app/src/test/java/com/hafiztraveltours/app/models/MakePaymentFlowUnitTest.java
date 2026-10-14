@@ -115,6 +115,42 @@ public class MakePaymentFlowUnitTest {
     }
 
     @Test
+    public void testPayNowEligibilityUsesOutstandingBalanceAndSafeStatuses() {
+        BookingDto unpaid = new BookingDto();
+        unpaid.status = "confirmed";
+        unpaid.totalAmount = 8000;
+        unpaid.paidAmount = 2000;
+        assertTrue(unpaid.canMakePayment());
+        assertEquals(6000, unpaid.getOutstandingAmount(), 0.001);
+
+        unpaid.status = "cancelled";
+        assertFalse(unpaid.canMakePayment());
+        unpaid.status = "confirmed";
+        unpaid.paymentStatus = "pending_gateway";
+        assertFalse(unpaid.canMakePayment());
+        unpaid.paymentStatus = "fully_paid";
+        unpaid.balanceAmount = 0;
+        unpaid.paidAmount = 8000;
+        assertFalse(unpaid.canMakePayment());
+    }
+
+    @Test
+    public void testPayNowRemainsEligibleAfterDepositAndPartialPayments() {
+        BookingDto booking = new BookingDto();
+        booking.status = "partially_paid";
+        booking.paymentStatus = "deposit_paid";
+        booking.totalAmount = 5000;
+        booking.paidAmount = 1000;
+        booking.balanceAmount = 4000;
+        assertTrue(booking.canMakePayment());
+
+        booking.paymentStatus = "balance_partial";
+        booking.paidAmount = 3000;
+        booking.balanceAmount = 2000;
+        assertTrue(booking.canMakePayment());
+    }
+
+    @Test
     public void testMultiInstallmentSequenceAndCalculations() {
         BookingDto booking = new BookingDto();
         booking.totalAmount = 10000.0;

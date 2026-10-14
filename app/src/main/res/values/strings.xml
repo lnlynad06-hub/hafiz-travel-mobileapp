@@ -807,6 +807,8 @@
     <string name="detail_booking_guide_sub">Simple steps to book your travel package with Hafiz Travel &amp; Tours</string>
     <string name="room_quint">5-Person Room (Quint)</string>
     <string name="room_quad">4-Person Room (Quad)</string>
+    <string name="room_family_4">Family Room (4 Pax)</string>
+    <string name="room_family_5">Family Room (5 Pax)</string>
     <string name="room_triple">3-Person Room (Triple)</string>
     <string name="room_double">2-Person Room (Double)</string>
     <string name="room_single">1-Person Room (Single)</string>
@@ -829,6 +831,8 @@
     <string name="detail_section_related_packages">Related Packages</string>
     <string name="detail_section_cancellation_policy">Cancellation &amp; Refund Policy</string>
     <string name="detail_per_pax">per person</string>
+    <string name="family_room_surcharge_format">Includes %1$s family surcharge per person</string>
+    <string name="family_room_pax_required">This Family Room requires exactly %1$d travellers.</string>
     <string name="nights_unit">Nights</string>
     <string name="nights_label_makkah">Makkah</string>
     <string name="nights_label_madinah">Madinah</string>
@@ -1508,15 +1512,15 @@
     <string name="btn_view_my_bookings">Go to My Bookings</string>
 
     <!-- Cancel Booking Strings -->
-    <string name="booking_btn_cancel">Cancel Booking</string>
-    <string name="cancel_booking_title">Cancel Booking</string>
-    <string name="cancel_booking_confirm_message">Are you sure you want to cancel this booking? This action will release your reserved seats. Legitimate payment records will be preserved.</string>
-    <string name="cancel_booking_reason_hint">Reason for cancellation (optional)</string>
-    <string name="cancel_booking_btn_confirm">Yes, Cancel Booking</string>
+    <string name="booking_btn_cancel">Request Cancellation</string>
+    <string name="cancel_booking_title">Request Cancellation</string>
+    <string name="cancel_booking_confirm_message">Your request will be reviewed by Hafiz Travel. The booking is not cancelled until approval, and any refund is subject to the applicable policy.</string>
+    <string name="cancel_booking_reason_hint">Reason for cancellation (required)</string>
+    <string name="cancel_booking_btn_confirm">Submit Request</string>
     <string name="cancel_booking_keep">Keep Booking</string>
-    <string name="cancel_booking_success">Booking %1$s has been successfully cancelled.</string>
+    <string name="cancel_booking_success">Cancellation request for %1$s has been submitted for review.</string>
     <string name="cancel_booking_failed">Failed to cancel booking. Please try again.</string>
-    <string name="cancel_booking_processing">Cancelling booking, please wait...</string>
+    <string name="cancel_booking_processing">Submitting cancellation request, please wait...</string>
     <string name="cancel_booking_quote_loading">Calculating cancellation policy and refund quote...</string>
     <string name="cancel_quote_working_days">Working days before departure: %1$d days</string>
     <string name="cancel_quote_charge_summary">Cancellation Charge: %1$s (%2$s of package price)</string>
@@ -1526,7 +1530,9 @@
     <string name="cancel_quote_no_refund">No refund is eligible for this cancellation timeline.</string>
     <string name="cancel_quote_failed">Could not load cancellation details. Please try again.</string>
     <string name="cancel_not_cancellable">This booking can no longer be cancelled. Please contact us for assistance.</string>
-    <string name="cancel_booking_irreversible_notice">This action is permanent and cannot be undone.</string>
+    <string name="cancel_booking_irreversible_notice">No refund amount is approved until Hafiz Travel completes its review.</string>
+    <string name="cancel_booking_reason_required">Please provide a cancellation reason.</string>
+    <string name="cancel_booking_summary">Departure: %1$s\nTotal: %2$s\nPaid: %3$s\nOutstanding: %4$s</string>
     <string name="terms_tour_notice_title">Tour Package Terms &amp; Conditions</string>
     <string name="terms_tour_notice_body">Terms &amp; Conditions for Tour packages will be provided upon confirmation and finalized itinerary. For further inquiries, please contact our customer service.</string>
     <string name="booking_ref_prefix">Ref:</string>
@@ -1708,4 +1714,21 @@
     <string name="privacy_policy_open_browser">Open in Browser</string>
     <string name="privacy_policy_settings_desc">Read our data protection &amp; privacy terms</string>
     <string name="privacy_policy_close">Close</string>
+    <string name="pay_sheet_custom_amount_hint">Enter custom payment amount (RM)</string>
+    <string name="pay_sheet_custom_amount_invalid">Enter an amount greater than RM0 and not exceeding the balance.</string>
+    <string name="status_pending_cancellation">PENDING CANCELLATION</string>
+    <string name="status_refund_processing">REFUND PROCESSING</string>
+    <string name="status_refunded">REFUNDED</string>
+    <string name="cancellation_notice_title_pending">Cancellation Review in Progress</string>
+    <string name="cancellation_notice_msg_pending">Your cancellation request has been submitted and is awaiting review by Hafiz Travel.</string>
+    <string name="cancellation_notice_meta">Submitted: %1$s • Ref: %2$s • Paid: %3$s • Status: %4$s</string>
+    <string name="cancellation_notice_meta_with_refund">Submitted: %1$s • Ref: %2$s • Paid: %3$s • Refund: %4$s</string>
+    <string name="cancellation_notice_title_rejected">Cancellation Request Rejected</string>
+    <string name="cancellation_notice_msg_rejected">Your cancellation request was rejected. Rejection reason: %1$s</string>
+    <string name="cancellation_notice_title_approved">Cancellation Approved</string>
+    <string name="cancellation_notice_msg_approved">Your booking has been cancelled.</string>
+    <string name="cancellation_refund_status_pending">Pending Review</string>
+    <string name="cancellation_refund_status_processing">Processing</string>
+    <string name="cancellation_refund_status_approved">Approved (RM %1$s)</string>
+    <string name="cancellation_refund_status_processed">Refunded (RM %1$s)</string>
 </resources>

@@ -87,6 +87,24 @@ public class BookingDto {
     @SerializedName("cancelled_at")
     public String cancelledAt;
 
+    @SerializedName("cancellation_status")
+    public String cancellationStatus;
+
+    @SerializedName("cancellation_submitted_at")
+    public String cancellationSubmittedAt;
+
+    @SerializedName("cancellation_review_reason")
+    public String cancellationReviewReason;
+
+    @SerializedName("refund_status")
+    public String refundStatus;
+
+    @SerializedName("refund_requested_amount")
+    public Double refundRequestedAmount;
+
+    @SerializedName("refund_approved_amount")
+    public Double refundApprovedAmount;
+
     @SerializedName("created_at")
     public String createdAt;
 
@@ -124,5 +142,51 @@ public class BookingDto {
         double req = getRequiredDepositAmount();
         double paid = paidAmount;
         return Math.max(0, req - paid);
+    }
+
+    public boolean isPendingCancellation() {
+        String s = status != null ? status.toLowerCase(java.util.Locale.ROOT) : "";
+        String cs = cancellationStatus != null ? cancellationStatus.toLowerCase(java.util.Locale.ROOT) : "";
+        return s.contains("cancel_req") || s.equals("cancellation_requested") || cs.equals("requested");
+    }
+
+    public boolean isCancelled() {
+        if (isPendingCancellation()) return false;
+        String s = status != null ? status.toLowerCase(java.util.Locale.ROOT) : "";
+        String cs = cancellationStatus != null ? cancellationStatus.toLowerCase(java.util.Locale.ROOT) : "";
+        return s.equals("cancelled") || s.equals("batal") || cs.equals("approved");
+    }
+
+    public boolean isRefundPendingOrProcessing() {
+        String rs = refundStatus != null ? refundStatus.toLowerCase(java.util.Locale.ROOT) : "";
+        return rs.equals("requested") || rs.equals("approved") || rs.equals("processing");
+    }
+
+    public boolean isRefundCompleted() {
+        String rs = refundStatus != null ? refundStatus.toLowerCase(java.util.Locale.ROOT) : "";
+        return rs.equals("processed") || rs.equals("refunded");
+    }
+
+    public boolean isCancellationRejected() {
+        String cs = cancellationStatus != null ? cancellationStatus.toLowerCase(java.util.Locale.ROOT) : "";
+        return cs.equals("rejected");
+    }
+
+    /** The server owns booking access; this decides whether its listed booking can show payment. */
+    public boolean canMakePayment() {
+        if (isPendingCancellation() || isCancelled()) {
+            return false;
+        }
+        String bookingStatus = status != null ? status.toLowerCase(java.util.Locale.ROOT) : "";
+        String payment = paymentStatus != null ? paymentStatus.toLowerCase(java.util.Locale.ROOT) : "";
+        boolean unavailable = bookingStatus.contains("cancel") || bookingStatus.contains("batal")
+                || bookingStatus.contains("delet") || bookingStatus.contains("hapus")
+                || bookingStatus.contains("complet") || bookingStatus.contains("selesai")
+                || payment.contains("cancel") || payment.contains("pending_gateway");
+        return !unavailable && getOutstandingAmount() > 0;
+    }
+
+    public double getOutstandingAmount() {
+        return balanceAmount > 0 ? balanceAmount : Math.max(0, totalAmount - paidAmount);
     }
 }
