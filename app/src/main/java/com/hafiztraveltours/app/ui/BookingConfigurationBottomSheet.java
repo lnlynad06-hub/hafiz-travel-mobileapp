@@ -1043,8 +1043,7 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
                 ? getString(R.string.duration_days_nights, detail.durationDays, detail.nightsCount) 
                 : getString(R.string.package_full);
         req.roomLabel = roomLabel;
-        req.roomType = (detail.priceOptions != null && selectedRoomIndex >= 0 && selectedRoomIndex < detail.priceOptions.size()
-                && ("family_4".equals(detail.priceOptions.get(selectedRoomIndex).labelKey) || "family_5".equals(detail.priceOptions.get(selectedRoomIndex).labelKey)))
+        req.roomType = (detail.priceOptions != null && selectedRoomIndex >= 0 && selectedRoomIndex < detail.priceOptions.size())
                 ? detail.priceOptions.get(selectedRoomIndex).labelKey : null;
         int requiredFamilyPax = "family_4".equals(req.roomType) ? 4 : ("family_5".equals(req.roomType) ? 5 : 0);
         if (requiredFamilyPax > 0 && paxCount + kidsCount != requiredFamilyPax) {
