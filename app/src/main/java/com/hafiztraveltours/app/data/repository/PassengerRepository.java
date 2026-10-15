@@ -121,7 +121,6 @@ public class PassengerRepository {
         if (isBlank(user.issuingCountry)) user.issuingCountry = pref(prefs, "issuing_country");
         if (isBlank(user.addressLine1)) user.addressLine1 = pref(prefs, "address_line_1");
         if (isBlank(user.address)) user.address = pref(prefs, "address");
-        if (isBlank(user.clothesSize)) user.clothesSize = pref(prefs, "clothes_size");
         if (isBlank(user.nationality)) user.nationality = pref(prefs, "nationality");
         if (isBlank(user.emergencyName)) user.emergencyName = pref(prefs, "emergency_name");
         if (isBlank(user.emergencyPhone)) user.emergencyPhone = pref(prefs, "emergency_phone");

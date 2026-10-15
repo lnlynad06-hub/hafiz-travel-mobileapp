@@ -119,8 +119,6 @@ public class PassengerDetailsActivity extends BaseActivity {
         String selectedIssuingCountry = null;
 
         View layoutExtraSection;
-        View layoutClothesSizeSection;
-        MaterialAutoCompleteTextView inputClothesSize;
 
         View layoutMahramSection;
         MaterialAutoCompleteTextView inputMahram;
@@ -434,9 +432,8 @@ public class PassengerDetailsActivity extends BaseActivity {
                     case IC_DOC:
                         label = getString(R.string.passenger_missing_ic_doc);
                         break;
-                    case CLOTHES_SIZE:
                     default:
-                        label = getString(R.string.passenger_missing_clothes_size);
+                        label = "";
                         break;
                 }
                 sb.append("• ").append(label).append("\n");
@@ -488,7 +485,6 @@ public class PassengerDetailsActivity extends BaseActivity {
         boolean reqPassport = pkg != null ? pkg.requiresPassport : true;
         boolean reqIc = pkg != null ? pkg.requiresIc : true;
         boolean reqMahram = pkg != null ? pkg.requiresMahram : (pkg != null && pkg.isUmrah);
-        boolean reqClothesSize = pkg != null ? pkg.requiresClothesSize : (pkg != null && pkg.isUmrah);
 
         int index = additionalTravellers.size() + 2; // Traveller 2, 3...
 
@@ -546,8 +542,6 @@ public class PassengerDetailsActivity extends BaseActivity {
         holder.tvIssuingCountryValue = card.findViewById(R.id.tvIssuingCountryValue);
 
         holder.layoutExtraSection = card.findViewById(R.id.layoutExtraSection);
-        holder.layoutClothesSizeSection = card.findViewById(R.id.layoutClothesSizeSection);
-        holder.inputClothesSize = card.findViewById(R.id.inputClothesSize);
 
         holder.layoutMahramSection = card.findViewById(R.id.layoutMahramSection);
         holder.inputMahram = card.findViewById(R.id.inputMahram);
@@ -606,13 +600,6 @@ public class PassengerDetailsActivity extends BaseActivity {
             holder.layoutPassportSection.setVisibility(View.GONE);
         }
 
-        if (!reqClothesSize && holder.layoutClothesSizeSection != null) {
-            holder.layoutClothesSizeSection.setVisibility(View.GONE);
-        } else if (holder.inputClothesSize != null) {
-            holder.inputClothesSize.setInputType(InputType.TYPE_NULL);
-            holder.inputClothesSize.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, new String[]{"S", "M", "L", "XL", "2XL", "3XL", "4XL", "Custom"}));
-            holder.inputClothesSize.setOnClickListener(v -> holder.inputClothesSize.showDropDown());
-        }
 
         if (!reqMahram && holder.layoutMahramSection != null) {
             holder.layoutMahramSection.setVisibility(View.GONE);
@@ -621,7 +608,7 @@ public class PassengerDetailsActivity extends BaseActivity {
             holder.inputMahram.setOnClickListener(v -> holder.inputMahram.showDropDown());
         }
 
-        if (!reqClothesSize && !reqMahram && holder.layoutExtraSection != null) {
+        if (!reqMahram && holder.layoutExtraSection != null) {
             holder.layoutExtraSection.setVisibility(View.GONE);
         }
 
@@ -1200,8 +1187,6 @@ public class PassengerDetailsActivity extends BaseActivity {
         in.dateOfBirth = holder.selectedDob;
         in.gender = holder.selectedGender;
         in.nationality = holder.selectedNationality;
-        in.clothesSize = (holder.inputClothesSize != null && holder.layoutClothesSizeSection != null && holder.layoutClothesSizeSection.getVisibility() == View.VISIBLE)
-                ? holder.inputClothesSize.getText().toString().trim() : null;
         in.mahramText = (holder.inputMahram != null && holder.layoutMahramSection != null && holder.layoutMahramSection.getVisibility() == View.VISIBLE)
                 ? holder.inputMahram.getText().toString().trim() : null;
         in.relationship = (holder.inputRelationship != null && holder.layoutMahramSection != null && holder.layoutMahramSection.getVisibility() == View.VISIBLE)

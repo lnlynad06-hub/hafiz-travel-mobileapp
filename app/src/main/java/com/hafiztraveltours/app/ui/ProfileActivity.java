@@ -876,8 +876,6 @@ public class ProfileActivity extends BaseActivity {
                 ? currentUser.dateOfBirth : exVal(ex, "date_of_birth", "");
         String currentNationality = (currentUser != null && currentUser.nationality != null && !currentUser.nationality.isEmpty())
                 ? currentUser.nationality : exVal(ex, "nationality", "Malaysian");
-        String currentClothesSize = (currentUser != null && currentUser.clothesSize != null && !currentUser.clothesSize.isEmpty())
-                ? currentUser.clothesSize : exVal(ex, "clothes_size", "");
 
         String currentEmergName = exVal(ex, "emergency_name", "");
         String currentEmergPhone = exVal(ex, "emergency_phone", "");

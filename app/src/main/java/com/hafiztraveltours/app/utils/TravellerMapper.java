@@ -64,7 +64,6 @@ public final class TravellerMapper {
         lead.dateOfBirth = user != null ? orEmpty(user.dateOfBirth) : "";
         lead.nationality = (user != null && user.nationality != null)
                 ? user.nationality : defaultNationality(context);
-        lead.clothesSize = user != null ? orEmpty(user.clothesSize) : "";
         lead.icPassportNumber = !lead.passportNumber.isEmpty() ? lead.passportNumber : lead.icNumber;
         lead.phoneNumber = (user != null && user.phone != null) ? user.phone : orEmpty(phoneFallback);
         lead.email = (user != null && user.email != null) ? user.email : orEmpty(emailFallback);
@@ -93,7 +92,6 @@ public final class TravellerMapper {
         tr.gender = p.gender;
         tr.dateOfBirth = p.dateOfBirth;
         tr.nationality = p.nationality;
-        tr.clothesSize = p.clothesSize;
         tr.mahramIndex = p.mahramIndex;
         tr.relationship = p.relationship;
         tr.icPassport = p.icPassportNumber;

@@ -106,21 +106,6 @@
             android:textSize="10.5sp"
             tools:text="24 Jul 1995" />
 
-        <!-- Clothes Size Chip -->
-        <TextView
-            android:id="@+id/tvSummaryClothesChip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:background="@drawable/bg_chip_minimal"
-            android:paddingHorizontal="7dp"
-            android:paddingVertical="2dp"
-            android:textColor="@color/text_dark"
-            android:textSize="10.5sp"
-            android:visibility="gone"
-            tools:text="Saiz: XL"
-            tools:visibility="visible" />
-
     </LinearLayout>
 
 </LinearLayout>

@@ -234,7 +234,6 @@ public class BookingSummaryActivity extends BaseActivity {
             TextView tvRole = card.findViewById(R.id.tvSummaryPassengerRole);
             TextView tvGenderChip = card.findViewById(R.id.tvSummaryGenderChip);
             TextView tvDobChip = card.findViewById(R.id.tvSummaryDobChip);
-            TextView tvClothesChip = card.findViewById(R.id.tvSummaryClothesChip);
 
             String displayName = (p.fullName != null && !p.fullName.trim().isEmpty())
                     ? p.fullName.trim()
@@ -283,13 +282,6 @@ public class BookingSummaryActivity extends BaseActivity {
                 tvDobChip.setVisibility(View.GONE);
             }
 
-            // Clothes Size Chip
-            if (p.clothesSize != null && !p.clothesSize.trim().isEmpty()) {
-                tvClothesChip.setText(getString(R.string.clothes_size_format, p.clothesSize));
-                tvClothesChip.setVisibility(View.VISIBLE);
-            } else {
-                tvClothesChip.setVisibility(View.GONE);
-            }
 
             containerPassengers.addView(card);
         }

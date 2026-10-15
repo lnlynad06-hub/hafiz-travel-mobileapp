@@ -984,7 +984,6 @@
     <string name="passenger_missing_passport_validity">Pasport tamat luput / kurang %1$d bulan sah</string>
     <string name="passenger_missing_passport_doc">Salinan Dokumen Pasport</string>
     <string name="passenger_missing_ic_doc">Salinan Dokumen MyKad / IC</string>
-    <string name="passenger_missing_clothes_size">Saiz Baju / Abaya</string>
     <string name="passenger_traveller_title_format">Jemaah %1$d</string>
     <string name="passenger_delete">Padam</string>
     <string name="passenger_sub_personal_info">Maklumat Peribadi</string>
@@ -1005,8 +1004,6 @@
     <string name="passenger_field_passport_hint">Contoh: A98765432</string>
     <string name="passenger_field_passport_expiry_label">Tarikh Luput Pasport *</string>
     <string name="passenger_field_issuing_country_label">Negara Pengeluar</string>
-    <string name="passenger_field_clothes_size_label">Saiz Baju / Abaya</string>
-    <string name="passenger_field_clothes_size_hint">Pilih Saiz</string>
     <string name="passenger_field_mahram_label">Mahram (Rujukan Jemaah)</string>
     <string name="passenger_field_mahram_hint">Pilih Jemaah Mahram</string>
     <string name="passenger_field_mahram_relation_label">Hubungan Mahram</string>
@@ -1102,7 +1099,6 @@
     <string name="config_apply">GUNA</string>
     <string name="config_total_label">Jumlah Anggaran Kos</string>
     <string name="config_continue">TERUSKAN KE BUTIRAN JEMAAH</string>
-    <string name="clothes_size_format">Saiz: %1$s</string>
     <string name="content_desc_close">Tutup</string>
     <string name="content_desc_refresh">Muat semula lokasi</string>
     <string name="content_desc_share">Kongsi pakej</string>

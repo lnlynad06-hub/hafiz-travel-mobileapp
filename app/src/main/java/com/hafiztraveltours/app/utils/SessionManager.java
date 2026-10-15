@@ -218,7 +218,7 @@ public class SessionManager {
         java.util.Map<String, String> out = new java.util.HashMap<>();
         String[] keys = {
                 "name", "ic_no", "passport_no", "passport_expiry", "issuing_country",
-                "gender", "date_of_birth", "nationality", "clothes_size",
+                "gender", "date_of_birth", "nationality",
                 "address", "address_line_1", "address_line_2", "postcode", "city",
                 "state", "country", "emergency_name", "emergency_phone",
                 "mahram_name", "mahram_relationship", "has_vaccine_cert"

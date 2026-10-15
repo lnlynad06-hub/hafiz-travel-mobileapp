@@ -738,39 +738,6 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <!-- Clothes / Abaya Size -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layoutClothesSizeSection"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:hint="@string/passenger_field_clothes_size_label"
-                app:boxBackgroundMode="outline"
-                app:boxCornerRadiusTopStart="14dp"
-                app:boxCornerRadiusTopEnd="14dp"
-                app:boxCornerRadiusBottomStart="14dp"
-                app:boxCornerRadiusBottomEnd="14dp"
-                app:boxStrokeColor="@color/box_stroke_selector"
-                app:boxBackgroundColor="@color/box_bg_selector"
-                app:boxStrokeWidth="1dp"
-                app:boxStrokeWidthFocused="1.5dp"
-                app:hintEnabled="true"
-                app:startIconDrawable="@drawable/ic_packing_luggage"
-                app:startIconTint="@color/pink_dark">
-
-                <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                    android:id="@+id/inputClothesSize"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:paddingStart="4dp"
-                    android:paddingEnd="12dp"
-                    android:inputType="none"
-                    android:textColor="@color/input_text"
-                    android:textColorHint="@color/input_hint"
-                    android:textSize="14sp" />
-            </com.google.android.material.textfield.TextInputLayout>
-
             <!-- Mahram Section -->
             <LinearLayout
                 android:id="@+id/layoutMahramSection"

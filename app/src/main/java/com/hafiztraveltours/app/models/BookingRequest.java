@@ -67,7 +67,6 @@ public class BookingRequest implements Serializable {
         public String gender = "";
         public String dateOfBirth = "";
         public String nationality = "Malaysian";
-        public String clothesSize = "";
         public Integer mahramIndex = null;
         public String relationship = "";
         public String icPassportNumber = "";

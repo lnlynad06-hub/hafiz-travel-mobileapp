@@ -85,9 +85,6 @@ public class CreateBookingRequest {
         @SerializedName("nationality")
         public String nationality;
 
-        @SerializedName("clothes_size")
-        public String clothesSize;
-
         @SerializedName("mahram_index")
         public Integer mahramIndex;
 

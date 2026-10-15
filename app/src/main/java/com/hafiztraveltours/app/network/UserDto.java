@@ -64,9 +64,6 @@ public class UserDto {
     @SerializedName("nationality")
     public String nationality;
 
-    @SerializedName("clothes_size")
-    public String clothesSize;
-
     @SerializedName("avatar")
     public String avatar;
 

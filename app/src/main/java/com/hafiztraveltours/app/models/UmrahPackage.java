@@ -297,9 +297,6 @@ public class UmrahPackage implements java.io.Serializable {
     @SerializedName("requires_mahram")
     public Boolean requiresMahram;
 
-    @SerializedName("requires_clothes_size")
-    public Boolean requiresClothesSize;
-
     @SerializedName("passport_validity_months")
     public Integer passportValidityMonths;
 

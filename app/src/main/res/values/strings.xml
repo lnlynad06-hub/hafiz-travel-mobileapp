@@ -1097,7 +1097,6 @@
     <string name="passenger_missing_passport_validity">Passport expired or less than %1$d months validity</string>
     <string name="passenger_missing_passport_doc">Passport Copy Document</string>
     <string name="passenger_missing_ic_doc">MyKad / IC Copy Document</string>
-    <string name="passenger_missing_clothes_size">Clothing / Abaya Size</string>
     <string name="passenger_traveller_title_format">Traveller %1$d</string>
     <string name="passenger_delete">Delete</string>
     <string name="passenger_sub_personal_info">Personal Information</string>
@@ -1118,8 +1117,6 @@
     <string name="passenger_field_passport_hint">e.g. A98765432</string>
     <string name="passenger_field_passport_expiry_label">Passport Expiry Date *</string>
     <string name="passenger_field_issuing_country_label">Issuing Country</string>
-    <string name="passenger_field_clothes_size_label">Clothing / Abaya Size</string>
-    <string name="passenger_field_clothes_size_hint">Select Size</string>
     <string name="passenger_field_mahram_label">Mahram (Reference Traveller)</string>
     <string name="passenger_field_mahram_hint">Select Mahram Traveller</string>
     <string name="passenger_field_mahram_relation_label">Mahram Relationship</string>
@@ -1214,7 +1211,6 @@
     <string name="config_apply">APPLY</string>
     <string name="config_total_label">Estimated Total Cost</string>
     <string name="config_continue">CONTINUE TO TRAVELLER DETAILS</string>
-    <string name="clothes_size_format">Size: %1$s</string>
     <string name="content_desc_close">Close</string>
     <string name="content_desc_refresh">Refresh location</string>
     <string name="content_desc_share">Share package</string>

@@ -59,7 +59,6 @@ public class PackageDetail implements java.io.Serializable {
     public boolean requiresPassport = true;
     public boolean requiresIc = true;
     public boolean requiresMahram = false;
-    public boolean requiresClothesSize = false;
     public int passportValidityMonths = 6;
     public boolean isUmrah; // set from UmrahPackage.isUmrah() during parsing
 
@@ -237,7 +236,6 @@ public class PackageDetail implements java.io.Serializable {
         if (pkg.requiresPassport != null) d.requiresPassport = pkg.requiresPassport;
         if (pkg.requiresIc != null) d.requiresIc = pkg.requiresIc;
         if (pkg.requiresMahram != null) d.requiresMahram = pkg.requiresMahram;
-        if (pkg.requiresClothesSize != null) d.requiresClothesSize = pkg.requiresClothesSize;
         if (pkg.passportValidityMonths != null && pkg.passportValidityMonths > 0) {
             d.passportValidityMonths = pkg.passportValidityMonths;
         }

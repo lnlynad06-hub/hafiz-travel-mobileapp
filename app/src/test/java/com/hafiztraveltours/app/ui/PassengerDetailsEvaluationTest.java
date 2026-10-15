@@ -41,7 +41,6 @@ public class PassengerDetailsEvaluationTest {
         umrahPackage.isUmrah = true;
         umrahPackage.requiresPassport = true;
         umrahPackage.requiresIc = true;
-        umrahPackage.requiresClothesSize = true;
         umrahPackage.passportValidityMonths = 6;
 
         // Future passport expiry date > 6 months
@@ -55,7 +54,6 @@ public class PassengerDetailsEvaluationTest {
         completeUser.icNumber = "920101-14-1234";
         completeUser.passportNumber = "A99887766";
         completeUser.passportExpiryDate = validExpiry;
-        completeUser.clothesSize = "L";
 
         completeDocs = new ArrayList<>();
         DocumentDto passportDoc = new DocumentDto();
@@ -84,7 +82,7 @@ public class PassengerDetailsEvaluationTest {
     public void testCase1_profileIncomplete_and_docsIncomplete_cannotBook() {
         UserDto incompleteUser = new UserDto();
         incompleteUser.name = "Muhammad Hafiz";
-        // Missing IC, Passport Number, Clothes Size
+        // Missing IC, Passport Number
         List<DocumentDto> emptyDocs = new ArrayList<>();
 
         PassengerDetailsViewModel.LeadEvaluation eval =
@@ -104,7 +102,6 @@ public class PassengerDetailsEvaluationTest {
         UserDto incompleteUser = new UserDto();
         incompleteUser.name = "Muhammad Hafiz";
         // Missing IC, Passport Number
-        incompleteUser.clothesSize = "L";
 
         PassengerDetailsViewModel.LeadEvaluation eval =
                 PassengerDetailsViewModel.checkLeadCompleteness(umrahPackage, incompleteUser, completeDocs);

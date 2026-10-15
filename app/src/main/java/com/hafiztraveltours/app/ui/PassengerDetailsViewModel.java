@@ -46,8 +46,7 @@ public class PassengerDetailsViewModel extends AndroidViewModel {
         PASSPORT_EXPIRY,
         PASSPORT_VALIDITY,
         PASSPORT_DOC,
-        IC_DOC,
-        CLOTHES_SIZE
+        IC_DOC
     }
 
     public static final class MissingField {
@@ -114,7 +113,6 @@ public class PassengerDetailsViewModel extends AndroidViewModel {
         public String dateOfBirth = "";
         public String gender = "";
         public String nationality = "";
-        public String clothesSize = "";
         public String mahramText = "";
         public String relationship = "";
         public Boolean withBed = null;
@@ -266,7 +264,6 @@ public class PassengerDetailsViewModel extends AndroidViewModel {
     public static LeadEvaluation checkLeadCompleteness(PackageDetail pkg, UserDto user, List<DocumentDto> docs) {
         boolean reqPassport = pkg != null ? pkg.requiresPassport : true;
         boolean reqIc = pkg != null ? pkg.requiresIc : true;
-        boolean reqClothesSize = pkg != null ? pkg.requiresClothesSize : (pkg != null && pkg.isUmrah);
         int reqValidityMonths = pkg != null && pkg.passportValidityMonths > 0 ? pkg.passportValidityMonths : 6;
 
         if (user == null) user = new UserDto();
@@ -283,9 +280,6 @@ public class PassengerDetailsViewModel extends AndroidViewModel {
             if (isBlank(user.passportNumber)) {
                 missing.add(new MissingField(MissingKind.PASSPORT, 0));
             }
-        }
-        if (reqClothesSize && isBlank(user.clothesSize)) {
-            missing.add(new MissingField(MissingKind.CLOTHES_SIZE, 0));
         }
 
         boolean hasPassport = hasDocWithFile(documents, "passport");
@@ -385,7 +379,6 @@ public class PassengerDetailsViewModel extends AndroidViewModel {
         p.gender = in.gender != null ? in.gender.trim() : "";
         p.nationality = in.nationality != null ? in.nationality.trim()
                 : TravellerMapper.defaultNationality(getApplication());
-        p.clothesSize = in.clothesSize != null ? in.clothesSize.trim() : "";
         p.icPassportNumber = (!p.passportNumber.isEmpty()) ? p.passportNumber : p.icNumber;
         p.mahramIndex = parseMahramIndex(in.mahramText);
         p.relationship = in.relationship != null ? in.relationship.trim() : "";
