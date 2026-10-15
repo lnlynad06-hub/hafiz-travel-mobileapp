@@ -153,4 +153,22 @@ public class BookingEligibilityAndCancellationTest {
         assertNull(dto.refundStatus);
         assertNull(dto.refundRequestedAmount);
     }
+
+    @Test
+    public void testRoomAssignmentPendingVerification() {
+        String json = "{\"booking_no\":\"BKG-101\",\"room_assignment_status\":\"pending_verification\",\"room_assignment_label\":\"Room Assignment: Pending Verification\"}";
+        BookingDto dto = gson.fromJson(json, BookingDto.class);
+        assertNotNull(dto);
+        assertFalse(dto.isRoomAssignmentConfirmed());
+        assertEquals("Room Assignment: Pending Verification", dto.getRoomAssignmentDisplayLabel());
+    }
+
+    @Test
+    public void testRoomAssignmentConfirmed() {
+        String json = "{\"booking_no\":\"BKG-102\",\"room_assignment_status\":\"confirmed\",\"room_assignment_label\":\"Room Assignment: Confirmed\"}";
+        BookingDto dto = gson.fromJson(json, BookingDto.class);
+        assertNotNull(dto);
+        assertTrue(dto.isRoomAssignmentConfirmed());
+        assertEquals("Room Assignment: Confirmed", dto.getRoomAssignmentDisplayLabel());
+    }
 }

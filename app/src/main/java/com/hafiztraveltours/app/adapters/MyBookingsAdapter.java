@@ -176,6 +176,19 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
             holder.txtTripMeta.setText(meta.toString());
         }
 
+        // 3b. Room Assignment Status Badge
+        if (holder.txtRoomAssignmentStatus != null) {
+            String label = booking.getRoomAssignmentDisplayLabel();
+            holder.txtRoomAssignmentStatus.setText(label);
+            if (booking.isRoomAssignmentConfirmed()) {
+                holder.txtRoomAssignmentStatus.setTextColor(Color.parseColor("#059669"));
+                holder.txtRoomAssignmentStatus.setBackgroundResource(R.drawable.bg_pill_success);
+            } else {
+                holder.txtRoomAssignmentStatus.setTextColor(Color.parseColor("#D97706"));
+                holder.txtRoomAssignmentStatus.setBackgroundResource(R.drawable.bg_pill_accent);
+            }
+        }
+
         // 4b. Cancellation / Refund Notice
         if (holder.layoutCancellationNotice != null) {
             if (booking.isPendingCancellation()) {
@@ -475,6 +488,7 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
 
         TextView txtPackageName;
         TextView txtTripMeta;
+        TextView txtRoomAssignmentStatus;
 
         View layoutCancellationNotice;
         ImageView ivCancellationNoticeIcon;
@@ -498,6 +512,7 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
 
             txtPackageName = itemView.findViewById(R.id.itemBookingPackageName);
             txtTripMeta = itemView.findViewById(R.id.itemBookingTripMeta);
+            txtRoomAssignmentStatus = itemView.findViewById(R.id.itemRoomAssignmentStatus);
 
             layoutCancellationNotice = itemView.findViewById(R.id.layoutCancellationNotice);
             ivCancellationNoticeIcon = itemView.findViewById(R.id.ivCancellationNoticeIcon);

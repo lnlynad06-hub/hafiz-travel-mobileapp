@@ -72,6 +72,20 @@
             android:textSize="12.5sp"
             tools:text="07 Nov 2026 • 12 days 11 nights • 2 pax" />
 
+        <!-- 3b. Room Assignment Status Badge -->
+        <TextView
+            android:id="@+id/itemRoomAssignmentStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/bg_pill_accent"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="4dp"
+            android:textColor="#D97706"
+            android:textSize="11.5sp"
+            android:textStyle="bold"
+            tools:text="Room Assignment: Pending Verification" />
+
         <!-- Cancellation & Refund Status Notice Card -->
         <LinearLayout
             android:id="@+id/layoutCancellationNotice"

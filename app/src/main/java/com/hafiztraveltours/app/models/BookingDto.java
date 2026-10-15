@@ -105,8 +105,25 @@ public class BookingDto {
     @SerializedName("refund_approved_amount")
     public Double refundApprovedAmount;
 
+    @SerializedName("room_assignment_status")
+    public String roomAssignmentStatus;
+
+    @SerializedName("room_assignment_label")
+    public String roomAssignmentLabel;
+
     @SerializedName("created_at")
     public String createdAt;
+
+    public boolean isRoomAssignmentConfirmed() {
+        return "confirmed".equalsIgnoreCase(roomAssignmentStatus);
+    }
+
+    public String getRoomAssignmentDisplayLabel() {
+        if (roomAssignmentLabel != null && !roomAssignmentLabel.trim().isEmpty()) {
+            return roomAssignmentLabel;
+        }
+        return isRoomAssignmentConfirmed() ? "Room Assignment: Confirmed" : "Room Assignment: Pending Verification";
+    }
 
     public boolean isTourPackage() {
         if (isTour) return true;

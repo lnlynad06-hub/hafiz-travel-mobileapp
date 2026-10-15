@@ -91,11 +91,32 @@ public class BookingDetailDto extends BookingDto {
         @SerializedName("name")
         public String name;
 
+        @SerializedName("gender")
+        public String gender;
+
+        @SerializedName("relationship")
+        public String relationship;
+
         @SerializedName("identification_no")
         public String identificationNo;
 
         @SerializedName("passport_no")
         public String passportNo;
+
+        @SerializedName("document_status")
+        public String documentStatus;
+
+        @SerializedName("document_status_label")
+        public String documentStatusLabel;
+
+        @SerializedName("is_verified")
+        public boolean isVerified;
+
+        @SerializedName("room_assignment_status")
+        public String roomAssignmentStatus;
+
+        @SerializedName("room_assignment_label")
+        public String roomAssignmentLabel;
 
         @SerializedName("role")
         public String role;
