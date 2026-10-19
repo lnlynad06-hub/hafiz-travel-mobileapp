@@ -335,8 +335,11 @@
 
     <!-- Checklist - picker & titles -->
     <string name="checklist_picker_title">Select Checklist</string>
+    <string name="checklist_picker_subtitle">Please select your travel checklist type</string>
     <string name="checklist_option_umrah">Umrah Checklist</string>
+    <string name="checklist_option_umrah_sub">Ihram essentials, worship, &amp; Umrah preparation</string>
     <string name="checklist_option_tour">Tour Checklist</string>
+    <string name="checklist_option_tour_sub">Clothing, passport, luggage &amp; tour travel</string>
     <string name="checklist_dialog_title_umrah">Umrah Preparation Checklist</string>
     <string name="checklist_dialog_title_tour">Tour Preparation Checklist</string>
     <string name="dialog_close">Close</string>
@@ -373,9 +376,9 @@
     <string name="checklist_umrah_men_9">Small towel</string>
     <string name="checklist_umrah_men_10">Shoe bag / plastic bag</string>
     <string name="checklist_umrah_men_11">Wudu\' spray bottle</string>
-    <string name="checklist_umrah_men_12">Small scissors / shaving tool (place in checked baggage, not hand carry)</string>
+    <string name="checklist_umrah_men_12">Scissors / razor / nail clipper (pack in luggage, not hand carry)</string>
     <string name="checklist_umrah_men_13">Small prayer mat</string>
-    <string name="checklist_umrah_men_14">Nose filter (mask)</string>
+    <string name="checklist_umrah_men_14">Face mask / nose filter</string>
 
     <!-- Checklist Umrah - Women -->
     <string name="checklist_umrah_women_1">Telekung (prayer garment)</string>
@@ -431,9 +434,10 @@
     <string name="checklist_umrah_finance_3">Activate debit/credit card for overseas use</string>
 
     <!-- Checklist Umrah - General -->
-    <string name="checklist_umrah_general_1">Toiletries</string>
+    <string name="checklist_umrah_general_1">Toiletries &amp; personal hygiene items</string>
     <string name="checklist_umrah_general_2">Extra towel (Madinah hotels sometimes run short on towels)</string>
-    <string name="checklist_umrah_general_3">Other reasonable items</string>
+    <string name="checklist_umrah_general_3">Other reasonable items deemed necessary</string>
+    <string name="checklist_umrah_purchasable_note">Note: Some essentials can also be purchased upon arrival in Makkah / Madinah.</string>
 
     <!-- Checklist Tour - Documents -->
     <string name="checklist_tour_docs_1">Passport valid 6 months or more</string>

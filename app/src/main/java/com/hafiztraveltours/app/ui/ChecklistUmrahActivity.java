@@ -71,6 +71,9 @@ public class ChecklistUmrahActivity extends BaseActivity {
         Section(int titleResId) { this.titleResId = titleResId; }
     }
 
+    public static final String EXTRA_IS_TOUR = "IS_TOUR";
+    public static final String EXTRA_IS_PROCEDURE = "IS_PROCEDURE";
+
     private LinearLayout checklistContainer;
     private TextView progressText;
     private TextView titleView;
@@ -80,19 +83,28 @@ public class ChecklistUmrahActivity extends BaseActivity {
     private int totalItems = 0;
     private int checkedCount = 0;
     private boolean isTour = false;
+    private boolean isProcedure = false;
 
-    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checklist_umrah);
 
-        prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        isTour = getIntent().getBooleanExtra(EXTRA_IS_TOUR, false);
+        isProcedure = getIntent().getBooleanExtra(EXTRA_IS_PROCEDURE, false);
+
+        String prefsName;
+        if (isProcedure) {
+            prefsName = "checklist_procedure_prefs";
+        } else if (isTour) {
+            prefsName = "checklist_tour_prefs";
+        } else {
+            prefsName = "checklist_umrah_packing_prefs";
+        }
+        prefs = getSharedPreferences(prefsName, Context.MODE_PRIVATE);
 
         findViewById(R.id.checklistBackButton).setOnClickListener(v -> finish());
         findViewById(R.id.checklistResetButton).setOnClickListener(v -> resetChecklist());
-
-        isTour = getIntent().getBooleanExtra("IS_TOUR", false);
 
         titleView = findViewById(R.id.checklistTitleView);
         progressBar = findViewById(R.id.checklistProgressBar);
@@ -100,10 +112,16 @@ public class ChecklistUmrahActivity extends BaseActivity {
         progressText = findViewById(R.id.checklistProgressText);
 
         if (titleView != null) {
-            titleView.setText(isTour ? getString(R.string.checklist_option_tour) : getString(R.string.checklist_option_umrah));
+            if (isProcedure) {
+                titleView.setText(getString(R.string.checklist_umrah_title));
+            } else if (isTour) {
+                titleView.setText(getString(R.string.checklist_option_tour));
+            } else {
+                titleView.setText(getString(R.string.checklist_option_umrah));
+            }
         }
 
-        List<Section> sections = isTour ? buildTourSections() : buildSections();
+        List<Section> sections = loadSections();
         renderSections(sections);
         updateProgressText();
     }
@@ -113,8 +131,18 @@ public class ChecklistUmrahActivity extends BaseActivity {
         checklistContainer.removeAllViews();
         totalItems = 0;
         checkedCount = 0;
-        renderSections(isTour ? buildTourSections() : buildSections());
+        renderSections(loadSections());
         updateProgressText();
+    }
+
+    private List<Section> loadSections() {
+        if (isProcedure) {
+            return buildProcedureSections();
+        } else if (isTour) {
+            return buildTourSections();
+        } else {
+            return buildUmrahPackingSections();
+        }
     }
 
     private void updateProgressText() {
@@ -131,7 +159,105 @@ public class ChecklistUmrahActivity extends BaseActivity {
     // Data
     // ---------------------------------------------------------------------
 
-    private List<Section> buildSections() {
+    private List<Section> buildUmrahPackingSections() {
+        List<Section> sections = new ArrayList<>();
+
+        Section s1 = new Section(R.string.checklist_section_travel_docs);
+        item(s1, R.string.checklist_umrah_docs_1);
+        item(s1, R.string.checklist_umrah_docs_2);
+        item(s1, R.string.checklist_umrah_docs_3);
+        item(s1, R.string.checklist_umrah_docs_4);
+        item(s1, R.string.checklist_umrah_docs_5);
+        item(s1, R.string.checklist_umrah_docs_6);
+        sections.add(s1);
+
+        Section s2 = new Section(R.string.checklist_section_men_clothing);
+        item(s2, R.string.checklist_umrah_men_1);
+        item(s2, R.string.checklist_umrah_men_2);
+        item(s2, R.string.checklist_umrah_men_3);
+        item(s2, R.string.checklist_umrah_men_4);
+        item(s2, R.string.checklist_umrah_men_5);
+        item(s2, R.string.checklist_umrah_men_6);
+        item(s2, R.string.checklist_umrah_men_7);
+        item(s2, R.string.checklist_umrah_men_8);
+        item(s2, R.string.checklist_umrah_men_9);
+        item(s2, R.string.checklist_umrah_men_10);
+        item(s2, R.string.checklist_umrah_men_11);
+        item(s2, R.string.checklist_umrah_men_12);
+        item(s2, R.string.checklist_umrah_men_13);
+        item(s2, R.string.checklist_umrah_men_14);
+        sections.add(s2);
+
+        Section s3 = new Section(R.string.checklist_section_women_clothing);
+        item(s3, R.string.checklist_umrah_women_1);
+        item(s3, R.string.checklist_umrah_women_2);
+        item(s3, R.string.checklist_umrah_women_3);
+        item(s3, R.string.checklist_umrah_women_4);
+        item(s3, R.string.checklist_umrah_women_5);
+        item(s3, R.string.checklist_umrah_women_6);
+        item(s3, R.string.checklist_umrah_women_7);
+        item(s3, R.string.checklist_umrah_women_8);
+        item(s3, R.string.checklist_umrah_women_9);
+        item(s3, R.string.checklist_umrah_women_10);
+        item(s3, R.string.checklist_umrah_women_11);
+        item(s3, R.string.checklist_umrah_women_12);
+        item(s3, R.string.checklist_umrah_women_13);
+        sections.add(s3);
+
+        Section s4 = new Section(R.string.checklist_section_medicine);
+        item(s4, R.string.checklist_umrah_med_1);
+        item(s4, R.string.checklist_umrah_med_2);
+        item(s4, R.string.checklist_umrah_med_3);
+        item(s4, R.string.checklist_umrah_med_4);
+        item(s4, R.string.checklist_umrah_med_5);
+        item(s4, R.string.checklist_umrah_med_6);
+        item(s4, R.string.checklist_umrah_med_7);
+        item(s4, R.string.checklist_umrah_med_8);
+        item(s4, R.string.checklist_umrah_med_9);
+        item(s4, R.string.checklist_umrah_med_10);
+        item(s4, R.string.checklist_umrah_med_11);
+        item(s4, R.string.checklist_umrah_med_12);
+        item(s4, R.string.checklist_umrah_med_13);
+        sections.add(s4);
+
+        Section s5 = new Section(R.string.checklist_section_electronics);
+        item(s5, R.string.checklist_umrah_elec_1);
+        item(s5, R.string.checklist_umrah_elec_2);
+        item(s5, R.string.checklist_umrah_elec_3);
+        item(s5, R.string.checklist_umrah_elec_4);
+        item(s5, R.string.checklist_umrah_elec_5);
+        sections.add(s5);
+
+        Section s6 = new Section(R.string.checklist_section_women_accessories);
+        item(s6, R.string.checklist_umrah_acc_1);
+        item(s6, R.string.checklist_umrah_acc_2);
+        item(s6, R.string.checklist_umrah_acc_3);
+        sections.add(s6);
+
+        Section s7 = new Section(R.string.checklist_section_food);
+        item(s7, R.string.checklist_umrah_food_1);
+        item(s7, R.string.checklist_umrah_food_2);
+        item(s7, R.string.checklist_umrah_food_3);
+        item(s7, R.string.checklist_umrah_food_4);
+        sections.add(s7);
+
+        Section s8 = new Section(R.string.checklist_section_finance);
+        item(s8, R.string.checklist_umrah_finance_1);
+        item(s8, R.string.checklist_umrah_finance_2);
+        item(s8, R.string.checklist_umrah_finance_3);
+        sections.add(s8);
+
+        Section s9 = new Section(R.string.checklist_section_general);
+        note(s9, R.string.checklist_umrah_purchasable_note);
+        item(s9, R.string.checklist_umrah_general_1);
+        item(s9, R.string.checklist_umrah_general_2);
+        item(s9, R.string.checklist_umrah_general_3);
+        sections.add(s9);
+
+        return sections;
+    }
+
+    private List<Section> buildProcedureSections() {
         List<Section> sections = new ArrayList<>();
 
         Section s1 = new Section(R.string.checklist_sec1_title);

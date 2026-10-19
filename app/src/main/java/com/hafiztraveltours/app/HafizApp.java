@@ -49,6 +49,8 @@ public class HafizApp extends Application {
         instance = this;
         // Fail-closed integrity: a broken KeyStore invalidates any stored session.
         SessionManager.getInstance(this).enforceCryptoIntegrity();
+        // Initialize saved app locale
+        com.hafiztraveltours.app.utils.LocaleHelper.applySavedLocale(this);
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityResumed(Activity activity) {

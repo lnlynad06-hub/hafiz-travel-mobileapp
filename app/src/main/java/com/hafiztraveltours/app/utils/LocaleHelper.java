@@ -133,7 +133,14 @@ public class LocaleHelper {
     /** Wraps the given context so its resources use the saved language. */
     public static Context applySavedLocale(Context context) {
         if (context == null) return null;
-        return applyLocale(context, getSavedLanguage(context));
+        String lang = getSavedLanguage(context);
+        try {
+            LocaleListCompat current = AppCompatDelegate.getApplicationLocales();
+            if (current.isEmpty() || !lang.equalsIgnoreCase(current.toLanguageTags())) {
+                AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(lang));
+            }
+        } catch (Exception ignored) {}
+        return applyLocale(context, lang);
     }
 
     public static Context applyLocale(Context context, String languageCode) {

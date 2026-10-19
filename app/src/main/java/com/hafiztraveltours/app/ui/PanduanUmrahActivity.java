@@ -133,7 +133,9 @@ public class PanduanUmrahActivity extends BaseActivity {
 
     /** Handles tap on the floating "Checklist Umrah" button - opens the checklist screen. */
     private void openChecklistUmrah() {
-        startActivity(new Intent(this, ChecklistUmrahActivity.class));
+        Intent intent = new Intent(this, ChecklistUmrahActivity.class);
+        intent.putExtra(ChecklistUmrahActivity.EXTRA_IS_PROCEDURE, true);
+        startActivity(intent);
     }
 
     /**
