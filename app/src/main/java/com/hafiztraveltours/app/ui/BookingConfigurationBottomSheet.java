@@ -1,6 +1,7 @@
 package com.hafiztraveltours.app.ui;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import android.app.AlertDialog;
 import com.bumptech.glide.Glide;
@@ -35,6 +37,8 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
 
     private PackageDetail detail;
     private int selectedRoomIndex = 0;
+    private int adultMaleCount = 1;
+    private int adultFemaleCount = 0;
     private int paxCount = 1;
     private int kidsCount = 0;
     private String selectedSeason = com.hafiztraveltours.app.utils.PackagePricingCalculator.SEASON_STANDARD;
@@ -47,10 +51,14 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
     private LinearLayout containerChildDetails;
     private LinearLayout containerCostBreakdownItems;
     private final List<BookingRequest.ChildConfig> childConfigs = new java.util.ArrayList<>();
+    private TextView txtAdultMaleCount;
+    private TextView txtAdultFemaleCount;
     private TextView txtPaxCount;
     private TextView txtKidsCount;
     private TextView txtTotalAmount;
     private TextView txtUnitPriceDetail;
+    private com.google.android.material.switchmaterial.SwitchMaterial switchConfigFamilyRoom;
+    private TextView txtConfigFamilyRoomDesc;
 
     public static BookingConfigurationBottomSheet newInstance(PackageDetail detail, int initialRoomIndex) {
         BookingConfigurationBottomSheet sheet = new BookingConfigurationBottomSheet();
@@ -120,10 +128,30 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
         containerDeparture = view.findViewById(R.id.configDepartureContainer);
         containerChildDetails = view.findViewById(R.id.containerChildDetails);
         containerCostBreakdownItems = view.findViewById(R.id.containerCostBreakdownItems);
+        txtAdultMaleCount = view.findViewById(R.id.txtAdultMaleCount);
+        txtAdultFemaleCount = view.findViewById(R.id.txtAdultFemaleCount);
         txtPaxCount = view.findViewById(R.id.txtPaxCount);
         txtKidsCount = view.findViewById(R.id.txtKidsCount);
         txtTotalAmount = view.findViewById(R.id.configTotalAmountText);
         txtUnitPriceDetail = view.findViewById(R.id.configUnitPriceDetailText);
+        switchConfigFamilyRoom = view.findViewById(R.id.switchConfigFamilyRoom);
+        txtConfigFamilyRoomDesc = view.findViewById(R.id.txtConfigFamilyRoomDesc);
+
+        if (switchConfigFamilyRoom != null) {
+            if (detail.priceOptions != null && selectedRoomIndex >= 0 && selectedRoomIndex < detail.priceOptions.size()) {
+                PackageDetail.PriceOption opt = detail.priceOptions.get(selectedRoomIndex);
+                if (opt != null && ("family_4".equals(opt.labelKey) || "family_5".equals(opt.labelKey))) {
+                    switchConfigFamilyRoom.setChecked(true);
+                }
+            }
+            updateConfigFamilyRoomUi();
+
+            switchConfigFamilyRoom.setOnCheckedChangeListener((btn, isChecked) -> {
+                com.hafiztraveltours.app.utils.HapticUtil.click(btn);
+                updateConfigFamilyRoomUi();
+                updateUi();
+            });
+        }
 
         inputPromo = view.findViewById(R.id.inputPromoCode);
         btnApplyPromo = view.findViewById(R.id.btnApplyPromo);
@@ -139,21 +167,53 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
             } catch (Exception ignored) {}
         }
 
-        view.findViewById(R.id.btnPaxDecrease).setOnClickListener(v -> {
-            com.hafiztraveltours.app.utils.HapticUtil.click(v);
-            if (paxCount > 1) {
-                paxCount--;
-                updateUi();
-            }
-        });
+        View btnMaleDec = view.findViewById(R.id.btnAdultMaleDecrease);
+        if (btnMaleDec != null) {
+            btnMaleDec.setOnClickListener(v -> {
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
+                if (adultMaleCount > 0 && (adultMaleCount + adultFemaleCount) > 1) {
+                    adultMaleCount--;
+                    paxCount = adultMaleCount + adultFemaleCount;
+                    updateUi();
+                }
+            });
+        }
 
-        view.findViewById(R.id.btnPaxIncrease).setOnClickListener(v -> {
-            com.hafiztraveltours.app.utils.HapticUtil.click(v);
-            if (paxCount < 10) {
-                paxCount++;
-                updateUi();
-            }
-        });
+        View btnMaleInc = view.findViewById(R.id.btnAdultMaleIncrease);
+        if (btnMaleInc != null) {
+            btnMaleInc.setOnClickListener(v -> {
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
+                if ((adultMaleCount + adultFemaleCount) < 20) {
+                    adultMaleCount++;
+                    paxCount = adultMaleCount + adultFemaleCount;
+                    updateUi();
+                }
+            });
+        }
+
+        View btnFemaleDec = view.findViewById(R.id.btnAdultFemaleDecrease);
+        if (btnFemaleDec != null) {
+            btnFemaleDec.setOnClickListener(v -> {
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
+                if (adultFemaleCount > 0 && (adultMaleCount + adultFemaleCount) > 1) {
+                    adultFemaleCount--;
+                    paxCount = adultMaleCount + adultFemaleCount;
+                    updateUi();
+                }
+            });
+        }
+
+        View btnFemaleInc = view.findViewById(R.id.btnAdultFemaleIncrease);
+        if (btnFemaleInc != null) {
+            btnFemaleInc.setOnClickListener(v -> {
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
+                if ((adultMaleCount + adultFemaleCount) < 20) {
+                    adultFemaleCount++;
+                    paxCount = adultMaleCount + adultFemaleCount;
+                    updateUi();
+                }
+            });
+        }
 
         View btnKidsDecrease = view.findViewById(R.id.btnKidsDecrease);
         if (btnKidsDecrease != null) {
@@ -382,6 +442,69 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
             });
 
             card.addView(dobRow);
+
+            // Child Gender Selector Row
+            LinearLayout genderContainer = new LinearLayout(requireContext());
+            genderContainer.setOrientation(LinearLayout.VERTICAL);
+            LinearLayout.LayoutParams genderParams = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            genderParams.topMargin = dp(8);
+            genderContainer.setLayoutParams(genderParams);
+
+            TextView lblGender = new TextView(requireContext());
+            lblGender.setText(getString(R.string.child_gender_label));
+            lblGender.setTextSize(11);
+            lblGender.setTypeface(null, Typeface.BOLD);
+            lblGender.setTextColor(getResources().getColor(R.color.text_dark));
+            genderContainer.addView(lblGender);
+
+            LinearLayout genderSegmentRow = new LinearLayout(requireContext());
+            genderSegmentRow.setOrientation(LinearLayout.HORIZONTAL);
+            LinearLayout.LayoutParams gSegParams = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            gSegParams.topMargin = dp(4);
+            genderSegmentRow.setLayoutParams(gSegParams);
+
+            boolean isMale = !"Female".equalsIgnoreCase(config.gender);
+
+            TextView btnMale = new TextView(requireContext());
+            btnMale.setText(getString(R.string.gender_male_symbol));
+            btnMale.setTextSize(12);
+            btnMale.setTypeface(null, Typeface.BOLD);
+            btnMale.setGravity(Gravity.CENTER);
+            btnMale.setPadding(dp(8), dp(8), dp(8), dp(8));
+            btnMale.setBackgroundResource(isMale ? R.drawable.bg_room_card_selected : R.drawable.bg_room_card_unselected);
+            btnMale.setTextColor(getResources().getColor(isMale ? R.color.brand_magenta : R.color.text_dark));
+            LinearLayout.LayoutParams mSegLp = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+            mSegLp.setMarginEnd(dp(4));
+            btnMale.setLayoutParams(mSegLp);
+            btnMale.setOnClickListener(v -> {
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
+                config.gender = "Male";
+                renderChildDetails();
+            });
+
+            TextView btnFemale = new TextView(requireContext());
+            btnFemale.setText(getString(R.string.gender_female_symbol));
+            btnFemale.setTextSize(12);
+            btnFemale.setTypeface(null, Typeface.BOLD);
+            btnFemale.setGravity(Gravity.CENTER);
+            btnFemale.setPadding(dp(8), dp(8), dp(8), dp(8));
+            btnFemale.setBackgroundResource(!isMale ? R.drawable.bg_room_card_selected : R.drawable.bg_room_card_unselected);
+            btnFemale.setTextColor(getResources().getColor(!isMale ? R.color.brand_magenta : R.color.text_dark));
+            LinearLayout.LayoutParams fSegLp = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+            fSegLp.setMarginStart(dp(4));
+            btnFemale.setLayoutParams(fSegLp);
+            btnFemale.setOnClickListener(v -> {
+                com.hafiztraveltours.app.utils.HapticUtil.click(v);
+                config.gender = "Female";
+                renderChildDetails();
+            });
+
+            genderSegmentRow.addView(btnMale);
+            genderSegmentRow.addView(btnFemale);
+            genderContainer.addView(genderSegmentRow);
+            card.addView(genderContainer);
 
             // Tour Bed Selector (Only for Tour package when child age is 2-11)
             if (!detail.isUmrah && hasDob) {
@@ -660,6 +783,12 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
             card.setOnClickListener(v -> {
                 com.hafiztraveltours.app.utils.HapticUtil.click(v);
                 selectedRoomIndex = index;
+                if ("family_4".equals(opt.labelKey) || "family_5".equals(opt.labelKey)) {
+                    if (switchConfigFamilyRoom != null) {
+                        switchConfigFamilyRoom.setChecked(true);
+                        updateConfigFamilyRoomUi();
+                    }
+                }
                 renderRoomOptions();
                 updateUi();
             });
@@ -760,6 +889,12 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
     }
 
     private void updateUi() {
+        if (txtAdultMaleCount != null) {
+            txtAdultMaleCount.setText(String.valueOf(adultMaleCount));
+        }
+        if (txtAdultFemaleCount != null) {
+            txtAdultFemaleCount.setText(String.valueOf(adultFemaleCount));
+        }
         if (txtPaxCount != null) {
             txtPaxCount.setText(String.valueOf(paxCount));
         }
@@ -1045,11 +1180,6 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
         req.roomLabel = roomLabel;
         req.roomType = (detail.priceOptions != null && selectedRoomIndex >= 0 && selectedRoomIndex < detail.priceOptions.size())
                 ? detail.priceOptions.get(selectedRoomIndex).labelKey : null;
-        int requiredFamilyPax = "family_4".equals(req.roomType) ? 4 : ("family_5".equals(req.roomType) ? 5 : 0);
-        if (requiredFamilyPax > 0 && paxCount + kidsCount != requiredFamilyPax) {
-            android.widget.Toast.makeText(requireContext(), getString(R.string.family_room_pax_required, requiredFamilyPax), android.widget.Toast.LENGTH_LONG).show();
-            return;
-        }
         req.roomPriceFormatted = roomPriceStr;
         req.unitPriceAmount = unitAmount;
         req.adultPaxCount = paxCount;
@@ -1123,11 +1253,38 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
 
         req.recalculateTotal();
 
-        Intent intent = new Intent(requireContext(), PassengerDetailsActivity.class);
-        intent.putExtra(PassengerDetailsActivity.EXTRA_BOOKING_REQUEST, req);
-        startActivity(intent);
+        req.adultPaxCount = paxCount;
+        req.adultMaleCount = adultMaleCount;
+        req.adultFemaleCount = adultFemaleCount;
+        req.kidsPaxCount = kidsCount;
+        req.childConfigs = new java.util.ArrayList<>(childConfigs);
+        req.season = detail.isUmrah ? null : selectedSeason;
+        req.packageDetail = detail;
+        req.packageCategory = detail.isUmrah ? "umrah" : "tour";
 
-        dismiss();
+        boolean isFamilySelected = switchConfigFamilyRoom != null && switchConfigFamilyRoom.isChecked();
+        if (!isFamilySelected && detail.priceOptions != null && selectedRoomIndex >= 0 && selectedRoomIndex < detail.priceOptions.size()) {
+            PackageDetail.PriceOption opt = detail.priceOptions.get(selectedRoomIndex);
+            if (opt != null && ("family_4".equals(opt.labelKey) || "family_5".equals(opt.labelKey))) {
+                isFamilySelected = true;
+            }
+        }
+        req.isFamilyRoomEnabled = isFamilySelected;
+
+        Intent intent = new Intent(requireContext(), RoomArrangementActivity.class);
+        intent.putExtra(RoomArrangementActivity.EXTRA_BOOKING_REQUEST, req);
+        startActivity(intent);
+    }
+
+    private void updateConfigFamilyRoomUi() {
+        if (switchConfigFamilyRoom == null || txtConfigFamilyRoomDesc == null || getContext() == null) return;
+        if (switchConfigFamilyRoom.isChecked()) {
+            txtConfigFamilyRoomDesc.setText(getString(R.string.family_room_on_desc));
+            txtConfigFamilyRoomDesc.setTextColor(Color.parseColor("#047857"));
+        } else {
+            txtConfigFamilyRoomDesc.setText(getString(R.string.family_room_off_desc));
+            txtConfigFamilyRoomDesc.setTextColor(ContextCompat.getColor(requireContext(), R.color.text_gray));
+        }
     }
 
     private int dp(int value) {

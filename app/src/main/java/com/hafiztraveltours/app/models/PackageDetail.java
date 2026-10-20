@@ -105,7 +105,6 @@ public class PackageDetail implements java.io.Serializable {
     public static class ItineraryDay implements java.io.Serializable {
         public int dayNumber;
         public String dayLabel;
-        public String dateLabel;
         public String tag;
         public String timeNote;
         public String title;
@@ -313,7 +312,6 @@ public class PackageDetail implements java.io.Serializable {
             for (UmrahPackage.ItineraryItem item : pkg.itineraries) {
                 ItineraryDay day = new ItineraryDay();
                 day.dayNumber = item.dayNumber;
-                day.dateLabel = item.dateLabel != null && !item.dateLabel.trim().isEmpty() ? item.dateLabel.trim() : null;
                 // Localized by the Activity via R.string.day_label_format /
                 // R.string.itinerary_daily (dayNumber is the locale-neutral key).
                 day.dayLabel = null;

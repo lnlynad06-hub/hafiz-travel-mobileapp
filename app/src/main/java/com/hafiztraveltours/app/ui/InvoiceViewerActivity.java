@@ -194,7 +194,7 @@ public class InvoiceViewerActivity extends BaseActivity {
 
         // Package & Room
         if (tvInvoicePackageName != null) {
-            tvInvoicePackageName.setText(req.packageName != null ? req.packageName : "Pakej Umrah");
+            tvInvoicePackageName.setText(req.packageName != null ? req.packageName : getString(R.string.category_umrah));
         }
         if (tvRoomSetup != null) {
             String room = (req.roomLabel != null && !req.roomLabel.isEmpty()) ? req.roomLabel : "Standard Room";
@@ -342,13 +342,13 @@ public class InvoiceViewerActivity extends BaseActivity {
                 tvInvoiceCustomerAddress.setText(detail.customerInfo.address);
             }
             if (tvInvoiceCustomerPhone != null && detail.customerInfo.mobileNumber != null) {
-                tvInvoiceCustomerPhone.setText("Telefon: " + detail.customerInfo.mobileNumber);
+                tvInvoiceCustomerPhone.setText(getString(R.string.customer_phone_format, detail.customerInfo.mobileNumber));
             }
         } else if (detail.travellers != null && !detail.travellers.isEmpty()) {
             BookingDetailDto.TravellerInfo lead = detail.travellers.get(0);
-            if (tvInvoiceCustomerName != null) tvInvoiceCustomerName.setText(lead.name + " (Ketua Jemaah)");
+            if (tvInvoiceCustomerName != null) tvInvoiceCustomerName.setText(lead.name + " (" + getString(R.string.lead_traveller_name_default) + ")");
             if (tvInvoiceCustomerAddress != null) tvInvoiceCustomerAddress.setText("Johor Bahru, Johor, Malaysia");
-            if (tvInvoiceCustomerPhone != null) tvInvoiceCustomerPhone.setText("Telefon: —");
+            if (tvInvoiceCustomerPhone != null) tvInvoiceCustomerPhone.setText(getString(R.string.customer_phone_format, "—"));
         }
 
         // 3. Invoice & Package Metadata
@@ -424,7 +424,7 @@ public class InvoiceViewerActivity extends BaseActivity {
                             BookingRequest.formatPrice(item.total));
                 }
             } else {
-                addLineItem(detail.packageName != null ? detail.packageName : "Pakej Pelancongan",
+                addLineItem(detail.packageName != null ? detail.packageName : getString(R.string.category_tourism),
                         String.valueOf(detail.travellers != null ? detail.travellers.size() : 1),
                         BookingRequest.formatPrice(detail.totalAmount));
             }
@@ -509,7 +509,7 @@ public class InvoiceViewerActivity extends BaseActivity {
 
         TextView tvName = new TextView(this);
         tvName.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f));
-        tvName.setText(name != null ? name : "Jemaah " + no);
+        tvName.setText(name != null ? name : getString(R.string.default_traveller_number, no));
         tvName.setTextColor(Color.parseColor("#18181B"));
         tvName.setTextSize(11.5f);
         tvName.setTypeface(null, android.graphics.Typeface.BOLD);
@@ -668,14 +668,14 @@ public class InvoiceViewerActivity extends BaseActivity {
 
     private void shareInvoiceSummary() {
         String num = tvInvoiceNumberHeader != null ? tvInvoiceNumberHeader.getText().toString() : "HQ INV-OFFICIAL";
-        String pkg = tvInvoicePackageName != null ? tvInvoicePackageName.getText().toString() : "Pakej Umrah";
+        String pkg = tvInvoicePackageName != null ? tvInvoicePackageName.getText().toString() : getString(R.string.category_umrah);
         String total = tvInvoiceGrandTotal != null ? tvInvoiceGrandTotal.getText().toString() : "RM 0";
         String bal = tvInvoiceBalanceDue != null ? tvInvoiceBalanceDue.getText().toString() : "RM 0";
 
         String shareText = "📄 *" + getString(R.string.invoice_title_official).toUpperCase(Locale.ROOT) + "*\n" +
                 "-----------------------------------\n" +
                 getString(R.string.invoice_meta_no) + ": " + num + "\n" +
-                "Pakej: " + pkg + "\n" +
+                getString(R.string.label_package) + ": " + pkg + "\n" +
                 getString(R.string.invoice_grand_total_label) + " " + total + "\n" +
                 getString(R.string.invoice_balance_due_label) + " " + bal + "\n" +
                 "-----------------------------------\n" +

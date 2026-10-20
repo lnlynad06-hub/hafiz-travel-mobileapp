@@ -54,8 +54,43 @@ public class CreateBookingRequest {
     @SerializedName("terms_version")
     public String termsVersion;
 
+    @SerializedName("rooms")
+    public List<RoomRequest> rooms = new ArrayList<>();
+
     @SerializedName("travellers")
     public List<TravellerRequest> travellers = new ArrayList<>();
+
+    public static class RoomRequest {
+        @SerializedName("room_number")
+        public int roomNumber;
+
+        @SerializedName("room_type")
+        public String roomType;
+
+        @SerializedName("room_category")
+        public String roomCategory;
+
+        @SerializedName("gender")
+        public String gender;
+
+        @SerializedName("capacity")
+        public int capacity;
+
+        @SerializedName("traveller_indices")
+        public List<Integer> travellerIndices = new ArrayList<>();
+
+        @SerializedName("notes")
+        public String notes;
+
+        public RoomRequest() {}
+
+        public RoomRequest(int roomNumber, String roomType, List<Integer> travellerIndices) {
+            this.roomNumber = roomNumber;
+            this.roomType = roomType;
+            this.roomCategory = roomType;
+            this.travellerIndices = travellerIndices;
+        }
+    }
 
     public static class TravellerRequest {
         @SerializedName("title")
@@ -105,6 +140,9 @@ public class CreateBookingRequest {
 
         @SerializedName("is_lead")
         public boolean isLead;
+
+        @SerializedName("room_index")
+        public Integer roomIndex;
 
         public TravellerRequest() {}
     }

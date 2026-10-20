@@ -196,7 +196,7 @@ public class PassengerDetailsActivity extends BaseActivity {
                         holder.tvDobValue.setTextColor(ContextCompat.getColor(this, R.color.text_dark));
                         int age = com.hafiztraveltours.app.utils.PackagePricingCalculator.calculateAge(cfg.dateOfBirth.trim());
                         if (holder.tvDobAge != null) {
-                            holder.tvDobAge.setText(age < 2 ? getString(R.string.child_age_under_2) : (age + " tahun"));
+                            holder.tvDobAge.setText(age < 2 ? getString(R.string.child_age_under_2) : getString(R.string.child_age_format, age));
                             holder.tvDobAge.setVisibility(View.VISIBLE);
                         }
                         holder.withBed = cfg.withBed;
@@ -548,7 +548,12 @@ public class PassengerDetailsActivity extends BaseActivity {
         holder.inputRelationship = card.findViewById(R.id.inputRelationship);
 
         // Configure Title
-        holder.titleText.setText(getString(R.string.passenger_traveller_title_format, index));
+        String roomBadge = getRoomBadgeForTraveller(index - 1);
+        if (!roomBadge.isEmpty()) {
+            holder.titleText.setText(getString(R.string.passenger_traveller_title_format, index) + " • " + roomBadge);
+        } else {
+            holder.titleText.setText(getString(R.string.passenger_traveller_title_format, index));
+        }
 
         // Configure Name & Real-time preview
         holder.inputName.addTextChangedListener(new TextWatcher() {
@@ -1158,17 +1163,46 @@ public class PassengerDetailsActivity extends BaseActivity {
         bookingRequest.passengers.clear();
 
         // Lead passenger (Profile Snapshot)
-        bookingRequest.passengers.add(passengerViewModel.buildLeadPassenger(currentUserProfile));
+        BookingRequest.Passenger lead = passengerViewModel.buildLeadPassenger(currentUserProfile);
+        lead.roomIndex = findRoomIndexForTraveller(0);
+        bookingRequest.passengers.add(lead);
 
         // Additional passengers (Manual Input Snapshot)
-        for (PassengerDetailsViewModel.TravellerInput in : travellerInputs) {
-            bookingRequest.passengers.add(passengerViewModel.buildAdditionalPassenger(in));
+        for (int i = 0; i < travellerInputs.size(); i++) {
+            PassengerDetailsViewModel.TravellerInput in = travellerInputs.get(i);
+            BookingRequest.Passenger p = passengerViewModel.buildAdditionalPassenger(in);
+            p.roomIndex = findRoomIndexForTraveller(i + 1);
+            bookingRequest.passengers.add(p);
         }
 
         // Navigate to Booking Summary
         Intent intent = new Intent(this, BookingSummaryActivity.class);
         intent.putExtra(BookingSummaryActivity.EXTRA_BOOKING_REQUEST, bookingRequest);
         startActivity(intent);
+    }
+
+    private Integer findRoomIndexForTraveller(int travellerIdx) {
+        if (bookingRequest != null && bookingRequest.rooms != null) {
+            for (int r = 0; r < bookingRequest.rooms.size(); r++) {
+                BookingRequest.RoomConfig room = bookingRequest.rooms.get(r);
+                if (room.assignedTravellerIndices != null && room.assignedTravellerIndices.contains(travellerIdx)) {
+                    return r;
+                }
+            }
+        }
+        return 0;
+    }
+
+    private String getRoomBadgeForTraveller(int travellerIdx) {
+        if (bookingRequest != null && bookingRequest.rooms != null) {
+            for (int r = 0; r < bookingRequest.rooms.size(); r++) {
+                BookingRequest.RoomConfig room = bookingRequest.rooms.get(r);
+                if (room.assignedTravellerIndices != null && room.assignedTravellerIndices.contains(travellerIdx)) {
+                    return getString(R.string.room_badge_format, room.roomNumber, room.roomType.toUpperCase());
+                }
+            }
+        }
+        return "";
     }
 
     /** Reads card inputs; null marks fields whose input view doesn't exist or is not applicable. */

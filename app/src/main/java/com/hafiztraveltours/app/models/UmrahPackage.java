@@ -32,7 +32,7 @@ public class UmrahPackage implements java.io.Serializable {
     public String getDisplayName() {
         if (name != null && !name.trim().isEmpty()) return name;
         if (title != null && !title.trim().isEmpty()) return title;
-        return "Pakej Pelancongan";
+        return "Package";
     }
 
     @SerializedName("duration_days")
@@ -395,9 +395,6 @@ public class UmrahPackage implements java.io.Serializable {
     public static class ItineraryItem implements java.io.Serializable {
         @SerializedName("day_number")
         public int dayNumber;
-
-        @SerializedName("date_label")
-        public String dateLabel;
 
         @SerializedName("title")
         public String title;

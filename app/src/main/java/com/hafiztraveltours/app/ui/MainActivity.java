@@ -678,7 +678,28 @@ public class MainActivity extends BaseActivity {
         // Checklist - shows a picker first (Umrah / Tour), then the matching interactive checklist
         setupTactileButton(findViewById(R.id.featureChecklist), this::showChecklistCategoryPicker);
 
+        // Qibla Compass - accessible directly from quick action badge
+        setupTactileButton(findViewById(R.id.featureQibla), () ->
+                startActivity(new Intent(this, QiblaActivity.class)));
+
+        // Qibla CTA banner under prayer times
+        setupTactileButton(findViewById(R.id.btnQiblaAction), () ->
+                startActivity(new Intent(this, QiblaActivity.class)));
+
         setupTactileButton(findViewById(R.id.featureWhatsapp), this::openWhatsApp);
+
+        // Package Categories - direct access to dedicated Umrah & Tour catalog views
+        setupTactileButton(findViewById(R.id.btnCategoryUmrah), () -> {
+            Intent intent = new Intent(this, UmrahActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.nav_seamless_fade_in, R.anim.nav_seamless_fade_out);
+        });
+
+        setupTactileButton(findViewById(R.id.btnCategoryTour), () -> {
+            Intent intent = new Intent(this, TourActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.nav_seamless_fade_in, R.anim.nav_seamless_fade_out);
+        });
     }
 
     private void setupBottomNav() {

@@ -83,6 +83,8 @@ public class PackageDetailActivity extends BaseActivity {
     private UmrahPackage rawPackage;
     private int selectedPriceOptionIndex = 0;
     private PackageDetailViewModel packageViewModel;
+    private View detailTopBarBg;
+    private TextView detailTopBarTitle;
 
     
     @Override
@@ -111,6 +113,21 @@ public class PackageDetailActivity extends BaseActivity {
         }
         favoriteButton = findViewById(R.id.detailFavoriteButton);
         shareButton = findViewById(R.id.detailShareButton);
+
+        detailTopBarBg = findViewById(R.id.detailTopBarBg);
+        detailTopBarTitle = findViewById(R.id.detailTopBarTitle);
+        androidx.core.widget.NestedScrollView scrollView = findViewById(R.id.detailScrollView);
+        if (scrollView != null && detailTopBarBg != null) {
+            scrollView.setOnScrollChangeListener((androidx.core.widget.NestedScrollView.OnScrollChangeListener)
+                    (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+                int threshold = dp(180);
+                float alpha = Math.min(1.0f, Math.max(0.0f, (float) scrollY / threshold));
+                detailTopBarBg.setAlpha(alpha);
+                if (detailTopBarTitle != null) {
+                    detailTopBarTitle.setAlpha(alpha);
+                }
+            });
+        }
 
         packageViewModel = new androidx.lifecycle.ViewModelProvider(this).get(PackageDetailViewModel.class);
         observePackageState();
@@ -196,9 +213,12 @@ public class PackageDetailActivity extends BaseActivity {
             }
         } catch (Exception ignored) {}
 
-        // 2. Category badge on Hero
+        // 2. Category badge on Hero & Top bar title
         if (heroCategoryBadge != null) {
             heroCategoryBadge.setVisibility(View.GONE);
+        }
+        if (detailTopBarTitle != null && detail.name != null) {
+            detailTopBarTitle.setText(detail.name);
         }
 
         // 3. Top Actions (Favorite & Share)
@@ -439,12 +459,16 @@ public class PackageDetailActivity extends BaseActivity {
     }
 
     private void addQuickSpecsSection() {
+        HorizontalScrollView hsv = new HorizontalScrollView(this);
+        hsv.setHorizontalScrollBarEnabled(false);
+        hsv.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        LinearLayout.LayoutParams hsvParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        hsvParams.topMargin = dp(14);
+        hsv.setLayoutParams(hsvParams);
+
         LinearLayout row = new LinearLayout(this);
         row.setOrientation(LinearLayout.HORIZONTAL);
-        LinearLayout.LayoutParams rowParams = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        rowParams.topMargin = dp(14);
-        row.setLayoutParams(rowParams);
 
         if (detail.durationDays > 0) {
             row.addView(buildSpecChip(getString(R.string.duration_days_nights, detail.durationDays, detail.nightsCount)));
@@ -459,7 +483,8 @@ public class PackageDetailActivity extends BaseActivity {
         }
 
         if (row.getChildCount() > 0) {
-            container.addView(row);
+            hsv.addView(row);
+            container.addView(hsv);
         }
     }
 
@@ -468,6 +493,8 @@ public class PackageDetailActivity extends BaseActivity {
         chip.setText(text);
         chip.setTextSize(11);
         chip.setTypeface(null, Typeface.BOLD);
+        chip.setMaxLines(1);
+        chip.setSingleLine(true);
         chip.setTextColor(getResources().getColor(R.color.brand_magenta));
         chip.setBackgroundResource(R.drawable.bg_prayer_countdown_pill);
         chip.setPadding(dp(10), dp(6), dp(10), dp(6));
@@ -768,19 +795,9 @@ public class PackageDetailActivity extends BaseActivity {
             titleContainer.setLayoutParams(tcParams);
 
             TextView titleText = new TextView(this);
-            String pillTextStr;
-            boolean showBodyTitle = false;
-
-            if (day.dateLabel != null && !day.dateLabel.trim().isEmpty()) {
-                pillTextStr = day.dateLabel.trim().toUpperCase();
-                if (day.title != null && !day.title.trim().isEmpty()) {
-                    showBodyTitle = true;
-                }
-            } else {
-                pillTextStr = (day.title != null && !day.title.trim().isEmpty())
-                        ? day.title.trim().toUpperCase()
-                        : getString(R.string.day_label_format, day.dayNumber).toUpperCase();
-            }
+            String pillTextStr = (day.title != null && !day.title.trim().isEmpty())
+                    ? day.title.trim().toUpperCase()
+                    : getString(R.string.day_label_format, day.dayNumber).toUpperCase();
 
             titleText.setText(pillTextStr);
             titleText.setTextSize(13);
@@ -809,19 +826,6 @@ public class PackageDetailActivity extends BaseActivity {
             body.setOrientation(LinearLayout.VERTICAL);
             body.setPadding(dp(14), dp(12), dp(14), dp(14));
             body.setVisibility(isFirst ? View.VISIBLE : View.GONE);
-
-            if (showBodyTitle) {
-                TextView itemTitle = new TextView(this);
-                itemTitle.setText(day.title.trim());
-                itemTitle.setTextSize(13);
-                itemTitle.setTypeface(null, Typeface.BOLD);
-                itemTitle.setTextColor(getResources().getColor(R.color.text_dark));
-                LinearLayout.LayoutParams itp = new LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                itp.bottomMargin = dp(8);
-                itemTitle.setLayoutParams(itp);
-                body.addView(itemTitle);
-            }
 
             for (String activity : day.activities) {
                 TextView bullet = new TextView(this);

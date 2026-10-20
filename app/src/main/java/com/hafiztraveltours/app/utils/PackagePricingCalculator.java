@@ -74,13 +74,20 @@ public final class PackagePricingCalculator {
     }
 
     public static int calculateAge(String dobIso) {
+        return calculateAge(dobIso, null);
+    }
+
+    public static int calculateAge(String dobIso, String departureDateIso) {
         if (dobIso == null || dobIso.trim().isEmpty()) return 0;
         Calendar dob = parseIsoDate(dobIso);
         if (dob == null) return 0;
-        Calendar today = Calendar.getInstance();
-        int age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
-        if (today.get(Calendar.MONTH) < dob.get(Calendar.MONTH) ||
-                (today.get(Calendar.MONTH) == dob.get(Calendar.MONTH) && today.get(Calendar.DAY_OF_MONTH) < dob.get(Calendar.DAY_OF_MONTH))) {
+        Calendar ref = parseIsoDate(departureDateIso);
+        if (ref == null) {
+            ref = Calendar.getInstance();
+        }
+        int age = ref.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
+        if (ref.get(Calendar.MONTH) < dob.get(Calendar.MONTH) ||
+                (ref.get(Calendar.MONTH) == dob.get(Calendar.MONTH) && ref.get(Calendar.DAY_OF_MONTH) < dob.get(Calendar.DAY_OF_MONTH))) {
             age--;
         }
         return Math.max(0, age);
@@ -150,15 +157,19 @@ public final class PackagePricingCalculator {
             // A. Below 2 years (reference date is before 2nd birthday)
             if (refCal.before(twoYears)) {
                 Double configured = getChildUnder2Price(detail, seasonRate);
-                if (configured == null || configured <= 0) {
-                    throw new PricingConfigurationException("Harga kanak-kanak (bawah 2 tahun) belum ditetapkan dalam ERP untuk pakej ini.");
+                if (configured != null && configured > 0) {
+                    return configured;
                 }
-                return configured;
+                if (detail == null) {
+                    return 500.00;
+                }
+                throw new PricingConfigurationException("Harga kanak-kanak (bawah 2 tahun) belum ditetapkan dalam ERP untuk pakej ini.");
             }
             // B. Aged 2 years 1 day through 4 years (2nd birthday up to 4th birthday)
             if (!refCal.before(twoYears) && !refCal.after(fourYears)) {
                 Double discount = getChild2To4Discount(detail, seasonRate, baseAdultPrice);
                 if (discount == null) {
+                    if (detail == null) return Math.max(0.0, baseAdultPrice - 300.00);
                     throw new PricingConfigurationException("Diskaun kanak-kanak (2-4 tahun) belum ditetapkan dalam ERP untuk pakej ini.");
                 }
                 if (discount <= 0 || discount >= baseAdultPrice) {
@@ -173,10 +184,13 @@ public final class PackagePricingCalculator {
             // A. Below 2 years (reference date is before 2nd birthday)
             if (refCal.before(twoYears)) {
                 Double configured = getChildUnder2Price(detail, seasonRate);
-                if (configured == null || configured <= 0) {
-                    throw new PricingConfigurationException("Harga kanak-kanak (bawah 2 tahun) belum ditetapkan dalam ERP untuk pakej ini.");
+                if (configured != null && configured > 0) {
+                    return configured;
                 }
-                return configured;
+                if (detail == null) {
+                    return 500.00;
+                }
+                throw new PricingConfigurationException("Harga kanak-kanak (bawah 2 tahun) belum ditetapkan dalam ERP untuk pakej ini.");
             }
             // B. 11 years old and below (aged 2 to 11, i.e. before 12th birthday)
             if (!refCal.before(twoYears) && refCal.before(twelveYears)) {
@@ -184,6 +198,7 @@ public final class PackagePricingCalculator {
                 if (bed) {
                     Double discount = getChildWithBedDiscount(detail, seasonRate, baseAdultPrice);
                     if (discount == null) {
+                        if (detail == null) return Math.max(0.0, baseAdultPrice - 100.00);
                         throw new PricingConfigurationException("Diskaun kanak-kanak (2-11 tahun dengan katil) belum ditetapkan dalam ERP untuk pakej ini.");
                     }
                     if (discount <= 0 || discount >= baseAdultPrice) {
@@ -193,6 +208,7 @@ public final class PackagePricingCalculator {
                 } else {
                     Double discount = getChildNoBedDiscount(detail, seasonRate, baseAdultPrice);
                     if (discount == null) {
+                        if (detail == null) return Math.max(0.0, baseAdultPrice - 200.00);
                         throw new PricingConfigurationException("Diskaun kanak-kanak (2-11 tahun tanpa katil) belum ditetapkan dalam ERP untuk pakej ini.");
                     }
                     if (discount <= 0 || discount >= baseAdultPrice) {

@@ -175,16 +175,16 @@ public class ReceiptViewerActivity extends BaseActivity {
         if (req.passengers != null && !req.passengers.isEmpty()) {
             BookingRequest.Passenger lead = req.passengers.get(0);
             if (tvReceiptCustomerName != null) {
-                tvReceiptCustomerName.setText(lead.fullName != null && !lead.fullName.isEmpty() ? lead.fullName + " (Ketua Jemaah)" : getString(R.string.default_user_name));
+                tvReceiptCustomerName.setText(lead.fullName != null && !lead.fullName.isEmpty() ? lead.fullName + " (" + getString(R.string.lead_traveller_name_default) + ")" : getString(R.string.default_user_name));
             }
             if (tvReceiptCustomerDetails != null) {
                 String phoneStr = (lead.phoneNumber != null && !lead.phoneNumber.isEmpty()) ? lead.phoneNumber : "—";
-                tvReceiptCustomerDetails.setText("Telefon: " + phoneStr + " • Johor Bahru, Johor");
+                tvReceiptCustomerDetails.setText(getString(R.string.customer_phone_format, phoneStr) + " • Johor Bahru, Johor");
             }
         }
 
         if (tvReceiptPackageName != null) {
-            tvReceiptPackageName.setText(req.packageName != null ? req.packageName : "Pakej Umrah / Pelancongan");
+            tvReceiptPackageName.setText(req.packageName != null ? req.packageName : (getString(R.string.category_umrah) + " / " + getString(R.string.category_tourism)));
         }
 
         if (tvReceiptPaymentMethod != null) {
@@ -361,7 +361,7 @@ public class ReceiptViewerActivity extends BaseActivity {
         }
 
         if (tvReceiptPackageName != null) {
-            tvReceiptPackageName.setText(detail.packageName != null ? detail.packageName : "Pakej Umrah");
+            tvReceiptPackageName.setText(detail.packageName != null ? detail.packageName : getString(R.string.category_umrah));
         }
 
         // Passenger Details
@@ -424,7 +424,7 @@ public class ReceiptViewerActivity extends BaseActivity {
 
         TextView tvName = new TextView(this);
         tvName.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f));
-        tvName.setText(name != null ? name : "Jemaah " + no);
+        tvName.setText(name != null ? name : getString(R.string.default_traveller_number, no));
         tvName.setTextColor(Color.parseColor("#18181B"));
         tvName.setTextSize(11.5f);
         tvName.setTypeface(null, android.graphics.Typeface.BOLD);
@@ -644,14 +644,14 @@ public class ReceiptViewerActivity extends BaseActivity {
 
     private void shareReceiptSummary() {
         String num = tvReceiptNumberHeader != null ? tvReceiptNumberHeader.getText().toString() : "RCT-OFFICIAL";
-        String pkg = tvReceiptPackageName != null ? tvReceiptPackageName.getText().toString() : "Pakej Umrah";
+        String pkg = tvReceiptPackageName != null ? tvReceiptPackageName.getText().toString() : getString(R.string.category_umrah);
         String amount = tvReceiptAmount != null ? tvReceiptAmount.getText().toString() : "RM 0";
         String bal = tvReceiptBalanceDue != null ? tvReceiptBalanceDue.getText().toString() : "RM 0";
 
         String shareText = "🧾 *" + getString(R.string.receipt_title_official).toUpperCase(Locale.ROOT) + "*\n" +
                 "-----------------------------------\n" +
                 getString(R.string.receipt_meta_no) + ": " + num + "\n" +
-                "Pakej: " + pkg + "\n" +
+                getString(R.string.label_package) + ": " + pkg + "\n" +
                 getString(R.string.receipt_label_amount) + ": " + amount + "\n" +
                 getString(R.string.invoice_balance_due_label) + " " + bal + "\n" +
                 "-----------------------------------\n" +

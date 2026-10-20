@@ -88,6 +88,11 @@ public interface ApiService {
             @Path("booking") int bookingId
     );
 
+    @POST("v1/bookings/quote")
+    Call<ApiResponse<QuoteResponse>> getBookingQuote(
+            @Body QuoteRequest request
+    );
+
     @POST("v1/bookings")
     Call<ApiResponse<BookingDetailDto>> createBooking(
             @Body CreateBookingRequest request

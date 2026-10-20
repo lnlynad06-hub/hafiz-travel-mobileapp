@@ -122,6 +122,15 @@ public class MyBookingsActivity extends BaseActivity {
         TextView emptyText = findViewById(R.id.bookingsEmptyText);
         if (emptyText != null) emptyText.setText(getString(R.string.profile_no_booking));
 
+        View btnExplore = findViewById(R.id.btnBookingsExplore);
+        if (btnExplore != null) {
+            btnExplore.setOnClickListener(v -> {
+                Intent intent = new Intent(this, AllPackagesActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.nav_seamless_fade_in, R.anim.nav_seamless_fade_out);
+            });
+        }
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new MyBookingsAdapter(new ArrayList<>());
         adapter.setOnDocumentClickListener(this::showBookingDocsSheet);

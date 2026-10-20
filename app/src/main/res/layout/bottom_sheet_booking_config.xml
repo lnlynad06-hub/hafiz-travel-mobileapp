@@ -146,6 +146,58 @@
 
         </HorizontalScrollView>
 
+        <!-- Family Room Option Toggle Card -->
+        <LinearLayout
+            android:id="@+id/cardConfigFamilyRoom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/bg_detail_card"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/family_room_toggle_title"
+                        android:textColor="@color/text_dark"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/txtConfigFamilyRoomDesc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="@string/family_room_off_desc"
+                        android:textColor="@color/text_gray"
+                        android:textSize="11sp" />
+
+                </LinearLayout>
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switchConfigFamilyRoom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    app:useMaterialThemeColors="true" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
         <!-- Number of Travellers Section (Adults & Kids) -->
         <LinearLayout
             android:layout_width="match_parent"
@@ -163,7 +215,7 @@
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
-            <!-- Adults Row -->
+            <!-- Adult Male Row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -180,7 +232,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/config_pax_adults_label"
+                        android:text="@string/config_pax_adult_male"
                         android:textColor="@color/text_dark"
                         android:textSize="13sp"
                         android:textStyle="bold" />
@@ -189,14 +241,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="@string/config_pax_adults_sub"
+                        android:text="@string/config_pax_adult_male_sub"
                         android:textColor="@color/text_gray"
                         android:textSize="11sp" />
 
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/btnPaxDecrease"
+                    android:id="@+id/btnAdultMaleDecrease"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:background="@drawable/bg_whatsapp_secondary_button"
@@ -209,7 +261,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/txtPaxCount"
+                    android:id="@+id/txtAdultMaleCount"
                     android:layout_width="48dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -219,7 +271,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/btnPaxIncrease"
+                    android:id="@+id/btnAdultMaleIncrease"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:background="@drawable/bg_booking_primary_button"
@@ -232,6 +284,84 @@
                     android:textStyle="bold" />
 
             </LinearLayout>
+
+            <!-- Adult Female Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/config_pax_adult_female"
+                        android:textColor="@color/text_dark"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="@string/config_pax_adult_female_sub"
+                        android:textColor="@color/text_gray"
+                        android:textSize="11sp" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/btnAdultFemaleDecrease"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:background="@drawable/bg_whatsapp_secondary_button"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:text="-"
+                    android:textColor="@color/text_dark"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtAdultFemaleCount"
+                    android:layout_width="48dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textColor="@color/text_dark"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/btnAdultFemaleIncrease"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:background="@drawable/bg_booking_primary_button"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:text="+"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <!-- Total Adults Backward Compatibility hidden/indicator -->
+            <TextView
+                android:id="@+id/txtPaxCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:text="1" />
 
             <!-- Divider -->
             <View
@@ -474,9 +604,10 @@
             android:gravity="center">
 
             <TextView
+                android:id="@+id/btnProceedLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/config_continue"
+                android:text="@string/config_continue_to_rooms"
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 android:textStyle="bold" />

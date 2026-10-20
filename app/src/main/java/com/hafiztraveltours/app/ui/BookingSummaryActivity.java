@@ -20,6 +20,10 @@ import com.hafiztraveltours.app.R;
 import com.hafiztraveltours.app.models.BookingDetailDto;
 import com.hafiztraveltours.app.models.BookingRequest;
 import com.hafiztraveltours.app.models.CreateBookingRequest;
+import com.hafiztraveltours.app.models.QuoteRequest;
+import com.hafiztraveltours.app.models.QuoteResponse;
+import java.util.ArrayList;
+import java.util.List;
 import com.hafiztraveltours.app.network.ApiClient;
 import com.hafiztraveltours.app.network.ApiResponse;
 import com.hafiztraveltours.app.utils.DateFormats;
@@ -45,6 +49,7 @@ public class BookingSummaryActivity extends BaseActivity {
 
     private TextView txtDepartureDate;
     private LinearLayout containerBreakdown;
+    private LinearLayout containerRooms;
 
     private CheckBox summaryAgreementCheckbox;
     private View btnConfirmBooking;
@@ -80,6 +85,7 @@ public class BookingSummaryActivity extends BaseActivity {
         txtRoomLabel = findViewById(R.id.summaryRoomLabel);
         txtPaxCount = findViewById(R.id.summaryPaxCount);
         containerPassengers = findViewById(R.id.summaryPassengersContainer);
+        containerRooms = findViewById(R.id.summaryRoomsContainer);
         containerBreakdown = findViewById(R.id.summaryBreakdownContainer);
         txtUnitPriceLabel = findViewById(R.id.summaryUnitPriceLabel);
         txtUnitPriceAmount = findViewById(R.id.summaryUnitPriceAmount);
@@ -164,7 +170,9 @@ public class BookingSummaryActivity extends BaseActivity {
         double finalTotal = Math.max(0, calculatedTotal - bookingRequest.discountAmount);
         txtTotalAmount.setText(BookingRequest.formatPrice(finalTotal));
 
+        renderRoomsBreakdown();
         renderPassengers();
+        fetchServerQuote();
     }
 
     private void renderBreakdown() {
@@ -263,7 +271,13 @@ public class BookingSummaryActivity extends BaseActivity {
 
             // Gender Chip
             if (p.gender != null && !p.gender.trim().isEmpty()) {
-                tvGenderChip.setText(p.gender);
+                String g = p.gender.trim();
+                String displayGender = ("Male".equalsIgnoreCase(g) || "Lelaki".equalsIgnoreCase(g))
+                        ? getString(R.string.gender_male)
+                        : (("Female".equalsIgnoreCase(g) || "Perempuan".equalsIgnoreCase(g) || "Wanita".equalsIgnoreCase(g))
+                                ? getString(R.string.gender_female)
+                                : g);
+                tvGenderChip.setText(displayGender);
                 tvGenderChip.setVisibility(View.VISIBLE);
             } else {
                 tvGenderChip.setVisibility(View.GONE);
@@ -400,6 +414,163 @@ public class BookingSummaryActivity extends BaseActivity {
         }
     }
 
+    private void renderRoomsBreakdown() {
+        if (containerRooms == null) return;
+        containerRooms.removeAllViews();
+
+        if (bookingRequest.rooms == null || bookingRequest.rooms.isEmpty()) {
+            View card = findViewById(R.id.cardBookedRoomsSummary);
+            if (card != null) card.setVisibility(View.GONE);
+            return;
+        }
+
+        View cardWrapper = findViewById(R.id.cardBookedRoomsSummary);
+        if (cardWrapper != null) cardWrapper.setVisibility(View.VISIBLE);
+
+        for (int r = 0; r < bookingRequest.rooms.size(); r++) {
+            BookingRequest.RoomConfig rc = bookingRequest.rooms.get(r);
+
+            LinearLayout rCard = new LinearLayout(this);
+            rCard.setOrientation(LinearLayout.VERTICAL);
+            rCard.setBackgroundResource(R.drawable.bg_luxury_form_field);
+            rCard.setPadding(dp(12), dp(10), dp(12), dp(10));
+
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            lp.bottomMargin = dp(8);
+            rCard.setLayoutParams(lp);
+
+            LinearLayout header = new LinearLayout(this);
+            header.setOrientation(LinearLayout.HORIZONTAL);
+
+            TextView rTitle = new TextView(this);
+            String rType = rc.roomType != null ? rc.roomType.toUpperCase() : "STANDARD";
+            rTitle.setText(getString(R.string.room_card_header, (r + 1), rType));
+            rTitle.setTextSize(13);
+            rTitle.setTypeface(null, Typeface.BOLD);
+            rTitle.setTextColor(getResources().getColor(R.color.text_dark));
+            LinearLayout.LayoutParams tLp = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+            rTitle.setLayoutParams(tLp);
+            header.addView(rTitle);
+
+            TextView occText = new TextView(this);
+            occText.setText(getString(R.string.room_occupied_count_format, rc.getOccupancy(), rc.capacity));
+            occText.setTextSize(11);
+            occText.setTypeface(null, Typeface.BOLD);
+            occText.setTextColor(getResources().getColor(R.color.brand_magenta));
+            header.addView(occText);
+
+            rCard.addView(header);
+
+            // Display occupants assigned to this room
+            if (bookingRequest.passengers != null) {
+                for (int pIdx = 0; pIdx < bookingRequest.passengers.size(); pIdx++) {
+                    BookingRequest.Passenger p = bookingRequest.passengers.get(pIdx);
+                    if (p.roomIndex != null && p.roomIndex == r) {
+                        TextView pLine = new TextView(this);
+                        String pName = p.fullName != null && !p.fullName.isEmpty() ? p.fullName : (p.isLead ? getString(R.string.lead_traveller_name_default) : getString(R.string.default_traveller_number, (pIdx + 1)));
+                        String role = p.isLead ? getString(R.string.room_role_lead) : getString(R.string.room_role_traveller, (pIdx + 1));
+                        String gText = "";
+                        if (p.gender != null && !p.gender.isEmpty()) {
+                            String g = p.gender.trim();
+                            gText = ", " + (("Male".equalsIgnoreCase(g) || "Lelaki".equalsIgnoreCase(g)) ? getString(R.string.gender_male) : (("Female".equalsIgnoreCase(g) || "Perempuan".equalsIgnoreCase(g) || "Wanita".equalsIgnoreCase(g)) ? getString(R.string.gender_female) : g));
+                        }
+                        pLine.setText("  • " + pName + " (" + role + gText + ")");
+                        pLine.setTextSize(11);
+                        pLine.setTextColor(getResources().getColor(R.color.text_gray));
+                        rCard.addView(pLine);
+                    }
+                }
+            }
+
+            containerRooms.addView(rCard);
+        }
+    }
+
+    private void fetchServerQuote() {
+        QuoteRequest qReq = new QuoteRequest();
+        qReq.packageId = bookingRequest.packageId;
+        qReq.departureId = parseDepartureId(bookingRequest.selectedDepartureId);
+        qReq.pricingId = bookingRequest.selectedPricingId;
+        qReq.season = bookingRequest.season;
+        qReq.promoCode = bookingRequest.promoCode;
+        qReq.roomType = bookingRequest.roomType;
+
+        if (bookingRequest.rooms != null) {
+            for (BookingRequest.RoomConfig rc : bookingRequest.rooms) {
+                QuoteRequest.RoomQuoteItem rqi = new QuoteRequest.RoomQuoteItem(rc.roomNumber, rc.roomType, rc.assignedTravellerIndices);
+                rqi.gender = rc.gender;
+                qReq.rooms.add(rqi);
+            }
+        }
+
+        if (bookingRequest.passengers != null) {
+            for (int i = 0; i < bookingRequest.passengers.size(); i++) {
+                BookingRequest.Passenger p = bookingRequest.passengers.get(i);
+                QuoteRequest.TravellerQuoteItem tq = new QuoteRequest.TravellerQuoteItem();
+                tq.index = i;
+                tq.fullName = p.fullName;
+                tq.gender = p.gender;
+                tq.dateOfBirth = p.dateOfBirth;
+                tq.withBed = p.withBed;
+                tq.roomIndex = p.roomIndex != null ? p.roomIndex : 0;
+                tq.isLead = p.isLead;
+                qReq.travellers.add(tq);
+            }
+        }
+
+        ApiClient.getApiService().getBookingQuote(qReq).enqueue(new retrofit2.Callback<ApiResponse<QuoteResponse>>() {
+            @Override
+            public void onResponse(retrofit2.Call<ApiResponse<QuoteResponse>> call,
+                                   retrofit2.Response<ApiResponse<QuoteResponse>> response) {
+                if (isFinishing() || isDestroyed()) return;
+                if (response.isSuccessful() && response.body() != null && response.body().data != null) {
+                    applyServerQuote(response.body().data);
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<ApiResponse<QuoteResponse>> call, Throwable t) {
+                // Keep local calculations on failure
+            }
+        });
+    }
+
+    private void applyServerQuote(QuoteResponse quote) {
+        if (quote == null) return;
+
+        txtTotalAmount.setText(BookingRequest.formatPrice(quote.total));
+        if (containerBreakdown != null && quote.items != null && !quote.items.isEmpty()) {
+            containerBreakdown.removeAllViews();
+            for (QuoteResponse.QuoteLineItem item : quote.items) {
+                LinearLayout row = new LinearLayout(this);
+                row.setOrientation(LinearLayout.HORIZONTAL);
+                row.setPadding(0, dp(3), 0, dp(3));
+
+                TextView label = new TextView(this);
+                String desc = item.description != null ? item.description : "";
+                if (item.quantity > 1) {
+                    desc += " (×" + item.quantity + ")";
+                }
+                label.setText(desc);
+                label.setTextSize(12);
+                label.setTextColor(getResources().getColor(R.color.text_dark));
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+                label.setLayoutParams(lp);
+
+                TextView val = new TextView(this);
+                val.setText(BookingRequest.formatPrice(item.total));
+                val.setTextSize(12);
+                val.setTextColor(getResources().getColor(item.total < 0 ? R.color.brand_magenta : R.color.text_dark));
+                val.setTypeface(null, Typeface.BOLD);
+
+                row.addView(label);
+                row.addView(val);
+                containerBreakdown.addView(row);
+            }
+        }
+    }
+
     private CreateBookingRequest buildApiRequest() {
         CreateBookingRequest apiRequest = new CreateBookingRequest();
         apiRequest.packageId = bookingRequest.packageId;
@@ -409,23 +580,48 @@ public class BookingSummaryActivity extends BaseActivity {
         apiRequest.pricingId = bookingRequest.selectedPricingId;
         apiRequest.season = bookingRequest.season;
 
+        // Populate rooms
+        if (bookingRequest.rooms != null && !bookingRequest.rooms.isEmpty()) {
+            for (BookingRequest.RoomConfig rc : bookingRequest.rooms) {
+                CreateBookingRequest.RoomRequest rr = new CreateBookingRequest.RoomRequest();
+                rr.roomNumber = rc.roomNumber;
+                rr.roomType = rc.roomType;
+                rr.roomCategory = rc.roomCategory != null ? rc.roomCategory : rc.roomType;
+                rr.gender = rc.gender;
+                rr.capacity = rc.capacity;
+                rr.travellerIndices = new ArrayList<>(rc.assignedTravellerIndices);
+                rr.notes = rc.notes;
+                apiRequest.rooms.add(rr);
+            }
+        }
+
+        int adults = 0;
+        int children = 0;
         if (bookingRequest.passengers != null && !bookingRequest.passengers.isEmpty()) {
             for (int i = 0; i < bookingRequest.passengers.size(); i++) {
                 BookingRequest.Passenger p = bookingRequest.passengers.get(i);
                 apiRequest.travellers.add(
                         com.hafiztraveltours.app.utils.TravellerMapper.toTravellerRequest(p, i == 0));
+                int age = com.hafiztraveltours.app.utils.PackagePricingCalculator.calculateAge(p.dateOfBirth, bookingRequest.selectedDepartureDate);
+                if (p.dateOfBirth != null && !p.dateOfBirth.trim().isEmpty() && age < 12) {
+                    children++;
+                } else {
+                    adults++;
+                }
             }
         } else {
             CreateBookingRequest.TravellerRequest t = new CreateBookingRequest.TravellerRequest();
-            t.fullName = "Jemaah Utama";
+            t.fullName = getString(R.string.lead_traveller_name_default);
             t.isLead = true;
             t.relationship = "self";
             t.nationality = "Malaysian";
+            t.roomIndex = 0;
             apiRequest.travellers.add(t);
+            adults = 1;
         }
 
-        apiRequest.adultCount = apiRequest.travellers.size();
-        apiRequest.childCount = 0;
+        apiRequest.adultCount = adults;
+        apiRequest.childCount = children;
         apiRequest.unitPrice = bookingRequest.unitPriceAmount;
         apiRequest.discountAmount = 0.0;
         apiRequest.promoCode = bookingRequest.promoCode;

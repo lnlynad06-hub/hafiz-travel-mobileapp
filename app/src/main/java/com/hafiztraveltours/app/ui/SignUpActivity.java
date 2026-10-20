@@ -344,18 +344,7 @@ View btnLanguagePicker = findViewById(R.id.btnLanguagePicker);
     }
 
     private void showTermsBottomSheet() {
-        BottomSheetDialog dialog = new BottomSheetDialog(this);
-        View sheet = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_forgot_password, null);
-        dialog.setContentView(sheet);
-
-        Window w = dialog.getWindow();
-        if (w != null) {
-            w.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            w.setDimAmount(0.55f);
-        }
-
-        // Show quick Terms info
-        Toast.makeText(this, getString(R.string.privacy_terms_toast), Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this, TermsConditionsActivity.class));
     }
 
     private void updateActiveLanguageLabel() {

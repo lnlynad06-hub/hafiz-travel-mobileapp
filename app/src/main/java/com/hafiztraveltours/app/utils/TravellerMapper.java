@@ -99,6 +99,7 @@ public final class TravellerMapper {
         tr.email = p.email;
         tr.withBed = p.withBed;
         tr.isLead = p.isLead || forceLead;
+        tr.roomIndex = p.roomIndex;
         return tr;
     }
 }
