@@ -150,6 +150,7 @@ public class ProfileActivity extends BaseActivity {
                     return;
                 }
                 profileViewModel.loadStats();
+                profileViewModel.loadProfile();
             });
         }
 
@@ -219,6 +220,7 @@ public class ProfileActivity extends BaseActivity {
         updatePrayerAndAzanSettingsUI();
         if (profileViewModel.isLoggedIn()) {
             profileViewModel.loadStats();
+            profileViewModel.loadProfile();
         }
     }
 
@@ -877,8 +879,10 @@ public class ProfileActivity extends BaseActivity {
         String currentNationality = (currentUser != null && currentUser.nationality != null && !currentUser.nationality.isEmpty())
                 ? currentUser.nationality : exVal(ex, "nationality", "Malaysian");
 
-        String currentEmergName = exVal(ex, "emergency_name", "");
-        String currentEmergPhone = exVal(ex, "emergency_phone", "");
+        String currentEmergName = (currentUser != null && currentUser.emergencyName != null && !currentUser.emergencyName.isEmpty())
+                ? currentUser.emergencyName : exVal(ex, "emergency_name", "");
+        String currentEmergPhone = (currentUser != null && currentUser.emergencyPhone != null && !currentUser.emergencyPhone.isEmpty())
+                ? currentUser.emergencyPhone : exVal(ex, "emergency_phone", "");
         String currentMahram = exVal(ex, "mahram_name", "");
         String currentMahramRel = exVal(ex, "mahram_relationship", "");
         boolean isMahramApplicable = profileViewModel.readProfileFlag("mahram_applicable", !currentMahram.isEmpty());
@@ -1412,7 +1416,9 @@ public class ProfileActivity extends BaseActivity {
         if (btnClose != null) btnClose.setOnClickListener(v -> dialog.dismiss());
 
         java.util.Map<String, String> vaultEx = profileViewModel.readProfileExtras();
-        String passportNo = exVal(vaultEx, "passport_no", "").trim();
+        UserDto vUser = profileViewModel.getSessionUser();
+        String passportNo = (vUser != null && vUser.passportNumber != null && !vUser.passportNumber.isEmpty())
+                ? vUser.passportNumber.trim() : exVal(vaultEx, "passport_no", "").trim();
         String mahramName = exVal(vaultEx, "mahram_name", "").trim();
 
         View cardDocProgressContainer = sheetView.findViewById(R.id.cardDocProgressContainer);

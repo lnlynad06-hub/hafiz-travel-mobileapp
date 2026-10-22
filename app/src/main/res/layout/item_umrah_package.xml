@@ -87,12 +87,12 @@
 
     <ImageView
         android:id="@+id/packageFavoriteIcon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:padding="8dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:padding="12dp"
+        android:contentDescription="@string/content_desc_favorite"
         android:src="@drawable/ic_favorite"
         android:clickable="true"
-        android:focusable="true"
-        tools:ignore="ContentDescription,TouchTargetSizeCheck" />
+        android:focusable="true" />
 
 </LinearLayout>

@@ -49,6 +49,10 @@ public class ProfileRepository {
         return api().getProfileStats();
     }
 
+    public Call<ApiResponse<ProfileResponseDto>> profileCall() {
+        return api().getProfile();
+    }
+
     public Call<ApiResponse<List<DocumentDto>>> documentsCall() {
         return api().getUserDocuments();
     }
@@ -104,6 +108,10 @@ public class ProfileRepository {
     /** Persists updated profile user; existing token is preserved by SessionManager. */
     public void persistUser(UserDto user) {
         session.saveUser(user);
+    }
+
+    public void syncUserToExtras(UserDto user) {
+        session.syncProfileExtras(user);
     }
 
     public void persistStats(ProfileStatsDto stats) {

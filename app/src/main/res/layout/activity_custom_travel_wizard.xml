@@ -1,0 +1,1441 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background">
+
+    <!-- Top Navigation Bar -->
+    <LinearLayout
+        android:id="@+id/wizardTopBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/surface"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="10dp"
+        android:elevation="4dp">
+
+        <ImageButton
+            android:id="@+id/wizardBackButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/back"
+            android:padding="10dp"
+            android:src="@drawable/ic_back" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/wizardTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/custom_travel_wizard_title"
+                android:textColor="@color/text_dark"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/wizardStepIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="@string/wizard_step_initial"
+                android:textColor="@color/brand_magenta"
+                android:textSize="11.5sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Visual Step Progress Indicator -->
+    <ProgressBar
+        android:id="@+id/wizardProgressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:max="4"
+        android:progress="1"
+        android:progressTint="@color/brand_magenta"
+        android:backgroundTint="#F0E0E6" />
+
+    <!-- Scrollable Content Frame -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/wizardScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <!-- STAGE 1: TRAVEL DETAILS -->
+            <LinearLayout
+                android:id="@+id/stage1Container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <!-- Base Package Banner (if customize_package) -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardBasePackage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="#FFF8E1"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="14dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/base_package_banner_label"
+                            android:textColor="#F57F17"
+                            android:textSize="11sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvBasePackageName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:textColor="@color/text_dark"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            tools:text="Pakej Umrah Syawal Mewah" />
+
+                        <TextView
+                            android:id="@+id/tvBasePackagePrice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:textColor="@color/brand_magenta"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            tools:text="Starting from RM 8,490" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Travel Category Selection -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/travel_category_label"
+                    android:textColor="@color/text_dark"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <RadioGroup
+                    android:id="@+id/rgTravelType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/rbTypeUmrah"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="6dp"
+                        android:background="@drawable/bg_category_chip_inactive"
+                        android:button="@null"
+                        android:checked="true"
+                        android:gravity="center"
+                        android:text="@string/travel_type_umrah"
+                        android:textColor="@color/brand_magenta"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <RadioButton
+                        android:id="@+id/rbTypeTour"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="6dp"
+                        android:background="@drawable/bg_category_chip_inactive"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:text="@string/travel_type_tour"
+                        android:textColor="@color/text_gray"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+                </RadioGroup>
+
+                <!-- Destination -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutDestination"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:hint="@string/label_destination"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusTopStart="14dp"
+                    app:boxCornerRadiusTopEnd="14dp"
+                    app:boxCornerRadiusBottomStart="14dp"
+                    app:boxCornerRadiusBottomEnd="14dp"
+                    app:boxStrokeColor="@color/box_stroke_selector"
+                    app:boxBackgroundColor="@color/box_bg_selector"
+                    app:boxStrokeWidth="1dp"
+                    app:boxStrokeWidthFocused="1.5dp"
+                    app:boxStrokeErrorColor="@color/error_red"
+                    app:hintEnabled="true"
+                    app:startIconDrawable="@drawable/ic_location_pin"
+                    app:startIconTint="@color/pink_dark">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etDestination"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:inputType="textCapWords"
+                        android:textColor="@color/input_text"
+                        android:textColorHint="@color/input_hint"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Departure Airport -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutDepartureAirport"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:hint="@string/label_departure_airport"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusTopStart="14dp"
+                    app:boxCornerRadiusTopEnd="14dp"
+                    app:boxCornerRadiusBottomStart="14dp"
+                    app:boxCornerRadiusBottomEnd="14dp"
+                    app:boxStrokeColor="@color/box_stroke_selector"
+                    app:boxBackgroundColor="@color/box_bg_selector"
+                    app:boxStrokeWidth="1dp"
+                    app:boxStrokeWidthFocused="1.5dp"
+                    app:boxStrokeErrorColor="@color/error_red"
+                    app:hintEnabled="true"
+                    app:startIconDrawable="@drawable/ic_flight"
+                    app:startIconTint="@color/pink_dark"
+                    app:endIconMode="clear_text">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etDepartureAirport"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:inputType="textCapCharacters"
+                        android:textColor="@color/input_text"
+                        android:textColorHint="@color/input_hint"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Preferred Departure Date -->
+                <LinearLayout
+                    android:id="@+id/btnPickDepartureDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:background="@drawable/bg_luxury_form_field"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:minHeight="58dp"
+                    android:orientation="horizontal"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:paddingTop="9dp"
+                    android:paddingBottom="9dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginEnd="12dp"
+                        android:src="@drawable/ic_calendar"
+                        app:tint="@color/pink_dark" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/label_pref_dep_date"
+                            android:textColor="@color/text_gray"
+                            android:textSize="11.5sp" />
+
+                        <TextView
+                            android:id="@+id/tvPreferredDepartureDate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="@string/hint_select_date"
+                            android:textColor="@color/text_muted"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Preferred Return Date -->
+                <LinearLayout
+                    android:id="@+id/btnPickReturnDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:background="@drawable/bg_luxury_form_field"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:minHeight="58dp"
+                    android:orientation="horizontal"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:paddingTop="9dp"
+                    android:paddingBottom="9dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginEnd="12dp"
+                        android:src="@drawable/ic_calendar"
+                        app:tint="@color/pink_dark" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/label_pref_ret_date"
+                            android:textColor="@color/text_gray"
+                            android:textSize="11.5sp" />
+
+                        <TextView
+                            android:id="@+id/tvPreferredReturnDate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="@string/hint_select_date"
+                            android:textColor="@color/text_muted"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Flexible Dates Checkbox -->
+                <CheckBox
+                    android:id="@+id/cbFlexibleDates"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:buttonTint="@color/brand_magenta"
+                    android:text="@string/cb_flexible_dates"
+                    android:textColor="@color/text_dark"
+                    android:textSize="13sp" />
+
+                <!-- Duration Days -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutDurationDays"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:hint="@string/label_duration_days"
+                    app:suffixText="@string/unit_days"
+                    app:suffixTextColor="@color/brand_magenta"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusTopStart="14dp"
+                    app:boxCornerRadiusTopEnd="14dp"
+                    app:boxCornerRadiusBottomStart="14dp"
+                    app:boxCornerRadiusBottomEnd="14dp"
+                    app:boxStrokeColor="@color/box_stroke_selector"
+                    app:boxBackgroundColor="@color/box_bg_selector"
+                    app:boxStrokeWidth="1dp"
+                    app:boxStrokeWidthFocused="1.5dp"
+                    app:boxStrokeErrorColor="@color/error_red"
+                    app:hintEnabled="true">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etDurationDays"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:inputType="number"
+                        android:textColor="@color/input_text"
+                        android:textColorHint="@color/input_hint"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <!-- STAGE 2: TRAVELLERS & ACCOMMODATION -->
+            <LinearLayout
+                android:id="@+id/stage2Container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <!-- Adult Male Counter -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingVertical="8dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/label_adult_male"
+                            android:textColor="@color/text_dark"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/adult_age_note"
+                            android:textColor="@color/text_gray"
+                            android:textSize="11.5sp" />
+                    </LinearLayout>
+
+                    <ImageButton
+                        android:id="@+id/btnMinusAdultMale"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/bg_whatsapp_secondary_button"
+                        android:src="@drawable/ic_minus_gray"
+                        app:tint="@color/text_dark"
+                        android:contentDescription="@string/action_decrease" />
+
+                    <TextView
+                        android:id="@+id/tvCountAdultMale"
+                        android:layout_width="44dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="1"
+                        android:textColor="@color/text_dark"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <ImageButton
+                        android:id="@+id/btnPlusAdultMale"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/bg_booking_primary_button"
+                        android:src="@drawable/ic_plus"
+                        app:tint="@color/white"
+                        android:contentDescription="@string/action_increase" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#F0E0E6"
+                    android:layout_marginVertical="6dp" />
+
+                <!-- Adult Female Counter -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingVertical="8dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/label_adult_female"
+                            android:textColor="@color/text_dark"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/adult_age_note"
+                            android:textColor="@color/text_gray"
+                            android:textSize="11.5sp" />
+                    </LinearLayout>
+
+                    <ImageButton
+                        android:id="@+id/btnMinusAdultFemale"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/bg_whatsapp_secondary_button"
+                        android:src="@drawable/ic_minus_gray"
+                        app:tint="@color/text_dark"
+                        android:contentDescription="@string/action_decrease" />
+
+                    <TextView
+                        android:id="@+id/tvCountAdultFemale"
+                        android:layout_width="44dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="1"
+                        android:textColor="@color/text_dark"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <ImageButton
+                        android:id="@+id/btnPlusAdultFemale"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/bg_booking_primary_button"
+                        android:src="@drawable/ic_plus"
+                        app:tint="@color/white"
+                        android:contentDescription="@string/action_increase" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#F0E0E6"
+                    android:layout_marginVertical="6dp" />
+
+                <!-- Children Counter -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingVertical="8dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/label_children_count"
+                            android:textColor="@color/text_dark"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/children_age_note"
+                            android:textColor="@color/text_gray"
+                            android:textSize="11.5sp" />
+                    </LinearLayout>
+
+                    <ImageButton
+                        android:id="@+id/btnMinusChildren"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/bg_whatsapp_secondary_button"
+                        android:src="@drawable/ic_minus_gray"
+                        app:tint="@color/text_dark"
+                        android:contentDescription="@string/action_decrease" />
+
+                    <TextView
+                        android:id="@+id/tvCountChildren"
+                        android:layout_width="44dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textColor="@color/text_dark"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <ImageButton
+                        android:id="@+id/btnPlusChildren"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/bg_booking_primary_button"
+                        android:src="@drawable/ic_plus"
+                        app:tint="@color/white"
+                        android:contentDescription="@string/action_increase" />
+                </LinearLayout>
+
+                <!-- Children Details Container (dynamic per child) -->
+                <LinearLayout
+                    android:id="@+id/containerChildrenDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="8dp" />
+
+                <!-- Room Category Selection -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/label_room_category"
+                    android:textColor="@color/text_dark"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <!-- Room Category Chips -->
+                <LinearLayout
+                    android:id="@+id/containerRoomCategories"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical">
+
+                    <RadioGroup
+                        android:id="@+id/rgRoomCategory"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <RadioButton
+                            android:id="@+id/rbRoomQuint"
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:layout_marginBottom="6dp"
+                            android:background="@drawable/bg_category_chip_inactive"
+                            android:button="@null"
+                            android:gravity="center_vertical"
+                            android:paddingHorizontal="14dp"
+                            android:text="@string/room_category_quint"
+                            android:textColor="@color/text_dark"
+                            android:textSize="13.5sp"
+                            android:textStyle="bold" />
+
+                        <RadioButton
+                            android:id="@+id/rbRoomQuad"
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:layout_marginBottom="6dp"
+                            android:background="@drawable/bg_category_chip_inactive"
+                            android:button="@null"
+                            android:checked="true"
+                            android:gravity="center_vertical"
+                            android:paddingHorizontal="14dp"
+                            android:text="@string/room_category_quad"
+                            android:textColor="@color/brand_magenta"
+                            android:textSize="13.5sp"
+                            android:textStyle="bold" />
+
+                        <RadioButton
+                            android:id="@+id/rbRoomTriple"
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:layout_marginBottom="6dp"
+                            android:background="@drawable/bg_category_chip_inactive"
+                            android:button="@null"
+                            android:gravity="center_vertical"
+                            android:paddingHorizontal="14dp"
+                            android:text="@string/room_category_triple"
+                            android:textColor="@color/text_dark"
+                            android:textSize="13.5sp"
+                            android:textStyle="bold" />
+
+                        <RadioButton
+                            android:id="@+id/rbRoomDouble"
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:layout_marginBottom="6dp"
+                            android:background="@drawable/bg_category_chip_inactive"
+                            android:button="@null"
+                            android:gravity="center_vertical"
+                            android:paddingHorizontal="14dp"
+                            android:text="@string/room_category_double"
+                            android:textColor="@color/text_dark"
+                            android:textSize="13.5sp"
+                            android:textStyle="bold" />
+
+                        <RadioButton
+                            android:id="@+id/rbRoomSingle"
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:layout_marginBottom="6dp"
+                            android:background="@drawable/bg_category_chip_inactive"
+                            android:button="@null"
+                            android:gravity="center_vertical"
+                            android:paddingHorizontal="14dp"
+                            android:text="@string/room_category_single"
+                            android:textColor="@color/text_dark"
+                            android:textSize="13.5sp"
+                            android:textStyle="bold" />
+
+                    </RadioGroup>
+
+                </LinearLayout>
+
+                <!-- Umrah Single Warning -->
+                <TextView
+                    android:id="@+id/tvUmrahSingleWarning"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:background="#FFEBEE"
+                    android:padding="10dp"
+                    android:text="@string/err_umrah_single_prohibited"
+                    android:textColor="#C62828"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+
+                <!-- Family Room Switch -->
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/switchFamilyRoom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/switch_family_room"
+                    android:textColor="@color/text_dark"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:thumbTint="@color/brand_magenta"
+                    app:trackTint="#F0D0DC" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="@string/switch_family_room_sub"
+                    android:textColor="@color/text_gray"
+                    android:textSize="11.5sp" />
+
+                <!-- Real-time Generated Room Preview Card -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="#F8F9FA">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="14dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/room_group_preview_title"
+                            android:textColor="@color/text_dark"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvGeneratedRoomPreview"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:textColor="@color/brand_magenta"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            tools:text="• Quad Lelaki (1/4)\n• Quad Perempuan (1/4)" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Hotel Star Rating -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:text="@string/label_hotel_category"
+                    android:textColor="@color/text_dark"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="54dp"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/bg_luxury_form_field"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_hotel"
+                            app:tint="@color/pink_dark" />
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/ic_chevron_down"
+                            app:tint="@color/pink_dark" />
+                    </LinearLayout>
+
+                    <Spinner
+                        android:id="@+id/spHotelCategory"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="28dp"
+                        android:layout_marginEnd="24dp"
+                        android:background="@null"
+                        android:overlapAnchor="false"
+                        android:spinnerMode="dropdown" />
+                </FrameLayout>
+
+                <!-- Hotel Preferences & Location -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutHotelPreferences"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:hint="@string/label_hotel_preferences"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusTopStart="14dp"
+                    app:boxCornerRadiusTopEnd="14dp"
+                    app:boxCornerRadiusBottomStart="14dp"
+                    app:boxCornerRadiusBottomEnd="14dp"
+                    app:boxStrokeColor="@color/box_stroke_selector"
+                    app:boxBackgroundColor="@color/box_bg_selector"
+                    app:boxStrokeWidth="1dp"
+                    app:boxStrokeWidthFocused="1.5dp"
+                    app:boxStrokeErrorColor="@color/error_red"
+                    app:hintEnabled="true"
+                    app:startIconDrawable="@drawable/ic_hotel"
+                    app:startIconTint="@color/pink_dark">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etHotelPreferences"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="top|start"
+                        android:inputType="textMultiLine"
+                        android:lines="3"
+                        android:minLines="3"
+                        android:textColor="@color/input_text"
+                        android:textColorHint="@color/input_hint"
+                        android:textSize="13.5sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <!-- STAGE 3: CUSTOM REQUIREMENTS -->
+            <LinearLayout
+                android:id="@+id/stage3Container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <!-- Preferred Airline -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutAirlinePreference"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:hint="@string/label_airline_preference"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusTopStart="14dp"
+                    app:boxCornerRadiusTopEnd="14dp"
+                    app:boxCornerRadiusBottomStart="14dp"
+                    app:boxCornerRadiusBottomEnd="14dp"
+                    app:boxStrokeColor="@color/box_stroke_selector"
+                    app:boxBackgroundColor="@color/box_bg_selector"
+                    app:boxStrokeWidth="1dp"
+                    app:boxStrokeWidthFocused="1.5dp"
+                    app:boxStrokeErrorColor="@color/error_red"
+                    app:hintEnabled="true"
+                    app:startIconDrawable="@drawable/ic_flight"
+                    app:startIconTint="@color/pink_dark"
+                    app:endIconMode="clear_text">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etAirlinePreference"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:inputType="textCapWords"
+                        android:textColor="@color/input_text"
+                        android:textColorHint="@color/input_hint"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Flight Class -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:text="@string/label_flight_class"
+                    android:textColor="@color/text_dark"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="54dp"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/bg_luxury_form_field"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_ticket"
+                            app:tint="@color/pink_dark" />
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/ic_chevron_down"
+                            app:tint="@color/pink_dark" />
+                    </LinearLayout>
+
+                    <Spinner
+                        android:id="@+id/spFlightClass"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="28dp"
+                        android:layout_marginEnd="24dp"
+                        android:background="@null"
+                        android:overlapAnchor="false"
+                        android:spinnerMode="dropdown" />
+                </FrameLayout>
+
+                <!-- Flight Routing (Direct / Transit) -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:text="@string/label_flight_routing"
+                    android:textColor="@color/text_dark"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <RadioGroup
+                    android:id="@+id/rgFlightRouting"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/rbFlightDirect"
+                        android:layout_width="0dp"
+                        android:layout_height="42dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="4dp"
+                        android:background="@drawable/bg_category_chip_inactive"
+                        android:button="@null"
+                        android:checked="true"
+                        android:gravity="center"
+                        android:text="@string/flight_routing_direct"
+                        android:textColor="@color/brand_magenta"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <RadioButton
+                        android:id="@+id/rbFlightTransit"
+                        android:layout_width="0dp"
+                        android:layout_height="42dp"
+                        android:layout_weight="1"
+                        android:layout_marginHorizontal="4dp"
+                        android:background="@drawable/bg_category_chip_inactive"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:text="@string/flight_routing_transit"
+                        android:textColor="@color/text_gray"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <RadioButton
+                        android:id="@+id/rbFlightAny"
+                        android:layout_width="0dp"
+                        android:layout_height="42dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="4dp"
+                        android:background="@drawable/bg_category_chip_inactive"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:text="@string/flight_routing_any"
+                        android:textColor="@color/text_gray"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </RadioGroup>
+
+                <!-- Transportation Preferences -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutTransportation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:hint="@string/label_transportation"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusTopStart="14dp"
+                    app:boxCornerRadiusTopEnd="14dp"
+                    app:boxCornerRadiusBottomStart="14dp"
+                    app:boxCornerRadiusBottomEnd="14dp"
+                    app:boxStrokeColor="@color/box_stroke_selector"
+                    app:boxBackgroundColor="@color/box_bg_selector"
+                    app:boxStrokeWidth="1dp"
+                    app:boxStrokeWidthFocused="1.5dp"
+                    app:boxStrokeErrorColor="@color/error_red"
+                    app:hintEnabled="true"
+                    app:startIconDrawable="@drawable/ic_transport"
+                    app:startIconTint="@color/pink_dark"
+                    app:endIconMode="clear_text">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etTransportation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:inputType="text"
+                        android:textColor="@color/input_text"
+                        android:textColorHint="@color/input_hint"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Private Guide / Mutawwif Checkbox -->
+                <CheckBox
+                    android:id="@+id/cbPrivateGuide"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:buttonTint="@color/brand_magenta"
+                    android:text="@string/cb_private_guide"
+                    android:textColor="@color/text_dark"
+                    android:textSize="13sp" />
+
+                <!-- Meal Preferences -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:text="@string/label_meals"
+                    android:textColor="@color/text_dark"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="54dp"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/bg_luxury_form_field"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_meals"
+                            app:tint="@color/pink_dark" />
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/ic_chevron_down"
+                            app:tint="@color/pink_dark" />
+                    </LinearLayout>
+
+                    <Spinner
+                        android:id="@+id/spMeals"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="28dp"
+                        android:layout_marginEnd="24dp"
+                        android:background="@null"
+                        android:overlapAnchor="false"
+                        android:spinnerMode="dropdown" />
+                </FrameLayout>
+
+                <!-- Custom Itinerary Notes -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutItineraryNotes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:hint="@string/label_itinerary_notes"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusTopStart="14dp"
+                    app:boxCornerRadiusTopEnd="14dp"
+                    app:boxCornerRadiusBottomStart="14dp"
+                    app:boxCornerRadiusBottomEnd="14dp"
+                    app:boxStrokeColor="@color/box_stroke_selector"
+                    app:boxBackgroundColor="@color/box_bg_selector"
+                    app:boxStrokeWidth="1dp"
+                    app:boxStrokeWidthFocused="1.5dp"
+                    app:boxStrokeErrorColor="@color/error_red"
+                    app:hintEnabled="true"
+                    app:startIconDrawable="@drawable/ic_tour_checklist"
+                    app:startIconTint="@color/pink_dark">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etItineraryNotes"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="top|start"
+                        android:inputType="textMultiLine"
+                        android:lines="3"
+                        android:minLines="3"
+                        android:textColor="@color/input_text"
+                        android:textColorHint="@color/input_hint"
+                        android:textSize="13.5sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Budget Per Pax -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutBudgetPerPax"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:hint="@string/label_budget_per_pax"
+                    app:prefixText="RM "
+                    app:prefixTextColor="@color/brand_magenta"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusTopStart="14dp"
+                    app:boxCornerRadiusTopEnd="14dp"
+                    app:boxCornerRadiusBottomStart="14dp"
+                    app:boxCornerRadiusBottomEnd="14dp"
+                    app:boxStrokeColor="@color/box_stroke_selector"
+                    app:boxBackgroundColor="@color/box_bg_selector"
+                    app:boxStrokeWidth="1dp"
+                    app:boxStrokeWidthFocused="1.5dp"
+                    app:boxStrokeErrorColor="@color/error_red"
+                    app:hintEnabled="true"
+                    app:startIconDrawable="@drawable/ic_card"
+                    app:startIconTint="@color/pink_dark"
+                    app:endIconMode="clear_text">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etBudgetPerPax"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:inputType="numberDecimal"
+                        android:textColor="@color/input_text"
+                        android:textColorHint="@color/input_hint"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/budget_disclaimer"
+                    android:textColor="@color/text_gray"
+                    android:textSize="11sp" />
+
+                <!-- Special Requirements -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutSpecialRequirements"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:hint="@string/label_special_requirements"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusTopStart="14dp"
+                    app:boxCornerRadiusTopEnd="14dp"
+                    app:boxCornerRadiusBottomStart="14dp"
+                    app:boxCornerRadiusBottomEnd="14dp"
+                    app:boxStrokeColor="@color/box_stroke_selector"
+                    app:boxBackgroundColor="@color/box_bg_selector"
+                    app:boxStrokeWidth="1dp"
+                    app:boxStrokeWidthFocused="1.5dp"
+                    app:boxStrokeErrorColor="@color/error_red"
+                    app:hintEnabled="true"
+                    app:startIconDrawable="@drawable/ic_tune"
+                    app:startIconTint="@color/pink_dark">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etSpecialRequirements"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="top|start"
+                        android:inputType="textMultiLine"
+                        android:lines="3"
+                        android:minLines="3"
+                        android:textColor="@color/input_text"
+                        android:textColorHint="@color/input_hint"
+                        android:textSize="13.5sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <!-- STAGE 4: REVIEW & SUBMIT -->
+            <LinearLayout
+                android:id="@+id/stage4Container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <!-- Summary Card 1: Travel Overview -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="@color/card_surface">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/summary_travel_overview"
+                                android:textColor="@color/text_dark"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/btnEditStage1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/action_edit"
+                                android:textColor="@color/brand_magenta"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tvSummaryOverview"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:textColor="@color/text_dark"
+                            android:textSize="13sp"
+                            android:lineSpacingMultiplier="1.2"
+                            tools:text="Kategori: Umrah\nDestinasi: Makkah &amp; Madinah\nTarikh: 2026-11-01 hingga 2026-11-13 (12 Hari)" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Summary Card 2: Travellers & Accommodation -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="@color/card_surface">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/summary_travellers_rooms"
+                                android:textColor="@color/text_dark"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/btnEditStage2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/action_edit"
+                                android:textColor="@color/brand_magenta"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tvSummaryTravellersRooms"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:textColor="@color/text_dark"
+                            android:textSize="13sp"
+                            android:lineSpacingMultiplier="1.2"
+                            tools:text="Jemaah: 2 Dewasa Lelaki, 2 Dewasa Perempuan\nBilik: Quad\nSusunan Bilik:\n• Quad Lelaki (2/4)\n• Quad Perempuan (2/4)" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Summary Card 3: Custom Preferences -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="@color/card_surface">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/summary_flight_transport"
+                                android:textColor="@color/text_dark"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/btnEditStage3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/action_edit"
+                                android:textColor="@color/brand_magenta"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tvSummaryPreferences"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:textColor="@color/text_dark"
+                            android:textSize="13sp"
+                            android:lineSpacingMultiplier="1.2"
+                            tools:text="Penerbangan: Malaysia Airlines (Ekonomi, Terus)\nPengangkutan: Bas Persendirian\nSajian: Full Board" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Submission Disclaimer -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="@string/submission_disclaimer"
+                    android:textColor="@color/text_gray"
+                    android:textSize="11.5sp"
+                    android:gravity="center" />
+
+            </LinearLayout>
+
+        </FrameLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Bottom Action Bar (Back & Next / Submit) -->
+    <LinearLayout
+        android:id="@+id/wizardBottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/surface"
+        android:elevation="12dp"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="12dp">
+
+        <Button
+            android:id="@+id/btnWizardBack"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="6dp"
+            android:background="@drawable/bg_category_chip_inactive"
+            android:text="@string/btn_previous_stage"
+            android:textColor="@color/text_dark"
+            android:textSize="13.5sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btnWizardNext"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:layout_marginStart="6dp"
+            android:background="@drawable/bg_booking_primary_button"
+            android:text="@string/btn_next_stage"
+            android:textColor="@color/white"
+            android:textSize="13.5sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+</LinearLayout>

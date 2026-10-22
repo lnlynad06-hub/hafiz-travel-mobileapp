@@ -3,6 +3,7 @@ package com.hafiztraveltours.app.utils;
 import android.content.Context;
 
 import com.hafiztraveltours.app.R;
+import com.hafiztraveltours.app.models.CreateCustomTravelRequest;
 import com.hafiztraveltours.app.models.PackageDetail;
 
 /**
@@ -44,6 +45,16 @@ public final class RoomLabels {
                 // Legacy Malay labels from older payloads ("Bilik Berlima (Quint)" etc.)
                 return resolveLegacy(context, fallbackLabel != null ? fallbackLabel : labelKey);
         }
+    }
+
+    public static String resolve(Context context, CreateCustomTravelRequest.RoomArrangement room, int index) {
+        if (room == null) return "";
+        int group = "family".equalsIgnoreCase(room.gender) ? R.string.room_group_family
+                : "female".equalsIgnoreCase(room.gender) ? R.string.room_group_female
+                : R.string.room_group_male;
+        return context.getString(R.string.room_arrangement_format,
+                resolve(context, room.roomType, room.roomType), context.getString(group), index,
+                room.paxCount, room.capacity);
     }
 
     private static String resolveLegacy(Context context, String label) {

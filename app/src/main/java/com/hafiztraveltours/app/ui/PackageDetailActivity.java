@@ -111,6 +111,10 @@ public class PackageDetailActivity extends BaseActivity {
         if (bookButton != null) {
             bookButton.setOnClickListener(v -> onBookNowClicked());
         }
+        View customizeButton = findViewById(R.id.detailCustomizeButton);
+        if (customizeButton != null) {
+            customizeButton.setOnClickListener(v -> onCustomizePackageClicked());
+        }
         favoriteButton = findViewById(R.id.detailFavoriteButton);
         shareButton = findViewById(R.id.detailShareButton);
 
@@ -290,6 +294,28 @@ public class PackageDetailActivity extends BaseActivity {
         }
 
         checkEligibilityAndOpenBookingSheet();
+    }
+
+    private void onCustomizePackageClicked() {
+        if (detail == null) return;
+
+        Intent intent = new Intent(this, CustomTravelWizardActivity.class);
+        intent.putExtra(CustomTravelWizardActivity.EXTRA_REQUEST_TYPE, "customize_package");
+        intent.putExtra(CustomTravelWizardActivity.EXTRA_TRAVEL_TYPE,
+                "tour".equalsIgnoreCase(detail.category) ? "tour" : "umrah");
+        try {
+            if (detail.id != null) {
+                intent.putExtra(CustomTravelWizardActivity.EXTRA_PACKAGE_ID, Integer.parseInt(detail.id));
+            }
+        } catch (Exception ignored) {}
+        intent.putExtra(CustomTravelWizardActivity.EXTRA_PACKAGE_NAME, detail.name);
+        String destination = (detail.rawPackage != null && detail.rawPackage.destination != null && !detail.rawPackage.destination.trim().isEmpty())
+                ? detail.rawPackage.destination.trim() : detail.name;
+        intent.putExtra(CustomTravelWizardActivity.EXTRA_DESTINATION, destination);
+        intent.putExtra(CustomTravelWizardActivity.EXTRA_DURATION_DAYS, detail.durationDays > 0 ? detail.durationDays : 12);
+        intent.putExtra(CustomTravelWizardActivity.EXTRA_STARTING_PRICE, detail.price);
+        startActivity(intent);
+        overridePendingTransition(R.anim.nav_seamless_fade_in, R.anim.nav_seamless_fade_out);
     }
 
     private void checkEligibilityAndOpenBookingSheet() {
@@ -772,27 +798,26 @@ public class PackageDetailActivity extends BaseActivity {
             cardParams.topMargin = dp(10);
             card.setLayoutParams(cardParams);
 
-            // Dual-tone Header Ribbon Banner (Navy Blue Left + Brand Magenta Right)
+            // Unified Responsive Header Ribbon Banner (Pink Header Ribbon with Navy Day Badge)
             LinearLayout headerRow = new LinearLayout(this);
             headerRow.setOrientation(LinearLayout.HORIZONTAL);
             headerRow.setGravity(Gravity.CENTER_VERTICAL);
+            headerRow.setBackgroundResource(isFirst ? R.drawable.bg_itinerary_header_ribbon : R.drawable.bg_itinerary_header_ribbon_collapsed);
+            headerRow.setPadding(dp(12), dp(10), dp(12), dp(10));
 
             TextView dayLabel = new TextView(this);
             dayLabel.setText(getString(R.string.day_label_format, day.dayNumber).toUpperCase());
-            dayLabel.setTextSize(13);
+            dayLabel.setTextSize(12);
             dayLabel.setTypeface(null, Typeface.BOLD);
             dayLabel.setTextColor(Color.WHITE);
             dayLabel.setBackgroundResource(R.drawable.bg_itinerary_day_pill);
-            dayLabel.setPadding(dp(14), dp(9), dp(14), dp(9));
+            dayLabel.setPadding(dp(10), dp(5), dp(10), dp(5));
 
-            LinearLayout titleContainer = new LinearLayout(this);
-            titleContainer.setOrientation(LinearLayout.HORIZONTAL);
-            titleContainer.setGravity(Gravity.CENTER_VERTICAL);
-            titleContainer.setBackgroundResource(R.drawable.bg_itinerary_title_pill);
-            titleContainer.setPadding(dp(14), dp(9), dp(14), dp(9));
-
-            LinearLayout.LayoutParams tcParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
-            titleContainer.setLayoutParams(tcParams);
+            LinearLayout.LayoutParams dayParams = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            dayParams.gravity = Gravity.CENTER_VERTICAL;
+            dayParams.rightMargin = dp(10);
+            dayLabel.setLayoutParams(dayParams);
 
             TextView titleText = new TextView(this);
             String pillTextStr = (day.title != null && !day.title.trim().isEmpty())
@@ -803,8 +828,10 @@ public class PackageDetailActivity extends BaseActivity {
             titleText.setTextSize(13);
             titleText.setTypeface(null, Typeface.BOLD);
             titleText.setTextColor(Color.WHITE);
+            titleText.setLineSpacing(dp(2), 1.0f);
 
             LinearLayout.LayoutParams ttParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+            ttParams.gravity = Gravity.CENTER_VERTICAL;
             titleText.setLayoutParams(ttParams);
 
             TextView chevron = new TextView(this);
@@ -812,12 +839,16 @@ public class PackageDetailActivity extends BaseActivity {
             chevron.setTextSize(11);
             chevron.setTypeface(null, Typeface.BOLD);
             chevron.setTextColor(Color.WHITE);
+            chevron.setPadding(dp(6), dp(4), dp(2), dp(4));
 
-            titleContainer.addView(titleText);
-            titleContainer.addView(chevron);
+            LinearLayout.LayoutParams chevParams = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            chevParams.gravity = Gravity.CENTER_VERTICAL;
+            chevron.setLayoutParams(chevParams);
 
             headerRow.addView(dayLabel);
-            headerRow.addView(titleContainer);
+            headerRow.addView(titleText);
+            headerRow.addView(chevron);
 
             card.addView(headerRow);
 
@@ -862,9 +893,12 @@ public class PackageDetailActivity extends BaseActivity {
 
             card.setOnClickListener(v -> {
                 com.hafiztraveltours.app.utils.HapticUtil.click(v);
-                boolean isExpanded = (body.getVisibility() == View.VISIBLE);
-                body.setVisibility(isExpanded ? View.GONE : View.VISIBLE);
-                chevron.setText(isExpanded ? "▼" : "▲");
+                boolean willExpand = (body.getVisibility() != View.VISIBLE);
+                body.setVisibility(willExpand ? View.VISIBLE : View.GONE);
+                chevron.setText(willExpand ? "▲" : "▼");
+                headerRow.setBackgroundResource(willExpand
+                        ? R.drawable.bg_itinerary_header_ribbon
+                        : R.drawable.bg_itinerary_header_ribbon_collapsed);
             });
 
             targetContainer.addView(card);

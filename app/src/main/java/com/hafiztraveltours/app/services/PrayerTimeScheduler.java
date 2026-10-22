@@ -1,33 +1,51 @@
 package com.hafiztraveltours.app.services;
 
-import com.hafiztraveltours.app.R;
-import com.hafiztraveltours.app.models.*;
-import com.hafiztraveltours.app.adapters.*;
-import com.hafiztraveltours.app.network.*;
-import com.hafiztraveltours.app.services.*;
-import com.hafiztraveltours.app.utils.*;
-import com.hafiztraveltours.app.views.*;
-import com.hafiztraveltours.app.ui.*;
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.View;
-import java.util.Calendar;
+
+import com.hafiztraveltours.app.R;
+import com.hafiztraveltours.app.utils.HapticUtil;
+import com.hafiztraveltours.app.utils.OnboardingManager;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class PrayerTimeScheduler {
 
+    private static final String TAG = "PrayerTimeScheduler";
     private static final String PREFS_NAME = "prayer_times_cache";
 
-    // Panggil ni SETIAP KALI dapat waktu solat baru (dalam MainActivity),
-    // dengan epochSeconds untuk setiap waktu (dari JAKIM API atau Adhan fallback)
+    public static final TimeZone TIME_ZONE_MALAYSIA = TimeZone.getTimeZone("Asia/Kuala_Lumpur");
+
+    public static String getMalaysiaDateString(long epochSeconds) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        sdf.setTimeZone(TIME_ZONE_MALAYSIA);
+        return sdf.format(new Date(epochSeconds > 0 ? epochSeconds * 1000L : System.currentTimeMillis()));
+    }
+
     public static void scheduleAll(Context context, long fajrEpoch, long dhuhrEpoch,
                                    long asrEpoch, long maghribEpoch, long ishaEpoch) {
+        String derivedDate = getMalaysiaDateString(fajrEpoch > 0 ? fajrEpoch : System.currentTimeMillis() / 1000L);
+        scheduleAll(context, fajrEpoch, dhuhrEpoch, asrEpoch, maghribEpoch, ishaEpoch, null, derivedDate);
+    }
+
+    public static void scheduleAll(Context context, long fajrEpoch, long dhuhrEpoch,
+                                   long asrEpoch, long maghribEpoch, long ishaEpoch,
+                                   String zone, String prayerDate) {
         if (context == null) return;
 
-        // Simpan untuk reschedule lepas reboot atau bila feature di-enable
+        if (prayerDate == null || prayerDate.trim().isEmpty()) {
+            prayerDate = getMalaysiaDateString(fajrEpoch > 0 ? fajrEpoch : System.currentTimeMillis() / 1000L);
+        }
+
+        // Simpan cache untuk reschedule lepas reboot atau bila feature di-enable
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         prefs.edit()
                 .putLong("fajr", fajrEpoch)
@@ -35,25 +53,36 @@ public class PrayerTimeScheduler {
                 .putLong("asr", asrEpoch)
                 .putLong("maghrib", maghribEpoch)
                 .putLong("isha", ishaEpoch)
+                .putString("cache_date", prayerDate)
+                .putString("cache_zone", zone != null ? zone : "")
+                .putLong("cache_timestamp", System.currentTimeMillis())
                 .apply();
 
+        // Batalkan sebarang jadual lama dahulu untuk mengelakkan duplicate active alarms
+        cancelAllAlarms(context);
+
         if (!OnboardingManager.isPrayerFeatureEnabled(context) || !OnboardingManager.isAzanFeatureEnabled(context)) {
-            cancelAllAlarms(context);
+            Log.i(TAG, "Prayer or Azan disabled in onboarding, cancelled all alarms.");
             return;
         }
 
-        scheduleOne(context, "fajr", fajrEpoch, 1, false);
-        scheduleOne(context, "dhuhr", dhuhrEpoch, 2, false);
-        scheduleOne(context, "asr", asrEpoch, 3, false);
-        scheduleOne(context, "maghrib", maghribEpoch, 4, false);
-        scheduleOne(context, "isha", ishaEpoch, 5, false);
+        Log.i(TAG, "Scheduling prayer alarms: date=" + prayerDate + ", zone=" + zone +
+                ", fajr=" + fajrEpoch + ", dhuhr=" + dhuhrEpoch +
+                ", asr=" + asrEpoch + ", maghrib=" + maghribEpoch + ", isha=" + ishaEpoch);
+
+        // Schedule exact Azan alarms
+        scheduleOne(context, "fajr", fajrEpoch, 1, false, prayerDate, zone);
+        scheduleOne(context, "dhuhr", dhuhrEpoch, 2, false, prayerDate, zone);
+        scheduleOne(context, "asr", asrEpoch, 3, false, prayerDate, zone);
+        scheduleOne(context, "maghrib", maghribEpoch, 4, false, prayerDate, zone);
+        scheduleOne(context, "isha", ishaEpoch, 5, false, prayerDate, zone);
 
         // Schedule 5-minute pre-prayer notification reminders
-        scheduleOne(context, "fajr", fajrEpoch - 300, 11, true);
-        scheduleOne(context, "dhuhr", dhuhrEpoch - 300, 12, true);
-        scheduleOne(context, "asr", asrEpoch - 300, 13, true);
-        scheduleOne(context, "maghrib", maghribEpoch - 300, 14, true);
-        scheduleOne(context, "isha", ishaEpoch - 300, 15, true);
+        scheduleOne(context, "fajr", fajrEpoch - 300, 11, true, prayerDate, zone);
+        scheduleOne(context, "dhuhr", dhuhrEpoch - 300, 12, true, prayerDate, zone);
+        scheduleOne(context, "asr", asrEpoch - 300, 13, true, prayerDate, zone);
+        scheduleOne(context, "maghrib", maghribEpoch - 300, 14, true, prayerDate, zone);
+        scheduleOne(context, "isha", ishaEpoch - 300, 15, true, prayerDate, zone);
     }
 
     // Dipanggil oleh BootReceiver atau ProfileActivity, guna cache tersimpan (tak perlu network call)
@@ -70,20 +99,37 @@ public class PrayerTimeScheduler {
         long asr = prefs.getLong("asr", 0);
         long maghrib = prefs.getLong("maghrib", 0);
         long isha = prefs.getLong("isha", 0);
+        String cachedDate = prefs.getString("cache_date", null);
+        String cachedZone = prefs.getString("cache_zone", "");
 
-        if (fajr == 0) return; // belum ada cache, tunggu app dibuka
+        if (fajr == 0) {
+            Log.d(TAG, "rescheduleFromCache: No cache available.");
+            return;
+        }
 
-        scheduleOne(context, "fajr", fajr, 1, false);
-        scheduleOne(context, "dhuhr", dhuhr, 2, false);
-        scheduleOne(context, "asr", asr, 3, false);
-        scheduleOne(context, "maghrib", maghrib, 4, false);
-        scheduleOne(context, "isha", isha, 5, false);
+        String todayMalaysia = getMalaysiaDateString(System.currentTimeMillis() / 1000L);
+        if (cachedDate == null || !cachedDate.equals(todayMalaysia)) {
+            Log.i(TAG, "rescheduleFromCache: Cached date (" + cachedDate +
+                    ") is not today in Malaysia (" + todayMalaysia + "). Skipping obsolete alarm recreation.");
+            cancelAllAlarms(context);
+            return;
+        }
 
-        scheduleOne(context, "fajr", fajr - 300, 11, true);
-        scheduleOne(context, "dhuhr", dhuhr - 300, 12, true);
-        scheduleOne(context, "asr", asr - 300, 13, true);
-        scheduleOne(context, "maghrib", maghrib - 300, 14, true);
-        scheduleOne(context, "isha", isha - 300, 15, true);
+        cancelAllAlarms(context);
+
+        Log.i(TAG, "Rescheduling from cache for date=" + cachedDate + ", zone=" + cachedZone);
+
+        scheduleOne(context, "fajr", fajr, 1, false, cachedDate, cachedZone);
+        scheduleOne(context, "dhuhr", dhuhr, 2, false, cachedDate, cachedZone);
+        scheduleOne(context, "asr", asr, 3, false, cachedDate, cachedZone);
+        scheduleOne(context, "maghrib", maghrib, 4, false, cachedDate, cachedZone);
+        scheduleOne(context, "isha", isha, 5, false, cachedDate, cachedZone);
+
+        scheduleOne(context, "fajr", fajr - 300, 11, true, cachedDate, cachedZone);
+        scheduleOne(context, "dhuhr", dhuhr - 300, 12, true, cachedDate, cachedZone);
+        scheduleOne(context, "asr", asr - 300, 13, true, cachedDate, cachedZone);
+        scheduleOne(context, "maghrib", maghrib - 300, 14, true, cachedDate, cachedZone);
+        scheduleOne(context, "isha", isha - 300, 15, true, cachedDate, cachedZone);
     }
 
     public static void cancelAllAlarms(Context context) {
@@ -105,14 +151,17 @@ public class PrayerTimeScheduler {
         }
     }
 
-    private static void scheduleOne(Context context, String prayerName, long epochSeconds, int requestCode, boolean isReminder) {
+    private static void scheduleOne(Context context, String prayerName, long epochSeconds,
+                                    int requestCode, boolean isReminder, String prayerDate, String zone) {
         if (epochSeconds <= 0) {
             return;
         }
 
         long triggerTimeMillis = epochSeconds * 1000L;
+        long nowMillis = System.currentTimeMillis();
 
-        if (triggerTimeMillis < System.currentTimeMillis()) {
+        if (triggerTimeMillis <= nowMillis) {
+            // Masa sudah berlalu, jangan schedule untuk mengelakkan azan berbunyi lewat / midnight
             return;
         }
 
@@ -124,6 +173,20 @@ public class PrayerTimeScheduler {
         Intent intent = new Intent(context, PrayerAlarmReceiver.class);
         intent.putExtra("prayer_name", prayerName);
         intent.putExtra("is_reminder", isReminder);
+        intent.putExtra("scheduled_epoch", epochSeconds);
+        intent.putExtra("prayer_date", prayerDate);
+        intent.putExtra("prayer_zone", zone);
+
+        // Batalkan intent lama dengan request code ini sekiranya wujud
+        try {
+            PendingIntent existing = PendingIntent.getBroadcast(
+                    context, requestCode, intent,
+                    PendingIntent.FLAG_NO_CREATE | PendingIntent.FLAG_IMMUTABLE);
+            if (existing != null) {
+                alarmManager.cancel(existing);
+                existing.cancel();
+            }
+        } catch (Exception ignored) {}
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 context, requestCode, intent,
@@ -141,6 +204,9 @@ public class PrayerTimeScheduler {
             alarmManager.setAndAllowWhileIdle(
                     AlarmManager.RTC_WAKEUP, triggerTimeMillis, pendingIntent);
         }
+
+        Log.d(TAG, "Scheduled alarm: prayer=" + prayerName + ", reminder=" + isReminder +
+                ", date=" + prayerDate + ", epoch=" + epochSeconds + ", inSec=" + ((triggerTimeMillis - nowMillis) / 1000L));
     }
 
     // Panggil ni dari MainActivity untuk minta user enable "exact alarm"
@@ -169,10 +235,10 @@ public class PrayerTimeScheduler {
     public static void requestBatteryOptimizationExemption(Context context) {
         if (context == null) return;
         if (!OnboardingManager.isPrayerFeatureEnabled(context) || !OnboardingManager.isAzanFeatureEnabled(context)) {
-            return; // Hormati pilihan 'Mungkin Nanti'
+            return;
         }
         if (OnboardingManager.isBatteryPromptShown(context)) {
-            return; // Sudah pernah ditanya, elakkan prompt berulang
+            return;
         }
         showBatteryOptimizationDialog(context, false);
     }
@@ -183,7 +249,7 @@ public class PrayerTimeScheduler {
         String packageName = context.getPackageName();
 
         if (pm != null && pm.isIgnoringBatteryOptimizations(packageName) && !forceShow) {
-            return; // Dah exempted, tidak perlu tanya lagi
+            return;
         }
 
         if (context instanceof android.app.Activity && ((android.app.Activity) context).isFinishing()) {
@@ -218,8 +284,7 @@ public class PrayerTimeScheduler {
                 } catch (Exception e) {
                     try {
                         context.startActivity(new Intent(android.provider.Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS));
-                    } catch (Exception ignored) {
-                    }
+                    } catch (Exception ignored) {}
                 }
             });
         }
@@ -238,8 +303,7 @@ public class PrayerTimeScheduler {
 
         try {
             dialog.show();
-        } catch (Exception ignored) {
-        }
+        } catch (Exception ignored) {}
     }
 
     // Baca semula waktu solat yang dah di-cache, untuk refresh arc widget
@@ -248,7 +312,7 @@ public class PrayerTimeScheduler {
         if (context == null) return null;
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         long fajr = prefs.getLong("fajr", 0);
-        if (fajr == 0) return null; // takde cache lagi
+        if (fajr == 0) return null;
 
         return new long[]{
                 fajr,

@@ -65,6 +65,9 @@ public interface ApiService {
     @GET("v1/auth/me")
     Call<ApiResponse<ProfileResponseDto>> getMe();
 
+    @GET("v1/profile")
+    Call<ApiResponse<ProfileResponseDto>> getProfile();
+
     @POST("v1/auth/logout")
     Call<ApiResponse<Object>> logout();
 
@@ -146,4 +149,31 @@ public interface ApiService {
     @Streaming
     @GET
     Call<ResponseBody> downloadFile(@Url String fileUrl);
+
+    @GET("v1/custom-travel-requests")
+    Call<ApiResponse<List<CustomTravelRequestDto>>> getCustomTravelRequests(
+            @Query("status") String status,
+            @Query("page") Integer page
+    );
+
+    @POST("v1/custom-travel-requests")
+    Call<ApiResponse<CustomTravelRequestDto>> createCustomTravelRequest(
+            @Body CreateCustomTravelRequest request
+    );
+
+    @GET("v1/custom-travel-requests/{id}")
+    Call<ApiResponse<CustomTravelRequestDto>> getCustomTravelRequestDetail(
+            @Path("id") int requestId
+    );
+
+    @PUT("v1/custom-travel-requests/{id}")
+    Call<ApiResponse<CustomTravelRequestDto>> updateCustomTravelRequest(
+            @Path("id") int requestId,
+            @Body CreateCustomTravelRequest request
+    );
+
+    @POST("v1/custom-travel-requests/{id}/cancel")
+    Call<ApiResponse<CustomTravelRequestDto>> cancelCustomTravelRequest(
+            @Path("id") int requestId
+    );
 }

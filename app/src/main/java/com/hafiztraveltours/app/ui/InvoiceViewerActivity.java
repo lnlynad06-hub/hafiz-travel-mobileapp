@@ -394,7 +394,7 @@ public class InvoiceViewerActivity extends BaseActivity {
                 tvPaymentDueDate.setText(formatDatePretty(detail.depositDueDate));
             }
             if (tvInvoicePackageName != null) {
-                tvInvoicePackageName.setText(detail.packageName != null ? detail.packageName : "Pakej Umrah");
+                tvInvoicePackageName.setText(detail.packageName != null ? detail.packageName : getString(R.string.category_umrah));
             }
         }
 
@@ -466,7 +466,7 @@ public class InvoiceViewerActivity extends BaseActivity {
                 }
             } else {
                 TextView tvEmpty = new TextView(this);
-                tvEmpty.setText("Tiada rekod bayaran buat masa ini.");
+                tvEmpty.setText(getString(R.string.invoice_no_payment_records));
                 tvEmpty.setTextColor(Color.parseColor("#94A3B8"));
                 tvEmpty.setTextSize(11f);
                 tvEmpty.setPadding(0, 8, 0, 8);
@@ -477,10 +477,15 @@ public class InvoiceViewerActivity extends BaseActivity {
         // 8. Bank Details & Terms
         if (detail.bankDetails != null) {
             if (tvBankDetails != null) {
-                tvBankDetails.setText("Bank: " + detail.bankDetails.bankName + "\nAkaun: " + detail.bankDetails.accountNumber + "\nPenerima: " + detail.bankDetails.accountHolder);
+                tvBankDetails.setText(getString(R.string.invoice_bank_details_format,
+                        detail.bankDetails.bankName,
+                        detail.bankDetails.accountNumber,
+                        detail.bankDetails.accountHolder));
             }
             if (tvPaymentTerms != null) {
-                tvPaymentTerms.setText("Polisi Deposit: " + detail.bankDetails.depositPolicy + "\nBaki Bayaran: " + detail.bankDetails.balanceDeadline);
+                tvPaymentTerms.setText(getString(R.string.invoice_payment_terms_format,
+                        detail.bankDetails.depositPolicy,
+                        detail.bankDetails.balanceDeadline));
             }
         }
 

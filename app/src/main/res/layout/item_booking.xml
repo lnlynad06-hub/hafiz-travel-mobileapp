@@ -38,13 +38,13 @@
 
             <ImageView
                 android:id="@+id/btnBookingKebabMenu"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="More options"
-                android:padding="6dp"
+                android:contentDescription="@string/content_desc_more_options"
+                android:padding="12dp"
                 android:src="@drawable/ic_more_vert"
                 app:tint="@color/text_dark" />
 

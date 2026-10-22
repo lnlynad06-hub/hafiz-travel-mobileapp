@@ -229,4 +229,203 @@ public class DatePickerBottomSheetHelper {
         sheetDialog.show();
         return sheetDialog;
     }
+
+    public static BottomSheetDialog showTravelDatePicker(
+            Context context,
+            String title,
+            String subtitle,
+            String minDateIso,
+            TextView tvTargetValue,
+            String[] selectedDateHolder,
+            OnDateSelectedListener listener) {
+
+        BottomSheetDialog sheetDialog = new BottomSheetDialog(context);
+        View sheetView = LayoutInflater.from(context).inflate(R.layout.bottom_sheet_dob_picker, null);
+        sheetDialog.setContentView(sheetView);
+
+        if (sheetDialog.getWindow() != null) {
+            sheetDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            sheetDialog.getWindow().setDimAmount(0.55f);
+        }
+
+        View btnClose = sheetView.findViewById(R.id.btnCloseDobSheet);
+        if (btnClose != null) btnClose.setOnClickListener(v -> sheetDialog.dismiss());
+
+        TextView tvSheetTitle = sheetView.findViewById(R.id.tvDobSheetTitle);
+        if (tvSheetTitle != null && title != null && !title.isEmpty()) {
+            tvSheetTitle.setText(title);
+        }
+
+        TextView tvSheetSub = sheetView.findViewById(R.id.tvDobSheetSub);
+        if (tvSheetSub != null && subtitle != null && !subtitle.isEmpty()) {
+            tvSheetSub.setText(subtitle);
+        }
+
+        TextView tvPreview = sheetView.findViewById(R.id.tvDobPreviewText);
+        TextView tvPreviewAge = sheetView.findViewById(R.id.tvDobPreviewAge);
+        if (tvPreviewAge != null) {
+            tvPreviewAge.setVisibility(View.GONE);
+        }
+
+        NumberPicker npDay = sheetView.findViewById(R.id.npDobDay);
+        NumberPicker npMonth = sheetView.findViewById(R.id.npDobMonth);
+        NumberPicker npYear = sheetView.findViewById(R.id.npDobYear);
+        View btnDone = sheetView.findViewById(R.id.btnDoneDob);
+
+        Calendar today = Calendar.getInstance();
+        today.set(Calendar.HOUR_OF_DAY, 0);
+        today.set(Calendar.MINUTE, 0);
+        today.set(Calendar.SECOND, 0);
+        today.set(Calendar.MILLISECOND, 0);
+
+        Calendar minCal = Calendar.getInstance();
+        minCal.setTime(today.getTime());
+
+        if (minDateIso != null && !minDateIso.trim().isEmpty()) {
+            try {
+                String[] parts = minDateIso.trim().split("-");
+                if (parts.length == 3) {
+                    minCal.set(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]) - 1, Integer.parseInt(parts[2]));
+                }
+            } catch (Exception ignored) {}
+        }
+        if (minCal.before(today)) {
+            minCal.setTime(today.getTime());
+        }
+
+        int minYear = minCal.get(Calendar.YEAR);
+        int maxYear = minYear + 5;
+
+        final int[] curSelected = new int[]{
+                minCal.get(Calendar.YEAR),
+                minCal.get(Calendar.MONTH),
+                minCal.get(Calendar.DAY_OF_MONTH)
+        };
+
+        String currentDateStr = selectedDateHolder != null && selectedDateHolder.length > 0 ? selectedDateHolder[0] : "";
+        if (currentDateStr != null && !currentDateStr.trim().isEmpty()) {
+            try {
+                String[] parts = currentDateStr.trim().split("-");
+                if (parts.length == 3) {
+                    Calendar selCal = Calendar.getInstance();
+                    selCal.set(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]) - 1, Integer.parseInt(parts[2]));
+                    if (!selCal.before(minCal)) {
+                        curSelected[0] = selCal.get(Calendar.YEAR);
+                        curSelected[1] = selCal.get(Calendar.MONTH);
+                        curSelected[2] = selCal.get(Calendar.DAY_OF_MONTH);
+                    }
+                }
+            } catch (Exception ignored) {}
+        }
+
+        boolean isMalay = "ms".equalsIgnoreCase(LocaleHelper.getSavedLanguage(context));
+        String[] monthNames = isMalay
+                ? new String[]{"Jan", "Feb", "Mac", "Apr", "Mei", "Jun", "Jul", "Ogo", "Sep", "Okt", "Nov", "Dis"}
+                : new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+
+        if (npYear != null) {
+            npYear.setMinValue(minYear);
+            npYear.setMaxValue(maxYear);
+            npYear.setValue(Math.max(minYear, Math.min(maxYear, curSelected[0])));
+            npYear.setWrapSelectorWheel(false);
+        }
+
+        Runnable updateMonthBounds = () -> {
+            int y = npYear != null ? npYear.getValue() : minYear;
+            int minM = (y == minCal.get(Calendar.YEAR)) ? minCal.get(Calendar.MONTH) : 0;
+            if (npMonth != null) {
+                int oldM = npMonth.getValue();
+                npMonth.setDisplayedValues(null);
+                npMonth.setMinValue(minM);
+                npMonth.setMaxValue(11);
+                String[] subMonths = new String[12 - minM];
+                System.arraycopy(monthNames, minM, subMonths, 0, subMonths.length);
+                npMonth.setDisplayedValues(subMonths);
+                npMonth.setValue(Math.max(minM, Math.min(11, oldM)));
+                npMonth.setWrapSelectorWheel(false);
+            }
+        };
+
+        Runnable updateDayBounds = () -> {
+            int y = npYear != null ? npYear.getValue() : minYear;
+            int m = npMonth != null ? npMonth.getValue() : 0;
+            Calendar tempCal = Calendar.getInstance();
+            tempCal.set(Calendar.YEAR, y);
+            tempCal.set(Calendar.MONTH, m);
+            tempCal.set(Calendar.DAY_OF_MONTH, 1);
+            int maxDays = tempCal.getActualMaximum(Calendar.DAY_OF_MONTH);
+            int minD = (y == minCal.get(Calendar.YEAR) && m == minCal.get(Calendar.MONTH))
+                    ? minCal.get(Calendar.DAY_OF_MONTH) : 1;
+            if (npDay != null) {
+                int oldD = npDay.getValue();
+                npDay.setMinValue(minD);
+                npDay.setMaxValue(maxDays);
+                npDay.setValue(Math.max(minD, Math.min(maxDays, oldD)));
+                npDay.setWrapSelectorWheel(false);
+            }
+        };
+
+        if (npMonth != null) {
+            updateMonthBounds.run();
+            npMonth.setValue(Math.max(npMonth.getMinValue(), Math.min(11, curSelected[1])));
+        }
+
+        if (npDay != null) {
+            updateDayBounds.run();
+            npDay.setValue(Math.max(npDay.getMinValue(), Math.min(31, curSelected[2])));
+        }
+
+        Runnable updatePreview = () -> {
+            int d = npDay != null ? npDay.getValue() : 1;
+            int m = npMonth != null ? npMonth.getValue() : 0;
+            int y = npYear != null ? npYear.getValue() : minYear;
+            String iso = String.format(Locale.US, "%04d-%02d-%02d", y, m + 1, d);
+            String displayStr = ProfileActivity.formatDateDisplay(context, iso);
+            if (tvPreview != null) {
+                tvPreview.setText(displayStr);
+            }
+        };
+
+        updatePreview.run();
+
+        NumberPicker.OnValueChangeListener changeListener = (picker, oldVal, newVal) -> {
+            if (picker == npYear) {
+                updateMonthBounds.run();
+                updateDayBounds.run();
+            } else if (picker == npMonth) {
+                updateDayBounds.run();
+            }
+            updatePreview.run();
+        };
+
+        if (npDay != null) npDay.setOnValueChangedListener(changeListener);
+        if (npMonth != null) npMonth.setOnValueChangedListener(changeListener);
+        if (npYear != null) npYear.setOnValueChangedListener(changeListener);
+
+        if (btnDone != null) {
+            btnDone.setOnClickListener(v -> {
+                HapticUtil.click(v);
+                int d = npDay != null ? npDay.getValue() : 1;
+                int m = npMonth != null ? npMonth.getValue() : 0;
+                int y = npYear != null ? npYear.getValue() : minYear;
+                String iso = String.format(Locale.US, "%04d-%02d-%02d", y, m + 1, d);
+                String formattedDisplay = ProfileActivity.formatDateDisplay(context, iso);
+
+                if (selectedDateHolder != null && selectedDateHolder.length > 0) {
+                    selectedDateHolder[0] = iso;
+                }
+                if (tvTargetValue != null) {
+                    tvTargetValue.setText(formattedDisplay);
+                    tvTargetValue.setTextColor(ContextCompat.getColor(context, R.color.text_dark));
+                }
+                if (listener != null) {
+                    listener.onDateSelected(iso, formattedDisplay, 0);
+                }
+                sheetDialog.dismiss();
+            });
+        }
+
+        sheetDialog.show();
+        return sheetDialog;
+    }
 }

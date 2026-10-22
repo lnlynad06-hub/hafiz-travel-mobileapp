@@ -187,6 +187,7 @@ public class ProfileViewModel extends AndroidViewModel {
 
     private Call<?> statsCall;
     private Call<?> docsCall;
+    private Call<?> profileCall;
     private Call<?> saveCall;
     private Call<?> passwordCall;
     private Call<?> uploadCall;
@@ -198,6 +199,10 @@ public class ProfileViewModel extends AndroidViewModel {
             ProfileStatsDto cached = repository.cachedStats();
             if (cached != null) {
                 statsData.setValue(cached);
+            }
+            UserDto cachedUser = repository.getSessionUser();
+            if (cachedUser != null) {
+                userData.setValue(cachedUser);
             }
         }
         refreshReadiness();
@@ -317,6 +322,32 @@ public class ProfileViewModel extends AndroidViewModel {
             @Override
             public void onFailure(Call<ApiResponse<ProfileStatsDto>> call, Throwable t) {
                 statsLoading.setValue(false);
+            }
+        });
+    }
+
+    /** Fresh server profile fetch to keep session user & extras synchronized. */
+    public void loadProfile() {
+        if (!repository.isLoggedIn()) return;
+        cancel(profileCall);
+        Call<ApiResponse<ProfileResponseDto>> call = repository.profileCall();
+        profileCall = call;
+        call.enqueue(new Callback<ApiResponse<ProfileResponseDto>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<ProfileResponseDto>> call,
+                                   Response<ApiResponse<ProfileResponseDto>> response) {
+                ProfileResponseDto body =
+                        (response.isSuccessful() && response.body() != null
+                                && response.body().isSuccess()) ? response.body().data : null;
+                if (body != null && body.user != null) {
+                    repository.persistUser(body.user);
+                    userData.setValue(body.user);
+                    refreshReadiness();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<ProfileResponseDto>> call, Throwable t) {
             }
         });
     }
@@ -672,6 +703,7 @@ public class ProfileViewModel extends AndroidViewModel {
     protected void onCleared() {
         cancel(statsCall);
         cancel(docsCall);
+        cancel(profileCall);
         cancel(saveCall);
         cancel(passwordCall);
         cancel(uploadCall);

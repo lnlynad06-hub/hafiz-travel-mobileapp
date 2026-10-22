@@ -33,6 +33,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.hafiztraveltours.app.R;
+import com.hafiztraveltours.app.adapters.CustomTravelRequestAdapter;
 import com.hafiztraveltours.app.adapters.MyBookingsAdapter;
 import com.hafiztraveltours.app.models.BookingDetailDto;
 import com.hafiztraveltours.app.models.BookingDocumentsResponse;
@@ -40,6 +41,7 @@ import com.hafiztraveltours.app.models.BookingDto;
 import com.hafiztraveltours.app.models.BookingListPage;
 import com.hafiztraveltours.app.models.BookingRequest;
 import com.hafiztraveltours.app.models.CancelBookingRequest;
+import com.hafiztraveltours.app.models.CustomTravelRequestDto;
 import com.hafiztraveltours.app.models.DocumentDto;
 import com.hafiztraveltours.app.network.ApiClient;
 import com.hafiztraveltours.app.network.ApiErrors;
@@ -78,6 +80,19 @@ public class MyBookingsActivity extends BaseActivity {
     private ViewStateController viewState;
     private Call<?> bookingsCall;
 
+    // Phase 4 & 5 Custom Travel Quotations Tab
+    private boolean isQuotationsTab = false;
+    private RecyclerView quotationsRecyclerView;
+    private CustomTravelRequestAdapter quotationsAdapter;
+    private Call<ApiResponse<List<CustomTravelRequestDto>>> quotationsCall;
+    private LinearLayout tabBookings;
+    private LinearLayout tabQuotations;
+    private TextView tvTabBookings;
+    private TextView tvTabQuotations;
+    private TextView emptyText;
+    private TextView btnExplore;
+    private View quotationsEmptyContainer;
+
     // Active bottom sheet context
     private BookingDto activeBooking;
     private Integer activeTravellerId = null;
@@ -115,19 +130,36 @@ public class MyBookingsActivity extends BaseActivity {
         findViewById(R.id.bookingsBackButton).setOnClickListener(v -> finish());
 
         recyclerView = findViewById(R.id.bookingsRecyclerView);
+        quotationsRecyclerView = findViewById(R.id.quotationsRecyclerView);
         emptyContainer = findViewById(R.id.bookingsEmptyContainer);
+        quotationsEmptyContainer = findViewById(R.id.quotationsEmptyContainer);
         progressBar = findViewById(R.id.bookingsProgressBar);
         swipeRefresh = findViewById(R.id.bookingsSwipeRefresh);
 
-        TextView emptyText = findViewById(R.id.bookingsEmptyText);
+        tabBookings = findViewById(R.id.tabBookings);
+        tabQuotations = findViewById(R.id.tabQuotations);
+        tvTabBookings = findViewById(R.id.tvTabBookings);
+        tvTabQuotations = findViewById(R.id.tvTabQuotations);
+
+        emptyText = findViewById(R.id.bookingsEmptyText);
         if (emptyText != null) emptyText.setText(getString(R.string.profile_no_booking));
 
-        View btnExplore = findViewById(R.id.btnBookingsExplore);
+        btnExplore = findViewById(R.id.btnBookingsExplore);
         if (btnExplore != null) {
             btnExplore.setOnClickListener(v -> {
                 Intent intent = new Intent(this, AllPackagesActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.nav_seamless_fade_in, R.anim.nav_seamless_fade_out);
+            });
+        }
+
+        View btnQuotationsPlan = findViewById(R.id.btnQuotationsPlanNow);
+        if (btnQuotationsPlan != null) {
+            btnQuotationsPlan.setOnClickListener(v -> {
+                Intent intent = new Intent(this, CustomTravelWizardActivity.class);
+                intent.putExtra(CustomTravelWizardActivity.EXTRA_REQUEST_TYPE, "custom_trip");
+                intent.putExtra(CustomTravelWizardActivity.EXTRA_TRAVEL_TYPE, "umrah");
+                startActivity(intent);
             });
         }
 
@@ -137,6 +169,24 @@ public class MyBookingsActivity extends BaseActivity {
         adapter.setOnPayClickListener(this::showQuickPaySheet);
         adapter.setOnCancelClickListener(this::showCancelBookingConfirmation);
         recyclerView.setAdapter(adapter);
+
+        // Quotations adapter setup
+        quotationsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        quotationsAdapter = new CustomTravelRequestAdapter(this, item -> {
+            Intent intent = new Intent(this, CustomTravelRequestDetailActivity.class);
+            intent.putExtra(CustomTravelRequestDetailActivity.EXTRA_REQUEST_DTO, item);
+            intent.putExtra(CustomTravelRequestDetailActivity.EXTRA_REQUEST_ID, item.id);
+            startActivity(intent);
+        });
+        quotationsRecyclerView.setAdapter(quotationsAdapter);
+
+        if (tabBookings != null) {
+            tabBookings.setOnClickListener(v -> selectTab(false));
+        }
+        if (tabQuotations != null) {
+            tabQuotations.setOnClickListener(v -> selectTab(true));
+        }
+
         viewState = new ViewStateController(progressBar, recyclerView, emptyContainer);
 
         if (swipeRefresh != null) {
@@ -144,21 +194,150 @@ public class MyBookingsActivity extends BaseActivity {
                     R.color.brand_magenta,
                     R.color.gold_accent,
                     R.color.brand_dark_pink);
-            swipeRefresh.setOnRefreshListener(this::loadBookings);
+            swipeRefresh.setOnRefreshListener(() -> {
+                if (isQuotationsTab) {
+                    loadQuotations();
+                } else {
+                    loadBookings();
+                }
+            });
         }
+
+        String defaultTab = getIntent().getStringExtra("extra_default_tab");
+        if ("quotations".equalsIgnoreCase(defaultTab)) {
+            selectTab(true);
+        }
+
         restorePendingPayment();
+    }
+
+    private void selectTab(boolean quotations) {
+        isQuotationsTab = quotations;
+        if (quotations) {
+            if (tabQuotations != null) tabQuotations.setBackgroundResource(R.drawable.bg_category_chip_active);
+            if (tvTabQuotations != null) tvTabQuotations.setTextColor(Color.WHITE);
+            if (tabBookings != null) tabBookings.setBackgroundResource(R.drawable.bg_category_chip_inactive);
+            if (tvTabBookings != null) tvTabBookings.setTextColor(getColor(R.color.text_gray));
+
+            if (bookingsCall != null) {
+                bookingsCall.cancel();
+                bookingsCall = null;
+            }
+
+            recyclerView.setVisibility(View.GONE);
+            emptyContainer.setVisibility(View.GONE);
+
+            if (quotationsAdapter.getItemCount() > 0) {
+                quotationsRecyclerView.setVisibility(View.VISIBLE);
+                if (quotationsEmptyContainer != null) quotationsEmptyContainer.setVisibility(View.GONE);
+            } else {
+                quotationsRecyclerView.setVisibility(View.GONE);
+                if (quotationsEmptyContainer != null) quotationsEmptyContainer.setVisibility(View.VISIBLE);
+            }
+
+            loadQuotations();
+        } else {
+            if (tabBookings != null) tabBookings.setBackgroundResource(R.drawable.bg_category_chip_active);
+            if (tvTabBookings != null) tvTabBookings.setTextColor(Color.WHITE);
+            if (tabQuotations != null) tabQuotations.setBackgroundResource(R.drawable.bg_category_chip_inactive);
+            if (tvTabQuotations != null) tvTabQuotations.setTextColor(getColor(R.color.text_gray));
+
+            if (quotationsCall != null) {
+                quotationsCall.cancel();
+                quotationsCall = null;
+            }
+
+            quotationsRecyclerView.setVisibility(View.GONE);
+            if (quotationsEmptyContainer != null) quotationsEmptyContainer.setVisibility(View.GONE);
+
+            if (adapter.getItemCount() > 0) {
+                recyclerView.setVisibility(View.VISIBLE);
+                emptyContainer.setVisibility(View.GONE);
+            } else {
+                recyclerView.setVisibility(View.GONE);
+                emptyContainer.setVisibility(View.VISIBLE);
+            }
+
+            loadBookings();
+        }
+    }
+
+    private void loadQuotations() {
+        if (!isQuotationsTab) return;
+
+        if (!SessionManager.getInstance(this).isLoggedIn()) {
+            if (quotationsEmptyContainer != null) quotationsEmptyContainer.setVisibility(View.VISIBLE);
+            quotationsRecyclerView.setVisibility(View.GONE);
+            if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
+            return;
+        }
+
+        if (swipeRefresh == null || !swipeRefresh.isRefreshing()) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+        if (quotationsCall != null) quotationsCall.cancel();
+        quotationsCall = ApiClient.getApiService().getCustomTravelRequests(null, 1);
+        quotationsCall.enqueue(new Callback<ApiResponse<List<CustomTravelRequestDto>>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<List<CustomTravelRequestDto>>> call, Response<ApiResponse<List<CustomTravelRequestDto>>> response) {
+                if (isFinishing() || isDestroyed() || !isQuotationsTab) return;
+                progressBar.setVisibility(View.GONE);
+                if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
+
+                recyclerView.setVisibility(View.GONE);
+                emptyContainer.setVisibility(View.GONE);
+
+                if (response.isSuccessful() && response.body() != null && response.body().data != null) {
+                    List<CustomTravelRequestDto> list = response.body().data;
+                    if (list.isEmpty()) {
+                        if (quotationsEmptyContainer != null) quotationsEmptyContainer.setVisibility(View.VISIBLE);
+                        quotationsRecyclerView.setVisibility(View.GONE);
+                    } else {
+                        if (quotationsEmptyContainer != null) quotationsEmptyContainer.setVisibility(View.GONE);
+                        quotationsRecyclerView.setVisibility(View.VISIBLE);
+                        quotationsAdapter.setItems(list);
+                    }
+                } else {
+                    if (quotationsAdapter.getItemCount() == 0) {
+                        if (quotationsEmptyContainer != null) quotationsEmptyContainer.setVisibility(View.VISIBLE);
+                        quotationsRecyclerView.setVisibility(View.GONE);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<List<CustomTravelRequestDto>>> call, Throwable t) {
+                if (isFinishing() || isDestroyed() || !isQuotationsTab) return;
+                progressBar.setVisibility(View.GONE);
+                if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
+
+                recyclerView.setVisibility(View.GONE);
+                emptyContainer.setVisibility(View.GONE);
+
+                if (quotationsAdapter.getItemCount() == 0) {
+                    if (quotationsEmptyContainer != null) quotationsEmptyContainer.setVisibility(View.VISIBLE);
+                    quotationsRecyclerView.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        loadBookings();
+        if (isQuotationsTab) {
+            loadQuotations();
+        } else {
+            loadBookings();
+        }
         // Returning from the gateway browser (or process restart): verify real state.
         verifyPendingPayment();
     }
 
     @Override
     protected void onDestroy() {
+        if (quotationsCall != null) quotationsCall.cancel();
         if (bookingsCall != null) bookingsCall.cancel();
         if (payCall != null) payCall.cancel();
         if (verifyCall != null) verifyCall.cancel();
@@ -169,6 +348,8 @@ public class MyBookingsActivity extends BaseActivity {
     }
 
     private void loadBookings() {
+        if (isQuotationsTab) return;
+
         if (!SessionManager.getInstance(this).isLoggedIn()) {
             showEmpty();
             if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
@@ -185,8 +366,11 @@ public class MyBookingsActivity extends BaseActivity {
             @Override
             public void onResponse(Call<ApiResponse<BookingListPage>> call,
                                    Response<ApiResponse<BookingListPage>> response) {
-                if (isFinishing() || isDestroyed()) return;
+                if (isFinishing() || isDestroyed() || isQuotationsTab) return;
                 if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
+
+                quotationsRecyclerView.setVisibility(View.GONE);
+                if (quotationsEmptyContainer != null) quotationsEmptyContainer.setVisibility(View.GONE);
 
                 BookingListPage page = (response.isSuccessful() && response.body() != null
                         && response.body().isSuccess()) ? response.body().data : null;
@@ -205,8 +389,12 @@ public class MyBookingsActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<ApiResponse<BookingListPage>> call, Throwable t) {
-                if (isFinishing() || isDestroyed()) return;
+                if (isFinishing() || isDestroyed() || isQuotationsTab) return;
                 if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
+
+                quotationsRecyclerView.setVisibility(View.GONE);
+                if (quotationsEmptyContainer != null) quotationsEmptyContainer.setVisibility(View.GONE);
+
                 Toast.makeText(MyBookingsActivity.this,
                         com.hafiztraveltours.app.network.ApiErrors.userMessage(MyBookingsActivity.this, t, R.string.err_network), Toast.LENGTH_SHORT).show();
                 if (adapter.getItemCount() == 0) showEmpty();

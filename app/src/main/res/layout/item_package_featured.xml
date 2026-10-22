@@ -22,12 +22,13 @@
 
         <ImageView
             android:id="@+id/packageFavoriteIcon"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_gravity="top|end"
             android:layout_margin="10dp"
             android:background="@drawable/circle_bg_social"
-            android:padding="10dp"
+            android:padding="12dp"
+            android:contentDescription="@string/content_desc_favorite"
             android:src="@drawable/ic_favorite"
             android:clickable="true"
             android:focusable="true"
@@ -37,7 +38,7 @@
 
     <TextView
         android:id="@+id/packageCategory"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:textColor="@color/brand_magenta"

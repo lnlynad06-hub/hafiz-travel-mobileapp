@@ -42,6 +42,7 @@ public class ApiClient {
                         okhttp3.Request original = chain.request();
                         okhttp3.Request.Builder builder = original.newBuilder()
                                 .header("Accept", "application/json")
+                                .header("X-App-Locale", "ms".equalsIgnoreCase(java.util.Locale.getDefault().getLanguage()) ? "ms" : "en")
                                 .header("User-Agent", "HafizTravelApp/1.6 (Android; Mobile)");
                         if (authToken != null) {
                             builder.header("Authorization", "Bearer " + authToken);

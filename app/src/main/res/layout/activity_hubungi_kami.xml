@@ -21,14 +21,14 @@
 
         <ImageView
             android:id="@+id/hubungiBackButton"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:contentDescription="@string/content_desc_back"
             android:clickable="true"
             android:focusable="true"
             android:padding="10dp"
             android:src="@drawable/ic_back"
-            app:tint="@color/text_dark"
-            tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+            app:tint="@color/text_dark" />
 
         <TextView
             android:layout_width="0dp"
@@ -293,7 +293,7 @@
                 <TextView
                     android:id="@+id/socialFacebook"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
                     android:layout_marginEnd="6dp"
                     android:layout_weight="1"
                     android:background="@drawable/circle_bg_light"
@@ -304,13 +304,12 @@
                     android:text="Facebook"
                     android:textColor="@color/pink_dark"
                     android:textSize="12sp"
-                    android:textStyle="bold"
-                    tools:ignore="TouchTargetSizeCheck" />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/socialInstagram"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
                     android:layout_marginHorizontal="6dp"
                     android:layout_weight="1"
                     android:background="@drawable/circle_bg_light"
@@ -321,13 +320,12 @@
                     android:text="Instagram"
                     android:textColor="@color/pink_dark"
                     android:textSize="12sp"
-                    android:textStyle="bold"
-                    tools:ignore="TouchTargetSizeCheck" />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/socialTiktok"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
                     android:layout_marginHorizontal="6dp"
                     android:layout_weight="1"
                     android:background="@drawable/circle_bg_light"
@@ -338,13 +336,12 @@
                     android:text="TikTok"
                     android:textColor="@color/pink_dark"
                     android:textSize="12sp"
-                    android:textStyle="bold"
-                    tools:ignore="TouchTargetSizeCheck" />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/socialYoutube"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
                     android:layout_marginStart="6dp"
                     android:layout_weight="1"
                     android:background="@drawable/circle_bg_light"
@@ -355,8 +352,7 @@
                     android:text="YouTube"
                     android:textColor="@color/pink_dark"
                     android:textSize="12sp"
-                    android:textStyle="bold"
-                    tools:ignore="TouchTargetSizeCheck" />
+                    android:textStyle="bold" />
 
             </LinearLayout>
 

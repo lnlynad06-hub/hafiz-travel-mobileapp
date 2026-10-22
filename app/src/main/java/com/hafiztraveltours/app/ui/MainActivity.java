@@ -583,7 +583,7 @@ public class MainActivity extends BaseActivity {
         if (tag != null) {
             String dest = (pkg.destination != null && !pkg.destination.trim().isEmpty())
                     ? pkg.destination.toUpperCase()
-                    : (pkg.isUmrah() ? "UMRAH" : "PELANCONGAN");
+                    : (pkg.isUmrah() ? getString(R.string.category_umrah).toUpperCase(Locale.ENGLISH) : getString(R.string.category_tourism).toUpperCase(Locale.ENGLISH));
             if (dest.length() > 20) dest = dest.substring(0, 20);
             tag.setText(dest);
         }
@@ -700,6 +700,34 @@ public class MainActivity extends BaseActivity {
             startActivity(intent);
             overridePendingTransition(R.anim.nav_seamless_fade_in, R.anim.nav_seamless_fade_out);
         });
+
+        // Entry Point B: Plan Your Own Trip (Build Your Own Travel)
+        setupTactileButton(findViewById(R.id.btnPlanOwnUmrah), () -> {
+            Intent intent = new Intent(this, CustomTravelWizardActivity.class);
+            intent.putExtra(CustomTravelWizardActivity.EXTRA_REQUEST_TYPE, "custom_trip");
+            intent.putExtra(CustomTravelWizardActivity.EXTRA_TRAVEL_TYPE, "umrah");
+            startActivity(intent);
+            overridePendingTransition(R.anim.nav_seamless_fade_in, R.anim.nav_seamless_fade_out);
+        });
+
+        setupTactileButton(findViewById(R.id.btnPlanOwnTour), () -> {
+            Intent intent = new Intent(this, CustomTravelWizardActivity.class);
+            intent.putExtra(CustomTravelWizardActivity.EXTRA_REQUEST_TYPE, "custom_trip");
+            intent.putExtra(CustomTravelWizardActivity.EXTRA_TRAVEL_TYPE, "tour");
+            startActivity(intent);
+            overridePendingTransition(R.anim.nav_seamless_fade_in, R.anim.nav_seamless_fade_out);
+        });
+
+        View cardPlanOwnTrip = findViewById(R.id.cardPlanOwnTrip);
+        if (cardPlanOwnTrip != null) {
+            setupTactileButton(cardPlanOwnTrip, () -> {
+                Intent intent = new Intent(this, CustomTravelWizardActivity.class);
+                intent.putExtra(CustomTravelWizardActivity.EXTRA_REQUEST_TYPE, "custom_trip");
+                intent.putExtra(CustomTravelWizardActivity.EXTRA_TRAVEL_TYPE, "umrah");
+                startActivity(intent);
+                overridePendingTransition(R.anim.nav_seamless_fade_in, R.anim.nav_seamless_fade_out);
+            });
+        }
     }
 
     private void setupBottomNav() {
@@ -1217,7 +1245,12 @@ public class MainActivity extends BaseActivity {
         String zone = json.optString("zone", "");
         JSONArray prayersArray = json.getJSONArray("prayers");
 
-        int todayOfMonth = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+        Calendar myCal = Calendar.getInstance(PrayerTimeScheduler.TIME_ZONE_MALAYSIA);
+        int todayOfMonth = myCal.get(Calendar.DAY_OF_MONTH);
+        int currentYear = myCal.get(Calendar.YEAR);
+        int currentMonth = myCal.get(Calendar.MONTH) + 1;
+        String todayDateStr = String.format(Locale.US, "%04d-%02d-%02d", currentYear, currentMonth, todayOfMonth);
+
         JSONObject todayPrayers = null;
         for (int i = 0; i < prayersArray.length(); i++) {
             JSONObject entry = prayersArray.getJSONObject(i);
@@ -1243,13 +1276,15 @@ public class MainActivity extends BaseActivity {
                 todayPrayers.getLong("isha")
         };
 
-        // TAMBAHAN BARU: schedule alarm azan untuk setiap waktu solat hari ini
+        // Schedule exact Azan alarms with Malaysian timezone & date
         PrayerTimeScheduler.scheduleAll(this,
                 finalTodayPrayers.getLong("fajr"),
                 finalTodayPrayers.getLong("dhuhr"),
                 finalTodayPrayers.getLong("asr"),
                 finalTodayPrayers.getLong("maghrib"),
-                finalTodayPrayers.getLong("isha"));
+                finalTodayPrayers.getLong("isha"),
+                zone,
+                todayDateStr);
 
         String finalZone = zone;
         runOnUiThread(() -> {
@@ -1274,11 +1309,13 @@ public class MainActivity extends BaseActivity {
         dateText.setTextColor(getResources().getColor(R.color.prayer_card_text_secondary));
         dateText.setTextSize(15f);
 
-        Calendar today = Calendar.getInstance();
-        DateComponents dateComponents = new DateComponents(
-                today.get(Calendar.YEAR),
-                today.get(Calendar.MONTH) + 1,
-                today.get(Calendar.DAY_OF_MONTH));
+        Calendar today = Calendar.getInstance(PrayerTimeScheduler.TIME_ZONE_MALAYSIA);
+        int year = today.get(Calendar.YEAR);
+        int month = today.get(Calendar.MONTH) + 1;
+        int day = today.get(Calendar.DAY_OF_MONTH);
+        String fallbackDateStr = String.format(Locale.US, "%04d-%02d-%02d", year, month, day);
+
+        DateComponents dateComponents = new DateComponents(year, month, day);
 
         Coordinates coordinates = new Coordinates(latitude, longitude);
         CalculationParameters params = CalculationMethod.SINGAPORE.getParameters();
@@ -1297,13 +1334,15 @@ public class MainActivity extends BaseActivity {
                 prayerTimes.isha.getTime() / 1000L
         };
 
-        // TAMBAHAN BARU: schedule alarm azan guna waktu anggaran (epoch seconds = milliseconds / 1000)
+        // Schedule fallback alarms with calculated estimates
         PrayerTimeScheduler.scheduleAll(this,
-                prayerTimes.fajr.getTime() / 1000,
-                prayerTimes.dhuhr.getTime() / 1000,
-                prayerTimes.asr.getTime() / 1000,
-                prayerTimes.maghrib.getTime() / 1000,
-                prayerTimes.isha.getTime() / 1000);
+                prayerTimes.fajr.getTime() / 1000L,
+                prayerTimes.dhuhr.getTime() / 1000L,
+                prayerTimes.asr.getTime() / 1000L,
+                prayerTimes.maghrib.getTime() / 1000L,
+                prayerTimes.isha.getTime() / 1000L,
+                "GPS_ESTIMATE",
+                fallbackDateStr);
 
         renderPrayerArc(names, epochs);
     }

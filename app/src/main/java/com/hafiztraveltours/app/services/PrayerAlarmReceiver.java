@@ -1,30 +1,92 @@
 package com.hafiztraveltours.app.services;
 
-import com.hafiztraveltours.app.R;
-import com.hafiztraveltours.app.models.*;
-import com.hafiztraveltours.app.adapters.*;
-import com.hafiztraveltours.app.network.*;
-import com.hafiztraveltours.app.services.*;
-import com.hafiztraveltours.app.utils.*;
-import com.hafiztraveltours.app.views.*;
-import com.hafiztraveltours.app.ui.*;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
+import android.util.Log;
+
+import com.hafiztraveltours.app.models.AppNotification;
+import com.hafiztraveltours.app.utils.AppNotificationManager;
+import com.hafiztraveltours.app.utils.OnboardingManager;
 
 public class PrayerAlarmReceiver extends BroadcastReceiver {
+
+    private static final String TAG = "PrayerAlarmReceiver";
+    private static final String PREFS_TRACKER = "prayer_playback_tracker";
+
+    // Maximum acceptable drift: 15 minutes (900 seconds).
+    // An alarm delayed by Android Doze/battery-saver beyond 15 minutes must never
+    // blast Azan (e.g. late night or midnight for an Isha alarm).
+    public static final long MAX_ALLOWED_DRIFT_SECONDS = 15 * 60L;
+
+    public static final int STATE_IDLE = 0;
+    public static final int STATE_DISPATCHED = 1;
+    public static final int STATE_COMPLETED = 2;
+    public static final int STATE_STOPPED = 3;
+
     @Override
     public void onReceive(Context context, Intent intent) {
         if (context == null) return;
         if (!OnboardingManager.isPrayerFeatureEnabled(context) || !OnboardingManager.isAzanFeatureEnabled(context)) {
+            Log.i(TAG, "Prayer or Azan feature disabled, ignoring alarm trigger.");
             return;
         }
 
         String prayerName = intent != null ? intent.getStringExtra("prayer_name") : null;
         boolean isReminder = intent != null && intent.getBooleanExtra("is_reminder", false);
+        long scheduledEpoch = intent != null ? intent.getLongExtra("scheduled_epoch", 0) : 0;
+        String prayerDate = intent != null ? intent.getStringExtra("prayer_date") : null;
+        String prayerZone = intent != null ? intent.getStringExtra("prayer_zone") : null;
 
+        long currentEpoch = System.currentTimeMillis() / 1000L;
+        long driftSeconds = scheduledEpoch > 0 ? (currentEpoch - scheduledEpoch) : 0;
+
+        if (prayerDate == null || prayerDate.isEmpty()) {
+            prayerDate = PrayerTimeScheduler.getMalaysiaDateString(scheduledEpoch > 0 ? scheduledEpoch : currentEpoch);
+        }
+
+        // 1. Freshness / Stale Alarm Guard:
+        if (scheduledEpoch > 0) {
+            if (driftSeconds > MAX_ALLOWED_DRIFT_SECONDS) {
+                Log.w(TAG, "STALE_ALARM_DROPPED: prayer=" + prayerName +
+                        ", date=" + prayerDate +
+                        ", zone=" + prayerZone +
+                        ", timezone=Asia/Kuala_Lumpur" +
+                        ", scheduledEpoch=" + scheduledEpoch +
+                        ", actualEpoch=" + currentEpoch +
+                        ", driftSeconds=" + driftSeconds + "s (> " + MAX_ALLOWED_DRIFT_SECONDS + "s limit). Dropping stale playback.");
+                return;
+            }
+            if (driftSeconds < -300) {
+                Log.w(TAG, "EARLY_ALARM_DROPPED: prayer=" + prayerName +
+                        ", driftSeconds=" + driftSeconds + "s. Dropping anomalous trigger.");
+                return;
+            }
+        }
+
+        // 2. Duplicate Playback Guard:
+        if (!isReminder) {
+            if (isPrayerPlaybackCompletedOrStopped(context, prayerName, prayerDate)) {
+                Log.w(TAG, "DUPLICATE_PLAYBACK_PREVENTED: prayer=" + prayerName +
+                        " on date=" + prayerDate + " was already played or stopped. Dropping duplicate alarm.");
+                return;
+            }
+            markPrayerAsDispatched(context, prayerName, prayerDate);
+        }
+
+        // 3. Diagnostic Logging:
+        Log.i(TAG, "PRAYER_ALARM_DISPATCH: prayer=" + prayerName +
+                ", date=" + prayerDate +
+                ", zone=" + prayerZone +
+                ", timezone=Asia/Kuala_Lumpur" +
+                ", scheduledEpoch=" + scheduledEpoch +
+                ", triggerEpoch=" + currentEpoch +
+                ", driftSeconds=" + driftSeconds +
+                ", isReminder=" + isReminder);
+
+        // 4. Notification / Playback Execution:
         if (isReminder) {
             String nameEn = getPrayerNameEn(prayerName);
             String nameBm = getPrayerNameBm(prayerName);
@@ -33,7 +95,7 @@ public class PrayerAlarmReceiver extends BroadcastReceiver {
             String msgEn = nameEn + " prayer is in 5 minutes.";
             String msgBm = "Waktu solat " + nameBm + " akan masuk dalam 5 minit.";
 
-            String notifId = "prayer_reminder_" + (prayerName != null ? prayerName.toLowerCase() : "solat") + "_" + (System.currentTimeMillis() / (1000 * 60 * 60 * 24));
+            String notifId = "prayer_reminder_" + (prayerName != null ? prayerName.toLowerCase() : "solat") + "_" + prayerDate;
             AppNotification notif = new AppNotification(
                     notifId, titleEn, titleBm, msgEn, msgBm,
                     System.currentTimeMillis(), false, "prayer_reminder");
@@ -43,12 +105,81 @@ public class PrayerAlarmReceiver extends BroadcastReceiver {
 
         Intent serviceIntent = new Intent(context, AzanService.class);
         serviceIntent.putExtra("prayer_name", prayerName);
+        serviceIntent.putExtra("prayer_date", prayerDate);
+        serviceIntent.putExtra("prayer_zone", prayerZone);
+        serviceIntent.putExtra("scheduled_epoch", scheduledEpoch);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             context.startForegroundService(serviceIntent);
         } else {
             context.startService(serviceIntent);
         }
+    }
+
+    public static boolean isPrayerPlaybackCompletedOrStopped(Context context, String prayerName, String prayerDate) {
+        if (context == null) return false;
+        return isPrayerPlaybackCompletedOrStopped(context.getSharedPreferences(PREFS_TRACKER, Context.MODE_PRIVATE), prayerName, prayerDate);
+    }
+
+    public static boolean isPrayerPlaybackCompletedOrStopped(SharedPreferences prefs, String prayerName, String prayerDate) {
+        if (prefs == null || prayerName == null || prayerDate == null) return false;
+        String key = buildTrackerKey(prayerName, prayerDate);
+        int state = prefs.getInt(key, STATE_IDLE);
+        return state == STATE_COMPLETED || state == STATE_STOPPED;
+    }
+
+    public static void markPrayerAsDispatched(Context context, String prayerName, String prayerDate) {
+        if (context != null) {
+            markPrayerAsDispatched(context.getSharedPreferences(PREFS_TRACKER, Context.MODE_PRIVATE), prayerName, prayerDate);
+        }
+    }
+
+    public static void markPrayerAsDispatched(SharedPreferences prefs, String prayerName, String prayerDate) {
+        setPrayerState(prefs, prayerName, prayerDate, STATE_DISPATCHED);
+    }
+
+    public static void markPrayerAsPlayed(Context context, String prayerName, String prayerDate) {
+        if (context != null) {
+            markPrayerAsPlayed(context.getSharedPreferences(PREFS_TRACKER, Context.MODE_PRIVATE), prayerName, prayerDate);
+        }
+    }
+
+    public static void markPrayerAsPlayed(SharedPreferences prefs, String prayerName, String prayerDate) {
+        setPrayerState(prefs, prayerName, prayerDate, STATE_COMPLETED);
+    }
+
+    public static void markPrayerAsStopped(Context context, String prayerName, String prayerDate) {
+        if (context != null) {
+            markPrayerAsStopped(context.getSharedPreferences(PREFS_TRACKER, Context.MODE_PRIVATE), prayerName, prayerDate);
+        }
+    }
+
+    public static void markPrayerAsStopped(SharedPreferences prefs, String prayerName, String prayerDate) {
+        setPrayerState(prefs, prayerName, prayerDate, STATE_STOPPED);
+    }
+
+    public static void clearTracker(Context context) {
+        if (context != null) {
+            clearTracker(context.getSharedPreferences(PREFS_TRACKER, Context.MODE_PRIVATE));
+        }
+    }
+
+    public static void clearTracker(SharedPreferences prefs) {
+        if (prefs == null) return;
+        prefs.edit().clear().apply();
+    }
+
+    private static void setPrayerState(SharedPreferences prefs, String prayerName, String prayerDate, int state) {
+        if (prefs == null || prayerName == null || prayerDate == null) return;
+        String key = buildTrackerKey(prayerName, prayerDate);
+        prefs.edit()
+                .putInt(key, state)
+                .putLong(key + "_time", System.currentTimeMillis())
+                .apply();
+    }
+
+    private static String buildTrackerKey(String prayerName, String prayerDate) {
+        return prayerName.trim().toLowerCase() + "_" + prayerDate.trim();
     }
 
     private String getPrayerNameEn(String key) {

@@ -83,6 +83,7 @@ public class SessionManager {
         }
         if (user != null) {
             editor.putString(KEY_USER_DATA, gson.toJson(user));
+            syncProfileExtras(user);
         }
         editor.apply();
         syncApiToken();
@@ -91,6 +92,7 @@ public class SessionManager {
     public void saveUser(UserDto user) {
         if (user != null) {
             prefs.edit().putString(KEY_USER_DATA, gson.toJson(user)).apply();
+            syncProfileExtras(user);
         }
     }
 
@@ -228,5 +230,34 @@ public class SessionManager {
             if (v != null && !v.isEmpty()) out.put(k, v);
         }
         return out;
+    }
+
+    public void syncProfileExtras(UserDto user) {
+        if (user == null || appContext == null) return;
+        try {
+            SharedPreferences profilePrefs = SecurePrefs.wrap(appContext, "user_profile");
+            SharedPreferences.Editor editor = profilePrefs.edit();
+            if (user.name != null && !user.name.isEmpty()) editor.putString("name", user.name);
+            if (user.nickname != null && !user.nickname.isEmpty()) editor.putString("nickname", user.nickname);
+            if (user.email != null && !user.email.isEmpty()) editor.putString("email", user.email);
+            if (user.phone != null && !user.phone.isEmpty()) editor.putString("phone", user.phone);
+            if (user.icNumber != null && !user.icNumber.isEmpty()) editor.putString("ic_no", user.icNumber);
+            if (user.passportNumber != null && !user.passportNumber.isEmpty()) editor.putString("passport_no", user.passportNumber);
+            if (user.passportExpiryDate != null && !user.passportExpiryDate.isEmpty()) editor.putString("passport_expiry", user.passportExpiryDate);
+            if (user.issuingCountry != null && !user.issuingCountry.isEmpty()) editor.putString("issuing_country", user.issuingCountry);
+            if (user.gender != null && !user.gender.isEmpty()) editor.putString("gender", user.gender);
+            if (user.dateOfBirth != null && !user.dateOfBirth.isEmpty()) editor.putString("date_of_birth", user.dateOfBirth);
+            if (user.nationality != null && !user.nationality.isEmpty()) editor.putString("nationality", user.nationality);
+            if (user.addressLine1 != null && !user.addressLine1.isEmpty()) editor.putString("address_line_1", user.addressLine1);
+            if (user.addressLine2 != null && !user.addressLine2.isEmpty()) editor.putString("address_line_2", user.addressLine2);
+            if (user.postcode != null && !user.postcode.isEmpty()) editor.putString("postcode", user.postcode);
+            if (user.city != null && !user.city.isEmpty()) editor.putString("city", user.city);
+            if (user.state != null && !user.state.isEmpty()) editor.putString("state", user.state);
+            if (user.country != null && !user.country.isEmpty()) editor.putString("country", user.country);
+            if (user.address != null && !user.address.isEmpty()) editor.putString("address", user.address);
+            if (user.emergencyName != null && !user.emergencyName.isEmpty()) editor.putString("emergency_name", user.emergencyName);
+            if (user.emergencyPhone != null && !user.emergencyPhone.isEmpty()) editor.putString("emergency_phone", user.emergencyPhone);
+            editor.apply();
+        } catch (Exception ignored) {}
     }
 }

@@ -235,11 +235,13 @@ public class PassengerDetailsViewModel extends AndroidViewModel {
                         && response.body().isSuccess() && response.body().data != null
                         && response.body().data.user != null) {
                     fresh = response.body().data.user;
-                    repository.persistRefreshedUser(fresh);
                 }
                 UserDto effective = (fresh != null)
                         ? repository.mergeExtras(fresh)
                         : repository.getEffectiveProfile();
+                if (effective != null) {
+                    repository.persistRefreshedUser(effective);
+                }
                 profileData.setValue(effective);
                 evaluateLead(pkg, effective, docsData.getValue());
             }
