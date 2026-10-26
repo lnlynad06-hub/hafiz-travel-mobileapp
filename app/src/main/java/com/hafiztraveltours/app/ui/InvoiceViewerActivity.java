@@ -349,10 +349,14 @@ public class InvoiceViewerActivity extends BaseActivity {
                 tvInvoiceStatusBadge.setText(getString(R.string.payment_status_fully_paid));
                 tvInvoiceStatusBadge.setTextColor(Color.parseColor("#059669"));
                 tvInvoiceStatusBadge.setBackgroundResource(R.drawable.bg_pill_success);
+            } else if (detail.isDepositPaid || "deposit_paid".equalsIgnoreCase(detail.paymentStatus) || (detail.paidAmount > 0 && detail.paidAmount <= detail.requiredDeposit)) {
+                tvInvoiceStatusBadge.setText(getString(R.string.status_deposit_paid));
+                tvInvoiceStatusBadge.setTextColor(Color.parseColor("#059669"));
+                tvInvoiceStatusBadge.setBackgroundResource(R.drawable.bg_pill_success);
             } else if (detail.paidAmount > 0) {
                 tvInvoiceStatusBadge.setText(getString(R.string.payment_status_balance_partial));
-                tvInvoiceStatusBadge.setTextColor(Color.parseColor("#D97706"));
-                tvInvoiceStatusBadge.setBackgroundResource(R.drawable.bg_pill_accent);
+                tvInvoiceStatusBadge.setTextColor(Color.parseColor("#059669"));
+                tvInvoiceStatusBadge.setBackgroundResource(R.drawable.bg_pill_success);
             } else {
                 tvInvoiceStatusBadge.setText(getString(R.string.payment_status_deposit_pending));
                 tvInvoiceStatusBadge.setTextColor(Color.parseColor("#D97706"));

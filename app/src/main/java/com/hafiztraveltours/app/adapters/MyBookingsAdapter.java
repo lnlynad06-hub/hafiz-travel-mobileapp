@@ -131,7 +131,15 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
                 holder.txtStatus.setTextColor(androidx.core.content.ContextCompat.getColor(ctx, R.color.status_alert_text));
                 holder.txtStatus.setBackgroundResource(R.drawable.bg_pill_inactive);
             }
-        } else if (rawStatus.contains("confirm") || rawStatus.contains("active") || rawStatus.contains("sah")) {
+        } else if (booking.totalAmount > 0 && booking.balanceAmount <= 0 && booking.paidAmount > 0) {
+            holder.txtStatus.setText(ctx.getString(R.string.status_confirmed));
+            holder.txtStatus.setTextColor(androidx.core.content.ContextCompat.getColor(ctx, R.color.status_paid_text));
+            holder.txtStatus.setBackgroundResource(R.drawable.bg_pill_success);
+        } else if (booking.isDepositPaid || rawStatus.contains("partial") || "deposit_paid".equalsIgnoreCase(booking.paymentStatus) || (booking.paidAmount > 0 && booking.balanceAmount > 0)) {
+            holder.txtStatus.setText(ctx.getString(R.string.status_deposit_paid));
+            holder.txtStatus.setTextColor(androidx.core.content.ContextCompat.getColor(ctx, R.color.status_paid_text));
+            holder.txtStatus.setBackgroundResource(R.drawable.bg_pill_success);
+        } else if (rawStatus.contains("confirm") || rawStatus.contains("active") || rawStatus.contains("sah") || rawStatus.equals("paid") || rawStatus.contains("fully")) {
             holder.txtStatus.setText(ctx.getString(R.string.status_confirmed));
             holder.txtStatus.setTextColor(androidx.core.content.ContextCompat.getColor(ctx, R.color.status_paid_text));
             holder.txtStatus.setBackgroundResource(R.drawable.bg_pill_success);

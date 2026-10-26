@@ -372,6 +372,7 @@ public class MyBookingsActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        restorePendingPayment();
         if (isQuotationsTab) {
             loadQuotations();
         } else {

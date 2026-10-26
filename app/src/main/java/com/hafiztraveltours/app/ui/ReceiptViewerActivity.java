@@ -264,7 +264,8 @@ public class ReceiptViewerActivity extends BaseActivity {
                 if (p != null && p.isVerified) return true;
             }
         }
-        return detail.balanceAmount <= 0 && detail.paidAmount > 0;
+        if (detail.receipts != null && !detail.receipts.isEmpty()) return true;
+        return detail.paidAmount > 0 || detail.isDepositPaid || (detail.balanceAmount <= 0 && detail.totalAmount > 0);
     }
 
     private void populateFromBookingDetail(BookingDetailDto detail) {
