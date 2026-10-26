@@ -34,7 +34,18 @@
         <activity android:name=".ui.AboutActivity" android:exported="false" />
 
         <activity android:name=".ui.ProfileActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".ui.MyBookingsActivity" android:exported="false" />
+        <activity
+            android:name=".ui.MyBookingsActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="hafiztravel"
+                    android:host="bookings" />
+            </intent-filter>
+        </activity>
 
         <activity android:name=".ui.MainActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
 

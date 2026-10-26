@@ -136,6 +136,9 @@ dependencies {
     // Skeleton UI Shimmer
     implementation("com.facebook.shimmer:shimmer:0.5.0")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+
+    // Chrome Custom Tabs for in-app secure payment gateway checkout
+    implementation("androidx.browser:browser:1.8.0")
 }
 
 tasks.matching { it.name == "preReleaseBuild" }.configureEach {

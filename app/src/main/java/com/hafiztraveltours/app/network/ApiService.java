@@ -132,6 +132,11 @@ public interface ApiService {
             @Body Map<String, Object> body
     );
 
+    @POST("v1/bookings/{booking}/sync-payment")
+    Call<ApiResponse<BookingDetailDto>> syncPayment(
+            @Path("booking") int bookingId
+    );
+
     @GET("v1/bookings/check-eligibility")
     Call<ApiResponse<BookingEligibilityDto>> checkBookingEligibility();
 

@@ -770,13 +770,20 @@ public class MyBookingsActivity extends BaseActivity {
         booking.isMerchandiseEligible = detail.isMerchandiseEligible;
         booking.status = detail.status;
         booking.paymentStatus = detail.paymentStatus;
+        booking.capacityTier = detail.capacityTier;
+        booking.capacityTierLabel = detail.capacityTierLabel;
+        booking.isGuaranteed = detail.isGuaranteed;
+        booking.isSoftHold = detail.isSoftHold;
         if (detail.receipts != null && !detail.receipts.isEmpty()) {
             booking.hasReceipts = true;
             booking.receiptsCount = detail.receipts.size();
+        } else if (detail.hasReceipts) {
+            booking.hasReceipts = true;
+            booking.receiptsCount = detail.receiptsCount;
         }
     }
 
-    /** Verified only by backend signals: a verified payment record or paid status. */
+    /** Verified only by backend signals: a verified payment record, deposit, or paid status. */
     private boolean isPaymentVerified(BookingDetailDto detail) {
         if (detail == null) return false;
         if (detail.payments != null) {
@@ -785,18 +792,30 @@ public class MyBookingsActivity extends BaseActivity {
             }
         }
         return "paid".equalsIgnoreCase(detail.status)
-                || "paid".equalsIgnoreCase(detail.paymentStatus);
+                || "paid".equalsIgnoreCase(detail.paymentStatus)
+                || detail.paidAmount > 0;
     }
 
-    /** Opens a URL in the secure system browser (never an in-app WebView). */
+    /** Opens a URL using Chrome Custom Tabs with fallback to the secure system browser. */
     private boolean openSecureBrowser(String url) {
         try {
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+            Uri uri = Uri.parse(url);
+            androidx.browser.customtabs.CustomTabsIntent customTabs =
+                    new androidx.browser.customtabs.CustomTabsIntent.Builder()
+                            .setShowTitle(true)
+                            .setToolbarColor(androidx.core.content.ContextCompat.getColor(this, R.color.brand_magenta))
+                            .build();
+            customTabs.launchUrl(this, uri);
             return true;
-        } catch (Exception e) {
-            return false;
+        } catch (Throwable t) {
+            try {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                return true;
+            } catch (Exception e) {
+                return false;
+            }
         }
     }
 
@@ -831,7 +850,15 @@ public class MyBookingsActivity extends BaseActivity {
         } catch (Exception ignored) {}
     }
 
-    /** After returning from the gateway browser, verify actual backend state. */
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        restorePendingPayment();
+        verifyPendingPayment();
+    }
+
+    /** After returning from the gateway browser, authoritatively sync with backend. */
     private void verifyPendingPayment() {
         if (pendingPaymentBookingId <= 0) return;
         final int bookingId = pendingPaymentBookingId;
@@ -839,7 +866,8 @@ public class MyBookingsActivity extends BaseActivity {
         clearPendingPayment();
 
         if (verifyCall != null) verifyCall.cancel();
-        Call<ApiResponse<BookingDetailDto>> call = ApiClient.getApiService().getBookingDetail(bookingId);
+        // Call authoritative server-to-server sync endpoint
+        Call<ApiResponse<BookingDetailDto>> call = ApiClient.getApiService().syncPayment(bookingId);
         verifyCall = call;
         call.enqueue(new Callback<ApiResponse<BookingDetailDto>>() {
             @Override
@@ -847,13 +875,17 @@ public class MyBookingsActivity extends BaseActivity {
                                    Response<ApiResponse<BookingDetailDto>> response) {
                 if (isFinishing() || isDestroyed()) return;
                 if (response.isSuccessful() && response.body() != null
-                        && response.body().isSuccess() && response.body().data != null
-                        && isPaymentVerified(response.body().data)) {
-                    BookingDto local = findBookingById(bookingId);
-                    if (local != null) {
-                        syncBookingFromDetail(local, response.body().data);
+                        && response.body().isSuccess() && response.body().data != null) {
+                    BookingDetailDto data = response.body().data;
+                    if (isPaymentVerified(data)) {
+                        BookingDto local = findBookingById(bookingId);
+                        BookingDto target = local != null ? local : data;
+                        syncBookingFromDetail(target, data);
                         if (adapter != null) adapter.notifyDataSetChanged();
-                        showPaymentSuccessfulDialog(local, amount);
+                        showPaymentSuccessfulDialog(target, amount);
+                    } else {
+                        Toast.makeText(MyBookingsActivity.this,
+                                getString(R.string.pay_pending_verification), Toast.LENGTH_SHORT).show();
                     }
                 }
                 loadBookings();

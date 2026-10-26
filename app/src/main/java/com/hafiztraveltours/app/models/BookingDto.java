@@ -78,6 +78,18 @@ public class BookingDto {
     @SerializedName("has_receipts")
     public boolean hasReceipts;
 
+    @SerializedName("capacity_tier")
+    public String capacityTier;
+
+    @SerializedName("capacity_tier_label")
+    public String capacityTierLabel;
+
+    @SerializedName("is_guaranteed")
+    public boolean isGuaranteed;
+
+    @SerializedName("is_soft_hold")
+    public boolean isSoftHold;
+
     @SerializedName("is_cancellable")
     public Boolean isCancellable;
 
