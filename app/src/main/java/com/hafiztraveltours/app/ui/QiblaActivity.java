@@ -424,6 +424,7 @@ public class QiblaActivity extends BaseActivity implements SensorEventListener {
         if (sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD && accuracy == SensorManager.SENSOR_STATUS_UNRELIABLE) {
             if (tvQiblaWarning != null && tvQiblaWarning.getVisibility() != View.VISIBLE) {
                 tvQiblaWarning.setText(R.string.qibla_accuracy_notice);
+                tvQiblaWarning.setVisibility(View.VISIBLE);
             }
         }
     }

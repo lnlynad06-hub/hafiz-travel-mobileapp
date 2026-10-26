@@ -111,37 +111,37 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
 
         Context ctx = holder.itemView.getContext();
 
-        // 1. Booking Status Badge (Header Row Left)
+        // 1. Booking Status Badge (Header Row Left) - Phase 1 Semantic Status Tokens
         String rawStatus = booking.status != null ? booking.status.toLowerCase(Locale.ROOT) : "";
         if (booking.isPendingCancellation()) {
             holder.txtStatus.setText(ctx.getString(R.string.status_pending_cancellation));
-            holder.txtStatus.setTextColor(Color.parseColor("#D97706"));
+            holder.txtStatus.setTextColor(androidx.core.content.ContextCompat.getColor(ctx, R.color.status_pending_text));
             holder.txtStatus.setBackgroundResource(R.drawable.bg_pill_accent);
         } else if (booking.isCancelled()) {
             if (booking.isRefundCompleted()) {
                 holder.txtStatus.setText(ctx.getString(R.string.status_refunded));
-                holder.txtStatus.setTextColor(Color.parseColor("#059669"));
+                holder.txtStatus.setTextColor(androidx.core.content.ContextCompat.getColor(ctx, R.color.status_paid_text));
                 holder.txtStatus.setBackgroundResource(R.drawable.bg_pill_success);
             } else if (booking.isRefundPendingOrProcessing()) {
                 holder.txtStatus.setText(ctx.getString(R.string.status_refund_processing));
-                holder.txtStatus.setTextColor(Color.parseColor("#2563EB"));
-                holder.txtStatus.setBackgroundResource(R.drawable.bg_pill_accent);
+                holder.txtStatus.setTextColor(androidx.core.content.ContextCompat.getColor(ctx, R.color.status_info_text));
+                holder.txtStatus.setBackgroundResource(R.drawable.bg_pill_info);
             } else {
                 holder.txtStatus.setText(ctx.getString(R.string.status_cancelled));
-                holder.txtStatus.setTextColor(Color.parseColor("#DC2626"));
+                holder.txtStatus.setTextColor(androidx.core.content.ContextCompat.getColor(ctx, R.color.status_alert_text));
                 holder.txtStatus.setBackgroundResource(R.drawable.bg_pill_inactive);
             }
         } else if (rawStatus.contains("confirm") || rawStatus.contains("active") || rawStatus.contains("sah")) {
             holder.txtStatus.setText(ctx.getString(R.string.status_confirmed));
-            holder.txtStatus.setTextColor(Color.parseColor("#059669"));
+            holder.txtStatus.setTextColor(androidx.core.content.ContextCompat.getColor(ctx, R.color.status_paid_text));
             holder.txtStatus.setBackgroundResource(R.drawable.bg_pill_success);
         } else if (rawStatus.contains("complet") || rawStatus.contains("selesai")) {
             holder.txtStatus.setText(ctx.getString(R.string.status_completed));
-            holder.txtStatus.setTextColor(Color.parseColor("#059669"));
+            holder.txtStatus.setTextColor(androidx.core.content.ContextCompat.getColor(ctx, R.color.status_paid_text));
             holder.txtStatus.setBackgroundResource(R.drawable.bg_pill_success);
         } else {
             holder.txtStatus.setText(ctx.getString(R.string.status_pending_confirmation));
-            holder.txtStatus.setTextColor(Color.parseColor("#D97706"));
+            holder.txtStatus.setTextColor(androidx.core.content.ContextCompat.getColor(ctx, R.color.status_pending_text));
             holder.txtStatus.setBackgroundResource(R.drawable.bg_pill_accent);
         }
 
@@ -181,10 +181,10 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
             String label = booking.getRoomAssignmentDisplayLabel();
             holder.txtRoomAssignmentStatus.setText(label);
             if (booking.isRoomAssignmentConfirmed()) {
-                holder.txtRoomAssignmentStatus.setTextColor(Color.parseColor("#059669"));
+                holder.txtRoomAssignmentStatus.setTextColor(androidx.core.content.ContextCompat.getColor(ctx, R.color.status_paid_text));
                 holder.txtRoomAssignmentStatus.setBackgroundResource(R.drawable.bg_pill_success);
             } else {
-                holder.txtRoomAssignmentStatus.setTextColor(Color.parseColor("#D97706"));
+                holder.txtRoomAssignmentStatus.setTextColor(androidx.core.content.ContextCompat.getColor(ctx, R.color.status_pending_text));
                 holder.txtRoomAssignmentStatus.setBackgroundResource(R.drawable.bg_pill_accent);
             }
         }
@@ -315,6 +315,12 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
             }
         }
 
+        // Card click -> View Booking Details / Invoice
+        holder.itemView.setOnClickListener(v -> {
+            HapticUtil.click(v);
+            openBookingDetails(ctx, booking);
+        });
+
         // 8. Action 2: Manage Documents (Secondary full width)
         if (holder.btnManageDocs != null) {
             if (isCancelled || "completed".equalsIgnoreCase(rawStatus)) {
@@ -336,6 +342,26 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
                 });
             }
         }
+
+        // 9. Action 3: View Details
+        if (holder.btnDetails != null) {
+            holder.btnDetails.setVisibility(View.VISIBLE);
+            holder.btnDetails.setEnabled(true);
+            holder.btnDetails.setClickable(true);
+            holder.btnDetails.setOnClickListener(v -> {
+                HapticUtil.click(v);
+                openBookingDetails(ctx, booking);
+            });
+        }
+    }
+
+    private void openBookingDetails(Context ctx, BookingDto booking) {
+        if (booking == null) return;
+        Intent intent = new Intent(ctx, InvoiceViewerActivity.class);
+        intent.putExtra(InvoiceViewerActivity.EXTRA_BOOKING_ID, booking.id);
+        intent.putExtra(InvoiceViewerActivity.EXTRA_BOOKING_NO, booking.bookingNo);
+        intent.putExtra(InvoiceViewerActivity.EXTRA_VIEW_MODE, InvoiceViewerActivity.VIEW_MODE_DETAILS);
+        ctx.startActivity(intent);
     }
 
     private static String formatRefundStatus(Context ctx, String status, Double approvedAmt, Double requestedAmt) {
@@ -391,6 +417,7 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
                     Intent intent = new Intent(ctx, InvoiceViewerActivity.class);
                     intent.putExtra(InvoiceViewerActivity.EXTRA_BOOKING_ID, booking.id);
                     intent.putExtra(InvoiceViewerActivity.EXTRA_BOOKING_NO, booking.bookingNo);
+                    intent.putExtra(InvoiceViewerActivity.EXTRA_VIEW_MODE, InvoiceViewerActivity.VIEW_MODE_INVOICE);
                     ctx.startActivity(intent);
                 });
             }
@@ -452,6 +479,7 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
                     Intent intent = new Intent(ctx, InvoiceViewerActivity.class);
                     intent.putExtra(InvoiceViewerActivity.EXTRA_BOOKING_ID, booking.id);
                     intent.putExtra(InvoiceViewerActivity.EXTRA_BOOKING_NO, booking.bookingNo);
+                    intent.putExtra(InvoiceViewerActivity.EXTRA_VIEW_MODE, InvoiceViewerActivity.VIEW_MODE_INVOICE);
                     ctx.startActivity(intent);
                     return true;
                 } else if (item.getItemId() == 2 && hasConfirmedPayment) {
@@ -504,6 +532,7 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
 
         MaterialButton btnPayNow;
         MaterialButton btnManageDocs;
+        MaterialButton btnDetails;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -528,6 +557,7 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
 
             btnPayNow = itemView.findViewById(R.id.btnItemPayNow);
             btnManageDocs = itemView.findViewById(R.id.btnItemManageDocs);
+            btnDetails = itemView.findViewById(R.id.btnItemDetails);
         }
     }
 }

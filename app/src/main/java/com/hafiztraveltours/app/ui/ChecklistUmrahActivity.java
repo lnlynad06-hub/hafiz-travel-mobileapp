@@ -19,7 +19,6 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -146,12 +145,14 @@ public class ChecklistUmrahActivity extends BaseActivity {
     }
 
     private void updateProgressText() {
+        String progress = getString(R.string.checklist_progress_format, checkedCount, totalItems);
         if (progressText != null) {
-            progressText.setText(checkedCount + " / " + totalItems + " " + getString(R.string.checklist_progress_suffix));
+            progressText.setText(progress);
         }
         if (progressBar != null) {
             progressBar.setMax(totalItems > 0 ? totalItems : 1);
             progressBar.setProgress(checkedCount);
+            progressBar.setContentDescription(progress);
         }
     }
 
@@ -506,39 +507,33 @@ public class ChecklistUmrahActivity extends BaseActivity {
         rowParams.bottomMargin = dp(4);
         row.setLayoutParams(rowParams);
 
-        LinearLayout topLine = new LinearLayout(this);
-        topLine.setOrientation(LinearLayout.HORIZONTAL);
-        topLine.setGravity(Gravity.CENTER_VERTICAL);
-
         CheckBox checkBox = new CheckBox(this);
         boolean savedChecked = prefs.getBoolean(block.prefsKey, false);
         checkBox.setChecked(savedChecked);
         if (savedChecked) checkedCount++;
 
-        TextView label = new TextView(this);
-        label.setText(getString(block.textResId));
-        label.setTextSize(15);
-        label.setTextColor(getResources().getColor(R.color.text_dark));
-        LinearLayout.LayoutParams labelParams = new LinearLayout.LayoutParams(
-                0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
-        label.setLayoutParams(labelParams);
-        applyStrikethrough(label, savedChecked);
+        checkBox.setText(getString(block.textResId));
+        checkBox.setTextSize(15);
+        checkBox.setTextColor(getResources().getColor(R.color.text_dark));
+        checkBox.setMinHeight(dp(48));
+        checkBox.setGravity(Gravity.CENTER_VERTICAL);
+        checkBox.setLayoutParams(new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        applyStrikethrough(checkBox, savedChecked);
 
-        checkBox.setOnCheckedChangeListener((CompoundButton buttonView, boolean isChecked) -> {
+        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             prefs.edit().putBoolean(block.prefsKey, isChecked).apply();
             checkedCount += isChecked ? 1 : -1;
-            applyStrikethrough(label, isChecked);
+            applyStrikethrough(checkBox, isChecked);
             updateProgressText();
         });
 
-        topLine.addView(checkBox);
-        topLine.addView(label);
-        row.addView(topLine);
+        row.addView(checkBox);
 
         if (block.subResIds != null) {
             for (int subResId : block.subResIds) {
                 TextView subView = new TextView(this);
-                subView.setText("- " + getString(subResId));
+                subView.setText(getString(R.string.checklist_subitem_format, getString(subResId)));
                 subView.setTextSize(13);
                 subView.setTextColor(getResources().getColor(R.color.text_gray));
                 LinearLayout.LayoutParams subParams = new LinearLayout.LayoutParams(
@@ -578,7 +573,7 @@ public class ChecklistUmrahActivity extends BaseActivity {
 
     private TextView buildInfoBullet(String text) {
         TextView info = new TextView(this);
-        info.setText("\u2022 " + text);
+        info.setText(getString(R.string.checklist_bullet_format, text));
         info.setTextSize(13);
         info.setTextColor(getResources().getColor(R.color.text_gray));
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(

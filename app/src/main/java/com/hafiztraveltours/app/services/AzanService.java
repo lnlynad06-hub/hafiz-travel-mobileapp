@@ -22,6 +22,8 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
+import java.util.Locale;
+
 public class AzanService extends Service {
 
     private static final String TAG = "AzanService";
@@ -43,14 +45,8 @@ public class AzanService extends Service {
             instance.stopAzan();
         } else if (context != null) {
             try {
-                Intent stopIntent = new Intent(context, AzanService.class);
-                stopIntent.setAction(ACTION_STOP_AZAN);
-                context.startService(stopIntent);
-            } catch (Exception e) {
-                try {
-                    context.stopService(new Intent(context, AzanService.class));
-                } catch (Exception ignored) {}
-            }
+                context.stopService(new Intent(context, AzanService.class));
+            } catch (Exception ignored) {}
         }
     }
 
@@ -105,7 +101,7 @@ public class AzanService extends Service {
     /** Maps locale-neutral keys (fajr/dhuhr/...) to the localized prayer name. */
     private String resolvePrayerName(String prayerKey) {
         if (prayerKey == null) return "";
-        switch (prayerKey.toLowerCase()) {
+        switch (prayerKey.toLowerCase(Locale.ROOT)) {
             case "fajr":
                 return getString(R.string.prayer_name_subuh);
             case "dhuhr":
@@ -288,11 +284,7 @@ public class AzanService extends Service {
         }
 
         try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                stopForeground(STOP_FOREGROUND_REMOVE);
-            } else {
-                stopForeground(true);
-            }
+            stopForeground(STOP_FOREGROUND_REMOVE);
         } catch (Exception ignored) {}
 
         try {

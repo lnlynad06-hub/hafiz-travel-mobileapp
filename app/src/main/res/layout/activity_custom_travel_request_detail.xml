@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:orientation="vertical"
     android:background="@color/background">
 
@@ -21,11 +22,11 @@
 
         <ImageButton
             android:id="@+id/btnDetailBack"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="@dimen/touch_target_min"
+            android:layout_height="@dimen/touch_target_min"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/back"
-            android:padding="10dp"
+            android:padding="@dimen/touch_target_icon_padding"
             android:src="@drawable/ic_back" />
 
         <LinearLayout

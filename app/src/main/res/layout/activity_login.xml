@@ -27,14 +27,17 @@
             <LinearLayout
                 android:id="@+id/btnLanguagePicker"
                 android:layout_width="wrap_content"
-                android:layout_height="38dp"
+                android:layout_height="wrap_content"
+                android:minWidth="@dimen/touch_target_min"
+                android:minHeight="@dimen/touch_target_min"
                 android:layout_alignParentEnd="true"
                 android:background="@drawable/bg_language_pill"
                 android:clickable="true"
                 android:focusable="true"
-                android:gravity="center_vertical"
+                android:gravity="center"
+                android:contentDescription="@string/language_select"
                 android:orientation="horizontal"
-                android:paddingHorizontal="12dp">
+                android:paddingHorizontal="14dp">
 
                 <TextView
                     android:id="@+id/tvActiveLanguage"
@@ -103,75 +106,40 @@
             <!-- Email Input Field -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/emailLayout"
+                style="@style/Widget.HafizTravel.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_email"
-                app:boxBackgroundMode="outline"
-                app:boxCornerRadiusTopStart="14dp"
-                app:boxCornerRadiusTopEnd="14dp"
-                app:boxCornerRadiusBottomStart="14dp"
-                app:boxCornerRadiusBottomEnd="14dp"
-                app:boxStrokeColor="@color/box_stroke_selector"
-                app:boxBackgroundColor="@color/box_bg_selector"
-                app:boxStrokeWidth="1dp"
-                app:boxStrokeWidthFocused="1.5dp"
-                app:boxStrokeErrorColor="@color/error_red"
-                app:hintEnabled="true"
                 app:errorEnabled="true"
-                app:errorIconDrawable="@null"
-                app:startIconDrawable="@drawable/ic_email"
-                app:startIconTint="@color/pink_dark">
+                app:startIconDrawable="@drawable/ic_email">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/emailInput"
+                    style="@style/Widget.HafizTravel.TextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:paddingStart="4dp"
-                    android:paddingEnd="12dp"
-                    android:inputType="textEmailAddress"
-                    android:textColor="@color/input_text"
-                    android:textColorHint="@color/input_hint"
-                    android:textSize="14sp" />
+                    android:inputType="textEmailAddress" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Password Input Field -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/passwordLayout"
+                style="@style/Widget.HafizTravel.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="10dp"
                 android:hint="@string/hint_password"
-                app:boxBackgroundMode="outline"
-                app:boxCornerRadiusTopStart="14dp"
-                app:boxCornerRadiusTopEnd="14dp"
-                app:boxCornerRadiusBottomStart="14dp"
-                app:boxCornerRadiusBottomEnd="14dp"
-                app:boxStrokeColor="@color/box_stroke_selector"
-                app:boxBackgroundColor="@color/box_bg_selector"
-                app:boxStrokeWidth="1dp"
-                app:boxStrokeWidthFocused="1.5dp"
-                app:boxStrokeErrorColor="@color/error_red"
-                app:hintEnabled="true"
                 app:errorEnabled="true"
-                app:errorIconDrawable="@null"
                 app:startIconDrawable="@drawable/ic_lock"
-                app:startIconTint="@color/pink_dark"
-                app:endIconMode="password_toggle"
-                app:endIconTint="@color/pink_dark">
+                app:endIconMode="password_toggle">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/passwordInput"
+                    style="@style/Widget.HafizTravel.TextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:paddingStart="4dp"
-                    android:paddingEnd="12dp"
-                    android:inputType="textPassword"
-                    android:textColor="@color/input_text"
-                    android:textColorHint="@color/input_hint"
-                    android:textSize="14sp" />
+                    android:inputType="textPassword" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -179,18 +147,21 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp">
+                android:layout_marginTop="6dp">
 
                 <CheckBox
                     android:id="@+id/rememberMeCheckBox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:minHeight="@dimen/touch_target_min"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
+                    android:layout_marginEnd="8dp"
+                    android:layout_toStartOf="@id/forgotPasswordText"
                     android:button="@drawable/selector_checkbox_pink"
                     android:buttonTint="@null"
                     app:buttonTint="@null"
-                    android:paddingStart="6dp"
+                    android:paddingStart="8dp"
                     android:text="@string/remember_me"
                     android:textColor="@color/text_gray"
                     android:textSize="13sp" />
@@ -199,9 +170,12 @@
                     android:id="@+id/forgotPasswordText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:minHeight="@dimen/touch_target_min"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:paddingVertical="8dp"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="8dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
                     android:text="@string/forgot_password"
                     android:textColor="@color/pink_dark"
                     android:textSize="13sp"
@@ -214,12 +188,12 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp">
+                android:layout_marginTop="18dp">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/loginButton"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="52dp"
                     android:background="@drawable/bg_gradient_primary_button"
                     app:backgroundTint="@null"
                     android:insetTop="0dp"
@@ -247,8 +221,12 @@
             android:id="@+id/goToSignUp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:minHeight="@dimen/touch_target_min"
             android:layout_marginTop="16dp"
-            android:padding="6dp"
+            android:gravity="center"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:text="@string/login_no_account"
             android:textColor="@color/pink_dark"
             android:textSize="13.5sp"

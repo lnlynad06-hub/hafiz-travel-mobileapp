@@ -21,12 +21,12 @@
 
         <ImageView
             android:id="@+id/passengerBackButton"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="@dimen/touch_target_min"
+            android:layout_height="@dimen/touch_target_min"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
             android:focusable="true"
-            android:padding="10dp"
+            android:padding="@dimen/touch_target_icon_padding"
             android:src="@drawable/ic_back"
             app:tint="@color/text_dark"
             android:contentDescription="@string/content_desc_back" />
@@ -320,24 +320,12 @@
             android:textStyle="bold"
             tools:text="2 Registered Travellers" />
 
-        <LinearLayout
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnProceedToReview"
+            style="@style/Widget.HafizTravel.Button.Primary"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:background="@drawable/bg_booking_primary_button"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="center">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/passenger_btn_continue"
-                android:textColor="@color/white"
-                android:textSize="13sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:text="@string/passenger_btn_continue" />
 
     </LinearLayout>
 

@@ -416,6 +416,11 @@ public class UmrahPackage implements java.io.Serializable {
         if (isUmrahFlag != null) {
             return isUmrahFlag;
         }
+        if (category != null && !category.trim().isEmpty()) {
+            String cat = category.trim().toLowerCase();
+            if (cat.contains("umrah") || cat.contains("haji") || cat.contains("hajj")) return true;
+            if (cat.contains("tour") || cat.contains("outbound") || cat.contains("domestic")) return false;
+        }
         if (tourCategoryType != null && !tourCategoryType.trim().isEmpty()) {
             String tct = tourCategoryType.trim().toLowerCase();
             if ("umrah".equals(tct)) return true;

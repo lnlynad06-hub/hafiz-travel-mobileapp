@@ -33,6 +33,8 @@
     <string name="settings_azan_notif_desc">Terima peringatan dan audio azan pada waktu solat</string>
     <string name="settings_app_notif_title">Pemberitahuan Aplikasi</string>
     <string name="settings_app_notif_desc">Kemas kini perjalanan, peringatan tempahan dan promosi</string>
+    <string name="app_notification_channel_name">Pemberitahuan Hafiz Travel</string>
+    <string name="app_notification_channel_desc">Kemas kini perjalanan, peringatan tempahan dan notis penting</string>
     <string name="settings_background_op_title">Operasi Latar Belakang</string>
     <string name="settings_background_op_desc">Benarkan operasi latar belakang untuk azan tepat pada masanya</string>
     <string name="settings_background_op_enabled">Aktif</string>
@@ -123,6 +125,7 @@
     <string name="passwords_match">Kata laluan sepadan</string>
     <string name="passwords_mismatch">Kata laluan tidak sepadan</string>
     <string name="select_country_code">Pilih Kod Negara</string>
+    <string name="language_select">Pilih Bahasa</string>
     <string name="region_southeast_asia">ASIA TENGGARA</string>
     <string name="region_international">ANTARABANGSA LAIN</string>
     <string name="err_name_required">Sila masukkan nama penuh</string>
@@ -249,6 +252,7 @@
     <string name="guideline_hero_title">Panduan Ringkas Umrah</string>
     <string name="guideline_hero_blurb">Susunan mengikut urutan sebenar - dari adab bermusafir sehingga selesai ibadah umrah.</string>
     <string name="guideline_pdf_title">Mahukan panduan lengkap?</string>
+    <string name="guideline_pdf_chapter_subtitle">%1$s — %2$s</string>
     <string name="guideline_pdf_subtitle">Muat turun PDF penuh dengan penjelasan terperinci</string>
     <string name="guideline_pdf_button">Muat Turun</string>
     <string name="prayer_times_title_jakim">Waktu Solat Hari Ini (JAKIM)</string>
@@ -442,6 +446,9 @@
     <string name="checklist_umrah_title">Tatacara mengerjakan Umrah</string>
     <string name="checklist_reset">Tetap semula</string>
     <string name="checklist_progress_suffix">Selesai</string>
+    <string name="checklist_progress_format">%1$d / %2$d Selesai</string>
+    <string name="checklist_subitem_format">– %1$s</string>
+    <string name="checklist_bullet_format">• %1$s</string>
     <string name="all_packages_title">Semua Pakej</string>
     <string name="checklist_sec1_title">1. SEBELUM BERANGKAT</string>
     <string name="checklist_sec1_item1">Mandi sunat ihram</string>
@@ -750,6 +757,10 @@
     <string name="azan_channel_desc">Notifikasi untuk waktu solat &amp; azan</string>
     <string name="qibla_title">Arah Kiblat</string>
     <string name="qibla_subtitle">Cari arah Kaabah</string>
+    <string name="compass_north_short">U</string>
+    <string name="compass_east_short">T</string>
+    <string name="compass_south_short">S</string>
+    <string name="compass_west_short">B</string>
     <string name="qibla_screen_title">Kompas Kiblat</string>
     <string name="qibla_aligned">✓ Menghadap Kiblat</string>
     <string name="qibla_degree_format">Kiblat: %1$.0f°</string>
@@ -1087,6 +1098,13 @@
     <string name="summary_card_travellers">Senarai Jemaah</string>
     <string name="summary_card_payment">Ringkasan Bayaran</string>
     <string name="summary_grand_total">Jumlah Keseluruhan</string>
+    <string name="summary_deposit_required">Deposit Diperlukan</string>
+    <string name="summary_outstanding_balance">Baki Perlu Dibayar</string>
+    <string name="quote_calculating">Mendapatkan sebut harga rasmi &amp; deposit…</string>
+    <string name="quote_error_msg">Gagal mendapatkan sebut harga rasmi.</string>
+    <string name="quote_retry_btn">Cuba Lagi ›</string>
+    <string name="quote_still_loading">Sila tunggu, sebut harga rasmi sedang dimuat…</string>
+    <string name="quote_retry_required">Sila ketik Cuba Lagi untuk memuat sebut harga sebelum mengesahkan.</string>
     <string name="summary_payment_notice_title">Maklumat Bayaran &amp; Deposit</string>
     <string name="summary_payment_notice_body">Pengesahan tempahan ini tidak memerlukan bayaran segera. Setelah tempahan disahkan, anda boleh membuat bayaran deposit atau baki pakej pada bila-bila masa melalui menu Tempahan Saya (My Booking).</string>
     <string name="summary_checkbox_agree">Saya telah membaca dan bersetuju dengan Terma &amp; Syarat serta Polisi Pembatalan Hafiz Travel &amp; Tours.</string>
@@ -1104,7 +1122,11 @@
     <string name="config_total_label">Jumlah Anggaran Kos</string>
     <string name="config_continue">TERUSKAN KE BUTIRAN JEMAAH</string>
     <string name="content_desc_close">Tutup</string>
+    <string name="content_desc_clear_search">Kosongkan carian</string>
+    <string name="content_desc_phone_valid">Nombor telefon sah</string>
     <string name="content_desc_refresh">Muat semula lokasi</string>
+    <string name="accessibility_expanded">Dikembangkan</string>
+    <string name="accessibility_collapsed">Dikuncupkan</string>
     <string name="content_desc_share">Kongsi pakej</string>
     <string name="content_desc_favorite">Simpan kegemaran</string>
     <string name="content_desc_status">Status</string>
@@ -1218,6 +1240,7 @@
     <string name="booking_btn_invoice">Invois</string>
     <string name="booking_btn_receipt">Resit</string>
     <string name="booking_btn_documents">Dokumen</string>
+    <string name="booking_btn_details">Lihat Butiran</string>
     <string name="booking_label_departure">TARIKH PELEPASAN</string>
     <string name="booking_label_grand_total">JUMLAH KESELURUHAN</string>
     <string name="booking_no_official_label">NO. TEMPAHAN RASMI</string>
@@ -1231,6 +1254,7 @@
 
     <!-- Invoice Viewer Strings -->
     <string name="invoice_title_official">Invois Rasmi</string>
+    <string name="booking_title_details">Butiran Tempahan</string>
     <string name="invoice_meta_no">NO. INVOIS</string>
     <string name="invoice_meta_date">TARIKH INVOIS</string>
     <string name="invoice_meta_tour_code">KOD LAWATAN</string>
@@ -1367,14 +1391,14 @@
     <string name="pay_sheet_this_payment">Jumlah Bayaran</string>
     <string name="pay_sheet_balance_after">Baki Selepas Bayaran</string>
     <string name="pay_sheet_btn_pay_format">Bayar %1$s</string>
-    <string name="pay_sheet_secure_title">Bayaran Selamat melalui ToyyibPay</string>
-    <string name="pay_sheet_secure_desc">Penyulitan 256-bit. Integrasi gerbang pembayaran dikuasakan oleh ToyyibPay.</string>
+    <string name="pay_sheet_secure_title">Bayaran Dalam Talian Selamat</string>
+    <string name="pay_sheet_secure_desc">Penyulitan 256-bit. Pemprosesan bayaran dalam talian yang selamat.</string>
     <string name="pay_confirm_dialog_title">Sahkan Bayaran</string>
     <string name="pay_confirm_purpose_label">Tujuan Bayaran</string>
     <string name="pay_confirm_gateway_label">Gerbang Bayaran</string>
-    <string name="pay_confirm_gateway_name">ToyyibPay</string>
+    <string name="pay_confirm_gateway_name">Bayaran Dalam Talian (FPX)</string>
     <string name="pay_confirm_dialog_msg">Anda sedang mengesahkan bayaran sebanyak %1$s untuk %2$s.</string>
-    <string name="pay_confirm_dialog_secure_notice">Anda akan dibawa ke ToyyibPay untuk melengkapkan bayaran ini dengan selamat.</string>
+    <string name="pay_confirm_dialog_secure_notice">Anda akan dibawa untuk melengkapkan bayaran ini dengan selamat.</string>
     <string name="pay_browser_continue">Sambung pembayaran dalam pelayar anda, kemudian kembali ke sini untuk pengesahan.</string>
     <string name="pay_pending_verification">Pembayaran dimulakan. Tempahan anda akan dikemas kini sebaik sahaja gerbang pembayaran mengesahkannya.</string>
     <string name="pay_confirm_btn_pay">Sahkan &amp; Bayar</string>
@@ -1387,7 +1411,7 @@
     <string name="payment_detail_fully_paid_format">Selesai: %1$s / %2$s (Baki: RM 0.00)</string>
     <string name="payment_detail_deposit_format">Deposit: %1$s / %2$s (Baki Deposit: %3$s)</string>
     <string name="payment_detail_deposit_required_format">Deposit: %1$s / %2$s (Diperlukan: %3$s)</string>
-    <string name="payment_detail_balance_format">Baki: %1$s / %2$s (Tinggal: %3$s)</string>
+    <string name="payment_detail_balance_format">Baki: %1$s / %2$s</string>
     <string name="pay_sheet_opt_deposit_preset">Bayar Deposit Diperlukan (%1$s)</string>
     <string name="pay_sheet_opt_deposit_remaining_preset">Bayar Baki Deposit (%1$s)</string>
     <string name="pay_sheet_opt_balance_preset">Bayar Penuh Baki Bayaran (%1$s)</string>
@@ -1538,6 +1562,8 @@
     <string name="about_phone_label">Telefon</string>
     <string name="about_phone_value">+6019-785 9867</string>
     <string name="about_email_label">E-mel</string>
+    <string name="about_email_subject">Pertanyaan melalui Aplikasi Hafiz Travel</string>
+    <string name="send_email_chooser">Hantar e-mel</string>
     <string name="about_email_value">sales.httsb@gmail.com</string>
     <string name="about_website_label">Laman Web</string>
     <string name="about_website_value">hafiztraveltours.com</string>
@@ -1563,6 +1589,8 @@
 
     <!-- App Version & Developer Footer -->
     <string name="about_app_version">Versi Aplikasi</string>
+    <string name="version_short_format">v%1$s</string>
+    <string name="about_developer_name">Danial</string>
     <string name="about_engineered_by_prefix">Direka oleh</string>
     <string name="about_copyright">© 2022 Hafiz Travel &amp; Tours Sdn. Bhd. Hak cipta terpelihara.</string>
 
@@ -1588,6 +1616,7 @@
     <string name="privacy_policy_subtitle">Dasar Rasmi Hafiz Travel &amp; Tours</string>
     <string name="privacy_policy_badge">DASAR RASMI</string>
     <string name="privacy_policy_version_label">Versi %s</string>
+    <string name="privacy_policy_version_placeholder">v1.0</string>
     <string name="privacy_policy_accept">Terima</string>
     <string name="privacy_policy_decline">Tolak</string>
     <string name="privacy_policy_loading">Memuatkan Dasar Privasi…</string>
@@ -1929,7 +1958,7 @@
     <string name="summary_airport_format">Lapangan terbang berlepas: %1$s</string>
     <string name="summary_dates_format">Tarikh: %1$s hingga %2$s</string>
     <string name="summary_flexible_dates_suffix"> (Fleksibel +/- 3 hari)</string>
-    <string name="summary_duration_format">Tempoh: %1$d hari</string>
+    <string name="summary_duration_format">Tempoh: %1$s hari</string>
     <string name="summary_traveller_counts">Jumlah jemaah: %1$d (%2$d dewasa lelaki, %3$d dewasa perempuan, %4$d kanak-kanak)</string>
     <string name="summary_room_type_format">Jenis bilik pilihan: %1$s</string>
     <string name="summary_family_room_format">Bilik keluarga: %1$s</string>

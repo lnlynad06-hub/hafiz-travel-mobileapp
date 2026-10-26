@@ -82,6 +82,8 @@ public class MyBookingsActivity extends BaseActivity {
 
     // Phase 4 & 5 Custom Travel Quotations Tab
     private boolean isQuotationsTab = false;
+    private boolean hasLoadedBookingsOnce = false;
+    private boolean hasLoadedQuotationsOnce = false;
     private RecyclerView quotationsRecyclerView;
     private CustomTravelRequestAdapter quotationsAdapter;
     private Call<ApiResponse<List<CustomTravelRequestDto>>> quotationsCall;
@@ -126,6 +128,33 @@ public class MyBookingsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_bookings);
         BottomNavHelper.setup(this, BottomNavHelper.Tab.BOOKING);
+
+        View headerContainer = findViewById(R.id.bookingsHeaderContainer);
+        if (headerContainer != null) {
+            androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(headerContainer, (v, insets) -> {
+                androidx.core.graphics.Insets statusInsets = insets.getInsets(
+                        androidx.core.view.WindowInsetsCompat.Type.statusBars()
+                );
+                v.setPadding(v.getPaddingLeft(), statusInsets.top, v.getPaddingRight(), v.getPaddingBottom());
+                return insets;
+            });
+        }
+
+        View bottomNavCard = findViewById(R.id.bottomNavCard);
+        if (bottomNavCard != null) {
+            androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(bottomNavCard, (v, insets) -> {
+                androidx.core.graphics.Insets navInsets = insets.getInsets(
+                        androidx.core.view.WindowInsetsCompat.Type.systemBars()
+                );
+                ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+                if (lp != null) {
+                    int baseMargin = (int) (16 * getResources().getDisplayMetrics().density);
+                    lp.bottomMargin = navInsets.bottom > 0 ? navInsets.bottom + baseMargin : baseMargin;
+                    v.setLayoutParams(lp);
+                }
+                return insets;
+            });
+        }
 
         findViewById(R.id.bookingsBackButton).setOnClickListener(v -> finish());
 
@@ -230,9 +259,15 @@ public class MyBookingsActivity extends BaseActivity {
             if (quotationsAdapter.getItemCount() > 0) {
                 quotationsRecyclerView.setVisibility(View.VISIBLE);
                 if (quotationsEmptyContainer != null) quotationsEmptyContainer.setVisibility(View.GONE);
-            } else {
+                progressBar.setVisibility(View.GONE);
+            } else if (hasLoadedQuotationsOnce) {
                 quotationsRecyclerView.setVisibility(View.GONE);
                 if (quotationsEmptyContainer != null) quotationsEmptyContainer.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
+            } else {
+                quotationsRecyclerView.setVisibility(View.GONE);
+                if (quotationsEmptyContainer != null) quotationsEmptyContainer.setVisibility(View.GONE);
+                progressBar.setVisibility(View.VISIBLE);
             }
 
             loadQuotations();
@@ -253,9 +288,15 @@ public class MyBookingsActivity extends BaseActivity {
             if (adapter.getItemCount() > 0) {
                 recyclerView.setVisibility(View.VISIBLE);
                 emptyContainer.setVisibility(View.GONE);
-            } else {
+                progressBar.setVisibility(View.GONE);
+            } else if (hasLoadedBookingsOnce) {
                 recyclerView.setVisibility(View.GONE);
                 emptyContainer.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
+            } else {
+                recyclerView.setVisibility(View.GONE);
+                emptyContainer.setVisibility(View.GONE);
+                progressBar.setVisibility(View.VISIBLE);
             }
 
             loadBookings();
@@ -266,13 +307,15 @@ public class MyBookingsActivity extends BaseActivity {
         if (!isQuotationsTab) return;
 
         if (!SessionManager.getInstance(this).isLoggedIn()) {
+            hasLoadedQuotationsOnce = true;
             if (quotationsEmptyContainer != null) quotationsEmptyContainer.setVisibility(View.VISIBLE);
             quotationsRecyclerView.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
             if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
             return;
         }
 
-        if (swipeRefresh == null || !swipeRefresh.isRefreshing()) {
+        if ((swipeRefresh == null || !swipeRefresh.isRefreshing()) && quotationsAdapter.getItemCount() == 0) {
             progressBar.setVisibility(View.VISIBLE);
         }
 
@@ -282,6 +325,7 @@ public class MyBookingsActivity extends BaseActivity {
             @Override
             public void onResponse(Call<ApiResponse<List<CustomTravelRequestDto>>> call, Response<ApiResponse<List<CustomTravelRequestDto>>> response) {
                 if (isFinishing() || isDestroyed() || !isQuotationsTab) return;
+                hasLoadedQuotationsOnce = true;
                 progressBar.setVisibility(View.GONE);
                 if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
 
@@ -291,6 +335,7 @@ public class MyBookingsActivity extends BaseActivity {
                 if (response.isSuccessful() && response.body() != null && response.body().data != null) {
                     List<CustomTravelRequestDto> list = response.body().data;
                     if (list.isEmpty()) {
+                        quotationsAdapter.setItems(new ArrayList<>());
                         if (quotationsEmptyContainer != null) quotationsEmptyContainer.setVisibility(View.VISIBLE);
                         quotationsRecyclerView.setVisibility(View.GONE);
                     } else {
@@ -308,7 +353,8 @@ public class MyBookingsActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<ApiResponse<List<CustomTravelRequestDto>>> call, Throwable t) {
-                if (isFinishing() || isDestroyed() || !isQuotationsTab) return;
+                if (isFinishing() || isDestroyed() || !isQuotationsTab || call.isCanceled()) return;
+                hasLoadedQuotationsOnce = true;
                 progressBar.setVisibility(View.GONE);
                 if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
 
@@ -351,11 +397,12 @@ public class MyBookingsActivity extends BaseActivity {
         if (isQuotationsTab) return;
 
         if (!SessionManager.getInstance(this).isLoggedIn()) {
+            hasLoadedBookingsOnce = true;
             showEmpty();
             if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
             return;
         }
-        if (swipeRefresh == null || !swipeRefresh.isRefreshing()) {
+        if ((swipeRefresh == null || !swipeRefresh.isRefreshing()) && adapter.getItemCount() == 0) {
             viewState.showLoading();
         }
 
@@ -367,6 +414,7 @@ public class MyBookingsActivity extends BaseActivity {
             public void onResponse(Call<ApiResponse<BookingListPage>> call,
                                    Response<ApiResponse<BookingListPage>> response) {
                 if (isFinishing() || isDestroyed() || isQuotationsTab) return;
+                hasLoadedBookingsOnce = true;
                 if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
 
                 quotationsRecyclerView.setVisibility(View.GONE);
@@ -378,6 +426,7 @@ public class MyBookingsActivity extends BaseActivity {
                     adapter.setItems(page.data);
                     viewState.showContent();
                 } else if (page != null) {
+                    adapter.setItems(new ArrayList<>());
                     showEmpty();
                 } else {
                     Toast.makeText(MyBookingsActivity.this,
@@ -389,7 +438,8 @@ public class MyBookingsActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<ApiResponse<BookingListPage>> call, Throwable t) {
-                if (isFinishing() || isDestroyed() || isQuotationsTab) return;
+                if (isFinishing() || isDestroyed() || isQuotationsTab || call.isCanceled()) return;
+                hasLoadedBookingsOnce = true;
                 if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
 
                 quotationsRecyclerView.setVisibility(View.GONE);
@@ -647,7 +697,7 @@ public class MyBookingsActivity extends BaseActivity {
 
         Map<String, Object> body = new HashMap<>();
         body.put("amount", paymentAmount);
-        body.put("payment_method", "toyyibpay");
+        body.put("payment_method", "fpx");
         body.put("payment_type", paymentType);
 
         if (payCall != null) payCall.cancel();

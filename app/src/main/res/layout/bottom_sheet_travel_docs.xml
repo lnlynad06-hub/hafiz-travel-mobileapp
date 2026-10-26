@@ -50,13 +50,13 @@
 
         <ImageView
             android:id="@+id/btnCloseSheet"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="@dimen/touch_target_min"
+            android:layout_height="@dimen/touch_target_min"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/content_desc_close"
-            android:padding="6dp"
+            android:padding="@dimen/touch_target_icon_padding"
             android:rotation="270"
             android:src="@drawable/ic_back"
             app:tint="#616161" />
@@ -101,6 +101,7 @@
                 android:layout_width="22dp"
                 android:layout_height="22dp"
                 android:layout_marginTop="1dp"
+                android:contentDescription="@null"
                 android:src="@drawable/ic_shield_check"
                 app:tint="@color/brand_magenta" />
 
@@ -252,6 +253,7 @@
                             android:layout_width="38dp"
                             android:layout_height="38dp"
                             android:background="@drawable/circle_bg_light"
+                            android:contentDescription="@null"
                             android:padding="9dp"
                             android:src="@drawable/ic_doc_passport"
                             app:tint="@color/pink_dark" />
@@ -328,6 +330,7 @@
                         <ImageView
                             android:layout_width="16dp"
                             android:layout_height="16dp"
+                            android:contentDescription="@null"
                             android:src="@drawable/ic_warning"
                             app:tint="#DC2626" />
 
@@ -420,6 +423,7 @@
                             android:layout_width="38dp"
                             android:layout_height="38dp"
                             android:background="@drawable/circle_bg_light"
+                            android:contentDescription="@null"
                             android:padding="9dp"
                             android:src="@drawable/ic_profile"
                             app:tint="@color/pink_dark" />
@@ -496,6 +500,7 @@
                         <ImageView
                             android:layout_width="16dp"
                             android:layout_height="16dp"
+                            android:contentDescription="@null"
                             android:src="@drawable/ic_warning"
                             app:tint="#DC2626" />
 
@@ -590,6 +595,7 @@
                             android:layout_width="38dp"
                             android:layout_height="38dp"
                             android:background="@drawable/circle_bg_light"
+                            android:contentDescription="@null"
                             android:padding="9dp"
                             android:src="@drawable/ic_visa"
                             app:tint="@color/pink_dark" />
@@ -668,6 +674,7 @@
                         <ImageView
                             android:layout_width="16dp"
                             android:layout_height="16dp"
+                            android:contentDescription="@null"
                             android:src="@drawable/ic_warning"
                             app:tint="#DC2626" />
 

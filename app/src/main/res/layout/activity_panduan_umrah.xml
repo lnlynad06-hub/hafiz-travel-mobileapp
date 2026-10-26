@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/background">
+    android:background="@color/background"
+    android:fitsSystemWindows="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -119,6 +120,7 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:importantForAccessibility="no"
                     android:scaleType="centerCrop"
                     android:src="@drawable/bg_checklist_banner" />
 
@@ -155,6 +157,7 @@
                         android:background="@drawable/bg_button_white_square"
                         android:clickable="true"
                         android:focusable="true"
+                        android:minHeight="@dimen/touch_target_min"
                         android:paddingHorizontal="16dp"
                         android:paddingVertical="8dp"
                         android:text="@string/panduan_banner_button"

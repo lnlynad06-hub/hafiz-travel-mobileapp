@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.hafiztraveltours.app.ui.LoginActivity;
 import com.hafiztraveltours.app.utils.SessionManager;
 
+import java.lang.ref.WeakReference;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -27,7 +28,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class HafizApp extends Application {
 
     private static volatile HafizApp instance;
-    private static volatile Activity foreground;
+    private static volatile WeakReference<Activity> foreground = new WeakReference<>(null);
     private static final AtomicLong lastHandledAt = new AtomicLong(0);
     private static final long THROTTLE_MS = 3000;
 
@@ -54,12 +55,12 @@ public class HafizApp extends Application {
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityResumed(Activity activity) {
-                foreground = activity;
+                foreground = new WeakReference<>(activity);
             }
 
             @Override
             public void onActivityPaused(Activity activity) {
-                if (foreground == activity) foreground = null;
+                if (foreground.get() == activity) foreground = new WeakReference<>(null);
             }
 
             @Override public void onActivityCreated(Activity activity, Bundle savedInstanceState) {}
@@ -78,7 +79,7 @@ public class HafizApp extends Application {
     public static void handleUnauthorized() {
         HafizApp app = instance;
         if (app == null) return;
-        Activity current = foreground;
+        Activity current = foreground.get();
         if (current == null || current.isFinishing() || current.isDestroyed()) return;
         if (AUTH_SCREENS.contains(current.getClass().getSimpleName())) return;
         if (!SessionManager.getInstance(app).isLoggedIn()) return;

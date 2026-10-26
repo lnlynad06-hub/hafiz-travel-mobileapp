@@ -1,6 +1,5 @@
 package com.hafiztraveltours.app.ui;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -8,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
 
 import com.hafiztraveltours.app.R;
 import com.hafiztraveltours.app.models.BookingRequest;
@@ -101,6 +102,7 @@ public class TermsConditionsActivity extends BaseActivity {
 
             ImageView dot = new ImageView(this);
             dot.setImageResource(R.drawable.ic_check_green);
+            dot.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
             LinearLayout.LayoutParams dip = new LinearLayout.LayoutParams(dp(14), dp(14));
             dip.rightMargin = dp(8);
             dip.topMargin = dp(2);
@@ -109,7 +111,7 @@ public class TermsConditionsActivity extends BaseActivity {
             TextView tv = new TextView(this);
             tv.setText(item.trim());
             tv.setTextSize(12);
-            tv.setTextColor(Color.parseColor("#4B5563"));
+            tv.setTextColor(ContextCompat.getColor(this, R.color.text_gray));
             tv.setLineSpacing(dp(1), 1.15f);
             LinearLayout.LayoutParams tp = new LinearLayout.LayoutParams(
                     0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);

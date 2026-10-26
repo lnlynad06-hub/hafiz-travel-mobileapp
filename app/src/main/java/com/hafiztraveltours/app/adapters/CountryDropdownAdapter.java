@@ -134,6 +134,7 @@ public class CountryDropdownAdapter extends ArrayAdapter<String> {
         }
 
         boolean isSelected = isSameCountry(country, selectedCountry);
+        row.setSelected(isSelected);
 
         if (tvName != null) {
             tvName.setText(country);

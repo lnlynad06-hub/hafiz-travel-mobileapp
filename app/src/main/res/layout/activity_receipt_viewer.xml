@@ -24,8 +24,8 @@
 
             <ImageButton
                 android:id="@+id/btnReceiptBack"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="@dimen/touch_target_min"
+                android:layout_height="@dimen/touch_target_min"
                 android:layout_centerVertical="true"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_arrow_back"
@@ -156,6 +156,8 @@
                     android:id="@+id/tvDocTypeTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_toStartOf="@id/tvReceiptNumberHeader"
                     android:text="@string/receipt_title_official"
                     android:textColor="#059669"
                     android:textSize="14sp"
@@ -189,6 +191,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_toStartOf="@id/tvReceiptAmount"
                         android:text="@string/receipt_amount_received_label"
                         android:textColor="#166534"
                         android:textSize="11sp"
@@ -334,7 +338,7 @@
                         android:textColor="@color/text_dark"
                         android:textSize="12.5sp"
                         android:textStyle="bold"
-                        tools:text="TOYYIB-MOCK-260928-9812" />
+                        tools:text="PAY-ONLINE-260928-9812" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -476,6 +480,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_toStartOf="@id/tvReceiptTotalAmount"
                         android:text="@string/receipt_total_package_price"
                         android:textColor="@color/text_gray"
                         android:textSize="12sp" />
@@ -500,6 +506,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_toStartOf="@id/tvReceiptTotalPaid"
                         android:text="@string/receipt_total_paid_to_date"
                         android:textColor="@color/text_gray"
                         android:textSize="12sp" />
@@ -526,6 +534,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_toStartOf="@id/tvReceiptBalanceDue"
                         android:text="@string/receipt_balance_due"
                         android:textColor="@color/text_dark"
                         android:textSize="12.5sp"

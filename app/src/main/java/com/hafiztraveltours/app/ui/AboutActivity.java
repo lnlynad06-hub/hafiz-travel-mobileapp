@@ -1,26 +1,17 @@
 package com.hafiztraveltours.app.ui;
 
-import android.animation.ValueAnimator;
 import android.content.Intent;
-import android.graphics.LinearGradient;
-import android.graphics.Matrix;
-import android.graphics.Shader;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.view.animation.LinearInterpolator;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.core.content.ContextCompat;
 
 import com.hafiztraveltours.app.BuildConfig;
 import com.hafiztraveltours.app.R;
 import com.hafiztraveltours.app.utils.HapticUtil;
 
 public class AboutActivity extends BaseActivity {
-
-    private ValueAnimator shimmerAnimator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +27,7 @@ public class AboutActivity extends BaseActivity {
         // App Version dynamically from build configuration
         TextView tvAppVersion = findViewById(R.id.tvAppVersion);
         if (tvAppVersion != null) {
-            tvAppVersion.setText("v" + BuildConfig.VERSION_NAME);
+            tvAppVersion.setText(getString(R.string.version_short_format, BuildConfig.VERSION_NAME));
         }
 
         // Contact Intent Listeners
@@ -56,8 +47,6 @@ public class AboutActivity extends BaseActivity {
             });
         }
 
-        // Developer Shimmer & Link
-        setupDanialShimmer();
     }
 
     private void setupSocialListeners() {
@@ -115,7 +104,9 @@ public class AboutActivity extends BaseActivity {
             }
             startActivity(intent);
         } catch (Exception e) {
-            startActivitySafely(new Intent(Intent.ACTION_VIEW, Uri.parse(url)), "No app found to open link");
+            startActivitySafely(
+                    new Intent(Intent.ACTION_VIEW, Uri.parse(url)),
+                    getString(R.string.err_open_link));
         }
     }
 
@@ -127,7 +118,7 @@ public class AboutActivity extends BaseActivity {
                 HapticUtil.click(v);
                 String phoneNumber = getString(R.string.about_phone_value);
                 Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phoneNumber.replace(" ", "").replace("-", "")));
-                startActivitySafely(intent, "No dialer app found");
+                startActivitySafely(intent, getString(R.string.err_open_call));
             });
         }
 
@@ -138,8 +129,10 @@ public class AboutActivity extends BaseActivity {
                 HapticUtil.click(v);
                 String email = getString(R.string.about_email_value);
                 Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + email));
-                intent.putExtra(Intent.EXTRA_SUBJECT, "Inquiry via Hafiz Travel App");
-                startActivitySafely(Intent.createChooser(intent, "Send Email"), "No email app found");
+                intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.about_email_subject));
+                startActivitySafely(
+                        Intent.createChooser(intent, getString(R.string.send_email_chooser)),
+                        getString(R.string.err_open_email));
             });
         }
 
@@ -150,7 +143,7 @@ public class AboutActivity extends BaseActivity {
                 HapticUtil.click(v);
                 String webUrl = getString(R.string.about_website_url);
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(webUrl));
-                startActivitySafely(intent, "No browser app found");
+                startActivitySafely(intent, getString(R.string.err_open_link));
             });
         }
 
@@ -163,10 +156,13 @@ public class AboutActivity extends BaseActivity {
                 Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + Uri.encode(address));
                 Intent intent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                 intent.setPackage("com.google.android.apps.maps");
-                if (intent.resolveActivity(getPackageManager()) == null) {
-                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://maps.google.com/?q=" + Uri.encode(address)));
+                try {
+                    startActivity(intent);
+                } catch (Exception e) {
+                    startActivitySafely(
+                            new Intent(Intent.ACTION_VIEW, Uri.parse("https://maps.google.com/?q=" + Uri.encode(address))),
+                            getString(R.string.err_open_map));
                 }
-                startActivitySafely(intent, "No maps app found");
             });
         }
     }
@@ -181,56 +177,4 @@ public class AboutActivity extends BaseActivity {
         }
     }
 
-    private void setupDanialShimmer() {
-        TextView tvDanial = findViewById(R.id.tvAuthorDanial);
-        if (tvDanial == null) return;
-
-        // Production: author credit is display-only (no external personal links).
-        tvDanial.setOnClickListener(null);
-        tvDanial.setClickable(false);
-        tvDanial.setFocusable(false);
-
-        tvDanial.post(() -> {
-            if (isFinishing() || isDestroyed()) return;
-
-            float width = tvDanial.getPaint().measureText(tvDanial.getText().toString());
-            if (width <= 0) width = 120f;
-
-            int baseColor = ContextCompat.getColor(this, R.color.pink_dark);
-            int glowColor = 0xFFFFA0B8; // Soft, elegant rose glow
-
-            LinearGradient shader = new LinearGradient(
-                    -width, 0, width, 0,
-                    new int[]{baseColor, glowColor, baseColor},
-                    new float[]{0f, 0.5f, 1f},
-                    Shader.TileMode.CLAMP
-            );
-            tvDanial.getPaint().setShader(shader);
-
-            Matrix matrix = new Matrix();
-            shimmerAnimator = ValueAnimator.ofFloat(-width * 1.5f, width * 2.5f);
-            shimmerAnimator.setDuration(3200);
-            shimmerAnimator.setRepeatCount(ValueAnimator.INFINITE);
-            shimmerAnimator.setRepeatMode(ValueAnimator.RESTART);
-            shimmerAnimator.setInterpolator(new LinearInterpolator());
-            shimmerAnimator.addUpdateListener(animation -> {
-                if (tvDanial.getPaint() != null) {
-                    float translate = (float) animation.getAnimatedValue();
-                    matrix.setTranslate(translate, 0);
-                    shader.setLocalMatrix(matrix);
-                    tvDanial.invalidate();
-                }
-            });
-            shimmerAnimator.start();
-        });
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (shimmerAnimator != null) {
-            shimmerAnimator.cancel();
-            shimmerAnimator = null;
-        }
-        super.onDestroy();
-    }
 }

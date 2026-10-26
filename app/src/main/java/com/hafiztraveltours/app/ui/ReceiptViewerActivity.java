@@ -192,7 +192,7 @@ public class ReceiptViewerActivity extends BaseActivity {
         }
 
         if (tvReceiptRefNo != null) {
-            tvReceiptRefNo.setText("TOYYIB-ONLINE-" + displayNo);
+            tvReceiptRefNo.setText("PAY-ONLINE-" + displayNo);
         }
 
         double deposit = req.totalAmount;
@@ -325,7 +325,7 @@ public class ReceiptViewerActivity extends BaseActivity {
             if (tvReceiptNumberHeader != null) tvReceiptNumberHeader.setText(recNo);
             if (tvReceiptAmount != null) tvReceiptAmount.setText(BookingRequest.formatPrice(detail.paidAmount));
             if (tvReceiptPaymentMethod != null) tvReceiptPaymentMethod.setText("FPX / Online Banking");
-            if (tvReceiptRefNo != null) tvReceiptRefNo.setText("TOYYIB-ONLINE-" + bNo);
+            if (tvReceiptRefNo != null) tvReceiptRefNo.setText("PAY-ONLINE-" + bNo);
         }
 
         if (tvReceiptBookingRef != null) {

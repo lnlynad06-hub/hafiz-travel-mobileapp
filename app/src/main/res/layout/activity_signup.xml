@@ -27,14 +27,17 @@
             <LinearLayout
                 android:id="@+id/btnLanguagePicker"
                 android:layout_width="wrap_content"
-                android:layout_height="38dp"
+                android:layout_height="wrap_content"
+                android:minWidth="@dimen/touch_target_min"
+                android:minHeight="@dimen/touch_target_min"
                 android:layout_alignParentEnd="true"
                 android:background="@drawable/bg_language_pill"
                 android:clickable="true"
                 android:focusable="true"
-                android:gravity="center_vertical"
+                android:gravity="center"
+                android:contentDescription="@string/language_select"
                 android:orientation="horizontal"
-                android:paddingHorizontal="12dp">
+                android:paddingHorizontal="14dp">
 
                 <TextView
                     android:id="@+id/tvActiveLanguage"
@@ -99,109 +102,58 @@
             <!-- Full Name Input -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/nameLayout"
+                style="@style/Widget.HafizTravel.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_full_name"
-                app:boxBackgroundMode="outline"
-                app:boxCornerRadiusTopStart="14dp"
-                app:boxCornerRadiusTopEnd="14dp"
-                app:boxCornerRadiusBottomStart="14dp"
-                app:boxCornerRadiusBottomEnd="14dp"
-                app:boxStrokeColor="@color/box_stroke_selector"
-                app:boxBackgroundColor="@color/box_bg_selector"
-                app:boxStrokeWidth="1dp"
-                app:boxStrokeWidthFocused="1.5dp"
-                app:boxStrokeErrorColor="@color/error_red"
-                app:hintEnabled="true"
                 app:errorEnabled="true"
-                app:errorIconDrawable="@null"
-                app:startIconDrawable="@drawable/ic_profile"
-                app:startIconTint="@color/pink_dark">
+                app:startIconDrawable="@drawable/ic_profile">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/nameInput"
+                    style="@style/Widget.HafizTravel.TextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:paddingStart="4dp"
-                    android:paddingEnd="12dp"
-                    android:inputType="textPersonName"
-                    android:textColor="@color/input_text"
-                    android:textColorHint="@color/input_hint"
-                    android:textSize="14sp" />
+                    android:inputType="textPersonName" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Username Input -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/nicknameLayout"
+                style="@style/Widget.HafizTravel.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:hint="@string/hint_username"
-                app:boxBackgroundMode="outline"
-                app:boxCornerRadiusTopStart="14dp"
-                app:boxCornerRadiusTopEnd="14dp"
-                app:boxCornerRadiusBottomStart="14dp"
-                app:boxCornerRadiusBottomEnd="14dp"
-                app:boxStrokeColor="@color/box_stroke_selector"
-                app:boxBackgroundColor="@color/box_bg_selector"
-                app:boxStrokeWidth="1dp"
-                app:boxStrokeWidthFocused="1.5dp"
-                app:boxStrokeErrorColor="@color/error_red"
-                app:hintEnabled="true"
                 app:errorEnabled="true"
-                app:errorIconDrawable="@null"
-                app:startIconDrawable="@drawable/ic_profile"
-                app:startIconTint="@color/pink_dark">
+                app:startIconDrawable="@drawable/ic_profile">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/nicknameInput"
+                    style="@style/Widget.HafizTravel.TextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:paddingStart="4dp"
-                    android:paddingEnd="12dp"
                     android:inputType="text"
-                    android:maxLength="50"
-                    android:textColor="@color/input_text"
-                    android:textColorHint="@color/input_hint"
-                    android:textSize="14sp" />
+                    android:maxLength="50" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Email Input -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/emailLayout"
+                style="@style/Widget.HafizTravel.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:hint="@string/hint_email"
-                app:boxBackgroundMode="outline"
-                app:boxCornerRadiusTopStart="14dp"
-                app:boxCornerRadiusTopEnd="14dp"
-                app:boxCornerRadiusBottomStart="14dp"
-                app:boxCornerRadiusBottomEnd="14dp"
-                app:boxStrokeColor="@color/box_stroke_selector"
-                app:boxBackgroundColor="@color/box_bg_selector"
-                app:boxStrokeWidth="1dp"
-                app:boxStrokeWidthFocused="1.5dp"
-                app:boxStrokeErrorColor="@color/error_red"
-                app:hintEnabled="true"
                 app:errorEnabled="true"
-                app:errorIconDrawable="@null"
-                app:startIconDrawable="@drawable/ic_email"
-                app:startIconTint="@color/pink_dark">
+                app:startIconDrawable="@drawable/ic_email">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/emailInput"
+                    style="@style/Widget.HafizTravel.TextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:paddingStart="4dp"
-                    android:paddingEnd="12dp"
-                    android:inputType="textEmailAddress"
-                    android:textColor="@color/input_text"
-                    android:textColorHint="@color/input_hint"
-                    android:textSize="14sp" />
+                    android:inputType="textEmailAddress" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Phone Input with Country Code Picker -->
@@ -227,11 +179,13 @@
                         android:id="@+id/btnCountryCode"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:gravity="center_vertical"
+                        android:minWidth="@dimen/touch_target_min"
+                        android:gravity="center"
                         android:orientation="horizontal"
                         android:paddingStart="14dp"
                         android:paddingEnd="10dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="@string/select_country_code"
                         android:clickable="true"
                         android:focusable="true">
 
@@ -281,6 +235,7 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_marginEnd="12dp"
+                        android:contentDescription="@string/content_desc_phone_valid"
                         android:src="@drawable/ic_check_circle_magenta"
                         android:visibility="gone" />
 
@@ -302,40 +257,21 @@
             <!-- Password Input -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/passwordLayout"
+                style="@style/Widget.HafizTravel.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:hint="@string/hint_password"
-                app:boxBackgroundMode="outline"
-                app:boxCornerRadiusTopStart="14dp"
-                app:boxCornerRadiusTopEnd="14dp"
-                app:boxCornerRadiusBottomStart="14dp"
-                app:boxCornerRadiusBottomEnd="14dp"
-                app:boxStrokeColor="@color/box_stroke_selector"
-                app:boxBackgroundColor="@color/box_bg_selector"
-                app:boxStrokeWidth="1dp"
-                app:boxStrokeWidthFocused="1.5dp"
-                app:boxStrokeErrorColor="@color/error_red"
-                app:helperTextEnabled="false"
-                app:hintEnabled="true"
                 app:errorEnabled="true"
-                app:errorIconDrawable="@null"
                 app:startIconDrawable="@drawable/ic_lock"
-                app:startIconTint="@color/pink_dark"
-                app:endIconMode="password_toggle"
-                app:endIconTint="@color/pink_dark">
+                app:endIconMode="password_toggle">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/passwordInput"
+                    style="@style/Widget.HafizTravel.TextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:paddingStart="4dp"
-                    android:paddingEnd="12dp"
-                    android:inputType="textPassword"
-                    android:textColor="@color/input_text"
-                    android:textColorHint="@color/input_hint"
-                    android:textSize="14sp" />
+                    android:inputType="textPassword" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Password Requirements Checklist -->
@@ -349,51 +285,33 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/confirmPasswordLayout"
+                style="@style/Widget.HafizTravel.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:hint="@string/hint_confirm_password"
-                app:boxBackgroundMode="outline"
-                app:boxCornerRadiusTopStart="14dp"
-                app:boxCornerRadiusTopEnd="14dp"
-                app:boxCornerRadiusBottomStart="14dp"
-                app:boxCornerRadiusBottomEnd="14dp"
-                app:boxStrokeColor="@color/box_stroke_selector"
-                app:boxBackgroundColor="@color/box_bg_selector"
-                app:boxStrokeWidth="1dp"
-                app:boxStrokeWidthFocused="1.5dp"
-                app:boxStrokeErrorColor="@color/error_red"
-                app:hintEnabled="true"
                 app:errorEnabled="true"
-                app:errorIconDrawable="@null"
                 app:startIconDrawable="@drawable/ic_lock"
-                app:startIconTint="@color/pink_dark"
-                app:endIconMode="password_toggle"
-                app:endIconTint="@color/pink_dark">
+                app:endIconMode="password_toggle">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/confirmPasswordInput"
+                    style="@style/Widget.HafizTravel.TextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:paddingStart="4dp"
-                    android:paddingEnd="12dp"
-                    android:inputType="textPassword"
-                    android:textColor="@color/input_text"
-                    android:textColorHint="@color/input_hint"
-                    android:textSize="14sp" />
+                    android:inputType="textPassword" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Gradient Sign Up Action Button with Loading State -->
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp">
+                android:layout_marginTop="18dp">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/signUpButton"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="52dp"
                     android:background="@drawable/bg_gradient_primary_button"
                     app:backgroundTint="@null"
                     android:insetTop="0dp"
@@ -435,8 +353,12 @@
             android:id="@+id/goToLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:minHeight="@dimen/touch_target_min"
             android:layout_marginTop="16dp"
-            android:padding="6dp"
+            android:gravity="center"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:text="@string/signup_have_account"
             android:textColor="@color/pink_dark"
             android:textSize="13.5sp"

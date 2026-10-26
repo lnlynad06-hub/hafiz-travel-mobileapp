@@ -1,3 +1,44 @@
 <resources>
+    <!-- Established Core Input Token (Preserved for compatibility) -->
     <dimen name="input_corner_radius">14dp</dimen>
+
+    <!-- 8-Point Spatial Grid Tokens -->
+    <dimen name="spacing_xxs">2dp</dimen>
+    <dimen name="spacing_xs">4dp</dimen>
+    <dimen name="spacing_sm">8dp</dimen>
+    <dimen name="spacing_md">16dp</dimen>
+    <dimen name="spacing_lg">24dp</dimen>
+    <dimen name="spacing_xl">32dp</dimen>
+    <dimen name="spacing_xxl">48dp</dimen>
+
+    <!-- Corner Radius Tokens -->
+    <dimen name="radius_input">14dp</dimen>
+    <dimen name="radius_button">14dp</dimen>
+    <dimen name="radius_card">16dp</dimen>
+    <dimen name="radius_card_sm">12dp</dimen>
+    <dimen name="radius_chip">20dp</dimen>
+    <dimen name="radius_dialog">26dp</dimen>
+    <dimen name="radius_pill">999dp</dimen>
+
+    <!-- Touch Target & Accessibility Tokens (Android Material 48dp Standard) -->
+    <dimen name="touch_target_min">48dp</dimen>
+    <dimen name="touch_target_button_height">48dp</dimen>
+    <dimen name="touch_target_input_height">52dp</dimen>
+    <dimen name="touch_target_icon_padding">12dp</dimen>
+
+    <!-- Elevation & Surface Hierarchy Tokens -->
+    <dimen name="elevation_none">0dp</dimen>
+    <dimen name="elevation_low">2dp</dimen>
+    <dimen name="elevation_medium">4dp</dimen>
+    <dimen name="elevation_high">8dp</dimen>
+    <dimen name="elevation_dialog">12dp</dimen>
+    <dimen name="elevation_bottom_bar">16dp</dimen>
+
+    <!-- Unified Type Scale Reference Tokens -->
+    <dimen name="text_size_display">20sp</dimen>
+    <dimen name="text_size_headline">18sp</dimen>
+    <dimen name="text_size_title">16sp</dimen>
+    <dimen name="text_size_body">14sp</dimen>
+    <dimen name="text_size_caption">12sp</dimen>
+    <dimen name="text_size_badge">11sp</dimen>
 </resources>

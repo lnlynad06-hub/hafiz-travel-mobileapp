@@ -1,10 +1,11 @@
 package com.hafiztraveltours.app.models;
 
 import com.google.gson.annotations.SerializedName;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CreateCustomTravelRequest {
+public class CreateCustomTravelRequest implements Serializable {
     @SerializedName("request_type")
     public String requestType; // "customize_package" or "custom_trip"
 
@@ -80,7 +81,7 @@ public class CreateCustomTravelRequest {
     @SerializedName("status")
     public String status = "submitted";
 
-    public static class ChildDetail {
+    public static class ChildDetail implements Serializable {
         @SerializedName("dob")
         public String dob;
 
@@ -99,7 +100,7 @@ public class CreateCustomTravelRequest {
         }
     }
 
-    public static class RoomArrangement {
+    public static class RoomArrangement implements Serializable {
         @SerializedName("room_type")
         public String roomType;
 
@@ -126,7 +127,7 @@ public class CreateCustomTravelRequest {
         }
     }
 
-    public static class FlightPreferences {
+    public static class FlightPreferences implements Serializable {
         @SerializedName("airline")
         public String airline;
 

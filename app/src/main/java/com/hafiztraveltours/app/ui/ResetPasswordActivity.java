@@ -75,6 +75,17 @@ public class ResetPasswordActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_password);
 
+        View root = findViewById(R.id.resetPasswordRootContainer);
+        if (root != null) {
+            androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
+                androidx.core.graphics.Insets sysBars = insets.getInsets(
+                        androidx.core.view.WindowInsetsCompat.Type.systemBars()
+                );
+                v.setPadding(sysBars.left, sysBars.top, sysBars.right, sysBars.bottom);
+                return insets;
+            });
+        }
+
         targetEmail = getIntent().getStringExtra(EXTRA_EMAIL);
         resetToken = getIntent().getStringExtra(EXTRA_RESET_TOKEN);
         if (targetEmail == null) targetEmail = "";
@@ -303,6 +314,7 @@ public class ResetPasswordActivity extends BaseActivity {
         ImageView radio = sheet.findViewById(radioId);
 
         boolean isSelected = langCode.equalsIgnoreCase(currentLang);
+        item.setSelected(isSelected);
         if (isSelected) {
             item.setBackgroundResource(R.drawable.bg_language_item_selected);
             if (radio != null) radio.setImageResource(R.drawable.ic_check_circle_magenta);

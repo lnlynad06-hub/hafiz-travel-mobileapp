@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/background">
+    android:background="@color/background"
+    android:fitsSystemWindows="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,11 +20,12 @@
 
         <ImageView
             android:id="@+id/webViewBackButton"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="@dimen/touch_target_min"
+            android:layout_height="@dimen/touch_target_min"
             android:padding="10dp"
             android:src="@drawable/ic_back"
             app:tint="@color/text_dark"
+            android:contentDescription="@string/content_desc_back"
             android:clickable="true"
             android:focusable="true" />
 

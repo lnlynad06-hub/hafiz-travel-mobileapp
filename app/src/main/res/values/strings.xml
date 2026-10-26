@@ -35,6 +35,8 @@
     <string name="settings_azan_notif_desc">Receive alerts and Azan audio at prayer times</string>
     <string name="settings_app_notif_title">App Notifications</string>
     <string name="settings_app_notif_desc">Trip updates, booking alerts and promotions</string>
+    <string name="app_notification_channel_name">Hafiz Travel notifications</string>
+    <string name="app_notification_channel_desc">Trip updates, booking alerts and important notices</string>
     <string name="settings_background_op_title">Background Operation</string>
     <string name="settings_background_op_desc">Allow background execution for punctual Azan alarms</string>
     <string name="settings_background_op_enabled">Active</string>
@@ -129,6 +131,7 @@
     <string name="passwords_match">Passwords match</string>
     <string name="passwords_mismatch">Passwords do not match</string>
     <string name="select_country_code">Select Country Code</string>
+    <string name="language_select">Select Language</string>
     <string name="region_southeast_asia">SOUTHEAST ASIA</string>
     <string name="region_international">OTHER INTERNATIONAL</string>
     <string name="err_name_required">Please enter your full name</string>
@@ -250,6 +253,9 @@
     <string name="about_established_year">Established in 2022</string>
 
     <string name="contact_us_title">Contact Us</string>
+    <string name="contact_address_value" translatable="false">No. 31, Jalan Dataran Larkin,\n80350 Johor Bahru, Johor.</string>
+    <string name="contact_phone_value" translatable="false">+6019-785 9867</string>
+    <string name="contact_email_value" translatable="false">sales.httsb@gmail.com.my</string>
     <string name="contact_hero_blurb">Have a question about our Umrah or Tour packages? Reach us through any of the channels below — we\'re happy to help.</string>
     <string name="label_address">Address</string>
     <string name="label_phone">Phone</string>
@@ -272,6 +278,7 @@
     <string name="guideline_hero_title">A Brief Guide to Umrah</string>
     <string name="guideline_hero_blurb">Arranged in the actual sequence—from the etiquette of travel to the completion of the Umrah pilgrimage.</string>
     <string name="guideline_pdf_title">Want a complete guide?</string>
+    <string name="guideline_pdf_chapter_subtitle">%1$s — %2$s</string>
     <string name="guideline_pdf_subtitle">Download the full PDF with detailed explanations.</string>
     <string name="guideline_pdf_button">Download</string>
 
@@ -506,6 +513,9 @@
     <string name="checklist_umrah_title">Procedures for Performing Umrah</string>
     <string name="checklist_reset">Reset</string>
     <string name="checklist_progress_suffix">Done</string>
+    <string name="checklist_progress_format">%1$d / %2$d Done</string>
+    <string name="checklist_subitem_format">– %1$s</string>
+    <string name="checklist_bullet_format">• %1$s</string>
     <string name="all_packages_title">All Packages</string>
 
     <!-- Section 1 -->
@@ -709,6 +719,10 @@
     <string name="prayer_countdown_hour_min">%1$s in %2$dh %3$dm</string>
     <string name="qibla_title">Qibla Direction</string>
     <string name="qibla_subtitle">Find the direction of the Kaaba</string>
+    <string name="compass_north_short">N</string>
+    <string name="compass_east_short">E</string>
+    <string name="compass_south_short">S</string>
+    <string name="compass_west_short">W</string>
     <string name="qibla_screen_title">Qibla Compass</string>
     <string name="qibla_aligned">✓ Facing Qibla</string>
     <string name="qibla_degree_format">Qibla: %1$.0f°</string>
@@ -1199,6 +1213,13 @@
     <string name="summary_card_travellers">Traveller List</string>
     <string name="summary_card_payment">Payment Summary</string>
     <string name="summary_grand_total">Grand Total</string>
+    <string name="summary_deposit_required">Deposit Required</string>
+    <string name="summary_outstanding_balance">Outstanding Balance</string>
+    <string name="quote_calculating">Fetching official quotation &amp; deposit…</string>
+    <string name="quote_error_msg">Unable to retrieve official quote.</string>
+    <string name="quote_retry_btn">Retry ›</string>
+    <string name="quote_still_loading">Please wait, official quotation is loading…</string>
+    <string name="quote_retry_required">Please tap Retry to load official quote before confirming.</string>
     <string name="summary_payment_notice_title">Payment &amp; Deposit Information</string>
     <string name="summary_payment_notice_body">Booking confirmation does not require immediate payment. Once confirmed, you can conveniently make your deposit or package payment anytime via My Booking.</string>
     <string name="summary_checkbox_agree">I have read and agree to the Terms &amp; Conditions and Cancellation Policy of Hafiz Travel &amp; Tours.</string>
@@ -1216,7 +1237,13 @@
     <string name="config_total_label">Estimated Total Cost</string>
     <string name="config_continue">CONTINUE TO TRAVELLER DETAILS</string>
     <string name="content_desc_close">Close</string>
+    <string name="content_desc_clear_search">Clear search</string>
+    <string name="content_desc_phone_valid">Phone number is valid</string>
+    <string name="chevron_right_symbol" translatable="false">›</string>
+    <string name="language_badge_english" translatable="false">EN</string>
     <string name="content_desc_refresh">Refresh location</string>
+    <string name="accessibility_expanded">Expanded</string>
+    <string name="accessibility_collapsed">Collapsed</string>
     <string name="content_desc_share">Share package</string>
     <string name="content_desc_favorite">Save to favorites</string>
     <string name="content_desc_status">Status</string>
@@ -1330,6 +1357,7 @@
     <string name="booking_btn_invoice">Invoice</string>
     <string name="booking_btn_receipt">Receipt</string>
     <string name="booking_btn_documents">Documents</string>
+    <string name="booking_btn_details">View Details</string>
     <string name="booking_label_departure">DEPARTURE DATE</string>
     <string name="booking_label_grand_total">GRAND TOTAL</string>
     <string name="booking_no_official_label">OFFICIAL BOOKING NO.</string>
@@ -1343,6 +1371,7 @@
 
     <!-- Invoice Viewer Strings -->
     <string name="invoice_title_official">Official Invoice</string>
+    <string name="booking_title_details">Booking Details</string>
     <string name="invoice_meta_no">INVOICE NO.</string>
     <string name="invoice_meta_date">ISSUE DATE</string>
     <string name="invoice_meta_tour_code">TOUR CODE</string>
@@ -1479,14 +1508,14 @@
     <string name="pay_sheet_this_payment">Amount</string>
     <string name="pay_sheet_balance_after">Balance After Payment</string>
     <string name="pay_sheet_btn_pay_format">Pay %1$s</string>
-    <string name="pay_sheet_secure_title">Secure Payment via ToyyibPay</string>
-    <string name="pay_sheet_secure_desc">256-bit encryption. Online payment gateway integration powered by ToyyibPay.</string>
+    <string name="pay_sheet_secure_title">Secure Online Payment</string>
+    <string name="pay_sheet_secure_desc">256-bit encryption. Secure online payment processing.</string>
     <string name="pay_confirm_dialog_title">Confirm Payment</string>
     <string name="pay_confirm_purpose_label">Payment Purpose</string>
     <string name="pay_confirm_gateway_label">Payment Gateway</string>
-    <string name="pay_confirm_gateway_name">ToyyibPay</string>
+    <string name="pay_confirm_gateway_name">Online Payment (FPX)</string>
     <string name="pay_confirm_dialog_msg">You are confirming payment of %1$s for %2$s.</string>
-    <string name="pay_confirm_dialog_secure_notice">You will be redirected to ToyyibPay to complete this payment securely.</string>
+    <string name="pay_confirm_dialog_secure_notice">You will be redirected to complete this payment securely.</string>
     <string name="pay_browser_continue">Continue the payment in your browser, then return here for confirmation.</string>
     <string name="pay_pending_verification">Payment initiated. Your booking will update once the payment gateway confirms it.</string>
     <string name="pay_confirm_btn_pay">Confirm &amp; Pay</string>
@@ -1650,6 +1679,8 @@
     <string name="about_phone_label">Phone</string>
     <string name="about_phone_value">+6019-785 9867</string>
     <string name="about_email_label">Email</string>
+    <string name="about_email_subject">Inquiry via Hafiz Travel App</string>
+    <string name="send_email_chooser">Send email</string>
     <string name="about_email_value">sales.httsb@gmail.com</string>
     <string name="about_website_label">Website</string>
     <string name="about_website_value">hafiztraveltours.com</string>
@@ -1675,6 +1706,8 @@
 
     <!-- App Version & Developer Footer -->
     <string name="about_app_version">App Version</string>
+    <string name="version_short_format">v%1$s</string>
+    <string name="about_developer_name">Danial</string>
     <string name="about_engineered_by_prefix">Engineered by</string>
     <string name="about_copyright">© 2022 Hafiz Travel &amp; Tours Sdn. Bhd. All rights reserved.</string>
 
@@ -1700,6 +1733,7 @@
     <string name="privacy_policy_subtitle">Hafiz Travel &amp; Tours Official Policy</string>
     <string name="privacy_policy_badge">OFFICIAL POLICY</string>
     <string name="privacy_policy_version_label">Version %s</string>
+    <string name="privacy_policy_version_placeholder">v1.0</string>
     <string name="privacy_policy_accept">Accept</string>
     <string name="privacy_policy_decline">Decline</string>
     <string name="privacy_policy_loading">Loading Privacy Policy…</string>
@@ -2040,7 +2074,7 @@
     <string name="summary_airport_format">Departure airport: %1$s</string>
     <string name="summary_dates_format">Dates: %1$s to %2$s</string>
     <string name="summary_flexible_dates_suffix"> (Flexible +/- 3 days)</string>
-    <string name="summary_duration_format">Duration: %1$d days</string>
+    <string name="summary_duration_format">Duration: %1$s days</string>
     <string name="summary_traveller_counts">Total travellers: %1$d (%2$d adult men, %3$d adult women, %4$d children)</string>
     <string name="summary_room_type_format">Requested room type: %1$s</string>
     <string name="summary_family_room_format">Family room: %1$s</string>

@@ -24,6 +24,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:contentDescription="@null"
                 android:src="@drawable/ic_profile"
                 app:tint="@color/pink_dark" />
         </FrameLayout>
@@ -63,13 +64,8 @@
 
         <ImageView
             android:id="@+id/btnCloseDialog"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/content_desc_close"
-            android:padding="4dp"
-            android:src="@drawable/ic_close"
-            app:tint="@color/text_gray" />
+            style="@style/Widget.HafizTravel.Dialog.CloseButton"
+            android:contentDescription="@string/content_desc_close" />
     </LinearLayout>
 
     <View
@@ -104,6 +100,7 @@
                 <ImageView
                     android:layout_width="18dp"
                     android:layout_height="18dp"
+                    android:contentDescription="@null"
                     android:src="@drawable/ic_profile"
                     app:tint="@color/pink_dark" />
 
@@ -120,73 +117,37 @@
             <!-- Full Name -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/nameLayout"
+                style="@style/Widget.HafizTravel.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/profile_field_full_name"
-                app:boxBackgroundMode="outline"
-                app:boxCornerRadiusTopStart="14dp"
-                app:boxCornerRadiusTopEnd="14dp"
-                app:boxCornerRadiusBottomStart="14dp"
-                app:boxCornerRadiusBottomEnd="14dp"
-                app:boxStrokeColor="@color/box_stroke_selector"
-                app:boxBackgroundColor="@color/box_bg_selector"
-                app:boxStrokeWidth="1dp"
-                app:boxStrokeWidthFocused="1.5dp"
-                app:boxStrokeErrorColor="@color/error_red"
-                app:hintEnabled="true"
-                app:errorEnabled="false"
-                app:errorIconDrawable="@null"
-                app:startIconDrawable="@drawable/ic_profile"
-                app:startIconTint="@color/pink_dark">
+                app:startIconDrawable="@drawable/ic_profile">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/nameInput"
+                    style="@style/Widget.HafizTravel.TextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:paddingStart="4dp"
-                    android:paddingEnd="12dp"
-                    android:inputType="textPersonName"
-                    android:textColor="@color/input_text"
-                    android:textColorHint="@color/input_hint"
-                    android:textSize="14sp" />
+                    android:inputType="textPersonName" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Nickname / Username -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/nicknameLayout"
+                style="@style/Widget.HafizTravel.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:hint="@string/profile_field_nickname"
-                app:boxBackgroundMode="outline"
-                app:boxCornerRadiusTopStart="14dp"
-                app:boxCornerRadiusTopEnd="14dp"
-                app:boxCornerRadiusBottomStart="14dp"
-                app:boxCornerRadiusBottomEnd="14dp"
-                app:boxStrokeColor="@color/box_stroke_selector"
-                app:boxBackgroundColor="@color/box_bg_selector"
-                app:boxStrokeWidth="1dp"
-                app:boxStrokeWidthFocused="1.5dp"
-                app:boxStrokeErrorColor="@color/error_red"
-                app:hintEnabled="true"
-                app:errorEnabled="false"
-                app:errorIconDrawable="@null"
-                app:startIconDrawable="@drawable/ic_profile"
-                app:startIconTint="@color/pink_dark">
+                app:startIconDrawable="@drawable/ic_profile">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/nicknameInput"
+                    style="@style/Widget.HafizTravel.TextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:paddingStart="4dp"
-                    android:paddingEnd="12dp"
                     android:inputType="textPersonName"
-                    android:maxLength="50"
-                    android:textColor="@color/input_text"
-                    android:textColorHint="@color/input_hint"
-                    android:textSize="14sp" />
+                    android:maxLength="50" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Date of Birth (Shared Luxury Field) -->
@@ -211,6 +172,7 @@
                     android:layout_width="18dp"
                     android:layout_height="18dp"
                     android:layout_marginEnd="12dp"
+                    android:contentDescription="@null"
                     android:src="@drawable/ic_calendar"
                     app:tint="@color/pink_dark" />
 
@@ -255,6 +217,7 @@
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="16dp"
+                    android:contentDescription="@null"
                     android:src="@drawable/ic_chevron_right"
                     app:tint="@color/text_gray" />
 
@@ -282,6 +245,7 @@
                     android:layout_width="18dp"
                     android:layout_height="18dp"
                     android:layout_marginEnd="12dp"
+                    android:contentDescription="@null"
                     android:src="@drawable/ic_profile"
                     app:tint="@color/pink_dark" />
 
@@ -327,6 +291,7 @@
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="16dp"
+                    android:contentDescription="@null"
                     android:src="@drawable/ic_chevron_right"
                     app:tint="@color/text_gray" />
 
@@ -354,6 +319,7 @@
                     android:layout_width="18dp"
                     android:layout_height="18dp"
                     android:layout_marginEnd="12dp"
+                    android:contentDescription="@null"
                     android:src="@drawable/ic_location_pin"
                     app:tint="@color/pink_dark" />
 
@@ -401,6 +367,7 @@
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="16dp"
+                    android:contentDescription="@null"
                     android:src="@drawable/ic_chevron_right"
                     app:tint="@color/text_gray" />
 
@@ -427,10 +394,12 @@
                         android:id="@+id/btnCountryCode"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:minWidth="@dimen/touch_target_min"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:clickable="true"
                         android:focusable="true"
-                        android:gravity="center_vertical"
+                        android:gravity="center"
+                        android:contentDescription="@string/select_country_code"
                         android:orientation="horizontal"
                         android:paddingStart="14dp"
                         android:paddingEnd="10dp">
@@ -513,6 +482,7 @@
                     android:id="@+id/emailInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:minHeight="@dimen/touch_target_min"
                     android:gravity="center_vertical"
                     android:paddingStart="4dp"
                     android:paddingEnd="12dp"
@@ -538,6 +508,7 @@
                 <ImageView
                     android:layout_width="18dp"
                     android:layout_height="18dp"
+                    android:contentDescription="@null"
                     android:src="@drawable/ic_card"
                     app:tint="@color/pink_dark" />
 
@@ -554,36 +525,18 @@
             <!-- IC / Identity Number -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/icLayout"
+                style="@style/Widget.HafizTravel.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/profile_field_ic_no"
-                app:boxBackgroundMode="outline"
-                app:boxCornerRadiusTopStart="14dp"
-                app:boxCornerRadiusTopEnd="14dp"
-                app:boxCornerRadiusBottomStart="14dp"
-                app:boxCornerRadiusBottomEnd="14dp"
-                app:boxStrokeColor="@color/box_stroke_selector"
-                app:boxBackgroundColor="@color/box_bg_selector"
-                app:boxStrokeWidth="1dp"
-                app:boxStrokeWidthFocused="1.5dp"
-                app:boxStrokeErrorColor="@color/error_red"
-                app:hintEnabled="true"
-                app:errorEnabled="false"
-                app:errorIconDrawable="@null"
-                app:startIconDrawable="@drawable/ic_card"
-                app:startIconTint="@color/pink_dark">
+                app:startIconDrawable="@drawable/ic_card">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/icInput"
+                    style="@style/Widget.HafizTravel.TextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:paddingStart="4dp"
-                    android:paddingEnd="12dp"
-                    android:inputType="number"
-                    android:textColor="@color/input_text"
-                    android:textColorHint="@color/input_hint"
-                    android:textSize="14sp" />
+                    android:inputType="number" />
             </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -599,6 +552,7 @@
                 <ImageView
                     android:layout_width="18dp"
                     android:layout_height="18dp"
+                    android:contentDescription="@null"
                     android:src="@drawable/ic_doc_passport"
                     app:tint="@color/pink_dark" />
 
@@ -615,36 +569,18 @@
             <!-- Passport Number -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/passportLayout"
+                style="@style/Widget.HafizTravel.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/profile_field_passport_no"
-                app:boxBackgroundMode="outline"
-                app:boxCornerRadiusTopStart="14dp"
-                app:boxCornerRadiusTopEnd="14dp"
-                app:boxCornerRadiusBottomStart="14dp"
-                app:boxCornerRadiusBottomEnd="14dp"
-                app:boxStrokeColor="@color/box_stroke_selector"
-                app:boxBackgroundColor="@color/box_bg_selector"
-                app:boxStrokeWidth="1dp"
-                app:boxStrokeWidthFocused="1.5dp"
-                app:boxStrokeErrorColor="@color/error_red"
-                app:hintEnabled="true"
-                app:errorEnabled="false"
-                app:errorIconDrawable="@null"
-                app:startIconDrawable="@drawable/ic_doc_passport"
-                app:startIconTint="@color/pink_dark">
+                app:startIconDrawable="@drawable/ic_doc_passport">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/passportInput"
+                    style="@style/Widget.HafizTravel.TextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:paddingStart="4dp"
-                    android:paddingEnd="12dp"
-                    android:inputType="textCapCharacters"
-                    android:textColor="@color/input_text"
-                    android:textColorHint="@color/input_hint"
-                    android:textSize="14sp" />
+                    android:inputType="textCapCharacters" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Passport Expiry Date (Shared Luxury Field matching Date of Birth) -->
@@ -669,6 +605,7 @@
                     android:layout_width="18dp"
                     android:layout_height="18dp"
                     android:layout_marginEnd="12dp"
+                    android:contentDescription="@null"
                     android:src="@drawable/ic_calendar"
                     app:tint="@color/pink_dark" />
 
@@ -699,6 +636,7 @@
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="16dp"
+                    android:contentDescription="@null"
                     android:src="@drawable/ic_chevron_right"
                     app:tint="@color/text_gray" />
 
@@ -720,6 +658,7 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
+                    android:contentDescription="@null"
                     android:src="@drawable/ic_warning"
                     app:tint="#D97706" />
 
@@ -756,6 +695,7 @@
                     android:layout_width="18dp"
                     android:layout_height="18dp"
                     android:layout_marginEnd="12dp"
+                    android:contentDescription="@null"
                     android:src="@drawable/ic_location_pin"
                     app:tint="@color/pink_dark" />
 
@@ -803,6 +743,7 @@
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="16dp"
+                    android:contentDescription="@null"
                     android:src="@drawable/ic_chevron_right"
                     app:tint="@color/text_gray" />
 
@@ -821,6 +762,7 @@
                 <ImageView
                     android:layout_width="18dp"
                     android:layout_height="18dp"
+                    android:contentDescription="@null"
                     android:src="@drawable/ic_location_pin"
                     app:tint="@color/pink_dark" />
 
@@ -837,68 +779,36 @@
             <!-- Address Line 1 -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/addressLine1Layout"
+                style="@style/Widget.HafizTravel.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/profile_field_address_line_1"
-                app:boxBackgroundMode="outline"
-                app:boxCornerRadiusTopStart="14dp"
-                app:boxCornerRadiusTopEnd="14dp"
-                app:boxCornerRadiusBottomStart="14dp"
-                app:boxCornerRadiusBottomEnd="14dp"
-                app:boxStrokeColor="@color/box_stroke_selector"
-                app:boxBackgroundColor="@color/box_bg_selector"
-                app:boxStrokeWidth="1dp"
-                app:boxStrokeWidthFocused="1.5dp"
-                app:hintEnabled="true"
-                app:errorEnabled="false"
-                app:startIconDrawable="@drawable/ic_location_pin"
-                app:startIconTint="@color/pink_dark">
+                app:startIconDrawable="@drawable/ic_location_pin">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/addressLine1Input"
+                    style="@style/Widget.HafizTravel.TextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:paddingStart="4dp"
-                    android:paddingEnd="12dp"
-                    android:inputType="textPostalAddress"
-                    android:textColor="@color/input_text"
-                    android:textColorHint="@color/input_hint"
-                    android:textSize="14sp" />
+                    android:inputType="textPostalAddress" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Address Line 2 (Optional) -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/addressLine2Layout"
+                style="@style/Widget.HafizTravel.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:hint="@string/profile_field_address_line_2"
-                app:boxBackgroundMode="outline"
-                app:boxCornerRadiusTopStart="14dp"
-                app:boxCornerRadiusTopEnd="14dp"
-                app:boxCornerRadiusBottomStart="14dp"
-                app:boxCornerRadiusBottomEnd="14dp"
-                app:boxStrokeColor="@color/box_stroke_selector"
-                app:boxBackgroundColor="@color/box_bg_selector"
-                app:boxStrokeWidth="1dp"
-                app:boxStrokeWidthFocused="1.5dp"
-                app:hintEnabled="true"
-                app:errorEnabled="false"
-                app:startIconDrawable="@drawable/ic_location_pin"
-                app:startIconTint="@color/pink_dark">
+                app:startIconDrawable="@drawable/ic_location_pin">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/addressLine2Input"
+                    style="@style/Widget.HafizTravel.TextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:paddingStart="4dp"
-                    android:paddingEnd="12dp"
-                    android:inputType="textPostalAddress"
-                    android:textColor="@color/input_text"
-                    android:textColorHint="@color/input_hint"
-                    android:textSize="14sp" />
+                    android:inputType="textPostalAddress" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Postcode & City Group Row -->
@@ -911,66 +821,38 @@
                 <!-- Postcode -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/postcodeLayout"
+                    style="@style/Widget.HafizTravel.TextInputLayout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginEnd="4dp"
-                    android:hint="@string/profile_field_postcode"
-                    app:boxBackgroundMode="outline"
-                    app:boxCornerRadiusTopStart="14dp"
-                    app:boxCornerRadiusTopEnd="14dp"
-                    app:boxCornerRadiusBottomStart="14dp"
-                    app:boxCornerRadiusBottomEnd="14dp"
-                    app:boxStrokeColor="@color/box_stroke_selector"
-                    app:boxBackgroundColor="@color/box_bg_selector"
-                    app:boxStrokeWidth="1dp"
-                    app:boxStrokeWidthFocused="1.5dp"
-                    app:hintEnabled="true"
-                    app:errorEnabled="false">
+                    android:hint="@string/profile_field_postcode">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/postcodeInput"
+                        style="@style/Widget.HafizTravel.TextInputEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:paddingHorizontal="12dp"
                         android:inputType="number"
-                        android:maxLength="10"
-                        android:textColor="@color/input_text"
-                        android:textColorHint="@color/input_hint"
-                        android:textSize="14sp" />
+                        android:maxLength="10" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- City -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/cityLayout"
+                    style="@style/Widget.HafizTravel.TextInputLayout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.5"
                     android:layout_marginStart="4dp"
-                    android:hint="@string/profile_field_city"
-                    app:boxBackgroundMode="outline"
-                    app:boxCornerRadiusTopStart="14dp"
-                    app:boxCornerRadiusTopEnd="14dp"
-                    app:boxCornerRadiusBottomStart="14dp"
-                    app:boxCornerRadiusBottomEnd="14dp"
-                    app:boxStrokeColor="@color/box_stroke_selector"
-                    app:boxBackgroundColor="@color/box_bg_selector"
-                    app:boxStrokeWidth="1dp"
-                    app:boxStrokeWidthFocused="1.5dp"
-                    app:hintEnabled="true"
-                    app:errorEnabled="false">
+                    android:hint="@string/profile_field_city">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/cityInput"
+                        style="@style/Widget.HafizTravel.TextInputEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:paddingHorizontal="12dp"
-                        android:inputType="textCapWords"
-                        android:textColor="@color/input_text"
-                        android:textColorHint="@color/input_hint"
-                        android:textSize="14sp" />
+                        android:inputType="textCapWords" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
@@ -984,33 +866,19 @@
                 <!-- State -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/stateLayout"
+                    style="@style/Widget.HafizTravel.TextInputLayout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginEnd="4dp"
-                    android:hint="@string/profile_field_state"
-                    app:boxBackgroundMode="outline"
-                    app:boxCornerRadiusTopStart="14dp"
-                    app:boxCornerRadiusTopEnd="14dp"
-                    app:boxCornerRadiusBottomStart="14dp"
-                    app:boxCornerRadiusBottomEnd="14dp"
-                    app:boxStrokeColor="@color/box_stroke_selector"
-                    app:boxBackgroundColor="@color/box_bg_selector"
-                    app:boxStrokeWidth="1dp"
-                    app:boxStrokeWidthFocused="1.5dp"
-                    app:hintEnabled="true"
-                    app:errorEnabled="false">
+                    android:hint="@string/profile_field_state">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/stateInput"
+                        style="@style/Widget.HafizTravel.TextInputEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:paddingHorizontal="12dp"
-                        android:inputType="textCapWords"
-                        android:textColor="@color/input_text"
-                        android:textColorHint="@color/input_hint"
-                        android:textSize="14sp" />
+                        android:inputType="textCapWords" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Country Dropdown (Southeast Asian Countries) -->
@@ -1063,6 +931,7 @@
                 <ImageView
                     android:layout_width="18dp"
                     android:layout_height="18dp"
+                    android:contentDescription="@null"
                     android:src="@drawable/ic_users"
                     app:tint="@color/pink_dark" />
 
@@ -1079,72 +948,36 @@
             <!-- Emergency Contact Name -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/emergNameLayout"
+                style="@style/Widget.HafizTravel.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/profile_field_emergency_name"
-                app:boxBackgroundMode="outline"
-                app:boxCornerRadiusTopStart="14dp"
-                app:boxCornerRadiusTopEnd="14dp"
-                app:boxCornerRadiusBottomStart="14dp"
-                app:boxCornerRadiusBottomEnd="14dp"
-                app:boxStrokeColor="@color/box_stroke_selector"
-                app:boxBackgroundColor="@color/box_bg_selector"
-                app:boxStrokeWidth="1dp"
-                app:boxStrokeWidthFocused="1.5dp"
-                app:boxStrokeErrorColor="@color/error_red"
-                app:hintEnabled="true"
-                app:errorEnabled="false"
-                app:errorIconDrawable="@null"
-                app:startIconDrawable="@drawable/ic_profile"
-                app:startIconTint="@color/pink_dark">
+                app:startIconDrawable="@drawable/ic_profile">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/emergNameInput"
+                    style="@style/Widget.HafizTravel.TextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:paddingStart="4dp"
-                    android:paddingEnd="12dp"
-                    android:inputType="textPersonName"
-                    android:textColor="@color/input_text"
-                    android:textColorHint="@color/input_hint"
-                    android:textSize="14sp" />
+                    android:inputType="textPersonName" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Emergency Contact Phone -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/emergPhoneLayout"
+                style="@style/Widget.HafizTravel.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:hint="@string/profile_field_emergency_phone"
-                app:boxBackgroundMode="outline"
-                app:boxCornerRadiusTopStart="14dp"
-                app:boxCornerRadiusTopEnd="14dp"
-                app:boxCornerRadiusBottomStart="14dp"
-                app:boxCornerRadiusBottomEnd="14dp"
-                app:boxStrokeColor="@color/box_stroke_selector"
-                app:boxBackgroundColor="@color/box_bg_selector"
-                app:boxStrokeWidth="1dp"
-                app:boxStrokeWidthFocused="1.5dp"
-                app:boxStrokeErrorColor="@color/error_red"
-                app:hintEnabled="true"
-                app:errorEnabled="false"
-                app:errorIconDrawable="@null"
-                app:startIconDrawable="@drawable/ic_phone"
-                app:startIconTint="@color/pink_dark">
+                app:startIconDrawable="@drawable/ic_phone">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/emergPhoneInput"
+                    style="@style/Widget.HafizTravel.TextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:paddingStart="4dp"
-                    android:paddingEnd="12dp"
-                    android:inputType="phone"
-                    android:textColor="@color/input_text"
-                    android:textColorHint="@color/input_hint"
-                    android:textSize="14sp" />
+                    android:inputType="phone" />
             </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -1160,6 +993,7 @@
                 <ImageView
                     android:layout_width="18dp"
                     android:layout_height="18dp"
+                    android:contentDescription="@null"
                     android:src="@drawable/ic_users"
                     app:tint="@color/pink_dark" />
 
@@ -1238,35 +1072,18 @@
                 <!-- Mahram Name -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/mahramLayout"
+                    style="@style/Widget.HafizTravel.TextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/profile_field_mahram_name"
-                    app:boxBackgroundMode="outline"
-                    app:boxCornerRadiusTopStart="14dp"
-                    app:boxCornerRadiusTopEnd="14dp"
-                    app:boxCornerRadiusBottomStart="14dp"
-                    app:boxCornerRadiusBottomEnd="14dp"
-                    app:boxStrokeColor="@color/box_stroke_selector"
-                    app:boxBackgroundColor="@color/box_bg_selector"
-                    app:boxStrokeWidth="1dp"
-                    app:boxStrokeWidthFocused="1.5dp"
-                    app:boxStrokeErrorColor="@color/error_red"
-                    app:hintEnabled="true"
-                    app:errorEnabled="false"
-                    app:startIconDrawable="@drawable/ic_profile"
-                    app:startIconTint="@color/pink_dark">
+                    app:startIconDrawable="@drawable/ic_profile">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/mahramInput"
+                        style="@style/Widget.HafizTravel.TextInputEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:paddingStart="4dp"
-                        android:paddingEnd="12dp"
-                        android:inputType="textPersonName"
-                        android:textColor="@color/input_text"
-                        android:textColorHint="@color/input_hint"
-                        android:textSize="14sp" />
+                        android:inputType="textPersonName" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Mahram Relationship Dropdown -->
@@ -1321,6 +1138,7 @@
             android:id="@+id/btnCancelEdit"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
+            android:minHeight="@dimen/touch_target_min"
             android:gravity="center"
             android:background="@drawable/bg_google_button"
             android:clickable="true"
@@ -1341,6 +1159,7 @@
                 android:id="@+id/btnSaveEdit"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
+                android:minHeight="@dimen/touch_target_min"
                 android:background="@drawable/bg_gradient_primary_button"
                 app:backgroundTint="@null"
                 android:insetTop="0dp"

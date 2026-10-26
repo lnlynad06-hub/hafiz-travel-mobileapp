@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:orientation="vertical"
     android:background="@color/background">
 
@@ -18,11 +19,12 @@
 
         <ImageView
             android:id="@+id/allPackagesBackButton"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="@dimen/touch_target_min"
+            android:layout_height="@dimen/touch_target_min"
             android:clickable="true"
+            android:contentDescription="@string/content_desc_back"
             android:focusable="true"
-            android:padding="10dp"
+            android:padding="@dimen/touch_target_icon_padding"
             android:src="@drawable/ic_back"
             app:tint="@color/text_dark" />
 
@@ -69,6 +71,7 @@
             android:layout_marginStart="10dp"
             android:background="@drawable/bg_search_white"
             android:clickable="true"
+            android:contentDescription="@string/filter_title"
             android:focusable="true">
 
             <ImageView
@@ -76,6 +79,7 @@
                 android:layout_width="22dp"
                 android:layout_height="22dp"
                 android:layout_gravity="center"
+                android:contentDescription="@null"
                 android:src="@drawable/ic_tune"
                 app:tint="@color/text_dark" />
 

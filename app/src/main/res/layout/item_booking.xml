@@ -7,6 +7,9 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="20dp"
     android:layout_marginVertical="10dp"
+    android:foreground="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
     app:cardCornerRadius="18dp"
     app:cardElevation="2dp"
     app:cardBackgroundColor="@color/card_surface">
@@ -28,11 +31,13 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
+                android:layout_toStartOf="@id/btnBookingKebabMenu"
+                android:layout_marginEnd="8dp"
                 android:background="@drawable/bg_pill_accent"
-                android:paddingHorizontal="10dp"
-                android:paddingVertical="4dp"
-                android:textColor="#D97706"
-                android:textSize="11sp"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="5dp"
+                android:textColor="@color/status_pending_text"
+                android:textSize="11.5sp"
                 android:textStyle="bold"
                 tools:text="PENDING CONFIRMATION" />
 
@@ -57,6 +62,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:lineSpacingExtra="4dp"
+            android:maxLines="3"
+            android:ellipsize="end"
             android:textColor="@color/text_dark"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -69,7 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:textColor="@color/text_gray"
-            android:textSize="12.5sp"
+            android:textSize="13sp"
             tools:text="07 Nov 2026 • 12 days 11 nights • 2 pax" />
 
         <!-- 3b. Room Assignment Status Badge -->
@@ -77,11 +84,11 @@
             android:id="@+id/itemRoomAssignmentStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/bg_pill_accent"
-            android:paddingHorizontal="10dp"
-            android:paddingVertical="4dp"
-            android:textColor="#D97706"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="5dp"
+            android:textColor="@color/status_pending_text"
             android:textSize="11.5sp"
             android:textStyle="bold"
             tools:text="Room Assignment: Pending Verification" />
@@ -108,6 +115,7 @@
                     android:id="@+id/ivCancellationNoticeIcon"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
+                    android:contentDescription="@null"
                     android:src="@drawable/ic_warning"
                     app:tint="#D97706" />
 
@@ -173,20 +181,21 @@
                         android:letterSpacing="0.03"
                         android:text="@string/booking_label_paid_amount"
                         android:textColor="@color/text_muted"
-                        android:textSize="10.5sp"
+                        android:textSize="11sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/itemBookingPaidAmount"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        android:textColor="#059669"
-                        android:textSize="14sp"
+                        android:layout_marginTop="3dp"
+                        android:textColor="@color/status_paid_text"
+                        android:textSize="15sp"
                         android:textStyle="bold"
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeMinTextSize="11sp"
+                        app:autoSizeMaxTextSize="15sp"
+                        app:autoSizeStepGranularity="1sp"
                         tools:text="RM 5,925" />
 
                 </LinearLayout>
@@ -205,21 +214,22 @@
                         android:letterSpacing="0.03"
                         android:text="@string/booking_label_balance_due"
                         android:textColor="@color/text_muted"
-                        android:textSize="10.5sp"
+                        android:textSize="11sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/itemBookingOutstandingAmount"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:ellipsize="end"
+                        android:layout_marginTop="3dp"
                         android:gravity="end"
-                        android:maxLines="1"
-                        android:singleLine="true"
                         android:textColor="@color/brand_magenta"
-                        android:textSize="14sp"
+                        android:textSize="15sp"
                         android:textStyle="bold"
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeMinTextSize="11sp"
+                        app:autoSizeMaxTextSize="15sp"
+                        app:autoSizeStepGranularity="1sp"
                         tools:text="RM 15,375" />
 
                 </LinearLayout>
@@ -231,7 +241,7 @@
                 android:id="@+id/itemPaymentProgressBar"
                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="5dp"
+                android:layout_height="6dp"
                 android:layout_marginTop="12dp"
                 android:max="100"
                 android:progress="40"
@@ -249,6 +259,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
+                    android:layout_toStartOf="@id/itemBookingGrandTotal"
+                    android:layout_marginEnd="8dp"
                     android:letterSpacing="0.03"
                     android:text="@string/booking_label_grand_total_summary"
                     android:textColor="@color/text_muted"
@@ -264,13 +276,17 @@
                     android:textColor="@color/text_dark"
                     android:textSize="15sp"
                     android:textStyle="bold"
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="11sp"
+                    app:autoSizeMaxTextSize="15sp"
+                    app:autoSizeStepGranularity="1sp"
                     tools:text="RM 21,300" />
 
             </RelativeLayout>
 
         </LinearLayout>
 
-        <!-- 5. Action Buttons: Full-width stacked layout -->
+        <!-- 5. Action Buttons: Pay Now (Primary) + Documents & Details Row -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -281,7 +297,8 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnItemPayNow"
                 android:layout_width="match_parent"
-                android:layout_height="46dp"
+                android:layout_height="48dp"
+                android:minHeight="48dp"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
                 android:text="@string/booking_btn_pay_now"
@@ -298,24 +315,57 @@
                 app:iconTint="@color/white"
                 tools:text="Pay now" />
 
-            <!-- 2. Documents (Secondary full-width action) -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnItemManageDocs"
-                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+            <!-- 2. Dual Action Row: Documents + View Details -->
+            <LinearLayout
+                android:id="@+id/layoutItemSecondaryActions"
                 android:layout_width="match_parent"
-                android:layout_height="44dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:clickable="true"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                android:text="@string/booking_btn_documents"
-                android:textAllCaps="false"
-                android:textColor="@color/text_dark"
-                android:textSize="13.5sp"
-                android:textStyle="bold"
-                app:backgroundTint="#F1F5F9"
-                app:cornerRadius="12dp"
-                app:elevation="0dp" />
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnItemManageDocs"
+                    style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="6dp"
+                    android:minHeight="48dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:text="@string/booking_btn_documents"
+                    android:textAllCaps="false"
+                    android:textColor="@color/text_dark"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="#F1F5F9"
+                    app:cornerRadius="12dp"
+                    app:elevation="0dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnItemDetails"
+                    style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="6dp"
+                    android:minHeight="48dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:text="@string/booking_btn_details"
+                    android:textAllCaps="false"
+                    android:textColor="@color/text_dark"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="#F1F5F9"
+                    app:cornerRadius="12dp"
+                    app:elevation="0dp" />
+
+            </LinearLayout>
 
         </LinearLayout>
 

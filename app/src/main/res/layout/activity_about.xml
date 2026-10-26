@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <!-- Header Bar -->
@@ -19,11 +20,11 @@
 
         <ImageView
             android:id="@+id/aboutBackButton"
-            android:layout_width="38dp"
-            android:layout_height="38dp"
+            android:layout_width="@dimen/touch_target_min"
+            android:layout_height="@dimen/touch_target_min"
             android:background="@drawable/circle_bg_light"
             android:clickable="true"
-            android:contentDescription="@string/content_desc_close"
+            android:contentDescription="@string/content_desc_back"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:padding="9dp"
@@ -909,7 +910,7 @@
                         android:background="?attr/selectableItemBackground"
                         android:letterSpacing="0.04"
                         android:paddingHorizontal="4dp"
-                        android:text="Danial"
+                        android:text="@string/about_developer_name"
                         android:textColor="@color/pink_dark"
                         android:textSize="12.5sp"
                         android:textStyle="bold" />

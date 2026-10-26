@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.ViewCompat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -204,6 +205,8 @@ public class PanduanUmrahActivity extends BaseActivity {
             tab.setTextSize(16); // was 13
             tab.setTypeface(null, Typeface.BOLD);
             tab.setPadding(dp(20), dp(11), dp(20), dp(11));
+            tab.setMinHeight(dp(48));
+            tab.setGravity(Gravity.CENTER);
             tab.setClickable(true);
             tab.setFocusable(true);
 
@@ -256,7 +259,10 @@ public class PanduanUmrahActivity extends BaseActivity {
         }
 
         downloadPdfTitle.setText(getString(R.string.guideline_pdf_title));
-        downloadPdfSubtitle.setText(chapter.tabLabel + " - " + getString(R.string.guideline_pdf_subtitle));
+        downloadPdfSubtitle.setText(getString(
+                R.string.guideline_pdf_chapter_subtitle,
+                chapter.tabLabel,
+                getString(R.string.guideline_pdf_subtitle)));
         downloadPdfButton.setOnClickListener(v ->
                 Toast.makeText(this, getString(R.string.pdf_coming_soon_format, chapter.tabLabel), Toast.LENGTH_SHORT).show());
     }
@@ -271,8 +277,10 @@ public class PanduanUmrahActivity extends BaseActivity {
         item.setLayoutParams(itemParams);
         int padding = dp(18);
         item.setPadding(padding, padding, padding, padding);
+        item.setMinimumHeight(dp(48));
         item.setClickable(true);
         item.setFocusable(true);
+        ViewCompat.setStateDescription(item, getString(R.string.accessibility_collapsed));
 
         LinearLayout headerRow = new LinearLayout(this);
         headerRow.setOrientation(LinearLayout.HORIZONTAL);
@@ -317,6 +325,9 @@ public class PanduanUmrahActivity extends BaseActivity {
             boolean isExpanded = summary.getVisibility() == View.VISIBLE;
             summary.setVisibility(isExpanded ? View.GONE : View.VISIBLE);
             expandIcon.setRotation(isExpanded ? 0f : 90f);
+            ViewCompat.setStateDescription(item, getString(isExpanded
+                    ? R.string.accessibility_collapsed
+                    : R.string.accessibility_expanded));
         });
 
         return item;

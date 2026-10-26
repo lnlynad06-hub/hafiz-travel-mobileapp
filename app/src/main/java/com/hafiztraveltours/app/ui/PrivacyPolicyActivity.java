@@ -14,6 +14,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
@@ -57,7 +58,9 @@ public class PrivacyPolicyActivity extends BaseActivity {
 
         TextView tvVersionBadge = findViewById(R.id.tvPrivacyVersionBadge);
         if (tvVersionBadge != null) {
-            tvVersionBadge.setText("v" + PrivacyPolicyManager.CURRENT_POLICY_VERSION);
+            tvVersionBadge.setText(getString(
+                    R.string.version_short_format,
+                    PrivacyPolicyManager.CURRENT_POLICY_VERSION));
         }
 
         View layoutConsentActions = findViewById(R.id.layoutConsentActions);
@@ -255,7 +258,7 @@ public class PrivacyPolicyActivity extends BaseActivity {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(PrivacyPolicyManager.OFFICIAL_POLICY_URL));
             startActivity(intent);
         } catch (Exception ignored) {
-            // Safe fallback if no browser is installed
+            Toast.makeText(this, R.string.err_open_link, Toast.LENGTH_SHORT).show();
         }
     }
 

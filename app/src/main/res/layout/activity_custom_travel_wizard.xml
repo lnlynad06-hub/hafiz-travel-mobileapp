@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:orientation="vertical"
     android:background="@color/background">
 
@@ -186,66 +187,38 @@
                 <!-- Destination -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutDestination"
+                    style="@style/Widget.HafizTravel.TextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:hint="@string/label_destination"
-                    app:boxBackgroundMode="outline"
-                    app:boxCornerRadiusTopStart="14dp"
-                    app:boxCornerRadiusTopEnd="14dp"
-                    app:boxCornerRadiusBottomStart="14dp"
-                    app:boxCornerRadiusBottomEnd="14dp"
-                    app:boxStrokeColor="@color/box_stroke_selector"
-                    app:boxBackgroundColor="@color/box_bg_selector"
-                    app:boxStrokeWidth="1dp"
-                    app:boxStrokeWidthFocused="1.5dp"
-                    app:boxStrokeErrorColor="@color/error_red"
-                    app:hintEnabled="true"
-                    app:startIconDrawable="@drawable/ic_location_pin"
-                    app:startIconTint="@color/pink_dark">
+                    app:startIconDrawable="@drawable/ic_location_pin">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etDestination"
+                        style="@style/Widget.HafizTravel.TextInputEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:inputType="textCapWords"
-                        android:textColor="@color/input_text"
-                        android:textColorHint="@color/input_hint"
-                        android:textSize="14sp" />
+                        android:inputType="textCapWords" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Departure Airport -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutDepartureAirport"
+                    style="@style/Widget.HafizTravel.TextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="14dp"
                     android:hint="@string/label_departure_airport"
-                    app:boxBackgroundMode="outline"
-                    app:boxCornerRadiusTopStart="14dp"
-                    app:boxCornerRadiusTopEnd="14dp"
-                    app:boxCornerRadiusBottomStart="14dp"
-                    app:boxCornerRadiusBottomEnd="14dp"
-                    app:boxStrokeColor="@color/box_stroke_selector"
-                    app:boxBackgroundColor="@color/box_bg_selector"
-                    app:boxStrokeWidth="1dp"
-                    app:boxStrokeWidthFocused="1.5dp"
-                    app:boxStrokeErrorColor="@color/error_red"
-                    app:hintEnabled="true"
                     app:startIconDrawable="@drawable/ic_flight"
-                    app:startIconTint="@color/pink_dark"
                     app:endIconMode="clear_text">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etDepartureAirport"
+                        style="@style/Widget.HafizTravel.TextInputEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:inputType="textCapCharacters"
-                        android:textColor="@color/input_text"
-                        android:textColorHint="@color/input_hint"
-                        android:textSize="14sp" />
+                        android:inputType="textCapCharacters" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Preferred Departure Date -->
@@ -259,19 +232,20 @@
                     android:focusable="true"
                     android:foreground="?attr/selectableItemBackground"
                     android:gravity="center_vertical"
-                    android:minHeight="58dp"
+                    android:minHeight="56dp"
                     android:orientation="horizontal"
                     android:paddingStart="14dp"
                     android:paddingEnd="14dp"
-                    android:paddingTop="9dp"
-                    android:paddingBottom="9dp">
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp">
 
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_marginEnd="12dp"
                         android:src="@drawable/ic_calendar"
-                        app:tint="@color/pink_dark" />
+                        app:tint="@color/pink_dark"
+                        android:contentDescription="@null" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -296,6 +270,13 @@
                             android:textSize="14sp"
                             android:textStyle="bold" />
                     </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_chevron_right"
+                        app:tint="@color/text_muted"
+                        android:contentDescription="@null" />
                 </LinearLayout>
 
                 <!-- Preferred Return Date -->
@@ -309,19 +290,20 @@
                     android:focusable="true"
                     android:foreground="?attr/selectableItemBackground"
                     android:gravity="center_vertical"
-                    android:minHeight="58dp"
+                    android:minHeight="56dp"
                     android:orientation="horizontal"
                     android:paddingStart="14dp"
                     android:paddingEnd="14dp"
-                    android:paddingTop="9dp"
-                    android:paddingBottom="9dp">
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp">
 
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_marginEnd="12dp"
                         android:src="@drawable/ic_calendar"
-                        app:tint="@color/pink_dark" />
+                        app:tint="@color/pink_dark"
+                        android:contentDescription="@null" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -346,6 +328,13 @@
                             android:textSize="14sp"
                             android:textStyle="bold" />
                     </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_chevron_right"
+                        app:tint="@color/text_muted"
+                        android:contentDescription="@null" />
                 </LinearLayout>
 
                 <!-- Flexible Dates Checkbox -->
@@ -362,33 +351,20 @@
                 <!-- Duration Days -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutDurationDays"
+                    style="@style/Widget.HafizTravel.TextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="14dp"
                     android:hint="@string/label_duration_days"
                     app:suffixText="@string/unit_days"
-                    app:suffixTextColor="@color/brand_magenta"
-                    app:boxBackgroundMode="outline"
-                    app:boxCornerRadiusTopStart="14dp"
-                    app:boxCornerRadiusTopEnd="14dp"
-                    app:boxCornerRadiusBottomStart="14dp"
-                    app:boxCornerRadiusBottomEnd="14dp"
-                    app:boxStrokeColor="@color/box_stroke_selector"
-                    app:boxBackgroundColor="@color/box_bg_selector"
-                    app:boxStrokeWidth="1dp"
-                    app:boxStrokeWidthFocused="1.5dp"
-                    app:boxStrokeErrorColor="@color/error_red"
-                    app:hintEnabled="true">
+                    app:suffixTextColor="@color/brand_magenta">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etDurationDays"
+                        style="@style/Widget.HafizTravel.TextInputEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:inputType="number"
-                        android:textColor="@color/input_text"
-                        android:textColorHint="@color/input_hint"
-                        android:textSize="14sp" />
+                        android:inputType="number" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
@@ -431,10 +407,10 @@
                             android:textSize="11.5sp" />
                     </LinearLayout>
 
-                    <ImageButton
-                        android:id="@+id/btnMinusAdultMale"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+        <ImageButton
+            android:id="@+id/btnMinusAdultMale"
+            android:layout_width="@dimen/touch_target_min"
+            android:layout_height="@dimen/touch_target_min"
                         android:background="@drawable/bg_whatsapp_secondary_button"
                         android:src="@drawable/ic_minus_gray"
                         app:tint="@color/text_dark"
@@ -450,10 +426,10 @@
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
-                    <ImageButton
-                        android:id="@+id/btnPlusAdultMale"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+        <ImageButton
+            android:id="@+id/btnPlusAdultMale"
+            android:layout_width="@dimen/touch_target_min"
+            android:layout_height="@dimen/touch_target_min"
                         android:background="@drawable/bg_booking_primary_button"
                         android:src="@drawable/ic_plus"
                         app:tint="@color/white"
@@ -496,10 +472,10 @@
                             android:textSize="11.5sp" />
                     </LinearLayout>
 
-                    <ImageButton
-                        android:id="@+id/btnMinusAdultFemale"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+        <ImageButton
+            android:id="@+id/btnMinusAdultFemale"
+            android:layout_width="@dimen/touch_target_min"
+            android:layout_height="@dimen/touch_target_min"
                         android:background="@drawable/bg_whatsapp_secondary_button"
                         android:src="@drawable/ic_minus_gray"
                         app:tint="@color/text_dark"
@@ -515,10 +491,10 @@
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
-                    <ImageButton
-                        android:id="@+id/btnPlusAdultFemale"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+        <ImageButton
+            android:id="@+id/btnPlusAdultFemale"
+            android:layout_width="@dimen/touch_target_min"
+            android:layout_height="@dimen/touch_target_min"
                         android:background="@drawable/bg_booking_primary_button"
                         android:src="@drawable/ic_plus"
                         app:tint="@color/white"
@@ -561,10 +537,10 @@
                             android:textSize="11.5sp" />
                     </LinearLayout>
 
-                    <ImageButton
-                        android:id="@+id/btnMinusChildren"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+        <ImageButton
+            android:id="@+id/btnMinusChildren"
+            android:layout_width="@dimen/touch_target_min"
+            android:layout_height="@dimen/touch_target_min"
                         android:background="@drawable/bg_whatsapp_secondary_button"
                         android:src="@drawable/ic_minus_gray"
                         app:tint="@color/text_dark"
@@ -580,10 +556,10 @@
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
-                    <ImageButton
-                        android:id="@+id/btnPlusChildren"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+        <ImageButton
+            android:id="@+id/btnPlusChildren"
+            android:layout_width="@dimen/touch_target_min"
+            android:layout_height="@dimen/touch_target_min"
                         android:background="@drawable/bg_booking_primary_button"
                         android:src="@drawable/ic_plus"
                         app:tint="@color/white"
@@ -625,12 +601,14 @@
                         <RadioButton
                             android:id="@+id/rbRoomQuint"
                             android:layout_width="match_parent"
-                            android:layout_height="44dp"
-                            android:layout_marginBottom="6dp"
-                            android:background="@drawable/bg_category_chip_inactive"
+                            android:layout_height="wrap_content"
+                            android:minHeight="@dimen/touch_target_button_height"
+                            android:layout_marginBottom="8dp"
+                            android:background="@drawable/bg_room_card_unselected"
                             android:button="@null"
                             android:gravity="center_vertical"
-                            android:paddingHorizontal="14dp"
+                            android:paddingHorizontal="16dp"
+                            android:paddingVertical="12dp"
                             android:text="@string/room_category_quint"
                             android:textColor="@color/text_dark"
                             android:textSize="13.5sp"
@@ -639,13 +617,15 @@
                         <RadioButton
                             android:id="@+id/rbRoomQuad"
                             android:layout_width="match_parent"
-                            android:layout_height="44dp"
-                            android:layout_marginBottom="6dp"
-                            android:background="@drawable/bg_category_chip_inactive"
+                            android:layout_height="wrap_content"
+                            android:minHeight="@dimen/touch_target_button_height"
+                            android:layout_marginBottom="8dp"
+                            android:background="@drawable/bg_room_card_unselected"
                             android:button="@null"
                             android:checked="true"
                             android:gravity="center_vertical"
-                            android:paddingHorizontal="14dp"
+                            android:paddingHorizontal="16dp"
+                            android:paddingVertical="12dp"
                             android:text="@string/room_category_quad"
                             android:textColor="@color/brand_magenta"
                             android:textSize="13.5sp"
@@ -654,12 +634,14 @@
                         <RadioButton
                             android:id="@+id/rbRoomTriple"
                             android:layout_width="match_parent"
-                            android:layout_height="44dp"
-                            android:layout_marginBottom="6dp"
-                            android:background="@drawable/bg_category_chip_inactive"
+                            android:layout_height="wrap_content"
+                            android:minHeight="@dimen/touch_target_button_height"
+                            android:layout_marginBottom="8dp"
+                            android:background="@drawable/bg_room_card_unselected"
                             android:button="@null"
                             android:gravity="center_vertical"
-                            android:paddingHorizontal="14dp"
+                            android:paddingHorizontal="16dp"
+                            android:paddingVertical="12dp"
                             android:text="@string/room_category_triple"
                             android:textColor="@color/text_dark"
                             android:textSize="13.5sp"
@@ -668,12 +650,14 @@
                         <RadioButton
                             android:id="@+id/rbRoomDouble"
                             android:layout_width="match_parent"
-                            android:layout_height="44dp"
-                            android:layout_marginBottom="6dp"
-                            android:background="@drawable/bg_category_chip_inactive"
+                            android:layout_height="wrap_content"
+                            android:minHeight="@dimen/touch_target_button_height"
+                            android:layout_marginBottom="8dp"
+                            android:background="@drawable/bg_room_card_unselected"
                             android:button="@null"
                             android:gravity="center_vertical"
-                            android:paddingHorizontal="14dp"
+                            android:paddingHorizontal="16dp"
+                            android:paddingVertical="12dp"
                             android:text="@string/room_category_double"
                             android:textColor="@color/text_dark"
                             android:textSize="13.5sp"
@@ -682,12 +666,14 @@
                         <RadioButton
                             android:id="@+id/rbRoomSingle"
                             android:layout_width="match_parent"
-                            android:layout_height="44dp"
-                            android:layout_marginBottom="6dp"
-                            android:background="@drawable/bg_category_chip_inactive"
+                            android:layout_height="wrap_content"
+                            android:minHeight="@dimen/touch_target_button_height"
+                            android:layout_marginBottom="8dp"
+                            android:background="@drawable/bg_room_card_unselected"
                             android:button="@null"
                             android:gravity="center_vertical"
-                            android:paddingHorizontal="14dp"
+                            android:paddingHorizontal="16dp"
+                            android:paddingVertical="12dp"
                             android:text="@string/room_category_single"
                             android:textColor="@color/text_dark"
                             android:textSize="13.5sp"
@@ -793,6 +779,7 @@
                         <ImageView
                             android:layout_width="20dp"
                             android:layout_height="20dp"
+                            android:contentDescription="@null"
                             android:src="@drawable/ic_hotel"
                             app:tint="@color/pink_dark" />
 
@@ -804,6 +791,7 @@
                         <ImageView
                             android:layout_width="16dp"
                             android:layout_height="16dp"
+                            android:contentDescription="@null"
                             android:src="@drawable/ic_chevron_down"
                             app:tint="@color/pink_dark" />
                     </LinearLayout>
@@ -822,35 +810,22 @@
                 <!-- Hotel Preferences & Location -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutHotelPreferences"
+                    style="@style/Widget.HafizTravel.TextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="14dp"
                     android:hint="@string/label_hotel_preferences"
-                    app:boxBackgroundMode="outline"
-                    app:boxCornerRadiusTopStart="14dp"
-                    app:boxCornerRadiusTopEnd="14dp"
-                    app:boxCornerRadiusBottomStart="14dp"
-                    app:boxCornerRadiusBottomEnd="14dp"
-                    app:boxStrokeColor="@color/box_stroke_selector"
-                    app:boxBackgroundColor="@color/box_bg_selector"
-                    app:boxStrokeWidth="1dp"
-                    app:boxStrokeWidthFocused="1.5dp"
-                    app:boxStrokeErrorColor="@color/error_red"
-                    app:hintEnabled="true"
-                    app:startIconDrawable="@drawable/ic_hotel"
-                    app:startIconTint="@color/pink_dark">
+                    app:startIconDrawable="@drawable/ic_hotel">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etHotelPreferences"
+                        style="@style/Widget.HafizTravel.TextInputEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="top|start"
                         android:inputType="textMultiLine"
                         android:lines="3"
-                        android:minLines="3"
-                        android:textColor="@color/input_text"
-                        android:textColorHint="@color/input_hint"
-                        android:textSize="13.5sp" />
+                        android:minLines="3" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
@@ -866,34 +841,21 @@
                 <!-- Preferred Airline -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutAirlinePreference"
+                    style="@style/Widget.HafizTravel.TextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="14dp"
                     android:hint="@string/label_airline_preference"
-                    app:boxBackgroundMode="outline"
-                    app:boxCornerRadiusTopStart="14dp"
-                    app:boxCornerRadiusTopEnd="14dp"
-                    app:boxCornerRadiusBottomStart="14dp"
-                    app:boxCornerRadiusBottomEnd="14dp"
-                    app:boxStrokeColor="@color/box_stroke_selector"
-                    app:boxBackgroundColor="@color/box_bg_selector"
-                    app:boxStrokeWidth="1dp"
-                    app:boxStrokeWidthFocused="1.5dp"
-                    app:boxStrokeErrorColor="@color/error_red"
-                    app:hintEnabled="true"
                     app:startIconDrawable="@drawable/ic_flight"
-                    app:startIconTint="@color/pink_dark"
                     app:endIconMode="clear_text">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etAirlinePreference"
+                        style="@style/Widget.HafizTravel.TextInputEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:inputType="textCapWords"
-                        android:textColor="@color/input_text"
-                        android:textColorHint="@color/input_hint"
-                        android:textSize="14sp" />
+                        android:inputType="textCapWords" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Flight Class -->
@@ -923,6 +885,7 @@
                         <ImageView
                             android:layout_width="20dp"
                             android:layout_height="20dp"
+                            android:contentDescription="@null"
                             android:src="@drawable/ic_ticket"
                             app:tint="@color/pink_dark" />
 
@@ -934,6 +897,7 @@
                         <ImageView
                             android:layout_width="16dp"
                             android:layout_height="16dp"
+                            android:contentDescription="@null"
                             android:src="@drawable/ic_chevron_down"
                             app:tint="@color/pink_dark" />
                     </LinearLayout>
@@ -969,13 +933,16 @@
                     <RadioButton
                         android:id="@+id/rbFlightDirect"
                         android:layout_width="0dp"
-                        android:layout_height="42dp"
+                        android:layout_height="wrap_content"
+                        android:minHeight="@dimen/touch_target_button_height"
                         android:layout_weight="1"
                         android:layout_marginEnd="4dp"
                         android:background="@drawable/bg_category_chip_inactive"
                         android:button="@null"
                         android:checked="true"
                         android:gravity="center"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="8dp"
                         android:text="@string/flight_routing_direct"
                         android:textColor="@color/brand_magenta"
                         android:textSize="12sp"
@@ -984,12 +951,15 @@
                     <RadioButton
                         android:id="@+id/rbFlightTransit"
                         android:layout_width="0dp"
-                        android:layout_height="42dp"
+                        android:layout_height="wrap_content"
+                        android:minHeight="@dimen/touch_target_button_height"
                         android:layout_weight="1"
                         android:layout_marginHorizontal="4dp"
                         android:background="@drawable/bg_category_chip_inactive"
                         android:button="@null"
                         android:gravity="center"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="8dp"
                         android:text="@string/flight_routing_transit"
                         android:textColor="@color/text_gray"
                         android:textSize="12sp"
@@ -998,12 +968,15 @@
                     <RadioButton
                         android:id="@+id/rbFlightAny"
                         android:layout_width="0dp"
-                        android:layout_height="42dp"
+                        android:layout_height="wrap_content"
+                        android:minHeight="@dimen/touch_target_button_height"
                         android:layout_weight="1"
                         android:layout_marginStart="4dp"
                         android:background="@drawable/bg_category_chip_inactive"
                         android:button="@null"
                         android:gravity="center"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="8dp"
                         android:text="@string/flight_routing_any"
                         android:textColor="@color/text_gray"
                         android:textSize="12sp"
@@ -1013,34 +986,21 @@
                 <!-- Transportation Preferences -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutTransportation"
+                    style="@style/Widget.HafizTravel.TextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:hint="@string/label_transportation"
-                    app:boxBackgroundMode="outline"
-                    app:boxCornerRadiusTopStart="14dp"
-                    app:boxCornerRadiusTopEnd="14dp"
-                    app:boxCornerRadiusBottomStart="14dp"
-                    app:boxCornerRadiusBottomEnd="14dp"
-                    app:boxStrokeColor="@color/box_stroke_selector"
-                    app:boxBackgroundColor="@color/box_bg_selector"
-                    app:boxStrokeWidth="1dp"
-                    app:boxStrokeWidthFocused="1.5dp"
-                    app:boxStrokeErrorColor="@color/error_red"
-                    app:hintEnabled="true"
                     app:startIconDrawable="@drawable/ic_transport"
-                    app:startIconTint="@color/pink_dark"
                     app:endIconMode="clear_text">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etTransportation"
+                        style="@style/Widget.HafizTravel.TextInputEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:inputType="text"
-                        android:textColor="@color/input_text"
-                        android:textColorHint="@color/input_hint"
-                        android:textSize="14sp" />
+                        android:inputType="text" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Private Guide / Mutawwif Checkbox -->
@@ -1048,6 +1008,7 @@
                     android:id="@+id/cbPrivateGuide"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:minHeight="@dimen/touch_target_button_height"
                     android:layout_marginTop="10dp"
                     android:buttonTint="@color/brand_magenta"
                     android:text="@string/cb_private_guide"
@@ -1081,6 +1042,7 @@
                         <ImageView
                             android:layout_width="20dp"
                             android:layout_height="20dp"
+                            android:contentDescription="@null"
                             android:src="@drawable/ic_meals"
                             app:tint="@color/pink_dark" />
 
@@ -1092,6 +1054,7 @@
                         <ImageView
                             android:layout_width="16dp"
                             android:layout_height="16dp"
+                            android:contentDescription="@null"
                             android:src="@drawable/ic_chevron_down"
                             app:tint="@color/pink_dark" />
                     </LinearLayout>
@@ -1110,70 +1073,44 @@
                 <!-- Custom Itinerary Notes -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutItineraryNotes"
+                    style="@style/Widget.HafizTravel.TextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="14dp"
                     android:hint="@string/label_itinerary_notes"
-                    app:boxBackgroundMode="outline"
-                    app:boxCornerRadiusTopStart="14dp"
-                    app:boxCornerRadiusTopEnd="14dp"
-                    app:boxCornerRadiusBottomStart="14dp"
-                    app:boxCornerRadiusBottomEnd="14dp"
-                    app:boxStrokeColor="@color/box_stroke_selector"
-                    app:boxBackgroundColor="@color/box_bg_selector"
-                    app:boxStrokeWidth="1dp"
-                    app:boxStrokeWidthFocused="1.5dp"
-                    app:boxStrokeErrorColor="@color/error_red"
-                    app:hintEnabled="true"
-                    app:startIconDrawable="@drawable/ic_tour_checklist"
-                    app:startIconTint="@color/pink_dark">
+                    app:startIconDrawable="@drawable/ic_tour_checklist">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etItineraryNotes"
+                        style="@style/Widget.HafizTravel.TextInputEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="top|start"
                         android:inputType="textMultiLine"
                         android:lines="3"
-                        android:minLines="3"
-                        android:textColor="@color/input_text"
-                        android:textColorHint="@color/input_hint"
-                        android:textSize="13.5sp" />
+                        android:minLines="3" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Budget Per Pax -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutBudgetPerPax"
+                    style="@style/Widget.HafizTravel.TextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="14dp"
                     android:hint="@string/label_budget_per_pax"
                     app:prefixText="RM "
                     app:prefixTextColor="@color/brand_magenta"
-                    app:boxBackgroundMode="outline"
-                    app:boxCornerRadiusTopStart="14dp"
-                    app:boxCornerRadiusTopEnd="14dp"
-                    app:boxCornerRadiusBottomStart="14dp"
-                    app:boxCornerRadiusBottomEnd="14dp"
-                    app:boxStrokeColor="@color/box_stroke_selector"
-                    app:boxBackgroundColor="@color/box_bg_selector"
-                    app:boxStrokeWidth="1dp"
-                    app:boxStrokeWidthFocused="1.5dp"
-                    app:boxStrokeErrorColor="@color/error_red"
-                    app:hintEnabled="true"
                     app:startIconDrawable="@drawable/ic_card"
-                    app:startIconTint="@color/pink_dark"
                     app:endIconMode="clear_text">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etBudgetPerPax"
+                        style="@style/Widget.HafizTravel.TextInputEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:inputType="numberDecimal"
-                        android:textColor="@color/input_text"
-                        android:textColorHint="@color/input_hint"
-                        android:textSize="14sp" />
+                        android:inputType="numberDecimal" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
@@ -1187,35 +1124,22 @@
                 <!-- Special Requirements -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutSpecialRequirements"
+                    style="@style/Widget.HafizTravel.TextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="14dp"
                     android:hint="@string/label_special_requirements"
-                    app:boxBackgroundMode="outline"
-                    app:boxCornerRadiusTopStart="14dp"
-                    app:boxCornerRadiusTopEnd="14dp"
-                    app:boxCornerRadiusBottomStart="14dp"
-                    app:boxCornerRadiusBottomEnd="14dp"
-                    app:boxStrokeColor="@color/box_stroke_selector"
-                    app:boxBackgroundColor="@color/box_bg_selector"
-                    app:boxStrokeWidth="1dp"
-                    app:boxStrokeWidthFocused="1.5dp"
-                    app:boxStrokeErrorColor="@color/error_red"
-                    app:hintEnabled="true"
-                    app:startIconDrawable="@drawable/ic_tune"
-                    app:startIconTint="@color/pink_dark">
+                    app:startIconDrawable="@drawable/ic_tune">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etSpecialRequirements"
+                        style="@style/Widget.HafizTravel.TextInputEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="top|start"
                         android:inputType="textMultiLine"
                         android:lines="3"
-                        android:minLines="3"
-                        android:textColor="@color/input_text"
-                        android:textColorHint="@color/input_hint"
-                        android:textSize="13.5sp" />
+                        android:minLines="3" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
@@ -1407,34 +1331,35 @@
         android:layout_height="wrap_content"
         android:background="@color/surface"
         android:elevation="12dp"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingHorizontal="16dp"
         android:paddingVertical="12dp">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnWizardBack"
+            style="@style/Widget.HafizTravel.Button.Secondary"
             android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
             android:layout_marginEnd="6dp"
-            android:background="@drawable/bg_category_chip_inactive"
+            android:minHeight="56dp"
             android:text="@string/btn_previous_stage"
-            android:textColor="@color/text_dark"
-            android:textSize="13.5sp"
-            android:textStyle="bold"
             android:visibility="gone" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnWizardNext"
+            style="@style/Widget.HafizTravel.Button.Primary"
             android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
             android:layout_marginStart="6dp"
-            android:background="@drawable/bg_booking_primary_button"
-            android:text="@string/btn_next_stage"
-            android:textColor="@color/white"
-            android:textSize="13.5sp"
-            android:textStyle="bold" />
+            android:gravity="center"
+            android:maxLines="2"
+            android:minHeight="56dp"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="8dp"
+            android:text="@string/btn_next_stage" />
 
     </LinearLayout>
 

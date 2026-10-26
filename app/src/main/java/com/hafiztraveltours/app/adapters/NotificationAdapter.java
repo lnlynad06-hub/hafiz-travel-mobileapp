@@ -67,7 +67,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             if (!item.isRead) {
                 item.isRead = true;
                 AppNotificationManager.markRead(context, item.id);
-                notifyItemChanged(holder.getAdapterPosition());
+                int bindingPosition = holder.getBindingAdapterPosition();
+                if (bindingPosition != RecyclerView.NO_POSITION) notifyItemChanged(bindingPosition);
             }
             if (listener != null) {
                 listener.onNotificationClick(item);

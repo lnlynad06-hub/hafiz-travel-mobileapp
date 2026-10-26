@@ -278,14 +278,8 @@ public class PrayerTimeScheduler {
                 OnboardingManager.setBatteryPromptShown(context, true);
                 dialog.dismiss();
                 try {
-                    Intent intent = new Intent(android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
-                    intent.setData(android.net.Uri.parse("package:" + packageName));
-                    context.startActivity(intent);
-                } catch (Exception e) {
-                    try {
-                        context.startActivity(new Intent(android.provider.Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS));
-                    } catch (Exception ignored) {}
-                }
+                    context.startActivity(new Intent(android.provider.Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS));
+                } catch (Exception ignored) {}
             });
         }
 

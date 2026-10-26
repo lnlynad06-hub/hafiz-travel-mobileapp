@@ -25,7 +25,6 @@ public class AppNotificationManager {
     private static final String PREF_NAME = "app_notifications_store";
     private static final String KEY_NOTIFS = "notifications_json";
     private static final String CHANNEL_ID = "hafiz_travel_notifications";
-    private static final String CHANNEL_NAME = "Hafiz Travel Notifications";
 
     public static synchronized List<AppNotification> getNotifications(Context context) {
         List<AppNotification> list = new ArrayList<>();
@@ -110,8 +109,10 @@ public class AppNotificationManager {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
-                    CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
-            channel.setDescription("System & Travel notifications");
+                    CHANNEL_ID,
+                    context.getString(R.string.app_notification_channel_name),
+                    NotificationManager.IMPORTANCE_HIGH);
+            channel.setDescription(context.getString(R.string.app_notification_channel_desc));
             nm.createNotificationChannel(channel);
         }
 

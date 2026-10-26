@@ -15,9 +15,13 @@ import java.lang.reflect.Proxy;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -52,6 +56,17 @@ public class PrayerSchedulingAndLocalizationUnitTest {
         // Alarms delayed by more than 15 minutes (e.g. Doze mode delay until midnight)
         // must be dropped to prevent startling midnight Azan playback.
         assertEquals(900L, PrayerAlarmReceiver.MAX_ALLOWED_DRIFT_SECONDS);
+    }
+
+    @Test
+    public void testAlarmFreshnessBoundariesAroundMidnightAndClockChanges() {
+        long scheduledEpoch = 1_773_610_200L;
+
+        assertFalse(PrayerAlarmReceiver.isStaleTrigger(scheduledEpoch, scheduledEpoch + 900));
+        assertTrue(PrayerAlarmReceiver.isStaleTrigger(scheduledEpoch, scheduledEpoch + 901));
+        assertFalse(PrayerAlarmReceiver.isAnomalouslyEarlyTrigger(scheduledEpoch, scheduledEpoch - 300));
+        assertTrue(PrayerAlarmReceiver.isAnomalouslyEarlyTrigger(scheduledEpoch, scheduledEpoch - 301));
+        assertFalse(PrayerAlarmReceiver.isStaleTrigger(0, scheduledEpoch));
     }
 
     @Test
@@ -131,6 +146,21 @@ public class PrayerSchedulingAndLocalizationUnitTest {
         assertEquals("Baki Bayaran", msStrings.get("outstanding_balance"));
         assertEquals("Baki Bayaran", msStrings.get("receipt_balance_due"));
         assertEquals("Baki Bayaran", msStrings.get("booking_label_balance_due"));
+
+        // Localized variants must accept the same positional format arguments.
+        for (String name : defaultStrings.keySet()) {
+            if (msStrings.containsKey(name)) {
+                assertEquals(name, formatArgumentIndexes(defaultStrings.get(name)),
+                        formatArgumentIndexes(msStrings.get(name)));
+            }
+        }
+    }
+
+    private Set<Integer> formatArgumentIndexes(String value) {
+        Set<Integer> indexes = new HashSet<>();
+        Matcher matcher = Pattern.compile("%(\\d+)\\$").matcher(value != null ? value : "");
+        while (matcher.find()) indexes.add(Integer.parseInt(matcher.group(1)));
+        return indexes;
     }
 
     private Map<String, String> loadStringsXml(File file) throws Exception {

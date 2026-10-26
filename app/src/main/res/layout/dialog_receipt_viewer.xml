@@ -226,6 +226,7 @@
                 <ImageView
                     android:layout_width="32dp"
                     android:layout_height="32dp"
+                    android:contentDescription="@null"
                     android:src="@drawable/ic_check_circle_magenta"
                     app:tint="@color/brand_magenta" />
             </LinearLayout>

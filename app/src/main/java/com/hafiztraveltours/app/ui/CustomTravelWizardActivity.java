@@ -150,6 +150,10 @@ public class CustomTravelWizardActivity extends BaseActivity {
 
         if (savedInstanceState != null) {
             currentStage = savedInstanceState.getInt(STATE_CURRENT_STAGE, 1);
+            Serializable savedRequest = savedInstanceState.getSerializable(STATE_REQUEST_DATA);
+            if (savedRequest instanceof CreateCustomTravelRequest) {
+                requestData = (CreateCustomTravelRequest) savedRequest;
+            }
         }
 
         bindViews();
@@ -170,6 +174,7 @@ public class CustomTravelWizardActivity extends BaseActivity {
         super.onSaveInstanceState(outState);
         collectCurrentStageData();
         outState.putInt(STATE_CURRENT_STAGE, currentStage);
+        outState.putSerializable(STATE_REQUEST_DATA, requestData);
     }
 
     private void parseIntentExtras() {
@@ -482,12 +487,8 @@ public class CustomTravelWizardActivity extends BaseActivity {
             rbTypeUmrah.setChecked(true);
         }
 
-        boolean isCustomizePackage = "customize_package".equalsIgnoreCase(requestData.requestType);
-
         if (requestData.destination != null && !requestData.destination.trim().isEmpty()) {
-            etDestination.setText(requestData.destination);
-        } else if (isCustomizePackage && basePackageName != null) {
-            etDestination.setText(basePackageName);
+            etDestination.setText(requestData.destination.trim());
         } else {
             etDestination.setText("");
         }
@@ -779,7 +780,7 @@ public class CustomTravelWizardActivity extends BaseActivity {
     private void setChipColor(RadioButton rb, boolean selected) {
         if (rb != null) {
             rb.setTextColor(getColor(selected ? R.color.brand_magenta : R.color.text_dark));
-            rb.setBackgroundResource(selected ? R.drawable.bg_category_chip_active : R.drawable.bg_category_chip_inactive);
+            rb.setBackgroundResource(selected ? R.drawable.bg_room_card_selected : R.drawable.bg_room_card_unselected);
         }
     }
 

@@ -21,10 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class HubungiKamiActivity extends BaseActivity {
 
     
-    private static final String PHONE_NUMBER = "+6019-785 9867";
     private static final String PHONE_DIAL_URI = "tel:+60197859867";
-    private static final String EMAIL_ADDRESS = "sales.httsb@gmail.com.my";
-    private static final String ADDRESS = "No. 31, Jalan Dataran Larkin,\n80350 Johor Bahru, Johor.";
     private static final String WHATSAPP_URL = "https://wa.me/60197859867";
 
     private static final String FACEBOOK_URL = "https://www.facebook.com/hafiztravelntours";
@@ -41,7 +38,7 @@ public class HubungiKamiActivity extends BaseActivity {
 
         findViewById(R.id.addressRow).setOnClickListener(v -> {
             try {
-                Uri mapUri = Uri.parse("geo:0,0?q=" + Uri.encode(ADDRESS));
+                Uri mapUri = Uri.parse("geo:0,0?q=" + Uri.encode(getString(R.string.contact_address_value)));
                 startActivity(new Intent(Intent.ACTION_VIEW, mapUri));
             } catch (Exception e) {
                 Toast.makeText(this, getString(R.string.err_open_map), Toast.LENGTH_SHORT).show();
@@ -59,7 +56,7 @@ public class HubungiKamiActivity extends BaseActivity {
         findViewById(R.id.emailRow).setOnClickListener(v -> {
             try {
                 Intent intent = new Intent(Intent.ACTION_SENDTO);
-                intent.setData(Uri.parse("mailto:" + EMAIL_ADDRESS));
+                intent.setData(Uri.parse("mailto:" + getString(R.string.contact_email_value)));
                 startActivity(intent);
             } catch (Exception e) {
                 Toast.makeText(this, getString(R.string.err_open_email), Toast.LENGTH_SHORT).show();

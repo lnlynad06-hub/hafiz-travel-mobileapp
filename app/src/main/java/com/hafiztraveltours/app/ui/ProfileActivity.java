@@ -23,11 +23,11 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.ProgressBar;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.hafiztraveltours.app.network.ApiClient;
@@ -73,9 +73,9 @@ public class ProfileActivity extends BaseActivity {
     private TextView pendingFileNameView;
     private View pendingConfirmButton;
 
-    private Switch switchPrayerTimes;
-    private Switch switchAzanNotif;
-    private Switch switchAppNotif;
+    private MaterialSwitch switchPrayerTimes;
+    private MaterialSwitch switchAzanNotif;
+    private MaterialSwitch switchAppNotif;
     private TextView tvBackgroundOpStatus;
     private androidx.activity.result.ActivityResultLauncher<String[]> profileLocationPermissionLauncher;
     private androidx.activity.result.ActivityResultLauncher<String> profileNotifPermissionLauncher;
@@ -86,6 +86,34 @@ public class ProfileActivity extends BaseActivity {
         setContentView(R.layout.activity_profile);
 
         BottomNavHelper.setup(this, BottomNavHelper.Tab.PROFILE);
+
+        View topBar = findViewById(R.id.profileTopBar);
+        if (topBar != null) {
+            androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(topBar, (v, insets) -> {
+                androidx.core.graphics.Insets statusInsets = insets.getInsets(
+                        androidx.core.view.WindowInsetsCompat.Type.statusBars()
+                );
+                int baseVert = (int) (12 * getResources().getDisplayMetrics().density);
+                v.setPadding(v.getPaddingLeft(), statusInsets.top + baseVert, v.getPaddingRight(), baseVert);
+                return insets;
+            });
+        }
+
+        View bottomNavCard = findViewById(R.id.bottomNavCard);
+        if (bottomNavCard != null) {
+            androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(bottomNavCard, (v, insets) -> {
+                androidx.core.graphics.Insets navInsets = insets.getInsets(
+                        androidx.core.view.WindowInsetsCompat.Type.systemBars()
+                );
+                android.view.ViewGroup.MarginLayoutParams lp = (android.view.ViewGroup.MarginLayoutParams) v.getLayoutParams();
+                if (lp != null) {
+                    int baseMargin = (int) (16 * getResources().getDisplayMetrics().density);
+                    lp.bottomMargin = navInsets.bottom > 0 ? navInsets.bottom + baseMargin : baseMargin;
+                    v.setLayoutParams(lp);
+                }
+                return insets;
+            });
+        }
 
         docPickerLauncher = registerForActivityResult(
                 new androidx.activity.result.contract.ActivityResultContracts.GetContent(),
@@ -477,6 +505,7 @@ public class ProfileActivity extends BaseActivity {
         if (item == null) return;
         android.widget.ImageView radio = sheet.findViewById(radioId);
         boolean isSelected = langCode.equalsIgnoreCase(currentLang);
+        item.setSelected(isSelected);
         if (isSelected) {
             item.setBackgroundResource(R.drawable.bg_language_item_selected);
             if (radio != null) radio.setImageResource(R.drawable.ic_check_circle_magenta);
@@ -2254,6 +2283,7 @@ public class ProfileActivity extends BaseActivity {
                 } else {
                     OnboardingManager.setAzanFeatureEnabled(this, false);
                     PrayerTimeScheduler.cancelAllAlarms(this);
+                    AzanService.stopActivePlayback(this);
                     updatePrayerAndAzanSettingsUI();
                 }
             });
@@ -2301,7 +2331,13 @@ public class ProfileActivity extends BaseActivity {
             switchAzanNotif.setChecked(OnboardingManager.isAzanFeatureEnabled(this));
         }
         if (switchAppNotif != null) {
-            switchAppNotif.setChecked(OnboardingManager.isNotificationFeatureEnabled(this));
+            boolean permissionGranted = android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.TIRAMISU
+                    || ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)
+                    == android.content.pm.PackageManager.PERMISSION_GRANTED;
+            if (!permissionGranted) {
+                OnboardingManager.setNotificationFeatureEnabled(this, false);
+            }
+            switchAppNotif.setChecked(permissionGranted && OnboardingManager.isNotificationFeatureEnabled(this));
         }
         if (tvBackgroundOpStatus != null) {
             boolean isIgnored = PrayerTimeScheduler.isBatteryOptimizationIgnored(this);

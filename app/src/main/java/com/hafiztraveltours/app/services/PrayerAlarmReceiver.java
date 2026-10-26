@@ -11,6 +11,8 @@ import com.hafiztraveltours.app.models.AppNotification;
 import com.hafiztraveltours.app.utils.AppNotificationManager;
 import com.hafiztraveltours.app.utils.OnboardingManager;
 
+import java.util.Locale;
+
 public class PrayerAlarmReceiver extends BroadcastReceiver {
 
     private static final String TAG = "PrayerAlarmReceiver";
@@ -49,7 +51,7 @@ public class PrayerAlarmReceiver extends BroadcastReceiver {
 
         // 1. Freshness / Stale Alarm Guard:
         if (scheduledEpoch > 0) {
-            if (driftSeconds > MAX_ALLOWED_DRIFT_SECONDS) {
+            if (isStaleTrigger(scheduledEpoch, currentEpoch)) {
                 Log.w(TAG, "STALE_ALARM_DROPPED: prayer=" + prayerName +
                         ", date=" + prayerDate +
                         ", zone=" + prayerZone +
@@ -59,7 +61,7 @@ public class PrayerAlarmReceiver extends BroadcastReceiver {
                         ", driftSeconds=" + driftSeconds + "s (> " + MAX_ALLOWED_DRIFT_SECONDS + "s limit). Dropping stale playback.");
                 return;
             }
-            if (driftSeconds < -300) {
+            if (isAnomalouslyEarlyTrigger(scheduledEpoch, currentEpoch)) {
                 Log.w(TAG, "EARLY_ALARM_DROPPED: prayer=" + prayerName +
                         ", driftSeconds=" + driftSeconds + "s. Dropping anomalous trigger.");
                 return;
@@ -95,7 +97,7 @@ public class PrayerAlarmReceiver extends BroadcastReceiver {
             String msgEn = nameEn + " prayer is in 5 minutes.";
             String msgBm = "Waktu solat " + nameBm + " akan masuk dalam 5 minit.";
 
-            String notifId = "prayer_reminder_" + (prayerName != null ? prayerName.toLowerCase() : "solat") + "_" + prayerDate;
+            String notifId = "prayer_reminder_" + (prayerName != null ? prayerName.toLowerCase(Locale.ROOT) : "solat") + "_" + prayerDate;
             AppNotification notif = new AppNotification(
                     notifId, titleEn, titleBm, msgEn, msgBm,
                     System.currentTimeMillis(), false, "prayer_reminder");
@@ -169,6 +171,14 @@ public class PrayerAlarmReceiver extends BroadcastReceiver {
         prefs.edit().clear().apply();
     }
 
+    static boolean isStaleTrigger(long scheduledEpoch, long currentEpoch) {
+        return scheduledEpoch > 0 && currentEpoch - scheduledEpoch > MAX_ALLOWED_DRIFT_SECONDS;
+    }
+
+    static boolean isAnomalouslyEarlyTrigger(long scheduledEpoch, long currentEpoch) {
+        return scheduledEpoch > 0 && currentEpoch - scheduledEpoch < -300;
+    }
+
     private static void setPrayerState(SharedPreferences prefs, String prayerName, String prayerDate, int state) {
         if (prefs == null || prayerName == null || prayerDate == null) return;
         String key = buildTrackerKey(prayerName, prayerDate);
@@ -179,12 +189,12 @@ public class PrayerAlarmReceiver extends BroadcastReceiver {
     }
 
     private static String buildTrackerKey(String prayerName, String prayerDate) {
-        return prayerName.trim().toLowerCase() + "_" + prayerDate.trim();
+        return prayerName.trim().toLowerCase(Locale.ROOT) + "_" + prayerDate.trim();
     }
 
     private String getPrayerNameEn(String key) {
         if (key == null) return "Prayer";
-        switch (key.toLowerCase()) {
+        switch (key.toLowerCase(Locale.ROOT)) {
             case "fajr": return "Fajr";
             case "dhuhr": return "Dhuhr";
             case "asr": return "Asr";
@@ -196,7 +206,7 @@ public class PrayerAlarmReceiver extends BroadcastReceiver {
 
     private String getPrayerNameBm(String key) {
         if (key == null) return "Solat";
-        switch (key.toLowerCase()) {
+        switch (key.toLowerCase(Locale.ROOT)) {
             case "fajr": return "Subuh";
             case "dhuhr": return "Zohor";
             case "asr": return "Asar";

@@ -144,6 +144,17 @@ public class WelcomeActivity extends BaseActivity {
         layoutPrayerSetup = findViewById(R.id.layoutPrayerSetup);
         layoutNotificationSetup = findViewById(R.id.layoutNotificationSetup);
 
+        View root = findViewById(android.R.id.content);
+        if (root != null) {
+            androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
+                androidx.core.graphics.Insets sysBars = insets.getInsets(
+                        androidx.core.view.WindowInsetsCompat.Type.systemBars()
+                );
+                v.setPadding(sysBars.left, sysBars.top, sysBars.right, sysBars.bottom);
+                return insets;
+            });
+        }
+
         tvActiveLanguage = findViewById(R.id.tvActiveLanguage);
         heroImageMain = findViewById(R.id.heroImageMain);
         tvHeroTag = findViewById(R.id.tvHeroTag);
@@ -500,6 +511,7 @@ public class WelcomeActivity extends BaseActivity {
         ImageView radio = sheet.findViewById(radioId);
 
         boolean isSelected = langCode.equalsIgnoreCase(currentLang);
+        item.setSelected(isSelected);
         if (isSelected) {
             item.setBackgroundResource(R.drawable.bg_language_item_selected);
             if (radio != null) radio.setImageResource(R.drawable.ic_check_circle_magenta);

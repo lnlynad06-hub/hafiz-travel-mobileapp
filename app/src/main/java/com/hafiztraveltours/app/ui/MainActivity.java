@@ -370,24 +370,34 @@ public class MainActivity extends BaseActivity {
                 rv.setLayoutManager(new LinearLayoutManager(this));
                 NotificationAdapter adapter = new NotificationAdapter(this, list, notif -> {
                     updateNotificationDotState();
+                    if (btnMarkAll != null) {
+                        boolean hasUnread = AppNotificationManager.hasUnread(this);
+                        btnMarkAll.setEnabled(hasUnread);
+                        btnMarkAll.setAlpha(hasUnread ? 1f : 0.45f);
+                    }
                 });
                 rv.setAdapter(adapter);
             }
         }
 
         if (btnMarkAll != null) {
+            boolean hasUnread = AppNotificationManager.hasUnread(this);
+            btnMarkAll.setEnabled(hasUnread);
+            btnMarkAll.setAlpha(hasUnread ? 1f : 0.45f);
             btnMarkAll.setOnClickListener(v -> {
                 HapticUtil.click(v);
                 AppNotificationManager.markAllRead(this);
+                for (AppNotification notification : list) {
+                    notification.isRead = true;
+                }
                 updateNotificationDotState();
                 if (rv != null && rv.getAdapter() != null) {
-                    rv.getAdapter().notifyDataSetChanged();
+                    rv.getAdapter().notifyItemRangeChanged(0, list.size());
                 }
+                btnMarkAll.setEnabled(false);
+                btnMarkAll.setAlpha(0.45f);
             });
         }
-
-        AppNotificationManager.markAllRead(this);
-        updateNotificationDotState();
 
         dialog.show();
     }
@@ -444,6 +454,7 @@ public class MainActivity extends BaseActivity {
         ImageView radio = sheet.findViewById(radioId);
 
         boolean isSelected = langCode.equalsIgnoreCase(currentLang);
+        item.setSelected(isSelected);
         if (isSelected) {
             item.setBackgroundResource(R.drawable.bg_language_item_selected);
             if (radio != null) radio.setImageResource(R.drawable.ic_check_circle_magenta);

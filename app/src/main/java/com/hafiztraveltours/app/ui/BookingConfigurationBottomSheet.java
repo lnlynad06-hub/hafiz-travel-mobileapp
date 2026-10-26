@@ -259,6 +259,23 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
             proceedToTravellerDetails();
         });
 
+        View stickyBottomBar = view.findViewById(R.id.configStickyBottomBar);
+        if (stickyBottomBar != null) {
+            androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(stickyBottomBar, (v, insets) -> {
+                androidx.core.graphics.Insets navInsets = insets.getInsets(
+                        androidx.core.view.WindowInsetsCompat.Type.systemBars() |
+                        androidx.core.view.WindowInsetsCompat.Type.ime()
+                );
+                v.setPadding(
+                        v.getPaddingLeft(),
+                        v.getPaddingTop(),
+                        v.getPaddingRight(),
+                        navInsets.bottom > 0 ? navInsets.bottom + dp(8) : dp(16)
+                );
+                return insets;
+            });
+        }
+
         View seasonTitle = view.findViewById(R.id.configSeasonTitle);
         View seasonScrollView = view.findViewById(R.id.configSeasonScrollView);
         View roomTitle = view.findViewById(R.id.configRoomTitle);

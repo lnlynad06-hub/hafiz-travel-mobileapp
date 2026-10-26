@@ -40,6 +40,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:minHeight="@dimen/touch_target_min"
             android:paddingHorizontal="8dp"
             android:paddingVertical="4dp"
             android:text="@string/notification_mark_all_read"
@@ -49,8 +51,8 @@
 
         <ImageView
             android:id="@+id/btnCloseNotifSheet"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="@dimen/touch_target_min"
+            android:layout_height="@dimen/touch_target_min"
             android:layout_marginStart="8dp"
             android:background="@drawable/circle_bg_light"
             android:contentDescription="@string/content_desc_close"
@@ -62,7 +64,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#E2E8F0" />
+        android:background="@color/status_neutral_border" />
 
     <!-- Empty State -->
     <LinearLayout
@@ -77,9 +79,9 @@
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:importantForAccessibility="no"
             android:src="@drawable/ic_notifications"
-            app:tint="@color/text_muted"
-            tools:ignore="ContentDescription" />
+            app:tint="@color/text_muted" />
 
         <TextView
             android:layout_width="wrap_content"

@@ -175,6 +175,24 @@ public class PassengerDetailsActivity extends BaseActivity {
             validateAndProceed();
         });
 
+        View bottomBar = findViewById(R.id.passengerBottomBar);
+        if (bottomBar != null) {
+            androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(bottomBar, (v, insets) -> {
+                androidx.core.graphics.Insets navInsets = insets.getInsets(
+                        androidx.core.view.WindowInsetsCompat.Type.systemBars() |
+                        androidx.core.view.WindowInsetsCompat.Type.ime()
+                );
+                int basePad = Math.round(12 * getResources().getDisplayMetrics().density);
+                v.setPadding(
+                        v.getPaddingLeft(),
+                        v.getPaddingTop(),
+                        v.getPaddingRight(),
+                        navInsets.bottom > 0 ? navInsets.bottom + basePad : basePad
+                );
+                return insets;
+            });
+        }
+
         // Initialize required additional traveller count based on total pax (adults + kids)
         int totalPaxNeeded = bookingRequest.adultPaxCount + bookingRequest.kidsPaxCount;
         int extraNeeded = Math.max(0, totalPaxNeeded - 1);

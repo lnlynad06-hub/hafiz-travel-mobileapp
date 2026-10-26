@@ -92,6 +92,29 @@ public class PackageDetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_package_detail);
 
+        View topBarLayout = findViewById(R.id.detailTopBarLayout);
+        if (topBarLayout != null) {
+            androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(topBarLayout, (v, insets) -> {
+                androidx.core.graphics.Insets statusInsets = insets.getInsets(
+                        androidx.core.view.WindowInsetsCompat.Type.statusBars()
+                );
+                v.setPadding(v.getPaddingLeft(), statusInsets.top, v.getPaddingRight(), v.getPaddingBottom());
+                return insets;
+            });
+        }
+
+        View bottomBar = findViewById(R.id.detailBottomBar);
+        if (bottomBar != null) {
+            final int initialBottomPadding = bottomBar.getPaddingBottom();
+            androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(bottomBar, (v, insets) -> {
+                androidx.core.graphics.Insets navInsets = insets.getInsets(
+                        androidx.core.view.WindowInsetsCompat.Type.navigationBars()
+                );
+                v.setPadding(v.getPaddingLeft(), v.getPaddingTop(), v.getPaddingRight(), initialBottomPadding + navInsets.bottom);
+                return insets;
+            });
+        }
+
         findViewById(R.id.detailBackButton).setOnClickListener(v -> finish());
 
         heroImage = findViewById(R.id.detailHeroImage);
@@ -211,9 +234,12 @@ public class PackageDetailActivity extends BaseActivity {
             if (detail.imageUrl != null && !detail.imageUrl.isEmpty()) {
                 Glide.with(this)
                         .load(detail.imageUrl)
-                        .placeholder(R.color.surface)
-                        .error(R.color.surface)
+                        .placeholder(R.drawable.bg_image_placeholder)
+                        .error(R.drawable.bg_image_placeholder)
+                        .fallback(R.drawable.bg_image_placeholder)
                         .into(heroImage);
+            } else if (heroImage != null) {
+                heroImage.setImageResource(R.drawable.bg_image_placeholder);
             }
         } catch (Exception ignored) {}
 
@@ -309,13 +335,70 @@ public class PackageDetailActivity extends BaseActivity {
             }
         } catch (Exception ignored) {}
         intent.putExtra(CustomTravelWizardActivity.EXTRA_PACKAGE_NAME, detail.name);
-        String destination = (detail.rawPackage != null && detail.rawPackage.destination != null && !detail.rawPackage.destination.trim().isEmpty())
-                ? detail.rawPackage.destination.trim() : detail.name;
-        intent.putExtra(CustomTravelWizardActivity.EXTRA_DESTINATION, destination);
-        intent.putExtra(CustomTravelWizardActivity.EXTRA_DURATION_DAYS, detail.durationDays > 0 ? detail.durationDays : 12);
+        UmrahPackage sourcePkg = detail.rawPackage != null ? detail.rawPackage : rawPackage;
+        String destination = resolvePackageDestination(sourcePkg, detail);
+        if (destination != null && !destination.trim().isEmpty()) {
+            intent.putExtra(CustomTravelWizardActivity.EXTRA_DESTINATION, destination.trim());
+        }
+        if (detail.durationDays > 0) {
+            intent.putExtra(CustomTravelWizardActivity.EXTRA_DURATION_DAYS, detail.durationDays);
+        }
         intent.putExtra(CustomTravelWizardActivity.EXTRA_STARTING_PRICE, detail.price);
         startActivity(intent);
         overridePendingTransition(R.anim.nav_seamless_fade_in, R.anim.nav_seamless_fade_out);
+    }
+
+    public static String resolvePackageDestination(UmrahPackage pkg, PackageDetail detail) {
+        // 1. Authoritative package destination field
+        if (pkg != null && pkg.destination != null && !pkg.destination.trim().isEmpty()) {
+            return pkg.destination.trim();
+        }
+
+        // 2. Structured destinations from tour hotels (cities/countries)
+        if (pkg != null && pkg.tourHotels != null && !pkg.tourHotels.isEmpty()) {
+            java.util.LinkedHashSet<String> places = new java.util.LinkedHashSet<>();
+            for (UmrahPackage.TourHotelItem th : pkg.tourHotels) {
+                if (th.city != null && !th.city.trim().isEmpty()) {
+                    places.add(th.city.trim());
+                } else if (th.country != null && !th.country.trim().isEmpty()) {
+                    places.add(th.country.trim());
+                }
+            }
+            if (!places.isEmpty()) {
+                StringBuilder sb = new StringBuilder();
+                for (String p : places) {
+                    if (sb.length() > 0) sb.append(", ");
+                    sb.append(p);
+                }
+                return sb.toString();
+            }
+        }
+
+        // 3. Umrah package destination resolution
+        boolean isUmrah = (pkg != null && pkg.isUmrah()) || (detail != null && detail.isUmrah);
+        if (isUmrah) {
+            boolean hasMakkah = (pkg != null && pkg.nightsMakkah != null && pkg.nightsMakkah > 0)
+                    || (pkg != null && pkg.hotelMakkahName != null && !pkg.hotelMakkahName.trim().isEmpty());
+            boolean hasMadinah = (pkg != null && pkg.nightsMadinah != null && pkg.nightsMadinah > 0)
+                    || (pkg != null && pkg.hotelMadinahName != null && !pkg.hotelMadinahName.trim().isEmpty());
+            boolean hasTaif = (pkg != null && pkg.nightsTaif != null && pkg.nightsTaif > 0)
+                    || (pkg != null && pkg.hotelTaifName != null && !pkg.hotelTaifName.trim().isEmpty())
+                    || (detail != null && detail.nightsTaif != null && detail.nightsTaif > 0);
+
+            if (hasMakkah && hasMadinah && hasTaif) {
+                return "Makkah, Madinah & Taif";
+            } else if (hasMakkah && hasMadinah) {
+                return "Makkah & Madinah";
+            } else if (hasMakkah) {
+                return "Makkah";
+            } else if (hasMadinah) {
+                return "Madinah";
+            }
+        }
+
+        // 4. Do NOT confuse package name with destination.
+        // If no reliable destination exists, return null so customer input is requested.
+        return null;
     }
 
     private void checkEligibilityAndOpenBookingSheet() {
@@ -792,58 +875,62 @@ public class PackageDetailActivity extends BaseActivity {
             card.setBackgroundResource(R.drawable.bg_detail_card);
             card.setClickable(true);
             card.setFocusable(true);
+            card.setElevation(dp(1));
+            card.setSelected(isFirst);
+            androidx.core.view.ViewCompat.setStateDescription(card, getString(
+                    isFirst ? R.string.accessibility_expanded : R.string.accessibility_collapsed));
 
             LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            cardParams.topMargin = dp(10);
+            cardParams.topMargin = dp(12);
             card.setLayoutParams(cardParams);
 
-            // Unified Responsive Header Ribbon Banner (Pink Header Ribbon with Navy Day Badge)
+            // Premium editorial header: quiet surface, compact brand badge, readable title.
             LinearLayout headerRow = new LinearLayout(this);
             headerRow.setOrientation(LinearLayout.HORIZONTAL);
             headerRow.setGravity(Gravity.CENTER_VERTICAL);
-            headerRow.setBackgroundResource(isFirst ? R.drawable.bg_itinerary_header_ribbon : R.drawable.bg_itinerary_header_ribbon_collapsed);
-            headerRow.setPadding(dp(12), dp(10), dp(12), dp(10));
+            headerRow.setMinimumHeight(dp(64));
+            headerRow.setPadding(dp(16), dp(12), dp(10), dp(12));
 
             TextView dayLabel = new TextView(this);
-            dayLabel.setText(getString(R.string.day_label_format, day.dayNumber).toUpperCase());
-            dayLabel.setTextSize(12);
+            dayLabel.setText(getString(R.string.day_label_format, day.dayNumber).toUpperCase(Locale.getDefault()));
+            dayLabel.setTextSize(10);
             dayLabel.setTypeface(null, Typeface.BOLD);
-            dayLabel.setTextColor(Color.WHITE);
-            dayLabel.setBackgroundResource(R.drawable.bg_itinerary_day_pill);
-            dayLabel.setPadding(dp(10), dp(5), dp(10), dp(5));
+            dayLabel.setTextColor(getResources().getColor(R.color.brand_magenta));
+            dayLabel.setLetterSpacing(0.06f);
+            dayLabel.setGravity(Gravity.CENTER);
+            dayLabel.setBackgroundResource(R.drawable.bg_editorial_tag);
+            dayLabel.setPadding(dp(11), dp(7), dp(11), dp(7));
 
             LinearLayout.LayoutParams dayParams = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            dayParams.gravity = Gravity.CENTER_VERTICAL;
-            dayParams.rightMargin = dp(10);
+            dayParams.rightMargin = dp(12);
             dayLabel.setLayoutParams(dayParams);
 
             TextView titleText = new TextView(this);
             String pillTextStr = (day.title != null && !day.title.trim().isEmpty())
-                    ? day.title.trim().toUpperCase()
-                    : getString(R.string.day_label_format, day.dayNumber).toUpperCase();
+                    ? day.title.trim()
+                    : getString(R.string.day_label_format, day.dayNumber);
 
             titleText.setText(pillTextStr);
-            titleText.setTextSize(13);
+            titleText.setTextSize(14);
             titleText.setTypeface(null, Typeface.BOLD);
-            titleText.setTextColor(Color.WHITE);
-            titleText.setLineSpacing(dp(2), 1.0f);
+            titleText.setTextColor(getResources().getColor(R.color.text_dark));
+            titleText.setLineSpacing(dp(2), 1.08f);
 
             LinearLayout.LayoutParams ttParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
-            ttParams.gravity = Gravity.CENTER_VERTICAL;
             titleText.setLayoutParams(ttParams);
 
-            TextView chevron = new TextView(this);
-            chevron.setText(isFirst ? "▲" : "▼");
-            chevron.setTextSize(11);
-            chevron.setTypeface(null, Typeface.BOLD);
-            chevron.setTextColor(Color.WHITE);
-            chevron.setPadding(dp(6), dp(4), dp(2), dp(4));
+            ImageView chevron = new ImageView(this);
+            chevron.setImageResource(R.drawable.ic_chevron_down);
+            chevron.setColorFilter(getResources().getColor(R.color.brand_magenta));
+            chevron.setPadding(dp(6), dp(6), dp(6), dp(6));
+            chevron.setRotation(isFirst ? 180f : 0f);
+            chevron.setContentDescription(null);
 
             LinearLayout.LayoutParams chevParams = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            chevParams.gravity = Gravity.CENTER_VERTICAL;
+                    dp(36), dp(36));
+            chevParams.leftMargin = dp(8);
             chevron.setLayoutParams(chevParams);
 
             headerRow.addView(dayLabel);
@@ -855,20 +942,45 @@ public class PackageDetailActivity extends BaseActivity {
             // Card Body Container
             LinearLayout body = new LinearLayout(this);
             body.setOrientation(LinearLayout.VERTICAL);
-            body.setPadding(dp(14), dp(12), dp(14), dp(14));
+            body.setPadding(dp(16), 0, dp(16), dp(16));
             body.setVisibility(isFirst ? View.VISIBLE : View.GONE);
 
+            View divider = new View(this);
+            divider.setBackgroundColor(getResources().getColor(R.color.card_border_subtle));
+            LinearLayout.LayoutParams dividerParams = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, dp(1));
+            dividerParams.bottomMargin = dp(14);
+            divider.setLayoutParams(dividerParams);
+            body.addView(divider);
+
             for (String activity : day.activities) {
+                LinearLayout bulletRow = new LinearLayout(this);
+                bulletRow.setOrientation(LinearLayout.HORIZONTAL);
+                bulletRow.setGravity(Gravity.TOP);
+
+                View dot = new View(this);
+                dot.setBackgroundResource(R.drawable.bg_timeline_dot_active);
+                LinearLayout.LayoutParams dotParams = new LinearLayout.LayoutParams(dp(7), dp(7));
+                dotParams.topMargin = dp(6);
+                dotParams.rightMargin = dp(10);
+                dot.setLayoutParams(dotParams);
+
                 TextView bullet = new TextView(this);
-                bullet.setText("• " + activity);
+                bullet.setText(activity);
                 bullet.setTextSize(13);
                 bullet.setTextColor(getResources().getColor(R.color.text_dark));
-                bullet.setLineSpacing(dp(2), 1.15f);
+                bullet.setLineSpacing(dp(2), 1.18f);
                 LinearLayout.LayoutParams bp = new LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                bp.bottomMargin = dp(6);
+                        0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
                 bullet.setLayoutParams(bp);
-                body.addView(bullet);
+
+                bulletRow.addView(dot);
+                bulletRow.addView(bullet);
+                LinearLayout.LayoutParams rowParams = new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                rowParams.bottomMargin = dp(10);
+                bulletRow.setLayoutParams(rowParams);
+                body.addView(bulletRow);
             }
 
             if (!day.hotelNote.isEmpty() || !day.mealNote.isEmpty()) {
@@ -880,11 +992,14 @@ public class PackageDetailActivity extends BaseActivity {
                     sb.append(getString(R.string.package_detail_meals_label)).append(": ").append(day.mealNote);
                 }
                 footer.setText(sb.toString());
-                footer.setTextSize(11);
+                footer.setTextSize(11.5f);
+                footer.setTypeface(null, Typeface.BOLD);
                 footer.setTextColor(getResources().getColor(R.color.brand_magenta));
+                footer.setBackgroundResource(R.drawable.bg_category_chip_inactive);
+                footer.setPadding(dp(12), dp(10), dp(12), dp(10));
                 LinearLayout.LayoutParams fp = new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                fp.topMargin = dp(6);
+                fp.topMargin = dp(4);
                 footer.setLayoutParams(fp);
                 body.addView(footer);
             }
@@ -895,10 +1010,10 @@ public class PackageDetailActivity extends BaseActivity {
                 com.hafiztraveltours.app.utils.HapticUtil.click(v);
                 boolean willExpand = (body.getVisibility() != View.VISIBLE);
                 body.setVisibility(willExpand ? View.VISIBLE : View.GONE);
-                chevron.setText(willExpand ? "▲" : "▼");
-                headerRow.setBackgroundResource(willExpand
-                        ? R.drawable.bg_itinerary_header_ribbon
-                        : R.drawable.bg_itinerary_header_ribbon_collapsed);
+                chevron.animate().rotation(willExpand ? 180f : 0f).setDuration(160).start();
+                card.setSelected(willExpand);
+                androidx.core.view.ViewCompat.setStateDescription(card, getString(
+                        willExpand ? R.string.accessibility_expanded : R.string.accessibility_collapsed));
             });
 
             targetContainer.addView(card);

@@ -3,12 +3,35 @@ package com.hafiztraveltours.app.utils;
 import com.hafiztraveltours.app.models.CreateCustomTravelRequest;
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
 
 public class CustomTravelHelperTest {
+
+    @Test
+    public void testWizardRequestSurvivesSavedStateSerialization() throws Exception {
+        CreateCustomTravelRequest request = new CreateCustomTravelRequest();
+        request.destination = "Makkah";
+        request.durationDays = 12;
+        request.childrenDetails.add(new CreateCustomTravelRequest.ChildDetail("2020-01-01", 6, "female"));
+        request.flightPreferences = new CreateCustomTravelRequest.FlightPreferences("Any", "economy", "direct");
+
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        new ObjectOutputStream(bytes).writeObject(request);
+        CreateCustomTravelRequest restored = (CreateCustomTravelRequest) new ObjectInputStream(
+                new ByteArrayInputStream(bytes.toByteArray())).readObject();
+
+        assertEquals("Makkah", restored.destination);
+        assertEquals(Integer.valueOf(12), restored.durationDays);
+        assertEquals(1, restored.childrenDetails.size());
+        assertEquals("direct", restored.flightPreferences.directTransit);
+    }
 
     @Test
     public void testChildAgeCalculatedBasedOnDepartureDate() {

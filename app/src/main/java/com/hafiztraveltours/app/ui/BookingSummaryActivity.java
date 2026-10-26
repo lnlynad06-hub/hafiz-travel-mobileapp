@@ -50,6 +50,17 @@ public class BookingSummaryActivity extends BaseActivity {
     private TextView txtDepartureDate;
     private LinearLayout containerBreakdown;
     private LinearLayout containerRooms;
+    private LinearLayout layoutDepositBreakdown;
+    private TextView summaryDepositAmount;
+    private TextView summaryOutstandingAmount;
+    private View layoutQuoteLoading;
+    private View layoutQuoteError;
+    private View btnRetryQuote;
+
+    private boolean isQuoteLoading = false;
+    private boolean hasQuoteFailed = false;
+    private QuoteResponse currentQuote = null;
+    private retrofit2.Call<ApiResponse<QuoteResponse>> quoteCall = null;
 
     private CheckBox summaryAgreementCheckbox;
     private View btnConfirmBooking;
@@ -61,6 +72,7 @@ public class BookingSummaryActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
+        if (quoteCall != null) quoteCall.cancel();
         if (isSubmitting && bookingCall != null) bookingCall.cancel();
         super.onDestroy();
     }
@@ -91,6 +103,38 @@ public class BookingSummaryActivity extends BaseActivity {
         txtUnitPriceAmount = findViewById(R.id.summaryUnitPriceAmount);
         txtTotalAmount = findViewById(R.id.summaryTotalAmount);
 
+        layoutDepositBreakdown = findViewById(R.id.layoutDepositBreakdown);
+        summaryDepositAmount = findViewById(R.id.summaryDepositAmount);
+        summaryOutstandingAmount = findViewById(R.id.summaryOutstandingAmount);
+        layoutQuoteLoading = findViewById(R.id.layoutQuoteLoading);
+        layoutQuoteError = findViewById(R.id.layoutQuoteError);
+        btnRetryQuote = findViewById(R.id.btnRetryQuote);
+
+        if (btnRetryQuote != null) {
+            btnRetryQuote.setOnClickListener(v -> {
+                HapticUtil.click(v);
+                fetchServerQuote();
+            });
+        }
+
+        View summaryBottomBar = findViewById(R.id.summaryBottomBar);
+        if (summaryBottomBar != null) {
+            androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(summaryBottomBar, (v, insets) -> {
+                androidx.core.graphics.Insets navInsets = insets.getInsets(
+                        androidx.core.view.WindowInsetsCompat.Type.systemBars() |
+                        androidx.core.view.WindowInsetsCompat.Type.ime()
+                );
+                int basePad = dp(12);
+                v.setPadding(
+                        v.getPaddingLeft(),
+                        v.getPaddingTop(),
+                        v.getPaddingRight(),
+                        navInsets.bottom > 0 ? navInsets.bottom + dp(8) : basePad
+                );
+                return insets;
+            });
+        }
+
         summaryAgreementCheckbox = findViewById(R.id.summaryAgreementCheckbox);
         btnConfirmBooking = findViewById(R.id.btnConfirmBooking);
         confirmProgressBar = findViewById(R.id.confirmProgressBar);
@@ -118,6 +162,15 @@ public class BookingSummaryActivity extends BaseActivity {
                 HapticUtil.click(v);
                 if (summaryAgreementCheckbox != null && !summaryAgreementCheckbox.isChecked()) {
                     Toast.makeText(this, R.string.terms_required_error, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (isQuoteLoading) {
+                    Toast.makeText(this, R.string.quote_still_loading, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (hasQuoteFailed && currentQuote == null) {
+                    Toast.makeText(this, R.string.quote_retry_required, Toast.LENGTH_SHORT).show();
+                    fetchServerQuote();
                     return;
                 }
                 if (!isSubmitting) {
@@ -169,6 +222,11 @@ public class BookingSummaryActivity extends BaseActivity {
         renderBreakdown();
         double finalTotal = Math.max(0, calculatedTotal - bookingRequest.discountAmount);
         txtTotalAmount.setText(BookingRequest.formatPrice(finalTotal));
+
+        // Deposit is not estimated locally; it will be displayed authoritatively from server quote
+        if (layoutDepositBreakdown != null) {
+            layoutDepositBreakdown.setVisibility(View.GONE);
+        }
 
         renderRoomsBreakdown();
         renderPassengers();
@@ -488,6 +546,13 @@ public class BookingSummaryActivity extends BaseActivity {
     }
 
     private void fetchServerQuote() {
+        isQuoteLoading = true;
+        hasQuoteFailed = false;
+
+        if (layoutQuoteLoading != null) layoutQuoteLoading.setVisibility(View.VISIBLE);
+        if (layoutQuoteError != null) layoutQuoteError.setVisibility(View.GONE);
+        if (layoutDepositBreakdown != null) layoutDepositBreakdown.setVisibility(View.GONE);
+
         QuoteRequest qReq = new QuoteRequest();
         qReq.packageId = bookingRequest.packageId;
         qReq.departureId = parseDepartureId(bookingRequest.selectedDepartureId);
@@ -519,19 +584,36 @@ public class BookingSummaryActivity extends BaseActivity {
             }
         }
 
-        ApiClient.getApiService().getBookingQuote(qReq).enqueue(new retrofit2.Callback<ApiResponse<QuoteResponse>>() {
+        if (quoteCall != null) quoteCall.cancel();
+        quoteCall = ApiClient.getApiService().getBookingQuote(qReq);
+        quoteCall.enqueue(new retrofit2.Callback<ApiResponse<QuoteResponse>>() {
             @Override
             public void onResponse(retrofit2.Call<ApiResponse<QuoteResponse>> call,
                                    retrofit2.Response<ApiResponse<QuoteResponse>> response) {
                 if (isFinishing() || isDestroyed()) return;
+                isQuoteLoading = false;
+                if (layoutQuoteLoading != null) layoutQuoteLoading.setVisibility(View.GONE);
+
                 if (response.isSuccessful() && response.body() != null && response.body().data != null) {
-                    applyServerQuote(response.body().data);
+                    currentQuote = response.body().data;
+                    hasQuoteFailed = false;
+                    if (layoutQuoteError != null) layoutQuoteError.setVisibility(View.GONE);
+                    applyServerQuote(currentQuote);
+                } else {
+                    hasQuoteFailed = true;
+                    if (layoutQuoteError != null) layoutQuoteError.setVisibility(View.VISIBLE);
+                    if (layoutDepositBreakdown != null) layoutDepositBreakdown.setVisibility(View.GONE);
                 }
             }
 
             @Override
             public void onFailure(retrofit2.Call<ApiResponse<QuoteResponse>> call, Throwable t) {
-                // Keep local calculations on failure
+                if (isFinishing() || isDestroyed() || call.isCanceled()) return;
+                isQuoteLoading = false;
+                hasQuoteFailed = true;
+                if (layoutQuoteLoading != null) layoutQuoteLoading.setVisibility(View.GONE);
+                if (layoutQuoteError != null) layoutQuoteError.setVisibility(View.VISIBLE);
+                if (layoutDepositBreakdown != null) layoutDepositBreakdown.setVisibility(View.GONE);
             }
         });
     }
@@ -540,6 +622,21 @@ public class BookingSummaryActivity extends BaseActivity {
         if (quote == null) return;
 
         txtTotalAmount.setText(BookingRequest.formatPrice(quote.total));
+
+        if (layoutDepositBreakdown != null) {
+            if (quote.requiredDeposit > 0 && quote.requiredDeposit < quote.total) {
+                layoutDepositBreakdown.setVisibility(View.VISIBLE);
+                if (summaryDepositAmount != null) {
+                    summaryDepositAmount.setText(BookingRequest.formatPrice(quote.requiredDeposit));
+                }
+                if (summaryOutstandingAmount != null) {
+                    double balance = Math.max(0, quote.total - quote.requiredDeposit);
+                    summaryOutstandingAmount.setText(BookingRequest.formatPrice(balance));
+                }
+            } else {
+                layoutDepositBreakdown.setVisibility(View.GONE);
+            }
+        }
         if (containerBreakdown != null && quote.items != null && !quote.items.isEmpty()) {
             containerBreakdown.removeAllViews();
             for (QuoteResponse.QuoteLineItem item : quote.items) {

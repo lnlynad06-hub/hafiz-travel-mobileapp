@@ -52,11 +52,11 @@
 
         <ImageView
             android:id="@+id/btnCloseCountrySheet"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="@dimen/touch_target_min"
+            android:layout_height="@dimen/touch_target_min"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/content_desc_close"
-            android:padding="6dp"
+            android:padding="@dimen/touch_target_icon_padding"
             android:src="@drawable/ic_close"
             app:tint="@color/text_gray" />
     </LinearLayout>
@@ -81,6 +81,7 @@
         <ImageView
             android:layout_width="18dp"
             android:layout_height="18dp"
+            android:contentDescription="@null"
             android:src="@drawable/ic_search"
             app:tint="@color/pink_dark" />
 
@@ -91,6 +92,7 @@
             android:layout_weight="1"
             android:background="@null"
             android:hint="@string/profile_country_search_hint"
+            android:importantForAutofill="no"
             android:imeOptions="actionDone"
             android:inputType="text"
             android:maxLines="1"
@@ -102,11 +104,11 @@
 
         <ImageView
             android:id="@+id/btnClearCountrySearch"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="@dimen/touch_target_min"
+            android:layout_height="@dimen/touch_target_min"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/content_desc_close"
-            android:padding="4dp"
+            android:contentDescription="@string/content_desc_clear_search"
+            android:padding="@dimen/touch_target_icon_padding"
             android:src="@drawable/ic_close"
             android:visibility="gone"
             app:tint="@color/text_gray" />

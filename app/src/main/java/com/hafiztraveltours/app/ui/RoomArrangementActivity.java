@@ -151,6 +151,24 @@ public class RoomArrangementActivity extends BaseActivity {
             HapticUtil.click(v);
             validateAndProceed();
         });
+
+        View bottomBar = findViewById(R.id.bottomActionBar);
+        if (bottomBar != null) {
+            androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(bottomBar, (v, insets) -> {
+                androidx.core.graphics.Insets navInsets = insets.getInsets(
+                        androidx.core.view.WindowInsetsCompat.Type.systemBars() |
+                        androidx.core.view.WindowInsetsCompat.Type.ime()
+                );
+                int basePad = dp(16);
+                v.setPadding(
+                        v.getPaddingLeft(),
+                        v.getPaddingTop(),
+                        v.getPaddingRight(),
+                        navInsets.bottom > 0 ? navInsets.bottom + dp(10) : basePad
+                );
+                return insets;
+            });
+        }
     }
 
     private void updateFamilyRoomOptionUi() {
@@ -711,6 +729,12 @@ public class RoomArrangementActivity extends BaseActivity {
         ProgressBar pb = new ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal);
         pb.setMax(cap);
         pb.setProgress(Math.min(occ, cap));
+        pb.setProgressTintList(android.content.res.ColorStateList.valueOf(
+                ContextCompat.getColor(this, occ > cap ? R.color.error_red : (occ == cap ? R.color.brand_magenta : R.color.brand_magenta))
+        ));
+        pb.setProgressBackgroundTintList(android.content.res.ColorStateList.valueOf(
+                ContextCompat.getColor(this, R.color.card_border)
+        ));
         LinearLayout.LayoutParams pbLp = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, dp(4));
         pbLp.topMargin = dp(8);

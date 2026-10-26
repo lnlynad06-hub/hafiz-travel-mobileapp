@@ -42,7 +42,13 @@ public class InvoiceViewerActivity extends BaseActivity {
     public static final String EXTRA_BOOKING_ID = "extra_booking_id";
     public static final String EXTRA_BOOKING_NO = "extra_booking_no";
     public static final String EXTRA_BOOKING_REQUEST = "extra_booking_request";
+    public static final String EXTRA_VIEW_MODE = "extra_view_mode";
+    public static final String VIEW_MODE_INVOICE = "invoice";
+    public static final String VIEW_MODE_DETAILS = "details";
 
+    private String viewMode = VIEW_MODE_INVOICE;
+    private TextView tvInvoiceTopBarTitle;
+    private TextView tvDocTypeTitle;
     private TextView tvCompanyHeaderName;
     private TextView tvCompanyHeaderMeta;
     private TextView tvCompanyHeaderAddress;
@@ -92,6 +98,8 @@ public class InvoiceViewerActivity extends BaseActivity {
         ImageButton btnBack = findViewById(R.id.btnInvoiceBack);
         if (btnBack != null) btnBack.setOnClickListener(v -> finish());
 
+        tvInvoiceTopBarTitle = findViewById(R.id.tvInvoiceTopBarTitle);
+        tvDocTypeTitle = findViewById(R.id.tvDocTypeTitle);
         tvCompanyHeaderName = findViewById(R.id.tvCompanyHeaderName);
         tvCompanyHeaderMeta = findViewById(R.id.tvCompanyHeaderMeta);
         tvCompanyHeaderAddress = findViewById(R.id.tvCompanyHeaderAddress);
@@ -140,9 +148,25 @@ public class InvoiceViewerActivity extends BaseActivity {
         }
     }
 
+    private void updateViewModeDisplay() {
+        boolean isDetails = VIEW_MODE_DETAILS.equalsIgnoreCase(viewMode);
+        if (tvInvoiceTopBarTitle != null) {
+            tvInvoiceTopBarTitle.setText(isDetails ? R.string.booking_title_details : R.string.invoice_title_official);
+        }
+        if (tvDocTypeTitle != null) {
+            tvDocTypeTitle.setText(isDetails ? R.string.booking_title_details : R.string.invoice_title_official);
+        }
+    }
+
     private void handleIntentData() {
         Intent intent = getIntent();
         if (intent == null) return;
+
+        viewMode = intent.getStringExtra(EXTRA_VIEW_MODE);
+        if (viewMode == null || viewMode.isEmpty()) {
+            viewMode = VIEW_MODE_INVOICE;
+        }
+        updateViewModeDisplay();
 
         bookingId = intent.getIntExtra(EXTRA_BOOKING_ID, 0);
         bookingNo = intent.getStringExtra(EXTRA_BOOKING_NO);
@@ -158,7 +182,9 @@ public class InvoiceViewerActivity extends BaseActivity {
         } else if (bookingId > 0) {
             fetchBookingDetailFromApi(bookingId);
         } else if (bookingNo != null && !bookingNo.isEmpty()) {
-            if (tvInvoiceNumberHeader != null) tvInvoiceNumberHeader.setText("HQ " + bookingNo.replace("BKG-", "INV-"));
+            boolean isDetails = VIEW_MODE_DETAILS.equalsIgnoreCase(viewMode);
+            String ref = isDetails ? bookingNo : bookingNo.replace("BKG-", "INV-");
+            if (tvInvoiceNumberHeader != null) tvInvoiceNumberHeader.setText(ref);
         }
     }
 
@@ -166,9 +192,10 @@ public class InvoiceViewerActivity extends BaseActivity {
         if (req == null) return;
 
         String displayNo = (bNo != null && !bNo.isEmpty()) ? bNo : "BKG-OFFICIAL";
-        String invNo = "HQ " + displayNo.replace("BKG-", "INV-");
+        boolean isDetails = VIEW_MODE_DETAILS.equalsIgnoreCase(viewMode);
+        String headerNo = isDetails ? displayNo : displayNo.replace("BKG-", "INV-");
 
-        if (tvInvoiceNumberHeader != null) tvInvoiceNumberHeader.setText(invNo);
+        if (tvInvoiceNumberHeader != null) tvInvoiceNumberHeader.setText(headerNo);
 
         if (tvInvoiceStatusBadge != null) {
             tvInvoiceStatusBadge.setText(getString(R.string.status_deposit_paid));
@@ -351,10 +378,18 @@ public class InvoiceViewerActivity extends BaseActivity {
             if (tvInvoiceCustomerPhone != null) tvInvoiceCustomerPhone.setText(getString(R.string.customer_phone_format, "—"));
         }
 
+        updateViewModeDisplay();
+        boolean isDetails = VIEW_MODE_DETAILS.equalsIgnoreCase(viewMode);
+
         // 3. Invoice & Package Metadata
         if (detail.invoiceMeta != null) {
-            if (tvInvoiceNumberHeader != null && detail.invoiceMeta.invoiceNo != null) {
-                tvInvoiceNumberHeader.setText(detail.invoiceMeta.invoiceNo);
+            if (tvInvoiceNumberHeader != null) {
+                if (isDetails) {
+                    String bNo = detail.bookingNo != null ? detail.bookingNo : ("BKG-" + detail.id);
+                    tvInvoiceNumberHeader.setText(bNo);
+                } else if (detail.invoiceMeta.invoiceNo != null) {
+                    tvInvoiceNumberHeader.setText(detail.invoiceMeta.invoiceNo);
+                }
             }
             if (tvInvoiceDate != null && detail.invoiceMeta.invoiceDate != null) {
                 tvInvoiceDate.setText(formatDatePretty(detail.invoiceMeta.invoiceDate));
@@ -373,9 +408,14 @@ public class InvoiceViewerActivity extends BaseActivity {
             }
         } else {
             if (tvInvoiceNumberHeader != null) {
-                String inv = (detail.invoices != null && !detail.invoices.isEmpty() && detail.invoices.get(0).invoiceNo != null)
-                        ? detail.invoices.get(0).invoiceNo : "HQ " + (detail.bookingNo != null ? detail.bookingNo.replace("BKG-", "INV-") : "INV-" + detail.id);
-                tvInvoiceNumberHeader.setText(inv);
+                if (isDetails) {
+                    String bNo = detail.bookingNo != null ? detail.bookingNo : ("BKG-" + detail.id);
+                    tvInvoiceNumberHeader.setText(bNo);
+                } else {
+                    String inv = (detail.invoices != null && !detail.invoices.isEmpty() && detail.invoices.get(0).invoiceNo != null)
+                            ? detail.invoices.get(0).invoiceNo : (detail.bookingNo != null ? detail.bookingNo.replace("BKG-", "INV-") : "INV-" + detail.id);
+                    tvInvoiceNumberHeader.setText(inv);
+                }
             }
             if (tvInvoiceDate != null) {
                 String dateRaw = (detail.invoices != null && !detail.invoices.isEmpty() && detail.invoices.get(0).issuedAt != null)
@@ -672,14 +712,16 @@ public class InvoiceViewerActivity extends BaseActivity {
     }
 
     private void shareInvoiceSummary() {
-        String num = tvInvoiceNumberHeader != null ? tvInvoiceNumberHeader.getText().toString() : "HQ INV-OFFICIAL";
+        boolean isDetails = VIEW_MODE_DETAILS.equalsIgnoreCase(viewMode);
+        String docTitle = getString(isDetails ? R.string.booking_title_details : R.string.invoice_title_official);
+        String num = tvInvoiceNumberHeader != null ? tvInvoiceNumberHeader.getText().toString() : (isDetails ? "BKG-OFFICIAL" : "INV-OFFICIAL");
         String pkg = tvInvoicePackageName != null ? tvInvoicePackageName.getText().toString() : getString(R.string.category_umrah);
         String total = tvInvoiceGrandTotal != null ? tvInvoiceGrandTotal.getText().toString() : "RM 0";
         String bal = tvInvoiceBalanceDue != null ? tvInvoiceBalanceDue.getText().toString() : "RM 0";
 
-        String shareText = "📄 *" + getString(R.string.invoice_title_official).toUpperCase(Locale.ROOT) + "*\n" +
+        String shareText = "📄 *" + docTitle.toUpperCase(Locale.ROOT) + "*\n" +
                 "-----------------------------------\n" +
-                getString(R.string.invoice_meta_no) + ": " + num + "\n" +
+                (isDetails ? getString(R.string.booking_no_official_label) : getString(R.string.invoice_meta_no)) + ": " + num + "\n" +
                 getString(R.string.label_package) + ": " + pkg + "\n" +
                 getString(R.string.invoice_grand_total_label) + " " + total + "\n" +
                 getString(R.string.invoice_balance_due_label) + " " + bal + "\n" +
@@ -689,7 +731,7 @@ public class InvoiceViewerActivity extends BaseActivity {
         Intent sendIntent = new Intent(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_TEXT, shareText);
         sendIntent.setType("text/plain");
-        startActivity(Intent.createChooser(sendIntent, getString(R.string.invoice_share_title)));
+        startActivity(Intent.createChooser(sendIntent, docTitle));
     }
 
     private String formatDatePretty(String raw) {

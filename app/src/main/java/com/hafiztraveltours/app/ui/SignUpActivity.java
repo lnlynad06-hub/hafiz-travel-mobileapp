@@ -83,6 +83,17 @@ public class SignUpActivity extends BaseActivity {
         signUpViewModel = new androidx.lifecycle.ViewModelProvider(this).get(SignUpViewModel.class);
         observeSignUpState();
 
+        View root = findViewById(R.id.signUpRootContainer);
+        if (root != null) {
+            androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
+                androidx.core.graphics.Insets sysBars = insets.getInsets(
+                        androidx.core.view.WindowInsetsCompat.Type.systemBars()
+                );
+                v.setPadding(sysBars.left, sysBars.top, sysBars.right, sysBars.bottom);
+                return insets;
+            });
+        }
+
         nameLayout = findViewById(R.id.nameLayout);
         nicknameLayout = findViewById(R.id.nicknameLayout);
         emailLayout = findViewById(R.id.emailLayout);
@@ -522,6 +533,7 @@ View btnLanguagePicker = findViewById(R.id.btnLanguagePicker);
         ImageView radio = sheet.findViewById(radioId);
 
         boolean isSelected = langCode.equalsIgnoreCase(currentLang);
+        item.setSelected(isSelected);
         if (isSelected) {
             item.setBackgroundResource(R.drawable.bg_language_item_selected);
             if (radio != null) radio.setImageResource(R.drawable.ic_check_circle_magenta);

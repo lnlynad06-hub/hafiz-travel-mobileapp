@@ -43,6 +43,7 @@
                         android:id="@+id/logoTop"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
+                        android:contentDescription="@null"
                         android:scaleType="fitCenter"
                         android:src="@drawable/logo" />
 
@@ -64,10 +65,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
+                    android:minWidth="@dimen/touch_target_min"
+                    android:minHeight="@dimen/touch_target_min"
                     android:background="@drawable/bg_luxury_pill"
                     android:clickable="true"
                     android:focusable="true"
-                    android:gravity="center_vertical"
+                    android:gravity="center"
+                    android:contentDescription="@string/language_select"
                     android:orientation="horizontal">
 
                     <TextView
@@ -115,6 +119,7 @@
                         android:id="@+id/heroImageMain"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:contentDescription="@null"
                         android:scaleType="centerCrop"
                         android:src="@drawable/bg_image_placeholder" />
 
@@ -296,9 +301,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:minHeight="32dp"
-                    android:paddingHorizontal="14dp"
-                    android:paddingVertical="3dp"
+                    android:minHeight="@dimen/touch_target_min"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="8dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
                     android:focusable="true"
@@ -312,9 +317,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
                     android:gravity="center"
-                    android:minHeight="32dp"
-                    android:paddingHorizontal="14dp"
-                    android:paddingVertical="3dp"
+                    android:minHeight="@dimen/touch_target_min"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="8dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
                     android:focusable="true"
