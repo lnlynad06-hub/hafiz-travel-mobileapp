@@ -91,6 +91,13 @@ public interface ApiService {
             @Path("booking") int bookingId
     );
 
+    @Streaming
+    @GET("v1/bookings/{booking}/invoice/pdf")
+    Call<ResponseBody> getBookingInvoicePdf(
+            @Path("booking") int bookingId,
+            @Query("lang") String lang
+    );
+
     @POST("v1/bookings/quote")
     Call<ApiResponse<QuoteResponse>> getBookingQuote(
             @Body QuoteRequest request

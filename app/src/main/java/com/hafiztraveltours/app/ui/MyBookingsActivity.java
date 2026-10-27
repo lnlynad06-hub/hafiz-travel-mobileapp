@@ -27,7 +27,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import android.widget.FrameLayout;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
@@ -464,6 +466,23 @@ public class MyBookingsActivity extends BaseActivity {
         BottomSheetDialog payDialog = new BottomSheetDialog(this);
         View sheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_quick_pay, null);
         payDialog.setContentView(sheetView);
+
+        if (payDialog.getWindow() != null) {
+            payDialog.getWindow().setSoftInputMode(android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        }
+
+        BottomSheetBehavior<FrameLayout> payBehavior = payDialog.getBehavior();
+        payBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        payBehavior.setSkipCollapsed(true);
+        payDialog.setOnShowListener(dialogInterface -> {
+            BottomSheetDialog d = (BottomSheetDialog) dialogInterface;
+            FrameLayout bottomSheet = d.findViewById(com.google.android.material.R.id.design_bottom_sheet);
+            if (bottomSheet != null) {
+                BottomSheetBehavior<FrameLayout> b = BottomSheetBehavior.from(bottomSheet);
+                b.setState(BottomSheetBehavior.STATE_EXPANDED);
+                b.setSkipCollapsed(true);
+            }
+        });
 
         TextView tvPkgName = sheetView.findViewById(R.id.tvPayBookingPackageName);
         TextView tvBookingRef = sheetView.findViewById(R.id.tvPayBookingRef);
@@ -1051,6 +1070,10 @@ public class MyBookingsActivity extends BaseActivity {
         BottomSheetDialog dialog = new BottomSheetDialog(this);
         View sheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_travel_docs, null);
         dialog.setContentView(sheetView);
+
+        BottomSheetBehavior<FrameLayout> docsBehavior = dialog.getBehavior();
+        docsBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        docsBehavior.setSkipCollapsed(true);
 
         activeDocsDialog = dialog;
         activeSheetView = sheetView;

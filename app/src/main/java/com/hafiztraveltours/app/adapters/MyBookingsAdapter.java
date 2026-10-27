@@ -153,12 +153,10 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
             holder.txtStatus.setBackgroundResource(R.drawable.bg_pill_accent);
         }
 
-        // 2. Custom Luxury Kebab Popup Menu (Header Row Right)
-        if (holder.btnKebabMenu != null) {
-            holder.btnKebabMenu.setOnClickListener(v -> {
-                HapticUtil.click(v);
-                showCustomKebabMenu(ctx, v, booking);
-            });
+        // 2. Booking Reference (Header Row Right)
+        if (holder.txtBookingReference != null) {
+            String bNo = booking.bookingNo != null ? booking.bookingNo : ("#BKG-" + booking.id);
+            holder.txtBookingReference.setText(bNo);
         }
 
         // 3. Package Title
@@ -186,9 +184,12 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
 
         // 3b. Room Assignment Status Badge
         if (holder.txtRoomAssignmentStatus != null) {
-            String label = booking.getRoomAssignmentDisplayLabel();
+            boolean isConfirmed = booking.isRoomAssignmentConfirmed();
+            String label = isConfirmed
+                    ? ctx.getString(R.string.room_assignment_confirmed)
+                    : ctx.getString(R.string.room_assignment_pending);
             holder.txtRoomAssignmentStatus.setText(label);
-            if (booking.isRoomAssignmentConfirmed()) {
+            if (isConfirmed) {
                 holder.txtRoomAssignmentStatus.setTextColor(androidx.core.content.ContextCompat.getColor(ctx, R.color.status_paid_text));
                 holder.txtRoomAssignmentStatus.setBackgroundResource(R.drawable.bg_pill_success);
             } else {
@@ -520,7 +521,7 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView txtStatus;
-        ImageView btnKebabMenu;
+        TextView txtBookingReference;
 
         TextView txtPackageName;
         TextView txtTripMeta;
@@ -545,7 +546,7 @@ public class MyBookingsAdapter extends RecyclerView.Adapter<MyBookingsAdapter.Vi
         ViewHolder(View itemView) {
             super(itemView);
             txtStatus = itemView.findViewById(R.id.itemBookingStatus);
-            btnKebabMenu = itemView.findViewById(R.id.btnBookingKebabMenu);
+            txtBookingReference = itemView.findViewById(R.id.itemBookingReference);
 
             txtPackageName = itemView.findViewById(R.id.itemBookingPackageName);
             txtTripMeta = itemView.findViewById(R.id.itemBookingTripMeta);

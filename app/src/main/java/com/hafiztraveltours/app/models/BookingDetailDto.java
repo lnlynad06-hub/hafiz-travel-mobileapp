@@ -132,6 +132,9 @@ public class BookingDetailDto extends BookingDto {
 
         @SerializedName("role")
         public String role;
+
+        @SerializedName("room_type")
+        public String roomType;
     }
 
     public static class ItemInfo {
@@ -308,6 +311,12 @@ public class BookingDetailDto extends BookingDto {
 
         @SerializedName("full_package_title")
         public String fullPackageTitle;
+
+        @SerializedName("package_duration")
+        public String packageDuration;
+
+        @SerializedName("branch_name")
+        public String branchName;
     }
 
     public static class ReceiptMetaDto {
