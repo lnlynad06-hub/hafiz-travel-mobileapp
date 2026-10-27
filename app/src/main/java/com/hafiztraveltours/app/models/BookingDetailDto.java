@@ -73,6 +73,18 @@ public class BookingDetailDto extends BookingDto {
     @SerializedName("payment_url")
     public String paymentUrl;
 
+    @SerializedName("transaction_status")
+    public String transactionStatus;
+
+    @SerializedName("transaction_reference")
+    public String transactionReference;
+
+    @SerializedName("session_id")
+    public String sessionId;
+
+    @SerializedName("transaction_amount")
+    public double transactionAmount;
+
     public static class DepartureInfo {
         @SerializedName("departure_no")
         public String departureNo;

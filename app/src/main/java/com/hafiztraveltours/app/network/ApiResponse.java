@@ -15,6 +15,18 @@ public class ApiResponse<T> {
     @SerializedName("data")
     public T data;
 
+    @SerializedName("transaction_status")
+    public String transactionStatus;
+
+    @SerializedName("transaction_reference")
+    public String transactionReference;
+
+    @SerializedName("session_id")
+    public String sessionId;
+
+    @SerializedName("amount")
+    public Double amount;
+
     public boolean isSuccess() {
         return "success".equalsIgnoreCase(status);
     }

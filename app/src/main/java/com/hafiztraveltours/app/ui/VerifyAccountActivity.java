@@ -69,11 +69,20 @@ public class VerifyAccountActivity extends BaseActivity {
 
         View root = findViewById(R.id.verifyRootContainer);
         if (root != null) {
+            final int initialPadLeft = root.getPaddingLeft();
+            final int initialPadTop = root.getPaddingTop();
+            final int initialPadRight = root.getPaddingRight();
+            final int initialPadBottom = root.getPaddingBottom();
             androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
                 androidx.core.graphics.Insets sysBars = insets.getInsets(
                         androidx.core.view.WindowInsetsCompat.Type.systemBars()
                 );
-                v.setPadding(sysBars.left, sysBars.top, sysBars.right, sysBars.bottom);
+                v.setPadding(
+                        initialPadLeft + sysBars.left,
+                        initialPadTop + sysBars.top,
+                        initialPadRight + sysBars.right,
+                        initialPadBottom + sysBars.bottom
+                );
                 return insets;
             });
         }

@@ -1522,6 +1522,12 @@
     <string name="pay_success_dialog_title">Payment Successful!</string>
     <string name="pay_success_dialog_msg">Payment of %1$s has been successfully recorded. Official receipt and booking schedule have been generated.</string>
     <string name="pay_btn_done">Done</string>
+    <string name="pay_failed_dialog_title">Payment Failed</string>
+    <string name="pay_failed_dialog_msg">Your payment attempt of %1$s was not successful or was declined by the bank. No funds were deducted. You may try again.</string>
+    <string name="pay_cancelled_dialog_title">Payment Cancelled</string>
+    <string name="pay_cancelled_dialog_msg">The payment session was cancelled. Your booking status remains unchanged and you can retry payment anytime.</string>
+    <string name="pay_btn_retry">Try Again</string>
+    <string name="pay_btn_close">Close</string>
 
     <string name="booking_meta_duration_format">%1$d Days %2$d Nights</string>
     <string name="booking_meta_pax_format">%1$d Pax</string>
@@ -2109,5 +2115,13 @@
     <string name="country_myanmar">Myanmar</string>
     <string name="country_cambodia">Cambodia</string>
     <string name="country_timor_leste">Timor-Leste</string>
+
+    <!-- Distinct Payment Gateway Outcomes -->
+    <string name="pay_verification_failed_title">Payment Verification Failed</string>
+    <string name="pay_verification_failed_msg">Unable to verify transaction status with the gateway. If funds were deducted, please contact customer support with your transaction reference.</string>
+    <string name="pay_already_processed_title">Payment Already Processed</string>
+    <string name="pay_already_processed_msg">This payment transaction has already been completed and processed previously.</string>
+    <string name="pay_timeout_title">Payment Session Timed Out</string>
+    <string name="pay_timeout_msg">The payment session timed out before completion. No funds were deducted. You may initiate a new payment safely.</string>
 </resources>
 

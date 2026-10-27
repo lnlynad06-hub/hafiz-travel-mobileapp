@@ -681,10 +681,14 @@ public class MyBookingsActivity extends BaseActivity {
     private Call<?> verifyCall;
     private int pendingPaymentBookingId = -1;
     private double pendingPaymentAmount = 0;
+    private String pendingPaymentReference = null;
+    private boolean isVerifyingPayment = false;
+    private AlertDialog activeResultDialog = null;
 
     private static final String PREF_PENDING_PAY = "pending_gateway_payment";
     private static final String KEY_PENDING_BOOKING_ID = "booking_id";
     private static final String KEY_PENDING_AMOUNT = "amount";
+    private static final String KEY_PENDING_REFERENCE = "reference";
 
     private void executeGatewayPayment(BookingDto booking, double paymentAmount, String paymentPurpose, String paymentType) {
         if (booking == null || payInFlight) return;
@@ -715,11 +719,12 @@ public class MyBookingsActivity extends BaseActivity {
                         && response.body().data != null) {
                     BookingDetailDto detail = response.body().data;
                     String paymentUrl = detail.paymentUrl;
+                    String txRef = detail.transactionReference;
                     if (paymentUrl != null
                             && (paymentUrl.startsWith("https://") || paymentUrl.startsWith("http://"))) {
                         // Gateway checkout required: hand off to the secure system browser,
                         // verify on return. The backend webhook is the source of truth.
-                        storePendingPayment(booking.id, paymentAmount);
+                        storePendingPayment(booking.id, paymentAmount, txRef);
                         if (openSecureBrowser(paymentUrl)) {
                             Toast.makeText(MyBookingsActivity.this,
                                     getString(R.string.pay_browser_continue), Toast.LENGTH_LONG).show();
@@ -728,8 +733,8 @@ public class MyBookingsActivity extends BaseActivity {
                             Toast.makeText(MyBookingsActivity.this,
                                     getString(R.string.err_network), Toast.LENGTH_LONG).show();
                         }
-                    } else if (isPaymentVerified(detail)) {
-                        // Backend already confirms a verified payment (e.g. instant verification).
+                    } else if ("paid".equalsIgnoreCase(detail.transactionStatus)) {
+                        // Backend already confirms this specific transaction is paid.
                         syncBookingFromDetail(booking, detail);
                         if (adapter != null) adapter.notifyDataSetChanged();
                         showPaymentSuccessfulDialog(booking, paymentAmount);
@@ -784,19 +789,6 @@ public class MyBookingsActivity extends BaseActivity {
         }
     }
 
-    /** Verified only by backend signals: a verified payment record, deposit, or paid status. */
-    private boolean isPaymentVerified(BookingDetailDto detail) {
-        if (detail == null) return false;
-        if (detail.payments != null) {
-            for (BookingDetailDto.PaymentInfo p : detail.payments) {
-                if (p != null && p.isVerified) return true;
-            }
-        }
-        return "paid".equalsIgnoreCase(detail.status)
-                || "paid".equalsIgnoreCase(detail.paymentStatus)
-                || detail.paidAmount > 0;
-    }
-
     /** Opens a URL using Chrome Custom Tabs with fallback to the secure system browser. */
     private boolean openSecureBrowser(String url) {
         try {
@@ -820,13 +812,15 @@ public class MyBookingsActivity extends BaseActivity {
         }
     }
 
-    private void storePendingPayment(int bookingId, double amount) {
+    private void storePendingPayment(int bookingId, double amount, String reference) {
         pendingPaymentBookingId = bookingId;
         pendingPaymentAmount = amount;
+        pendingPaymentReference = reference;
         try {
             getSharedPreferences(PREF_PENDING_PAY, MODE_PRIVATE).edit()
                     .putInt(KEY_PENDING_BOOKING_ID, bookingId)
                     .putFloat(KEY_PENDING_AMOUNT, (float) amount)
+                    .putString(KEY_PENDING_REFERENCE, reference != null ? reference : "")
                     .apply();
         } catch (Exception ignored) {}
     }
@@ -834,6 +828,7 @@ public class MyBookingsActivity extends BaseActivity {
     private void clearPendingPayment() {
         pendingPaymentBookingId = -1;
         pendingPaymentAmount = 0;
+        pendingPaymentReference = null;
         try {
             getSharedPreferences(PREF_PENDING_PAY, MODE_PRIVATE).edit().clear().apply();
         } catch (Exception ignored) {}
@@ -847,6 +842,7 @@ public class MyBookingsActivity extends BaseActivity {
             if (id > 0) {
                 pendingPaymentBookingId = id;
                 pendingPaymentAmount = prefs.getFloat(KEY_PENDING_AMOUNT, 0);
+                pendingPaymentReference = prefs.getString(KEY_PENDING_REFERENCE, null);
             }
         } catch (Exception ignored) {}
     }
@@ -856,37 +852,66 @@ public class MyBookingsActivity extends BaseActivity {
         super.onNewIntent(intent);
         setIntent(intent);
         restorePendingPayment();
+        if (intent != null && intent.getData() != null) {
+            String ref = intent.getData().getQueryParameter("ref");
+            if (ref != null && !ref.trim().isEmpty()) {
+                pendingPaymentReference = ref.trim();
+            }
+        }
         verifyPendingPayment();
     }
 
     /** After returning from the gateway browser, authoritatively sync with backend. */
     private void verifyPendingPayment() {
-        if (pendingPaymentBookingId <= 0) return;
+        if (isVerifyingPayment || pendingPaymentBookingId <= 0) return;
+        isVerifyingPayment = true;
+
         final int bookingId = pendingPaymentBookingId;
         final double amount = pendingPaymentAmount;
+        final String ref = pendingPaymentReference;
         clearPendingPayment();
 
         if (verifyCall != null) verifyCall.cancel();
+
+        Map<String, Object> body = new HashMap<>();
+        if (ref != null && !ref.isEmpty()) {
+            body.put("transaction_reference", ref);
+        }
+
         // Call authoritative server-to-server sync endpoint
-        Call<ApiResponse<BookingDetailDto>> call = ApiClient.getApiService().syncPayment(bookingId);
+        Call<ApiResponse<BookingDetailDto>> call = ApiClient.getApiService().syncPayment(bookingId, body);
         verifyCall = call;
         call.enqueue(new Callback<ApiResponse<BookingDetailDto>>() {
             @Override
             public void onResponse(Call<ApiResponse<BookingDetailDto>> call,
                                    Response<ApiResponse<BookingDetailDto>> response) {
+                isVerifyingPayment = false;
                 if (isFinishing() || isDestroyed()) return;
-                if (response.isSuccessful() && response.body() != null
-                        && response.body().isSuccess() && response.body().data != null) {
-                    BookingDetailDto data = response.body().data;
-                    if (isPaymentVerified(data)) {
-                        BookingDto local = findBookingById(bookingId);
-                        BookingDto target = local != null ? local : data;
-                        syncBookingFromDetail(target, data);
-                        if (adapter != null) adapter.notifyDataSetChanged();
+
+                if (response.isSuccessful() && response.body() != null && response.body().data != null) {
+                    ApiResponse<BookingDetailDto> apiResponse = response.body();
+                    BookingDetailDto data = apiResponse.data;
+
+                    String txStatus = apiResponse.transactionStatus;
+                    if (txStatus == null || txStatus.isEmpty()) {
+                        txStatus = data.transactionStatus;
+                    }
+                    if (txStatus != null) txStatus = txStatus.toLowerCase().trim();
+
+                    BookingDto local = findBookingById(bookingId);
+                    BookingDto target = local != null ? local : data;
+                    syncBookingFromDetail(target, data);
+                    if (adapter != null) adapter.notifyDataSetChanged();
+
+                    if ("paid".equals(txStatus)) {
                         showPaymentSuccessfulDialog(target, amount);
-                    } else {
+                    } else if ("failed".equals(txStatus)) {
+                        showPaymentFailedDialog(target, amount);
+                    } else if ("cancelled".equals(txStatus)) {
+                        showPaymentCancelledDialog(target, amount);
+                    } else if ("pending".equals(txStatus)) {
                         Toast.makeText(MyBookingsActivity.this,
-                                getString(R.string.pay_pending_verification), Toast.LENGTH_SHORT).show();
+                                getString(R.string.pay_pending_verification), Toast.LENGTH_LONG).show();
                     }
                 }
                 loadBookings();
@@ -894,6 +919,7 @@ public class MyBookingsActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<ApiResponse<BookingDetailDto>> call, Throwable t) {
+                isVerifyingPayment = false;
                 if (isFinishing() || isDestroyed()) return;
                 loadBookings();
             }
@@ -911,6 +937,11 @@ public class MyBookingsActivity extends BaseActivity {
     }
 
     private void showPaymentSuccessfulDialog(BookingDto booking, double paymentAmount) {
+        if (isFinishing() || isDestroyed()) return;
+        if (activeResultDialog != null && activeResultDialog.isShowing()) {
+            activeResultDialog.dismiss();
+        }
+
         String bookingRef = booking.bookingNo != null ? booking.bookingNo : "BKG-" + booking.id;
         String packageName = booking.packageName != null ? booking.packageName : getString(R.string.booking_category_umrah);
         String formattedAmount = MoneyFormat.formatRMCents(paymentAmount);
@@ -953,7 +984,62 @@ public class MyBookingsActivity extends BaseActivity {
             });
         }
 
+        activeResultDialog = successDialog;
         successDialog.show();
+    }
+
+    private void showPaymentFailedDialog(BookingDto booking, double paymentAmount) {
+        if (isFinishing() || isDestroyed()) return;
+        if (activeResultDialog != null && activeResultDialog.isShowing()) {
+            activeResultDialog.dismiss();
+        }
+
+        String bookingRef = booking.bookingNo != null ? booking.bookingNo : "BKG-" + booking.id;
+        String packageName = booking.packageName != null ? booking.packageName : getString(R.string.booking_category_umrah);
+        String formattedAmount = MoneyFormat.formatRMCents(paymentAmount);
+
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_payment_failed, null);
+        AlertDialog failedDialog = new AlertDialog.Builder(this)
+                .setView(dialogView)
+                .setCancelable(true)
+                .create();
+
+        if (failedDialog.getWindow() != null) {
+            failedDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+
+        TextView tvAmount = dialogView.findViewById(R.id.tvFailedAmount);
+        TextView tvSubtitle = dialogView.findViewById(R.id.tvFailedSubtitle);
+        TextView tvMessage = dialogView.findViewById(R.id.tvFailedMessage);
+        View btnClose = dialogView.findViewById(R.id.btnFailedClose);
+        View btnRetry = dialogView.findViewById(R.id.btnFailedRetry);
+
+        if (tvAmount != null) tvAmount.setText(formattedAmount);
+        if (tvSubtitle != null) tvSubtitle.setText(packageName + " • " + bookingRef);
+        if (tvMessage != null) tvMessage.setText(getString(R.string.pay_failed_dialog_msg, formattedAmount));
+
+        if (btnClose != null) {
+            btnClose.setOnClickListener(v -> {
+                HapticUtil.click(v);
+                failedDialog.dismiss();
+            });
+        }
+
+        if (btnRetry != null) {
+            btnRetry.setOnClickListener(v -> {
+                HapticUtil.click(v);
+                failedDialog.dismiss();
+                showQuickPaySheet(booking);
+            });
+        }
+
+        activeResultDialog = failedDialog;
+        failedDialog.show();
+    }
+
+    private void showPaymentCancelledDialog(BookingDto booking, double paymentAmount) {
+        if (isFinishing() || isDestroyed()) return;
+        Toast.makeText(this, getString(R.string.pay_cancelled_dialog_msg), Toast.LENGTH_LONG).show();
     }
 
     public void showBookingDocsSheet(BookingDto booking) {

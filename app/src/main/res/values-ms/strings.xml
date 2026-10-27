@@ -1405,6 +1405,12 @@
     <string name="pay_success_dialog_title">Bayaran Berjaya!</string>
     <string name="pay_success_dialog_msg">Bayaran sebanyak %1$s telah berjaya direkodkan. Resit rasmi dan jadual tempahan telah dijana.</string>
     <string name="pay_btn_done">Selesai</string>
+    <string name="pay_failed_dialog_title">Bayaran Tidak Berjaya</string>
+    <string name="pay_failed_dialog_msg">Percubaan bayaran sebanyak %1$s tidak berjaya atau telah ditolak oleh pihak bank. Tiada sebarang bayaran ditolak. Anda boleh cuba semula.</string>
+    <string name="pay_cancelled_dialog_title">Bayaran Dibatalkan</string>
+    <string name="pay_cancelled_dialog_msg">Sesi pembayaran telah dibatalkan. Status tempahan anda tidak berubah dan anda boleh mencuba semula pada bila-bila masa.</string>
+    <string name="pay_btn_retry">Cuba Semula</string>
+    <string name="pay_btn_close">Tutup</string>
 
     <string name="booking_meta_duration_format">%1$d Hari %2$d Malam</string>
     <string name="booking_meta_pax_format">%1$d Jemaah</string>
@@ -1993,4 +1999,19 @@
     <string name="country_myanmar">Myanmar</string>
     <string name="country_cambodia">Kemboja</string>
     <string name="country_timor_leste">Timor-Leste</string>
+
+    <!-- Missing Contact & Symbol Keys for Full Parity -->
+    <string name="contact_address_value" translatable="false">No. 31, Jalan Dataran Larkin,\n80350 Johor Bahru, Johor.</string>
+    <string name="contact_phone_value" translatable="false">+6019-785 9867</string>
+    <string name="contact_email_value" translatable="false">sales.httsb@gmail.com.my</string>
+    <string name="chevron_right_symbol" translatable="false">&#8250;</string>
+    <string name="language_badge_english" translatable="false">EN</string>
+
+    <!-- Distinct Payment Gateway Outcomes -->
+    <string name="pay_verification_failed_title">Pengesahan Bayaran Gagal</string>
+    <string name="pay_verification_failed_msg">Tidak dapat mengesahkan status transaksi dengan gerbang pembayaran. Sekiranya wang anda telah ditolak, sila hubungi khidmat pelanggan bersama rujukan transaksi anda.</string>
+    <string name="pay_already_processed_title">Bayaran Telah Diproses</string>
+    <string name="pay_already_processed_msg">Transaksi pembayaran ini telah pun selesai dan diproses sebelum ini.</string>
+    <string name="pay_timeout_title">Sesi Bayaran Tamat Tempoh</string>
+    <string name="pay_timeout_msg">Sesi pembayaran telah tamat tempoh sebelum selesai. Tiada sebarang bayaran ditolak. Anda boleh memulakan bayaran baharu dengan selamat.</string>
 </resources>

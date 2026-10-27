@@ -40,9 +40,13 @@ public class ApiClient {
                     .addInterceptor(loggingInterceptor)
                     .addInterceptor(chain -> {
                         okhttp3.Request original = chain.request();
+                        String activeLocale = com.hafiztraveltours.app.HafizApp.getInstance() != null
+                                ? com.hafiztraveltours.app.utils.LocaleHelper.getSavedLanguage(com.hafiztraveltours.app.HafizApp.getInstance())
+                                : ("ms".equalsIgnoreCase(java.util.Locale.getDefault().getLanguage()) ? "ms" : "en");
+
                         okhttp3.Request.Builder builder = original.newBuilder()
                                 .header("Accept", "application/json")
-                                .header("X-App-Locale", "ms".equalsIgnoreCase(java.util.Locale.getDefault().getLanguage()) ? "ms" : "en")
+                                .header("X-App-Locale", activeLocale)
                                 .header("User-Agent", "HafizTravelApp/1.6 (Android; Mobile)");
                         if (authToken != null) {
                             builder.header("Authorization", "Bearer " + authToken);

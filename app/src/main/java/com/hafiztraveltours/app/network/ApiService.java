@@ -134,7 +134,8 @@ public interface ApiService {
 
     @POST("v1/bookings/{booking}/sync-payment")
     Call<ApiResponse<BookingDetailDto>> syncPayment(
-            @Path("booking") int bookingId
+            @Path("booking") int bookingId,
+            @Body Map<String, Object> body
     );
 
     @GET("v1/bookings/check-eligibility")

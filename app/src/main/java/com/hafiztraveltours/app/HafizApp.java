@@ -32,6 +32,10 @@ public class HafizApp extends Application {
     private static final AtomicLong lastHandledAt = new AtomicLong(0);
     private static final long THROTTLE_MS = 3000;
 
+    public static HafizApp getInstance() {
+        return instance;
+    }
+
     private static final Set<String> AUTH_SCREENS = new HashSet<>(Arrays.asList(
             "SplashActivity",
             "PrivacyPolicyActivity",
