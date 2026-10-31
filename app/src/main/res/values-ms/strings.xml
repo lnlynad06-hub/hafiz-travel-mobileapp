@@ -12,7 +12,7 @@
     <string name="welcome_already_have_account_full">Sudah mempunyai akaun? &lt;font color=\'#D81B60\'&gt;&lt;b&gt;Log Masuk&lt;/b&gt;&lt;/font&gt;</string>
     <string name="welcome_no_account_full">Belum mempunyai akaun? &lt;font color=\'#D81B60\'&gt;&lt;b&gt;Daftar Akaun&lt;/b&gt;&lt;/font&gt;</string>
 
-    <!-- Onboarding Step 1: Prayer Times & Qibla -->
+    <!-- Onboarding Step 1: Prayer Times &amp; Qibla -->
     <string name="onboarding_step_1_of_2">LANGKAH 1 DARIPADA 2</string>
     <string name="onboarding_prayer_title">Waktu Solat &amp; Kiblat</string>
     <string name="onboarding_prayer_desc">Kekal terhubung dengan waktu solat anda sepanjang perjalanan.</string>
@@ -25,7 +25,7 @@
     <string name="onboarding_notif_desc">Dapatkan kemas kini penting mengenai tempahan, pembayaran dan perjalanan anda.</string>
     <string name="onboarding_action_allow_notif">Benarkan Pemberitahuan</string>
 
-    <!-- Prayer & Azan Settings in Profile -->
+    <!-- Prayer &amp; Azan Settings in Profile -->
     <string name="profile_prayer_azan_section">Tetapan Waktu Solat &amp; Azan</string>
     <string name="settings_prayer_times_title">Waktu Solat &amp; Kiblat</string>
     <string name="settings_prayer_times_desc">Pengiraan solat berasaskan lokasi dan arah kiblat</string>
@@ -222,7 +222,7 @@
     <string name="about_why_choose_title">Sebab Memilih Kami</string>
     <string name="about_reason_registered">Agensi berdaftar dan sah (KPK/LN: 10751) — pengendali umrah dan agensi pelancongan rasmi yang mematuhi garis panduan undang-undang pelancongan Malaysia.</string>
     <string name="about_reason_branches">Cawangan luas — rangkaian cawangan tempatan di 10 buah negeri untuk khidmat nasihat secara bersemuka.</string>
-    <string name="about_reason_guidance">Bimbingan mesra dan profesional — mengutamakan pengalaman ibadah yang lancar dan membahagiakan buat setiap jemaah.</string>
+    <string name="about_reason_guidance">Bimbingan mesra dan profesional — mengutamakan pengalaman ibadah yang lancar dan membahagiakan buat per pax.</string>
     <string name="label_vision">Visi</string>
     <string name="about_vision_body">Menjadi syarikat pelancongan yang sentiasa telus, berpatutan dan menjadi pilihan utama masyarakat.</string>
     <string name="label_mission">Misi</string>
@@ -821,7 +821,7 @@
     <string name="profile_saving">Menyimpan…</string>
     <string name="profile_update_failed">Gagal mengemaskini profil. Sila cuba lagi.</string>
 
-    <!-- Profile & Document Vault Strings -->
+    <!-- Profile &amp; Document Vault Strings -->
     <string name="profile_field_ic_no">Nombor Kad Pengenalan (IC) <font color="#DC2626">*</font></string>
     <string name="profile_field_passport_no">Nombor Pasport <font color="#DC2626">*</font></string>
     <string name="profile_field_passport_expiry">Tarikh Tamat Pasport (YYYY-MM-DD) <font color="#DC2626">*</font></string>
@@ -911,7 +911,7 @@
     <string name="doc_expires_at_format">Tamat tempoh: %1$s</string>
     <string name="legend_required"><font color="#DC2626">*</font> Diperlukan</string>
 
-    <!-- Requirements & Upload Dialog Strings -->
+    <!-- Requirements &amp; Upload Dialog Strings -->
     <string name="doc_view_requirements">Lihat Syarat</string>
     <string name="req_subtitle">Sila semak spesifikasi standard sebelum memuat naik</string>
     <string name="req_passport_title">Syarat Dokumen Pasport</string>
@@ -963,7 +963,7 @@
     <string name="prefilled_from_profile">Diisi dari profil anda</string>
 
 
-    <!-- Jemaah & Traveller Selection (Malay) -->
+    <!-- Jemaah &amp; Traveller Selection (Malay) -->
     <string name="passenger_details_title">Jemaah</string>
     <string name="passenger_booking_summary">RINGKASAN TEMPAHAN</string>
     <string name="passenger_departure_format">Pelepasan: %1$s</string>
@@ -1155,7 +1155,7 @@
     <string name="doc_name_passport">Salinan Pasport (Muka Utama)</string>
     <string name="doc_name_ic">MyKad / Kad Pengenalan (IC)</string>
     <string name="doc_name_passport_photo">Foto Pasport (Latar Belakang Putih)</string>
-    <!-- Terms & Conditions Booking Step (Exact Official PDF) -->
+    <!-- Terms &amp; Conditions Booking Step (Exact Official PDF) -->
     <string name="terms_title">Terma &amp; Syarat</string>
     <string name="terms_close_viewer">Faham &amp; Kembali</string>
     <string name="terms_required_error">Sila tanda persetujuan Terma &amp; Syarat sebelum membuat pengesahan tempahan.</string>
@@ -1236,7 +1236,7 @@
     <string name="err_departure_fully_booked">Tarikh pelepasan yang dipilih telah penuh. Sila pilih tarikh lain.</string>
     <string name="err_departure_not_enough_seats">Hanya %1$d tempat duduk tersedia untuk tarikh ini. Sila kurangkan bilangan jemaah atau pilih tarikh lain.</string>
 
-    <!-- Booking Item Buttons & Labels -->
+    <!-- Booking Item Buttons &amp; Labels -->
     <string name="booking_btn_invoice">Invois</string>
     <string name="booking_btn_receipt">Resit</string>
     <string name="booking_btn_documents">Dokumen</string>
@@ -1262,6 +1262,7 @@
     <string name="invoice_meta_due_date">TEMPOH AKHIR BAYARAN</string>
     <string name="invoice_sec_bill_to">BIL KEPADA</string>
     <string name="invoice_sec_pkg">BUTIRAN PAKEJ &amp; PERJALANAN</string>
+    <string name="invoice_sec_passengers">MAKLUMAT JEMAAH</string>
     <string name="invoice_th_no">No.</string>
     <string name="invoice_th_passenger_name">Nama Jemaah</string>
     <string name="invoice_th_ic_passport">No. KP / Pasport</string>
@@ -1505,7 +1506,7 @@
     <string name="payment_status_refunded">Dipulangkan</string>
     <string name="payment_status_cancelled">Dibatalkan</string>
 
-    <!-- Season & Pricing Management Strings -->
+    <!-- Season &amp; Pricing Management Strings -->
     <string name="config_season_type">Pilih Musim</string>
     <string name="season_standard">Musim Standard</string>
     <string name="season_low_peak">Musim Low Peak</string>
@@ -1571,7 +1572,7 @@
     <string name="category_2_to_11">2 hingga 11 tahun</string>
     <string name="category_adult_rate">Kadar Dewasa</string>
 
-    <!-- About Page & Company Strings (Bahasa Melayu) -->
+    <!-- About Page &amp; Company Strings (Bahasa Melayu) -->
     <string name="about_title">Tentang</string>
     <string name="about_tagline">Bina Memori yang Telus bersama Hafiz Travel &amp; Tours</string>
     <string name="about_company_full_name">Hafiz Travel &amp; Tours Sdn. Bhd.</string>
@@ -1617,14 +1618,14 @@
     <string name="about_refund_policy">Polisi Bayaran Balik &amp; Pembatalan</string>
     <string name="about_coming_soon">Akan Datang</string>
 
-    <!-- App Version & Developer Footer -->
+    <!-- App Version &amp; Developer Footer -->
     <string name="about_app_version">Versi Aplikasi</string>
     <string name="version_short_format">v%1$s</string>
     <string name="about_developer_name">Danial</string>
     <string name="about_engineered_by_prefix">Direka oleh</string>
     <string name="about_copyright">© 2022 Hafiz Travel &amp; Tours Sdn. Bhd. Hak cipta terpelihara.</string>
 
-    <!-- Notification Center & Push Notifications -->
+    <!-- Notification Center &amp; Push Notifications -->
     <string name="notification_center_title">Pemberitahuan</string>
     <string name="notification_mark_all_read">Tanda semua dibaca</string>
     <string name="notif_doc_verified_title">Dokumen Perjalanan Disahkan</string>
@@ -1738,6 +1739,11 @@
     <string name="step_funnel_room">2. Bilik</string>
     <string name="step_funnel_travellers">3. Jemaah</string>
     <string name="step_funnel_payment">4. Bayaran</string>
+    <string name="step_funnel_5_package">1. Pakej</string>
+    <string name="step_funnel_5_room">2. Bilik</string>
+    <string name="step_funnel_5_customize">3. Ubah Suai</string>
+    <string name="step_funnel_5_travellers">4. Jemaah</string>
+    <string name="step_funnel_5_payment">5. Bayaran</string>
     <string name="room_booked_list_title">Senarai Bilik Ditempah</string>
     <string name="room_count_single">1 Bilik</string>
     <string name="room_count_plural">%d Bilik</string>
@@ -1842,7 +1848,7 @@
     <string name="unassigned_travellers_label">Jemaah Belum Ditetapkan</string>
     <string name="outstanding_balance">Baki Bayaran</string>
 
-    <!-- Phase 4 & 5 Custom Travel Experience -->
+    <!-- Phase 4 &amp; 5 Custom Travel Experience -->
     <string name="btn_customize_package">Sesuaikan Pakej Ini</string>
     <string name="plan_own_trip_title">Rancang Percutian Sendiri</string>
     <string name="plan_own_trip_subtitle">Sesuaikan tarikh, hotel &amp; aktiviti mengikut bajet anda</string>
@@ -2024,11 +2030,11 @@
     <string name="country_cambodia">Kemboja</string>
     <string name="country_timor_leste">Timor-Leste</string>
 
-    <!-- Missing Contact & Symbol Keys for Full Parity -->
+    <!-- Missing Contact &amp; Symbol Keys for Full Parity -->
     <string name="contact_address_value" translatable="false">No. 31, Jalan Dataran Larkin,\n80350 Johor Bahru, Johor.</string>
     <string name="contact_phone_value" translatable="false">+6019-785 9867</string>
     <string name="contact_email_value" translatable="false">sales.httsb@gmail.com.my</string>
-    <string name="chevron_right_symbol" translatable="false">&#8250;</string>
+    <string name="chevron_right_symbol" translatable="false">&amp;#8250;</string>
     <string name="language_badge_english" translatable="false">EN</string>
 
     <!-- Distinct Payment Gateway Outcomes -->
@@ -2072,4 +2078,98 @@
 
     <string name="pay_timeout_title">Sesi Bayaran Tamat Tempoh</string>
     <string name="pay_timeout_msg">Sesi pembayaran telah tamat tempoh sebelum selesai. Tiada sebarang bayaran ditolak. Anda boleh memulakan bayaran baharu dengan selamat.</string>
+
+    <!-- Guided Package Customization -->
+    <string name="customization_title">Penyesuaian Pakej</string>
+    <string name="customization_step_format">Langkah %1$d daripada %2$d</string>
+    <string name="step_hotel_makkah_title">Naik Taraf Hotel Makkah</string>
+    <string name="step_hotel_makkah_desc">Kekalkan hotel asal atau pilih hotel yang lebih dekat dengan Masjidil Haram.</string>
+    <string name="step_hotel_madinah_title">Naik Taraf Hotel Madinah</string>
+    <string name="step_hotel_madinah_desc">Kekalkan hotel asal atau pilih hotel yang lebih dekat dengan Masjid Nabawi.</string>
+    <string name="step_meals_title">Sajian Makanan Penuh (Full Board)</string>
+    <string name="step_meals_desc">Nikmati sajian makanan penuh di Makkah dan Madinah sepanjang ziarah anda.</string>
+    <string name="step_train_title">Kereta Api Laju Haramain (Speed Train)</string>
+    <string name="step_train_desc">Perjalanan pantas dan selesa antara Makkah dan Madinah.</string>
+    <string name="step_transport_title">Pengangkutan Persendirian</string>
+    <string name="step_transport_desc">Perkhidmatan kenderaan persendirian (Kereta atau Van) mengikut laluan pilihan.</string>
+    <string name="step_luggage_title">Beg Bagasi Syarikat</string>
+    <string name="step_luggage_desc">Beg bagasi rasmi syarikat (Had maksimum 2 beg fizikal per pax).</string>
+    <string name="step_accessories_title">Aksesori Tambahan</string>
+    <string name="step_accessories_desc">Pakej beg sandang dan beg kasut eksklusif Hafiz Travel.</string>
+    <string name="step_review_title">Ringkasan Penyesuaian</string>
+    <string name="step_review_desc">Semak pilihan dan sebut harga rasmi sebelum meneruskan tempahan.</string>
+    <string name="keep_original_hotel">Kekalkan Hotel Asal (Pilihan Asal)</string>
+    <string name="original_package_hotel">Hotel Pakej Asal</string>
+    <string name="hotel_tier_near">Dekat (~50m)</string>
+    <string name="hotel_tier_moderate">Sederhana (~300m)</string>
+    <string name="hotel_tier_far">Jauh (1–4km)</string>
+    <string name="hotel_tier_unverified">Belum Disahkan</string>
+    <string name="full_board_ineligible_notice">Sajian Penuh (Full Board) hanya tersedia jika kedua-dua hotel bertaraf Dekat atau Sederhana. Pilihan hotel anda tidak memenuhi syarat ini.</string>
+    <string name="full_board_removed_notice">Pilihan Full Board telah dipadamkan secara automatik kerana salah satu hotel ditukar ke taraf Jauh atau Belum Disahkan.</string>
+    <string name="feature_already_included">Telah disertakan dalam pakej asas</string>
+    <string name="transport_mutually_exclusive_notice">Kereta dan Van adalah pilihan alternatif untuk laluan yang sama. Sila pilih salah satu sahaja.</string>
+    <string name="transport_overlap_notice">Pilihan pengangkutan bertindih bagi laluan yang sama.</string>
+    <string name="luggage_limit_reached">Had maksimum 2 beg per pax telah dicapai.</string>
+    <string name="luggage_allocated_format">Jemaah %1$d: %2$d / 2 beg</string>
+    <string name="luggage_included_info">Disertakan dalam pakej: %1$d beg per pax.</string>
+    <string name="btn_select_upgrade">Pilih Naik Taraf</string>
+    <string name="btn_selected">Dipilih</string>
+    <string name="btn_next_step">Seterusnya</string>
+    <string name="btn_back_step">Kembali</string>
+    <string name="btn_skip_step">Langkau langkah ini</string>
+    <string name="btn_confirm_customization">Sahkan &amp; Masukkan Butiran Jemaah</string>
+    <string name="subtotal_base_package">Pakej Asas</string>
+    <string name="subtotal_addons">Jumlah Tambahan</string>
+    <string name="quote_updating">Mengemas kini sebut harga rasmi…</string>
+    <string name="per_pax_label">per pax</string>
+    <string name="per_unit_label">per unit</string>
+    <string name="btn_back">Kembali</string>
+    <string name="server_quote_confirmed">Harga rasmi disahkan oleh pelayan</string>
+    <string name="indicative_total">Anggaran Jumlah</string>
+
+    <string name="customization_original_hotel">Hotel Asal Pakej</string>
+    <string name="customization_selected_hotel">Hotel Pilihan</string>
+    <string name="customization_distance_prefix">Jarak</string>
+    <string name="customization_route_prefix">Laluan</string>
+    <string name="customization_per_unit"> / unit</string>
+    <string name="customization_included_badge">Termasuk</string>
+    <string name="customization_empty_meals">Tiada pilihan Full Board berdaftar untuk pakej ini.</string>
+    <string name="customization_default_meals_desc">Meliputi Makkah &amp; Madinah sepanjang penginapan.</string>
+    <string name="customization_empty_train">Tiada pilihan Speed Train berdaftar untuk pakej ini.</string>
+    <string name="customization_default_train_desc">Tiket kereta api laju Haramain (Makkah - Madinah).</string>
+    <string name="customization_empty_transport">Tiada pilihan kenderaan persendirian berdaftar untuk pakej ini.</string>
+    <string name="customization_transport_bus_title">Pengangkutan Bas Pakej Standard</string>
+    <string name="customization_transport_bus_desc">Kekalkan pengangkutan bas standard yang telah disertakan dalam pakej asas.</string>
+    <string name="customization_luggage_quota_max">Pakej asas anda telah menyertakan 2 beg fizikal syarikat seorang (kuota maksima tercapai). Tiada pembelian tambahan diperlukan.</string>
+    <string name="customization_luggage_extra_note">Setiap pax boleh membeli sehingga %1$d beg tambahan (had 2 beg).</string>
+    <string name="customization_empty_luggage">Tiada produk beg bagasi syarikat berdaftar untuk pakej ini.</string>
+    <string name="customization_empty_accessories">Tiada pakej aksesori tambahan berdaftar untuk pakej ini.</string>
+    <string name="customization_default_accessories_desc">Set Beg Sandang + Beg Kasut Rasmi.</string>
+    <string name="customization_review_header">Pilihan Peningkatan Anda:</string>
+    <string name="customization_review_empty">Tiada pilihan tambahan dipilih. Pakej anda akan diteruskan pada spesifikasi asas.</string>
+    <string name="customization_quote_server_unavailable">Perhatian: Sebut harga pelayan tidak dapat dikemas kini buat sementara.</string>
+    <string name="customization_quote_conn_error">Ralat sambungan untuk sebut harga pelayan. Anggaran tempatan dipaparkan.</string>
+    <string name="customization_pilgrim_label">Jemaah %1$d</string>
+
+    <!-- Customization UI Additions -->
+    <string name="customization_standard_badge">Standard</string>
+    <string name="customization_luggage_allowance_sub">Baki kuota: %d beg</string>
+    <string name="customization_review_base_package">Pakej Asas (%d jemaah)</string>
+    <string name="customization_review_grand_total">Anggaran Jumlah Keseluruhan</string>
+    <string name="customization_transport_all_routes">Semua laluan disertakan</string>
+
+    <!-- Child Pricing & Boundaries -->
+    <string name="child_package_price_label">Harga Pakej Kanak-kanak</string>
+    <string name="reason_fixed_infant_price">Harga Tetap Bayi</string>
+    <string name="reason_child_discount">Diskaun Kanak-Kanak (-%s)</string>
+    <string name="reason_adult_rate_applies">Kadar Dewasa Berkenaan</string>
+    <string name="reason_policy_confirmation_needed">Perlu Pengesahan Polisi Staf</string>
+    <string name="reason_dob_required">Tarikh lahir diperlukan</string>
+    <string name="reason_bed_required">Pilihan katil diperlukan</string>
+    <string name="estimate_incomplete">Anggaran Belum Lengkap</string>
+    <string name="err_child_dob_required_short">Kanak-kanak %d: Sila pilih tarikh lahir</string>
+    <string name="err_child_bed_required_short">Kanak-kanak %d: Sila pilih pilihan katil</string>
+    <string name="err_child_exact_second_birthday">Kanak-kanak %d genap umur 2 tahun pada tarikh perlepasan. Sila hubungi staf Hafiz Travel untuk pengesahan polisi sebelum meneruskan.</string>
+    <string name="err_child_exact_second_birthday_short">Kanak-kanak %d: Perlu pengesahan polisi staf (genap 2 thn)</string>
+
 </resources>

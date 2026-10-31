@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/funnelHeaderRoot"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_detail_card"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingHorizontal="8dp"
+    android:paddingVertical="8dp">
+
+    <!-- Stage 1: Package -->
+    <TextView
+        android:id="@+id/txtFunnelStep1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:text="@string/step_funnel_package"
+        android:textColor="@color/text_gray"
+        android:textSize="10.5sp" />
+
+    <TextView
+        android:id="@+id/sepFunnel1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="1dp"
+        android:text="›"
+        android:textColor="@color/text_gray"
+        android:textSize="11sp" />
+
+    <!-- Stage 2: Room -->
+    <TextView
+        android:id="@+id/txtFunnelStep2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:text="@string/step_funnel_room"
+        android:textColor="@color/text_gray"
+        android:textSize="10.5sp" />
+
+    <TextView
+        android:id="@+id/sepFunnel2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="1dp"
+        android:text="›"
+        android:textColor="@color/text_gray"
+        android:textSize="11sp" />
+
+    <!-- Stage 3: Customize (5-stage) OR Travellers (4-stage) -->
+    <TextView
+        android:id="@+id/txtFunnelStep3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:text="@string/step_funnel_travellers"
+        android:textColor="@color/text_gray"
+        android:textSize="10.5sp" />
+
+    <TextView
+        android:id="@+id/sepFunnel3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="1dp"
+        android:text="›"
+        android:textColor="@color/text_gray"
+        android:textSize="11sp" />
+
+    <!-- Stage 4: Travellers (5-stage) OR Payment (4-stage) -->
+    <TextView
+        android:id="@+id/txtFunnelStep4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:text="@string/step_funnel_payment"
+        android:textColor="@color/text_gray"
+        android:textSize="10.5sp" />
+
+    <TextView
+        android:id="@+id/sepFunnel4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="1dp"
+        android:text="›"
+        android:textColor="@color/text_gray"
+        android:textSize="11sp"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <!-- Stage 5: Payment (5-stage only) -->
+    <TextView
+        android:id="@+id/txtFunnelStep5"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:text="@string/step_funnel_5_payment"
+        android:textColor="@color/text_gray"
+        android:textSize="10.5sp"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+</LinearLayout>
+

@@ -74,6 +74,12 @@ public class PackageDetail implements java.io.Serializable {
     public UmrahPackage.ChildPricingRules childPricingRules;
     public UmrahPackage rawPackage;
 
+    public String hotelMakkahDistanceTier;
+    public String hotelMadinahDistanceTier;
+    public Boolean isFullBoardEligible;
+    public List<PackageUpgradeDto> availableUpgrades = new ArrayList<>();
+    public CustomizationDataDto customization;
+
     public static class NightBreakdown implements java.io.Serializable {
         public String city;          // set by Activity from getString() using slot
         public int nights;
@@ -238,6 +244,16 @@ public class PackageDetail implements java.io.Serializable {
         if (pkg.passportValidityMonths != null && pkg.passportValidityMonths > 0) {
             d.passportValidityMonths = pkg.passportValidityMonths;
         }
+
+        d.hotelMakkahDistanceTier = pkg.hotelMakkahDistanceTier;
+        d.hotelMadinahDistanceTier = pkg.hotelMadinahDistanceTier;
+        d.isFullBoardEligible = pkg.isFullBoardEligible;
+        if (pkg.availableUpgrades != null) {
+            d.availableUpgrades.addAll(pkg.availableUpgrades);
+        } else if (pkg.customization != null && pkg.customization.upgrades != null) {
+            d.availableUpgrades.addAll(pkg.customization.upgrades);
+        }
+        d.customization = pkg.customization;
 
         // 1. Nights Breakdown — city labels use slot index, translated by Activity
         // slot 0=Makkah/Hotel1, 1=Madinah/Hotel2, 2=Taif/Hotel3

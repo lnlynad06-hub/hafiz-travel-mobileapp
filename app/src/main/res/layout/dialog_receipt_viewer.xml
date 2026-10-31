@@ -2,6 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -154,7 +155,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="1dp"
-                    android:text="Danial Dan"
+                    tools:text="Danial Dan"
                     android:textColor="@color/text_dark"
                     android:textSize="13sp"
                     android:textStyle="bold" />
@@ -164,7 +165,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="Rujukan Tempahan: BKG-260928-OIUEXZ"
+                    tools:text="Rujukan Tempahan: BKG-260928-OIUEXZ"
                     android:textColor="@color/brand_magenta"
                     android:textSize="11sp"
                     android:textStyle="bold" />
@@ -174,7 +175,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Pakej Umrah Ziarah Premium"
+                    tools:text="Pakej Umrah Ziarah Premium"
                     android:textColor="@color/text_dark"
                     android:textSize="11.5sp" />
 
@@ -237,7 +238,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Baki Tertunggak Semasa: RM 42,444.00"
+                tools:text="Baki Tertunggak Semasa: RM 42,444.00"
                 android:textColor="@color/text_gray"
                 android:textSize="11sp" />
 

@@ -1,5 +1,10 @@
 package com.hafiztraveltours.app.utils;
 
+import android.content.Context;
+
+import com.hafiztraveltours.app.R;
+import com.hafiztraveltours.app.models.BookingRequest;
+import com.hafiztraveltours.app.models.PackageDetail;
 import com.hafiztraveltours.app.models.UmrahPackage;
 
 import java.text.SimpleDateFormat;
@@ -20,6 +25,24 @@ public final class PackagePricingCalculator {
     public static class PricingConfigurationException extends IllegalStateException {
         public PricingConfigurationException(String message) {
             super(message);
+        }
+    }
+
+    public static class PassengerPriceDetail {
+        public final double amount;
+        public final String category; // "infant", "child", "adult", "unknown"
+        public final String reason;
+        public final Double discount;
+        public final boolean isExactSecondBirthday;
+        public final boolean isBedRequiredButMissing;
+
+        public PassengerPriceDetail(double amount, String category, String reason, Double discount, boolean isExactSecondBirthday, boolean isBedRequiredButMissing) {
+            this.amount = amount;
+            this.category = category;
+            this.reason = reason;
+            this.discount = discount;
+            this.isExactSecondBirthday = isExactSecondBirthday;
+            this.isBedRequiredButMissing = isBedRequiredButMissing;
         }
     }
 
@@ -93,6 +116,24 @@ public final class PackagePricingCalculator {
         return Math.max(0, age);
     }
 
+    public static boolean isSameCalendarDay(Calendar c1, Calendar c2) {
+        if (c1 == null || c2 == null) return false;
+        return c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR) &&
+                c1.get(Calendar.MONTH) == c2.get(Calendar.MONTH) &&
+                c1.get(Calendar.DAY_OF_MONTH) == c2.get(Calendar.DAY_OF_MONTH);
+    }
+
+    public static boolean isExactSecondBirthday(String dobIso, String departureDateIso) {
+        if (dobIso == null || dobIso.trim().isEmpty()) return false;
+        Calendar dob = parseIsoDate(dobIso);
+        if (dob == null) return false;
+        Calendar ref = parseIsoDate(departureDateIso);
+        if (ref == null) ref = Calendar.getInstance();
+        Calendar twoYears = (Calendar) dob.clone();
+        twoYears.add(Calendar.YEAR, 2);
+        return isSameCalendarDay(ref, twoYears);
+    }
+
     public static double calculatePassengerPrice(
             com.hafiztraveltours.app.models.PackageDetail detail,
             String season,
@@ -148,13 +189,13 @@ public final class PackagePricingCalculator {
         Calendar fourYears = (Calendar) dobCal.clone();
         fourYears.add(Calendar.YEAR, 4);
 
-        Calendar twelveYears = (Calendar) dobCal.clone();
-        twelveYears.add(Calendar.YEAR, 12);
+        Calendar elevenYears = (Calendar) dobCal.clone();
+        elevenYears.add(Calendar.YEAR, 11);
 
         UmrahPackage.SeasonRate seasonRate = getSeasonRate(detail, season);
 
         if (isUmrah) {
-            // A. Below 2 years (reference date is before 2nd birthday)
+            // A. Below 2 years (reference date is strictly before 2nd birthday)
             if (refCal.before(twoYears)) {
                 Double configured = getChildUnder2Price(detail, seasonRate);
                 if (configured != null && configured > 0) {
@@ -165,8 +206,14 @@ public final class PackagePricingCalculator {
                 }
                 throw new PricingConfigurationException("Harga kanak-kanak (bawah 2 tahun) belum ditetapkan dalam ERP untuk pakej ini.");
             }
-            // B. Aged 2 years 1 day through 4 years (2nd birthday up to 4th birthday)
-            if (!refCal.before(twoYears) && !refCal.after(fourYears)) {
+
+            // B. Exact 2nd birthday boundary check (unresolved policy)
+            if (isSameCalendarDay(refCal, twoYears)) {
+                throw new PricingConfigurationException("Tarikh lahir tepat 2 tahun pada tarikh perlepasan memerlukan pengesahan polisi staf Hafiz Travel.");
+            }
+
+            // C. Aged 2 years 1 day through 4 years (after 2nd birthday, up to exactly 4th birthday)
+            if (refCal.after(twoYears) && !refCal.after(fourYears)) {
                 Double discount = getChild2To4Discount(detail, seasonRate, baseAdultPrice);
                 if (discount == null) {
                     if (detail == null) return Math.max(0.0, baseAdultPrice - 300.00);
@@ -177,11 +224,12 @@ public final class PackagePricingCalculator {
                 }
                 return baseAdultPrice - discount;
             }
-            // C. 4 years 1 day and above -> Adult room price
+
+            // D. 4 years 1 day and above -> Adult room price
             return baseAdultPrice;
         } else {
             // TOUR
-            // A. Below 2 years (reference date is before 2nd birthday)
+            // A. Below 2 years (reference date is strictly before 2nd birthday)
             if (refCal.before(twoYears)) {
                 Double configured = getChildUnder2Price(detail, seasonRate);
                 if (configured != null && configured > 0) {
@@ -192,14 +240,15 @@ public final class PackagePricingCalculator {
                 }
                 throw new PricingConfigurationException("Harga kanak-kanak (bawah 2 tahun) belum ditetapkan dalam ERP untuk pakej ini.");
             }
-            // B. 11 years old and below (aged 2 to 11, i.e. before 12th birthday)
-            if (!refCal.before(twoYears) && refCal.before(twelveYears)) {
+
+            // B. Age 2 to 10 years inclusive (reached 2nd birthday, before 11th birthday)
+            if (!refCal.before(twoYears) && refCal.before(elevenYears)) {
                 boolean bed = (withBed == null || withBed);
                 if (bed) {
                     Double discount = getChildWithBedDiscount(detail, seasonRate, baseAdultPrice);
                     if (discount == null) {
                         if (detail == null) return Math.max(0.0, baseAdultPrice - 100.00);
-                        throw new PricingConfigurationException("Diskaun kanak-kanak (2-11 tahun dengan katil) belum ditetapkan dalam ERP untuk pakej ini.");
+                        throw new PricingConfigurationException("Diskaun kanak-kanak (2-10 tahun dengan katil) belum ditetapkan dalam ERP untuk pakej ini.");
                     }
                     if (discount <= 0 || discount >= baseAdultPrice) {
                         throw new PricingConfigurationException("Amaun diskaun kanak-kanak dengan katil tidak sah dalam ERP.");
@@ -209,7 +258,7 @@ public final class PackagePricingCalculator {
                     Double discount = getChildNoBedDiscount(detail, seasonRate, baseAdultPrice);
                     if (discount == null) {
                         if (detail == null) return Math.max(0.0, baseAdultPrice - 200.00);
-                        throw new PricingConfigurationException("Diskaun kanak-kanak (2-11 tahun tanpa katil) belum ditetapkan dalam ERP untuk pakej ini.");
+                        throw new PricingConfigurationException("Diskaun kanak-kanak (2-10 tahun tanpa katil) belum ditetapkan dalam ERP untuk pakej ini.");
                     }
                     if (discount <= 0 || discount >= baseAdultPrice) {
                         throw new PricingConfigurationException("Amaun diskaun kanak-kanak tanpa katil tidak sah dalam ERP.");
@@ -217,8 +266,186 @@ public final class PackagePricingCalculator {
                     return baseAdultPrice - discount;
                 }
             }
-            // C. Above 11 years old (12th birthday and above) -> Adult season price
+
+            // C. 11 years and above (11th birthday and above) -> Adult season price
             return baseAdultPrice;
+        }
+    }
+
+    public static PassengerPriceDetail resolvePassengerPriceDetail(
+            Context context,
+            PackageDetail detail,
+            String season,
+            boolean isUmrah,
+            double baseAdultPrice,
+            String dobIso,
+            String departureDateIso,
+            Boolean withBed) {
+
+        if (dobIso == null || dobIso.trim().isEmpty()) {
+            return new PassengerPriceDetail(
+                    baseAdultPrice,
+                    "unknown",
+                    context != null ? context.getString(R.string.reason_dob_required) : "DOB required",
+                    null,
+                    false,
+                    false
+            );
+        }
+
+        Calendar dobCal = parseIsoDate(dobIso);
+        if (dobCal == null) {
+            return new PassengerPriceDetail(
+                    baseAdultPrice,
+                    "unknown",
+                    context != null ? context.getString(R.string.reason_dob_required) : "DOB required",
+                    null,
+                    false,
+                    false
+            );
+        }
+
+        Calendar refCal = parseIsoDate(departureDateIso);
+        if (refCal == null) refCal = Calendar.getInstance();
+
+        Calendar twoYears = (Calendar) dobCal.clone();
+        twoYears.add(Calendar.YEAR, 2);
+
+        Calendar fourYears = (Calendar) dobCal.clone();
+        fourYears.add(Calendar.YEAR, 4);
+
+        Calendar elevenYears = (Calendar) dobCal.clone();
+        elevenYears.add(Calendar.YEAR, 11);
+
+        UmrahPackage.SeasonRate seasonRate = getSeasonRate(detail, season);
+
+        if (isUmrah) {
+            // 1. Under 2 years
+            if (refCal.before(twoYears)) {
+                Double configured = getChildUnder2Price(detail, seasonRate);
+                double price = (configured != null && configured > 0) ? configured : 500.00;
+                return new PassengerPriceDetail(
+                        price,
+                        "infant",
+                        context != null ? context.getString(R.string.reason_fixed_infant_price) : "Fixed Infant Price",
+                        null,
+                        false,
+                        false
+                );
+            }
+
+            // 2. Exact 2nd birthday
+            if (isSameCalendarDay(refCal, twoYears)) {
+                return new PassengerPriceDetail(
+                        baseAdultPrice,
+                        "child",
+                        context != null ? context.getString(R.string.reason_policy_confirmation_needed) : "Policy confirmation needed",
+                        null,
+                        true,
+                        false
+                );
+            }
+
+            // 3. 2y + 1d through 4th birthday
+            if (refCal.after(twoYears) && !refCal.after(fourYears)) {
+                Double discount = getChild2To4Discount(detail, seasonRate, baseAdultPrice);
+                if (discount == null || discount <= 0 || discount >= baseAdultPrice) {
+                    discount = 300.00;
+                }
+                double finalPrice = Math.max(0.0, baseAdultPrice - discount);
+                String reason = context != null
+                        ? context.getString(R.string.reason_child_discount, BookingRequest.formatPrice(discount))
+                        : "Child Discount";
+                return new PassengerPriceDetail(
+                        finalPrice,
+                        "child",
+                        reason,
+                        discount,
+                        false,
+                        false
+                );
+            }
+
+            // 4. 4y + 1d and above
+            return new PassengerPriceDetail(
+                    baseAdultPrice,
+                    "adult",
+                    context != null ? context.getString(R.string.reason_adult_rate_applies) : "Adult Rate Applies",
+                    null,
+                    false,
+                    false
+            );
+        } else {
+            // TOUR
+            // 1. Under 2 years
+            if (refCal.before(twoYears)) {
+                Double configured = getChildUnder2Price(detail, seasonRate);
+                double price = (configured != null && configured > 0) ? configured : 500.00;
+                return new PassengerPriceDetail(
+                        price,
+                        "infant",
+                        context != null ? context.getString(R.string.reason_fixed_infant_price) : "Fixed Infant Price",
+                        null,
+                        false,
+                        false
+                );
+            }
+
+            // 2. Age 2 to 10 inclusive
+            if (!refCal.before(twoYears) && refCal.before(elevenYears)) {
+                if (withBed == null) {
+                    return new PassengerPriceDetail(
+                            baseAdultPrice,
+                            "child",
+                            context != null ? context.getString(R.string.reason_bed_required) : "Bed option required",
+                            null,
+                            false,
+                            true
+                    );
+                }
+
+                if (withBed) {
+                    Double discount = getChildWithBedDiscount(detail, seasonRate, baseAdultPrice);
+                    if (discount == null || discount <= 0 || discount >= baseAdultPrice) discount = 100.00;
+                    double finalPrice = Math.max(0.0, baseAdultPrice - discount);
+                    String reason = context != null
+                            ? context.getString(R.string.reason_child_discount, BookingRequest.formatPrice(discount))
+                            : "Child Discount";
+                    return new PassengerPriceDetail(
+                            finalPrice,
+                            "child",
+                            reason,
+                            discount,
+                            false,
+                            false
+                    );
+                } else {
+                    Double discount = getChildNoBedDiscount(detail, seasonRate, baseAdultPrice);
+                    if (discount == null || discount <= 0 || discount >= baseAdultPrice) discount = 200.00;
+                    double finalPrice = Math.max(0.0, baseAdultPrice - discount);
+                    String reason = context != null
+                            ? context.getString(R.string.reason_child_discount, BookingRequest.formatPrice(discount))
+                            : "Child Discount";
+                    return new PassengerPriceDetail(
+                            finalPrice,
+                            "child",
+                            reason,
+                            discount,
+                            false,
+                            false
+                    );
+                }
+            }
+
+            // 3. 11 years and above
+            return new PassengerPriceDetail(
+                    baseAdultPrice,
+                    "adult",
+                    context != null ? context.getString(R.string.reason_adult_rate_applies) : "Adult Rate Applies",
+                    null,
+                    false,
+                    false
+            );
         }
     }
 
@@ -316,9 +543,9 @@ public final class PackagePricingCalculator {
             }
             return "adult";
         } else {
-            Calendar twelveYears = (Calendar) dobCal.clone();
-            twelveYears.add(Calendar.YEAR, 12);
-            if (refCal.before(twelveYears)) {
+            Calendar elevenYears = (Calendar) dobCal.clone();
+            elevenYears.add(Calendar.YEAR, 11);
+            if (refCal.before(elevenYears)) {
                 return "child";
             }
             return "adult";

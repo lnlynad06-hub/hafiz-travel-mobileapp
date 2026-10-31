@@ -60,76 +60,13 @@
             android:paddingTop="16dp"
             android:paddingBottom="24dp">
 
-            <!-- Progress Step Indicator (Unified 4-Step Funnel) -->
-            <LinearLayout
+            <!-- Step Progress Indicator -->
+            <include
+                android:id="@+id/funnelHeader"
+                layout="@layout/layout_booking_funnel_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_detail_card"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="10dp"
-                android:layout_marginBottom="12dp">
-
-                <!-- Step 1: Package -->
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/step_funnel_package"
-                    android:textColor="@color/text_gray"
-                    android:textSize="11sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="›"
-                    android:textColor="@color/text_gray" />
-
-                <!-- Step 2: Room -->
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/step_funnel_room"
-                    android:textColor="@color/text_gray"
-                    android:textSize="11sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="›"
-                    android:textColor="@color/text_gray" />
-
-                <!-- Step 3: Travellers -->
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/step_funnel_travellers"
-                    android:textColor="@color/text_gray"
-                    android:textSize="11sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="›"
-                    android:textColor="@color/text_gray" />
-
-                <!-- Step 4: Review & Payment (Active) -->
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/step_funnel_payment"
-                    android:textColor="@color/brand_magenta"
-                    android:textSize="11sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
+                android:layout_marginBottom="12dp" />
 
             <!-- Card 1: Package Summary -->
             <LinearLayout

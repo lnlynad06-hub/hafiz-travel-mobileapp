@@ -108,6 +108,7 @@ public class BookingSummaryActivity extends BaseActivity {
         summaryOutstandingAmount = findViewById(R.id.summaryOutstandingAmount);
         layoutQuoteLoading = findViewById(R.id.layoutQuoteLoading);
         layoutQuoteError = findViewById(R.id.layoutQuoteError);
+        BookingFunnelHelper.setup(findViewById(R.id.funnelHeader), bookingRequest != null && bookingRequest.hasCustomizationStep(), BookingFunnelHelper.STAGE_PAYMENT);
         btnRetryQuote = findViewById(R.id.btnRetryQuote);
 
         if (btnRetryQuote != null) {
@@ -344,8 +345,8 @@ public class BookingSummaryActivity extends BaseActivity {
             // DOB Chip & Bed info
             if (p.dateOfBirth != null && !p.dateOfBirth.trim().isEmpty()) {
                 String formattedDob = ProfileActivity.formatDateDisplay(this, p.dateOfBirth);
-                int age = com.hafiztraveltours.app.utils.PackagePricingCalculator.calculateAge(p.dateOfBirth);
-                if (p.withBed != null && age >= 2 && age <= 11) {
+                int age = com.hafiztraveltours.app.utils.PackagePricingCalculator.calculateAge(p.dateOfBirth, bookingRequest.selectedDepartureDate);
+                if (p.withBed != null && age >= 2 && age <= 10) {
                     formattedDob += " (" + getString(Boolean.TRUE.equals(p.withBed) ? R.string.with_bed : R.string.without_bed) + ")";
                 }
                 tvDobChip.setText(formattedDob);
@@ -584,6 +585,12 @@ public class BookingSummaryActivity extends BaseActivity {
             }
         }
 
+        if (bookingRequest.isUmrahPackage() && bookingRequest.selectedUpgrades != null) {
+            for (BookingRequest.SelectedUpgrade su : bookingRequest.selectedUpgrades) {
+                qReq.upgrades.add(new QuoteRequest.SelectedUpgradeItem(su.upgradeId, su.quantity, su.travellerIndex));
+            }
+        }
+
         if (quoteCall != null) quoteCall.cancel();
         quoteCall = ApiClient.getApiService().getBookingQuote(qReq);
         quoteCall.enqueue(new retrofit2.Callback<ApiResponse<QuoteResponse>>() {
@@ -727,6 +734,16 @@ public class BookingSummaryActivity extends BaseActivity {
         apiRequest.termsAgreed = true;
         apiRequest.termsAgreedAt = com.hafiztraveltours.app.utils.DateFormats.nowIsoDateTime();
         apiRequest.termsVersion = TermsConditionsActivity.TERMS_VERSION;
+
+        if (bookingRequest.isUmrahPackage() && bookingRequest.selectedUpgrades != null && !bookingRequest.selectedUpgrades.isEmpty()) {
+            for (BookingRequest.SelectedUpgrade su : bookingRequest.selectedUpgrades) {
+                apiRequest.upgrades.add(new CreateBookingRequest.SelectedUpgradeItem(su.upgradeId, su.quantity, su.travellerIndex));
+            }
+            if (currentQuote != null) {
+                apiRequest.expectedTotal = currentQuote.total;
+            }
+        }
+
         return apiRequest;
     }
 

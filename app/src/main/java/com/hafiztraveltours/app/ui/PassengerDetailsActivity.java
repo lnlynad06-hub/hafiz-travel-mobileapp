@@ -33,6 +33,7 @@ import com.hafiztraveltours.app.R;
 import com.hafiztraveltours.app.adapters.CountryDropdownAdapter;
 import com.hafiztraveltours.app.models.BookingRequest;
 import com.hafiztraveltours.app.models.PackageDetail;
+import com.hafiztraveltours.app.models.PackageUpgradeDto;
 import com.hafiztraveltours.app.network.UserDto;
 import com.hafiztraveltours.app.utils.HapticUtil;
 import com.hafiztraveltours.app.utils.LocaleHelper;
@@ -144,6 +145,7 @@ public class PassengerDetailsActivity extends BaseActivity {
         txtRoomAndPax = findViewById(R.id.passengerRoomAndPax);
         txtTotalAmount = findViewById(R.id.passengerTotalAmount);
         txtPaxCountFooter = findViewById(R.id.txtPaxCountFooter);
+        BookingFunnelHelper.setup(findViewById(R.id.funnelHeader), bookingRequest != null && bookingRequest.hasCustomizationStep(), BookingFunnelHelper.STAGE_TRAVELLERS);
 
         leadProfileContainer = findViewById(R.id.leadProfileContainer);
         additionalTravellersContainer = findViewById(R.id.additionalTravellersContainer);
@@ -212,13 +214,19 @@ public class PassengerDetailsActivity extends BaseActivity {
                         holder.selectedDob = cfg.dateOfBirth.trim();
                         holder.tvDobValue.setText(ProfileActivity.formatDateDisplay(this, cfg.dateOfBirth.trim()));
                         holder.tvDobValue.setTextColor(ContextCompat.getColor(this, R.color.text_dark));
-                        int age = com.hafiztraveltours.app.utils.PackagePricingCalculator.calculateAge(cfg.dateOfBirth.trim());
+                        String depDate = bookingRequest != null ? bookingRequest.selectedDepartureDate : null;
+                        int age = com.hafiztraveltours.app.utils.PackagePricingCalculator.calculateAge(cfg.dateOfBirth.trim(), depDate);
                         if (holder.tvDobAge != null) {
                             holder.tvDobAge.setText(age < 2 ? getString(R.string.child_age_under_2) : getString(R.string.child_age_format, age));
                             holder.tvDobAge.setVisibility(View.VISIBLE);
                         }
                         holder.withBed = cfg.withBed;
                         updateChildBedOptionVisibility(holder);
+                    }
+                    if (cfg.gender != null && !cfg.gender.trim().isEmpty()) {
+                        String gen = "Female".equalsIgnoreCase(cfg.gender.trim()) ? getString(R.string.gender_female) : getString(R.string.gender_male);
+                        holder.selectedGender = gen;
+                        updateGenderFieldDisplay(holder.ivGenderBadge, holder.tvGenderValue, gen);
                     }
                 }
             }
@@ -690,8 +698,9 @@ public class PassengerDetailsActivity extends BaseActivity {
             return;
         }
 
-        int age = com.hafiztraveltours.app.utils.PackagePricingCalculator.calculateAge(holder.selectedDob);
-        if (age >= 2 && age <= 11) {
+        String depDateIso = bookingRequest != null ? bookingRequest.selectedDepartureDate : null;
+        int age = com.hafiztraveltours.app.utils.PackagePricingCalculator.calculateAge(holder.selectedDob, depDateIso);
+        if (age >= 2 && age <= 10) {
             holder.layoutChildBedOption.setVisibility(View.VISIBLE);
             if (holder.withBed == null) {
                 holder.withBed = true;
@@ -1191,6 +1200,18 @@ public class PassengerDetailsActivity extends BaseActivity {
             BookingRequest.Passenger p = passengerViewModel.buildAdditionalPassenger(in);
             p.roomIndex = findRoomIndexForTraveller(i + 1);
             bookingRequest.passengers.add(p);
+        }
+
+        // Validate / sanitize luggage traveller indices against current passenger count
+        if (bookingRequest.selectedUpgrades != null && bookingRequest.passengers != null) {
+            int paxCount = bookingRequest.passengers.size();
+            for (BookingRequest.SelectedUpgrade su : bookingRequest.selectedUpgrades) {
+                if (PackageUpgradeDto.CATEGORY_LUGGAGE.equalsIgnoreCase(su.category)) {
+                    if (su.travellerIndex != null && su.travellerIndex >= paxCount) {
+                        su.travellerIndex = Math.max(0, paxCount - 1);
+                    }
+                }
+            }
         }
 
         // Navigate to Booking Summary

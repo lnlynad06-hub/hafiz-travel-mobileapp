@@ -94,6 +94,39 @@ public class BookingRequest implements Serializable {
     public String termsAgreedAt = "";
     public String termsVersion = "1.0";
 
+    public static class SelectedUpgrade implements Serializable {
+        public int upgradeId;
+        public String category;
+        public String name;
+        public int quantity = 1;
+        public Integer travellerIndex; // null for per_pax, 0..N-1 for luggage allocation
+        public double unitPrice;
+        public double calculatedTotal;
+        public String details;
+
+        public SelectedUpgrade() {}
+
+        public SelectedUpgrade(int upgradeId, String category, String name, int quantity, Integer travellerIndex, double unitPrice, double calculatedTotal, String details) {
+            this.upgradeId = upgradeId;
+            this.category = category;
+            this.name = name;
+            this.quantity = quantity;
+            this.travellerIndex = travellerIndex;
+            this.unitPrice = unitPrice;
+            this.calculatedTotal = calculatedTotal;
+            this.details = details;
+        }
+    }
+
+    public List<SelectedUpgrade> selectedUpgrades = new ArrayList<>();
+    public String selectedMakkahHotelName;
+    public String selectedMadinahHotelName;
+    public String selectedMakkahHotelTier;
+    public String selectedMadinahHotelTier;
+    public boolean fullBoardSelected = false;
+    public double serverQuoteTotal = 0.0;
+    public double serverQuoteDeposit = 0.0;
+
     public boolean isUmrahPackage() {
         if (packageDetail != null) {
             return packageDetail.isUmrah;
@@ -106,6 +139,19 @@ public class BookingRequest implements Serializable {
 
     public boolean isTourPackage() {
         return !isUmrahPackage();
+    }
+
+    public boolean hasCustomizationStep() {
+        if (!isUmrahPackage()) {
+            return false;
+        }
+        if (selectedUpgrades != null && !selectedUpgrades.isEmpty()) {
+            return true;
+        }
+        if (packageDetail != null && packageDetail.availableUpgrades != null && !packageDetail.availableUpgrades.isEmpty()) {
+            return true;
+        }
+        return false;
     }
 
     public String getBaseRoomType() {

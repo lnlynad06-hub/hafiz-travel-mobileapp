@@ -262,7 +262,7 @@
                             android:background="@drawable/bg_date_preview_pill"
                             android:paddingHorizontal="10dp"
                             android:paddingVertical="4dp"
-                            android:text="12 Hari • 10 Malam • 1 Pax"
+                            tools:text="12 Hari • 10 Malam • 1 Pax"
                             android:textColor="@color/text_gray"
                             android:textSize="11sp" />
 
@@ -333,7 +333,7 @@
                             android:layout_height="wrap_content"
                             android:background="#F8FAFC"
                             android:padding="12dp"
-                            android:text="Bilik Quad (4 Orang/Bilik)"
+                            tools:text="Bilik Quad (4 Orang/Bilik)"
                             android:textColor="@color/text_dark"
                             android:textSize="13sp"
                             android:textStyle="bold" />
@@ -560,7 +560,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:text="Tarikh akhir bayaran: —"
+                            tools:text="Tarikh akhir bayaran: —"
                             android:textColor="@color/text_muted"
                             android:textSize="11sp" />
 

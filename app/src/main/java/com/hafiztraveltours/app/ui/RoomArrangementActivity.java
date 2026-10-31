@@ -87,6 +87,7 @@ public class RoomArrangementActivity extends BaseActivity {
         }
 
         initViews();
+        BookingFunnelHelper.setup(findViewById(R.id.funnelHeader), bookingRequest != null && bookingRequest.hasCustomizationStep(), BookingFunnelHelper.STAGE_ROOM);
         setupTravellerSlots();
         setupInitialRooms();
         renderUi();
@@ -1265,9 +1266,20 @@ public class RoomArrangementActivity extends BaseActivity {
             bookingRequest.roomLabel = getRoomLabel(rooms.get(0).roomType);
         }
 
-        // Launch PassengerDetailsActivity
-        Intent intent = new Intent(this, PassengerDetailsActivity.class);
-        intent.putExtra(PassengerDetailsActivity.EXTRA_BOOKING_REQUEST, bookingRequest);
+        // Route to Guided Customization if package has upgrades, else proceed directly to PassengerDetailsActivity
+        boolean hasUpgrades = bookingRequest.isUmrahPackage()
+                && bookingRequest.packageDetail != null
+                && bookingRequest.packageDetail.availableUpgrades != null
+                && !bookingRequest.packageDetail.availableUpgrades.isEmpty();
+
+        Intent intent;
+        if (hasUpgrades) {
+            intent = new Intent(this, GuidedCustomizationActivity.class);
+            intent.putExtra(GuidedCustomizationActivity.EXTRA_BOOKING_REQUEST, bookingRequest);
+        } else {
+            intent = new Intent(this, PassengerDetailsActivity.class);
+            intent.putExtra(PassengerDetailsActivity.EXTRA_BOOKING_REQUEST, bookingRequest);
+        }
         startActivity(intent);
     }
 

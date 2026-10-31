@@ -31,6 +31,31 @@ public class QuoteRequest implements Serializable {
     @SerializedName("travellers")
     public List<TravellerQuoteItem> travellers = new ArrayList<>();
 
+    @SerializedName("upgrades")
+    public List<SelectedUpgradeItem> upgrades = new ArrayList<>();
+
+    public static class SelectedUpgradeItem implements Serializable {
+        @SerializedName("upgrade_id")
+        public int upgradeId;
+
+        @SerializedName("quantity")
+        public Integer quantity = 1;
+
+        @SerializedName("traveller_index")
+        public Integer travellerIndex;
+
+        @SerializedName("traveller_id")
+        public Integer travellerId;
+
+        public SelectedUpgradeItem() {}
+
+        public SelectedUpgradeItem(int upgradeId, int quantity, Integer travellerIndex) {
+            this.upgradeId = upgradeId;
+            this.quantity = quantity;
+            this.travellerIndex = travellerIndex;
+        }
+    }
+
     public static class RoomQuoteItem implements Serializable {
         @SerializedName("room_number")
         public int roomNumber;

@@ -523,10 +523,10 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
             genderContainer.addView(genderSegmentRow);
             card.addView(genderContainer);
 
-            // Tour Bed Selector (Only for Tour package when child age is 2-11)
+            // Tour Bed Selector (Only for Tour package when child age is 2-10 inclusive)
             if (!detail.isUmrah && hasDob) {
                 int age = calculateChildAge(config.dateOfBirth.trim(), depDateIso);
-                if (age >= 2 && age <= 11) {
+                if (age >= 2 && age <= 10) {
                     LinearLayout bedContainer = new LinearLayout(requireContext());
                     bedContainer.setOrientation(LinearLayout.VERTICAL);
                     LinearLayout.LayoutParams bedParams = new LinearLayout.LayoutParams(
@@ -597,6 +597,69 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
                     card.addView(bedContainer);
                 }
             }
+
+            // NEW: Child Package Price Section (calculated amount + short reason)
+            LinearLayout priceSection = new LinearLayout(requireContext());
+            priceSection.setOrientation(LinearLayout.HORIZONTAL);
+            priceSection.setGravity(Gravity.CENTER_VERTICAL);
+            priceSection.setBackgroundResource(R.drawable.bg_luxury_form_field);
+            priceSection.setPadding(dp(10), dp(8), dp(10), dp(8));
+            LinearLayout.LayoutParams pSecParams = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            pSecParams.topMargin = dp(8);
+            priceSection.setLayoutParams(pSecParams);
+
+            LinearLayout priceTextCol = new LinearLayout(requireContext());
+            priceTextCol.setOrientation(LinearLayout.VERTICAL);
+            LinearLayout.LayoutParams pColParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+            priceTextCol.setLayoutParams(pColParams);
+
+            TextView lblChildPrice = new TextView(requireContext());
+            lblChildPrice.setText(getString(R.string.child_package_price_label));
+            lblChildPrice.setTextSize(11);
+            lblChildPrice.setTypeface(null, Typeface.BOLD);
+            lblChildPrice.setTextColor(getResources().getColor(R.color.text_dark));
+            priceTextCol.addView(lblChildPrice);
+
+            TextView txtChildReason = new TextView(requireContext());
+            txtChildReason.setTextSize(10);
+            txtChildReason.setTextColor(getResources().getColor(R.color.text_gray));
+            priceTextCol.addView(txtChildReason);
+
+            priceSection.addView(priceTextCol);
+
+            TextView txtChildPriceVal = new TextView(requireContext());
+            txtChildPriceVal.setTextSize(13);
+            txtChildPriceVal.setTypeface(null, Typeface.BOLD);
+            txtChildPriceVal.setTextColor(getResources().getColor(R.color.brand_magenta));
+            priceSection.addView(txtChildPriceVal);
+
+            double currentUnitAmount = getSelectedUnitAmount();
+            com.hafiztraveltours.app.utils.PackagePricingCalculator.PassengerPriceDetail pd =
+                    com.hafiztraveltours.app.utils.PackagePricingCalculator.resolvePassengerPriceDetail(
+                            requireContext(), detail, selectedSeason, detail.isUmrah, currentUnitAmount,
+                            config.dateOfBirth, depDateIso, config.withBed);
+
+            if (!hasDob) {
+                txtChildPriceVal.setText("--");
+                txtChildPriceVal.setTextColor(getResources().getColor(R.color.text_gray));
+                txtChildReason.setText(getString(R.string.reason_dob_required));
+            } else if (pd.isExactSecondBirthday) {
+                txtChildPriceVal.setText(getString(R.string.reason_policy_confirmation_needed));
+                txtChildPriceVal.setTextSize(11);
+                txtChildPriceVal.setTextColor(getResources().getColor(R.color.error_red));
+                txtChildReason.setText(getString(R.string.err_child_exact_second_birthday_short, i + 1));
+            } else if (pd.isBedRequiredButMissing) {
+                txtChildPriceVal.setText("--");
+                txtChildPriceVal.setTextColor(getResources().getColor(R.color.text_gray));
+                txtChildReason.setText(getString(R.string.reason_bed_required));
+            } else {
+                txtChildPriceVal.setText(BookingRequest.formatPrice(pd.amount));
+                txtChildPriceVal.setTextColor(getResources().getColor(R.color.brand_magenta));
+                txtChildReason.setText(pd.reason);
+            }
+
+            card.addView(priceSection);
 
             containerChildDetails.addView(card);
         }
@@ -935,29 +998,63 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
 
         double calculatedSubtotal = unitAmount * paxCount;
         String depDateIso = getSelectedDepartureDate();
+        boolean isEstimateIncomplete = false;
+        String incompleteExplanation = null;
 
         for (int i = 0; i < kidsCount && i < childConfigs.size(); i++) {
             BookingRequest.ChildConfig cfg = childConfigs.get(i);
-            if (cfg.dateOfBirth != null && !cfg.dateOfBirth.trim().isEmpty()) {
-                try {
-                    double childPrice = com.hafiztraveltours.app.utils.PackagePricingCalculator.calculatePassengerPrice(
-                            detail, selectedSeason, detail.isUmrah, unitAmount, cfg.dateOfBirth.trim(), depDateIso, cfg.withBed);
-                    calculatedSubtotal += childPrice;
-                } catch (com.hafiztraveltours.app.utils.PackagePricingCalculator.PricingConfigurationException e) {
-                    calculatedSubtotal += unitAmount;
+            if (cfg.dateOfBirth == null || cfg.dateOfBirth.trim().isEmpty()) {
+                isEstimateIncomplete = true;
+                if (incompleteExplanation == null) {
+                    incompleteExplanation = getString(R.string.err_child_dob_required_short, i + 1);
                 }
-            } else {
-                calculatedSubtotal += unitAmount;
+                continue;
+            }
+
+            if (detail.isUmrah && com.hafiztraveltours.app.utils.PackagePricingCalculator.isExactSecondBirthday(cfg.dateOfBirth.trim(), depDateIso)) {
+                isEstimateIncomplete = true;
+                if (incompleteExplanation == null) {
+                    incompleteExplanation = getString(R.string.err_child_exact_second_birthday_short, i + 1);
+                }
+                continue;
+            }
+
+            if (!detail.isUmrah) {
+                int age = calculateChildAge(cfg.dateOfBirth.trim(), depDateIso);
+                if (age >= 2 && age <= 10 && cfg.withBed == null) {
+                    isEstimateIncomplete = true;
+                    if (incompleteExplanation == null) {
+                        incompleteExplanation = getString(R.string.err_child_bed_required_short, i + 1);
+                    }
+                    continue;
+                }
+            }
+
+            try {
+                double childPrice = com.hafiztraveltours.app.utils.PackagePricingCalculator.calculatePassengerPrice(
+                        detail, selectedSeason, detail.isUmrah, unitAmount, cfg.dateOfBirth.trim(), depDateIso, cfg.withBed);
+                calculatedSubtotal += childPrice;
+            } catch (com.hafiztraveltours.app.utils.PackagePricingCalculator.PricingConfigurationException e) {
+                isEstimateIncomplete = true;
+                if (incompleteExplanation == null) {
+                    incompleteExplanation = e.getMessage();
+                }
             }
         }
 
         double totalAmount = Math.max(0, calculatedSubtotal - appliedDiscount);
 
         if (txtTotalAmount != null) {
-            txtTotalAmount.setText(BookingRequest.formatPrice(totalAmount));
+            if (isEstimateIncomplete) {
+                txtTotalAmount.setText(getString(R.string.estimate_incomplete));
+            } else {
+                txtTotalAmount.setText(BookingRequest.formatPrice(totalAmount));
+            }
         }
         if (txtUnitPriceDetail != null) {
-            if (kidsCount > 0) {
+            if (isEstimateIncomplete) {
+                txtUnitPriceDetail.setText(incompleteExplanation != null ? incompleteExplanation : getString(R.string.estimate_incomplete));
+            } else if (kidsCount > 0) {
                 txtUnitPriceDetail.setText(getString(R.string.room_price_x_pax_format, roomPriceStr, totalPax));
             } else {
                 txtUnitPriceDetail.setText(getString(R.string.room_price_x_pax_format, roomPriceStr, paxCount));
@@ -1162,9 +1259,13 @@ public class BookingConfigurationBottomSheet extends BottomSheetDialogFragment {
                     android.widget.Toast.makeText(requireContext(), getString(R.string.err_child_dob_required, i + 1), android.widget.Toast.LENGTH_LONG).show();
                     return;
                 }
+                if (detail.isUmrah && com.hafiztraveltours.app.utils.PackagePricingCalculator.isExactSecondBirthday(cfg.dateOfBirth.trim(), depDateIso)) {
+                    android.widget.Toast.makeText(requireContext(), getString(R.string.err_child_exact_second_birthday, i + 1), android.widget.Toast.LENGTH_LONG).show();
+                    return;
+                }
                 if (!detail.isUmrah) {
                     int age = calculateChildAge(cfg.dateOfBirth.trim(), depDateIso);
-                    if (age >= 2 && age <= 11) {
+                    if (age >= 2 && age <= 10) {
                         if (cfg.withBed == null) {
                             android.widget.Toast.makeText(requireContext(), getString(R.string.err_child_bed_required, i + 1), android.widget.Toast.LENGTH_LONG).show();
                             return;

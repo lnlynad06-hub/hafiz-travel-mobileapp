@@ -14,7 +14,7 @@
     <string name="welcome_already_have_account_full">Already have an account? &lt;font color=\'#D81B60\'&gt;&lt;b&gt;Log In&lt;/b&gt;&lt;/font&gt;</string>
     <string name="welcome_no_account_full">Don’t have an account? &lt;font color=\'#D81B60\'&gt;&lt;b&gt;Create Account&lt;/b&gt;&lt;/font&gt;</string>
 
-    <!-- Onboarding Step 1: Prayer Times & Qibla -->
+    <!-- Onboarding Step 1: Prayer Times &amp; Qibla -->
     <string name="onboarding_step_1_of_2">STEP 1 OF 2</string>
     <string name="onboarding_prayer_title">Prayer Times &amp; Qibla</string>
     <string name="onboarding_prayer_desc">Stay connected to your prayer routine while you travel.</string>
@@ -27,7 +27,7 @@
     <string name="onboarding_notif_desc">Get important updates about your bookings, payments and trips.</string>
     <string name="onboarding_action_allow_notif">Allow Notifications</string>
 
-    <!-- Prayer & Azan Settings in Profile -->
+    <!-- Prayer &amp; Azan Settings in Profile -->
     <string name="profile_prayer_azan_section">Prayer &amp; Azan Settings</string>
     <string name="settings_prayer_times_title">Prayer Times &amp; Qibla</string>
     <string name="settings_prayer_times_desc">Location-based prayer calculations and Qibla direction</string>
@@ -340,7 +340,7 @@
     <string name="bab6_s2_title">Places to Visit in Madinah</string>
     <string name="bab6_s2_body">Jannatul Baqi\'\n\n-The main cemetery of Madinah from the time of the Prophet SAW.\n\n-The resting place of the Prophet\'s wives, daughters, and one of his sons.\n\n-Recommended supplication: A greeting of peace to the inhabitants of the graves, seeking forgiveness for those who came before and after them, and asking that their reward not be withheld and that we not be tested after them.\n\nMasjid Quba\'\n\n-The first mosque built by the Prophet SAW after the Hijrah, located 3 km south of Madinah.\n\n-Merit: Praying in Masjid Quba\' equals the reward of an Umrah (narrated by Ibn Majah).\n\n-The Prophet SAW would regularly visit on Saturdays, and sometimes on Mondays and Thursdays.\n\n-Built on a foundation of piety (Surah at-Taubah: 108).\n\nMount Uhud\n\n-Located 5 km north of Madinah, known for the Battle of Uhud.\n\n-The name \"Uhud\" means solitary (not connected to other mountains).\n\n-Hadith: \"Uhud is a mountain that loves us and we love it\" (narrated by al-Bukhari).\n\n-Contains the graves of Hamzah bin Abdul Muttalib, Abdullah bin Jahsy, Mus\'ab bin Umair, and other martyrs of Uhud.\n\n-Recommended to supplicate while visiting.\n\nMasjid Qiblatain\n\n-Formerly the mosque of Banu Salamah, the site where the change of qiblah occurred.\n\n-While the Prophet SAW was leading the Zuhur prayer with the congregation, Surah al-Baqarah verse 144 was revealed, commanding that they face Masjid al-Haram.\n\n-He turned from facing Baitulmaqdis toward the Kaabah, hence it is named the Mosque of the Two Qiblahs.</string>
 
-    <!-- Checklist - picker & titles -->
+    <!-- Checklist - picker &amp; titles -->
     <string name="checklist_picker_title">Select Checklist</string>
     <string name="checklist_picker_subtitle">Please select your travel checklist type</string>
     <string name="checklist_option_umrah">Umrah Checklist</string>
@@ -753,7 +753,7 @@
     <string name="qibla_kaaba_location">Kaaba · Mecca, Saudi Arabia</string>
     <string name="qibla_interference">⚠ Magnetic interference detected\nMove away from metal objects and calibrate the phone.</string>
 
-    <!-- Shared error / status messages (also used for previously hardcoded Toasts & dialogs) -->
+    <!-- Shared error / status messages (also used for previously hardcoded Toasts &amp; dialogs) -->
     <string name="err_server_connection">Failed to connect to the backend server.</string>
     <string name="err_connection_detail">Connection error: %1$s</string>
     <string name="error_whatsapp_not_found">WhatsApp is not installed on this device.</string>
@@ -935,7 +935,7 @@
     <string name="profile_saving">Saving…</string>
     <string name="profile_update_failed">Failed to update profile. Please try again.</string>
 
-    <!-- Profile & Document Vault Strings -->
+    <!-- Profile &amp; Document Vault Strings -->
     <string name="profile_field_ic_no">IC / NRIC Number <font color="#DC2626">*</font></string>
     <string name="profile_field_passport_no">Passport Number <font color="#DC2626">*</font></string>
     <string name="profile_field_passport_expiry">Passport Expiry Date (YYYY-MM-DD) <font color="#DC2626">*</font></string>
@@ -1028,7 +1028,7 @@
     <string name="doc_expires_at_format">Expires: %1$s</string>
     <string name="legend_required"><font color="#DC2626">*</font> Required</string>
 
-    <!-- Requirements & Upload Dialog Strings -->
+    <!-- Requirements &amp; Upload Dialog Strings -->
     <string name="doc_view_requirements">View Requirements</string>
     <string name="req_subtitle">Please review standard specifications before uploading</string>
     <string name="req_passport_title">Passport Requirements</string>
@@ -1079,7 +1079,7 @@
     <string name="prefilled_from_profile">Filled from your profile</string>
 
 
-    <!-- Travellers & Traveller Selection -->
+    <!-- Travellers &amp; Traveller Selection -->
     <string name="passenger_details_title">Travellers</string>
     <string name="passenger_booking_summary">BOOKING SUMMARY</string>
     <string name="passenger_departure_format">Departure: %1$s</string>
@@ -1272,7 +1272,7 @@
     <string name="doc_name_passport">Passport Copy (Main Page)</string>
     <string name="doc_name_ic">MyKad / Identity Card (IC)</string>
     <string name="doc_name_passport_photo">Passport Photo (White Background)</string>
-    <!-- Terms & Conditions Booking Step (Exact Official PDF) -->
+    <!-- Terms &amp; Conditions Booking Step (Exact Official PDF) -->
     <string name="terms_title">Terms &amp; Conditions</string>
     <string name="terms_close_viewer">Understood &amp; Back</string>
     <string name="terms_required_error">Please agree to the Terms &amp; Conditions before confirming your booking.</string>
@@ -1353,7 +1353,7 @@
     <string name="err_departure_fully_booked">Selected departure is fully booked. Please select another date.</string>
     <string name="err_departure_not_enough_seats">Only %1$d seats left on this departure. Please reduce passenger count or choose another date.</string>
 
-    <!-- Booking Item Buttons & Labels -->
+    <!-- Booking Item Buttons &amp; Labels -->
     <string name="booking_btn_invoice">Invoice</string>
     <string name="booking_btn_receipt">Receipt</string>
     <string name="booking_btn_documents">Documents</string>
@@ -1623,7 +1623,7 @@
     <string name="payment_status_refunded">Refunded</string>
     <string name="payment_status_cancelled">Cancelled</string>
 
-    <!-- Season & Pricing Management Strings -->
+    <!-- Season &amp; Pricing Management Strings -->
     <string name="config_season_type">Select Season</string>
     <string name="season_standard">Standard Season</string>
     <string name="season_low_peak">Low Peak Season</string>
@@ -1689,7 +1689,7 @@
     <string name="category_2_to_11">2 to 11 years</string>
     <string name="category_adult_rate">Adult rate</string>
 
-    <!-- About Page & Company Strings -->
+    <!-- About Page &amp; Company Strings -->
     <string name="about_title">About</string>
     <string name="about_tagline">Create Transparent Memories with Hafiz Travel &amp; Tours</string>
     <string name="about_company_full_name">Hafiz Travel &amp; Tours Sdn. Bhd.</string>
@@ -1735,14 +1735,14 @@
     <string name="about_refund_policy">Refund &amp; Cancellation Policy</string>
     <string name="about_coming_soon">Coming Soon</string>
 
-    <!-- App Version & Developer Footer -->
+    <!-- App Version &amp; Developer Footer -->
     <string name="about_app_version">App Version</string>
     <string name="version_short_format">v%1$s</string>
     <string name="about_developer_name">Danial</string>
     <string name="about_engineered_by_prefix">Engineered by</string>
     <string name="about_copyright">© 2022 Hafiz Travel &amp; Tours Sdn. Bhd. All rights reserved.</string>
 
-    <!-- Notification Center & Push Notifications -->
+    <!-- Notification Center &amp; Push Notifications -->
     <string name="notification_center_title">Notifications</string>
     <string name="notification_mark_all_read">Mark all as read</string>
     <string name="notif_doc_verified_title">Travel Document Verified</string>
@@ -1855,6 +1855,11 @@
     <string name="step_funnel_room">2. Room</string>
     <string name="step_funnel_travellers">3. Travellers</string>
     <string name="step_funnel_payment">4. Payment</string>
+    <string name="step_funnel_5_package">1. Package</string>
+    <string name="step_funnel_5_room">2. Room</string>
+    <string name="step_funnel_5_customize">3. Customize</string>
+    <string name="step_funnel_5_travellers">4. Travellers</string>
+    <string name="step_funnel_5_payment">5. Payment</string>
     <string name="room_booked_list_title">Booked Rooms List</string>
     <string name="room_count_single">1 Room</string>
     <string name="room_count_plural">%d Rooms</string>
@@ -1959,7 +1964,7 @@
     <string name="unassigned_travellers_label">Unassigned Travellers</string>
     <string name="outstanding_balance">Outstanding Balance</string>
 
-    <!-- Phase 4 & 5 Custom Travel Experience -->
+    <!-- Phase 4 &amp; 5 Custom Travel Experience -->
     <string name="btn_customize_package">Customize This Package</string>
     <string name="plan_own_trip_title">Plan Your Own Trip</string>
     <string name="plan_own_trip_subtitle">Customize dates, hotels &amp; activities according to your budget</string>
@@ -2181,7 +2186,100 @@
     <string name="pay_verification_failed_msg">Unable to verify transaction status with the gateway. If funds were deducted, please contact customer support with your transaction reference.</string>
     <string name="pay_already_processed_title">Payment Already Processed</string>
     <string name="pay_already_processed_msg">This payment transaction has already been completed and processed previously.</string>
-    <string name="pay_timeout_title">Payment Session Timed Out</string>
-    <string name="pay_timeout_msg">The payment session timed out before completion. No funds were deducted. You may initiate a new payment safely.</string>
+    <!-- Guided Package Customization -->
+    <string name="customization_title">Package Customization</string>
+    <string name="customization_step_format">Step %1$d of %2$d</string>
+    <string name="step_hotel_makkah_title">Upgrade Makkah Hotel</string>
+    <string name="step_hotel_makkah_desc">Keep your original hotel or choose an upgrade closer to Masjidil Haram.</string>
+    <string name="step_hotel_madinah_title">Upgrade Madinah Hotel</string>
+    <string name="step_hotel_madinah_desc">Keep your original hotel or choose an upgrade closer to Masjid Nabawi.</string>
+    <string name="step_meals_title">Full Board Meals</string>
+    <string name="step_meals_desc">Enjoy full board meals in both Makkah and Madinah throughout your pilgrimage.</string>
+    <string name="step_train_title">Haramain High-Speed Train</string>
+    <string name="step_train_desc">Fast, comfortable high-speed rail travel between Makkah and Madinah.</string>
+    <string name="step_transport_title">Private Transportation</string>
+    <string name="step_transport_desc">Private vehicle service (Car or Van) for your chosen route.</string>
+    <string name="step_luggage_title">Company Luggage</string>
+    <string name="step_luggage_desc">Official company suitcases (Maximum 2 physical bags per pax).</string>
+    <string name="step_accessories_title">Accessories</string>
+    <string name="step_accessories_desc">Exclusive Hafiz Travel sling bag and shoe bag package.</string>
+    <string name="step_review_title">Customization Summary</string>
+    <string name="step_review_desc">Review your chosen upgrades and official quoted price.</string>
+    <string name="keep_original_hotel">Keep Original Hotel (Default)</string>
+    <string name="original_package_hotel">Original Package Hotel</string>
+    <string name="hotel_tier_near">Near (~50m)</string>
+    <string name="hotel_tier_moderate">Moderate (~300m)</string>
+    <string name="hotel_tier_far">Far (1–4km)</string>
+    <string name="hotel_tier_unverified">Unverified</string>
+    <string name="full_board_ineligible_notice">Full Board is only available when both hotels are Near or Moderate distance. One or both of your selected hotels do not meet this requirement.</string>
+    <string name="full_board_removed_notice">Full Board was automatically removed because one of your selected hotels was changed to Far or Unverified.</string>
+    <string name="feature_already_included">Already included in your package</string>
+    <string name="transport_mutually_exclusive_notice">Car and Van are mutually exclusive for the same route. Please choose only one.</string>
+    <string name="transport_overlap_notice">Transportation services overlap for the same route.</string>
+    <string name="luggage_limit_reached">2 bags per pax limit reached.</string>
+    <string name="luggage_allocated_format">Traveller %1$d: %2$d / 2 bags</string>
+    <string name="luggage_included_info">Included in package: %1$d bag(s) per pax.</string>
+    <string name="btn_select_upgrade">Select Upgrade</string>
+    <string name="btn_selected">Selected</string>
+    <string name="btn_next_step">Next</string>
+    <string name="btn_back_step">Back</string>
+    <string name="btn_skip_step">Skip this step</string>
+    <string name="btn_confirm_customization">Confirm &amp; Enter Pilgrim Details</string>
+    <string name="subtotal_base_package">Base Package</string>
+    <string name="subtotal_addons">Total Add-ons</string>
+    <string name="quote_updating">Updating official quote…</string>
+    <string name="per_pax_label">per pax</string>
+    <string name="per_unit_label">per unit</string>
+    <string name="btn_back">Back</string>
+    <string name="server_quote_confirmed">Official server price confirmed</string>
+    <string name="indicative_total">Indicative Total</string>
+    <string name="pay_timeout_title">Payment Session Expired</string>
+    <string name="pay_timeout_msg">The payment session timed out before completion. No funds have been deducted. You may safely initiate a new payment.</string>
+
+    <string name="customization_original_hotel">Original Package Hotel</string>
+    <string name="customization_selected_hotel">Selected Hotel</string>
+    <string name="customization_distance_prefix">Distance</string>
+    <string name="customization_route_prefix">Route</string>
+    <string name="customization_per_unit"> / unit</string>
+    <string name="customization_included_badge">Included</string>
+    <string name="customization_empty_meals">No Full Board meal options registered for this package.</string>
+    <string name="customization_default_meals_desc">Full board meals in Makkah &amp; Madinah throughout stay.</string>
+    <string name="customization_empty_train">No Speed Train options registered for this package.</string>
+    <string name="customization_default_train_desc">Haramain High Speed Train ticket (Makkah - Madinah).</string>
+    <string name="customization_empty_transport">No private vehicle options registered for this package.</string>
+    <string name="customization_transport_bus_title">Standard Package Coach Transport</string>
+    <string name="customization_transport_bus_desc">Keep the standard coach transportation included in the base package.</string>
+    <string name="customization_luggage_quota_max">Your base package includes 2 official company bags per person (maximum quota reached). No additional purchases required.</string>
+    <string name="customization_luggage_extra_note">Each pax can purchase up to %1$d additional bag(s) (maximum 2 bags total).</string>
+    <string name="customization_empty_luggage">No official company luggage items registered for this package.</string>
+    <string name="customization_empty_accessories">No additional accessory options registered for this package.</string>
+    <string name="customization_default_accessories_desc">Official Sling Bag + Shoe Bag Set.</string>
+    <string name="customization_review_header">Your Selected Upgrades &amp; Add-ons:</string>
+    <string name="customization_review_empty">No add-on options selected. Your booking will proceed with standard base package specifications.</string>
+    <string name="customization_quote_server_unavailable">Notice: Server quote could not be updated temporarily.</string>
+    <string name="customization_quote_conn_error">Connection error fetching server quote. Local estimate is displayed.</string>
+    <string name="customization_pilgrim_label">Pilgrim %1$d</string>
+
+    <!-- Customization UI Additions -->
+    <string name="customization_standard_badge">Standard</string>
+    <string name="customization_luggage_allowance_sub">Remaining quota: %d bag(s)</string>
+    <string name="customization_review_base_package">Base Package (%d pax)</string>
+    <string name="customization_review_grand_total">Estimated Grand Total</string>
+    <string name="customization_transport_all_routes">All routes included</string>
+
+    <!-- Child Pricing & Boundaries -->
+    <string name="child_package_price_label">Child Package Price</string>
+    <string name="reason_fixed_infant_price">Fixed Infant Price</string>
+    <string name="reason_child_discount">Child Discount (-%s)</string>
+    <string name="reason_adult_rate_applies">Adult Rate Applies</string>
+    <string name="reason_policy_confirmation_needed">Requires Staff Policy Confirmation</string>
+    <string name="reason_dob_required">Date of birth required</string>
+    <string name="reason_bed_required">Bed preference required</string>
+    <string name="estimate_incomplete">Estimate Incomplete</string>
+    <string name="err_child_dob_required_short">Child %d: Date of birth required</string>
+    <string name="err_child_bed_required_short">Child %d: Bed preference required</string>
+    <string name="err_child_exact_second_birthday">Child %d reaches exactly 2 years old on departure date. Please contact Hafiz Travel staff for policy confirmation before booking.</string>
+    <string name="err_child_exact_second_birthday_short">Child %d: Staff policy confirmation required (exact 2yo)</string>
+
 </resources>
 

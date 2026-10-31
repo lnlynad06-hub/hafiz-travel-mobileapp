@@ -74,6 +74,7 @@
         <activity android:name=".ui.CustomTravelWizardActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
         <activity android:name=".ui.CustomTravelRequestDetailActivity" android:exported="false" />
         <activity android:name=".ui.RoomArrangementActivity" android:exported="false" />
+        <activity android:name=".ui.GuidedCustomizationActivity" android:exported="false" />
         <activity android:name=".ui.PassengerDetailsActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
         <activity android:name=".ui.BookingSummaryActivity" android:exported="false" />
         <activity android:name=".ui.TermsConditionsActivity" android:exported="false" />

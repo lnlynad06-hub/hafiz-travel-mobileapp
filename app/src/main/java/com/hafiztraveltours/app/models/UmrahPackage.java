@@ -98,6 +98,9 @@ public class UmrahPackage implements java.io.Serializable {
     @SerializedName("hotel_makkah_distance")
     public String hotelMakkahDistance;
 
+    @SerializedName("hotel_makkah_distance_tier")
+    public String hotelMakkahDistanceTier;
+
     @SerializedName("hotel_madinah_name")
     public String hotelMadinahName;
 
@@ -106,6 +109,27 @@ public class UmrahPackage implements java.io.Serializable {
 
     @SerializedName("hotel_madinah_distance")
     public String hotelMadinahDistance;
+
+    @SerializedName("hotel_madinah_distance_tier")
+    public String hotelMadinahDistanceTier;
+
+    @SerializedName("is_full_board_eligible")
+    public Boolean isFullBoardEligible;
+
+    @SerializedName("available_upgrades")
+    public java.util.List<PackageUpgradeDto> availableUpgrades;
+
+    @SerializedName("customization")
+    public CustomizationDataDto customization;
+
+    public boolean isFeatureIncluded(String featureKey) {
+        if (customization != null && customization.packageInclusions != null) {
+            if ("full_board_meals".equals(featureKey)) return customization.packageInclusions.fullBoardMeals;
+            if ("speed_train".equals(featureKey)) return customization.packageInclusions.speedTrain;
+            if ("company_luggage".equals(featureKey)) return customization.packageInclusions.companyLuggage;
+        }
+        return false;
+    }
 
     @SerializedName("hotel_taif_name")
     public String hotelTaifName;
